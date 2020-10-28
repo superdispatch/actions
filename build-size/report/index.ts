@@ -4,7 +4,7 @@ import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
 import filesize from 'filesize';
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 
 function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;

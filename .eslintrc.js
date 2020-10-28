@@ -22,10 +22,17 @@ module.exports = {
         'import/no-extraneous-dependencies': 'off',
         'node/no-unsupported-features/es-syntax': [
           'error',
-          {
-            version: '>=12',
-            ignores: ['modules'],
-          },
+          { version: '>=12', ignores: ['modules'] },
+        ],
+
+        'node/no-unsupported-features/es-builtins': [
+          'error',
+          { version: '>=12' },
+        ],
+
+        'node/no-unsupported-features/node-builtins': [
+          'error',
+          { version: '>=12' },
         ],
       },
     },

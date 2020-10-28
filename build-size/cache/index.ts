@@ -2,7 +2,7 @@ import { saveCache } from '@actions/cache';
 import { getInput, info, setFailed } from '@actions/core';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
-import fs from 'fs/promises';
+import { promises as fs } from 'fs';
 
 main().catch(setFailed);
 

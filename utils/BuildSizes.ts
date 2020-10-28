@@ -1,5 +1,21 @@
+import glob from '@actions/glob';
+import { promises as fs } from 'fs';
 import path from 'path';
-import { measureFileSizesBeforeBuild } from 'react-dev-utils/FileSizeReporter';
+import { gzip } from 'zlib';
+
+async function computeFileSize(filename: string): Promise<number> {
+  const buffer = await fs.readFile(filename);
+
+  return new Promise((resolve, reject) => {
+    gzip(buffer, { level: 9 }, (error, result) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(result.length);
+      }
+    });
+  });
+}
 
 interface BuildSizesOptions {
   dir: string;
@@ -11,14 +27,12 @@ export async function getBuildSizes({
   cwd,
 }: BuildSizesOptions): Promise<Record<string, number>> {
   const absoluteDir = path.isAbsolute(dir) ? dir : path.join(cwd, dir);
+  const sizes: Record<string, number> = {};
 
-  const { sizes } = await measureFileSizesBeforeBuild(absoluteDir);
+  const globber = await glob.create(`${absoluteDir}/**/*.{js,css}`);
 
-  for (const filename of Object.keys(sizes)) {
-    if (filename.startsWith('/')) {
-      sizes[filename.slice(1)] = sizes[filename];
-      delete sizes[filename];
-    }
+  for await (const filename of globber.globGenerator()) {
+    sizes[filename] = await computeFileSize(filename);
   }
 
   return sizes;
