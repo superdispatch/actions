@@ -1,5 +1,6 @@
 import { restoreCache } from '@actions/cache';
 import { getInput, info, setFailed, warning } from '@actions/core';
+import { context } from '@actions/github';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
@@ -116,7 +117,16 @@ async function getReportContent(
     totalPreviousSize,
   );
 
-  rows.push(format('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
+  rows.push(
+    format(
+      '| %s...%s | %s | %s (%s) |',
+      sha,
+      context.sha,
+      totalSize,
+      totalDelta,
+      totalDiff,
+    ),
+  );
 
   return rows.join('\n');
 }
