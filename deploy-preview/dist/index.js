@@ -10194,7 +10194,6 @@ async function main() {
     ], {
         listeners: {
             stdout: (data) => {
-                (0,core.info)(data.toString());
                 deployJSON += data.toString();
             },
         },
