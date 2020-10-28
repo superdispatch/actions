@@ -87,9 +87,14 @@ async function getReportContent(
     ...currentSizes,
   }).sort((a, b) => a.localeCompare(b));
 
-  const rows = ['| Path | Size | Delta |', '| - | - | - |'];
   let totalCurrentSize = 0;
   let totalPreviousSize = 0;
+
+  const rows = [
+    format('%s...%s', sha, context.sha),
+    '| Path | Size | Delta |',
+    '| - | - | - |',
+  ];
 
   for (const file of files) {
     const currentSize = toFinite(currentSizes[file]);
@@ -102,7 +107,7 @@ async function getReportContent(
 
     rows.push(
       format(
-        '| %s**%s** | %s | %s (%s) |',
+        '| %s/**%s** | %s | %s (%s) |',
         path.dirname(file),
         path.basename(file),
         size,
@@ -117,16 +122,7 @@ async function getReportContent(
     totalPreviousSize,
   );
 
-  rows.push(
-    format(
-      '| %s...%s | %s | %s (%s) |',
-      sha,
-      context.sha,
-      totalSize,
-      totalDelta,
-      totalDiff,
-    ),
-  );
+  rows.push(format('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
 
   return rows.join('\n');
 }
