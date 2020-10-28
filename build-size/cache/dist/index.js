@@ -57875,17 +57875,18 @@ function getBuildSnapshotMeta({ sha, label, }) {
 
 
 
+
 main().catch(core.setFailed);
 async function main() {
     const dir = (0,core.getInput)('dir');
     const sha = (0,core.getInput)('sha');
     const label = (0,core.getInput)('label');
     const meta = getBuildSnapshotMeta({ sha, label });
-    (0,core.info)(`Measuring build folder "${dir}"…`);
+    (0,core.info)((0,external_util_.format)('Measuring build folder "%s"…', dir));
     const sizes = await getBuildSizes(dir);
-    (0,core.info)(`File sizes ready: ${JSON.stringify(sizes)}`);
+    (0,core.info)((0,external_util_.format)('File sizes ready:\n%O', sizes));
     await external_fs_.promises.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');
-    (0,core.info)(`Writing "${meta.filename}" to "${meta.key}" cache.`);
+    (0,core.info)((0,external_util_.format)('Writing "%s" to "%s" cache.', meta.filename, meta.key));
     await (0,cache.saveCache)([meta.filename], meta.key);
 }
 

@@ -15,12 +15,12 @@ jobs:
 
       - uses: ./build-size/cache
         with:
-          dir: ./build-size/cache/dist
+          dir: ./build-size/cache
 
       - uses: ./build-size/cache
         with:
           label: custom-label
-          dir: ./build-size/report/dist
+          dir: ./build-size/report
 
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
@@ -33,13 +33,13 @@ jobs:
       - uses: ./build-size/report
         with:
           label: should-fail
-          dir: ./build-size/cache/dist
+          dir: ./build-size/cache
 
       - uses: ./build-size/report
         with:
-          dir: ./build-size/cache/dist
+          dir: ./build-size/cache
 
       - uses: ./build-size/report
         with:
           label: custom-label
-          dir: ./build-size/report/dist
+          dir: ./build-size/report

@@ -61004,6 +61004,7 @@ var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
 
 
 
+
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
@@ -61030,6 +61031,7 @@ function formatRow(currentSize, previousSize) {
 }
 async function getReportContent(dir, sha, label) {
     const meta = getBuildSnapshotMeta({ sha, label });
+    (0,core.info)((0,external_util_.format)('Restoring "%s" ("%s") cache to the "%s"', meta.key, meta.restoreKey, meta.filename));
     const restoredKey = await (0,cache.restoreCache)([meta.filename], meta.key, [
         meta.restoreKey,
     ]);
@@ -61037,7 +61039,7 @@ async function getReportContent(dir, sha, label) {
         return 'Failed to restore previous report cache.';
     }
     if (restoredKey !== meta.key) {
-        (0,core.warning)(`Failed to find latest key for sha "${sha}", using "${restoredKey}" instead.`);
+        (0,core.warning)((0,external_util_.format)('Failed to find latest key for sha "%s", using "%s" instead.', sha, restoredKey));
     }
     const previousSizesJSON = await external_fs_.promises.readFile(meta.filename, 'utf-8');
     const previousSizes = JSON.parse(previousSizesJSON);
@@ -61055,10 +61057,10 @@ async function getReportContent(dir, sha, label) {
         totalCurrentSize += currentSize;
         totalPreviousSize += previousSize;
         const [size, delta, diff] = formatRow(currentSize, previousSize);
-        rows.push(`| ${file} | ${size} | ${delta} (${diff}) |`);
+        rows.push((0,external_util_.format)('| %s | %s | %s (%s) |', file, size, delta, diff));
     }
     const [totalSize, totalDelta, totalDiff] = formatRow(totalCurrentSize, totalPreviousSize);
-    rows.push(`| | ${totalSize} | ${totalDelta} (${totalDiff}) |`);
+    rows.push((0,external_util_.format)('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
     return rows.join('\n');
 }
 async function main() {
