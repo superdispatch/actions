@@ -13,14 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./build-size
+      - uses: ./build-size/cache
         with:
-          dir: ./build-size/dist
+          dir: ./build-size/cache/dist
 
-      - uses: ./build-size
+      - uses: ./build-size/cache
         with:
           label: custom-label
-          dir: ./build-size/dist
+          dir: ./build-size/report/dist
 
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
