@@ -10180,6 +10180,10 @@ async function main() {
     const netlifySiteID = (0,core.getInput)('netlify-site-id');
     let deployJSON = '';
     (0,core.info)((0,external_util_.format)('Deploying "%sæ from "%s"…', alias, dir));
+    await (0,exec.exec)('netlify', ['--help']);
+    await (0,exec.exec)('netlify', ['deploy', '--help']);
+    await (0,exec.exec)('npx', ['netlify', '--help']);
+    await (0,exec.exec)('npx', ['netlify', 'deploy', '--help']);
     await (0,exec.exec)('netlify', ['deploy', '--json', '--dir', dir, '--alias', alias], {
         env: {
             ...process.env,

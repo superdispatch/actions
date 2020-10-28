@@ -16,6 +16,11 @@ async function main() {
 
   info(format('Deploying "%sæ from "%s"…', alias, dir));
 
+  await exec('netlify', ['--help']);
+  await exec('netlify', ['deploy', '--help']);
+  await exec('npx', ['netlify', '--help']);
+  await exec('npx', ['netlify', 'deploy', '--help']);
+
   await exec('netlify', ['deploy', '--json', '--dir', dir, '--alias', alias], {
     env: {
       ...process.env,
