@@ -5,6 +5,7 @@ import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
 import filesize from 'filesize';
 import { promises as fs } from 'fs';
+import path from 'path';
 import { format } from 'util';
 
 function toFinite(value: unknown): number {
@@ -97,7 +98,16 @@ async function getReportContent(
 
     const [size, delta, diff] = formatRow(currentSize, previousSize);
 
-    rows.push(format('| %s | %s | %s (%s) |', file, size, delta, diff));
+    rows.push(
+      format(
+        '| %s**%s** | %s | %s (%s) |',
+        path.dirname(file),
+        path.basename(file),
+        size,
+        delta,
+        diff,
+      ),
+    );
   }
 
   const [totalSize, totalDelta, totalDiff] = formatRow(
