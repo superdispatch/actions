@@ -1,5 +1,5 @@
 {
-  "include": ["@types", "utils", "build-size"],
+  "include": ["@types", "utils", "build-size", "deploy-preview"],
   "extends": "@superdispatch/tsconfig",
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo"

@@ -6,7 +6,8 @@
   "workspaces": {
     "packages": [
       "utils",
-      "build-size"
+      "build-size",
+      "deploy-preview"
     ]
   },
   "scripts": {
