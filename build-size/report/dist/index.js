@@ -60946,12 +60946,13 @@ var external_util_ = __webpack_require__(1669);
 
 
 function getBuildSnapshotMeta({ sha, label, }) {
-    const restoreKey = `build-size-v1-${label}-`;
+    const name = `build-size-v1-${label}`;
+    const restoreKey = `${name}-`;
     const key = restoreKey + sha;
     const meta = {
         key,
         restoreKey,
-        filename: external_path_default().join(external_os_default().tmpdir(), `${key}.json`),
+        filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
     };
     (0,core.info)((0,external_util_.format)('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
     return meta;
