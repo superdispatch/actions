@@ -121,7 +121,7 @@ jobs:
 
       - uses: ./prune-artifacts
         with:
-          skip-latest: 2
+          skip-recent: 2
           pattern: '-${{ github.event.number }}$'
 
       - uses: ./prune-artifacts
