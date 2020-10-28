@@ -49,20 +49,21 @@ async function getReportContent(
 ): Promise<string> {
   const meta = getBuildSnapshotMeta({ sha, label });
 
-  info(
-    format(
-      'Restoring "%s" ("%s") cache to the "%s"',
-      meta.key,
-      meta.restoreKey,
-      meta.filename,
-    ),
-  );
+  info(format('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
 
   const restoredKey = await restoreCache([meta.filename], meta.key, [
     meta.restoreKey,
   ]);
 
   if (!restoredKey) {
+    warning(
+      format(
+        'Failed to restore cache from [%s, %s] keys',
+        meta.key,
+        restoredKey,
+      ),
+    );
+
     return 'Failed to restore previous report cache.';
   }
 
