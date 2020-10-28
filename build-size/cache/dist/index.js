@@ -57887,7 +57887,17 @@ async function main() {
     (0,core.info)((0,external_util_.format)('File sizes ready:\n%O', sizes));
     await external_fs_.promises.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');
     (0,core.info)((0,external_util_.format)('Writing "%s" to "%s" cache.', meta.filename, meta.key));
-    await (0,cache.saveCache)([meta.filename], meta.key);
+    try {
+        await (0,cache.saveCache)([meta.filename], meta.key);
+    }
+    catch (e) {
+        if (e instanceof cache.ReserveCacheError) {
+            (0,core.warning)(e);
+        }
+        else {
+            throw e;
+        }
+    }
 }
 
 
