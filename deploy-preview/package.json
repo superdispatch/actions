@@ -1,6 +1,6 @@
 {
   "name": "@actions/deploy-preview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "scripts": {
     "version": "ncc build src/index.ts -s -o dist"
