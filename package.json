@@ -12,7 +12,7 @@
   "scripts": {
     "build": "lerna run version",
     "lint": "js-tools lint",
-    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn test && yarn build",
+    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
     "release": "yarn lerna version"
   },
   "husky": {
