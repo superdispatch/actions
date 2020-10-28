@@ -1,7 +1,8 @@
-import { getInput, setFailed } from '@actions/core';
+import { getInput, info, setFailed } from '@actions/core';
 import { exec } from '@actions/exec';
 import { context } from '@actions/github';
 import { sendReport } from '@actions/utils/sendReport';
+import { format } from 'util';
 
 async function main() {
   const pr = getInput('pr');
@@ -12,6 +13,8 @@ async function main() {
   const netlifySiteID = getInput('netlify-site-id');
 
   let deployJSON = '';
+
+  info(format('Deploying "%sæ from "%s"…', alias, dir));
 
   await exec('netlify', ['deploy', '--json', '--dir', dir, '--alias', alias], {
     env: {
