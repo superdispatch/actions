@@ -43,3 +43,32 @@ jobs:
         with:
           label: custom-label
           dir: ./build-size/report
+
+  deploy-preview:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          mkdir site
+          echo "<html><body>Hello</body></html>" > site/index.html
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          alias: custom-alias
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}

@@ -1,0 +1,11 @@
+{
+  "name": "@actions/deploy-preview",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "version": "ncc build src/index.ts -s -o dist"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
