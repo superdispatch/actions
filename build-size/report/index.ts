@@ -128,11 +128,11 @@ async function getReportContent(
 }
 
 async function main() {
-  const pr = getInput('pr');
-  const dir = getInput('dir');
-  const sha = getInput('sha');
-  const label = getInput('label');
-  const token = getInput('token');
+  const pr = getInput('pr', { required: true });
+  const dir = getInput('dir', { required: true });
+  const sha = getInput('sha', { required: true });
+  const label = getInput('label', { required: true });
+  const token = getInput('token', { required: true });
 
   const content = await getReportContent(dir, sha, label);
 

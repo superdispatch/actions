@@ -8,9 +8,9 @@ import { format } from 'util';
 main().catch(setFailed);
 
 async function main() {
-  const dir = getInput('dir');
-  const sha = getInput('sha');
-  const label = getInput('label');
+  const dir = getInput('dir', { required: true });
+  const sha = getInput('sha', { required: true });
+  const label = getInput('label', { required: true });
 
   const meta = getBuildSnapshotMeta({ sha, label });
 

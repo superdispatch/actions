@@ -5,10 +5,10 @@ import { sendReport } from '@actions/utils/sendReport';
 import { format } from 'util';
 
 async function main() {
-  const pr = getInput('pr');
-  const dir = getInput('dir');
+  const pr = getInput('pr', { required: true });
+  const dir = getInput('dir', { required: true });
   const alias = getInput('alias') || `preview-${pr}`;
-  const token = getInput('token');
+  const token = getInput('token', { required: true });
   const netlifyToken = getInput('netlify-token', { required: true });
   const netlifySiteID = getInput('netlify-site-id', { required: true });
 
