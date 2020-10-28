@@ -1,0 +1,16 @@
+name: 'Build Size Cache'
+description: 'Caches build size'
+author: 'superdispatch'
+inputs:
+  dir:
+    required: true
+    description: 'path to the build folder'
+
+  label:
+    required: true
+    default: 'default'
+    description: 'custom label to distinguish multiple builds'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

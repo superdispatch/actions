@@ -29,7 +29,9 @@ async function getSizes(dir: string): Promise<Record<string, number>> {
   return sizes;
 }
 
-async function collect(dir: string, label: string) {
+async function main() {
+  const dir = getInput('dir');
+  const label = getInput('label');
   const [key, filepath] = getSnapshotInfo(label);
   const sizes = await getSizes(dir);
 
@@ -38,18 +40,4 @@ async function collect(dir: string, label: string) {
   info(`Writing "${filepath}" to "${key}" cache.`);
 
   await saveCache([filepath], key);
-}
-
-async function main() {
-  const dir = getInput('dir');
-  const step = getInput('step');
-  const label = getInput('label');
-
-  switch (step) {
-    case 'collect':
-      return collect(dir, label);
-    default: {
-      throw new Error(`Unknown step "${step}".`);
-    }
-  }
 }
