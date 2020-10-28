@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig",
   "compilerOptions": {
-    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "dist123/tsconfig.tsbuildinfo"
   }
 }
