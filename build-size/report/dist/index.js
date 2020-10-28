@@ -61052,19 +61052,23 @@ async function getReportContent(dir, sha, label) {
         ...previousSizes,
         ...currentSizes,
     }).sort((a, b) => a.localeCompare(b));
-    const rows = ['| Path | Size | Delta |', '| - | - | - |'];
     let totalCurrentSize = 0;
     let totalPreviousSize = 0;
+    const rows = [
+        (0,external_util_.format)('%s...%s', sha, github.context.sha),
+        '| Path | Size | Delta |',
+        '| - | - | - |',
+    ];
     for (const file of files) {
         const currentSize = toFinite(currentSizes[file]);
         const previousSize = toFinite(previousSizes[file]);
         totalCurrentSize += currentSize;
         totalPreviousSize += previousSize;
         const [size, delta, diff] = formatRow(currentSize, previousSize);
-        rows.push((0,external_util_.format)('| %s**%s** | %s | %s (%s) |', external_path_default().dirname(file), external_path_default().basename(file), size, delta, diff));
+        rows.push((0,external_util_.format)('| %s/**%s** | %s | %s (%s) |', external_path_default().dirname(file), external_path_default().basename(file), size, delta, diff));
     }
     const [totalSize, totalDelta, totalDiff] = formatRow(totalCurrentSize, totalPreviousSize);
-    rows.push((0,external_util_.format)('| %s...%s | %s | %s (%s) |', sha, github.context.sha, totalSize, totalDelta, totalDiff));
+    rows.push((0,external_util_.format)('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
     return rows.join('\n');
 }
 async function main() {
