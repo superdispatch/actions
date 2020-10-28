@@ -57858,12 +57858,13 @@ var external_util_ = __webpack_require__(1669);
 
 
 function getBuildSnapshotMeta({ sha, label, }) {
-    const restoreKey = `build-size-v1-${label}-`;
+    const name = `build-size-v1-${label}`;
+    const restoreKey = `${name}-`;
     const key = restoreKey + sha;
     const meta = {
         key,
         restoreKey,
-        filename: external_path_default().join(external_os_default().tmpdir(), `${key}.json`),
+        filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
     };
     (0,core.info)((0,external_util_.format)('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
     return meta;
@@ -57875,18 +57876,29 @@ function getBuildSnapshotMeta({ sha, label, }) {
 
 
 
+
 main().catch(core.setFailed);
 async function main() {
     const dir = (0,core.getInput)('dir');
     const sha = (0,core.getInput)('sha');
     const label = (0,core.getInput)('label');
     const meta = getBuildSnapshotMeta({ sha, label });
-    (0,core.info)(`Measuring build folder "${dir}"…`);
+    (0,core.info)((0,external_util_.format)('Measuring build folder "%s"…', dir));
     const sizes = await getBuildSizes(dir);
-    (0,core.info)(`File sizes ready: ${JSON.stringify(sizes)}`);
+    (0,core.info)((0,external_util_.format)('File sizes ready:\n%O', sizes));
     await external_fs_.promises.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');
-    (0,core.info)(`Writing "${meta.filename}" to "${meta.key}" cache.`);
-    await (0,cache.saveCache)([meta.filename], meta.key);
+    (0,core.info)((0,external_util_.format)('Writing "%s" to "%s" cache.', meta.filename, meta.key));
+    try {
+        await (0,cache.saveCache)([meta.filename], meta.key);
+    }
+    catch (e) {
+        if (e instanceof cache.ReserveCacheError) {
+            (0,core.warning)(e);
+        }
+        else {
+            throw e;
+        }
+    }
 }
 
 

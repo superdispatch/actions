@@ -1,5 +1,5 @@
-import { saveCache } from '@actions/cache';
-import { getInput, info, setFailed } from '@actions/core';
+import { ReserveCacheError, saveCache } from '@actions/cache';
+import { getInput, info, setFailed, warning } from '@actions/core';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { promises as fs } from 'fs';
@@ -24,5 +24,13 @@ async function main() {
 
   info(format('Writing "%s" to "%s" cache.', meta.filename, meta.key));
 
-  await saveCache([meta.filename], meta.key);
+  try {
+    await saveCache([meta.filename], meta.key);
+  } catch (e: unknown) {
+    if (e instanceof ReserveCacheError) {
+      warning(e);
+    } else {
+      throw e;
+    }
+  }
 }
