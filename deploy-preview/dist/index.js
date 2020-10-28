@@ -10176,16 +10176,22 @@ async function main() {
     const dir = (0,core.getInput)('dir');
     const alias = (0,core.getInput)('alias') || `preview-${pr}`;
     const token = (0,core.getInput)('token');
-    const netlifyToken = (0,core.getInput)('netlify-token');
-    const netlifySiteID = (0,core.getInput)('netlify-site-id');
+    const netlifyToken = (0,core.getInput)('netlify-token', { required: true });
+    const netlifySiteID = (0,core.getInput)('netlify-site-id', { required: true });
     let deployJSON = '';
     (0,core.info)((0,external_util_.format)('Deploying "%sæ from "%s"…', alias, dir));
-    await (0,exec.exec)('netlify', ['deploy', '--dir', dir, '--alias', alias], {
-        env: {
-            ...process.env,
-            NETLIFY_SITE_ID: netlifySiteID,
-            NETLIFY_AUTH_TOKEN: netlifyToken,
-        },
+    await (0,exec.exec)('netlify', [
+        'deploy',
+        '--json',
+        '--dir',
+        dir,
+        '--alias',
+        alias,
+        '--auth',
+        netlifyToken,
+        '--site',
+        netlifySiteID,
+    ], {
         listeners: {
             stdout: (data) => {
                 (0,core.info)(data.toString());
