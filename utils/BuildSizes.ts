@@ -17,22 +17,40 @@ async function computeFileSize(filename: string): Promise<number> {
   });
 }
 
-interface BuildSizesOptions {
-  dir: string;
-  cwd: string;
+function shouldIgnoreFile(filename: string) {
+  return (
+    /\.(js|css)$/.test(filename) &&
+    !/service-worker\.js$/.test(filename) &&
+    !/precache-manifest\.[0-9a-f]+\.js$/.test(filename)
+  );
 }
 
-export async function getBuildSizes({
-  dir,
-  cwd,
-}: BuildSizesOptions): Promise<Record<string, number>> {
-  const absoluteDir = path.isAbsolute(dir) ? dir : path.join(cwd, dir);
+function getFileNameKey(filename: string, buildPath: string): string {
+  const key = path.relative(buildPath, filename);
+
+  return (
+    key
+      // `1.a57f92fb.chunk.js` -> `1.[hash].chunk.js`
+      .replace(/\.([a-f0-9])+\./, '.[hash].')
+  );
+}
+
+export async function getBuildSizes(
+  dir: string,
+): Promise<Record<string, number>> {
+  const globber = await glob.create(dir);
+  const [buildPath] = globber.getSearchPaths();
+
   const sizes: Record<string, number> = {};
 
-  const globber = await glob.create(`${absoluteDir}/**/*.{js,css}`);
-
   for await (const filename of globber.globGenerator()) {
-    sizes[filename] = await computeFileSize(filename);
+    if (shouldIgnoreFile(filename)) {
+      continue;
+    }
+
+    const key = getFileNameKey(filename, buildPath);
+
+    sizes[key] = await computeFileSize(filename);
   }
 
   return sizes;

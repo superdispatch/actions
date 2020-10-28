@@ -63,7 +63,7 @@ async function getReportContent(
 
   const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
   const previousSizes = JSON.parse(previousSizesJSON) as Record<string, number>;
-  const currentSizes = await getBuildSizes({ dir, cwd: process.cwd() });
+  const currentSizes = await getBuildSizes(dir);
 
   const files = Object.keys({
     ...previousSizes,

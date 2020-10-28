@@ -15,7 +15,7 @@ async function main() {
 
   info(`Measuring build folder "${dir}"…`);
 
-  const sizes = await getBuildSizes({ dir, cwd: process.cwd() });
+  const sizes = await getBuildSizes(dir);
 
   info(`File sizes ready: ${JSON.stringify(sizes)}`);
 
