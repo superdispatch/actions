@@ -16,20 +16,30 @@ async function main() {
 
   info(format('Deploying "%sæ from "%s"…', alias, dir));
 
-  await exec('netlify', ['deploy', '--dir', dir, '--alias', alias], {
-    env: {
-      ...process.env,
-      NETLIFY_SITE_ID: netlifySiteID,
-      NETLIFY_AUTH_TOKEN: netlifyToken,
-    },
-    listeners: {
-      stdout: (data) => {
-        info(data.toString());
+  await exec(
+    'netlify',
+    [
+      'deploy',
+      '--json',
+      '--dir',
+      dir,
+      '--alias',
+      alias,
+      '--auth',
+      netlifyToken,
+      '--site',
+      netlifySiteID,
+    ],
+    {
+      listeners: {
+        stdout: (data) => {
+          info(data.toString());
 
-        deployJSON += data.toString();
+          deployJSON += data.toString();
+        },
       },
     },
-  });
+  );
 
   const { deploy_url: previewURL } = JSON.parse(deployJSON) as {
     deploy_url: string;
