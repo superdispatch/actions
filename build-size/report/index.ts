@@ -26,19 +26,15 @@ function formatRow(
     delta = 0;
   }
 
-  let formattedDelta = filesize(delta);
+  const deltaFormat = delta > 0 ? '+%s' : '%s';
+  const formattedDelta = format(deltaFormat, filesize(delta));
 
   const diff = delta / currentSize;
-  let formattedDiff = diff.toLocaleString('en-us', {
-    style: 'percent',
-  });
-
-  if (diff > 0) {
-    formattedDiff = `+${formattedDiff} 🔺`;
-    formattedDelta = `+${formattedDelta}`;
-  } else if (diff < 0) {
-    formattedDiff = `${formattedDiff} 🔽`;
-  }
+  const diffFormat = diff > 0 ? '+%s 🔺' : diff < 0 ? '%s 🔽' : '%s';
+  const formattedDiff = format(
+    diffFormat,
+    diff.toLocaleString('en-us', { style: 'percent' }),
+  );
 
   return [formattedSize, formattedDelta, formattedDiff];
 }
