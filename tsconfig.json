@@ -1,6 +1,12 @@
 {
-  "include": ["@types", "utils", "build-size", "deploy-preview"],
+  "include": ["@types", "utils", "scripts", "build-size", "deploy-preview"],
   "extends": "@superdispatch/tsconfig",
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo"
   }
