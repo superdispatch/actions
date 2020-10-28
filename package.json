@@ -9,7 +9,7 @@
     ]
   },
   "scripts": {
-    "build": "lerna run version",
+    "build": "lerna run version --parallel",
     "lint": "js-tools lint",
     "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint",
     "release": "yarn lerna version",

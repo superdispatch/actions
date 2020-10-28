@@ -37,13 +37,20 @@ async function main() {
 
     for (const { id, name } of artifacts) {
       if (!matcher.exec(name)) {
-        info(format('Skipping "%s"…', name));
+        info(
+          format('Skipping "%s" (not matching pattern "%s")', name, pattern),
+        );
 
         continue;
       }
 
       if (skipRecent > skipped) {
         skipped += 1;
+
+        info(
+          format('Skipping "%s" (belongs to recent "%s")', name, skipRecent),
+        );
+
         continue;
       }
 

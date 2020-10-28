@@ -8987,11 +8987,12 @@ async function main() {
         let skipped = 0;
         for (const { id, name } of artifacts) {
             if (!matcher.exec(name)) {
-                (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)((0,util__WEBPACK_IMPORTED_MODULE_2__.format)('Skipping "%s"…', name));
+                (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)((0,util__WEBPACK_IMPORTED_MODULE_2__.format)('Skipping "%s" (not matching pattern "%s")', name, pattern));
                 continue;
             }
             if (skipRecent > skipped) {
                 skipped += 1;
+                (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)((0,util__WEBPACK_IMPORTED_MODULE_2__.format)('Skipping "%s" (belongs to recent "%s")', name, skipRecent));
                 continue;
             }
             (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.info)((0,util__WEBPACK_IMPORTED_MODULE_2__.format)('Removing "%s" artifact with the id "%s"…', name, id));
