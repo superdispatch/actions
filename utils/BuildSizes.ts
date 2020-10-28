@@ -17,7 +17,7 @@ async function computeFileSize(filename: string): Promise<number> {
   });
 }
 
-function shouldIgnoreFile(filename: string) {
+function isValidFile(filename: string) {
   return (
     /\.(js|css)$/.test(filename) &&
     !/service-worker\.js$/.test(filename) &&
@@ -44,7 +44,7 @@ export async function getBuildSizes(
   const sizes: Record<string, number> = {};
 
   for await (const filename of globber.globGenerator()) {
-    if (shouldIgnoreFile(filename)) {
+    if (!isValidFile(filename)) {
       continue;
     }
 
