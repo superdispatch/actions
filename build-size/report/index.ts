@@ -1,7 +1,7 @@
 import { restoreCache } from '@actions/cache';
 import { getInput, setFailed, warning } from '@actions/core';
-import { getBuildSizes } from '@actions/utils/getBuildSizes';
-import { getSnapshotMeta } from '@actions/utils/getSnapshotMeta';
+import { getBuildSizes } from '@actions/utils/BuildSizes';
+import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
 import filesize from 'filesize';
 import fs from 'fs';
@@ -45,7 +45,7 @@ async function getReportContent(
   sha: string,
   label: string,
 ): Promise<string> {
-  const meta = getSnapshotMeta({ sha, label });
+  const meta = getBuildSnapshotMeta({ sha, label });
 
   const restoredKey = await restoreCache([meta.filename], meta.key, [
     meta.restoreKey,

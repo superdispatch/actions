@@ -1,7 +1,7 @@
 import { saveCache } from '@actions/cache';
 import { getInput, info, setFailed } from '@actions/core';
-import { getBuildSizes } from '@actions/utils/getBuildSizes';
-import { getSnapshotMeta } from '@actions/utils/getSnapshotMeta';
+import { getBuildSizes } from '@actions/utils/BuildSizes';
+import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import fs from 'fs';
 
 main().catch(setFailed);
@@ -11,7 +11,7 @@ async function main() {
   const sha = getInput('sha');
   const label = getInput('label');
 
-  const meta = getSnapshotMeta({ sha, label });
+  const meta = getBuildSnapshotMeta({ sha, label });
 
   info(`Measuring build folder "${dir}"…`);
 

@@ -3,24 +3,24 @@ import os from 'os';
 import path from 'path';
 import { format } from 'util';
 
-export interface SnapshotMeta {
+export interface BuildSnapshotMeta {
   key: string;
   restoreKey: string;
   filename: string;
 }
 
-export interface SnapshotMetaOptions {
+export interface BuildSnapshotMetaOptions {
   sha: string;
   label: string;
 }
 
-export function getSnapshotMeta({
+export function getBuildSnapshotMeta({
   sha,
   label,
-}: SnapshotMetaOptions): SnapshotMeta {
+}: BuildSnapshotMetaOptions): BuildSnapshotMeta {
   const restoreKey = `build-size-v1-${label}-`;
   const key = restoreKey + sha;
-  const meta: SnapshotMeta = {
+  const meta: BuildSnapshotMeta = {
     key,
     restoreKey,
     filename: path.join(os.tmpdir(), `${key}.json`),
