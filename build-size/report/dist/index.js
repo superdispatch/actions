@@ -61006,6 +61006,7 @@ var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
 
 
 
+
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
@@ -61037,7 +61038,7 @@ async function getReportContent(dir, sha, label) {
         meta.restoreKey,
     ]);
     if (!restoredKey) {
-        (0,core.warning)((0,external_util_.format)('Failed to restore cache from [%s, %s] keys', meta.key, restoredKey));
+        (0,core.warning)((0,external_util_.format)('Failed to restore cache from [%s, %s] keys', meta.key, meta.restoreKey));
         return 'Failed to restore previous report cache.';
     }
     if (restoredKey !== meta.key) {
@@ -61062,7 +61063,7 @@ async function getReportContent(dir, sha, label) {
         rows.push((0,external_util_.format)('| %s**%s** | %s | %s (%s) |', external_path_default().dirname(file), external_path_default().basename(file), size, delta, diff));
     }
     const [totalSize, totalDelta, totalDiff] = formatRow(totalCurrentSize, totalPreviousSize);
-    rows.push((0,external_util_.format)('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
+    rows.push((0,external_util_.format)('| %s...%s | %s | %s (%s) |', sha, github.context.sha, totalSize, totalDelta, totalDiff));
     return rows.join('\n');
 }
 async function main() {
