@@ -60,7 +60,7 @@ async function getReportContent(
       format(
         'Failed to restore cache from [%s, %s] keys',
         meta.key,
-        restoredKey,
+        meta.restoreKey,
       ),
     );
 
