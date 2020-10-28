@@ -3,9 +3,10 @@
   "version": "1.0.2",
   "license": "MIT",
   "scripts": {
+    "build": "yarn build:cache && yarn build:report",
     "build:cache": "ncc build cache/index.ts -s -o cache/dist",
     "build:report": "ncc build report/index.ts -s -o report/dist",
-    "version": "yarn build:cache && yarn build:report"
+    "version": "yarn build && git add ."
   },
   "engines": {
     "node": ">=12"
