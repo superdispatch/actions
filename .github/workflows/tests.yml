@@ -54,11 +54,6 @@ jobs:
           mkdir site
           echo "<html><body>Hello</body></html>" > site/index.html
 
-      - run: netlify --help
-      - run: netlify deploy --help
-      - run: npx netlify --help
-      - run: npx netlify deploy --help
-
       - uses: ./deploy-preview
         with:
           dir: site
