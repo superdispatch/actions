@@ -18,12 +18,13 @@ export function getBuildSnapshotMeta({
   sha,
   label,
 }: BuildSnapshotMetaOptions): BuildSnapshotMeta {
-  const restoreKey = `build-size-v1-${label}-`;
+  const name = `build-size-v1-${label}`;
+  const restoreKey = `${name}-`;
   const key = restoreKey + sha;
   const meta: BuildSnapshotMeta = {
     key,
     restoreKey,
-    filename: path.join(os.tmpdir(), `${key}.json`),
+    filename: path.join(os.tmpdir(), `${name}.json`),
   };
 
   info(format('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));

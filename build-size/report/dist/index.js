@@ -60946,12 +60946,13 @@ var external_util_ = __webpack_require__(1669);
 
 
 function getBuildSnapshotMeta({ sha, label, }) {
-    const restoreKey = `build-size-v1-${label}-`;
+    const name = `build-size-v1-${label}`;
+    const restoreKey = `${name}-`;
     const key = restoreKey + sha;
     const meta = {
         key,
         restoreKey,
-        filename: external_path_default().join(external_os_default().tmpdir(), `${key}.json`),
+        filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
     };
     (0,core.info)((0,external_util_.format)('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
     return meta;
@@ -61004,6 +61005,9 @@ var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
 
 
 
+
+
+
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
@@ -61030,14 +61034,16 @@ function formatRow(currentSize, previousSize) {
 }
 async function getReportContent(dir, sha, label) {
     const meta = getBuildSnapshotMeta({ sha, label });
+    (0,core.info)((0,external_util_.format)('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
     const restoredKey = await (0,cache.restoreCache)([meta.filename], meta.key, [
         meta.restoreKey,
     ]);
     if (!restoredKey) {
+        (0,core.warning)((0,external_util_.format)('Failed to restore cache from [%s, %s] keys', meta.key, meta.restoreKey));
         return 'Failed to restore previous report cache.';
     }
     if (restoredKey !== meta.key) {
-        (0,core.warning)(`Failed to find latest key for sha "${sha}", using "${restoredKey}" instead.`);
+        (0,core.warning)((0,external_util_.format)('Failed to find latest key for sha "%s", using "%s" instead.', sha, restoredKey));
     }
     const previousSizesJSON = await external_fs_.promises.readFile(meta.filename, 'utf-8');
     const previousSizes = JSON.parse(previousSizesJSON);
@@ -61046,19 +61052,23 @@ async function getReportContent(dir, sha, label) {
         ...previousSizes,
         ...currentSizes,
     }).sort((a, b) => a.localeCompare(b));
-    const rows = ['| Path | Size | Delta |', '| - | - | - |'];
     let totalCurrentSize = 0;
     let totalPreviousSize = 0;
+    const rows = [
+        (0,external_util_.format)('%s...%s', sha, github.context.sha),
+        '| Path | Size | Delta |',
+        '| - | - | - |',
+    ];
     for (const file of files) {
         const currentSize = toFinite(currentSizes[file]);
         const previousSize = toFinite(previousSizes[file]);
         totalCurrentSize += currentSize;
         totalPreviousSize += previousSize;
         const [size, delta, diff] = formatRow(currentSize, previousSize);
-        rows.push(`| ${file} | ${size} | ${delta} (${diff}) |`);
+        rows.push((0,external_util_.format)('| %s/**%s** | %s | %s (%s) |', external_path_default().dirname(file), external_path_default().basename(file), size, delta, diff));
     }
     const [totalSize, totalDelta, totalDiff] = formatRow(totalCurrentSize, totalPreviousSize);
-    rows.push(`| | ${totalSize} | ${totalDelta} (${totalDiff}) |`);
+    rows.push((0,external_util_.format)('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
     return rows.join('\n');
 }
 async function main() {

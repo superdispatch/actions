@@ -1,10 +1,13 @@
 import { restoreCache } from '@actions/cache';
-import { getInput, setFailed, warning } from '@actions/core';
+import { getInput, info, setFailed, warning } from '@actions/core';
+import { context } from '@actions/github';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
 import filesize from 'filesize';
 import { promises as fs } from 'fs';
+import path from 'path';
+import { format } from 'util';
 
 function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;
@@ -47,17 +50,31 @@ async function getReportContent(
 ): Promise<string> {
   const meta = getBuildSnapshotMeta({ sha, label });
 
+  info(format('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
+
   const restoredKey = await restoreCache([meta.filename], meta.key, [
     meta.restoreKey,
   ]);
 
   if (!restoredKey) {
+    warning(
+      format(
+        'Failed to restore cache from [%s, %s] keys',
+        meta.key,
+        meta.restoreKey,
+      ),
+    );
+
     return 'Failed to restore previous report cache.';
   }
 
   if (restoredKey !== meta.key) {
     warning(
-      `Failed to find latest key for sha "${sha}", using "${restoredKey}" instead.`,
+      format(
+        'Failed to find latest key for sha "%s", using "%s" instead.',
+        sha,
+        restoredKey,
+      ),
     );
   }
 
@@ -70,9 +87,14 @@ async function getReportContent(
     ...currentSizes,
   }).sort((a, b) => a.localeCompare(b));
 
-  const rows = ['| Path | Size | Delta |', '| - | - | - |'];
   let totalCurrentSize = 0;
   let totalPreviousSize = 0;
+
+  const rows = [
+    format('%s...%s', sha, context.sha),
+    '| Path | Size | Delta |',
+    '| - | - | - |',
+  ];
 
   for (const file of files) {
     const currentSize = toFinite(currentSizes[file]);
@@ -83,7 +105,16 @@ async function getReportContent(
 
     const [size, delta, diff] = formatRow(currentSize, previousSize);
 
-    rows.push(`| ${file} | ${size} | ${delta} (${diff}) |`);
+    rows.push(
+      format(
+        '| %s/**%s** | %s | %s (%s) |',
+        path.dirname(file),
+        path.basename(file),
+        size,
+        delta,
+        diff,
+      ),
+    );
   }
 
   const [totalSize, totalDelta, totalDiff] = formatRow(
@@ -91,7 +122,7 @@ async function getReportContent(
     totalPreviousSize,
   );
 
-  rows.push(`| | ${totalSize} | ${totalDelta} (${totalDiff}) |`);
+  rows.push(format('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
 
   return rows.join('\n');
 }
