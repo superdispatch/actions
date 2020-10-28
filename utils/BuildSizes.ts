@@ -1,4 +1,4 @@
-import glob from '@actions/glob';
+import { create as createGlob } from '@actions/glob';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { gzip } from 'zlib';
@@ -38,7 +38,7 @@ function getFileNameKey(filename: string, buildPath: string): string {
 export async function getBuildSizes(
   dir: string,
 ): Promise<Record<string, number>> {
-  const globber = await glob.create(dir);
+  const globber = await createGlob(dir);
   const [buildPath] = globber.getSearchPaths();
 
   const sizes: Record<string, number> = {};
