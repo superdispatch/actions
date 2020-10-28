@@ -1,6 +1,6 @@
 {
   "name": "@actions/build-size-cache",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "build:cache": "ncc build cache/index.ts -sm -o cache/dist",
