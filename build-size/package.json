@@ -1,5 +1,5 @@
 {
-  "name": "@actions/build-size-cache",
+  "name": "@actions/build-size",
   "version": "0.1.0",
   "license": "MIT",
   "scripts": {
