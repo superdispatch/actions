@@ -1,43 +1,34 @@
 import { saveCache } from '@actions/cache';
 import { getInput, info, setFailed } from '@actions/core';
-import { context } from '@actions/github';
 import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import { measureFileSizesBeforeBuild } from 'react-dev-utils/FileSizeReporter';
+
+import { getBuildSizes } from '../utils/getBuildSizes';
+import { getSnapshotMeta } from '../utils/getSnapshotMeta';
 
 main().catch(setFailed);
 
-function getSnapshotInfo(label: string): [key: string, filepath: string] {
-  const key = `build-size-v1-${label}-${context.sha}`;
-  const filepath = path.join(os.tmpdir(), `${key}.json`);
+async function main() {
+  const dir = getInput('dir');
+  const sha = getInput('sha');
+  const label = getInput('label');
 
-  info(`Snapshot info for the ${label}: key=${key}, filepath=${filepath}`);
+  const meta = getSnapshotMeta({ sha, label });
 
-  return [key, filepath];
-}
+  info(
+    `Snapshot meta for the ${JSON.stringify({ sha, label })}: ${JSON.stringify(
+      meta,
+    )}`,
+  );
 
-async function getSizes(dir: string): Promise<Record<string, number>> {
-  const absolutePath = path.join(process.cwd(), dir);
+  info(`Measuring build folder "${dir}"…`);
 
-  info(`Measuring files from the "${absolutePath}"…`);
-
-  const { sizes } = await measureFileSizesBeforeBuild(absolutePath);
+  const sizes = await getBuildSizes({ dir, cwd: process.cwd() });
 
   info(`File sizes ready: ${JSON.stringify(sizes)}`);
 
-  return sizes;
-}
+  fs.writeFileSync(meta.filename, JSON.stringify(sizes), 'utf-8');
 
-async function main() {
-  const dir = getInput('dir');
-  const label = getInput('label');
-  const [key, filepath] = getSnapshotInfo(label);
-  const sizes = await getSizes(dir);
+  info(`Writing "${meta.filename}" to "${meta.key}" cache.`);
 
-  fs.writeFileSync(filepath, JSON.stringify(sizes), 'utf-8');
-
-  info(`Writing "${filepath}" to "${key}" cache.`);
-
-  await saveCache([filepath], key);
+  await saveCache([meta.filename], meta.key);
 }

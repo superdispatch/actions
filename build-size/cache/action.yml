@@ -6,6 +6,11 @@ inputs:
     required: true
     description: 'path to the build folder'
 
+  sha:
+    required: true
+    default: '${{ context.sha }}'
+    description: 'commit sha'
+
   label:
     required: true
     default: 'default'
