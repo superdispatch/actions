@@ -24,6 +24,8 @@ async function main() {
     },
     listeners: {
       stdout: (data) => {
+        info(data.toString());
+
         deployJSON += data.toString();
       },
     },
