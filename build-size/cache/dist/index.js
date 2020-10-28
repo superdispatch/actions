@@ -57879,9 +57879,9 @@ function getBuildSnapshotMeta({ sha, label, }) {
 
 main().catch(core.setFailed);
 async function main() {
-    const dir = (0,core.getInput)('dir');
-    const sha = (0,core.getInput)('sha');
-    const label = (0,core.getInput)('label');
+    const dir = (0,core.getInput)('dir', { required: true });
+    const sha = (0,core.getInput)('sha', { required: true });
+    const label = (0,core.getInput)('label', { required: true });
     const meta = getBuildSnapshotMeta({ sha, label });
     (0,core.info)((0,external_util_.format)('Measuring build folder "%s"…', dir));
     const sizes = await getBuildSizes(dir);

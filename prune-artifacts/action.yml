@@ -1,0 +1,21 @@
+name: 'Prune Artifacts'
+description: 'Remove workflow artifacts'
+author: 'superdispatch'
+inputs:
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+  pattern:
+    required: false
+    default: '.*'
+    description: 'RegExp pattern string to match an artifact name'
+
+  skip-recent:
+    required: false
+    description: 'Keep specified number of artifacts even if they are matching provided pattern'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

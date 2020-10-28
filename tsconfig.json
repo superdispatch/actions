@@ -1,5 +1,6 @@
 {
-  "include": ["@types", "utils", "scripts", "build-size", "deploy-preview"],
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"],
   "extends": "@superdispatch/tsconfig",
   "ts-node": {
     "transpileOnly": true,
