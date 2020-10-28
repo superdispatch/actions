@@ -30,4 +30,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: ls -R
+      - uses: ./build-size/report
+        with:
+          dir: ./build-size/cache/dist
+
+      - uses: ./build-size/report
+        with:
+          sha: ${{ github.sha }}
+          dir: ./build-size/cache/dist
+
+      - uses: ./build-size/report
+        with:
+          label: custom-label
+          sha: ${{ github.sha }}
+          dir: ./build-size/report/dist

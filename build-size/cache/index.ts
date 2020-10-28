@@ -1,9 +1,8 @@
 import { saveCache } from '@actions/cache';
 import { getInput, info, setFailed } from '@actions/core';
+import { getBuildSizes } from '@actions/utils/getBuildSizes';
+import { getSnapshotMeta } from '@actions/utils/getSnapshotMeta';
 import fs from 'fs';
-
-import { getBuildSizes } from '../utils/getBuildSizes';
-import { getSnapshotMeta } from '../utils/getSnapshotMeta';
 
 main().catch(setFailed);
 
@@ -13,12 +12,6 @@ async function main() {
   const label = getInput('label');
 
   const meta = getSnapshotMeta({ sha, label });
-
-  info(
-    `Snapshot meta for the ${JSON.stringify({ sha, label })}: ${JSON.stringify(
-      meta,
-    )}`,
-  );
 
   info(`Measuring build folder "${dir}"…`);
 

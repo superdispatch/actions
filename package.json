@@ -5,6 +5,7 @@
   "license": "MIT",
   "workspaces": {
     "packages": [
+      "utils",
       "build-size"
     ]
   },
@@ -36,6 +37,7 @@
     "@superdispatch/tsconfig": "^0.2.4",
     "@vercel/ncc": "^0.24.1",
     "eslint": "^7.4.0",
+    "filesize": "^6.1.0",
     "husky": "^4.2.3",
     "lerna": "^3.22.1",
     "lint-staged": "^10.2.11",
