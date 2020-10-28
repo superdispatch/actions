@@ -21,14 +21,10 @@ async function main() {
     [
       'deploy',
       '--json',
-      '--dir',
-      dir,
-      '--alias',
-      alias,
-      '--auth',
-      netlifyToken,
-      '--site',
-      netlifySiteID,
+      `--dir=${dir}`,
+      `--alias=${alias}`,
+      `--auth=${netlifyToken}`,
+      `--site=${netlifySiteID}`,
     ],
     {
       listeners: {
