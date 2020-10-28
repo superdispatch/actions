@@ -63365,7 +63365,7 @@ __webpack_require__.r(__webpack_exports__);
 main().catch(_actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed);
 function getSnapshotInfo(label) {
     const key = `build-size-v1-${label}-${_actions_github__WEBPACK_IMPORTED_MODULE_2__.context.sha}`;
-    const filepath = path__WEBPACK_IMPORTED_MODULE_5___default().join(os__WEBPACK_IMPORTED_MODULE_4___default().tmpdir(), 'superdispatch', 'actions', 'build-size', `${key}.json`);
+    const filepath = path__WEBPACK_IMPORTED_MODULE_5___default().join(os__WEBPACK_IMPORTED_MODULE_4___default().tmpdir(), `${key}.json`);
     (0,_actions_core__WEBPACK_IMPORTED_MODULE_1__.info)(`Snapshot info for the ${label}: key=${key}, filepath=${filepath}`);
     return [key, filepath];
 }
