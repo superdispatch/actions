@@ -7,7 +7,7 @@ on:
       - '**'
 
 jobs:
-  build-size-snapshot:
+  build-size-cache:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     runs-on: ubuntu-latest
     steps:
