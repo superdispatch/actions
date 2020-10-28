@@ -1,0 +1,47 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches:
+      - '**'
+
+jobs:
+  build-size-cache:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./build-size/cache
+        with:
+          dir: ./build-size/cache/dist
+
+      - uses: ./build-size/cache
+        with:
+          label: custom-label
+          dir: ./build-size/report/dist
+
+  build-size-report:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    needs:
+      - build-size-cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./build-size/report
+        with:
+          label: should-fail
+          dir: ./build-size/cache/dist
+
+      - uses: ./build-size/report
+        with:
+          sha: ${{ github.sha }}
+          dir: ./build-size/cache/dist
+
+      - uses: ./build-size/report
+        with:
+          label: custom-label
+          sha: ${{ github.sha }}
+          dir: ./build-size/report/dist

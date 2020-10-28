@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "packages": ["build-size"],
+  "command": {
+    "version": {
+      "message": "%s",
+      "ignoreChanges": ["**/__tests__/*.*", "**/__testutils__/*.*"]
+    }
+  }
+}

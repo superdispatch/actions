@@ -1,0 +1,4 @@
+{
+  "include": ["@types", "utils", "build-size"],
+  "extends": "@superdispatch/tsconfig"
+}

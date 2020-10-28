@@ -1,0 +1,31 @@
+name: 'Build Size Cache'
+description: 'Caches build size'
+author: 'superdispatch'
+inputs:
+  dir:
+    required: true
+    description: 'path to the build folder'
+
+  sha:
+    required: true
+    default: '${{ github.event.pull_request.base.sha }}'
+    description: 'commit sha'
+
+  label:
+    required: true
+    default: 'default'
+    description: 'custom label to distinguish multiple builds'
+
+  pr:
+    required: true
+    default: '${{ github.event.number }}'
+    description: 'pull request number'
+
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
