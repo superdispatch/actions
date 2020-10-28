@@ -1,10 +1,11 @@
 import { restoreCache } from '@actions/cache';
-import { getInput, setFailed, warning } from '@actions/core';
+import { getInput, info, setFailed, warning } from '@actions/core';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { sendReport } from '@actions/utils/sendReport';
 import filesize from 'filesize';
 import { promises as fs } from 'fs';
+import { format } from 'util';
 
 function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;
@@ -47,6 +48,15 @@ async function getReportContent(
 ): Promise<string> {
   const meta = getBuildSnapshotMeta({ sha, label });
 
+  info(
+    format(
+      'Restoring "%s" ("%s") cache to the "%s"',
+      meta.key,
+      meta.restoreKey,
+      meta.filename,
+    ),
+  );
+
   const restoredKey = await restoreCache([meta.filename], meta.key, [
     meta.restoreKey,
   ]);
@@ -57,7 +67,11 @@ async function getReportContent(
 
   if (restoredKey !== meta.key) {
     warning(
-      `Failed to find latest key for sha "${sha}", using "${restoredKey}" instead.`,
+      format(
+        'Failed to find latest key for sha "%s", using "%s" instead.',
+        sha,
+        restoredKey,
+      ),
     );
   }
 
@@ -83,7 +97,7 @@ async function getReportContent(
 
     const [size, delta, diff] = formatRow(currentSize, previousSize);
 
-    rows.push(`| ${file} | ${size} | ${delta} (${diff}) |`);
+    rows.push(format('| %s | %s | %s (%s) |', file, size, delta, diff));
   }
 
   const [totalSize, totalDelta, totalDiff] = formatRow(
@@ -91,7 +105,7 @@ async function getReportContent(
     totalPreviousSize,
   );
 
-  rows.push(`| | ${totalSize} | ${totalDelta} (${totalDiff}) |`);
+  rows.push(format('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
 
   return rows.join('\n');
 }

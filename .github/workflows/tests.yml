@@ -37,11 +37,9 @@ jobs:
 
       - uses: ./build-size/report
         with:
-          sha: ${{ github.sha }}
           dir: ./build-size/cache/dist
 
       - uses: ./build-size/report
         with:
           label: custom-label
-          sha: ${{ github.sha }}
           dir: ./build-size/report/dist
