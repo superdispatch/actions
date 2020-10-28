@@ -26,14 +26,7 @@ export function getBuildSnapshotMeta({
     filename: path.join(os.tmpdir(), `${key}.json`),
   };
 
-  info(
-    format(
-      'Snapshot meta for the { sha: %s, label: %s }: %O',
-      sha,
-      label,
-      meta,
-    ),
-  );
+  info(format('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
 
   return meta;
 }
