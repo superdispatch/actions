@@ -32,6 +32,7 @@ jobs:
 
       - uses: ./build-size/report
         with:
+          label: should-fail
           dir: ./build-size/cache/dist
 
       - uses: ./build-size/report
