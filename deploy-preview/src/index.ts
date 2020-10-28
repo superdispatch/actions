@@ -14,7 +14,7 @@ async function main() {
 
   let deployJSON = '';
 
-  info(format('Deploying "%sæ from "%s"…', alias, dir));
+  info(format('Deploying "%s" from "%s"…', alias, dir));
 
   await exec(
     'netlify',
