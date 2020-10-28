@@ -3,7 +3,8 @@
   "version": "1.0.3",
   "license": "MIT",
   "scripts": {
-    "version": "ncc build src/index.ts -s -o dist"
+    "build": "ncc build src/index.ts -s -o dist",
+    "version": "yarn build && git add ."
   },
   "engines": {
     "node": ">=12"
