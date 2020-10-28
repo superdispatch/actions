@@ -19,6 +19,7 @@ module.exports = {
       rules: {
         'node/no-missing-import': 'off',
         'node/no-extraneous-import': 'off',
+        'node/no-unpublished-import': 'off',
         'import/no-extraneous-dependencies': 'off',
         'node/no-unsupported-features/es-syntax': [
           'error',
@@ -37,6 +38,13 @@ module.exports = {
       },
     },
 
+    {
+      files: 'scripts/*',
+      rules: {
+        'no-console': 'off',
+        'no-process-exit': 'off',
+      },
+    },
     {
       files: '@types/**',
       rules: {
