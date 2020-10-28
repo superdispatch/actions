@@ -10,13 +10,7 @@ main().catch(setFailed);
 
 function getSnapshotInfo(label: string): [key: string, filepath: string] {
   const key = `build-size-v1-${label}-${context.sha}`;
-  const filepath = path.join(
-    os.tmpdir(),
-    'superdispatch',
-    'actions',
-    'build-size',
-    `${key}.json`,
-  );
+  const filepath = path.join(os.tmpdir(), `${key}.json`);
 
   info(`Snapshot info for the ${label}: key=${key}, filepath=${filepath}`);
 
