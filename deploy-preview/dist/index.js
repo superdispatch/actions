@@ -10162,7 +10162,11 @@ async function sendReport({ pr, token, label, title, content, }) {
     }
 }
 
+// EXTERNAL MODULE: external "util"
+var external_util_ = __webpack_require__(1669);
+
 // CONCATENATED MODULE: ./src/index.ts
+
 
 
 
@@ -10175,6 +10179,7 @@ async function main() {
     const netlifyToken = (0,core.getInput)('netlify-token');
     const netlifySiteID = (0,core.getInput)('netlify-site-id');
     let deployJSON = '';
+    (0,core.info)((0,external_util_.format)('Deploying "%sæ from "%s"…', alias, dir));
     await (0,exec.exec)('netlify', ['deploy', '--json', '--dir', dir, '--alias', alias], {
         env: {
             ...process.env,
@@ -10183,6 +10188,7 @@ async function main() {
         },
         listeners: {
             stdout: (data) => {
+                (0,core.info)(data.toString());
                 deployJSON += data.toString();
             },
         },
