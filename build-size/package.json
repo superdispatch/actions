@@ -1,0 +1,13 @@
+{
+  "name": "@actions/build-size-cache",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build:cache": "ncc build cache/index.ts -sm -o cache/dist",
+    "build:report": "ncc build report/index.ts -sm -o report/dist",
+    "version": "yarn build:cache && yarn build:report"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}
