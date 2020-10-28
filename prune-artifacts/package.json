@@ -1,6 +1,6 @@
 {
   "name": "@actions/prune-artifacts",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "license": "MIT",
   "scripts": {
     "build": "ncc build src/index.ts -s -o dist",
