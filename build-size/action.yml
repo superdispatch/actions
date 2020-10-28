@@ -4,6 +4,7 @@ author: 'superdispatch'
 inputs:
   step:
     required: true
+    default: 'collect'
     description: 'snapshot or report'
   dir:
     required: true
