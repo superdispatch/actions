@@ -2,7 +2,7 @@ import { saveCache } from '@actions/cache';
 import { getInput, info, setFailed } from '@actions/core';
 import { getBuildSizes } from '@actions/utils/BuildSizes';
 import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
-import fs from 'fs';
+import fs from 'fs/promises';
 
 main().catch(setFailed);
 
@@ -19,7 +19,7 @@ async function main() {
 
   info(`File sizes ready: ${JSON.stringify(sizes)}`);
 
-  fs.writeFileSync(meta.filename, JSON.stringify(sizes), 'utf-8');
+  await fs.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');
 
   info(`Writing "${meta.filename}" to "${meta.key}" cache.`);
 

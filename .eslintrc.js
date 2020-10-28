@@ -9,9 +9,24 @@ module.exports = {
 
     {
       files: '*.ts',
-      extends: 'plugin:@superdispatch/typescript',
+      extends: [
+        'plugin:@superdispatch/node',
+        'plugin:@superdispatch/typescript',
+      ],
       parserOptions: {
         project: './tsconfig.json',
+      },
+      rules: {
+        'node/no-missing-import': 'off',
+        'node/no-extraneous-import': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'node/no-unsupported-features/es-syntax': [
+          'error',
+          {
+            version: '>=12',
+            ignores: ['modules'],
+          },
+        ],
       },
     },
 
