@@ -1,0 +1,33 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches:
+      - '**'
+
+jobs:
+  build-size-snapshot:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./build-size
+        with:
+          dir: ./build-size/dist
+
+      - uses: ./build-size
+        with:
+          label: custom-label
+          dir: ./build-size/dist
+
+  build-size-report:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    needs:
+      - build-size-snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: ls -R

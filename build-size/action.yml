@@ -1,0 +1,22 @@
+name: 'Build Size'
+description: 'Collect and Report build size changes'
+author: 'superdispatch'
+inputs:
+  step:
+    required: true
+    description: 'snapshot or report'
+  dir:
+    required: true
+    description: 'path to the build folder'
+  label:
+    required: true
+    default: 'default'
+    description: 'custom label to distinguish multiple builds'
+  token:
+    required: true
+    description: 'github token'
+    default: '${{ github.token }}'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

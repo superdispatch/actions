@@ -1,0 +1,47 @@
+{
+  "name": "@superdispatch/actions",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "build-size"
+    ]
+  },
+  "scripts": {
+    "build": "lerna run version",
+    "lint": "js-tools lint",
+    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn test && yarn build",
+    "release": "yarn lerna version"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*": "js-tools lint --fix"
+  },
+  "prettier": "@superdispatch/prettier-config",
+  "devDependencies": {
+    "@actions/cache": "^1.0.3",
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@superdispatch/eslint-plugin": "^0.2.9",
+    "@superdispatch/js-tools": "^0.2.5",
+    "@superdispatch/prettier-config": "^0.2.1",
+    "@superdispatch/tsconfig": "^0.2.4",
+    "@vercel/ncc": "^0.24.1",
+    "eslint": "^7.4.0",
+    "husky": "^4.2.3",
+    "lerna": "^3.22.1",
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5",
+    "react-dev-utils": "^11.0.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.2"
+  }
+}

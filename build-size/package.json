@@ -1,0 +1,8 @@
+{
+  "name": "@actions/build-size",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "version": "ncc build src/index.ts"
+  }
+}
