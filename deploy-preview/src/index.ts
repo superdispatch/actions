@@ -9,8 +9,8 @@ async function main() {
   const dir = getInput('dir');
   const alias = getInput('alias') || `preview-${pr}`;
   const token = getInput('token');
-  const netlifyToken = getInput('netlify-token');
-  const netlifySiteID = getInput('netlify-site-id');
+  const netlifyToken = getInput('netlify-token', { required: true });
+  const netlifySiteID = getInput('netlify-site-id', { required: true });
 
   let deployJSON = '';
 
