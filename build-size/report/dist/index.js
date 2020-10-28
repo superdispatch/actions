@@ -61018,18 +61018,11 @@ function formatRow(currentSize, previousSize) {
     if (Math.abs(delta) < 512) {
         delta = 0;
     }
-    let formattedDelta = (0,filesize_default())(delta);
+    const deltaFormat = delta > 0 ? '+%s' : '%s';
+    const formattedDelta = (0,external_util_.format)(deltaFormat, (0,filesize_default())(delta));
     const diff = delta / currentSize;
-    let formattedDiff = diff.toLocaleString('en-us', {
-        style: 'percent',
-    });
-    if (diff > 0) {
-        formattedDiff = `+${formattedDiff} 🔺`;
-        formattedDelta = `+${formattedDelta}`;
-    }
-    else if (diff < 0) {
-        formattedDiff = `${formattedDiff} 🔽`;
-    }
+    const diffFormat = diff > 0 ? '+%s 🔺' : diff < 0 ? '%s 🔽' : '%s';
+    const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-us', { style: 'percent' }));
     return [formattedSize, formattedDelta, formattedDiff];
 }
 async function getReportContent(dir, sha, label) {
@@ -61072,11 +61065,11 @@ async function getReportContent(dir, sha, label) {
     return rows.join('\n');
 }
 async function main() {
-    const pr = (0,core.getInput)('pr');
-    const dir = (0,core.getInput)('dir');
-    const sha = (0,core.getInput)('sha');
-    const label = (0,core.getInput)('label');
-    const token = (0,core.getInput)('token');
+    const pr = (0,core.getInput)('pr', { required: true });
+    const dir = (0,core.getInput)('dir', { required: true });
+    const sha = (0,core.getInput)('sha', { required: true });
+    const label = (0,core.getInput)('label', { required: true });
+    const token = (0,core.getInput)('token', { required: true });
     const content = await getReportContent(dir, sha, label);
     return sendReport({
         pr,
