@@ -8,7 +8,7 @@ function toFinite(value: unknown): number {
 function normalizeDelta(delta: number): number {
   const absoluteDelta = Math.abs(delta);
 
-  if (absoluteDelta < 512) return 0;
+  if (absoluteDelta < 256) return 0;
 
   return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
