@@ -25,3 +25,5 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn tsc
       - run: yarn lint
+      - run: yarn build
+      - run: git diff --quiet || exit 1
