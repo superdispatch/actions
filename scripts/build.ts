@@ -8,7 +8,7 @@ async function main() {
   const entry = path.join(rootDir, 'index.ts');
   const out = path.join(rootDir, 'dist');
 
-  await exec('rm', ['-rf', out]);
+  await exec('git', ['rm', '-rf', out]);
 
   await exec('ncc', [
     'build',

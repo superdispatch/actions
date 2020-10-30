@@ -7053,11 +7053,13 @@ var external_util_ = __webpack_require__(1669);
 
 async function main() {
     const pr = (0,core.getInput)('pr', { required: true });
+    const defaultAlias = `preview-${pr}`;
     const dir = (0,core.getInput)('dir', { required: true });
-    const alias = (0,core.getInput)('alias') || `preview-${pr}`;
+    const alias = (0,core.getInput)('alias') || defaultAlias;
     const token = (0,core.getInput)('token', { required: true });
     const netlifyToken = (0,core.getInput)('netlify-token', { required: true });
     const netlifySiteID = (0,core.getInput)('netlify-site-id', { required: true });
+    const label = alias === defaultAlias ? '' : alias;
     let deployJSON = '';
     (0,core.info)((0,external_util_.format)('Deploying "%s" from "%s"…', alias, dir));
     await (0,exec.exec)('netlify', [
@@ -7079,8 +7081,8 @@ async function main() {
     await sendReport({
         pr,
         token,
+        label,
         content,
-        label: alias,
         title: 'Preview is ready!',
     });
 }
