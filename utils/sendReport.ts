@@ -6,7 +6,7 @@ const GITHUB_ACTIONS_BOT_LOGIN = 'github-actions[bot]';
 interface SendReportOptions {
   pr: string;
   token: string;
-  label: string;
+  label?: string;
   title: string;
   content: string;
 }

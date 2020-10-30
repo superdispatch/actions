@@ -1,10 +1,9 @@
 {
-  "name": "@actions/deploy-preview",
+  "name": "@sd/deploy-preview",
   "version": "1.0.4",
   "license": "MIT",
   "scripts": {
-    "build": "ncc build src/index.ts -s -o dist",
-    "version": "yarn build && git add dist"
+    "version": "ts-node-script ../scripts/build.ts"
   },
   "engines": {
     "node": ">=12"

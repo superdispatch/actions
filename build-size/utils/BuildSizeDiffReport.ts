@@ -30,7 +30,17 @@ function formatRow(
   delta: number,
 ): [size: string, delta: string, diff: string, icon: string] {
   const formattedSize = prettyBytes(size);
+
+  if (size === 0 && delta < 0) {
+    return [formattedSize, '', 'removed', ''];
+  }
+
+  if (delta === size) {
+    return [formattedSize, '', 'new file', ''];
+  }
+
   const formattedDelta = prettyBytes(delta, { signed: true });
+
   const diff = delta / size;
   const diffFormat = diff > 0 ? '+%s' : '%s';
   const formattedDiff = format(
@@ -91,7 +101,7 @@ export function createBuildSizeDiffReport(
 
   const lines = [format('**Total Size**: %s', formattedTotalSize)];
 
-  if (totalDelta > 0) {
+  if (totalDelta !== 0) {
     lines.push('');
     lines.push(
       format(

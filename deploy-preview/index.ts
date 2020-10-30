@@ -1,16 +1,18 @@
 import { getInput, info, setFailed } from '@actions/core';
 import { exec } from '@actions/exec';
 import { context } from '@actions/github';
-import { sendReport } from '@actions/utils/sendReport';
+import { sendReport } from '@sd/utils/sendReport';
 import { format } from 'util';
 
 async function main() {
   const pr = getInput('pr', { required: true });
+  const defaultAlias = `preview-${pr}`;
   const dir = getInput('dir', { required: true });
-  const alias = getInput('alias') || `preview-${pr}`;
+  const alias = getInput('alias') || defaultAlias;
   const token = getInput('token', { required: true });
   const netlifyToken = getInput('netlify-token', { required: true });
   const netlifySiteID = getInput('netlify-site-id', { required: true });
+  const label = alias === defaultAlias ? '' : alias;
 
   let deployJSON = '';
 
@@ -43,8 +45,8 @@ async function main() {
   await sendReport({
     pr,
     token,
+    label,
     content,
-    label: alias,
     title: 'Preview is ready!',
   });
 }

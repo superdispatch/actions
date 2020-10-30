@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts"],
+  "include": ["@types", "**/*.ts", "@types/vercel__ncc.d.ts"],
   "exclude": ["node_modules"],
   "extends": "@superdispatch/tsconfig",
   "ts-node": {
