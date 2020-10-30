@@ -57768,7 +57768,13 @@ function getDiffIcon(diff) {
 }
 function formatRow(size, delta) {
     const formattedSize = (0,pretty_bytes_default())(size);
-    const formattedDelta = delta === size ? '' : (0,pretty_bytes_default())(delta, { signed: true });
+    if (size === 0 && delta < 0) {
+        return [formattedSize, '', 'removed', ''];
+    }
+    if (delta === size) {
+        return [formattedSize, '', 'new file', ''];
+    }
+    const formattedDelta = (0,pretty_bytes_default())(delta, { signed: true });
     const diff = delta / size;
     const diffFormat = diff > 0 ? '+%s' : '%s';
     const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-US', { style: 'percent' }));

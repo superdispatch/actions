@@ -30,8 +30,16 @@ function formatRow(
   delta: number,
 ): [size: string, delta: string, diff: string, icon: string] {
   const formattedSize = prettyBytes(size);
-  const formattedDelta =
-    delta === size ? '' : prettyBytes(delta, { signed: true });
+
+  if (size === 0 && delta < 0) {
+    return [formattedSize, '', 'removed', ''];
+  }
+
+  if (delta === size) {
+    return [formattedSize, '', 'new file', ''];
+  }
+
+  const formattedDelta = prettyBytes(delta, { signed: true });
 
   const diff = delta / size;
   const diffFormat = diff > 0 ? '+%s' : '%s';
