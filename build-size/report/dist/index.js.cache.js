@@ -57768,7 +57768,7 @@ function getDiffIcon(diff) {
 }
 function formatRow(size, delta) {
     const formattedSize = (0,pretty_bytes_default())(size);
-    const formattedDelta = (0,pretty_bytes_default())(delta, { signed: true });
+    const formattedDelta = delta === size ? '' : (0,pretty_bytes_default())(delta, { signed: true });
     const diff = delta / size;
     const diffFormat = diff > 0 ? '+%s' : '%s';
     const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-US', { style: 'percent' }));
@@ -57798,7 +57798,7 @@ function createBuildSizeDiffReport(currentSizes, previousSizes) {
     }
     const [formattedTotalSize, formattedTotalDelta, formattedTotalDiff, totalDiffIcon,] = formatRow(totalSize, totalDelta);
     const lines = [(0,external_util_.format)('**Total Size**: %s', formattedTotalSize)];
-    if (totalDelta > 0) {
+    if (totalDelta !== 0) {
         lines.push('');
         lines.push((0,external_util_.format)('**Size Change**: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon));
     }
