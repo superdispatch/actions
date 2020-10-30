@@ -1,12 +1,11 @@
 {
-  "name": "@actions/build-size",
+  "name": "@sd/build-size",
   "version": "1.0.4",
   "license": "MIT",
   "scripts": {
-    "build": "run-p build:*",
-    "build:cache": "ncc build cache/index.ts -s -o cache/dist",
-    "build:report": "ncc build report/index.ts -s -o report/dist",
-    "version": "yarn build && git add **/dist"
+    "build:cache": "ts-node-script ../scripts/build.ts cache",
+    "build:report": "ts-node-script ../scripts/build.ts report",
+    "version": "run-p build:*"
   },
   "engines": {
     "node": ">=12"

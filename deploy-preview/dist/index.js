@@ -10111,7 +10111,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 2145:
+/***/ 3074:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -10165,7 +10165,7 @@ async function sendReport({ pr, token, label, title, content, }) {
 // EXTERNAL MODULE: external "util"
 var external_util_ = __webpack_require__(1669);
 
-// CONCATENATED MODULE: ./src/index.ts
+// CONCATENATED MODULE: ./index.ts
 
 
 
@@ -10450,7 +10450,7 @@ module.exports = require("zlib");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(2145);
+/******/ 	return __webpack_require__(3074);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

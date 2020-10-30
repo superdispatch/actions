@@ -1,6 +1,6 @@
 import { restoreCache } from '@actions/cache';
 import { getInput, info, setFailed, warning } from '@actions/core';
-import { sendReport } from '@actions/utils/sendReport';
+import { sendReport } from '@sd/utils/sendReport';
 import { promises as fs } from 'fs';
 import { format } from 'util';
 
