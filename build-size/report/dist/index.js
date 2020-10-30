@@ -60863,36 +60863,27 @@ function toFinite(value) {
 }
 function normalizeDelta(delta) {
     const absoluteDelta = Math.abs(delta);
-    if (absoluteDelta < 512) {
+    if (absoluteDelta < 512)
         return 0;
-    }
     return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
 function getDiffIcon(diff) {
-    if (diff >= 0.5) {
+    if (diff >= 0.5)
         return '🆘';
-    }
-    if (diff >= 0.2) {
+    if (diff >= 0.2)
         return '🚨';
-    }
-    if (diff >= 0.1) {
+    if (diff >= 0.1)
         return '⚠️';
-    }
-    if (diff >= 0.05) {
+    if (diff >= 0.05)
         return '🔍';
-    }
-    if (diff <= 0.5) {
+    if (diff <= -0.5)
         return '🏆';
-    }
-    if (diff <= 0.2) {
+    if (diff <= -0.2)
         return '🎉';
-    }
-    if (diff <= 0.1) {
+    if (diff <= -0.1)
         return '👏';
-    }
-    if (diff <= 0.05) {
+    if (diff <= -0.05)
         return '✅';
-    }
     return '';
 }
 function formatRow(size, delta) {
@@ -60918,18 +60909,16 @@ function createBuildSizeDiffReport(currentSizes, previousSizes) {
         totalSize += size;
         totalDelta += delta;
         const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(size, delta);
-        if (delta === 0) {
+        if (delta === 0)
             unChangedRows.push((0,external_util_.format)('| `%s` | %s |', formattedSize, formattedDelta));
-        }
-        else {
+        else
             changedRows.push((0,external_util_.format)('| `%s` | %s | %s (%s) | %s |', formattedSize, formattedDelta, formattedDiff, diffIcon));
-        }
     }
     const [formattedTotalSize, formattedTotalDelta, formattedTotalDiff, totalDiffIcon,] = formatRow(totalSize, totalDelta);
     const lines = [
-        (0,external_util_.format)('**Total Size: %s', formattedTotalSize),
+        (0,external_util_.format)('**Total Size**: %s', formattedTotalSize),
         '',
-        (0,external_util_.format)('**Size Change: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon),
+        (0,external_util_.format)('**Size Change**: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon),
         '',
     ];
     if (changedRows.length > 0) {

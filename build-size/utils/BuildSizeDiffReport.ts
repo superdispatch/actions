@@ -8,46 +8,20 @@ function toFinite(value: unknown): number {
 function normalizeDelta(delta: number): number {
   const absoluteDelta = Math.abs(delta);
 
-  if (absoluteDelta < 512) {
-    return 0;
-  }
+  if (absoluteDelta < 512) return 0;
 
   return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
 
 function getDiffIcon(diff: number): string {
-  if (diff >= 0.5) {
-    return '🆘';
-  }
-
-  if (diff >= 0.2) {
-    return '🚨';
-  }
-
-  if (diff >= 0.1) {
-    return '⚠️';
-  }
-
-  if (diff >= 0.05) {
-    return '🔍';
-  }
-
-  if (diff <= 0.5) {
-    return '🏆';
-  }
-
-  if (diff <= 0.2) {
-    return '🎉';
-  }
-
-  if (diff <= 0.1) {
-    return '👏';
-  }
-
-  if (diff <= 0.05) {
-    return '✅';
-  }
-
+  if (diff >= 0.5) return '🆘';
+  if (diff >= 0.2) return '🚨';
+  if (diff >= 0.1) return '⚠️';
+  if (diff >= 0.05) return '🔍';
+  if (diff <= -0.5) return '🏆';
+  if (diff <= -0.2) return '🎉';
+  if (diff <= -0.1) return '👏';
+  if (diff <= -0.05) return '✅';
   return '';
 }
 
@@ -92,11 +66,11 @@ export function createBuildSizeDiffReport(
       delta,
     );
 
-    if (delta === 0) {
+    if (delta === 0)
       unChangedRows.push(
         format('| `%s` | %s |', formattedSize, formattedDelta),
       );
-    } else {
+    else
       changedRows.push(
         format(
           '| `%s` | %s | %s (%s) | %s |',
@@ -106,7 +80,6 @@ export function createBuildSizeDiffReport(
           diffIcon,
         ),
       );
-    }
   }
 
   const [
@@ -117,10 +90,10 @@ export function createBuildSizeDiffReport(
   ] = formatRow(totalSize, totalDelta);
 
   const lines = [
-    format('**Total Size: %s', formattedTotalSize),
+    format('**Total Size**: %s', formattedTotalSize),
     '',
     format(
-      '**Size Change: %s (%s) %s',
+      '**Size Change**: %s (%s) %s',
       formattedTotalDelta,
       formattedTotalDiff,
       totalDiffIcon,
