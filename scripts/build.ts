@@ -8,7 +8,11 @@ async function main() {
   const entry = path.join(rootDir, 'index.ts');
   const out = path.join(rootDir, 'dist');
 
-  await exec('git', ['rm', '-rf', out]);
+  try {
+    await exec('git', ['rm', '-rf', out]);
+  } catch {
+    await exec('rm', ['-rf', out]);
+  }
 
   await exec('ncc', [
     'build',
@@ -20,7 +24,11 @@ async function main() {
     'encoding',
   ]);
 
-  await exec('git', ['add', out]);
+  try {
+    await exec('git', ['add', out]);
+  } finally {
+    await exec('git', ['status']);
+  }
 }
 
 main().catch((error) => {
