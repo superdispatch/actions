@@ -67,13 +67,12 @@ export function createBuildSizeDiffReport(
     );
 
     if (delta === 0) {
-      unChangedRows.push(
-        format('| `%s` | %s |', formattedSize, formattedDelta),
-      );
+      unChangedRows.push(format('| `%s` | %s |', file, formattedSize));
     } else {
       changedRows.push(
         format(
           '| `%s` | %s | %s (%s) | %s |',
+          file,
           formattedSize,
           formattedDelta,
           formattedDiff,

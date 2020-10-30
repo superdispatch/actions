@@ -60909,18 +60909,20 @@ function createBuildSizeDiffReport(currentSizes, previousSizes) {
         totalSize += size;
         totalDelta += delta;
         const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(size, delta);
-        if (delta === 0)
-            unChangedRows.push((0,external_util_.format)('| `%s` | %s |', formattedSize, formattedDelta));
-        else
-            changedRows.push((0,external_util_.format)('| `%s` | %s | %s (%s) | %s |', formattedSize, formattedDelta, formattedDiff, diffIcon));
+        if (delta === 0) {
+            unChangedRows.push((0,external_util_.format)('| `%s` | %s |', file, formattedSize));
+        }
+        else {
+            changedRows.push((0,external_util_.format)('| `%s` | %s | %s (%s) | %s |', file, formattedSize, formattedDelta, formattedDiff, diffIcon));
+        }
     }
     const [formattedTotalSize, formattedTotalDelta, formattedTotalDiff, totalDiffIcon,] = formatRow(totalSize, totalDelta);
-    const lines = [
-        (0,external_util_.format)('**Total Size**: %s', formattedTotalSize),
-        '',
-        (0,external_util_.format)('**Size Change**: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon),
-        '',
-    ];
+    const lines = [(0,external_util_.format)('**Total Size**: %s', formattedTotalSize)];
+    if (totalDelta > 0) {
+        lines.push('');
+        lines.push((0,external_util_.format)('**Size Change**: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon));
+    }
+    lines.push('');
     if (changedRows.length > 0) {
         lines.push('| Filename | Size | Change |     |');
         lines.push('| :------- | ---: | -----: | :-: |');
