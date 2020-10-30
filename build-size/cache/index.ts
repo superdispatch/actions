@@ -1,9 +1,10 @@
 import { ReserveCacheError, saveCache } from '@actions/cache';
 import { getInput, info, setFailed, warning } from '@actions/core';
-import { getBuildSizes } from '@actions/utils/BuildSizes';
-import { getBuildSnapshotMeta } from '@actions/utils/BuildSnapshotMeta';
 import { promises as fs } from 'fs';
 import { format } from 'util';
+
+import { getBuildSizes } from '../utils/BuildSizes';
+import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';
 
 main().catch(setFailed);
 

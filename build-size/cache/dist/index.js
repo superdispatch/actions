@@ -57776,7 +57776,7 @@ module.exports = v4;
 
 /***/ }),
 
-/***/ 3494:
+/***/ 322:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -57806,7 +57806,10 @@ var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 // EXTERNAL MODULE: external "zlib"
 var external_zlib_ = __webpack_require__(8761);
 
-// CONCATENATED MODULE: ../utils/BuildSizes.ts
+// EXTERNAL MODULE: external "util"
+var external_util_ = __webpack_require__(1669);
+
+// CONCATENATED MODULE: ./utils/BuildSizes.ts
 
 
 
@@ -57849,10 +57852,7 @@ async function getBuildSizes(dir) {
     return sizes;
 }
 
-// EXTERNAL MODULE: external "util"
-var external_util_ = __webpack_require__(1669);
-
-// CONCATENATED MODULE: ../utils/BuildSnapshotMeta.ts
+// CONCATENATED MODULE: ./utils/BuildSnapshotMeta.ts
 
 
 
@@ -58214,7 +58214,7 @@ module.exports = require("zlib");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(3494);
+/******/ 	return __webpack_require__(322);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
