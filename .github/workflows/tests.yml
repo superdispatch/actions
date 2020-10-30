@@ -93,7 +93,7 @@ jobs:
 
       - run: |
           mkdir site
-          echo "<html><body>Hello</body></html>" > site/index.html
+          echo "<html><body>Hello from ${{ github.sha }}</body></html>" > site/index.html
 
       - uses: ./deploy-preview
         with:
