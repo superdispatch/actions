@@ -21,7 +21,6 @@ async function main() {
     out,
     '--external',
     'encoding',
-    '--v8-cache',
     '--source-map',
   ]);
 
