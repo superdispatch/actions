@@ -19,9 +19,10 @@ async function main() {
     entry,
     '--out',
     out,
-    '--source-map',
     '--external',
     'encoding',
+    '--v8-cache',
+    '--source-map',
   ]);
 
   try {
