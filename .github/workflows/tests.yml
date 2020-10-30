@@ -63,7 +63,6 @@ jobs:
 
       - uses: ./build-size/report
         with:
-          label: cache
           dir: ./build-size/cache
 
       - uses: ./build-size/report
