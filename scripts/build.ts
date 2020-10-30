@@ -26,7 +26,7 @@ async function main() {
 
   try {
     await exec('git', ['add', out]);
-  } finally {
+  } catch {
     await exec('git', ['status']);
   }
 }
