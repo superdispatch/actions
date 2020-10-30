@@ -25,8 +25,26 @@ jobs:
 
       - uses: ./build-size/cache
         with:
-          label: custom-label
+          label: cache
+          dir: ./main/build-size/cache
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: report
           dir: ./main/build-size/report
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: deploy-preview
+          dir: ./main/deploy-preview
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: prune-artifacts
+          dir: ./main/prune-artifacts
           sha: ${{ github.event.pull_request.base.sha }}
 
   build-size-report:
@@ -45,12 +63,28 @@ jobs:
 
       - uses: ./build-size/report
         with:
+          label: cache
           dir: ./build-size/cache
 
       - uses: ./build-size/report
         with:
-          label: custom-label
+          label: cache
+          dir: ./build-size/cache
+
+      - uses: ./build-size/report
+        with:
+          label: report
           dir: ./build-size/report
+
+      - uses: ./build-size/report
+        with:
+          label: deploy-preview
+          dir: ./deploy-preview
+
+      - uses: ./build-size/report
+        with:
+          label: prune-artifacts
+          dir: ./prune-artifacts
 
   deploy-preview:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
