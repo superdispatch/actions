@@ -20,7 +20,7 @@ async function main() {
     '--out',
     out,
     '--external',
-    'encoding',
+    'encoding', // Optional dependency of the `node-fetch`.
     '--source-map',
   ]);
 
