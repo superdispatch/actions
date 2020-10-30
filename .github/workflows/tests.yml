@@ -13,14 +13,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - uses: actions/checkout@v2
+        with:
+          path: main
+          ref: ${{ github.event.pull_request.base.sha }}
+
       - uses: ./build-size/cache
         with:
-          dir: ./build-size/cache
+          dir: ./main/build-size/cache
+          sha: ${{ github.event.pull_request.base.sha }}
 
       - uses: ./build-size/cache
         with:
           label: custom-label
-          dir: ./build-size/report
+          dir: ./main/build-size/report
+          sha: ${{ github.event.pull_request.base.sha }}
 
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
@@ -32,6 +39,7 @@ jobs:
 
       - uses: ./build-size/report
         with:
+          sha: invalid-sha
           label: should-fail
           dir: ./build-size/cache
 

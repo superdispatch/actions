@@ -47916,197 +47916,6 @@ module.exports = function(stream_module) {
 
 /***/ }),
 
-/***/ 8098:
-/***/ ((module) => {
-
-"use strict";
-
-
-/**
- * filesize
- *
- * @copyright 2020 Jason Mulligan <jason.mulligan@avoidwork.com>
- * @license BSD-3-Clause
- * @version 6.1.0
- */
-(function (global) {
-  var b = /^(b|B)$/,
-      symbol = {
-    iec: {
-      bits: ["b", "Kib", "Mib", "Gib", "Tib", "Pib", "Eib", "Zib", "Yib"],
-      bytes: ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"]
-    },
-    jedec: {
-      bits: ["b", "Kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
-      bytes: ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-    }
-  },
-      fullform = {
-    iec: ["", "kibi", "mebi", "gibi", "tebi", "pebi", "exbi", "zebi", "yobi"],
-    jedec: ["", "kilo", "mega", "giga", "tera", "peta", "exa", "zetta", "yotta"]
-  };
-  /**
-   * filesize
-   *
-   * @method filesize
-   * @param  {Mixed}   arg        String, Int or Float to transform
-   * @param  {Object}  descriptor [Optional] Flags
-   * @return {String}             Readable file size String
-   */
-
-  function filesize(arg) {
-    var descriptor = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var result = [],
-        val = 0,
-        e = void 0,
-        base = void 0,
-        bits = void 0,
-        ceil = void 0,
-        full = void 0,
-        fullforms = void 0,
-        locale = void 0,
-        localeOptions = void 0,
-        neg = void 0,
-        num = void 0,
-        output = void 0,
-        round = void 0,
-        unix = void 0,
-        separator = void 0,
-        spacer = void 0,
-        standard = void 0,
-        symbols = void 0;
-
-    if (isNaN(arg)) {
-      throw new TypeError("Invalid number");
-    }
-
-    bits = descriptor.bits === true;
-    unix = descriptor.unix === true;
-    base = descriptor.base || 2;
-    round = descriptor.round !== void 0 ? descriptor.round : unix ? 1 : 2;
-    locale = descriptor.locale !== void 0 ? descriptor.locale : "";
-    localeOptions = descriptor.localeOptions || {};
-    separator = descriptor.separator !== void 0 ? descriptor.separator : "";
-    spacer = descriptor.spacer !== void 0 ? descriptor.spacer : unix ? "" : " ";
-    symbols = descriptor.symbols || {};
-    standard = base === 2 ? descriptor.standard || "jedec" : "jedec";
-    output = descriptor.output || "string";
-    full = descriptor.fullform === true;
-    fullforms = descriptor.fullforms instanceof Array ? descriptor.fullforms : [];
-    e = descriptor.exponent !== void 0 ? descriptor.exponent : -1;
-    num = Number(arg);
-    neg = num < 0;
-    ceil = base > 2 ? 1000 : 1024; // Flipping a negative number to determine the size
-
-    if (neg) {
-      num = -num;
-    } // Determining the exponent
-
-
-    if (e === -1 || isNaN(e)) {
-      e = Math.floor(Math.log(num) / Math.log(ceil));
-
-      if (e < 0) {
-        e = 0;
-      }
-    } // Exceeding supported length, time to reduce & multiply
-
-
-    if (e > 8) {
-      e = 8;
-    }
-
-    if (output === "exponent") {
-      return e;
-    } // Zero is now a special case because bytes divide by 1
-
-
-    if (num === 0) {
-      result[0] = 0;
-      result[1] = unix ? "" : symbol[standard][bits ? "bits" : "bytes"][e];
-    } else {
-      val = num / (base === 2 ? Math.pow(2, e * 10) : Math.pow(1000, e));
-
-      if (bits) {
-        val = val * 8;
-
-        if (val >= ceil && e < 8) {
-          val = val / ceil;
-          e++;
-        }
-      }
-
-      result[0] = Number(val.toFixed(e > 0 ? round : 0));
-
-      if (result[0] === ceil && e < 8 && descriptor.exponent === void 0) {
-        result[0] = 1;
-        e++;
-      }
-
-      result[1] = base === 10 && e === 1 ? bits ? "kb" : "kB" : symbol[standard][bits ? "bits" : "bytes"][e];
-
-      if (unix) {
-        result[1] = standard === "jedec" ? result[1].charAt(0) : e > 0 ? result[1].replace(/B$/, "") : result[1];
-
-        if (b.test(result[1])) {
-          result[0] = Math.floor(result[0]);
-          result[1] = "";
-        }
-      }
-    } // Decorating a 'diff'
-
-
-    if (neg) {
-      result[0] = -result[0];
-    } // Applying custom symbol
-
-
-    result[1] = symbols[result[1]] || result[1];
-
-    if (locale === true) {
-      result[0] = result[0].toLocaleString();
-    } else if (locale.length > 0) {
-      result[0] = result[0].toLocaleString(locale, localeOptions);
-    } else if (separator.length > 0) {
-      result[0] = result[0].toString().replace(".", separator);
-    } // Returning Array, Object, or String (default)
-
-
-    if (output === "array") {
-      return result;
-    }
-
-    if (full) {
-      result[1] = fullforms[e] ? fullforms[e] : fullform[standard][e] + (bits ? "bit" : "byte") + (result[0] === 1 ? "" : "s");
-    }
-
-    if (output === "object") {
-      return {
-        value: result[0],
-        symbol: result[1],
-        exponent: e
-      };
-    }
-
-    return result.join(spacer);
-  } // Partial application for functional programming
-
-
-  filesize.partial = function (opt) {
-    return function (arg) {
-      return filesize(arg, opt);
-    };
-  }; // CommonJS, AMD, script tag
-
-
-  if (true) {
-    module.exports = filesize;
-  } else {}
-})(typeof window !== "undefined" ? window : global);
-
-
-/***/ }),
-
 /***/ 2220:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -51471,6 +51280,116 @@ function onceStrict (fn) {
   f.called = false
   return f
 }
+
+
+/***/ }),
+
+/***/ 6418:
+/***/ ((module) => {
+
+"use strict";
+
+
+const BYTE_UNITS = [
+	'B',
+	'kB',
+	'MB',
+	'GB',
+	'TB',
+	'PB',
+	'EB',
+	'ZB',
+	'YB'
+];
+
+const BIBYTE_UNITS = [
+	'B',
+	'kiB',
+	'MiB',
+	'GiB',
+	'TiB',
+	'PiB',
+	'EiB',
+	'ZiB',
+	'YiB'
+];
+
+const BIT_UNITS = [
+	'b',
+	'kbit',
+	'Mbit',
+	'Gbit',
+	'Tbit',
+	'Pbit',
+	'Ebit',
+	'Zbit',
+	'Ybit'
+];
+
+const BIBIT_UNITS = [
+	'b',
+	'kibit',
+	'Mibit',
+	'Gibit',
+	'Tibit',
+	'Pibit',
+	'Eibit',
+	'Zibit',
+	'Yibit'
+];
+
+/*
+Formats the given number using `Number#toLocaleString`.
+- If locale is a string, the value is expected to be a locale-key (for example: `de`).
+- If locale is true, the system default locale is used for translation.
+- If no value for locale is specified, the number is returned unmodified.
+*/
+const toLocaleString = (number, locale) => {
+	let result = number;
+	if (typeof locale === 'string') {
+		result = number.toLocaleString(locale);
+	} else if (locale === true) {
+		result = number.toLocaleString();
+	}
+
+	return result;
+};
+
+module.exports = (number, options) => {
+	if (!Number.isFinite(number)) {
+		throw new TypeError(`Expected a finite number, got ${typeof number}: ${number}`);
+	}
+
+	options = Object.assign({bits: false, binary: false}, options);
+	const UNITS = options.bits ?
+		(options.binary ? BIBIT_UNITS : BIT_UNITS) :
+		(options.binary ? BIBYTE_UNITS : BYTE_UNITS);
+
+	if (options.signed && number === 0) {
+		return ' 0 ' + UNITS[0];
+	}
+
+	const isNegative = number < 0;
+	const prefix = isNegative ? '-' : (options.signed ? '+' : '');
+
+	if (isNegative) {
+		number = -number;
+	}
+
+	if (number < 1) {
+		const numberString = toLocaleString(number, options.locale);
+		return prefix + numberString + ' ' + UNITS[0];
+	}
+
+	const exponent = Math.min(Math.floor(options.binary ? Math.log(number) / Math.log(1024) : Math.log10(number) / 3), UNITS.length - 1);
+	// eslint-disable-next-line unicorn/prefer-exponentiation-operator
+	number = Number((number / Math.pow(options.binary ? 1024 : 1000, exponent)).toPrecision(3));
+	const numberString = toLocaleString(number, options.locale);
+
+	const unit = UNITS[exponent];
+
+	return prefix + numberString + ' ' + unit;
+};
 
 
 /***/ }),
@@ -60861,40 +60780,166 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 6004:
+/***/ 5091:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ../node_modules/@actions/glob/lib/glob.js
-var glob = __webpack_require__(8707);
-
 // EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
 var core = __webpack_require__(5316);
 
-// EXTERNAL MODULE: ../node_modules/@actions/cache/lib/cache.js
-var cache = __webpack_require__(9350);
+// EXTERNAL MODULE: ../node_modules/pretty-bytes/index.js
+var pretty_bytes = __webpack_require__(6418);
+var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(5747);
+// EXTERNAL MODULE: ../node_modules/@actions/glob/lib/glob.js
+var glob = __webpack_require__(8707);
 
 // EXTERNAL MODULE: external "os"
 var external_os_ = __webpack_require__(2087);
 var external_os_default = /*#__PURE__*/__webpack_require__.n(external_os_);
 
+// EXTERNAL MODULE: ../node_modules/@actions/cache/lib/cache.js
+var cache = __webpack_require__(9350);
+
 // EXTERNAL MODULE: ../node_modules/@actions/github/lib/github.js
 var github = __webpack_require__(1696);
+
+// EXTERNAL MODULE: external "util"
+var external_util_ = __webpack_require__(1669);
+
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(5747);
 
 // EXTERNAL MODULE: external "path"
 var external_path_ = __webpack_require__(5622);
 var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
 
+// CONCATENATED MODULE: ../utils/sendReport.ts
+
+
+const GITHUB_ACTIONS_BOT_LOGIN = 'github-actions[bot]';
+async function sendReport({ pr, token, label, title, content, }) {
+    const octokit = (0,github.getOctokit)(token);
+    const reportTitle = `### ${!label ? title : `${title} (${label})`}\n`;
+    let previousCommentID = undefined;
+    (0,core.info)('Looking for the previous report…');
+    for await (const { data: comments } of octokit.paginate.iterator('GET /repos/:owner/:repo/issues/:issue_number/comments', {
+        ...github.context.repo,
+        per_page: 100,
+        issue_number: Number(pr),
+    })) {
+        for (const { id, body, user: { login }, } of comments) {
+            if (login === GITHUB_ACTIONS_BOT_LOGIN && body.startsWith(reportTitle)) {
+                if (previousCommentID == null) {
+                    (0,core.info)(`Found previous report with ID "${id}"`);
+                    previousCommentID = id;
+                    break;
+                }
+            }
+        }
+    }
+    const body = reportTitle + content;
+    if (previousCommentID != null) {
+        (0,core.info)(`Updating previous report with ID "${previousCommentID}"…`);
+        await octokit.request('PATCH /repos/:owner/:repo/issues/comments/:comment_id', { ...github.context.repo, body, comment_id: previousCommentID });
+    }
+    else {
+        (0,core.info)('Sending new report…');
+        await octokit.request('POST /repos/:owner/:repo/issues/:issue_number/comments', { ...github.context.repo, body, issue_number: Number(pr) });
+    }
+}
+
 // EXTERNAL MODULE: external "zlib"
 var external_zlib_ = __webpack_require__(8761);
 
-// CONCATENATED MODULE: ../utils/BuildSizes.ts
+// CONCATENATED MODULE: ./utils/BuildSizeDiffReport.ts
+
+
+function toFinite(value) {
+    return typeof value == 'number' && Number.isFinite(value) ? value : 0;
+}
+function normalizeDelta(delta) {
+    const absoluteDelta = Math.abs(delta);
+    if (absoluteDelta < 256)
+        return 0;
+    return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
+}
+function getDiffIcon(diff) {
+    if (diff >= 0.5)
+        return '🆘';
+    if (diff >= 0.2)
+        return '🚨';
+    if (diff >= 0.1)
+        return '⚠️';
+    if (diff >= 0.05)
+        return '🔍';
+    if (diff <= -0.5)
+        return '🏆';
+    if (diff <= -0.2)
+        return '🎉';
+    if (diff <= -0.1)
+        return '👏';
+    if (diff <= -0.05)
+        return '✅';
+    return '';
+}
+function formatRow(size, delta) {
+    const formattedSize = (0,pretty_bytes_default())(size);
+    const formattedDelta = (0,pretty_bytes_default())(delta, { signed: true });
+    const diff = delta / size;
+    const diffFormat = diff > 0 ? '+%s' : '%s';
+    const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-US', { style: 'percent' }));
+    return [formattedSize, formattedDelta, formattedDiff, getDiffIcon(diff)];
+}
+function createBuildSizeDiffReport(currentSizes, previousSizes) {
+    let totalSize = 0;
+    let totalDelta = 0;
+    const changedRows = [];
+    const unChangedRows = [];
+    const files = Object.keys({
+        ...currentSizes,
+        ...previousSizes,
+    }).sort((a, b) => a.localeCompare(b));
+    for (const file of files) {
+        const size = toFinite(currentSizes[file]);
+        const delta = normalizeDelta(size - toFinite(previousSizes[file]));
+        totalSize += size;
+        totalDelta += delta;
+        const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(size, delta);
+        if (delta === 0) {
+            unChangedRows.push((0,external_util_.format)('| `%s` | %s |', file, formattedSize));
+        }
+        else {
+            changedRows.push((0,external_util_.format)('| `%s` | %s | %s (%s) | %s |', file, formattedSize, formattedDelta, formattedDiff, diffIcon));
+        }
+    }
+    const [formattedTotalSize, formattedTotalDelta, formattedTotalDiff, totalDiffIcon,] = formatRow(totalSize, totalDelta);
+    const lines = [(0,external_util_.format)('**Total Size**: %s', formattedTotalSize)];
+    if (totalDelta > 0) {
+        lines.push('');
+        lines.push((0,external_util_.format)('**Size Change**: %s (%s) %s', formattedTotalDelta, formattedTotalDiff, totalDiffIcon));
+    }
+    lines.push('');
+    if (changedRows.length > 0) {
+        lines.push('| Filename | Size | Change |     |');
+        lines.push('| :------- | ---: | -----: | :-: |');
+        lines.push(...changedRows);
+    }
+    if (unChangedRows.length > 0) {
+        lines.push('', '');
+        lines.push('<details><summary>ℹ️ <strong>View Unchanged</strong></summary>');
+        lines.push('', '');
+        lines.push('| Filename | Size |');
+        lines.push('| :------- | ---: |');
+        lines.push(...unChangedRows);
+    }
+    return lines.join('\n');
+}
+
+// CONCATENATED MODULE: ./utils/BuildSizes.ts
 
 
 
@@ -60937,65 +60982,19 @@ async function getBuildSizes(dir) {
     return sizes;
 }
 
-// EXTERNAL MODULE: external "util"
-var external_util_ = __webpack_require__(1669);
-
-// CONCATENATED MODULE: ../utils/BuildSnapshotMeta.ts
-
-
+// CONCATENATED MODULE: ./utils/BuildSnapshotMeta.ts
 
 
 function getBuildSnapshotMeta({ sha, label, }) {
     const name = `build-size-v1-${label}`;
     const restoreKey = `${name}-`;
     const key = restoreKey + sha;
-    const meta = {
+    return {
         key,
         restoreKey,
         filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
     };
-    (0,core.info)((0,external_util_.format)('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
-    return meta;
 }
-
-// CONCATENATED MODULE: ../utils/sendReport.ts
-
-
-const GITHUB_ACTIONS_BOT_LOGIN = 'github-actions[bot]';
-async function sendReport({ pr, token, label, title, content, }) {
-    const octokit = (0,github.getOctokit)(token);
-    const reportTitle = `### ${!label ? title : `${title} (${label})`}\n`;
-    let previousCommentID = undefined;
-    (0,core.info)('Looking for the previous report…');
-    for await (const { data: comments } of octokit.paginate.iterator('GET /repos/:owner/:repo/issues/:issue_number/comments', {
-        ...github.context.repo,
-        per_page: 100,
-        issue_number: Number(pr),
-    })) {
-        for (const { id, body, user: { login }, } of comments) {
-            if (login === GITHUB_ACTIONS_BOT_LOGIN && body.startsWith(reportTitle)) {
-                if (previousCommentID == null) {
-                    (0,core.info)(`Found previous report with ID "${id}"`);
-                    previousCommentID = id;
-                    break;
-                }
-            }
-        }
-    }
-    const body = reportTitle + content;
-    if (previousCommentID != null) {
-        (0,core.info)(`Updating previous report with ID "${previousCommentID}"…`);
-        await octokit.request('PATCH /repos/:owner/:repo/issues/comments/:comment_id', { ...github.context.repo, body, comment_id: previousCommentID });
-    }
-    else {
-        (0,core.info)('Sending new report…');
-        await octokit.request('POST /repos/:owner/:repo/issues/:issue_number/comments', { ...github.context.repo, body, issue_number: Number(pr) });
-    }
-}
-
-// EXTERNAL MODULE: ../node_modules/filesize/lib/filesize.js
-var filesize = __webpack_require__(8098);
-var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
 
 // CONCATENATED MODULE: ./report/index.ts
 
@@ -61006,25 +61005,6 @@ var filesize_default = /*#__PURE__*/__webpack_require__.n(filesize);
 
 
 
-
-
-function toFinite(value) {
-    return typeof value == 'number' && Number.isFinite(value) ? value : 0;
-}
-function formatRow(currentSize, previousSize) {
-    const formattedSize = (0,filesize_default())(currentSize);
-    let delta = currentSize - previousSize;
-    // Reduce noise from the insignificant changes.
-    if (Math.abs(delta) < 512) {
-        delta = 0;
-    }
-    const deltaFormat = delta > 0 ? '+%s' : '%s';
-    const formattedDelta = (0,external_util_.format)(deltaFormat, (0,filesize_default())(delta));
-    const diff = delta / currentSize;
-    const diffFormat = diff > 0 ? '+%s 🔺' : diff < 0 ? '%s 🔽' : '%s';
-    const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-us', { style: 'percent' }));
-    return [formattedSize, formattedDelta, formattedDiff];
-}
 async function getReportContent(dir, sha, label) {
     const meta = getBuildSnapshotMeta({ sha, label });
     (0,core.info)((0,external_util_.format)('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
@@ -61041,28 +61021,7 @@ async function getReportContent(dir, sha, label) {
     const previousSizesJSON = await external_fs_.promises.readFile(meta.filename, 'utf-8');
     const previousSizes = JSON.parse(previousSizesJSON);
     const currentSizes = await getBuildSizes(dir);
-    const files = Object.keys({
-        ...previousSizes,
-        ...currentSizes,
-    }).sort((a, b) => a.localeCompare(b));
-    let totalCurrentSize = 0;
-    let totalPreviousSize = 0;
-    const rows = [
-        (0,external_util_.format)('%s...%s', sha, github.context.sha),
-        '| Path | Size | Delta |',
-        '| - | - | - |',
-    ];
-    for (const file of files) {
-        const currentSize = toFinite(currentSizes[file]);
-        const previousSize = toFinite(previousSizes[file]);
-        totalCurrentSize += currentSize;
-        totalPreviousSize += previousSize;
-        const [size, delta, diff] = formatRow(currentSize, previousSize);
-        rows.push((0,external_util_.format)('| %s/**%s** | %s | %s (%s) |', external_path_default().dirname(file), external_path_default().basename(file), size, delta, diff));
-    }
-    const [totalSize, totalDelta, totalDiff] = formatRow(totalCurrentSize, totalPreviousSize);
-    rows.push((0,external_util_.format)('| | %s | %s (%s) |', totalSize, totalDelta, totalDiff));
-    return rows.join('\n');
+    return createBuildSizeDiffReport(currentSizes, previousSizes);
 }
 async function main() {
     const pr = (0,core.getInput)('pr', { required: true });
@@ -61394,7 +61353,7 @@ module.exports = require("zlib");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(6004);
+/******/ 	return __webpack_require__(5091);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

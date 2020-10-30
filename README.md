@@ -38,7 +38,7 @@ jobs:
 ##### Inputs
 
 - `dir` - path to the build folder
-- `sha` - commit sha, uses `${{ github.sha }}` as default
+- `sha` - commit sha, uses `${{ github.event.pull_request.base.sha }}` as default
 - `label` - custom label to distinguish multiple builds, uses `"default"` as default
 - `pr` - pull request number, uses `${{ github.event.number }}` as default
 - `token` - github token, uses `${{ github.token }}` as default

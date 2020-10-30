@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "build": "ncc build src/index.ts -s -o dist",
-    "version": "yarn build && git add ."
+    "version": "yarn build && git add dist"
   },
   "engines": {
     "node": ">=12"
