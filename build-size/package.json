@@ -1,0 +1,13 @@
+{
+  "name": "@sd/build-size",
+  "version": "1.0.5",
+  "license": "MIT",
+  "scripts": {
+    "build:cache": "ts-node-script ../scripts/build.ts cache",
+    "build:report": "ts-node-script ../scripts/build.ts report",
+    "version": "run-p build:*"
+  },
+  "engines": {
+    "node": ">=12"
+  }
+}

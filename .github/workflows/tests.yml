@@ -1,0 +1,168 @@
+name: Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+    branches:
+      - '**'
+
+jobs:
+  build-size-cache:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/checkout@v2
+        with:
+          path: main
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          dir: ./main/build-size/cache
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: cache
+          dir: ./main/build-size/cache
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: report
+          dir: ./main/build-size/report
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: deploy-preview
+          dir: ./main/deploy-preview
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - uses: ./build-size/cache
+        with:
+          label: prune-artifacts
+          dir: ./main/prune-artifacts
+          sha: ${{ github.event.pull_request.base.sha }}
+
+  build-size-report:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
+    needs:
+      - build-size-cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./build-size/report
+        with:
+          sha: invalid-sha
+          label: should-fail
+          dir: ./build-size/cache
+
+      - uses: ./build-size/report
+        with:
+          dir: ./build-size/cache
+
+      - uses: ./build-size/report
+        with:
+          label: cache
+          dir: ./build-size/cache
+
+      - uses: ./build-size/report
+        with:
+          label: report
+          dir: ./build-size/report
+
+      - uses: ./build-size/report
+        with:
+          label: deploy-preview
+          dir: ./deploy-preview
+
+      - uses: ./build-size/report
+        with:
+          label: prune-artifacts
+          dir: ./prune-artifacts
+
+  deploy-preview:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: |
+          mkdir site
+          echo "<html><body>Hello from ${{ github.sha }}</body></html>" > site/index.html
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - uses: ./deploy-preview
+        with:
+          dir: site
+          alias: custom-alias
+          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+  upload-artifacts:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test upload-artifacts') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-1-${{ github.event.number }}
+          path: package.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-2-${{ github.event.number }}
+          path: package.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-3-${{ github.event.number }}
+          path: package.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-4-${{ github.event.number }}
+          path: package.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-5-${{ github.event.number }}
+          path: package.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: test-6-${{ github.event.number }}
+          path: package.json
+
+  prune-artifacts:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test prune-artifacts') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./prune-artifacts
+        with:
+          pattern: '-1-${{ github.event.number }}$'
+
+      - uses: ./prune-artifacts
+        with:
+          skip-recent: 2
+          pattern: '-${{ github.event.number }}$'
+
+      - uses: ./prune-artifacts
