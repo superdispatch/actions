@@ -17,7 +17,7 @@ module.exports = {
         project: './tsconfig.json',
       },
       rules: {
-        curly: ['error', 'multi', 'consistent'],
+        curly: ['error', 'multi-line', 'consistent'],
 
         'node/no-missing-import': 'off',
         'node/no-extraneous-import': 'off',

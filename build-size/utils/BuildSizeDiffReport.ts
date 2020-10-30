@@ -66,11 +66,11 @@ export function createBuildSizeDiffReport(
       delta,
     );
 
-    if (delta === 0)
+    if (delta === 0) {
       unChangedRows.push(
         format('| `%s` | %s |', formattedSize, formattedDelta),
       );
-    else
+    } else {
       changedRows.push(
         format(
           '| `%s` | %s | %s (%s) | %s |',
@@ -80,6 +80,7 @@ export function createBuildSizeDiffReport(
           diffIcon,
         ),
       );
+    }
   }
 
   const [
@@ -89,17 +90,21 @@ export function createBuildSizeDiffReport(
     totalDiffIcon,
   ] = formatRow(totalSize, totalDelta);
 
-  const lines = [
-    format('**Total Size**: %s', formattedTotalSize),
-    '',
-    format(
-      '**Size Change**: %s (%s) %s',
-      formattedTotalDelta,
-      formattedTotalDiff,
-      totalDiffIcon,
-    ),
-    '',
-  ];
+  const lines = [format('**Total Size**: %s', formattedTotalSize)];
+
+  if (totalDelta > 0) {
+    lines.push('');
+    lines.push(
+      format(
+        '**Size Change**: %s (%s) %s',
+        formattedTotalDelta,
+        formattedTotalDiff,
+        totalDiffIcon,
+      ),
+    );
+  }
+
+  lines.push('');
 
   if (changedRows.length > 0) {
     lines.push('| Filename | Size | Change |     |');
