@@ -10,7 +10,15 @@ async function main() {
 
   await exec('rm', ['-rf', out]);
 
-  await exec('ncc', ['build', entry, '--out', out, '--source-map']);
+  await exec('ncc', [
+    'build',
+    entry,
+    '--out',
+    out,
+    '--source-map',
+    '--external',
+    'encoding',
+  ]);
 
   await exec('git', ['add', out]);
 }
