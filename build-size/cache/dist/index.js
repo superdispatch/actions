@@ -57786,8 +57786,9 @@ __webpack_require__.r(__webpack_exports__);
 // EXTERNAL MODULE: ../node_modules/@actions/glob/lib/glob.js
 var glob = __webpack_require__(8707);
 
-// EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(5316);
+// EXTERNAL MODULE: external "os"
+var external_os_ = __webpack_require__(2087);
+var external_os_default = /*#__PURE__*/__webpack_require__.n(external_os_);
 
 // EXTERNAL MODULE: ../node_modules/@actions/cache/lib/cache.js
 var cache = __webpack_require__(9350);
@@ -57795,13 +57796,12 @@ var cache = __webpack_require__(9350);
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(5747);
 
-// EXTERNAL MODULE: external "os"
-var external_os_ = __webpack_require__(2087);
-var external_os_default = /*#__PURE__*/__webpack_require__.n(external_os_);
-
 // EXTERNAL MODULE: external "path"
 var external_path_ = __webpack_require__(5622);
 var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
+
+// EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(5316);
 
 // EXTERNAL MODULE: external "zlib"
 var external_zlib_ = __webpack_require__(8761);
@@ -57855,19 +57855,15 @@ async function getBuildSizes(dir) {
 // CONCATENATED MODULE: ./utils/BuildSnapshotMeta.ts
 
 
-
-
 function getBuildSnapshotMeta({ sha, label, }) {
     const name = `build-size-v1-${label}`;
     const restoreKey = `${name}-`;
     const key = restoreKey + sha;
-    const meta = {
+    return {
         key,
         restoreKey,
         filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
     };
-    (0,core.info)((0,external_util_.format)('Snapshot meta for the:\n%O\n%O', { sha, label }, meta));
-    return meta;
 }
 
 // CONCATENATED MODULE: ./cache/index.ts
@@ -57883,20 +57879,26 @@ async function main() {
     const sha = (0,core.getInput)('sha', { required: true });
     const label = (0,core.getInput)('label', { required: true });
     const meta = getBuildSnapshotMeta({ sha, label });
-    (0,core.info)((0,external_util_.format)('Measuring build folder "%s"…', dir));
+    (0,core.info)((0,external_util_.format)('Checking cache for the key "%s"…', meta.key));
+    const restoredKey = await (0,cache.restoreCache)([meta.filename], meta.key);
+    if (restoredKey) {
+        (0,core.info)('Cache hit, finishing the job…');
+        return;
+    }
+    (0,core.info)((0,external_util_.format)('Computing build size of the "%s"…', dir));
     const sizes = await getBuildSizes(dir);
-    (0,core.info)((0,external_util_.format)('File sizes ready:\n%O', sizes));
+    (0,core.info)((0,external_util_.format)('Computed file sizes: %j', sizes));
     await external_fs_.promises.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');
     (0,core.info)((0,external_util_.format)('Writing "%s" to "%s" cache.', meta.filename, meta.key));
     try {
         await (0,cache.saveCache)([meta.filename], meta.key);
     }
-    catch (e) {
-        if (e instanceof cache.ReserveCacheError) {
-            (0,core.warning)(e);
+    catch (error) {
+        if (error instanceof cache.ReserveCacheError) {
+            (0,core.warning)(error);
         }
         else {
-            throw e;
+            throw error;
         }
     }
 }
