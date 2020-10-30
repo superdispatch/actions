@@ -18,7 +18,7 @@ jobs:
           path: main
           ref: ${{ github.event.pull_request.base.sha }}
 
-      - uses: ./main/build-size/cache
+      - uses: ./build-size/cache
         with:
           dir: ./main/build-size/cache
           sha: ${{ github.event.pull_request.base.sha }}
