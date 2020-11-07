@@ -3,8 +3,6 @@ name: Tests
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
-    branches:
-      - '**'
 
 jobs:
   build-size-cache:
@@ -84,6 +82,18 @@ jobs:
         with:
           label: prune-artifacts
           dir: ./prune-artifacts
+
+  build-size-limit:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./build-size/limit
+        with:
+          install_command: 'yarn install'
+          build_command: 'yarn add -WD size-limit @size-limit/preset-small-lib'
+          target: 'node_modules/lodash/get.js'
 
   deploy-preview:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
