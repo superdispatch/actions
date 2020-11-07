@@ -57725,9 +57725,9 @@ var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
-function normalizeDelta(delta) {
+function normalizeDelta(delta, deltaThreshold = 256) {
     const absoluteDelta = Math.abs(delta);
-    if (absoluteDelta < 256)
+    if (absoluteDelta < deltaThreshold)
         return 0;
     return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
@@ -57764,7 +57764,7 @@ function formatRow(size, delta) {
     const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-US', { style: 'percent' }));
     return [formattedSize, formattedDelta, formattedDiff, getDiffIcon(diff)];
 }
-function createBuildSizeDiffReport(currentSizes, previousSizes) {
+function createBuildSizeDiffReport(currentSizes, previousSizes, { deltaThreshold } = {}) {
     let totalSize = 0;
     let totalDelta = 0;
     const changedRows = [];
@@ -57775,7 +57775,7 @@ function createBuildSizeDiffReport(currentSizes, previousSizes) {
     }).sort((a, b) => a.localeCompare(b));
     for (const file of files) {
         const size = toFinite(currentSizes[file]);
-        const delta = normalizeDelta(size - toFinite(previousSizes[file]));
+        const delta = normalizeDelta(size - toFinite(previousSizes[file]), deltaThreshold);
         totalSize += size;
         totalDelta += delta;
         const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(size, delta);

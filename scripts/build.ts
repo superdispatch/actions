@@ -8,11 +8,7 @@ async function main() {
   const entry = path.join(rootDir, 'index.ts');
   const out = path.join(rootDir, 'dist');
 
-  try {
-    await exec('git', ['rm', '-rf', out]);
-  } catch {
-    await exec('rm', ['-rf', out]);
-  }
+  await exec('rm', ['-rf', out]);
 
   await exec('ncc', [
     'build',
@@ -23,12 +19,6 @@ async function main() {
     'encoding', // Optional dependency of the `node-fetch`.
     '--source-map',
   ]);
-
-  try {
-    await exec('git', ['add', out]);
-  } catch {
-    await exec('git', ['status']);
-  }
 }
 
 main().catch((error) => {
