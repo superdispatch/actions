@@ -59,7 +59,7 @@ async function main() {
 
   const content = await getReportContent(dir, sha, label);
 
-  return sendReport({
+  await sendReport({
     pr,
     label,
     token,
