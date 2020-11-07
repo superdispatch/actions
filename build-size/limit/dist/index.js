@@ -304,9 +304,12 @@ function uploadChunk(httpClient, resourceUrl, openStream, start, end) {
             'Content-Type': 'application/octet-stream',
             'Content-Range': getContentRange(start, end)
         };
-        yield requestUtils_1.retryHttpClientResponse(`uploadChunk (start: ${start}, end: ${end})`, () => __awaiter(this, void 0, void 0, function* () {
+        const uploadChunkResponse = yield requestUtils_1.retryHttpClientResponse(`uploadChunk (start: ${start}, end: ${end})`, () => __awaiter(this, void 0, void 0, function* () {
             return httpClient.sendStream('PATCH', resourceUrl, openStream(), additionalHeaders);
         }));
+        if (!requestUtils_1.isSuccessStatusCode(uploadChunkResponse.message.statusCode)) {
+            throw new Error(`Cache service responded with ${uploadChunkResponse.message.statusCode} during upload chunk.`);
+        }
     });
 }
 function uploadFile(httpClient, cacheId, archivePath, options) {
@@ -12471,15 +12474,15 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
+  "NIL": () => /* reexport */ nil,
+  "parse": () => /* reexport */ esm_node_parse,
+  "stringify": () => /* reexport */ esm_node_stringify,
   "v1": () => /* reexport */ esm_node_v1,
   "v3": () => /* reexport */ esm_node_v3,
   "v4": () => /* reexport */ esm_node_v4,
   "v5": () => /* reexport */ esm_node_v5,
-  "NIL": () => /* reexport */ nil,
-  "version": () => /* reexport */ esm_node_version,
   "validate": () => /* reexport */ esm_node_validate,
-  "stringify": () => /* reexport */ esm_node_stringify,
-  "parse": () => /* reexport */ esm_node_parse
+  "version": () => /* reexport */ esm_node_version
 });
 
 // EXTERNAL MODULE: external "crypto"
@@ -57667,25 +57670,14 @@ function wrappy (fn, cb) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
-var core = __webpack_require__(5316);
-
-// EXTERNAL MODULE: ../node_modules/pretty-bytes/index.js
-var pretty_bytes = __webpack_require__(6418);
-var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
-
 // EXTERNAL MODULE: ../node_modules/@actions/cache/lib/cache.js
 var cache = __webpack_require__(9350);
-
-// EXTERNAL MODULE: ../node_modules/@actions/github/lib/github.js
-var github = __webpack_require__(1696);
-
-// EXTERNAL MODULE: external "util"
-var external_util_ = __webpack_require__(1669);
-
+// EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
+var core = __webpack_require__(5316);
 // EXTERNAL MODULE: ../node_modules/@actions/exec/lib/exec.js
 var exec = __webpack_require__(110);
-
+// EXTERNAL MODULE: ../node_modules/@actions/github/lib/github.js
+var github = __webpack_require__(1696);
 // CONCATENATED MODULE: ../utils/sendReport.ts
 
 
@@ -57723,7 +57715,12 @@ async function sendReport({ pr, token, label, title, content, }) {
 
 // EXTERNAL MODULE: external "fs"
 var external_fs_ = __webpack_require__(5747);
+// EXTERNAL MODULE: ../node_modules/pretty-bytes/index.js
+var pretty_bytes = __webpack_require__(6418);
+var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 
+// EXTERNAL MODULE: external "util"
+var external_util_ = __webpack_require__(1669);
 // CONCATENATED MODULE: ./utils/BuildSizeDiffReport.ts
 
 
@@ -57756,14 +57753,14 @@ function getDiffIcon(diff) {
     return '';
 }
 function formatRow(size, delta) {
-    const formattedSize = (0,pretty_bytes_default())(size);
+    const formattedSize = pretty_bytes_default()(size);
     if (size === 0 && delta < 0) {
         return [formattedSize, '', 'removed', ''];
     }
     if (delta === size) {
         return [formattedSize, '', 'new file', ''];
     }
-    const formattedDelta = (0,pretty_bytes_default())(delta, { signed: true });
+    const formattedDelta = pretty_bytes_default()(delta, { signed: true });
     const diff = delta / size;
     const diffFormat = diff > 0 ? '+%s' : '%s';
     const formattedDiff = (0,external_util_.format)(diffFormat, diff.toLocaleString('en-US', { style: 'percent' }));
@@ -57924,7 +57921,7 @@ module.exports = JSON.parse("[\"ac\",\"com.ac\",\"edu.ac\",\"gov.ac\",\"net.ac\"
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");
+module.exports = require("assert");;
 
 /***/ }),
 
@@ -57932,7 +57929,7 @@ module.exports = require("assert");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("buffer");
+module.exports = require("buffer");;
 
 /***/ }),
 
@@ -57940,7 +57937,7 @@ module.exports = require("buffer");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");
+module.exports = require("child_process");;
 
 /***/ }),
 
@@ -57948,7 +57945,7 @@ module.exports = require("child_process");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("crypto");
+module.exports = require("crypto");;
 
 /***/ }),
 
@@ -57956,7 +57953,7 @@ module.exports = require("crypto");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("encoding");
+module.exports = require("encoding");;
 
 /***/ }),
 
@@ -57964,7 +57961,7 @@ module.exports = require("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");
+module.exports = require("events");;
 
 /***/ }),
 
@@ -57972,7 +57969,7 @@ module.exports = require("events");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");
+module.exports = require("fs");;
 
 /***/ }),
 
@@ -57980,7 +57977,7 @@ module.exports = require("fs");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");
+module.exports = require("http");;
 
 /***/ }),
 
@@ -57988,7 +57985,7 @@ module.exports = require("http");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");
+module.exports = require("https");;
 
 /***/ }),
 
@@ -57996,7 +57993,7 @@ module.exports = require("https");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");
+module.exports = require("net");;
 
 /***/ }),
 
@@ -58004,7 +58001,7 @@ module.exports = require("net");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");
+module.exports = require("os");;
 
 /***/ }),
 
@@ -58012,7 +58009,7 @@ module.exports = require("os");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");
+module.exports = require("path");;
 
 /***/ }),
 
@@ -58020,7 +58017,7 @@ module.exports = require("path");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("punycode");
+module.exports = require("punycode");;
 
 /***/ }),
 
@@ -58028,7 +58025,7 @@ module.exports = require("punycode");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");
+module.exports = require("stream");;
 
 /***/ }),
 
@@ -58036,7 +58033,7 @@ module.exports = require("stream");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("string_decoder");
+module.exports = require("string_decoder");;
 
 /***/ }),
 
@@ -58044,7 +58041,7 @@ module.exports = require("string_decoder");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("timers");
+module.exports = require("timers");;
 
 /***/ }),
 
@@ -58052,7 +58049,7 @@ module.exports = require("timers");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");
+module.exports = require("tls");;
 
 /***/ }),
 
@@ -58060,7 +58057,7 @@ module.exports = require("tls");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");
+module.exports = require("url");;
 
 /***/ }),
 
@@ -58068,7 +58065,7 @@ module.exports = require("url");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");
+module.exports = require("util");;
 
 /***/ }),
 
@@ -58076,7 +58073,7 @@ module.exports = require("util");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");
+module.exports = require("zlib");;
 
 /***/ })
 
