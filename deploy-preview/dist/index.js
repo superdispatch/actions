@@ -7000,13 +7000,10 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ../node_modules/@actions/core/lib/core.js
 var core = __webpack_require__(5316);
-
-// EXTERNAL MODULE: ../node_modules/@actions/github/lib/github.js
-var github = __webpack_require__(2189);
-
 // EXTERNAL MODULE: ../node_modules/@actions/exec/lib/exec.js
 var exec = __webpack_require__(110);
-
+// EXTERNAL MODULE: ../node_modules/@actions/github/lib/github.js
+var github = __webpack_require__(2189);
 // CONCATENATED MODULE: ../utils/sendReport.ts
 
 
@@ -7044,7 +7041,6 @@ async function sendReport({ pr, token, label, title, content, }) {
 
 // EXTERNAL MODULE: external "util"
 var external_util_ = __webpack_require__(1669);
-
 // CONCATENATED MODULE: ./index.ts
 
 
@@ -7095,7 +7091,7 @@ main().catch(core.setFailed);
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("assert");
+module.exports = require("assert");;
 
 /***/ }),
 
@@ -7103,7 +7099,7 @@ module.exports = require("assert");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");
+module.exports = require("child_process");;
 
 /***/ }),
 
@@ -7111,7 +7107,7 @@ module.exports = require("child_process");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("encoding");
+module.exports = require("encoding");;
 
 /***/ }),
 
@@ -7119,7 +7115,7 @@ module.exports = require("encoding");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("events");
+module.exports = require("events");;
 
 /***/ }),
 
@@ -7127,7 +7123,7 @@ module.exports = require("events");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");
+module.exports = require("fs");;
 
 /***/ }),
 
@@ -7135,7 +7131,7 @@ module.exports = require("fs");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("http");
+module.exports = require("http");;
 
 /***/ }),
 
@@ -7143,7 +7139,7 @@ module.exports = require("http");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("https");
+module.exports = require("https");;
 
 /***/ }),
 
@@ -7151,7 +7147,7 @@ module.exports = require("https");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("net");
+module.exports = require("net");;
 
 /***/ }),
 
@@ -7159,7 +7155,7 @@ module.exports = require("net");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");
+module.exports = require("os");;
 
 /***/ }),
 
@@ -7167,7 +7163,7 @@ module.exports = require("os");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");
+module.exports = require("path");;
 
 /***/ }),
 
@@ -7175,7 +7171,7 @@ module.exports = require("path");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("stream");
+module.exports = require("stream");;
 
 /***/ }),
 
@@ -7183,7 +7179,7 @@ module.exports = require("stream");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tls");
+module.exports = require("tls");;
 
 /***/ }),
 
@@ -7191,7 +7187,7 @@ module.exports = require("tls");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("url");
+module.exports = require("url");;
 
 /***/ }),
 
@@ -7199,7 +7195,7 @@ module.exports = require("url");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");
+module.exports = require("util");;
 
 /***/ }),
 
@@ -7207,7 +7203,7 @@ module.exports = require("util");
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("zlib");
+module.exports = require("zlib");;
 
 /***/ })
 

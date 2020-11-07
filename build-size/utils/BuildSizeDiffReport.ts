@@ -5,10 +5,10 @@ function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function normalizeDelta(delta: number): number {
+function normalizeDelta(delta: number, deltaThreshold = 256): number {
   const absoluteDelta = Math.abs(delta);
 
-  if (absoluteDelta < 256) return 0;
+  if (absoluteDelta < deltaThreshold) return 0;
 
   return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
@@ -51,9 +51,14 @@ function formatRow(
   return [formattedSize, formattedDelta, formattedDiff, getDiffIcon(diff)];
 }
 
+export interface BuildSizeDiffReportOptions {
+  deltaThreshold?: number;
+}
+
 export function createBuildSizeDiffReport(
   currentSizes: Record<string, number>,
   previousSizes: Record<string, number>,
+  { deltaThreshold }: BuildSizeDiffReportOptions = {},
 ): string {
   let totalSize = 0;
   let totalDelta = 0;
@@ -66,7 +71,10 @@ export function createBuildSizeDiffReport(
 
   for (const file of files) {
     const size = toFinite(currentSizes[file]);
-    const delta = normalizeDelta(size - toFinite(previousSizes[file]));
+    const delta = normalizeDelta(
+      size - toFinite(previousSizes[file]),
+      deltaThreshold,
+    );
 
     totalSize += size;
     totalDelta += delta;

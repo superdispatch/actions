@@ -108,6 +108,8 @@ async function main() {
     pr,
     token,
     title: 'Size Limit Report',
-    content: createBuildSizeDiffReport(currentSizes, previousSizes),
+    content: createBuildSizeDiffReport(currentSizes, previousSizes, {
+      deltaThreshold: 0,
+    }),
   });
 }
