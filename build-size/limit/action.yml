@@ -1,0 +1,34 @@
+name: 'Build Size Limit'
+description: 'Compares size-limit results of the current and base branches'
+author: 'superdispatch'
+inputs:
+  pr:
+    required: true
+    default: '${{ github.event.number }}'
+    description: 'pull request number'
+
+  base_ref:
+    required: true
+    default: '${{ github.event.pull_request.base.sha }}'
+    description: 'base commit reference'
+
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+  install_command:
+    required: false
+    description: 'command to install dependencies'
+
+  build_command:
+    required: false
+    description: 'command to build app'
+
+  target:
+    required: false
+    description: 'size limit target file'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

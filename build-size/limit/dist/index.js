@@ -57660,7 +57660,7 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
-/***/ 5091:
+/***/ 2429:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -57674,13 +57674,6 @@ var core = __webpack_require__(5316);
 var pretty_bytes = __webpack_require__(6418);
 var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 
-// EXTERNAL MODULE: ../node_modules/@actions/glob/lib/glob.js
-var glob = __webpack_require__(8707);
-
-// EXTERNAL MODULE: external "os"
-var external_os_ = __webpack_require__(2087);
-var external_os_default = /*#__PURE__*/__webpack_require__.n(external_os_);
-
 // EXTERNAL MODULE: ../node_modules/@actions/cache/lib/cache.js
 var cache = __webpack_require__(9350);
 
@@ -57690,12 +57683,8 @@ var github = __webpack_require__(1696);
 // EXTERNAL MODULE: external "util"
 var external_util_ = __webpack_require__(1669);
 
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __webpack_require__(5747);
-
-// EXTERNAL MODULE: external "path"
-var external_path_ = __webpack_require__(5622);
-var external_path_default = /*#__PURE__*/__webpack_require__.n(external_path_);
+// EXTERNAL MODULE: ../node_modules/@actions/exec/lib/exec.js
+var exec = __webpack_require__(110);
 
 // CONCATENATED MODULE: ../utils/sendReport.ts
 
@@ -57732,8 +57721,8 @@ async function sendReport({ pr, token, label, title, content, }) {
     }
 }
 
-// EXTERNAL MODULE: external "zlib"
-var external_zlib_ = __webpack_require__(8761);
+// EXTERNAL MODULE: external "fs"
+var external_fs_ = __webpack_require__(5747);
 
 // CONCATENATED MODULE: ./utils/BuildSizeDiffReport.ts
 
@@ -57825,106 +57814,92 @@ function createBuildSizeDiffReport(currentSizes, previousSizes) {
     return lines.join('\n');
 }
 
-// CONCATENATED MODULE: ./utils/BuildSizes.ts
+// CONCATENATED MODULE: ./limit/index.ts
 
 
 
 
-async function computeFileSize(filename) {
-    const buffer = await external_fs_.promises.readFile(filename);
-    return new Promise((resolve, reject) => {
-        (0,external_zlib_.gzip)(buffer, { level: 9 }, (error, result) => {
-            if (error) {
-                reject(error);
-            }
-            else {
-                resolve(result.length);
-            }
-        });
+
+
+const pr = (0,core.getInput)('pr', { required: true });
+const base = (0,core.getInput)('base_ref', { required: true });
+const token = (0,core.getInput)('token', { required: true });
+const target = (0,core.getInput)('target', { required: false });
+const buildCommand = (0,core.getInput)('build_command', { required: false });
+const installCommand = (0,core.getInput)('install_command', { required: false });
+const snapshotName = `size-limit-snapshot-${base}.json`;
+main().catch(core.setFailed);
+async function setup() {
+    if (installCommand) {
+        await (0,exec.exec)(installCommand);
+    }
+    if (buildCommand) {
+        await (0,exec.exec)(buildCommand);
+    }
+}
+async function computeSizes() {
+    const args = ['size-limit', '--json'];
+    if (target) {
+        args.push(target);
+    }
+    let json = '';
+    await (0,exec.exec)('npx', args, {
+        listeners: {
+            stdout: (data) => {
+                json += data.toString();
+            },
+        },
     });
-}
-function isValidFile(filename) {
-    return (/\.(js|css)$/.test(filename) &&
-        !/service-worker\.js$/.test(filename) &&
-        !/precache-manifest\.[0-9a-f]+\.js$/.test(filename));
-}
-function getFileNameKey(filename, buildPath) {
-    const key = external_path_default().relative(buildPath, filename);
-    return (key
-        // `1.a57f92fb.chunk.js` -> `1.[hash].chunk.js`
-        .replace(/\.([a-f0-9])+\./, '.[hash].'));
-}
-async function getBuildSizes(dir) {
-    const globber = await (0,glob.create)(dir);
-    const [buildPath] = globber.getSearchPaths();
     const sizes = {};
-    for await (const filename of globber.globGenerator()) {
-        if (!isValidFile(filename)) {
-            continue;
-        }
-        const key = getFileNameKey(filename, buildPath);
-        sizes[key] = await computeFileSize(filename);
+    for (const { name, size } of JSON.parse(json)) {
+        sizes[name] = size;
     }
     return sizes;
 }
-
-// CONCATENATED MODULE: ./utils/BuildSnapshotMeta.ts
-
-
-function getBuildSnapshotMeta({ sha, label, }) {
-    const name = `build-size-v1-${label}`;
-    const restoreKey = `${name}-`;
-    const key = restoreKey + sha;
-    return {
-        key,
-        restoreKey,
-        filename: external_path_default().join(external_os_default().tmpdir(), `${name}.json`),
-    };
-}
-
-// CONCATENATED MODULE: ./report/index.ts
-
-
-
-
-
-
-
-
-async function getReportContent(dir, sha, label) {
-    const meta = getBuildSnapshotMeta({ sha, label });
-    (0,core.info)((0,external_util_.format)('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
-    const restoredKey = await (0,cache.restoreCache)([meta.filename], meta.key, [
-        meta.restoreKey,
-    ]);
-    if (!restoredKey) {
-        (0,core.warning)((0,external_util_.format)('Failed to restore cache from [%s, %s] keys', meta.key, meta.restoreKey));
-        return 'Failed to restore previous report cache.';
+async function computePreviousSizes() {
+    const restoreKey = await (0,cache.restoreCache)([snapshotName], snapshotName);
+    if (restoreKey) {
+        const json = await external_fs_.promises.readFile(snapshotName, 'utf-8');
+        return JSON.parse(json);
     }
-    if (restoredKey !== meta.key) {
-        (0,core.warning)((0,external_util_.format)('Failed to find latest key for sha "%s", using "%s" instead.', sha, restoredKey));
+    let currentRef = '';
+    await (0,exec.exec)('git ', ['rev-parse', 'HEAD'], {
+        listeners: {
+            stdout: (data) => {
+                currentRef += data.toString();
+            },
+        },
+    });
+    await (0,exec.exec)('git', ['fetch', 'origin', base, '--depth', '1']);
+    await (0,exec.exec)('git', ['checkout', '--force', base]);
+    await setup();
+    const sizes = await computeSizes();
+    await external_fs_.promises.writeFile(snapshotName, JSON.stringify(sizes), 'utf-8');
+    try {
+        await (0,cache.saveCache)([snapshotName], snapshotName);
     }
-    const previousSizesJSON = await external_fs_.promises.readFile(meta.filename, 'utf-8');
-    const previousSizes = JSON.parse(previousSizesJSON);
-    const currentSizes = await getBuildSizes(dir);
-    return createBuildSizeDiffReport(currentSizes, previousSizes);
+    catch (error) {
+        if (error instanceof cache.ReserveCacheError) {
+            (0,core.warning)(error);
+        }
+        else {
+            throw error;
+        }
+    }
+    await (0,exec.exec)('git', ['checkout', '--force', currentRef.trim()]);
+    return sizes;
 }
 async function main() {
-    const pr = (0,core.getInput)('pr', { required: true });
-    const dir = (0,core.getInput)('dir', { required: true });
-    const sha = (0,core.getInput)('sha', { required: true });
-    const label = (0,core.getInput)('label', { required: true });
-    const token = (0,core.getInput)('token', { required: true });
-    const content = await getReportContent(dir, sha, label);
+    await setup();
+    const currentSizes = await computeSizes();
+    const previousSizes = await computePreviousSizes();
     await sendReport({
         pr,
-        label,
         token,
-        content,
-        title: 'Build Size Report',
+        title: 'Size Limit Report',
+        content: createBuildSizeDiffReport(currentSizes, previousSizes),
     });
 }
-main().catch(core.setFailed);
 
 
 /***/ }),
@@ -58183,7 +58158,7 @@ module.exports = require("zlib");
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(5091);
+/******/ 	return __webpack_require__(2429);
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

@@ -4,8 +4,9 @@
   "license": "MIT",
   "scripts": {
     "build:cache": "ts-node-script ../scripts/build.ts cache",
+    "build:limit": "ts-node-script ../scripts/build.ts limit",
     "build:report": "ts-node-script ../scripts/build.ts report",
-    "version": "run-p build:*"
+    "version": "run-p --print-label build:*"
   },
   "engines": {
     "node": ">=12"
