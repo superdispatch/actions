@@ -57725,7 +57725,7 @@ var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
-function normalizeDelta(delta, deltaThreshold = 128) {
+function normalizeDelta(delta, deltaThreshold = 256) {
     const absoluteDelta = Math.abs(delta);
     if (absoluteDelta < deltaThreshold)
         return 0;

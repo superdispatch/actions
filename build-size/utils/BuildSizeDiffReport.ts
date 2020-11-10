@@ -5,7 +5,7 @@ function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function normalizeDelta(delta: number, deltaThreshold = 128): number {
+function normalizeDelta(delta: number, deltaThreshold = 256): number {
   const absoluteDelta = Math.abs(delta);
 
   if (absoluteDelta < deltaThreshold) return 0;
