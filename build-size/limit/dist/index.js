@@ -57727,7 +57727,7 @@ var external_util_ = __webpack_require__(1669);
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
-function normalizeDelta(delta, deltaThreshold = 128) {
+function normalizeDelta(delta, deltaThreshold = 256) {
     const absoluteDelta = Math.abs(delta);
     if (absoluteDelta < deltaThreshold)
         return 0;
