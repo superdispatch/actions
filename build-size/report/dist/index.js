@@ -57725,7 +57725,7 @@ var pretty_bytes_default = /*#__PURE__*/__webpack_require__.n(pretty_bytes);
 function toFinite(value) {
     return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
-function normalizeDelta(delta, deltaThreshold = 256) {
+function normalizeDelta(delta, deltaThreshold = 128) {
     const absoluteDelta = Math.abs(delta);
     if (absoluteDelta < deltaThreshold)
         return 0;
@@ -57751,10 +57751,10 @@ function getDiffIcon(diff) {
     return '';
 }
 function formatRow(size, delta) {
-    const formattedSize = pretty_bytes_default()(size);
     if (size === 0 && delta < 0) {
-        return [formattedSize, '', 'removed', ''];
+        return [(0,external_util_.format)('~%s~', pretty_bytes_default()(Math.abs(delta))), '', 'removed', ''];
     }
+    const formattedSize = pretty_bytes_default()(size);
     if (delta === size) {
         return [formattedSize, '', 'new file', ''];
     }
