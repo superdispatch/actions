@@ -5,7 +5,7 @@ function toFinite(value: unknown): number {
   return typeof value == 'number' && Number.isFinite(value) ? value : 0;
 }
 
-function normalizeDelta(delta: number, deltaThreshold = 256): number {
+function normalizeDelta(delta: number, deltaThreshold = 128): number {
   const absoluteDelta = Math.abs(delta);
 
   if (absoluteDelta < deltaThreshold) return 0;
@@ -29,11 +29,11 @@ function formatRow(
   size: number,
   delta: number,
 ): [size: string, delta: string, diff: string, icon: string] {
-  const formattedSize = prettyBytes(size);
-
   if (size === 0 && delta < 0) {
-    return [formattedSize, '', 'removed', ''];
+    return [format('~%s~', prettyBytes(Math.abs(delta))), '', 'removed', ''];
   }
+
+  const formattedSize = prettyBytes(size);
 
   if (delta === size) {
     return [formattedSize, '', 'new file', ''];
