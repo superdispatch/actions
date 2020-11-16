@@ -1,17 +1,17 @@
 import { create as createGlob } from '@actions/glob';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { gzip } from 'zlib';
+import { brotliCompress } from 'zlib';
 
 async function computeFileSize(filename: string): Promise<number> {
   const buffer = await fs.readFile(filename);
 
   return new Promise((resolve, reject) => {
-    gzip(buffer, { level: 9 }, (error, result) => {
+    brotliCompress(buffer, (error, result) => {
       if (error) {
         reject(error);
       } else {
-        resolve(result.length);
+        resolve(result.byteLength);
       }
     });
   });

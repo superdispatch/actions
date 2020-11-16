@@ -93,7 +93,7 @@ jobs:
         with:
           install_command: 'yarn install'
           build_command: 'yarn add -WD size-limit @size-limit/preset-small-lib'
-          target: 'node_modules/lodash/get.js'
+          target: 'node_modules/object.assign/dist/browser.js'
 
   deploy-preview:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
