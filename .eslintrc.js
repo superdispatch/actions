@@ -9,34 +9,13 @@ module.exports = {
 
     {
       files: '*.ts',
-      extends: [
-        'plugin:@superdispatch/node',
-        'plugin:@superdispatch/typescript',
-      ],
+      extends: 'plugin:@superdispatch/ts-node',
       parserOptions: {
         project: './tsconfig.json',
       },
       rules: {
-        curly: ['error', 'multi-line', 'consistent'],
-
-        'node/no-missing-import': 'off',
-        'node/no-extraneous-import': 'off',
-        'node/no-unpublished-import': 'off',
         'import/no-extraneous-dependencies': 'off',
-        'node/no-unsupported-features/es-syntax': [
-          'error',
-          { version: '>=12', ignores: ['modules'] },
-        ],
-
-        'node/no-unsupported-features/es-builtins': [
-          'error',
-          { version: '>=12' },
-        ],
-
-        'node/no-unsupported-features/node-builtins': [
-          'error',
-          { version: '>=12' },
-        ],
+        'node/no-unpublished-import': 'off',
       },
     },
 
