@@ -29,5 +29,5 @@ inputs:
     description: 'netlify site to deploy to'
 
 runs:
-  using: 'node12'
+  using: 'node14'
   main: 'dist/index.js'

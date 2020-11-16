@@ -9,6 +9,6 @@
     "version": "run-p --print-label build:*"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   }
 }

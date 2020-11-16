@@ -29,13 +29,13 @@
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
     "@actions/github": "^4.0.0",
-    "@actions/glob": "^0.1.0",
+    "@actions/glob": "^0.1.1",
     "@babel/cli": "^7.10.4",
     "@babel/core": "^7.10.4",
-    "@superdispatch/eslint-plugin": "^0.2.12",
-    "@superdispatch/js-tools": "^0.2.14",
-    "@superdispatch/prettier-config": "^0.2.1",
-    "@superdispatch/tsconfig": "^0.2.4",
+    "@superdispatch/eslint-plugin": "^0.2.17",
+    "@superdispatch/js-tools": "^0.2.17",
+    "@superdispatch/prettier-config": "^0.2.17",
+    "@superdispatch/tsconfig": "^0.2.17",
     "@types/pretty-bytes": "^5.2.0",
     "@vercel/ncc": "^0.25.1",
     "eslint": "^7.13.0",
@@ -50,6 +50,6 @@
     "zlib": "^1.0.5"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   }
 }
