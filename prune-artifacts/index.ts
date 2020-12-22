@@ -19,7 +19,7 @@ async function main() {
   );
 
   for await (const { data: artifacts } of octokit.paginate.iterator(
-    'GET /repos/:owner/:repo/actions/artifacts',
+    'GET /repos/{owner}/{repo}/actions/artifacts',
     {
       ...context.repo,
       per_page: 50,
@@ -57,7 +57,7 @@ async function main() {
       info(format('Removing "%s" artifact with the id "%s"…', name, id));
 
       await octokit.request(
-        'DELETE /repos/:owner/:repo/actions/artifacts/:artifact_id',
+        'DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}',
         { ...context.repo, artifact_id: id },
       );
     }
