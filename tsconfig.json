@@ -9,6 +9,7 @@
     }
   },
   "compilerOptions": {
+    "target": "ES2019",
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo"
   }
 }
