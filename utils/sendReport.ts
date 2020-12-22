@@ -26,19 +26,18 @@ export async function sendReport({
   info('Looking for the previous report…');
 
   for await (const { data: comments } of octokit.paginate.iterator(
-    'GET /repos/:owner/:repo/issues/:issue_number/comments',
+    'GET /repos/{owner}/{repo}/issues/{issue_number}/comments',
     {
       ...context.repo,
       per_page: 100,
       issue_number: Number(pr),
     },
   )) {
-    for (const {
-      id,
-      body,
-      user: { login },
-    } of comments) {
-      if (login === GITHUB_ACTIONS_BOT_LOGIN && body.startsWith(reportTitle)) {
+    for (const { id, body, user } of comments) {
+      if (
+        user?.login === GITHUB_ACTIONS_BOT_LOGIN &&
+        body?.startsWith(reportTitle)
+      ) {
         if (previousCommentID == null) {
           info(`Found previous report with ID "${id}"`);
 
@@ -56,14 +55,14 @@ export async function sendReport({
     info(`Updating previous report with ID "${previousCommentID}"…`);
 
     await octokit.request(
-      'PATCH /repos/:owner/:repo/issues/comments/:comment_id',
+      'PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}',
       { ...context.repo, body, comment_id: previousCommentID },
     );
   } else {
     info('Sending new report…');
 
     await octokit.request(
-      'POST /repos/:owner/:repo/issues/:issue_number/comments',
+      'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
       { ...context.repo, body, issue_number: Number(pr) },
     );
   }
