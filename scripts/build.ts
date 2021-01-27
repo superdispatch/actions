@@ -7,14 +7,16 @@ async function main() {
   const [dir] = process.argv.slice(2);
   const rootDir = !dir ? cwd : path.join(cwd, dir);
   const entry = path.join(rootDir, 'index.ts');
-  const out = path.join(rootDir, 'dist', 'index.js');
+  const out = path.join(rootDir, 'dist');
+
+  await exec('rm', ['-rf', out]);
 
   await build({
     bundle: true,
     platform: 'node',
 
     entryPoints: [entry],
-    outfile: out,
+    outdir: out,
 
     target: 'node12',
 
@@ -23,24 +25,6 @@ async function main() {
     //   'process.env.NODE_ENV': JSON.stringify('production'),
     // },
   });
-
-  // entryPoints: ['app.js'],
-  //   bundle: true,
-  //   platform: 'node',
-  //   target: ['node10.4'],
-  //   outfile: 'out.js',
-
-  // await exec('rm', ['-rf', out]);
-  //
-  // await exec('ncc', [
-  //   'build',
-  //   entry,
-  //   '--out',
-  //   out,
-  //   '--external',
-  //   'encoding', // Optional dependency of the `node-fetch`.
-  //   '--source-map',
-  // ]);
 }
 
 main().catch((error) => {
