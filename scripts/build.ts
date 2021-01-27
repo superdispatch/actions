@@ -19,7 +19,11 @@ async function main() {
     target: 'node12',
     platform: 'node',
     minifySyntax: true,
-    external: ['encoding'],
+
+    external: [
+      // Optional dependency of the `node-fetch`.
+      'encoding',
+    ],
 
     // Fix for the https://github.com/node-fetch/node-fetch/issues/784
     keepNames: true,
