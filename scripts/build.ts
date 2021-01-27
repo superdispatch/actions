@@ -18,7 +18,12 @@ async function main() {
 
     target: 'node12',
     platform: 'node',
+
+    // Only perform syntax optimization
     minifySyntax: true,
+
+    // Prefer ESM versions
+    mainFields: ['module', 'main'],
 
     external: [
       // Optional dependency of the `node-fetch`.
