@@ -19,7 +19,6 @@ async function main() {
     target: 'node12',
     platform: 'node',
     minifySyntax: true,
-    mainFields: ['module', 'main'],
   });
 }
 
