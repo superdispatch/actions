@@ -20,6 +20,9 @@ async function main() {
     platform: 'node',
     minifySyntax: true,
     external: ['encoding'],
+
+    // Fix for the https://github.com/node-fetch/node-fetch/issues/784
+    keepNames: true,
   });
 }
 

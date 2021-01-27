@@ -1,5 +1,5 @@
 var __create = Object.create, __defProp = Object.defineProperty, __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty, __getOwnPropNames = Object.getOwnPropertyNames, __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __markAsModule = (target) => __defProp(target, "__esModule", {value: !0});
+var __markAsModule = (target) => __defProp(target, "__esModule", {value: !0}), __name = (target, value) => __defProp(target, "name", {value, configurable: !0});
 var __commonJS = (callback, module2) => () => (module2 || (module2 = {exports: {}}, callback(module2.exports, module2)), module2.exports), __export = (target, all) => {
   __markAsModule(target);
   for (var name in all)
@@ -18,6 +18,7 @@ var require_utils = __commonJS((exports2) => {
   function toCommandValue(input) {
     return input == null ? "" : typeof input == "string" || input instanceof String ? input : JSON.stringify(input);
   }
+  __name(toCommandValue, "toCommandValue");
   exports2.toCommandValue = toCommandValue;
 });
 
@@ -39,10 +40,12 @@ var require_command = __commonJS((exports2) => {
     let cmd = new Command(command, properties, message);
     process.stdout.write(cmd.toString() + os2.EOL);
   }
+  __name(issueCommand, "issueCommand");
   exports2.issueCommand = issueCommand;
   function issue(name, message = "") {
     issueCommand(name, {}, message);
   }
+  __name(issue, "issue");
   exports2.issue = issue;
   var CMD_STRING = "::", Command = class {
     constructor(command, properties, message) {
@@ -62,12 +65,15 @@ var require_command = __commonJS((exports2) => {
       return cmdStr += `${CMD_STRING}${escapeData(this.message)}`, cmdStr;
     }
   };
+  __name(Command, "Command");
   function escapeData(s) {
     return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
   }
+  __name(escapeData, "escapeData");
   function escapeProperty(s) {
     return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/:/g, "%3A").replace(/,/g, "%2C");
   }
+  __name(escapeProperty, "escapeProperty");
 });
 
 // ../node_modules/@actions/core/lib/file-command.js
@@ -94,6 +100,7 @@ var require_file_command = __commonJS((exports2) => {
       encoding: "utf8"
     });
   }
+  __name(issueCommand, "issueCommand");
   exports2.issueCommand = issueCommand;
 });
 
@@ -106,7 +113,7 @@ var require_core = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -114,6 +121,7 @@ var require_core = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -121,10 +129,11 @@ var require_core = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -148,14 +157,17 @@ var require_core = __commonJS((exports2) => {
     } else
       command_1.issueCommand("set-env", {name}, convertedVal);
   }
+  __name(exportVariable, "exportVariable");
   exports2.exportVariable = exportVariable;
   function setSecret(secret) {
     command_1.issueCommand("add-mask", {}, secret);
   }
+  __name(setSecret, "setSecret");
   exports2.setSecret = setSecret;
   function addPath(inputPath) {
     process.env.GITHUB_PATH || "" ? file_command_1.issueCommand("PATH", inputPath) : command_1.issueCommand("add-path", {}, inputPath), process.env.PATH = `${inputPath}${path3.delimiter}${process.env.PATH}`;
   }
+  __name(addPath, "addPath");
   exports2.addPath = addPath;
   function getInput2(name, options) {
     let val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
@@ -163,46 +175,57 @@ var require_core = __commonJS((exports2) => {
       throw new Error(`Input required and not supplied: ${name}`);
     return val.trim();
   }
+  __name(getInput2, "getInput");
   exports2.getInput = getInput2;
   function setOutput(name, value) {
     command_1.issueCommand("set-output", {name}, value);
   }
+  __name(setOutput, "setOutput");
   exports2.setOutput = setOutput;
   function setCommandEcho(enabled) {
     command_1.issue("echo", enabled ? "on" : "off");
   }
+  __name(setCommandEcho, "setCommandEcho");
   exports2.setCommandEcho = setCommandEcho;
   function setFailed2(message) {
     process.exitCode = ExitCode.Failure, error(message);
   }
+  __name(setFailed2, "setFailed");
   exports2.setFailed = setFailed2;
   function isDebug() {
     return process.env.RUNNER_DEBUG === "1";
   }
+  __name(isDebug, "isDebug");
   exports2.isDebug = isDebug;
   function debug(message) {
     command_1.issueCommand("debug", {}, message);
   }
+  __name(debug, "debug");
   exports2.debug = debug;
   function error(message) {
     command_1.issue("error", message instanceof Error ? message.toString() : message);
   }
+  __name(error, "error");
   exports2.error = error;
   function warning2(message) {
     command_1.issue("warning", message instanceof Error ? message.toString() : message);
   }
+  __name(warning2, "warning");
   exports2.warning = warning2;
   function info3(message) {
     process.stdout.write(message + os2.EOL);
   }
+  __name(info3, "info");
   exports2.info = info3;
   function startGroup(name) {
     command_1.issue("group", name);
   }
+  __name(startGroup, "startGroup");
   exports2.startGroup = startGroup;
   function endGroup() {
     command_1.issue("endgroup");
   }
+  __name(endGroup, "endGroup");
   exports2.endGroup = endGroup;
   function group(name, fn) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -216,14 +239,17 @@ var require_core = __commonJS((exports2) => {
       return result;
     });
   }
+  __name(group, "group");
   exports2.group = group;
   function saveState(name, value) {
     command_1.issueCommand("save-state", {name}, value);
   }
+  __name(saveState, "saveState");
   exports2.saveState = saveState;
   function getState(name) {
     return process.env[`STATE_${name}`] || "";
   }
+  __name(getState, "getState");
   exports2.getState = getState;
 });
 
@@ -236,7 +262,7 @@ var require_io_util = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -244,6 +270,7 @@ var require_io_util = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -251,10 +278,11 @@ var require_io_util = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, _a;
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -273,18 +301,21 @@ var require_io_util = __commonJS((exports2) => {
       return !0;
     });
   }
+  __name(exists, "exists");
   exports2.exists = exists;
   function isDirectory(fsPath, useStat = !1) {
     return __awaiter(this, void 0, void 0, function* () {
       return (useStat ? yield exports2.stat(fsPath) : yield exports2.lstat(fsPath)).isDirectory();
     });
   }
+  __name(isDirectory, "isDirectory");
   exports2.isDirectory = isDirectory;
   function isRooted(p) {
     if (p = normalizeSeparators(p), !p)
       throw new Error('isRooted() parameter "p" cannot be empty');
     return exports2.IS_WINDOWS ? p.startsWith("\\") || /^[A-Z]:/i.test(p) : p.startsWith("/");
   }
+  __name(isRooted, "isRooted");
   exports2.isRooted = isRooted;
   function mkdirP(fsPath, maxDepth = 1e3, depth = 1) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -313,6 +344,7 @@ var require_io_util = __commonJS((exports2) => {
       }
     });
   }
+  __name(mkdirP, "mkdirP");
   exports2.mkdirP = mkdirP;
   function tryGetExecutablePath(filePath, extensions) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -358,13 +390,16 @@ var require_io_util = __commonJS((exports2) => {
       return "";
     });
   }
+  __name(tryGetExecutablePath, "tryGetExecutablePath");
   exports2.tryGetExecutablePath = tryGetExecutablePath;
   function normalizeSeparators(p) {
     return p = p || "", exports2.IS_WINDOWS ? (p = p.replace(/\//g, "\\"), p.replace(/\\\\+/g, "\\")) : p.replace(/\/\/+/g, "/");
   }
+  __name(normalizeSeparators, "normalizeSeparators");
   function isUnixExecutable(stats) {
     return (stats.mode & 1) > 0 || (stats.mode & 8) > 0 && stats.gid === process.getgid() || (stats.mode & 64) > 0 && stats.uid === process.getuid();
   }
+  __name(isUnixExecutable, "isUnixExecutable");
 });
 
 // ../node_modules/@actions/io/lib/io.js
@@ -376,7 +411,7 @@ var require_io = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -384,6 +419,7 @@ var require_io = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -391,10 +427,11 @@ var require_io = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -419,6 +456,7 @@ var require_io = __commonJS((exports2) => {
       }
     });
   }
+  __name(cp, "cp");
   exports2.cp = cp;
   function mv(source, dest, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -433,6 +471,7 @@ var require_io = __commonJS((exports2) => {
       yield mkdirP(path3.dirname(dest)), yield ioUtil.rename(source, dest);
     });
   }
+  __name(mv, "mv");
   exports2.mv = mv;
   function rmRF(inputPath) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -462,12 +501,14 @@ var require_io = __commonJS((exports2) => {
       }
     });
   }
+  __name(rmRF, "rmRF");
   exports2.rmRF = rmRF;
   function mkdirP(fsPath) {
     return __awaiter(this, void 0, void 0, function* () {
       yield ioUtil.mkdirP(fsPath);
     });
   }
+  __name(mkdirP, "mkdirP");
   exports2.mkdirP = mkdirP;
   function which(tool, check) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -501,11 +542,13 @@ var require_io = __commonJS((exports2) => {
       }
     });
   }
+  __name(which, "which");
   exports2.which = which;
   function readCopyOptions(options) {
     let force = options.force == null ? !0 : options.force, recursive = Boolean(options.recursive);
     return {force, recursive};
   }
+  __name(readCopyOptions, "readCopyOptions");
   function cpDirRecursive(sourceDir, destDir, currentDepth, force) {
     return __awaiter(this, void 0, void 0, function* () {
       if (currentDepth >= 255)
@@ -519,6 +562,7 @@ var require_io = __commonJS((exports2) => {
       yield ioUtil.chmod(destDir, (yield ioUtil.stat(sourceDir)).mode);
     });
   }
+  __name(cpDirRecursive, "cpDirRecursive");
   function copyFile(srcFile, destFile, force) {
     return __awaiter(this, void 0, void 0, function* () {
       if ((yield ioUtil.lstat(srcFile)).isSymbolicLink()) {
@@ -533,6 +577,7 @@ var require_io = __commonJS((exports2) => {
         (!(yield ioUtil.exists(destFile)) || force) && (yield ioUtil.copyFile(srcFile, destFile));
     });
   }
+  __name(copyFile, "copyFile");
 });
 
 // ../node_modules/@actions/exec/lib/toolrunner.js
@@ -544,7 +589,7 @@ var require_toolrunner = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -552,6 +597,7 @@ var require_toolrunner = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -559,10 +605,11 @@ var require_toolrunner = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -749,12 +796,14 @@ var require_toolrunner = __commonJS((exports2) => {
       });
     }
   };
+  __name(ToolRunner, "ToolRunner");
   exports2.ToolRunner = ToolRunner;
   function argStringToArray(argString) {
     let args = [], inQuotes = !1, escaped = !1, arg = "";
     function append(c) {
       escaped && c !== '"' && (arg += "\\"), arg += c, escaped = !1;
     }
+    __name(append, "append");
     for (let i = 0; i < argString.length; i++) {
       let c = argString.charAt(i);
       if (c === '"') {
@@ -777,6 +826,7 @@ var require_toolrunner = __commonJS((exports2) => {
     }
     return arg.length > 0 && args.push(arg.trim()), args;
   }
+  __name(argStringToArray, "argStringToArray");
   exports2.argStringToArray = argStringToArray;
   var ExecState = class extends events.EventEmitter {
     constructor(options, toolPath) {
@@ -805,6 +855,7 @@ var require_toolrunner = __commonJS((exports2) => {
       }
     }
   };
+  __name(ExecState, "ExecState");
 });
 
 // ../node_modules/@actions/exec/lib/exec.js
@@ -816,7 +867,7 @@ var require_exec = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -824,6 +875,7 @@ var require_exec = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -831,10 +883,11 @@ var require_exec = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -856,6 +909,7 @@ var require_exec = __commonJS((exports2) => {
       return args = commandArgs.slice(1).concat(args || []), new tr.ToolRunner(toolPath, args, options).exec();
     });
   }
+  __name(exec, "exec");
   exports2.exec = exec;
 });
 
@@ -881,6 +935,7 @@ var require_internal_glob_options_helper = __commonJS((exports2) => {
     };
     return copy && (typeof copy.followSymbolicLinks == "boolean" && (result.followSymbolicLinks = copy.followSymbolicLinks, core.debug(`followSymbolicLinks '${result.followSymbolicLinks}'`)), typeof copy.implicitDescendants == "boolean" && (result.implicitDescendants = copy.implicitDescendants, core.debug(`implicitDescendants '${result.implicitDescendants}'`)), typeof copy.omitBrokenSymbolicLinks == "boolean" && (result.omitBrokenSymbolicLinks = copy.omitBrokenSymbolicLinks, core.debug(`omitBrokenSymbolicLinks '${result.omitBrokenSymbolicLinks}'`))), result;
   }
+  __name(getOptions, "getOptions");
   exports2.getOptions = getOptions;
 });
 
@@ -906,6 +961,7 @@ var require_internal_path_helper = __commonJS((exports2) => {
     let result = path3.dirname(p);
     return IS_WINDOWS && /^\\\\[^\\]+\\[^\\]+\\$/.test(result) && (result = safeTrimTrailingSeparator(result)), result;
   }
+  __name(dirname, "dirname");
   exports2.dirname = dirname;
   function ensureAbsoluteRoot(root, itemPath) {
     if (assert_1.default(root, "ensureAbsoluteRoot parameter 'root' must not be empty"), assert_1.default(itemPath, "ensureAbsoluteRoot parameter 'itemPath' must not be empty"), hasAbsoluteRoot(itemPath))
@@ -921,22 +977,27 @@ var require_internal_path_helper = __commonJS((exports2) => {
     }
     return assert_1.default(hasAbsoluteRoot(root), "ensureAbsoluteRoot parameter 'root' must have an absolute root"), root.endsWith("/") || IS_WINDOWS && root.endsWith("\\") || (root += path3.sep), root + itemPath;
   }
+  __name(ensureAbsoluteRoot, "ensureAbsoluteRoot");
   exports2.ensureAbsoluteRoot = ensureAbsoluteRoot;
   function hasAbsoluteRoot(itemPath) {
     return assert_1.default(itemPath, "hasAbsoluteRoot parameter 'itemPath' must not be empty"), itemPath = normalizeSeparators(itemPath), IS_WINDOWS ? itemPath.startsWith("\\\\") || /^[A-Z]:\\/i.test(itemPath) : itemPath.startsWith("/");
   }
+  __name(hasAbsoluteRoot, "hasAbsoluteRoot");
   exports2.hasAbsoluteRoot = hasAbsoluteRoot;
   function hasRoot(itemPath) {
     return assert_1.default(itemPath, "isRooted parameter 'itemPath' must not be empty"), itemPath = normalizeSeparators(itemPath), IS_WINDOWS ? itemPath.startsWith("\\") || /^[A-Z]:/i.test(itemPath) : itemPath.startsWith("/");
   }
+  __name(hasRoot, "hasRoot");
   exports2.hasRoot = hasRoot;
   function normalizeSeparators(p) {
     return p = p || "", IS_WINDOWS ? (p = p.replace(/\//g, "\\"), (/^\\\\+[^\\]/.test(p) ? "\\" : "") + p.replace(/\\\\+/g, "\\")) : p.replace(/\/\/+/g, "/");
   }
+  __name(normalizeSeparators, "normalizeSeparators");
   exports2.normalizeSeparators = normalizeSeparators;
   function safeTrimTrailingSeparator(p) {
     return p ? (p = normalizeSeparators(p), !p.endsWith(path3.sep) || p === path3.sep || IS_WINDOWS && /^[A-Z]:\\$/i.test(p) ? p : p.substr(0, p.length - 1)) : "";
   }
+  __name(safeTrimTrailingSeparator, "safeTrimTrailingSeparator");
   exports2.safeTrimTrailingSeparator = safeTrimTrailingSeparator;
 });
 
@@ -988,6 +1049,7 @@ var require_internal_pattern_helper = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(getSearchPaths, "getSearchPaths");
   exports2.getSearchPaths = getSearchPaths;
   function match(patterns, itemPath) {
     let result = internal_match_kind_1.MatchKind.None;
@@ -995,10 +1057,12 @@ var require_internal_pattern_helper = __commonJS((exports2) => {
       pattern.negate ? result &= ~pattern.match(itemPath) : result |= pattern.match(itemPath);
     return result;
   }
+  __name(match, "match");
   exports2.match = match;
   function partialMatch(patterns, itemPath) {
     return patterns.some((x) => !x.negate && x.partialMatch(itemPath));
   }
+  __name(partialMatch, "partialMatch");
   exports2.partialMatch = partialMatch;
 });
 
@@ -1031,10 +1095,12 @@ var require_balanced_match = __commonJS((exports2, module2) => {
       post: str.slice(r[1] + b.length)
     };
   }
+  __name(balanced, "balanced");
   function maybeMatch(reg, str) {
     var m = str.match(reg);
     return m ? m[0] : null;
   }
+  __name(maybeMatch, "maybeMatch");
   balanced.range = range;
   function range(a, b, str) {
     var begs, beg, left, right, result, ai = str.indexOf(a), bi = str.indexOf(b, ai + 1), i = ai;
@@ -1045,6 +1111,7 @@ var require_balanced_match = __commonJS((exports2, module2) => {
     }
     return result;
   }
+  __name(range, "range");
 });
 
 // ../node_modules/brace-expansion/index.js
@@ -1055,12 +1122,15 @@ var require_brace_expansion = __commonJS((exports2, module2) => {
   function numeric(str) {
     return parseInt(str, 10) == str ? parseInt(str, 10) : str.charCodeAt(0);
   }
+  __name(numeric, "numeric");
   function escapeBraces(str) {
     return str.split("\\\\").join(escSlash).split("\\{").join(escOpen).split("\\}").join(escClose).split("\\,").join(escComma).split("\\.").join(escPeriod);
   }
+  __name(escapeBraces, "escapeBraces");
   function unescapeBraces(str) {
     return str.split(escSlash).join("\\").split(escOpen).join("{").split(escClose).join("}").split(escComma).join(",").split(escPeriod).join(".");
   }
+  __name(unescapeBraces, "unescapeBraces");
   function parseCommaParts(str) {
     if (!str)
       return [""];
@@ -1072,21 +1142,27 @@ var require_brace_expansion = __commonJS((exports2, module2) => {
     var postParts = parseCommaParts(post);
     return post.length && (p[p.length - 1] += postParts.shift(), p.push.apply(p, postParts)), parts.push.apply(parts, p), parts;
   }
+  __name(parseCommaParts, "parseCommaParts");
   function expandTop(str) {
     return str ? (str.substr(0, 2) === "{}" && (str = "\\{\\}" + str.substr(2)), expand(escapeBraces(str), !0).map(unescapeBraces)) : [];
   }
+  __name(expandTop, "expandTop");
   function embrace(str) {
     return "{" + str + "}";
   }
+  __name(embrace, "embrace");
   function isPadded(el) {
     return /^-?0\d/.test(el);
   }
+  __name(isPadded, "isPadded");
   function lte(i, y) {
     return i <= y;
   }
+  __name(lte, "lte");
   function gte(i, y) {
     return i >= y;
   }
+  __name(gte, "gte");
   function expand(str, isTop) {
     var expansions = [], m = balanced("{", "}", str);
     if (!m || /\$$/.test(m.pre))
@@ -1133,6 +1209,7 @@ var require_brace_expansion = __commonJS((exports2, module2) => {
       }
     return expansions;
   }
+  __name(expand, "expand");
 });
 
 // ../node_modules/minimatch/minimatch.js
@@ -1156,6 +1233,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       return set[c] = !0, set;
     }, {});
   }
+  __name(charSet, "charSet");
   var slashSplit = /\/+/;
   minimatch.filter = filter;
   function filter(pattern, options) {
@@ -1163,6 +1241,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       return minimatch(p, pattern, options);
     };
   }
+  __name(filter, "filter");
   function ext(a, b) {
     a = a || {}, b = b || {};
     var t = {};
@@ -1172,15 +1251,16 @@ var require_minimatch = __commonJS((exports2, module2) => {
       t[k] = a[k];
     }), t;
   }
+  __name(ext, "ext");
   minimatch.defaults = function(def) {
     if (!def || !Object.keys(def).length)
       return minimatch;
-    var orig = minimatch, m = function(p, pattern, options) {
+    var orig = minimatch, m = /* @__PURE__ */ __name(function(p, pattern, options) {
       return orig.minimatch(p, pattern, ext(def, options));
-    };
-    return m.Minimatch = function(pattern, options) {
+    }, "minimatch");
+    return m.Minimatch = /* @__PURE__ */ __name(function(pattern, options) {
       return new orig.Minimatch(pattern, ext(def, options));
-    }, m;
+    }, "Minimatch"), m;
   };
   Minimatch.defaults = function(def) {
     return !def || !Object.keys(def).length ? Minimatch : minimatch.defaults(def).Minimatch;
@@ -1190,6 +1270,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       throw new TypeError("glob pattern string required");
     return options || (options = {}), !options.nocomment && pattern.charAt(0) === "#" ? !1 : pattern.trim() === "" ? p === "" : new Minimatch(pattern, options).match(p);
   }
+  __name(minimatch, "minimatch");
   function Minimatch(pattern, options) {
     if (!(this instanceof Minimatch))
       return new Minimatch(pattern, options);
@@ -1197,6 +1278,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       throw new TypeError("glob pattern string required");
     options || (options = {}), pattern = pattern.trim(), path3.sep !== "/" && (pattern = pattern.split(path3.sep).join("/")), this.options = options, this.set = [], this.pattern = pattern, this.regexp = null, this.negate = !1, this.comment = !1, this.empty = !1, this.make();
   }
+  __name(Minimatch, "Minimatch");
   Minimatch.prototype.debug = function() {
   };
   Minimatch.prototype.make = make;
@@ -1222,6 +1304,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       }), this.debug(this.pattern, set), this.set = set;
     }
   }
+  __name(make, "make");
   Minimatch.prototype.parseNegate = parseNegate;
   function parseNegate() {
     var pattern = this.pattern, negate = !1, options = this.options, negateOffset = 0;
@@ -1231,6 +1314,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       negateOffset && (this.pattern = pattern.substr(negateOffset)), this.negate = negate;
     }
   }
+  __name(parseNegate, "parseNegate");
   minimatch.braceExpand = function(pattern, options) {
     return braceExpand(pattern, options);
   };
@@ -1240,6 +1324,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
       throw new TypeError("undefined pattern");
     return options.nobrace || !pattern.match(/\{.*\}/) ? [pattern] : expand(pattern);
   }
+  __name(braceExpand, "braceExpand");
   Minimatch.prototype.parse = parse;
   var SUBPARSE = {};
   function parse(pattern, isSub) {
@@ -1267,6 +1352,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
         self2.debug("clearStateChar %j %j", stateChar, re), stateChar = !1;
       }
     }
+    __name(clearStateChar, "clearStateChar");
     for (var i = 0, len = pattern.length, c; i < len && (c = pattern.charAt(i)); i++) {
       if (this.debug("%s	%s %s %j", pattern, i, re, c), escaping && reSpecials[c]) {
         re += "\\" + c, escaping = !1;
@@ -1391,6 +1477,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
     }
     return regExp._glob = pattern, regExp._src = re, regExp;
   }
+  __name(parse, "parse");
   minimatch.makeRe = function(pattern, options) {
     return new Minimatch(pattern, options || {}).makeRe();
   };
@@ -1414,6 +1501,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
     }
     return this.regexp;
   }
+  __name(makeRe, "makeRe");
   minimatch.match = function(list, pattern, options) {
     options = options || {};
     var mm = new Minimatch(pattern, options);
@@ -1445,6 +1533,7 @@ var require_minimatch = __commonJS((exports2, module2) => {
     }
     return options.flipNegate ? !1 : this.negate;
   }
+  __name(match, "match");
   Minimatch.prototype.matchOne = function(file, pattern, partial) {
     var options = this.options;
     this.debug("matchOne", {this: this, file, pattern}), this.debug("matchOne", file.length, pattern.length);
@@ -1493,9 +1582,11 @@ globstar while`, file, fr, pattern, pr, swallowee), this.matchOne(file.slice(fr)
   function globUnescape(s) {
     return s.replace(/\\(.)/g, "$1");
   }
+  __name(globUnescape, "globUnescape");
   function regExpEscape(s) {
     return s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
   }
+  __name(regExpEscape, "regExpEscape");
 });
 
 // ../node_modules/@actions/glob/lib/internal-path.js
@@ -1541,6 +1632,7 @@ var require_internal_path = __commonJS((exports2) => {
       return result;
     }
   };
+  __name(Path, "Path");
   exports2.Path = Path;
 });
 
@@ -1652,6 +1744,7 @@ var require_internal_pattern = __commonJS((exports2) => {
       return s.replace(/[[\\^$.|?*+()]/g, "\\$&");
     }
   };
+  __name(Pattern, "Pattern");
   exports2.Pattern = Pattern;
 });
 
@@ -1664,6 +1757,7 @@ var require_internal_search_state = __commonJS((exports2) => {
       this.path = path3, this.level = level;
     }
   };
+  __name(SearchState, "SearchState");
   exports2.SearchState = SearchState;
 });
 
@@ -1676,7 +1770,7 @@ var require_internal_globber = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -1684,6 +1778,7 @@ var require_internal_globber = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -1691,10 +1786,11 @@ var require_internal_globber = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __asyncValues = exports2 && exports2.__asyncValues || function(o) {
     if (!Symbol.asyncIterator)
@@ -1790,7 +1886,7 @@ var require_internal_globber = __commonJS((exports2) => {
       });
     }
     globGenerator() {
-      return __asyncGenerator(this, arguments, function* () {
+      return __asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* () {
         let options = globOptionsHelper.getOptions(this.options), patterns = [];
         for (let pattern of this.patterns)
           patterns.push(pattern), options.implicitDescendants && (pattern.trailingSeparator || pattern.segments[pattern.segments.length - 1] !== "**") && patterns.push(new internal_pattern_1.Pattern(pattern.negate, pattern.segments.concat("**")));
@@ -1823,7 +1919,7 @@ var require_internal_globber = __commonJS((exports2) => {
             } else
               match & internal_match_kind_1.MatchKind.File && (yield yield __await(item.path));
         }
-      });
+      }, "globGenerator_1"));
     }
     static create(patterns, options) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -1870,6 +1966,7 @@ var require_internal_globber = __commonJS((exports2) => {
       });
     }
   };
+  __name(DefaultGlobber, "DefaultGlobber");
   exports2.DefaultGlobber = DefaultGlobber;
 });
 
@@ -1882,7 +1979,7 @@ var require_glob = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -1890,6 +1987,7 @@ var require_glob = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -1897,10 +1995,11 @@ var require_glob = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -1910,6 +2009,7 @@ var require_glob = __commonJS((exports2) => {
       return yield internal_globber_1.DefaultGlobber.create(patterns, options);
     });
   }
+  __name(create, "create");
   exports2.create = create;
 });
 
@@ -1917,16 +2017,17 @@ var require_glob = __commonJS((exports2) => {
 var require_semver = __commonJS((exports2, module2) => {
   exports2 = module2.exports = SemVer;
   var debug;
-  typeof process == "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? debug = function() {
+  typeof process == "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? debug = /* @__PURE__ */ __name(function() {
     var args = Array.prototype.slice.call(arguments, 0);
     args.unshift("SEMVER"), console.log.apply(console, args);
-  } : debug = function() {
-  };
+  }, "debug") : debug = /* @__PURE__ */ __name(function() {
+  }, "debug");
   exports2.SEMVER_SPEC_VERSION = "2.0.0";
   var MAX_LENGTH = 256, MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || 9007199254740991, MAX_SAFE_COMPONENT_LENGTH = 16, re = exports2.re = [], src = exports2.src = [], t = exports2.tokens = {}, R = 0;
   function tok(n) {
     t[n] = R++;
   }
+  __name(tok, "tok");
   tok("NUMERICIDENTIFIER");
   src[t.NUMERICIDENTIFIER] = "0|[1-9]\\d*";
   tok("NUMERICIDENTIFIERLOOSE");
@@ -2029,16 +2130,19 @@ var require_semver = __commonJS((exports2, module2) => {
       return null;
     }
   }
+  __name(parse, "parse");
   exports2.valid = valid;
   function valid(version, options) {
     var v = parse(version, options);
     return v ? v.version : null;
   }
+  __name(valid, "valid");
   exports2.clean = clean;
   function clean(version, options) {
     var s = parse(version.trim().replace(/^[=v]+/, ""), options);
     return s ? s.version : null;
   }
+  __name(clean, "clean");
   exports2.SemVer = SemVer;
   function SemVer(version, options) {
     if ((!options || typeof options != "object") && (options = {
@@ -2073,6 +2177,7 @@ var require_semver = __commonJS((exports2, module2) => {
       return id;
     }) : this.prerelease = [], this.build = m[5] ? m[5].split(".") : [], this.format();
   }
+  __name(SemVer, "SemVer");
   SemVer.prototype.format = function() {
     return this.version = this.major + "." + this.minor + "." + this.patch, this.prerelease.length && (this.version += "-" + this.prerelease.join(".")), this.version;
   };
@@ -2169,6 +2274,7 @@ var require_semver = __commonJS((exports2, module2) => {
       return null;
     }
   }
+  __name(inc, "inc");
   exports2.diff = diff;
   function diff(version1, version2) {
     if (eq(version1, version2))
@@ -2183,81 +2289,99 @@ var require_semver = __commonJS((exports2, module2) => {
         return prefix + key;
     return defaultResult;
   }
+  __name(diff, "diff");
   exports2.compareIdentifiers = compareIdentifiers;
   var numeric = /^[0-9]+$/;
   function compareIdentifiers(a, b) {
     var anum = numeric.test(a), bnum = numeric.test(b);
     return anum && bnum && (a = +a, b = +b), a === b ? 0 : anum && !bnum ? -1 : bnum && !anum ? 1 : a < b ? -1 : 1;
   }
+  __name(compareIdentifiers, "compareIdentifiers");
   exports2.rcompareIdentifiers = rcompareIdentifiers;
   function rcompareIdentifiers(a, b) {
     return compareIdentifiers(b, a);
   }
+  __name(rcompareIdentifiers, "rcompareIdentifiers");
   exports2.major = major;
   function major(a, loose) {
     return new SemVer(a, loose).major;
   }
+  __name(major, "major");
   exports2.minor = minor;
   function minor(a, loose) {
     return new SemVer(a, loose).minor;
   }
+  __name(minor, "minor");
   exports2.patch = patch;
   function patch(a, loose) {
     return new SemVer(a, loose).patch;
   }
+  __name(patch, "patch");
   exports2.compare = compare;
   function compare(a, b, loose) {
     return new SemVer(a, loose).compare(new SemVer(b, loose));
   }
+  __name(compare, "compare");
   exports2.compareLoose = compareLoose;
   function compareLoose(a, b) {
     return compare(a, b, !0);
   }
+  __name(compareLoose, "compareLoose");
   exports2.compareBuild = compareBuild;
   function compareBuild(a, b, loose) {
     var versionA = new SemVer(a, loose), versionB = new SemVer(b, loose);
     return versionA.compare(versionB) || versionA.compareBuild(versionB);
   }
+  __name(compareBuild, "compareBuild");
   exports2.rcompare = rcompare;
   function rcompare(a, b, loose) {
     return compare(b, a, loose);
   }
+  __name(rcompare, "rcompare");
   exports2.sort = sort;
   function sort(list, loose) {
     return list.sort(function(a, b) {
       return exports2.compareBuild(a, b, loose);
     });
   }
+  __name(sort, "sort");
   exports2.rsort = rsort;
   function rsort(list, loose) {
     return list.sort(function(a, b) {
       return exports2.compareBuild(b, a, loose);
     });
   }
+  __name(rsort, "rsort");
   exports2.gt = gt;
   function gt(a, b, loose) {
     return compare(a, b, loose) > 0;
   }
+  __name(gt, "gt");
   exports2.lt = lt;
   function lt(a, b, loose) {
     return compare(a, b, loose) < 0;
   }
+  __name(lt, "lt");
   exports2.eq = eq;
   function eq(a, b, loose) {
     return compare(a, b, loose) === 0;
   }
+  __name(eq, "eq");
   exports2.neq = neq;
   function neq(a, b, loose) {
     return compare(a, b, loose) !== 0;
   }
+  __name(neq, "neq");
   exports2.gte = gte;
   function gte(a, b, loose) {
     return compare(a, b, loose) >= 0;
   }
+  __name(gte, "gte");
   exports2.lte = lte;
   function lte(a, b, loose) {
     return compare(a, b, loose) <= 0;
   }
+  __name(lte, "lte");
   exports2.cmp = cmp;
   function cmp(a, op, b, loose) {
     switch (op) {
@@ -2283,6 +2407,7 @@ var require_semver = __commonJS((exports2, module2) => {
         throw new TypeError("Invalid operator: " + op);
     }
   }
+  __name(cmp, "cmp");
   exports2.Comparator = Comparator;
   function Comparator(comp, options) {
     if ((!options || typeof options != "object") && (options = {
@@ -2297,6 +2422,7 @@ var require_semver = __commonJS((exports2, module2) => {
       return new Comparator(comp, options);
     debug("comparator", comp, options), this.options = options, this.loose = !!options.loose, this.parse(comp), this.semver === ANY ? this.value = "" : this.value = this.operator + this.semver.version, debug("comp", this);
   }
+  __name(Comparator, "Comparator");
   var ANY = {};
   Comparator.prototype.parse = function(comp) {
     var r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR], m = comp.match(r);
@@ -2352,6 +2478,7 @@ var require_semver = __commonJS((exports2, module2) => {
       throw new TypeError("Invalid SemVer Range: " + range);
     this.format();
   }
+  __name(Range, "Range");
   Range.prototype.format = function() {
     return this.range = this.set.map(function(comps) {
       return comps.join(" ").trim();
@@ -2394,6 +2521,7 @@ var require_semver = __commonJS((exports2, module2) => {
       }), testComparator = remainingComparators.pop();
     return result;
   }
+  __name(isSatisfiable, "isSatisfiable");
   exports2.toComparators = toComparators;
   function toComparators(range, options) {
     return new Range(range, options).set.map(function(comp) {
@@ -2402,17 +2530,21 @@ var require_semver = __commonJS((exports2, module2) => {
       }).join(" ").trim().split(" ");
     });
   }
+  __name(toComparators, "toComparators");
   function parseComparator(comp, options) {
     return debug("comp", comp, options), comp = replaceCarets(comp, options), debug("caret", comp), comp = replaceTildes(comp, options), debug("tildes", comp), comp = replaceXRanges(comp, options), debug("xrange", comp), comp = replaceStars(comp, options), debug("stars", comp), comp;
   }
+  __name(parseComparator, "parseComparator");
   function isX(id) {
     return !id || id.toLowerCase() === "x" || id === "*";
   }
+  __name(isX, "isX");
   function replaceTildes(comp, options) {
     return comp.trim().split(/\s+/).map(function(comp2) {
       return replaceTilde(comp2, options);
     }).join(" ");
   }
+  __name(replaceTildes, "replaceTildes");
   function replaceTilde(comp, options) {
     var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
     return comp.replace(r, function(_, M, m, p, pr) {
@@ -2421,11 +2553,13 @@ var require_semver = __commonJS((exports2, module2) => {
       return isX(M) ? ret = "" : isX(m) ? ret = ">=" + M + ".0.0 <" + (+M + 1) + ".0.0" : isX(p) ? ret = ">=" + M + "." + m + ".0 <" + M + "." + (+m + 1) + ".0" : pr ? (debug("replaceTilde pr", pr), ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + (+m + 1) + ".0") : ret = ">=" + M + "." + m + "." + p + " <" + M + "." + (+m + 1) + ".0", debug("tilde return", ret), ret;
     });
   }
+  __name(replaceTilde, "replaceTilde");
   function replaceCarets(comp, options) {
     return comp.trim().split(/\s+/).map(function(comp2) {
       return replaceCaret(comp2, options);
     }).join(" ");
   }
+  __name(replaceCarets, "replaceCarets");
   function replaceCaret(comp, options) {
     debug("caret", comp, options);
     var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
@@ -2435,11 +2569,13 @@ var require_semver = __commonJS((exports2, module2) => {
       return isX(M) ? ret = "" : isX(m) ? ret = ">=" + M + ".0.0 <" + (+M + 1) + ".0.0" : isX(p) ? M === "0" ? ret = ">=" + M + "." + m + ".0 <" + M + "." + (+m + 1) + ".0" : ret = ">=" + M + "." + m + ".0 <" + (+M + 1) + ".0.0" : pr ? (debug("replaceCaret pr", pr), M === "0" ? m === "0" ? ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + m + "." + (+p + 1) : ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + (+m + 1) + ".0" : ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + (+M + 1) + ".0.0") : (debug("no pr"), M === "0" ? m === "0" ? ret = ">=" + M + "." + m + "." + p + " <" + M + "." + m + "." + (+p + 1) : ret = ">=" + M + "." + m + "." + p + " <" + M + "." + (+m + 1) + ".0" : ret = ">=" + M + "." + m + "." + p + " <" + (+M + 1) + ".0.0"), debug("caret return", ret), ret;
     });
   }
+  __name(replaceCaret, "replaceCaret");
   function replaceXRanges(comp, options) {
     return debug("replaceXRanges", comp, options), comp.split(/\s+/).map(function(comp2) {
       return replaceXRange(comp2, options);
     }).join(" ");
   }
+  __name(replaceXRanges, "replaceXRanges");
   function replaceXRange(comp, options) {
     comp = comp.trim();
     var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
@@ -2449,12 +2585,15 @@ var require_semver = __commonJS((exports2, module2) => {
       return gtlt === "=" && anyX && (gtlt = ""), pr = options.includePrerelease ? "-0" : "", xM ? gtlt === ">" || gtlt === "<" ? ret = "<0.0.0-0" : ret = "*" : gtlt && anyX ? (xm && (m = 0), p = 0, gtlt === ">" ? (gtlt = ">=", xm ? (M = +M + 1, m = 0, p = 0) : (m = +m + 1, p = 0)) : gtlt === "<=" && (gtlt = "<", xm ? M = +M + 1 : m = +m + 1), ret = gtlt + M + "." + m + "." + p + pr) : xm ? ret = ">=" + M + ".0.0" + pr + " <" + (+M + 1) + ".0.0" + pr : xp && (ret = ">=" + M + "." + m + ".0" + pr + " <" + M + "." + (+m + 1) + ".0" + pr), debug("xRange return", ret), ret;
     });
   }
+  __name(replaceXRange, "replaceXRange");
   function replaceStars(comp, options) {
     return debug("replaceStars", comp, options), comp.trim().replace(re[t.STAR], "");
   }
+  __name(replaceStars, "replaceStars");
   function hyphenReplace($0, from, fM, fm, fp, fpr, fb, to, tM, tm, tp, tpr, tb) {
     return isX(fM) ? from = "" : isX(fm) ? from = ">=" + fM + ".0.0" : isX(fp) ? from = ">=" + fM + "." + fm + ".0" : from = ">=" + from, isX(tM) ? to = "" : isX(tm) ? to = "<" + (+tM + 1) + ".0.0" : isX(tp) ? to = "<" + tM + "." + (+tm + 1) + ".0" : tpr ? to = "<=" + tM + "." + tm + "." + tp + "-" + tpr : to = "<=" + to, (from + " " + to).trim();
   }
+  __name(hyphenReplace, "hyphenReplace");
   Range.prototype.test = function(version) {
     if (!version)
       return !1;
@@ -2484,6 +2623,7 @@ var require_semver = __commonJS((exports2, module2) => {
     }
     return !0;
   }
+  __name(testSet, "testSet");
   exports2.satisfies = satisfies;
   function satisfies(version, range, options) {
     try {
@@ -2493,6 +2633,7 @@ var require_semver = __commonJS((exports2, module2) => {
     }
     return range.test(version);
   }
+  __name(satisfies, "satisfies");
   exports2.maxSatisfying = maxSatisfying;
   function maxSatisfying(versions, range, options) {
     var max = null, maxSV = null;
@@ -2505,6 +2646,7 @@ var require_semver = __commonJS((exports2, module2) => {
       rangeObj.test(v) && (!max || maxSV.compare(v) === -1) && (max = v, maxSV = new SemVer(max, options));
     }), max;
   }
+  __name(maxSatisfying, "maxSatisfying");
   exports2.minSatisfying = minSatisfying;
   function minSatisfying(versions, range, options) {
     var min = null, minSV = null;
@@ -2517,6 +2659,7 @@ var require_semver = __commonJS((exports2, module2) => {
       rangeObj.test(v) && (!min || minSV.compare(v) === 1) && (min = v, minSV = new SemVer(min, options));
     }), min;
   }
+  __name(minSatisfying, "minSatisfying");
   exports2.minVersion = minVersion;
   function minVersion(range, loose) {
     range = new Range(range, loose);
@@ -2545,6 +2688,7 @@ var require_semver = __commonJS((exports2, module2) => {
     }
     return minver && range.test(minver) ? minver : null;
   }
+  __name(minVersion, "minVersion");
   exports2.validRange = validRange;
   function validRange(range, options) {
     try {
@@ -2553,14 +2697,17 @@ var require_semver = __commonJS((exports2, module2) => {
       return null;
     }
   }
+  __name(validRange, "validRange");
   exports2.ltr = ltr;
   function ltr(version, range, options) {
     return outside(version, range, "<", options);
   }
+  __name(ltr, "ltr");
   exports2.gtr = gtr;
   function gtr(version, range, options) {
     return outside(version, range, ">", options);
   }
+  __name(gtr, "gtr");
   exports2.outside = outside;
   function outside(version, range, hilo, options) {
     version = new SemVer(version, options), range = new Range(range, options);
@@ -2588,15 +2735,18 @@ var require_semver = __commonJS((exports2, module2) => {
     }
     return !0;
   }
+  __name(outside, "outside");
   exports2.prerelease = prerelease;
   function prerelease(version, options) {
     var parsed = parse(version, options);
     return parsed && parsed.prerelease.length ? parsed.prerelease : null;
   }
+  __name(prerelease, "prerelease");
   exports2.intersects = intersects;
   function intersects(r1, r2, options) {
     return r1 = new Range(r1, options), r2 = new Range(r2, options), r1.intersects(r2);
   }
+  __name(intersects, "intersects");
   exports2.coerce = coerce;
   function coerce(version, options) {
     if (version instanceof SemVer)
@@ -2614,14 +2764,15 @@ var require_semver = __commonJS((exports2, module2) => {
     }
     return match === null ? null : parse(match[2] + "." + (match[3] || "0") + "." + (match[4] || "0"), options);
   }
+  __name(coerce, "coerce");
 });
 
 // ../node_modules/uuid/lib/rng.js
 var require_rng = __commonJS((exports2, module2) => {
   var crypto = require("crypto");
-  module2.exports = function() {
+  module2.exports = /* @__PURE__ */ __name(function() {
     return crypto.randomBytes(16);
-  };
+  }, "nodeRNG");
 });
 
 // ../node_modules/uuid/lib/bytesToUuid.js
@@ -2654,6 +2805,7 @@ var require_bytesToUuid = __commonJS((exports2, module2) => {
       bth[buf[i2++]]
     ].join("");
   }
+  __name(bytesToUuid, "bytesToUuid");
   module2.exports = bytesToUuid;
 });
 
@@ -2687,6 +2839,7 @@ var require_v1 = __commonJS((exports2, module2) => {
       b[i + n] = node[n];
     return buf || bytesToUuid(b);
   }
+  __name(v1, "v1");
   module2.exports = v1;
 });
 
@@ -2702,6 +2855,7 @@ var require_v4 = __commonJS((exports2, module2) => {
         buf[i + ii] = rnds[ii];
     return buf || bytesToUuid(rnds);
   }
+  __name(v4, "v4");
   module2.exports = v4;
 });
 
@@ -2739,7 +2893,7 @@ var require_cacheUtils = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -2747,6 +2901,7 @@ var require_cacheUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -2754,10 +2909,11 @@ var require_cacheUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __asyncValues = exports2 && exports2.__asyncValues || function(o) {
     if (!Symbol.asyncIterator)
@@ -2800,10 +2956,12 @@ var require_cacheUtils = __commonJS((exports2) => {
       return yield io.mkdirP(dest), dest;
     });
   }
+  __name(createTempDirectory, "createTempDirectory");
   exports2.createTempDirectory = createTempDirectory;
   function getArchiveFileSizeIsBytes(filePath) {
     return fs3.statSync(filePath).size;
   }
+  __name(getArchiveFileSizeIsBytes, "getArchiveFileSizeIsBytes");
   exports2.getArchiveFileSizeIsBytes = getArchiveFileSizeIsBytes;
   function resolvePaths(patterns) {
     var e_1, _a, _b;
@@ -2830,12 +2988,14 @@ var require_cacheUtils = __commonJS((exports2) => {
       return paths;
     });
   }
+  __name(resolvePaths, "resolvePaths");
   exports2.resolvePaths = resolvePaths;
   function unlinkFile(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
       return util.promisify(fs3.unlink)(filePath);
     });
   }
+  __name(unlinkFile, "unlinkFile");
   exports2.unlinkFile = unlinkFile;
   function getVersion(app) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -2856,6 +3016,7 @@ var require_cacheUtils = __commonJS((exports2) => {
       return versionOutput = versionOutput.trim(), core.debug(versionOutput), versionOutput;
     });
   }
+  __name(getVersion, "getVersion");
   function getCompressionMethod() {
     return __awaiter(this, void 0, void 0, function* () {
       if (process.platform === "win32" && !(yield isGnuTarInstalled()))
@@ -2864,22 +3025,26 @@ var require_cacheUtils = __commonJS((exports2) => {
       return versionOutput.toLowerCase().includes("zstd command line interface") ? !version || semver.lt(version, "v1.3.2") ? constants_1.CompressionMethod.ZstdWithoutLong : constants_1.CompressionMethod.Zstd : constants_1.CompressionMethod.Gzip;
     });
   }
+  __name(getCompressionMethod, "getCompressionMethod");
   exports2.getCompressionMethod = getCompressionMethod;
   function getCacheFileName(compressionMethod) {
     return compressionMethod === constants_1.CompressionMethod.Gzip ? constants_1.CacheFilename.Gzip : constants_1.CacheFilename.Zstd;
   }
+  __name(getCacheFileName, "getCacheFileName");
   exports2.getCacheFileName = getCacheFileName;
   function isGnuTarInstalled() {
     return __awaiter(this, void 0, void 0, function* () {
       return (yield getVersion("tar")).toLowerCase().includes("gnu tar");
     });
   }
+  __name(isGnuTarInstalled, "isGnuTarInstalled");
   exports2.isGnuTarInstalled = isGnuTarInstalled;
   function assertDefined(name, value) {
     if (value === void 0)
       throw Error(`Expected ${name} but value was undefiend`);
     return value;
   }
+  __name(assertDefined, "assertDefined");
   exports2.assertDefined = assertDefined;
 });
 
@@ -2894,6 +3059,7 @@ var require_proxy = __commonJS((exports2) => {
     let proxyVar;
     return usingSsl ? proxyVar = process.env.https_proxy || process.env.HTTPS_PROXY : proxyVar = process.env.http_proxy || process.env.HTTP_PROXY, proxyVar && (proxyUrl = new URL(proxyVar)), proxyUrl;
   }
+  __name(getProxyUrl, "getProxyUrl");
   exports2.getProxyUrl = getProxyUrl;
   function checkBypass(reqUrl) {
     if (!reqUrl.hostname)
@@ -2910,6 +3076,7 @@ var require_proxy = __commonJS((exports2) => {
         return !0;
     return !1;
   }
+  __name(checkBypass, "checkBypass");
   exports2.checkBypass = checkBypass;
 });
 
@@ -2925,21 +3092,25 @@ var require_tunnel = __commonJS((exports2) => {
     var agent = new TunnelingAgent(options);
     return agent.request = http.request, agent;
   }
+  __name(httpOverHttp, "httpOverHttp");
   function httpsOverHttp(options) {
     var agent = new TunnelingAgent(options);
     return agent.request = http.request, agent.createSocket = createSecureSocket, agent.defaultPort = 443, agent;
   }
+  __name(httpsOverHttp, "httpsOverHttp");
   function httpOverHttps(options) {
     var agent = new TunnelingAgent(options);
     return agent.request = https.request, agent;
   }
+  __name(httpOverHttps, "httpOverHttps");
   function httpsOverHttps(options) {
     var agent = new TunnelingAgent(options);
     return agent.request = https.request, agent.createSocket = createSecureSocket, agent.defaultPort = 443, agent;
   }
+  __name(httpsOverHttps, "httpsOverHttps");
   function TunnelingAgent(options) {
     var self2 = this;
-    self2.options = options || {}, self2.proxyOptions = self2.options.proxy || {}, self2.maxSockets = self2.options.maxSockets || http.Agent.defaultMaxSockets, self2.requests = [], self2.sockets = [], self2.on("free", function(socket, host, port, localAddress) {
+    self2.options = options || {}, self2.proxyOptions = self2.options.proxy || {}, self2.maxSockets = self2.options.maxSockets || http.Agent.defaultMaxSockets, self2.requests = [], self2.sockets = [], self2.on("free", /* @__PURE__ */ __name(function(socket, host, port, localAddress) {
       for (var options2 = toOptions(host, port, localAddress), i = 0, len = self2.requests.length; i < len; ++i) {
         var pending = self2.requests[i];
         if (pending.host === options2.host && pending.port === options2.port) {
@@ -2948,10 +3119,11 @@ var require_tunnel = __commonJS((exports2) => {
         }
       }
       socket.destroy(), self2.removeSocket(socket);
-    });
+    }, "onFree"));
   }
+  __name(TunnelingAgent, "TunnelingAgent");
   util.inherits(TunnelingAgent, events.EventEmitter);
-  TunnelingAgent.prototype.addRequest = function(req, host, port, localAddress) {
+  TunnelingAgent.prototype.addRequest = /* @__PURE__ */ __name(function(req, host, port, localAddress) {
     var self2 = this, options = mergeOptions({request: req}, self2.options, toOptions(host, port, localAddress));
     if (self2.sockets.length >= this.maxSockets) {
       self2.requests.push(options);
@@ -2962,12 +3134,14 @@ var require_tunnel = __commonJS((exports2) => {
       function onFree() {
         self2.emit("free", socket, options);
       }
+      __name(onFree, "onFree");
       function onCloseOrRemove(err) {
         self2.removeSocket(socket), socket.removeListener("free", onFree), socket.removeListener("close", onCloseOrRemove), socket.removeListener("agentRemove", onCloseOrRemove);
       }
+      __name(onCloseOrRemove, "onCloseOrRemove");
     });
-  };
-  TunnelingAgent.prototype.createSocket = function(options, cb) {
+  }, "addRequest");
+  TunnelingAgent.prototype.createSocket = /* @__PURE__ */ __name(function(options, cb) {
     var self2 = this, placeholder = {};
     self2.sockets.push(placeholder);
     var connectOptions = mergeOptions({}, self2.proxyOptions, {
@@ -2984,11 +3158,13 @@ var require_tunnel = __commonJS((exports2) => {
     function onResponse(res) {
       res.upgrade = !0;
     }
+    __name(onResponse, "onResponse");
     function onUpgrade(res, socket, head) {
       process.nextTick(function() {
         onConnect(res, socket, head);
       });
     }
+    __name(onUpgrade, "onUpgrade");
     function onConnect(res, socket, head) {
       if (connectReq.removeAllListeners(), socket.removeAllListeners(), res.statusCode !== 200) {
         debug("tunneling socket could not be established, statusCode=%d", res.statusCode), socket.destroy();
@@ -3004,14 +3180,16 @@ var require_tunnel = __commonJS((exports2) => {
       }
       return debug("tunneling connection has established"), self2.sockets[self2.sockets.indexOf(placeholder)] = socket, cb(socket);
     }
+    __name(onConnect, "onConnect");
     function onError(cause) {
       connectReq.removeAllListeners(), debug(`tunneling socket could not be established, cause=%s
 `, cause.message, cause.stack);
       var error = new Error("tunneling socket could not be established, cause=" + cause.message);
       error.code = "ECONNRESET", options.request.emit("error", error), self2.removeSocket(placeholder);
     }
-  };
-  TunnelingAgent.prototype.removeSocket = function(socket) {
+    __name(onError, "onError");
+  }, "createSocket");
+  TunnelingAgent.prototype.removeSocket = /* @__PURE__ */ __name(function(socket) {
     var pos = this.sockets.indexOf(socket);
     if (pos !== -1) {
       this.sockets.splice(pos, 1);
@@ -3020,7 +3198,7 @@ var require_tunnel = __commonJS((exports2) => {
         pending.request.onSocket(socket2);
       });
     }
-  };
+  }, "removeSocket");
   function createSecureSocket(options, cb) {
     var self2 = this;
     TunnelingAgent.prototype.createSocket.call(self2, options, function(socket) {
@@ -3031,6 +3209,7 @@ var require_tunnel = __commonJS((exports2) => {
       self2.sockets[self2.sockets.indexOf(socket)] = secureSocket, cb(secureSocket);
     });
   }
+  __name(createSecureSocket, "createSecureSocket");
   function toOptions(host, port, localAddress) {
     return typeof host == "string" ? {
       host,
@@ -3038,6 +3217,7 @@ var require_tunnel = __commonJS((exports2) => {
       localAddress
     } : host;
   }
+  __name(toOptions, "toOptions");
   function mergeOptions(target) {
     for (var i = 1, len = arguments.length; i < len; ++i) {
       var overrides = arguments[i];
@@ -3049,12 +3229,13 @@ var require_tunnel = __commonJS((exports2) => {
     }
     return target;
   }
+  __name(mergeOptions, "mergeOptions");
   var debug;
-  process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG) ? debug = function() {
+  process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG) ? debug = /* @__PURE__ */ __name(function() {
     var args = Array.prototype.slice.call(arguments);
     typeof args[0] == "string" ? args[0] = "TUNNEL: " + args[0] : args.unshift("TUNNEL:"), console.error.apply(console, args);
-  } : debug = function() {
-  };
+  }, "debug") : debug = /* @__PURE__ */ __name(function() {
+  }, "debug");
   exports2.debug = debug;
 });
 
@@ -3083,6 +3264,7 @@ var require_http_client = __commonJS((exports2) => {
     let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
     return proxyUrl ? proxyUrl.href : "";
   }
+  __name(getProxyUrl, "getProxyUrl");
   exports2.getProxyUrl = getProxyUrl;
   var HttpRedirectCodes = [
     HttpCodes.MovedPermanently,
@@ -3100,6 +3282,7 @@ var require_http_client = __commonJS((exports2) => {
       this.name = "HttpClientError", this.statusCode = statusCode, Object.setPrototypeOf(this, HttpClientError.prototype);
     }
   };
+  __name(HttpClientError, "HttpClientError");
   exports2.HttpClientError = HttpClientError;
   var HttpClientResponse = class {
     constructor(message) {
@@ -3116,10 +3299,12 @@ var require_http_client = __commonJS((exports2) => {
       });
     }
   };
+  __name(HttpClientResponse, "HttpClientResponse");
   exports2.HttpClientResponse = HttpClientResponse;
   function isHttps(requestUrl) {
     return new URL(requestUrl).protocol === "https:";
   }
+  __name(isHttps, "isHttps");
   exports2.isHttps = isHttps;
   var HttpClient = class {
     constructor(userAgent, handlers, requestOptions) {
@@ -3210,18 +3395,18 @@ var require_http_client = __commonJS((exports2) => {
     }
     requestRaw(info3, data) {
       return new Promise((resolve, reject) => {
-        let callbackForResult = function(err, res) {
+        let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
           err && reject(err), resolve(res);
-        };
+        }, "callbackForResult");
         this.requestRawWithCallback(info3, data, callbackForResult);
       });
     }
     requestRawWithCallback(info3, data, onResult) {
       let socket;
       typeof data == "string" && (info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8"));
-      let callbackCalled = !1, handleResult = (err, res) => {
+      let callbackCalled = !1, handleResult = /* @__PURE__ */ __name((err, res) => {
         callbackCalled || (callbackCalled = !0, onResult(err, res));
-      }, req = info3.httpModule.request(info3.options, (msg) => {
+      }, "handleResult"), req = info3.httpModule.request(info3.options, (msg) => {
         let res = new HttpClientResponse(msg);
         handleResult(null, res);
       });
@@ -3250,11 +3435,11 @@ var require_http_client = __commonJS((exports2) => {
       }), info3;
     }
     _mergeHeaders(headers) {
-      let lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
+      let lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
       return this.requestOptions && this.requestOptions.headers ? Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers)) : lowercaseKeys(headers || {});
     }
     _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
-      let lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), clientHeader;
+      let lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys"), clientHeader;
       return this.requestOptions && this.requestOptions.headers && (clientHeader = lowercaseKeys(this.requestOptions.headers)[header]), additionalHeaders[header] || clientHeader || _default;
     }
     _getAgent(parsedUrl) {
@@ -3319,6 +3504,7 @@ var require_http_client = __commonJS((exports2) => {
       });
     }
   };
+  __name(HttpClient, "HttpClient");
   exports2.HttpClient = HttpClient;
 });
 
@@ -3340,6 +3526,7 @@ var require_auth = __commonJS((exports2) => {
       return null;
     }
   };
+  __name(BasicCredentialHandler, "BasicCredentialHandler");
   exports2.BasicCredentialHandler = BasicCredentialHandler;
   var BearerCredentialHandler = class {
     constructor(token) {
@@ -3355,6 +3542,7 @@ var require_auth = __commonJS((exports2) => {
       return null;
     }
   };
+  __name(BearerCredentialHandler, "BearerCredentialHandler");
   exports2.BearerCredentialHandler = BearerCredentialHandler;
   var PersonalAccessTokenCredentialHandler = class {
     constructor(token) {
@@ -3370,6 +3558,7 @@ var require_auth = __commonJS((exports2) => {
       return null;
     }
   };
+  __name(PersonalAccessTokenCredentialHandler, "PersonalAccessTokenCredentialHandler");
   exports2.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
 });
 
@@ -3400,6 +3589,7 @@ var require_tslib = __commonJS((exports2, module2) => {
         return exports3[id] = previous ? previous(id, v) : v;
       };
     }
+    __name(createExporter, "createExporter");
   })(function(exporter) {
     var extendStatics = Object.setPrototypeOf || {__proto__: []} instanceof Array && function(d, b) {
       d.__proto__ = b;
@@ -3407,22 +3597,22 @@ var require_tslib = __commonJS((exports2, module2) => {
       for (var p in b)
         Object.prototype.hasOwnProperty.call(b, p) && (d[p] = b[p]);
     };
-    __extends = function(d, b) {
+    __extends = /* @__PURE__ */ __name(function(d, b) {
       if (typeof b != "function" && b !== null)
         throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
       extendStatics(d, b);
       function __() {
         this.constructor = d;
       }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }, __assign = Object.assign || function(t) {
+      __name(__, "__"), d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }, "__extends"), __assign = Object.assign || function(t) {
       for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
         for (var p in s)
           Object.prototype.hasOwnProperty.call(s, p) && (t[p] = s[p]);
       }
       return t;
-    }, __rest = function(s, e) {
+    }, __rest = /* @__PURE__ */ __name(function(s, e) {
       var t = {};
       for (var p in s)
         Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0 && (t[p] = s[p]);
@@ -3430,7 +3620,7 @@ var require_tslib = __commonJS((exports2, module2) => {
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
           e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]) && (t[p[i]] = s[p[i]]);
       return t;
-    }, __decorate = function(decorators, target, key, desc) {
+    }, "__rest"), __decorate = /* @__PURE__ */ __name(function(decorators, target, key, desc) {
       var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
       if (typeof Reflect == "object" && typeof Reflect.decorate == "function")
         r = Reflect.decorate(decorators, target, key, desc);
@@ -3438,20 +3628,20 @@ var require_tslib = __commonJS((exports2, module2) => {
         for (var i = decorators.length - 1; i >= 0; i--)
           (d = decorators[i]) && (r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r);
       return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }, __param = function(paramIndex, decorator) {
+    }, "__decorate"), __param = /* @__PURE__ */ __name(function(paramIndex, decorator) {
       return function(target, key) {
         decorator(target, key, paramIndex);
       };
-    }, __metadata = function(metadataKey, metadataValue) {
+    }, "__param"), __metadata = /* @__PURE__ */ __name(function(metadataKey, metadataValue) {
       if (typeof Reflect == "object" && typeof Reflect.metadata == "function")
         return Reflect.metadata(metadataKey, metadataValue);
-    }, __awaiter = function(thisArg, _arguments, P, generator) {
+    }, "__metadata"), __awaiter = /* @__PURE__ */ __name(function(thisArg, _arguments, P, generator) {
       function adopt(value) {
         return value instanceof P ? value : new P(function(resolve) {
           resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -3459,6 +3649,7 @@ var require_tslib = __commonJS((exports2, module2) => {
             reject(e);
           }
         }
+        __name(fulfilled, "fulfilled");
         function rejected(value) {
           try {
             step(generator.throw(value));
@@ -3466,12 +3657,13 @@ var require_tslib = __commonJS((exports2, module2) => {
             reject(e);
           }
         }
+        __name(rejected, "rejected");
         function step(result) {
           result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
+        __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
-    }, __generator = function(thisArg, body) {
+    }, "__awaiter"), __generator = /* @__PURE__ */ __name(function(thisArg, body) {
       var _ = {label: 0, sent: function() {
         if (t[0] & 1)
           throw t[1];
@@ -3535,16 +3727,16 @@ var require_tslib = __commonJS((exports2, module2) => {
           throw op[1];
         return {value: op[0] ? op[1] : void 0, done: !0};
       }
-    }, __exportStar2 = function(m, o) {
+    }, "__generator"), __exportStar2 = /* @__PURE__ */ __name(function(m, o) {
       for (var p in m)
         p !== "default" && !Object.prototype.hasOwnProperty.call(o, p) && __createBinding(o, m, p);
-    }, __createBinding = Object.create ? function(o, m, k, k2) {
+    }, "__exportStar"), __createBinding = Object.create ? function(o, m, k, k2) {
       k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
         return m[k];
       }});
     } : function(o, m, k, k2) {
       k2 === void 0 && (k2 = k), o[k2] = m[k];
-    }, __values2 = function(o) {
+    }, __values2 = /* @__PURE__ */ __name(function(o) {
       var s = typeof Symbol == "function" && Symbol.iterator, m = s && o[s], i = 0;
       if (m)
         return m.call(o);
@@ -3555,7 +3747,7 @@ var require_tslib = __commonJS((exports2, module2) => {
           }
         };
       throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-    }, __read = function(o, n) {
+    }, "__values"), __read = /* @__PURE__ */ __name(function(o, n) {
       var m = typeof Symbol == "function" && o[Symbol.iterator];
       if (!m)
         return o;
@@ -3574,24 +3766,24 @@ var require_tslib = __commonJS((exports2, module2) => {
         }
       }
       return ar;
-    }, __spread = function() {
+    }, "__read"), __spread = /* @__PURE__ */ __name(function() {
       for (var ar = [], i = 0; i < arguments.length; i++)
         ar = ar.concat(__read(arguments[i]));
       return ar;
-    }, __spreadArrays = function() {
+    }, "__spread"), __spreadArrays = /* @__PURE__ */ __name(function() {
       for (var s = 0, i = 0, il = arguments.length; i < il; i++)
         s += arguments[i].length;
       for (var r = Array(s), k = 0, i = 0; i < il; i++)
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
           r[k] = a[j];
       return r;
-    }, __spreadArray = function(to, from) {
+    }, "__spreadArrays"), __spreadArray = /* @__PURE__ */ __name(function(to, from) {
       for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
         to[j] = from[i];
       return to;
-    }, __await = function(v) {
+    }, "__spreadArray"), __await = /* @__PURE__ */ __name(function(v) {
       return this instanceof __await ? (this.v = v, this) : new __await(v);
-    }, __asyncGenerator = function(thisArg, _arguments, generator) {
+    }, "__await"), __asyncGenerator = /* @__PURE__ */ __name(function(thisArg, _arguments, generator) {
       if (!Symbol.asyncIterator)
         throw new TypeError("Symbol.asyncIterator is not defined.");
       var g = generator.apply(thisArg, _arguments || []), i, q = [];
@@ -3624,7 +3816,7 @@ var require_tslib = __commonJS((exports2, module2) => {
       function settle(f, v) {
         f(v), q.shift(), q.length && resume(q[0][0], q[0][1]);
       }
-    }, __asyncDelegator = function(o) {
+    }, "__asyncGenerator"), __asyncDelegator = /* @__PURE__ */ __name(function(o) {
       var i, p;
       return i = {}, verb("next"), verb("throw", function(e) {
         throw e;
@@ -3636,7 +3828,7 @@ var require_tslib = __commonJS((exports2, module2) => {
           return (p = !p) ? {value: __await(o[n](v)), done: n === "return"} : f ? f(v) : v;
         } : f;
       }
-    }, __asyncValues = function(o) {
+    }, "__asyncDelegator"), __asyncValues = /* @__PURE__ */ __name(function(o) {
       if (!Symbol.asyncIterator)
         throw new TypeError("Symbol.asyncIterator is not defined.");
       var m = o[Symbol.asyncIterator], i;
@@ -3655,15 +3847,15 @@ var require_tslib = __commonJS((exports2, module2) => {
           resolve({value: v2, done: d});
         }, reject);
       }
-    }, __makeTemplateObject = function(cooked, raw) {
+    }, "__asyncValues"), __makeTemplateObject = /* @__PURE__ */ __name(function(cooked, raw) {
       return Object.defineProperty ? Object.defineProperty(cooked, "raw", {value: raw}) : cooked.raw = raw, cooked;
-    };
+    }, "__makeTemplateObject");
     var __setModuleDefault = Object.create ? function(o, v) {
       Object.defineProperty(o, "default", {enumerable: !0, value: v});
     } : function(o, v) {
       o.default = v;
     };
-    __importStar = function(mod) {
+    __importStar = /* @__PURE__ */ __name(function(mod) {
       if (mod && mod.__esModule)
         return mod;
       var result = {};
@@ -3671,17 +3863,17 @@ var require_tslib = __commonJS((exports2, module2) => {
         for (var k in mod)
           k !== "default" && Object.prototype.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
       return __setModuleDefault(result, mod), result;
-    }, __importDefault = function(mod) {
+    }, "__importStar"), __importDefault = /* @__PURE__ */ __name(function(mod) {
       return mod && mod.__esModule ? mod : {default: mod};
-    }, __classPrivateFieldGet = function(receiver, privateMap) {
+    }, "__importDefault"), __classPrivateFieldGet = /* @__PURE__ */ __name(function(receiver, privateMap) {
       if (!privateMap.has(receiver))
         throw new TypeError("attempted to get private field on non-instance");
       return privateMap.get(receiver);
-    }, __classPrivateFieldSet = function(receiver, privateMap, value) {
+    }, "__classPrivateFieldGet"), __classPrivateFieldSet = /* @__PURE__ */ __name(function(receiver, privateMap, value) {
       if (!privateMap.has(receiver))
         throw new TypeError("attempted to set private field on non-instance");
       return privateMap.set(receiver, value), value;
-    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__spreadArray", __spreadArray), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
+    }, "__classPrivateFieldSet"), exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__spreadArray", __spreadArray), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
   });
 });
 
@@ -3696,10 +3888,12 @@ var require_rng2 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   var rnds8Pool = new Uint8Array(256), poolPtr = rnds8Pool.length;
   function rng() {
     return poolPtr > rnds8Pool.length - 16 && (_crypto.default.randomFillSync(rnds8Pool), poolPtr = 0), rnds8Pool.slice(poolPtr, poolPtr += 16);
   }
+  __name(rng, "rng");
 });
 
 // ../node_modules/@azure/core-http/node_modules/uuid/dist/regex.js
@@ -3724,9 +3918,11 @@ var require_validate = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function validate(uuid) {
     return typeof uuid == "string" && _regex.default.test(uuid);
   }
+  __name(validate, "validate");
   var _default = validate;
   exports2.default = _default;
 });
@@ -3742,6 +3938,7 @@ var require_stringify = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   var byteToHex = [];
   for (let i = 0; i < 256; ++i)
     byteToHex.push((i + 256).toString(16).substr(1));
@@ -3751,6 +3948,7 @@ var require_stringify = __commonJS((exports2) => {
       throw TypeError("Stringified UUID is invalid");
     return uuid;
   }
+  __name(stringify, "stringify");
   var _default = stringify;
   exports2.default = _default;
 });
@@ -3766,6 +3964,7 @@ var require_v12 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   var _nodeId, _clockseq, _lastMSecs = 0, _lastNSecs = 0;
   function v1(options, buf, offset) {
     let i = buf && offset || 0, b = buf || new Array(16);
@@ -3787,6 +3986,7 @@ var require_v12 = __commonJS((exports2) => {
       b[i + n] = node[n];
     return buf || (0, _stringify.default)(b);
   }
+  __name(v1, "v1");
   var _default = v1;
   exports2.default = _default;
 });
@@ -3802,12 +4002,14 @@ var require_parse = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function parse(uuid) {
     if (!(0, _validate.default)(uuid))
       throw TypeError("Invalid UUID");
     let v, arr = new Uint8Array(16);
     return arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24, arr[1] = v >>> 16 & 255, arr[2] = v >>> 8 & 255, arr[3] = v & 255, arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8, arr[5] = v & 255, arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8, arr[7] = v & 255, arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8, arr[9] = v & 255, arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 1099511627776 & 255, arr[11] = v / 4294967296 & 255, arr[12] = v >>> 24 & 255, arr[13] = v >>> 16 & 255, arr[14] = v >>> 8 & 255, arr[15] = v & 255, arr;
   }
+  __name(parse, "parse");
   var _default = parse;
   exports2.default = _default;
 });
@@ -3824,6 +4026,7 @@ var require_v35 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function stringToBytes(str) {
     str = unescape(encodeURIComponent(str));
     let bytes = [];
@@ -3831,6 +4034,7 @@ var require_v35 = __commonJS((exports2) => {
       bytes.push(str.charCodeAt(i));
     return bytes;
   }
+  __name(stringToBytes, "stringToBytes");
   var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
   exports2.DNS = DNS;
   var URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
@@ -3848,12 +4052,14 @@ var require_v35 = __commonJS((exports2) => {
       }
       return (0, _stringify.default)(bytes);
     }
+    __name(generateUUID, "generateUUID");
     try {
       generateUUID.name = name;
     } catch (err) {
     }
     return generateUUID.DNS = DNS, generateUUID.URL = URL2, generateUUID;
   }
+  __name(_default, "_default");
 });
 
 // ../node_modules/@azure/core-http/node_modules/uuid/dist/md5.js
@@ -3867,9 +4073,11 @@ var require_md5 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function md5(bytes) {
     return Array.isArray(bytes) ? bytes = Buffer.from(bytes) : typeof bytes == "string" && (bytes = Buffer.from(bytes, "utf8")), _crypto.default.createHash("md5").update(bytes).digest();
   }
+  __name(md5, "md5");
   var _default = md5;
   exports2.default = _default;
 });
@@ -3885,6 +4093,7 @@ var require_v3 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   var v3 = (0, _v.default)("v3", 48, _md.default), _default = v3;
   exports2.default = _default;
 });
@@ -3900,6 +4109,7 @@ var require_v42 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function v4(options, buf, offset) {
     options = options || {};
     let rnds = options.random || (options.rng || _rng.default)();
@@ -3911,6 +4121,7 @@ var require_v42 = __commonJS((exports2) => {
     }
     return (0, _stringify.default)(rnds);
   }
+  __name(v4, "v4");
   var _default = v4;
   exports2.default = _default;
 });
@@ -3926,9 +4137,11 @@ var require_sha1 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function sha1(bytes) {
     return Array.isArray(bytes) ? bytes = Buffer.from(bytes) : typeof bytes == "string" && (bytes = Buffer.from(bytes, "utf8")), _crypto.default.createHash("sha1").update(bytes).digest();
   }
+  __name(sha1, "sha1");
   var _default = sha1;
   exports2.default = _default;
 });
@@ -3944,6 +4157,7 @@ var require_v5 = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   var v5 = (0, _v.default)("v5", 80, _sha.default), _default = v5;
   exports2.default = _default;
 });
@@ -3970,11 +4184,13 @@ var require_version = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
   function version(uuid) {
     if (!(0, _validate.default)(uuid))
       throw TypeError("Invalid UUID");
     return parseInt(uuid.substr(14, 1), 16);
   }
+  __name(version, "version");
   var _default = version;
   exports2.default = _default;
 });
@@ -4043,6 +4259,7 @@ var require_dist = __commonJS((exports2) => {
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {default: obj};
   }
+  __name(_interopRequireDefault, "_interopRequireDefault");
 });
 
 // ../node_modules/psl/data/rules.json
@@ -12957,9 +13174,9 @@ var require_psl = __commonJS((exports2) => {
     }, domainParts = domain.split(".");
     if (domainParts[domainParts.length - 1] === "local")
       return parsed;
-    var handlePunycode = function() {
+    var handlePunycode = /* @__PURE__ */ __name(function() {
       return /xn--/.test(domain) && (parsed.domain && (parsed.domain = Punycode.toASCII(parsed.domain)), parsed.subdomain && (parsed.subdomain = Punycode.toASCII(parsed.subdomain))), parsed;
-    }, rule = internals.findRule(domain);
+    }, "handlePunycode"), rule = internals.findRule(domain);
     if (!rule)
       return domainParts.length < 2 ? parsed : (parsed.tld = domainParts.pop(), parsed.sld = domainParts.pop(), parsed.domain = [parsed.sld, parsed.tld].join("."), domainParts.length && (parsed.subdomain = domainParts.pop()), handlePunycode());
     parsed.listed = !0;
@@ -13012,6 +13229,7 @@ var require_pubsuffix_psl = __commonJS((exports2) => {
   function getPublicSuffix(domain) {
     return psl.get(domain);
   }
+  __name(getPublicSuffix, "getPublicSuffix");
   exports2.getPublicSuffix = getPublicSuffix;
 });
 
@@ -13077,6 +13295,7 @@ var require_store = __commonJS((exports2) => {
       throw new Error("getAllCookies is not implemented (therefore jar cannot be serialized)");
     }
   };
+  __name(Store, "Store");
   exports2.Store = Store;
 });
 
@@ -13157,6 +13376,7 @@ var require_permuteDomain = __commonJS((exports2) => {
       cur = `${parts.shift()}.${cur}`, permutations.push(cur);
     return permutations;
   }
+  __name(permuteDomain, "permuteDomain");
   exports2.permuteDomain = permuteDomain;
 });
 
@@ -13196,6 +13416,7 @@ var require_pathMatch = __commonJS((exports2) => {
   function pathMatch(reqPath, cookiePath) {
     return cookiePath === reqPath || reqPath.indexOf(cookiePath) === 0 && (cookiePath.substr(-1) === "/" || reqPath.substr(cookiePath.length, 1) === "/");
   }
+  __name(pathMatch, "pathMatch");
   exports2.pathMatch = pathMatch;
 });
 
@@ -13248,7 +13469,7 @@ var require_memstore = __commonJS((exports2) => {
       if (typeof allowSpecialUseDomain == "function" && (cb = allowSpecialUseDomain, allowSpecialUseDomain = !1), !domain)
         return cb(null, []);
       let pathMatcher;
-      path3 ? pathMatcher = function(domainIndex) {
+      path3 ? pathMatcher = /* @__PURE__ */ __name(function(domainIndex) {
         Object.keys(domainIndex).forEach((cookiePath) => {
           if (pathMatch(path3, cookiePath)) {
             let pathIndex = domainIndex[cookiePath];
@@ -13256,13 +13477,13 @@ var require_memstore = __commonJS((exports2) => {
               results.push(pathIndex[key]);
           }
         });
-      } : pathMatcher = function(domainIndex) {
+      }, "matchRFC") : pathMatcher = /* @__PURE__ */ __name(function(domainIndex) {
         for (let curPath in domainIndex) {
           let pathIndex = domainIndex[curPath];
           for (let key in pathIndex)
             results.push(pathIndex[key]);
         }
-      };
+      }, "matchAll");
       let domains = permuteDomain(domain, allowSpecialUseDomain) || [domain], idx = this.idx;
       domains.forEach((curDomain) => {
         let domainIndex = idx[curDomain];
@@ -13295,6 +13516,7 @@ var require_memstore = __commonJS((exports2) => {
       }), cookies.sort((a, b) => (a.creationIndex || 0) - (b.creationIndex || 0)), cb(null, cookies);
     }
   };
+  __name(MemoryCookieStore, "MemoryCookieStore");
   [
     "findCookie",
     "findCookies",
@@ -13367,6 +13589,7 @@ var require_cookie = __commonJS((exports2) => {
     let context2 = String(value).toLowerCase();
     return context2 === "none" || context2 === "lax" || context2 === "strict" ? context2 : null;
   }
+  __name(checkSameSiteContext, "checkSameSiteContext");
   var PrefixSecurityEnum = Object.freeze({
     SILENT: "silent",
     STRICT: "strict",
@@ -13382,6 +13605,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return count < minDigits || count > maxDigits || !trailingOK && count != token.length ? null : parseInt(token.substr(0, count), 10);
   }
+  __name(parseDigits, "parseDigits");
   function parseTime(token) {
     let parts = token.split(":"), result = [0, 0, 0];
     if (parts.length !== 3)
@@ -13394,11 +13618,13 @@ var require_cookie = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(parseTime, "parseTime");
   function parseMonth(token) {
     token = String(token).substr(0, 3).toLowerCase();
     let num = MONTH_TO_NUM[token];
     return num >= 0 ? num : null;
   }
+  __name(parseMonth, "parseMonth");
   function parseDate(str) {
     if (!str)
       return;
@@ -13428,12 +13654,15 @@ var require_cookie = __commonJS((exports2) => {
     if (!(dayOfMonth === null || month === null || year === null || second === null || dayOfMonth < 1 || dayOfMonth > 31 || year < 1601 || hour > 23 || minute > 59 || second > 59))
       return new Date(Date.UTC(year, month, dayOfMonth, hour, minute, second));
   }
+  __name(parseDate, "parseDate");
   function formatDate(date) {
     return date.toUTCString();
   }
+  __name(formatDate, "formatDate");
   function canonicalDomain(str) {
     return str == null ? null : (str = str.trim().replace(/^\./, ""), punycode && /[^\u0001-\u007f]/.test(str) && (str = punycode.toASCII(str)), str.toLowerCase());
   }
+  __name(canonicalDomain, "canonicalDomain");
   function domainMatch(str, domStr, canonicalize) {
     if (str == null || domStr == null)
       return null;
@@ -13442,6 +13671,7 @@ var require_cookie = __commonJS((exports2) => {
     let idx = str.indexOf(domStr);
     return !(idx <= 0 || str.length !== domStr.length + idx || str.substr(idx - 1, 1) !== "." || IP_REGEX_LOWERCASE.test(str));
   }
+  __name(domainMatch, "domainMatch");
   function defaultPath(path3) {
     if (!path3 || path3.substr(0, 1) !== "/")
       return "/";
@@ -13450,6 +13680,7 @@ var require_cookie = __commonJS((exports2) => {
     let rightSlash = path3.lastIndexOf("/");
     return rightSlash === 0 ? "/" : path3.slice(0, rightSlash);
   }
+  __name(defaultPath, "defaultPath");
   function trimTerminator(str) {
     for (let t = 0; t < TERMINATORS.length; t++) {
       let terminatorIdx = str.indexOf(TERMINATORS[t]);
@@ -13457,6 +13688,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return str;
   }
+  __name(trimTerminator, "trimTerminator");
   function parseCookiePair(cookiePair, looseMode) {
     cookiePair = trimTerminator(cookiePair);
     let firstEq = cookiePair.indexOf("=");
@@ -13470,6 +13702,7 @@ var require_cookie = __commonJS((exports2) => {
     let c = new Cookie();
     return c.key = cookieName, c.value = cookieValue, c;
   }
+  __name(parseCookiePair, "parseCookiePair");
   function parse(str, options) {
     (!options || typeof options != "object") && (options = {}), str = str.trim();
     let firstSemi = str.indexOf(";"), cookiePair = firstSemi === -1 ? str : str.substr(0, firstSemi), c = parseCookiePair(cookiePair, !!options.loose);
@@ -13533,12 +13766,15 @@ var require_cookie = __commonJS((exports2) => {
     }
     return c;
   }
+  __name(parse, "parse");
   function isSecurePrefixConditionMet(cookie) {
     return !cookie.key.startsWith("__Secure-") || cookie.secure;
   }
+  __name(isSecurePrefixConditionMet, "isSecurePrefixConditionMet");
   function isHostPrefixConditionMet(cookie) {
     return !cookie.key.startsWith("__Host-") || cookie.secure && cookie.hostOnly && cookie.path != null && cookie.path === "/";
   }
+  __name(isHostPrefixConditionMet, "isHostPrefixConditionMet");
   function jsonParse(str) {
     let obj;
     try {
@@ -13548,6 +13784,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return obj;
   }
+  __name(jsonParse, "jsonParse");
   function fromJSON(str) {
     if (!str)
       return null;
@@ -13564,6 +13801,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return c;
   }
+  __name(fromJSON, "fromJSON");
   function cookieCompare(a, b) {
     let cmp = 0, aPathLen = a.path ? a.path.length : 0;
     if (cmp = (b.path ? b.path.length : 0) - aPathLen, cmp !== 0)
@@ -13571,6 +13809,7 @@ var require_cookie = __commonJS((exports2) => {
     let aTime = a.creation ? a.creation.getTime() : MAX_TIME, bTime = b.creation ? b.creation.getTime() : MAX_TIME;
     return cmp = aTime - bTime, cmp !== 0 || (cmp = a.creationIndex - b.creationIndex), cmp;
   }
+  __name(cookieCompare, "cookieCompare");
   function permutePath(path3) {
     if (path3 === "/")
       return ["/"];
@@ -13583,6 +13822,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return permutations.push("/"), permutations;
   }
+  __name(permutePath, "permutePath");
   function getCookieContext(url) {
     if (url instanceof Object)
       return url;
@@ -13592,6 +13832,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return urlParse(url);
   }
+  __name(getCookieContext, "getCookieContext");
   var cookieDefaults = {
     key: "",
     value: "",
@@ -13682,6 +13923,7 @@ var require_cookie = __commonJS((exports2) => {
       return this.canonicalizedDomain();
     }
   };
+  __name(Cookie, "Cookie");
   Cookie.cookiesCreated = 0;
   Cookie.parse = parse;
   Cookie.fromJSON = fromJSON;
@@ -13707,6 +13949,7 @@ var require_cookie = __commonJS((exports2) => {
     }
     return PrefixSecurityEnum.SILENT;
   }
+  __name(getNormalizedPrefixSecurity, "getNormalizedPrefixSecurity");
   var CookieJar = class {
     constructor(store, options = {rejectPublicSuffixes: !0}) {
       typeof options == "boolean" && (options = {rejectPublicSuffixes: options}), this.rejectPublicSuffixes = options.rejectPublicSuffixes, this.enableLooseMode = !!options.looseMode, this.allowSpecialUseDomain = !!options.allowSpecialUseDomain, this.store = store || new MemoryCookieStore(), this.prefixSecurity = getNormalizedPrefixSecurity(options.prefixSecurity), this._cloneSync = syncWrap("clone"), this._importCookiesSync = syncWrap("_importCookies"), this.getCookiesSync = syncWrap("getCookies"), this.getCookieStringSync = syncWrap("getCookieString"), this.getSetCookieStringsSync = syncWrap("getSetCookieStrings"), this.removeAllCookiesSync = syncWrap("removeAllCookies"), this.setCookieSync = syncWrap("setCookie"), this.serializeSync = syncWrap("serialize");
@@ -13748,11 +13991,11 @@ var require_cookie = __commonJS((exports2) => {
       function withCookie(err2, oldCookie) {
         if (err2)
           return cb(err2);
-        let next = function(err3) {
+        let next = /* @__PURE__ */ __name(function(err3) {
           if (err3)
             return cb(err3);
           cb(null, cookie);
-        };
+        }, "next");
         if (oldCookie) {
           if (options.http === !1 && oldCookie.httpOnly)
             return err2 = new Error("old Cookie is HttpOnly and this isn't an HTTP API"), cb(options.ignoreError ? null : err2);
@@ -13760,7 +14003,7 @@ var require_cookie = __commonJS((exports2) => {
         } else
           cookie.creation = cookie.lastAccessed = now, store.putCookie(cookie, next);
       }
-      store.findCookie(cookie.domain, cookie.path, cookie.key, withCookie);
+      __name(withCookie, "withCookie"), store.findCookie(cookie.domain, cookie.path, cookie.key, withCookie);
     }
     getCookies(url, options, cb) {
       let context2 = getCookieContext(url);
@@ -13785,7 +14028,7 @@ var require_cookie = __commonJS((exports2) => {
         return !allPaths && !pathMatch(path3, c.path) || c.secure && !secure || c.httpOnly && !http || sameSiteLevel && Cookie.sameSiteLevel[c.sameSite || "none"] > sameSiteLevel ? !1 : expireCheck && c.expiryTime() <= now ? (store.removeCookie(c.domain, c.path, c.key, () => {
         }), !1) : !0;
       }
-      store.findCookies(host, allPaths ? null : path3, this.allowSpecialUseDomain, (err, cookies) => {
+      __name(matchingCookie, "matchingCookie"), store.findCookies(host, allPaths ? null : path3, this.allowSpecialUseDomain, (err, cookies) => {
         if (err)
           return cb(err);
         cookies = cookies.filter(matchingCookie), options.sort !== !1 && (cookies = cookies.sort(cookieCompare));
@@ -13796,15 +14039,15 @@ var require_cookie = __commonJS((exports2) => {
       });
     }
     getCookieString(...args) {
-      let cb = args.pop(), next = function(err, cookies) {
+      let cb = args.pop(), next = /* @__PURE__ */ __name(function(err, cookies) {
         err ? cb(err) : cb(null, cookies.sort(cookieCompare).map((c) => c.cookieString()).join("; "));
-      };
+      }, "next");
       args.push(next), this.getCookies.apply(this, args);
     }
     getSetCookieStrings(...args) {
-      let cb = args.pop(), next = function(err, cookies) {
+      let cb = args.pop(), next = /* @__PURE__ */ __name(function(err, cookies) {
         err ? cb(err) : cb(null, cookies.map((c) => c.toString()));
-      };
+      }, "next");
       args.push(next), this.getCookies.apply(this, args);
     }
     serialize(cb) {
@@ -13828,7 +14071,7 @@ var require_cookie = __commonJS((exports2) => {
       if (!cookies || !Array.isArray(cookies))
         return cb(new Error("serialized jar has no cookies array"));
       cookies = cookies.slice();
-      let putNext = (err) => {
+      let putNext = /* @__PURE__ */ __name((err) => {
         if (err)
           return cb(err);
         if (!cookies.length)
@@ -13842,7 +14085,7 @@ var require_cookie = __commonJS((exports2) => {
         if (cookie === null)
           return putNext(null);
         this.store.putCookie(cookie, putNext);
-      };
+      }, "putNext");
       putNext();
     }
     clone(newStore, cb) {
@@ -13873,7 +14116,7 @@ var require_cookie = __commonJS((exports2) => {
           if (removeErr && removeErrors.push(removeErr), completedCount++, completedCount === cookies.length)
             return cb(removeErrors.length ? removeErrors[0] : null);
         }
-        cookies.forEach((cookie) => {
+        __name(removeCookieCb, "removeCookieCb"), cookies.forEach((cookie) => {
           store.removeCookie(cookie.domain, cookie.path, cookie.key, removeCookieCb);
         });
       });
@@ -13900,6 +14143,7 @@ var require_cookie = __commonJS((exports2) => {
       return jar._importCookiesSync(serialized), jar;
     }
   };
+  __name(CookieJar, "CookieJar");
   CookieJar.fromJSON = CookieJar.deserializeSync;
   [
     "_importCookies",
@@ -13926,6 +14170,7 @@ var require_cookie = __commonJS((exports2) => {
       return syncResult;
     };
   }
+  __name(syncWrap, "syncWrap");
   exports2.version = VERSION;
   exports2.CookieJar = CookieJar;
   exports2.Cookie = Cookie;
@@ -13998,6 +14243,7 @@ var require_lib = __commonJS((exports2) => {
       return blob[BUFFER] = slicedBuffer, blob;
     }
   };
+  __name(Blob2, "Blob");
   Object.defineProperties(Blob2.prototype, {
     size: {enumerable: !0},
     type: {enumerable: !0},
@@ -14012,6 +14258,7 @@ var require_lib = __commonJS((exports2) => {
   function FetchError(message, type, systemError) {
     Error.call(this, message), this.message = message, this.type = type, systemError && (this.code = this.errno = systemError.code), Error.captureStackTrace(this, this.constructor);
   }
+  __name(FetchError, "FetchError");
   FetchError.prototype = Object.create(Error.prototype);
   FetchError.prototype.constructor = FetchError;
   FetchError.prototype.name = "FetchError";
@@ -14035,6 +14282,7 @@ var require_lib = __commonJS((exports2) => {
       _this[INTERNALS].error = error;
     });
   }
+  __name(Body, "Body");
   Body.prototype = {
     get body() {
       return this[INTERNALS].body;
@@ -14137,51 +14385,62 @@ var require_lib = __commonJS((exports2) => {
       });
     });
   }
+  __name(consumeBody, "consumeBody");
   function convertBody(buffer, headers) {
     if (typeof convert != "function")
       throw new Error("The package `encoding` must be installed to use the textConverted() function");
     let ct = headers.get("content-type"), charset = "utf-8", res, str;
     return ct && (res = /charset=([^;]*)/i.exec(ct)), str = buffer.slice(0, 1024).toString(), !res && str && (res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str)), !res && str && (res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str), res || (res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str), res && res.pop()), res && (res = /charset=(.*)/i.exec(res.pop()))), !res && str && (res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str)), res && (charset = res.pop(), (charset === "gb2312" || charset === "gbk") && (charset = "gb18030")), convert(buffer, "UTF-8", charset).toString();
   }
+  __name(convertBody, "convertBody");
   function isURLSearchParams(obj) {
     return typeof obj != "object" || typeof obj.append != "function" || typeof obj.delete != "function" || typeof obj.get != "function" || typeof obj.getAll != "function" || typeof obj.has != "function" || typeof obj.set != "function" ? !1 : obj.constructor.name === "URLSearchParams" || Object.prototype.toString.call(obj) === "[object URLSearchParams]" || typeof obj.sort == "function";
   }
+  __name(isURLSearchParams, "isURLSearchParams");
   function isBlob(obj) {
     return typeof obj == "object" && typeof obj.arrayBuffer == "function" && typeof obj.type == "string" && typeof obj.stream == "function" && typeof obj.constructor == "function" && typeof obj.constructor.name == "string" && /^(Blob|File)$/.test(obj.constructor.name) && /^(Blob|File)$/.test(obj[Symbol.toStringTag]);
   }
+  __name(isBlob, "isBlob");
   function clone(instance) {
     let p1, p2, body = instance.body;
     if (instance.bodyUsed)
       throw new Error("cannot clone body after it is used");
     return body instanceof import_stream.default && typeof body.getBoundary != "function" && (p1 = new PassThrough(), p2 = new PassThrough(), body.pipe(p1), body.pipe(p2), instance[INTERNALS].body = p1, body = p2), body;
   }
+  __name(clone, "clone");
   function extractContentType(body) {
     return body === null ? null : typeof body == "string" ? "text/plain;charset=UTF-8" : isURLSearchParams(body) ? "application/x-www-form-urlencoded;charset=UTF-8" : isBlob(body) ? body.type || null : Buffer.isBuffer(body) || Object.prototype.toString.call(body) === "[object ArrayBuffer]" || ArrayBuffer.isView(body) ? null : typeof body.getBoundary == "function" ? `multipart/form-data;boundary=${body.getBoundary()}` : body instanceof import_stream.default ? null : "text/plain;charset=UTF-8";
   }
+  __name(extractContentType, "extractContentType");
   function getTotalBytes(instance) {
     let body = instance.body;
     return body === null ? 0 : isBlob(body) ? body.size : Buffer.isBuffer(body) ? body.length : body && typeof body.getLengthSync == "function" && (body._lengthRetrievers && body._lengthRetrievers.length == 0 || body.hasKnownLength && body.hasKnownLength()) ? body.getLengthSync() : null;
   }
+  __name(getTotalBytes, "getTotalBytes");
   function writeToStream(dest, instance) {
     let body = instance.body;
     body === null ? dest.end() : isBlob(body) ? body.stream().pipe(dest) : Buffer.isBuffer(body) ? (dest.write(body), dest.end()) : body.pipe(dest);
   }
+  __name(writeToStream, "writeToStream");
   Body.Promise = global.Promise;
   var invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/, invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
   function validateName(name) {
     if (name = `${name}`, invalidTokenRegex.test(name) || name === "")
       throw new TypeError(`${name} is not a legal HTTP header name`);
   }
+  __name(validateName, "validateName");
   function validateValue(value) {
     if (value = `${value}`, invalidHeaderCharRegex.test(value))
       throw new TypeError(`${value} is not a legal HTTP header value`);
   }
+  __name(validateValue, "validateValue");
   function find(map, name) {
     name = name.toLowerCase();
     for (let key in map)
       if (key.toLowerCase() === name)
         return key;
   }
+  __name(find, "find");
   var MAP = Symbol("map"), Headers = class {
     constructor() {
       let init = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : void 0;
@@ -14261,6 +14520,7 @@ var require_lib = __commonJS((exports2) => {
       return createHeadersIterator(this, "key+value");
     }
   };
+  __name(Headers, "Headers");
   Headers.prototype.entries = Headers.prototype[Symbol.iterator];
   Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
     value: "Headers",
@@ -14289,6 +14549,7 @@ var require_lib = __commonJS((exports2) => {
       return [k.toLowerCase(), headers[MAP][k].join(", ")];
     });
   }
+  __name(getHeaders, "getHeaders");
   var INTERNAL = Symbol("internal");
   function createHeadersIterator(target, kind) {
     let iterator = Object.create(HeadersIteratorPrototype);
@@ -14298,6 +14559,7 @@ var require_lib = __commonJS((exports2) => {
       index: 0
     }, iterator;
   }
+  __name(createHeadersIterator, "createHeadersIterator");
   var HeadersIteratorPrototype = Object.setPrototypeOf({
     next() {
       if (!this || Object.getPrototypeOf(this) !== HeadersIteratorPrototype)
@@ -14323,6 +14585,7 @@ var require_lib = __commonJS((exports2) => {
     let obj = Object.assign({__proto__: null}, headers[MAP]), hostHeaderKey = find(headers[MAP], "Host");
     return hostHeaderKey !== void 0 && (obj[hostHeaderKey] = obj[hostHeaderKey][0]), obj;
   }
+  __name(exportNodeCompatibleHeaders, "exportNodeCompatibleHeaders");
   function createHeadersLenient(obj) {
     let headers = new Headers();
     for (let name of Object.keys(obj))
@@ -14334,6 +14597,7 @@ var require_lib = __commonJS((exports2) => {
           invalidHeaderCharRegex.test(obj[name]) || (headers[MAP][name] = [obj[name]]);
     return headers;
   }
+  __name(createHeadersLenient, "createHeadersLenient");
   var INTERNALS$1 = Symbol("Response internals"), STATUS_CODES = import_http.default.STATUS_CODES, Response = class {
     constructor() {
       let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null, opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
@@ -14380,6 +14644,7 @@ var require_lib = __commonJS((exports2) => {
       });
     }
   };
+  __name(Response, "Response");
   Body.mixIn(Response.prototype);
   Object.defineProperties(Response.prototype, {
     url: {enumerable: !0},
@@ -14400,10 +14665,12 @@ var require_lib = __commonJS((exports2) => {
   function isRequest(input) {
     return typeof input == "object" && typeof input[INTERNALS$2] == "object";
   }
+  __name(isRequest, "isRequest");
   function isAbortSignal(signal) {
     let proto = signal && typeof signal == "object" && Object.getPrototypeOf(signal);
     return !!(proto && proto.constructor.name === "AbortSignal");
   }
+  __name(isAbortSignal, "isAbortSignal");
   var Request = class {
     constructor(input) {
       let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, parsedURL;
@@ -14451,6 +14718,7 @@ var require_lib = __commonJS((exports2) => {
       return new Request(this);
     }
   };
+  __name(Request, "Request");
   Body.mixIn(Request.prototype);
   Object.defineProperty(Request.prototype, Symbol.toStringTag, {
     value: "Request",
@@ -14487,9 +14755,11 @@ var require_lib = __commonJS((exports2) => {
       agent
     });
   }
+  __name(getNodeRequestOptions, "getNodeRequestOptions");
   function AbortError(message) {
     Error.call(this, message), this.type = "aborted", this.message = message, Error.captureStackTrace(this, this.constructor);
   }
+  __name(AbortError, "AbortError");
   AbortError.prototype = Object.create(Error.prototype);
   AbortError.prototype.constructor = AbortError;
   AbortError.prototype.name = "AbortError";
@@ -14498,22 +14768,22 @@ var require_lib = __commonJS((exports2) => {
     if (!fetch.Promise)
       throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
     return Body.Promise = fetch.Promise, new fetch.Promise(function(resolve, reject) {
-      let request = new Request(url, opts), options = getNodeRequestOptions(request), send = (options.protocol === "https:" ? import_https.default : import_http.default).request, signal = request.signal, response = null, abort = function() {
+      let request = new Request(url, opts), options = getNodeRequestOptions(request), send = (options.protocol === "https:" ? import_https.default : import_http.default).request, signal = request.signal, response = null, abort = /* @__PURE__ */ __name(function() {
         let error = new AbortError("The user aborted a request.");
         reject(error), request.body && request.body instanceof import_stream.default.Readable && request.body.destroy(error), !(!response || !response.body) && response.body.emit("error", error);
-      };
+      }, "abort");
       if (signal && signal.aborted) {
         abort();
         return;
       }
-      let abortAndFinalize = function() {
+      let abortAndFinalize = /* @__PURE__ */ __name(function() {
         abort(), finalize();
-      }, req = send(options), reqTimeout;
+      }, "abortAndFinalize"), req = send(options), reqTimeout;
       signal && signal.addEventListener("abort", abortAndFinalize);
       function finalize() {
         req.abort(), signal && signal.removeEventListener("abort", abortAndFinalize), clearTimeout(reqTimeout);
       }
-      request.timeout && req.once("socket", function(socket) {
+      __name(finalize, "finalize"), request.timeout && req.once("socket", function(socket) {
         reqTimeout = setTimeout(function() {
           reject(new FetchError(`network timeout at: ${request.url}`, "request-timeout")), finalize();
         }, request.timeout);
@@ -14601,6 +14871,7 @@ var require_lib = __commonJS((exports2) => {
       }), writeToStream(req, request);
     });
   }
+  __name(fetch, "fetch");
   fetch.isRedirect = function(code) {
     return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
   };
@@ -14616,7 +14887,7 @@ var require_dist2 = __commonJS((exports2) => {
     function AbortSignal2() {
       this.onabort = null, listenersMap.set(this, []), abortedMap.set(this, !1);
     }
-    return Object.defineProperty(AbortSignal2.prototype, "aborted", {
+    return __name(AbortSignal2, "AbortSignal"), Object.defineProperty(AbortSignal2.prototype, "aborted", {
       get: function() {
         if (!abortedMap.has(this))
           throw new TypeError("Expected `this` to be an instance of AbortSignal.");
@@ -14653,13 +14924,14 @@ var require_dist2 = __commonJS((exports2) => {
       }), abortedMap.set(signal, !0);
     }
   }
+  __name(abortSignal, "abortSignal");
   var AbortError = function(_super) {
     tslib.__extends(AbortError2, _super);
     function AbortError2(message) {
       var _this = _super.call(this, message) || this;
       return _this.name = "AbortError", _this;
     }
-    return AbortError2;
+    return __name(AbortError2, "AbortError"), AbortError2;
   }(Error), AbortController = function() {
     function AbortController2(parentSignals) {
       var _this = this;
@@ -14673,7 +14945,7 @@ var require_dist2 = __commonJS((exports2) => {
         }
       }
     }
-    return Object.defineProperty(AbortController2.prototype, "signal", {
+    return __name(AbortController2, "AbortController"), Object.defineProperty(AbortController2.prototype, "signal", {
       get: function() {
         return this._signal;
       },
@@ -14698,6 +14970,7 @@ var require_delayed_stream = __commonJS((exports2, module2) => {
   function DelayedStream() {
     this.source = null, this.dataSize = 0, this.maxDataSize = 1024 * 1024, this.pauseStream = !0, this._maxDataSizeExceeded = !1, this._released = !1, this._bufferedEvents = [];
   }
+  __name(DelayedStream, "DelayedStream");
   util.inherits(DelayedStream, Stream);
   DelayedStream.create = function(source, options) {
     var delayedStream = new this();
@@ -14759,6 +15032,7 @@ var require_combined_stream = __commonJS((exports2, module2) => {
   function CombinedStream() {
     this.writable = !1, this.readable = !0, this.dataSize = 0, this.maxDataSize = 2 * 1024 * 1024, this.pauseStreams = !0, this._released = !1, this._streams = [], this._currentStream = null, this._insideLoop = !1, this._pendingNext = !1;
   }
+  __name(CombinedStream, "CombinedStream");
   util.inherits(CombinedStream, Stream);
   CombinedStream.create = function(options) {
     var combinedStream = new this();
@@ -23149,6 +23423,7 @@ var require_mime_types = __commonJS((exports2) => {
     var match = EXTRACT_TYPE_REGEXP.exec(type), mime = match && db[match[1].toLowerCase()];
     return mime && mime.charset ? mime.charset : match && TEXT_TYPE_REGEXP.test(match[1]) ? "UTF-8" : !1;
   }
+  __name(charset, "charset");
   function contentType(str) {
     if (!str || typeof str != "string")
       return !1;
@@ -23161,21 +23436,24 @@ var require_mime_types = __commonJS((exports2) => {
     }
     return mime;
   }
+  __name(contentType, "contentType");
   function extension(type) {
     if (!type || typeof type != "string")
       return !1;
     var match = EXTRACT_TYPE_REGEXP.exec(type), exts = match && exports2.extensions[match[1].toLowerCase()];
     return !exts || !exts.length ? !1 : exts[0];
   }
+  __name(extension, "extension");
   function lookup(path3) {
     if (!path3 || typeof path3 != "string")
       return !1;
     var extension2 = extname("x." + path3).toLowerCase().substr(1);
     return extension2 && exports2.types[extension2] || !1;
   }
+  __name(lookup, "lookup");
   function populateMaps(extensions, types) {
     var preference = ["nginx", "apache", void 0, "iana"];
-    Object.keys(db).forEach(function(type) {
+    Object.keys(db).forEach(/* @__PURE__ */ __name(function(type) {
       var mime = db[type], exts = mime.extensions;
       if (!(!exts || !exts.length)) {
         extensions[type] = exts;
@@ -23189,8 +23467,9 @@ var require_mime_types = __commonJS((exports2) => {
           types[extension2] = type;
         }
       }
-    });
+    }, "forEachMimeType"));
   }
+  __name(populateMaps, "populateMaps");
 });
 
 // ../node_modules/asynckit/lib/defer.js
@@ -23200,6 +23479,7 @@ var require_defer = __commonJS((exports2, module2) => {
     var nextTick = typeof setImmediate == "function" ? setImmediate : typeof process == "object" && typeof process.nextTick == "function" ? process.nextTick : null;
     nextTick ? nextTick(fn) : setTimeout(fn, 0);
   }
+  __name(defer, "defer");
 });
 
 // ../node_modules/asynckit/lib/async.js
@@ -23210,12 +23490,13 @@ var require_async = __commonJS((exports2, module2) => {
     var isAsync = !1;
     return defer(function() {
       isAsync = !0;
-    }), function(err, result) {
-      isAsync ? callback(err, result) : defer(function() {
+    }), /* @__PURE__ */ __name(function(err, result) {
+      isAsync ? callback(err, result) : defer(/* @__PURE__ */ __name(function() {
         callback(err, result);
-      });
-    };
+      }, "nextTick_callback"));
+    }, "async_callback");
   }
+  __name(async, "async");
 });
 
 // ../node_modules/asynckit/lib/abort.js
@@ -23224,9 +23505,11 @@ var require_abort = __commonJS((exports2, module2) => {
   function abort(state) {
     Object.keys(state.jobs).forEach(clean.bind(state)), state.jobs = {};
   }
+  __name(abort, "abort");
   function clean(key) {
     typeof this.jobs[key] == "function" && this.jobs[key]();
   }
+  __name(clean, "clean");
 });
 
 // ../node_modules/asynckit/lib/iterate.js
@@ -23239,10 +23522,12 @@ var require_iterate = __commonJS((exports2, module2) => {
       key in state.jobs && (delete state.jobs[key], error ? abort(state) : state.results[key] = output, callback(error, state.results));
     });
   }
+  __name(iterate, "iterate");
   function runJob(iterator, key, item, callback) {
     var aborter;
     return iterator.length == 2 ? aborter = iterator(item, async(callback)) : aborter = iterator(item, key, async(callback)), aborter;
   }
+  __name(runJob, "runJob");
 });
 
 // ../node_modules/asynckit/lib/state.js
@@ -23260,6 +23545,7 @@ var require_state = __commonJS((exports2, module2) => {
       return sortMethod(list[a], list[b]);
     }), initState;
   }
+  __name(state, "state");
 });
 
 // ../node_modules/asynckit/lib/terminator.js
@@ -23269,6 +23555,7 @@ var require_terminator = __commonJS((exports2, module2) => {
   function terminator(callback) {
     !Object.keys(this.jobs).length || (this.index = this.size, abort(this), async(callback)(null, this.results));
   }
+  __name(terminator, "terminator");
 });
 
 // ../node_modules/asynckit/parallel.js
@@ -23289,6 +23576,7 @@ var require_parallel = __commonJS((exports2, module2) => {
       }), state.index++;
     return terminator.bind(state, callback);
   }
+  __name(parallel, "parallel");
 });
 
 // ../node_modules/asynckit/serialOrdered.js
@@ -23299,7 +23587,7 @@ var require_serialOrdered = __commonJS((exports2, module2) => {
   module2.exports.descending = descending;
   function serialOrdered(list, iterator, sortMethod, callback) {
     var state = initState(list, sortMethod);
-    return iterate(list, iterator, state, function iteratorHandler(error, result) {
+    return iterate(list, iterator, state, /* @__PURE__ */ __name(function iteratorHandler(error, result) {
       if (error) {
         callback(error, result);
         return;
@@ -23309,14 +23597,17 @@ var require_serialOrdered = __commonJS((exports2, module2) => {
         return;
       }
       callback(null, state.results);
-    }), terminator.bind(state, callback);
+    }, "iteratorHandler")), terminator.bind(state, callback);
   }
+  __name(serialOrdered, "serialOrdered");
   function ascending(a, b) {
     return a < b ? -1 : a > b ? 1 : 0;
   }
+  __name(ascending, "ascending");
   function descending(a, b) {
     return -1 * ascending(a, b);
   }
+  __name(descending, "descending");
 });
 
 // ../node_modules/asynckit/serial.js
@@ -23326,6 +23617,7 @@ var require_serial = __commonJS((exports2, module2) => {
   function serial(list, iterator, callback) {
     return serialOrdered(list, iterator, null, callback);
   }
+  __name(serial, "serial");
 });
 
 // ../node_modules/asynckit/index.js
@@ -23358,6 +23650,7 @@ var require_form_data = __commonJS((exports2, module2) => {
     for (var option in options)
       this[option] = options[option];
   }
+  __name(FormData, "FormData");
   FormData.LINE_BREAK = `\r
 `;
   FormData.DEFAULT_CONTENT_TYPE = "application/octet-stream";
@@ -23475,9 +23768,9 @@ var require_form_data = __commonJS((exports2, module2) => {
         return;
       }
       if (request.setHeader("Content-Length", length), this.pipe(request), cb) {
-        var onResponse, callback = function(error, responce) {
+        var onResponse, callback = /* @__PURE__ */ __name(function(error, responce) {
           return request.removeListener("error", callback), request.removeListener("response", onResponse), cb.call(this, error, responce);
-        };
+        }, "callback");
         onResponse = callback.bind(this, null), request.on("error", callback), request.on("response", onResponse);
       }
     }.bind(this)), request;
@@ -23500,7 +23793,7 @@ var require_dist3 = __commonJS((exports2) => {
         throw new Error("key must be a non-empty string");
       this._key = key;
     }
-    return Object.defineProperty(AzureKeyCredential2.prototype, "key", {
+    return __name(AzureKeyCredential2, "AzureKeyCredential"), Object.defineProperty(AzureKeyCredential2.prototype, "key", {
       get: function() {
         return this._key;
       },
@@ -23514,6 +23807,7 @@ var require_dist3 = __commonJS((exports2) => {
     var castCredential = credential;
     return castCredential && typeof castCredential.getToken == "function" && (castCredential.signRequest === void 0 || castCredential.getToken.length > 0);
   }
+  __name(isTokenCredential, "isTokenCredential");
   exports2.AzureKeyCredential = AzureKeyCredential;
   exports2.isTokenCredential = isTokenCredential;
 });
@@ -23525,12 +23819,14 @@ var require_dist4 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
+  __name(_interopDefault, "_interopDefault");
   var tslib = require_tslib(), util = _interopDefault(require("util")), os2 = require("os");
   function log(message) {
     for (var args = [], _i = 1; _i < arguments.length; _i++)
       args[_i - 1] = arguments[_i];
     process.stderr.write("" + util.format.apply(util, tslib.__spread([message], args)) + os2.EOL);
   }
+  __name(log, "log");
   var debugEnvVariable = typeof process != "undefined" && process.env && process.env.DEBUG || void 0, enabledString, enabledNamespaces = [], skippedNamespaces = [], debuggers = [];
   debugEnvVariable && enable(debugEnvVariable);
   var debugObj = Object.assign(function(namespace) {
@@ -23578,6 +23874,7 @@ var require_dist4 = __commonJS((exports2) => {
       }
     }
   }
+  __name(enable, "enable");
   function enabled(namespace) {
     var e_3, _a, e_4, _b;
     if (namespace.endsWith("*"))
@@ -23616,10 +23913,12 @@ var require_dist4 = __commonJS((exports2) => {
     }
     return !1;
   }
+  __name(enabled, "enabled");
   function disable() {
     var result = enabledString || "";
     return enable(""), result;
   }
+  __name(disable, "disable");
   function createDebugger(namespace) {
     var newDebugger = Object.assign(debug, {
       enabled: enabled(namespace),
@@ -23633,16 +23932,19 @@ var require_dist4 = __commonJS((exports2) => {
         args[_i] = arguments[_i];
       !newDebugger.enabled || (args.length > 0 && (args[0] = namespace + " " + args[0]), newDebugger.log.apply(newDebugger, tslib.__spread(args)));
     }
-    return debuggers.push(newDebugger), newDebugger;
+    return __name(debug, "debug"), debuggers.push(newDebugger), newDebugger;
   }
+  __name(createDebugger, "createDebugger");
   function destroy() {
     var index = debuggers.indexOf(this);
     return index >= 0 ? (debuggers.splice(index, 1), !0) : !1;
   }
+  __name(destroy, "destroy");
   function extend(namespace) {
     var newDebugger = createDebugger(this.namespace + ":" + namespace);
     return newDebugger.log = this.log, newDebugger;
   }
+  __name(extend, "extend");
   var registeredLoggers = new Set(), logLevelFromEnv = typeof process != "undefined" && process.env && process.env.AZURE_LOG_LEVEL || void 0, azureLogLevel, AzureLogger = debugObj("azure");
   AzureLogger.log = function() {
     for (var args = [], _i = 0; _i < arguments.length; _i++)
@@ -23674,9 +23976,11 @@ var require_dist4 = __commonJS((exports2) => {
     }
     debugObj.enable(enabledNamespaces2.join(","));
   }
+  __name(setLogLevel, "setLogLevel");
   function getLogLevel() {
     return azureLogLevel;
   }
+  __name(getLogLevel, "getLogLevel");
   var levelMap = {
     verbose: 400,
     info: 300,
@@ -23692,6 +23996,7 @@ var require_dist4 = __commonJS((exports2) => {
       verbose: createLogger(clientRootLogger, "verbose")
     };
   }
+  __name(createClientLogger, "createClientLogger");
   function patchLogMethod(parent, child) {
     child.log = function() {
       for (var args = [], _i = 0; _i < arguments.length; _i++)
@@ -23699,6 +24004,7 @@ var require_dist4 = __commonJS((exports2) => {
       parent.log.apply(parent, tslib.__spread(args));
     };
   }
+  __name(patchLogMethod, "patchLogMethod");
   function createLogger(parent, level) {
     var logger = Object.assign(parent.extend(level), {
       level
@@ -23709,12 +24015,15 @@ var require_dist4 = __commonJS((exports2) => {
     }
     return registeredLoggers.add(logger), logger;
   }
+  __name(createLogger, "createLogger");
   function shouldEnable(logger) {
     return !!(azureLogLevel && levelMap[logger.level] <= levelMap[azureLogLevel]);
   }
+  __name(shouldEnable, "shouldEnable");
   function isAzureLogLevel(logLevel) {
     return AZURE_LOG_LEVELS.includes(logLevel);
   }
+  __name(isAzureLogLevel, "isAzureLogLevel");
   exports2.AzureLogger = AzureLogger;
   exports2.createClientLogger = createClientLogger;
   exports2.getLogLevel = getLogLevel;
@@ -23800,7 +24109,7 @@ var require_defaults = __commonJS((exports2) => {
 var require_Utility = __commonJS((exports2, module2) => {
   (function() {
     var assign, getValue, isArray, isEmpty, isFunction, isObject, isPlainObject, slice = [].slice, hasProp = {}.hasOwnProperty;
-    assign = function() {
+    assign = /* @__PURE__ */ __name(function() {
       var i, key, len, source, sources, target;
       if (target = arguments[0], sources = 2 <= arguments.length ? slice.call(arguments, 1) : [], isFunction(Object.assign))
         Object.assign.apply(null, arguments);
@@ -23810,14 +24119,14 @@ var require_Utility = __commonJS((exports2, module2) => {
             for (key in source)
               !hasProp.call(source, key) || (target[key] = source[key]);
       return target;
-    }, isFunction = function(val) {
+    }, "assign"), isFunction = /* @__PURE__ */ __name(function(val) {
       return !!val && Object.prototype.toString.call(val) === "[object Function]";
-    }, isObject = function(val) {
+    }, "isFunction"), isObject = /* @__PURE__ */ __name(function(val) {
       var ref;
       return !!val && ((ref = typeof val) === "function" || ref === "object");
-    }, isArray = function(val) {
+    }, "isObject"), isArray = /* @__PURE__ */ __name(function(val) {
       return isFunction(Array.isArray) ? Array.isArray(val) : Object.prototype.toString.call(val) === "[object Array]";
-    }, isEmpty = function(val) {
+    }, "isArray"), isEmpty = /* @__PURE__ */ __name(function(val) {
       var key;
       if (isArray(val))
         return !val.length;
@@ -23825,12 +24134,12 @@ var require_Utility = __commonJS((exports2, module2) => {
         if (!!hasProp.call(val, key))
           return !1;
       return !0;
-    }, isPlainObject = function(val) {
+    }, "isEmpty"), isPlainObject = /* @__PURE__ */ __name(function(val) {
       var ctor, proto;
       return isObject(val) && (proto = Object.getPrototypeOf(val)) && (ctor = proto.constructor) && typeof ctor == "function" && ctor instanceof ctor && Function.prototype.toString.call(ctor) === Function.prototype.toString.call(Object);
-    }, getValue = function(obj) {
+    }, "isPlainObject"), getValue = /* @__PURE__ */ __name(function(obj) {
       return isFunction(obj.valueOf) ? obj.valueOf() : obj;
-    }, module2.exports.assign = assign, module2.exports.isFunction = isFunction, module2.exports.isObject = isObject, module2.exports.isArray = isArray, module2.exports.isEmpty = isEmpty, module2.exports.isPlainObject = isPlainObject, module2.exports.getValue = getValue;
+    }, "getValue"), module2.exports.assign = assign, module2.exports.isFunction = isFunction, module2.exports.isObject = isObject, module2.exports.isArray = isArray, module2.exports.isEmpty = isEmpty, module2.exports.isPlainObject = isPlainObject, module2.exports.getValue = getValue;
   }).call(exports2);
 });
 
@@ -23841,7 +24150,7 @@ var require_XMLDOMImplementation = __commonJS((exports2, module2) => {
     module2.exports = XMLDOMImplementation = function() {
       function XMLDOMImplementation2() {
       }
-      return XMLDOMImplementation2.prototype.hasFeature = function(feature, version) {
+      return __name(XMLDOMImplementation2, "XMLDOMImplementation"), XMLDOMImplementation2.prototype.hasFeature = function(feature, version) {
         return !0;
       }, XMLDOMImplementation2.prototype.createDocumentType = function(qualifiedName, publicId, systemId) {
         throw new Error("This DOM method is not implemented.");
@@ -23863,7 +24172,7 @@ var require_XMLDOMErrorHandler = __commonJS((exports2, module2) => {
     module2.exports = XMLDOMErrorHandler = function() {
       function XMLDOMErrorHandler2() {
       }
-      return XMLDOMErrorHandler2.prototype.handleError = function(error) {
+      return __name(XMLDOMErrorHandler2, "XMLDOMErrorHandler"), XMLDOMErrorHandler2.prototype.handleError = function(error) {
         throw new Error(error);
       }, XMLDOMErrorHandler2;
     }();
@@ -23878,7 +24187,7 @@ var require_XMLDOMStringList = __commonJS((exports2, module2) => {
       function XMLDOMStringList2(arr) {
         this.arr = arr || [];
       }
-      return Object.defineProperty(XMLDOMStringList2.prototype, "length", {
+      return __name(XMLDOMStringList2, "XMLDOMStringList"), Object.defineProperty(XMLDOMStringList2.prototype, "length", {
         get: function() {
           return this.arr.length;
         }
@@ -23918,7 +24227,7 @@ var require_XMLDOMConfiguration = __commonJS((exports2, module2) => {
           "well-formed": !0
         }, this.params = clonedSelf = Object.create(this.defaultParams);
       }
-      return Object.defineProperty(XMLDOMConfiguration2.prototype, "parameterNames", {
+      return __name(XMLDOMConfiguration2, "XMLDOMConfiguration"), Object.defineProperty(XMLDOMConfiguration2.prototype, "parameterNames", {
         get: function() {
           return new XMLDOMStringList(Object.keys(this.defaultParams));
         }
@@ -23968,7 +24277,7 @@ var require_XMLAttribute = __commonJS((exports2, module2) => {
           throw new Error("Missing attribute name. " + this.debugInfo(name));
         this.name = this.stringify.name(name), this.value = this.stringify.attValue(value), this.type = NodeType.Attribute, this.isId = !1, this.schemaTypeInfo = null;
       }
-      return Object.defineProperty(XMLAttribute2.prototype, "nodeType", {
+      return __name(XMLAttribute2, "XMLAttribute"), Object.defineProperty(XMLAttribute2.prototype, "nodeType", {
         get: function() {
           return this.type;
         }
@@ -24020,7 +24329,7 @@ var require_XMLNamedNodeMap = __commonJS((exports2, module2) => {
       function XMLNamedNodeMap2(nodes) {
         this.nodes = nodes;
       }
-      return Object.defineProperty(XMLNamedNodeMap2.prototype, "length", {
+      return __name(XMLNamedNodeMap2, "XMLNamedNodeMap"), Object.defineProperty(XMLNamedNodeMap2.prototype, "length", {
         get: function() {
           return Object.keys(this.nodes).length || 0;
         }
@@ -24050,14 +24359,14 @@ var require_XMLNamedNodeMap = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLElement.js
 var require_XMLElement = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLAttribute, XMLElement, XMLNamedNodeMap, XMLNode, getValue, isFunction, isObject, ref, extend = function(child, parent) {
+    var NodeType, XMLAttribute, XMLElement, XMLNamedNodeMap, XMLNode, getValue, isFunction, isObject, ref, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     ref = require_Utility(), isObject = ref.isObject, isFunction = ref.isFunction, getValue = ref.getValue, XMLNode = require_XMLNode(), NodeType = require_NodeType(), XMLAttribute = require_XMLAttribute(), XMLNamedNodeMap = require_XMLNamedNodeMap(), module2.exports = XMLElement = function(superClass) {
       extend(XMLElement2, superClass);
       function XMLElement2(parent, name, attributes) {
@@ -24072,7 +24381,7 @@ var require_XMLElement = __commonJS((exports2, module2) => {
             }
         }
       }
-      return Object.defineProperty(XMLElement2.prototype, "tagName", {
+      return __name(XMLElement2, "XMLElement"), Object.defineProperty(XMLElement2.prototype, "tagName", {
         get: function() {
           return this.name;
         }
@@ -24193,20 +24502,20 @@ var require_XMLElement = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLCharacterData.js
 var require_XMLCharacterData = __commonJS((exports2, module2) => {
   (function() {
-    var XMLCharacterData, XMLNode, extend = function(child, parent) {
+    var XMLCharacterData, XMLNode, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLNode = require_XMLNode(), module2.exports = XMLCharacterData = function(superClass) {
       extend(XMLCharacterData2, superClass);
       function XMLCharacterData2(parent) {
         XMLCharacterData2.__super__.constructor.call(this, parent), this.value = "";
       }
-      return Object.defineProperty(XMLCharacterData2.prototype, "data", {
+      return __name(XMLCharacterData2, "XMLCharacterData"), Object.defineProperty(XMLCharacterData2.prototype, "data", {
         get: function() {
           return this.value;
         },
@@ -24246,14 +24555,14 @@ var require_XMLCharacterData = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLCData.js
 var require_XMLCData = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLCData, XMLCharacterData, extend = function(child, parent) {
+    var NodeType, XMLCData, XMLCharacterData, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLCharacterData = require_XMLCharacterData(), module2.exports = XMLCData = function(superClass) {
       extend(XMLCData2, superClass);
       function XMLCData2(parent, text) {
@@ -24261,7 +24570,7 @@ var require_XMLCData = __commonJS((exports2, module2) => {
           throw new Error("Missing CDATA text. " + this.debugInfo());
         this.name = "#cdata-section", this.type = NodeType.CData, this.value = this.stringify.cdata(text);
       }
-      return XMLCData2.prototype.clone = function() {
+      return __name(XMLCData2, "XMLCData"), XMLCData2.prototype.clone = function() {
         return Object.create(this);
       }, XMLCData2.prototype.toString = function(options) {
         return this.options.writer.cdata(this, this.options.writer.filterOptions(options));
@@ -24273,14 +24582,14 @@ var require_XMLCData = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLComment.js
 var require_XMLComment = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLCharacterData, XMLComment, extend = function(child, parent) {
+    var NodeType, XMLCharacterData, XMLComment, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLCharacterData = require_XMLCharacterData(), module2.exports = XMLComment = function(superClass) {
       extend(XMLComment2, superClass);
       function XMLComment2(parent, text) {
@@ -24288,7 +24597,7 @@ var require_XMLComment = __commonJS((exports2, module2) => {
           throw new Error("Missing comment text. " + this.debugInfo());
         this.name = "#comment", this.type = NodeType.Comment, this.value = this.stringify.comment(text);
       }
-      return XMLComment2.prototype.clone = function() {
+      return __name(XMLComment2, "XMLComment"), XMLComment2.prototype.clone = function() {
         return Object.create(this);
       }, XMLComment2.prototype.toString = function(options) {
         return this.options.writer.comment(this, this.options.writer.filterOptions(options));
@@ -24300,21 +24609,21 @@ var require_XMLComment = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDeclaration.js
 var require_XMLDeclaration = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDeclaration, XMLNode, isObject, extend = function(child, parent) {
+    var NodeType, XMLDeclaration, XMLNode, isObject, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     isObject = require_Utility().isObject, XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDeclaration = function(superClass) {
       extend(XMLDeclaration2, superClass);
       function XMLDeclaration2(parent, version, encoding, standalone) {
         var ref;
         XMLDeclaration2.__super__.constructor.call(this, parent), isObject(version) && (ref = version, version = ref.version, encoding = ref.encoding, standalone = ref.standalone), version || (version = "1.0"), this.type = NodeType.Declaration, this.version = this.stringify.xmlVersion(version), encoding != null && (this.encoding = this.stringify.xmlEncoding(encoding)), standalone != null && (this.standalone = this.stringify.xmlStandalone(standalone));
       }
-      return XMLDeclaration2.prototype.toString = function(options) {
+      return __name(XMLDeclaration2, "XMLDeclaration"), XMLDeclaration2.prototype.toString = function(options) {
         return this.options.writer.declaration(this, this.options.writer.filterOptions(options));
       }, XMLDeclaration2;
     }(XMLNode);
@@ -24324,14 +24633,14 @@ var require_XMLDeclaration = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDTDAttList.js
 var require_XMLDTDAttList = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDTDAttList, XMLNode, extend = function(child, parent) {
+    var NodeType, XMLDTDAttList, XMLNode, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDTDAttList = function(superClass) {
       extend(XMLDTDAttList2, superClass);
       function XMLDTDAttList2(parent, elementName, attributeName, attributeType, defaultValueType, defaultValue) {
@@ -24349,7 +24658,7 @@ var require_XMLDTDAttList = __commonJS((exports2, module2) => {
           throw new Error("Default value only applies to #FIXED or #DEFAULT. " + this.debugInfo(elementName));
         this.elementName = this.stringify.name(elementName), this.type = NodeType.AttributeDeclaration, this.attributeName = this.stringify.name(attributeName), this.attributeType = this.stringify.dtdAttType(attributeType), defaultValue && (this.defaultValue = this.stringify.dtdAttDefault(defaultValue)), this.defaultValueType = defaultValueType;
       }
-      return XMLDTDAttList2.prototype.toString = function(options) {
+      return __name(XMLDTDAttList2, "XMLDTDAttList"), XMLDTDAttList2.prototype.toString = function(options) {
         return this.options.writer.dtdAttList(this, this.options.writer.filterOptions(options));
       }, XMLDTDAttList2;
     }(XMLNode);
@@ -24359,14 +24668,14 @@ var require_XMLDTDAttList = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDTDEntity.js
 var require_XMLDTDEntity = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDTDEntity, XMLNode, isObject, extend = function(child, parent) {
+    var NodeType, XMLDTDEntity, XMLNode, isObject, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     isObject = require_Utility().isObject, XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDTDEntity = function(superClass) {
       extend(XMLDTDEntity2, superClass);
       function XMLDTDEntity2(parent, pe, name, value) {
@@ -24385,7 +24694,7 @@ var require_XMLDTDEntity = __commonJS((exports2, module2) => {
             throw new Error("Notation declaration is not allowed in a parameter entity. " + this.debugInfo(name));
         }
       }
-      return Object.defineProperty(XMLDTDEntity2.prototype, "publicId", {
+      return __name(XMLDTDEntity2, "XMLDTDEntity"), Object.defineProperty(XMLDTDEntity2.prototype, "publicId", {
         get: function() {
           return this.pubID;
         }
@@ -24419,14 +24728,14 @@ var require_XMLDTDEntity = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDTDElement.js
 var require_XMLDTDElement = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDTDElement, XMLNode, extend = function(child, parent) {
+    var NodeType, XMLDTDElement, XMLNode, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDTDElement = function(superClass) {
       extend(XMLDTDElement2, superClass);
       function XMLDTDElement2(parent, name, value) {
@@ -24434,7 +24743,7 @@ var require_XMLDTDElement = __commonJS((exports2, module2) => {
           throw new Error("Missing DTD element name. " + this.debugInfo());
         value || (value = "(#PCDATA)"), Array.isArray(value) && (value = "(" + value.join(",") + ")"), this.name = this.stringify.name(name), this.type = NodeType.ElementDeclaration, this.value = this.stringify.dtdElementValue(value);
       }
-      return XMLDTDElement2.prototype.toString = function(options) {
+      return __name(XMLDTDElement2, "XMLDTDElement"), XMLDTDElement2.prototype.toString = function(options) {
         return this.options.writer.dtdElement(this, this.options.writer.filterOptions(options));
       }, XMLDTDElement2;
     }(XMLNode);
@@ -24444,14 +24753,14 @@ var require_XMLDTDElement = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDTDNotation.js
 var require_XMLDTDNotation = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDTDNotation, XMLNode, extend = function(child, parent) {
+    var NodeType, XMLDTDNotation, XMLNode, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDTDNotation = function(superClass) {
       extend(XMLDTDNotation2, superClass);
       function XMLDTDNotation2(parent, name, value) {
@@ -24461,7 +24770,7 @@ var require_XMLDTDNotation = __commonJS((exports2, module2) => {
           throw new Error("Public or system identifiers are required for an external entity. " + this.debugInfo(name));
         this.name = this.stringify.name(name), this.type = NodeType.NotationDeclaration, value.pubID != null && (this.pubID = this.stringify.dtdPubID(value.pubID)), value.sysID != null && (this.sysID = this.stringify.dtdSysID(value.sysID));
       }
-      return Object.defineProperty(XMLDTDNotation2.prototype, "publicId", {
+      return __name(XMLDTDNotation2, "XMLDTDNotation"), Object.defineProperty(XMLDTDNotation2.prototype, "publicId", {
         get: function() {
           return this.pubID;
         }
@@ -24479,14 +24788,14 @@ var require_XMLDTDNotation = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDocType.js
 var require_XMLDocType = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDocType, XMLNamedNodeMap, XMLNode, isObject, extend = function(child, parent) {
+    var NodeType, XMLDTDAttList, XMLDTDElement, XMLDTDEntity, XMLDTDNotation, XMLDocType, XMLNamedNodeMap, XMLNode, isObject, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     isObject = require_Utility().isObject, XMLNode = require_XMLNode(), NodeType = require_NodeType(), XMLDTDAttList = require_XMLDTDAttList(), XMLDTDEntity = require_XMLDTDEntity(), XMLDTDElement = require_XMLDTDElement(), XMLDTDNotation = require_XMLDTDNotation(), XMLNamedNodeMap = require_XMLNamedNodeMap(), module2.exports = XMLDocType = function(superClass) {
       extend(XMLDocType2, superClass);
       function XMLDocType2(parent, pubID, sysID) {
@@ -24500,7 +24809,7 @@ var require_XMLDocType = __commonJS((exports2, module2) => {
         }
         this.documentObject = parent, isObject(pubID) && (ref1 = pubID, pubID = ref1.pubID, sysID = ref1.sysID), sysID == null && (ref2 = [pubID, sysID], sysID = ref2[0], pubID = ref2[1]), pubID != null && (this.pubID = this.stringify.dtdPubID(pubID)), sysID != null && (this.sysID = this.stringify.dtdSysID(sysID));
       }
-      return Object.defineProperty(XMLDocType2.prototype, "entities", {
+      return __name(XMLDocType2, "XMLDocType"), Object.defineProperty(XMLDocType2.prototype, "entities", {
         get: function() {
           var child, i, len, nodes, ref;
           for (nodes = {}, ref = this.children, i = 0, len = ref.length; i < len; i++)
@@ -24565,14 +24874,14 @@ var require_XMLDocType = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLRaw.js
 var require_XMLRaw = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLNode, XMLRaw, extend = function(child, parent) {
+    var NodeType, XMLNode, XMLRaw, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLNode = require_XMLNode(), module2.exports = XMLRaw = function(superClass) {
       extend(XMLRaw2, superClass);
       function XMLRaw2(parent, text) {
@@ -24580,7 +24889,7 @@ var require_XMLRaw = __commonJS((exports2, module2) => {
           throw new Error("Missing raw text. " + this.debugInfo());
         this.type = NodeType.Raw, this.value = this.stringify.raw(text);
       }
-      return XMLRaw2.prototype.clone = function() {
+      return __name(XMLRaw2, "XMLRaw"), XMLRaw2.prototype.clone = function() {
         return Object.create(this);
       }, XMLRaw2.prototype.toString = function(options) {
         return this.options.writer.raw(this, this.options.writer.filterOptions(options));
@@ -24592,14 +24901,14 @@ var require_XMLRaw = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLText.js
 var require_XMLText = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLCharacterData, XMLText, extend = function(child, parent) {
+    var NodeType, XMLCharacterData, XMLText, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLCharacterData = require_XMLCharacterData(), module2.exports = XMLText = function(superClass) {
       extend(XMLText2, superClass);
       function XMLText2(parent, text) {
@@ -24607,7 +24916,7 @@ var require_XMLText = __commonJS((exports2, module2) => {
           throw new Error("Missing element text. " + this.debugInfo());
         this.name = "#text", this.type = NodeType.Text, this.value = this.stringify.text(text);
       }
-      return Object.defineProperty(XMLText2.prototype, "isElementContentWhitespace", {
+      return __name(XMLText2, "XMLText"), Object.defineProperty(XMLText2.prototype, "isElementContentWhitespace", {
         get: function() {
           throw new Error("This DOM method is not implemented." + this.debugInfo());
         }
@@ -24636,14 +24945,14 @@ var require_XMLText = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLProcessingInstruction.js
 var require_XMLProcessingInstruction = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLCharacterData, XMLProcessingInstruction, extend = function(child, parent) {
+    var NodeType, XMLCharacterData, XMLProcessingInstruction, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLCharacterData = require_XMLCharacterData(), module2.exports = XMLProcessingInstruction = function(superClass) {
       extend(XMLProcessingInstruction2, superClass);
       function XMLProcessingInstruction2(parent, target, value) {
@@ -24651,7 +24960,7 @@ var require_XMLProcessingInstruction = __commonJS((exports2, module2) => {
           throw new Error("Missing instruction target. " + this.debugInfo());
         this.type = NodeType.ProcessingInstruction, this.target = this.stringify.insTarget(target), this.name = this.target, value && (this.value = this.stringify.insValue(value));
       }
-      return XMLProcessingInstruction2.prototype.clone = function() {
+      return __name(XMLProcessingInstruction2, "XMLProcessingInstruction"), XMLProcessingInstruction2.prototype.clone = function() {
         return Object.create(this);
       }, XMLProcessingInstruction2.prototype.toString = function(options) {
         return this.options.writer.processingInstruction(this, this.options.writer.filterOptions(options));
@@ -24665,20 +24974,20 @@ var require_XMLProcessingInstruction = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDummy.js
 var require_XMLDummy = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDummy, XMLNode, extend = function(child, parent) {
+    var NodeType, XMLDummy, XMLNode, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLNode = require_XMLNode(), NodeType = require_NodeType(), module2.exports = XMLDummy = function(superClass) {
       extend(XMLDummy2, superClass);
       function XMLDummy2(parent) {
         XMLDummy2.__super__.constructor.call(this, parent), this.type = NodeType.Dummy;
       }
-      return XMLDummy2.prototype.clone = function() {
+      return __name(XMLDummy2, "XMLDummy"), XMLDummy2.prototype.clone = function() {
         return Object.create(this);
       }, XMLDummy2.prototype.toString = function(options) {
         return "";
@@ -24695,7 +25004,7 @@ var require_XMLNodeList = __commonJS((exports2, module2) => {
       function XMLNodeList2(nodes) {
         this.nodes = nodes;
       }
-      return Object.defineProperty(XMLNodeList2.prototype, "length", {
+      return __name(XMLNodeList2, "XMLNodeList"), Object.defineProperty(XMLNodeList2.prototype, "length", {
         get: function() {
           return this.nodes.length || 0;
         }
@@ -24730,7 +25039,7 @@ var require_XMLNode = __commonJS((exports2, module2) => {
       function XMLNode2(parent1) {
         this.parent = parent1, this.parent && (this.options = this.parent.options, this.stringify = this.parent.stringify), this.value = null, this.children = [], this.baseURI = null, XMLElement || (XMLElement = require_XMLElement(), XMLCData = require_XMLCData(), XMLComment = require_XMLComment(), XMLDeclaration = require_XMLDeclaration(), XMLDocType = require_XMLDocType(), XMLRaw = require_XMLRaw(), XMLText = require_XMLText(), XMLProcessingInstruction = require_XMLProcessingInstruction(), XMLDummy = require_XMLDummy(), NodeType = require_NodeType(), XMLNodeList = require_XMLNodeList(), XMLNamedNodeMap = require_XMLNamedNodeMap(), DocumentPosition = require_DocumentPosition());
       }
-      return Object.defineProperty(XMLNode2.prototype, "nodeName", {
+      return __name(XMLNode2, "XMLNode"), Object.defineProperty(XMLNode2.prototype, "nodeName", {
         get: function() {
           return this.name;
         }
@@ -25039,11 +25348,11 @@ var require_XMLNode = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLStringifier.js
 var require_XMLStringifier = __commonJS((exports2, module2) => {
   (function() {
-    var XMLStringifier, bind = function(fn, me) {
+    var XMLStringifier, bind = /* @__PURE__ */ __name(function(fn, me) {
       return function() {
         return fn.apply(me, arguments);
       };
-    }, hasProp = {}.hasOwnProperty;
+    }, "bind"), hasProp = {}.hasOwnProperty;
     module2.exports = XMLStringifier = function() {
       function XMLStringifier2(options) {
         this.assertLegalName = bind(this.assertLegalName, this), this.assertLegalChar = bind(this.assertLegalChar, this);
@@ -25052,7 +25361,7 @@ var require_XMLStringifier = __commonJS((exports2, module2) => {
         for (key in ref)
           !hasProp.call(ref, key) || (value = ref[key], this[key] = value);
       }
-      return XMLStringifier2.prototype.name = function(val) {
+      return __name(XMLStringifier2, "XMLStringifier"), XMLStringifier2.prototype.name = function(val) {
         return this.options.noValidation ? val : this.assertLegalName("" + val || "");
       }, XMLStringifier2.prototype.text = function(val) {
         return this.options.noValidation ? val : this.assertLegalChar(this.textEscape("" + val || ""));
@@ -25155,7 +25464,7 @@ var require_XMLWriterBase = __commonJS((exports2, module2) => {
         for (key in ref)
           !hasProp.call(ref, key) || (value = ref[key], this["_" + key] = this[key], this[key] = value);
       }
-      return XMLWriterBase2.prototype.filterOptions = function(options) {
+      return __name(XMLWriterBase2, "XMLWriterBase"), XMLWriterBase2.prototype.filterOptions = function(options) {
         var filteredOptions, ref, ref1, ref2, ref3, ref4, ref5, ref6;
         return options || (options = {}), options = assign({}, this.options, options), filteredOptions = {
           writer: this
@@ -25274,20 +25583,20 @@ var require_XMLWriterBase = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLStringWriter.js
 var require_XMLStringWriter = __commonJS((exports2, module2) => {
   (function() {
-    var XMLStringWriter, XMLWriterBase, extend = function(child, parent) {
+    var XMLStringWriter, XMLWriterBase, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     XMLWriterBase = require_XMLWriterBase(), module2.exports = XMLStringWriter = function(superClass) {
       extend(XMLStringWriter2, superClass);
       function XMLStringWriter2(options) {
         XMLStringWriter2.__super__.constructor.call(this, options);
       }
-      return XMLStringWriter2.prototype.document = function(doc, options) {
+      return __name(XMLStringWriter2, "XMLStringWriter"), XMLStringWriter2.prototype.document = function(doc, options) {
         var child, i, len, r, ref;
         for (options = this.filterOptions(options), r = "", ref = doc.children, i = 0, len = ref.length; i < len; i++)
           child = ref[i], r += this.writeChildNode(child, options, 0);
@@ -25300,20 +25609,20 @@ var require_XMLStringWriter = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLDocument.js
 var require_XMLDocument = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, XMLDOMConfiguration, XMLDOMImplementation, XMLDocument, XMLNode, XMLStringWriter, XMLStringifier, isPlainObject, extend = function(child, parent) {
+    var NodeType, XMLDOMConfiguration, XMLDOMImplementation, XMLDocument, XMLNode, XMLStringWriter, XMLStringifier, isPlainObject, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     isPlainObject = require_Utility().isPlainObject, XMLDOMImplementation = require_XMLDOMImplementation(), XMLDOMConfiguration = require_XMLDOMConfiguration(), XMLNode = require_XMLNode(), NodeType = require_NodeType(), XMLStringifier = require_XMLStringifier(), XMLStringWriter = require_XMLStringWriter(), module2.exports = XMLDocument = function(superClass) {
       extend(XMLDocument2, superClass);
       function XMLDocument2(options) {
         XMLDocument2.__super__.constructor.call(this, null), this.name = "#document", this.type = NodeType.Document, this.documentURI = null, this.domConfig = new XMLDOMConfiguration(), options || (options = {}), options.writer || (options.writer = new XMLStringWriter()), this.options = options, this.stringify = new XMLStringifier(options);
       }
-      return Object.defineProperty(XMLDocument2.prototype, "implementation", {
+      return __name(XMLDocument2, "XMLDocument"), Object.defineProperty(XMLDocument2.prototype, "implementation", {
         value: new XMLDOMImplementation()
       }), Object.defineProperty(XMLDocument2.prototype, "doctype", {
         get: function() {
@@ -25432,7 +25741,7 @@ var require_XMLDocumentCB = __commonJS((exports2, module2) => {
         }, this.onEndCallback = onEnd || function() {
         }, this.currentNode = null, this.currentLevel = -1, this.openTags = {}, this.documentStarted = !1, this.documentCompleted = !1, this.root = null;
       }
-      return XMLDocumentCB2.prototype.createChildNode = function(node) {
+      return __name(XMLDocumentCB2, "XMLDocumentCB"), XMLDocumentCB2.prototype.createChildNode = function(node) {
         var att, attName, attributes, child, i, len, ref1, ref2;
         switch (node.type) {
           case NodeType.CData:
@@ -25624,20 +25933,20 @@ var require_XMLDocumentCB = __commonJS((exports2, module2) => {
 // ../node_modules/xmlbuilder/lib/XMLStreamWriter.js
 var require_XMLStreamWriter = __commonJS((exports2, module2) => {
   (function() {
-    var NodeType, WriterState, XMLStreamWriter, XMLWriterBase, extend = function(child, parent) {
+    var NodeType, WriterState, XMLStreamWriter, XMLWriterBase, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     NodeType = require_NodeType(), XMLWriterBase = require_XMLWriterBase(), WriterState = require_WriterState(), module2.exports = XMLStreamWriter = function(superClass) {
       extend(XMLStreamWriter2, superClass);
       function XMLStreamWriter2(stream, options) {
         this.stream = stream, XMLStreamWriter2.__super__.constructor.call(this, options);
       }
-      return XMLStreamWriter2.prototype.endline = function(node, options, level) {
+      return __name(XMLStreamWriter2, "XMLStreamWriter"), XMLStreamWriter2.prototype.endline = function(node, options, level) {
         return node.isLastRootNode && options.state === WriterState.CloseTag ? "" : XMLStreamWriter2.__super__.endline.call(this, node, options, level);
       }, XMLStreamWriter2.prototype.document = function(doc, options) {
         var child, i, j, k, len, len1, ref, ref1, results;
@@ -25723,13 +26032,13 @@ var require_builder = __commonJS((exports2) => {
   (function() {
     "use strict";
     var builder, defaults, escapeCDATA, requiresCDATA, wrapCDATA, hasProp = {}.hasOwnProperty;
-    builder = require_lib2(), defaults = require_defaults().defaults, requiresCDATA = function(entry) {
+    builder = require_lib2(), defaults = require_defaults().defaults, requiresCDATA = /* @__PURE__ */ __name(function(entry) {
       return typeof entry == "string" && (entry.indexOf("&") >= 0 || entry.indexOf(">") >= 0 || entry.indexOf("<") >= 0);
-    }, wrapCDATA = function(entry) {
+    }, "requiresCDATA"), wrapCDATA = /* @__PURE__ */ __name(function(entry) {
       return "<![CDATA[" + escapeCDATA(entry) + "]]>";
-    }, escapeCDATA = function(entry) {
+    }, "wrapCDATA"), escapeCDATA = /* @__PURE__ */ __name(function(entry) {
       return entry.replace("]]>", "]]]]><![CDATA[>");
-    }, exports2.Builder = function() {
+    }, "escapeCDATA"), exports2.Builder = function() {
       function Builder(opts) {
         var key, ref, value;
         this.options = {}, ref = defaults["0.2"];
@@ -25738,7 +26047,7 @@ var require_builder = __commonJS((exports2) => {
         for (key in opts)
           !hasProp.call(opts, key) || (value = opts[key], this.options[key] = value);
       }
-      return Builder.prototype.buildObject = function(rootObj) {
+      return __name(Builder, "Builder"), Builder.prototype.buildObject = function(rootObj) {
         var attrkey, charkey, render, rootElement, rootName;
         return attrkey = this.options.attrkey, charkey = this.options.charkey, Object.keys(rootObj).length === 1 && this.options.rootName === defaults["0.2"].rootName ? (rootName = Object.keys(rootObj)[0], rootObj = rootObj[rootName]) : rootName = this.options.rootName, render = function(_this) {
           return function(element, obj) {
@@ -25823,10 +26132,10 @@ var require_sax = __commonJS((exports2) => {
       var parser = this;
       clearBuffers(parser), parser.q = parser.c = "", parser.bufferCheckPosition = sax.MAX_BUFFER_LENGTH, parser.opt = opt || {}, parser.opt.lowercase = parser.opt.lowercase || parser.opt.lowercasetags, parser.looseCase = parser.opt.lowercase ? "toLowerCase" : "toUpperCase", parser.tags = [], parser.closed = parser.closedRoot = parser.sawRoot = !1, parser.tag = parser.error = null, parser.strict = !!strict, parser.noscript = !!(strict || parser.opt.noscript), parser.state = S.BEGIN, parser.strictEntities = parser.opt.strictEntities, parser.ENTITIES = parser.strictEntities ? Object.create(sax.XML_ENTITIES) : Object.create(sax.ENTITIES), parser.attribList = [], parser.opt.xmlns && (parser.ns = Object.create(rootNS)), parser.trackPosition = parser.opt.position !== !1, parser.trackPosition && (parser.position = parser.line = parser.column = 0), emit(parser, "onready");
     }
-    Object.create || (Object.create = function(o) {
+    __name(SAXParser, "SAXParser"), Object.create || (Object.create = function(o) {
       function F() {
       }
-      F.prototype = o;
+      __name(F, "F"), F.prototype = o;
       var newf = new F();
       return newf;
     }), Object.keys || (Object.keys = function(o) {
@@ -25857,14 +26166,16 @@ var require_sax = __commonJS((exports2) => {
       var m = sax.MAX_BUFFER_LENGTH - maxActual;
       parser.bufferCheckPosition = m + parser.position;
     }
+    __name(checkBufferLength, "checkBufferLength");
     function clearBuffers(parser) {
       for (var i = 0, l = buffers.length; i < l; i++)
         parser[buffers[i]] = "";
     }
+    __name(clearBuffers, "clearBuffers");
     function flushBuffers(parser) {
       closeText(parser), parser.cdata !== "" && (emitNode(parser, "oncdata", parser.cdata), parser.cdata = ""), parser.script !== "" && (emitNode(parser, "onscript", parser.script), parser.script = "");
     }
-    SAXParser.prototype = {
+    __name(flushBuffers, "flushBuffers"), SAXParser.prototype = {
       end: function() {
         end(this);
       },
@@ -25883,8 +26194,8 @@ var require_sax = __commonJS((exports2) => {
     try {
       Stream = require("stream").Stream;
     } catch (ex) {
-      Stream = function() {
-      };
+      Stream = /* @__PURE__ */ __name(function() {
+      }, "Stream");
     }
     var streamWraps = sax.EVENTS.filter(function(ev) {
       return ev !== "error" && ev !== "end";
@@ -25892,6 +26203,7 @@ var require_sax = __commonJS((exports2) => {
     function createStream(strict, opt) {
       return new SAXStream(strict, opt);
     }
+    __name(createStream, "createStream");
     function SAXStream(strict, opt) {
       if (!(this instanceof SAXStream))
         return new SAXStream(strict, opt);
@@ -25916,7 +26228,7 @@ var require_sax = __commonJS((exports2) => {
         });
       });
     }
-    SAXStream.prototype = Object.create(Stream.prototype, {
+    __name(SAXStream, "SAXStream"), SAXStream.prototype = Object.create(Stream.prototype, {
       constructor: {
         value: SAXStream
       }
@@ -25943,18 +26255,23 @@ var require_sax = __commonJS((exports2) => {
       return c === " " || c === `
 ` || c === "\r" || c === "	";
     }
+    __name(isWhitespace, "isWhitespace");
     function isQuote(c) {
       return c === '"' || c === "'";
     }
+    __name(isQuote, "isQuote");
     function isAttribEnd(c) {
       return c === ">" || isWhitespace(c);
     }
+    __name(isAttribEnd, "isAttribEnd");
     function isMatch(regex, c) {
       return regex.test(c);
     }
+    __name(isMatch, "isMatch");
     function notMatch(regex, c) {
       return !isMatch(regex, c);
     }
+    __name(notMatch, "notMatch");
     var S = 0;
     sax.STATE = {
       BEGIN: S++,
@@ -26263,38 +26580,47 @@ var require_sax = __commonJS((exports2) => {
     function emit(parser, event, data) {
       parser[event] && parser[event](data);
     }
+    __name(emit, "emit");
     function emitNode(parser, nodeType, data) {
       parser.textNode && closeText(parser), emit(parser, nodeType, data);
     }
+    __name(emitNode, "emitNode");
     function closeText(parser) {
       parser.textNode = textopts(parser.opt, parser.textNode), parser.textNode && emit(parser, "ontext", parser.textNode), parser.textNode = "";
     }
+    __name(closeText, "closeText");
     function textopts(opt, text) {
       return opt.trim && (text = text.trim()), opt.normalize && (text = text.replace(/\s+/g, " ")), text;
     }
+    __name(textopts, "textopts");
     function error(parser, er) {
       return closeText(parser), parser.trackPosition && (er += `
 Line: ` + parser.line + `
 Column: ` + parser.column + `
 Char: ` + parser.c), er = new Error(er), parser.error = er, emit(parser, "onerror", er), parser;
     }
+    __name(error, "error");
     function end(parser) {
       return parser.sawRoot && !parser.closedRoot && strictFail(parser, "Unclosed root tag"), parser.state !== S.BEGIN && parser.state !== S.BEGIN_WHITESPACE && parser.state !== S.TEXT && error(parser, "Unexpected end"), closeText(parser), parser.c = "", parser.closed = !0, emit(parser, "onend"), SAXParser.call(parser, parser.strict, parser.opt), parser;
     }
+    __name(end, "end");
     function strictFail(parser, message) {
       if (typeof parser != "object" || !(parser instanceof SAXParser))
         throw new Error("bad call to strictFail");
       parser.strict && error(parser, message);
     }
+    __name(strictFail, "strictFail");
     function newTag(parser) {
       parser.strict || (parser.tagName = parser.tagName[parser.looseCase]());
       var parent = parser.tags[parser.tags.length - 1] || parser, tag = parser.tag = {name: parser.tagName, attributes: {}};
       parser.opt.xmlns && (tag.ns = parent.ns), parser.attribList.length = 0, emitNode(parser, "onopentagstart", tag);
     }
+    __name(newTag, "newTag");
     function qname(name, attribute) {
       var i = name.indexOf(":"), qualName = i < 0 ? ["", name] : name.split(":"), prefix = qualName[0], local = qualName[1];
       return attribute && name === "xmlns" && (prefix = "xmlns", local = ""), {prefix, local};
     }
+    __name(qname, "qname");
     function attrib(parser) {
       if (parser.strict || (parser.attribName = parser.attribName[parser.looseCase]()), parser.attribList.indexOf(parser.attribName) !== -1 || parser.tag.attributes.hasOwnProperty(parser.attribName)) {
         parser.attribName = parser.attribValue = "";
@@ -26321,6 +26647,7 @@ Actual: ` + parser.attribValue);
         });
       parser.attribName = parser.attribValue = "";
     }
+    __name(attrib, "attrib");
     function openTag(parser, selfClosing) {
       if (parser.opt.xmlns) {
         var tag = parser.tag, qn = qname(parser.tagName);
@@ -26346,6 +26673,7 @@ Actual: ` + parser.attribValue);
       }
       parser.tag.isSelfClosing = !!selfClosing, parser.sawRoot = !0, parser.tags.push(parser.tag), emitNode(parser, "onopentag", parser.tag), selfClosing || (!parser.noscript && parser.tagName.toLowerCase() === "script" ? parser.state = S.SCRIPT : parser.state = S.TEXT, parser.tag = null, parser.tagName = ""), parser.attribName = parser.attribValue = "", parser.attribList.length = 0;
     }
+    __name(openTag, "openTag");
     function closeTag(parser) {
       if (!parser.tagName) {
         strictFail(parser, "Weird empty close tag."), parser.textNode += "</>", parser.state = S.TEXT;
@@ -26386,17 +26714,21 @@ Actual: ` + parser.attribValue);
       }
       t === 0 && (parser.closedRoot = !0), parser.tagName = parser.attribValue = parser.attribName = "", parser.attribList.length = 0, parser.state = S.TEXT;
     }
+    __name(closeTag, "closeTag");
     function parseEntity(parser) {
       var entity = parser.entity, entityLC = entity.toLowerCase(), num, numStr = "";
       return parser.ENTITIES[entity] ? parser.ENTITIES[entity] : parser.ENTITIES[entityLC] ? parser.ENTITIES[entityLC] : (entity = entityLC, entity.charAt(0) === "#" && (entity.charAt(1) === "x" ? (entity = entity.slice(2), num = parseInt(entity, 16), numStr = num.toString(16)) : (entity = entity.slice(1), num = parseInt(entity, 10), numStr = num.toString(10))), entity = entity.replace(/^0+/, ""), isNaN(num) || numStr.toLowerCase() !== entity ? (strictFail(parser, "Invalid character entity"), "&" + parser.entity + ";") : String.fromCodePoint(num));
     }
+    __name(parseEntity, "parseEntity");
     function beginWhiteSpace(parser, c) {
       c === "<" ? (parser.state = S.OPEN_WAKA, parser.startTagPosition = parser.position) : isWhitespace(c) || (strictFail(parser, "Non-whitespace before first tag."), parser.textNode = c, parser.state = S.TEXT);
     }
+    __name(beginWhiteSpace, "beginWhiteSpace");
     function charAt(chunk, i) {
       var result = "";
       return i < chunk.length && (result = chunk.charAt(i)), result;
     }
+    __name(charAt, "charAt");
     function write(chunk) {
       var parser = this;
       if (this.error)
@@ -26584,9 +26916,10 @@ Actual: ` + parser.attribValue);
         }
       return parser.position >= parser.bufferCheckPosition && checkBufferLength(parser), parser;
     }
+    __name(write, "write");
     /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
     String.fromCodePoint || function() {
-      var stringFromCharCode = String.fromCharCode, floor = Math.floor, fromCodePoint = function() {
+      var stringFromCharCode = String.fromCharCode, floor = Math.floor, fromCodePoint = /* @__PURE__ */ __name(function() {
         var MAX_SIZE = 16384, codeUnits = [], highSurrogate, lowSurrogate, index = -1, length = arguments.length;
         if (!length)
           return "";
@@ -26597,7 +26930,7 @@ Actual: ` + parser.attribValue);
           codePoint <= 65535 ? codeUnits.push(codePoint) : (codePoint -= 65536, highSurrogate = (codePoint >> 10) + 55296, lowSurrogate = codePoint % 1024 + 56320, codeUnits.push(highSurrogate, lowSurrogate)), (index + 1 === length || codeUnits.length > MAX_SIZE) && (result += stringFromCharCode.apply(null, codeUnits), codeUnits.length = 0);
         }
         return result;
-      };
+      }, "fromCodePoint");
       Object.defineProperty ? Object.defineProperty(String, "fromCodePoint", {
         value: fromCodePoint,
         configurable: !0,
@@ -26640,26 +26973,26 @@ var require_processors = __commonJS((exports2) => {
 var require_parser = __commonJS((exports2) => {
   (function() {
     "use strict";
-    var bom, defaults, events, isEmpty, processItem, processors, sax, setImmediate2, bind = function(fn, me) {
+    var bom, defaults, events, isEmpty, processItem, processors, sax, setImmediate2, bind = /* @__PURE__ */ __name(function(fn, me) {
       return function() {
         return fn.apply(me, arguments);
       };
-    }, extend = function(child, parent) {
+    }, "bind"), extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
-    sax = require_sax(), events = require("events"), bom = require_bom(), processors = require_processors(), setImmediate2 = require("timers").setImmediate, defaults = require_defaults().defaults, isEmpty = function(thing) {
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
+    sax = require_sax(), events = require("events"), bom = require_bom(), processors = require_processors(), setImmediate2 = require("timers").setImmediate, defaults = require_defaults().defaults, isEmpty = /* @__PURE__ */ __name(function(thing) {
       return typeof thing == "object" && thing != null && Object.keys(thing).length === 0;
-    }, processItem = function(processors2, item, key) {
+    }, "isEmpty"), processItem = /* @__PURE__ */ __name(function(processors2, item, key) {
       var i, len, process2;
       for (i = 0, len = processors2.length; i < len; i++)
         process2 = processors2[i], item = process2(item, key);
       return item;
-    }, exports2.Parser = function(superClass) {
+    }, "processItem"), exports2.Parser = function(superClass) {
       extend(Parser, superClass);
       function Parser(opts) {
         this.parseStringPromise = bind(this.parseStringPromise, this), this.parseString = bind(this.parseString, this), this.reset = bind(this.reset, this), this.assignOrPush = bind(this.assignOrPush, this), this.processAsync = bind(this.processAsync, this);
@@ -26673,7 +27006,7 @@ var require_parser = __commonJS((exports2) => {
           !hasProp.call(opts, key) || (value = opts[key], this.options[key] = value);
         this.options.xmlns && (this.options.xmlnskey = this.options.attrkey + "ns"), this.options.normalizeTags && (this.options.tagNameProcessors || (this.options.tagNameProcessors = []), this.options.tagNameProcessors.unshift(processors.normalize)), this.reset();
       }
-      return Parser.prototype.processAsync = function() {
+      return __name(Parser, "Parser"), Parser.prototype.processAsync = function() {
         var chunk, err;
         try {
           return this.remaining.length <= this.options.chunkSize ? (chunk = this.remaining, this.remaining = "", this.saxParser = this.saxParser.write(chunk), this.saxParser.close()) : (chunk = this.remaining.substr(0, this.options.chunkSize), this.remaining = this.remaining.substr(this.options.chunkSize, this.remaining.length), this.saxParser = this.saxParser.write(chunk), setImmediate2(this.processAsync));
@@ -26793,20 +27126,20 @@ var require_parser = __commonJS((exports2) => {
 var require_xml2js = __commonJS((exports2) => {
   (function() {
     "use strict";
-    var builder, defaults, parser, processors, extend = function(child, parent) {
+    var builder, defaults, parser, processors, extend = /* @__PURE__ */ __name(function(child, parent) {
       for (var key in parent)
         hasProp.call(parent, key) && (child[key] = parent[key]);
       function ctor() {
         this.constructor = child;
       }
-      return ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
-    }, hasProp = {}.hasOwnProperty;
+      return __name(ctor, "ctor"), ctor.prototype = parent.prototype, child.prototype = new ctor(), child.__super__ = parent.prototype, child;
+    }, "extend"), hasProp = {}.hasOwnProperty;
     defaults = require_defaults(), builder = require_builder(), parser = require_parser(), processors = require_processors(), exports2.defaults = defaults.defaults, exports2.processors = processors, exports2.ValidationError = function(superClass) {
       extend(ValidationError, superClass);
       function ValidationError(message) {
         this.message = message;
       }
-      return ValidationError;
+      return __name(ValidationError, "ValidationError"), ValidationError;
     }(Error), exports2.Builder = builder.Builder, exports2.Parser = parser.Parser, exports2.parseString = parser.parseString, exports2.parseStringPromise = parser.parseStringPromise;
   }).call(exports2);
 });
@@ -26831,6 +27164,7 @@ var require_getter = __commonJS((exports2) => {
   function defaultGetter(carrier, key) {
     return carrier[key];
   }
+  __name(defaultGetter, "defaultGetter");
   exports2.defaultGetter = defaultGetter;
 });
 
@@ -26848,7 +27182,7 @@ var require_NoopHttpTextPropagator = __commonJS((exports2) => {
   var NoopHttpTextPropagator = function() {
     function NoopHttpTextPropagator2() {
     }
-    return NoopHttpTextPropagator2.prototype.inject = function(context2, carrier, setter) {
+    return __name(NoopHttpTextPropagator2, "NoopHttpTextPropagator"), NoopHttpTextPropagator2.prototype.inject = function(context2, carrier, setter) {
     }, NoopHttpTextPropagator2.prototype.extract = function(context2, carrier, getter) {
       return context2;
     }, NoopHttpTextPropagator2;
@@ -26865,6 +27199,7 @@ var require_setter = __commonJS((exports2) => {
   function defaultSetter(carrier, key, value) {
     carrier[key] = value;
   }
+  __name(defaultSetter, "defaultSetter");
   exports2.defaultSetter = defaultSetter;
 });
 
@@ -26924,20 +27259,20 @@ var require_Metric = __commonJS((exports2) => {
 var require_NoopMeter = __commonJS((exports2) => {
   "use strict";
   var __extends = exports2 && exports2.__extends || function() {
-    var extendStatics = function(d, b) {
+    var extendStatics = /* @__PURE__ */ __name(function(d, b) {
       return extendStatics = Object.setPrototypeOf || {__proto__: []} instanceof Array && function(d2, b2) {
         d2.__proto__ = b2;
       } || function(d2, b2) {
         for (var p in b2)
           b2.hasOwnProperty(p) && (d2[p] = b2[p]);
       }, extendStatics(d, b);
-    };
+    }, "extendStatics");
     return function(d, b) {
       extendStatics(d, b);
       function __() {
         this.constructor = d;
       }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+      __name(__, "__"), d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
   }();
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -26945,7 +27280,7 @@ var require_NoopMeter = __commonJS((exports2) => {
   var NoopMeter = function() {
     function NoopMeter2() {
     }
-    return NoopMeter2.prototype.createValueRecorder = function(name, options) {
+    return __name(NoopMeter2, "NoopMeter"), NoopMeter2.prototype.createValueRecorder = function(name, options) {
       return exports2.NOOP_VALUE_RECORDER_METRIC;
     }, NoopMeter2.prototype.createCounter = function(name, options) {
       return exports2.NOOP_COUNTER_METRIC;
@@ -26962,7 +27297,7 @@ var require_NoopMeter = __commonJS((exports2) => {
     function NoopMetric2(instrument) {
       this._instrument = instrument;
     }
-    return NoopMetric2.prototype.bind = function(labels) {
+    return __name(NoopMetric2, "NoopMetric"), NoopMetric2.prototype.bind = function(labels) {
       return this._instrument;
     }, NoopMetric2.prototype.unbind = function(labels) {
     }, NoopMetric2.prototype.clear = function() {
@@ -26974,7 +27309,7 @@ var require_NoopMeter = __commonJS((exports2) => {
     function NoopCounterMetric2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return NoopCounterMetric2.prototype.add = function(value, labels) {
+    return __name(NoopCounterMetric2, "NoopCounterMetric"), NoopCounterMetric2.prototype.add = function(value, labels) {
       this.bind(labels).add(value);
     }, NoopCounterMetric2;
   }(NoopMetric);
@@ -26984,7 +27319,7 @@ var require_NoopMeter = __commonJS((exports2) => {
     function NoopValueRecorderMetric2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return NoopValueRecorderMetric2.prototype.record = function(value, labels, correlationContext, spanContext) {
+    return __name(NoopValueRecorderMetric2, "NoopValueRecorderMetric"), NoopValueRecorderMetric2.prototype.record = function(value, labels, correlationContext, spanContext) {
       typeof correlationContext == "undefined" ? this.bind(labels).record(value) : typeof spanContext == "undefined" ? this.bind(labels).record(value, correlationContext) : this.bind(labels).record(value, correlationContext, spanContext);
     }, NoopValueRecorderMetric2;
   }(NoopMetric);
@@ -26994,7 +27329,7 @@ var require_NoopMeter = __commonJS((exports2) => {
     function NoopBaseObserverMetric2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return NoopBaseObserverMetric2.prototype.observation = function() {
+    return __name(NoopBaseObserverMetric2, "NoopBaseObserverMetric"), NoopBaseObserverMetric2.prototype.observation = function() {
       return {
         observer: this,
         value: 0
@@ -27007,27 +27342,27 @@ var require_NoopMeter = __commonJS((exports2) => {
     function NoopBatchObserverMetric2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return NoopBatchObserverMetric2;
+    return __name(NoopBatchObserverMetric2, "NoopBatchObserverMetric"), NoopBatchObserverMetric2;
   }(NoopMetric);
   exports2.NoopBatchObserverMetric = NoopBatchObserverMetric;
   var NoopBoundCounter = function() {
     function NoopBoundCounter2() {
     }
-    return NoopBoundCounter2.prototype.add = function(value) {
+    return __name(NoopBoundCounter2, "NoopBoundCounter"), NoopBoundCounter2.prototype.add = function(value) {
     }, NoopBoundCounter2;
   }();
   exports2.NoopBoundCounter = NoopBoundCounter;
   var NoopBoundValueRecorder = function() {
     function NoopBoundValueRecorder2() {
     }
-    return NoopBoundValueRecorder2.prototype.record = function(value, correlationContext, spanContext) {
+    return __name(NoopBoundValueRecorder2, "NoopBoundValueRecorder"), NoopBoundValueRecorder2.prototype.record = function(value, correlationContext, spanContext) {
     }, NoopBoundValueRecorder2;
   }();
   exports2.NoopBoundValueRecorder = NoopBoundValueRecorder;
   var NoopBoundBaseObserver = function() {
     function NoopBoundBaseObserver2() {
     }
-    return NoopBoundBaseObserver2.prototype.update = function(value) {
+    return __name(NoopBoundBaseObserver2, "NoopBoundBaseObserver"), NoopBoundBaseObserver2.prototype.update = function(value) {
     }, NoopBoundBaseObserver2;
   }();
   exports2.NoopBoundBaseObserver = NoopBoundBaseObserver;
@@ -27051,7 +27386,7 @@ var require_NoopMeterProvider = __commonJS((exports2) => {
   var NoopMeter_1 = require_NoopMeter(), NoopMeterProvider = function() {
     function NoopMeterProvider2() {
     }
-    return NoopMeterProvider2.prototype.getMeter = function(_name, _version) {
+    return __name(NoopMeterProvider2, "NoopMeterProvider"), NoopMeterProvider2.prototype.getMeter = function(_name, _version) {
       return NoopMeter_1.NOOP_METER;
     }, NoopMeterProvider2;
   }();
@@ -27128,7 +27463,7 @@ var require_NoopSpan = __commonJS((exports2) => {
     function NoopSpan2(_spanContext) {
       _spanContext === void 0 && (_spanContext = INVALID_SPAN_CONTEXT), this._spanContext = _spanContext;
     }
-    return NoopSpan2.prototype.context = function() {
+    return __name(NoopSpan2, "NoopSpan"), NoopSpan2.prototype.context = function() {
       return this._spanContext;
     }, NoopSpan2.prototype.setAttribute = function(key, value) {
       return this;
@@ -27157,7 +27492,7 @@ var require_NoopTracer = __commonJS((exports2) => {
   var NoopSpan_1 = require_NoopSpan(), NoopTracer = function() {
     function NoopTracer2() {
     }
-    return NoopTracer2.prototype.getCurrentSpan = function() {
+    return __name(NoopTracer2, "NoopTracer"), NoopTracer2.prototype.getCurrentSpan = function() {
       return NoopSpan_1.NOOP_SPAN;
     }, NoopTracer2.prototype.startSpan = function(name, options) {
       return NoopSpan_1.NOOP_SPAN;
@@ -27179,7 +27514,7 @@ var require_NoopTracerProvider = __commonJS((exports2) => {
   var NoopTracer_1 = require_NoopTracer(), NoopTracerProvider = function() {
     function NoopTracerProvider2() {
     }
-    return NoopTracerProvider2.prototype.getTracer = function(_name, _version) {
+    return __name(NoopTracerProvider2, "NoopTracerProvider"), NoopTracerProvider2.prototype.getTracer = function(_name, _version) {
       return NoopTracer_1.NOOP_TRACER;
     }, NoopTracerProvider2;
   }();
@@ -27283,7 +27618,7 @@ var require_context = __commonJS((exports2) => {
     function Context2(parentContext) {
       this._currentContext = parentContext ? new Map(parentContext) : new Map();
     }
-    return Context2.createKey = function(description) {
+    return __name(Context2, "Context"), Context2.createKey = function(description) {
       return Symbol(description);
     }, Context2.prototype.getValue = function(key) {
       return this._currentContext.get(key);
@@ -27306,7 +27641,7 @@ var require_NoopContextManager = __commonJS((exports2) => {
   var context_1 = require_context(), NoopContextManager = function() {
     function NoopContextManager2() {
     }
-    return NoopContextManager2.prototype.active = function() {
+    return __name(NoopContextManager2, "NoopContextManager"), NoopContextManager2.prototype.active = function() {
       return context_1.Context.ROOT_CONTEXT;
     }, NoopContextManager2.prototype.with = function(context2, fn) {
       return fn();
@@ -27398,6 +27733,7 @@ var require_global_utils = __commonJS((exports2) => {
       return version === requiredVersion ? instance : fallback;
     };
   }
+  __name(makeGetter, "makeGetter");
   exports2.makeGetter = makeGetter;
   exports2.API_BACKWARDS_COMPATIBILITY_VERSION = 0;
 });
@@ -27410,7 +27746,7 @@ var require_context2 = __commonJS((exports2) => {
   var context_base_1 = require_src(), global_utils_1 = require_global_utils(), NOOP_CONTEXT_MANAGER = new context_base_1.NoopContextManager(), ContextAPI = function() {
     function ContextAPI2() {
     }
-    return ContextAPI2.getInstance = function() {
+    return __name(ContextAPI2, "ContextAPI"), ContextAPI2.getInstance = function() {
       return this._instance || (this._instance = new ContextAPI2()), this._instance;
     }, ContextAPI2.prototype.setGlobalContextManager = function(contextManager) {
       return global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY] ? this._getContextManager() : (global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, contextManager, NOOP_CONTEXT_MANAGER), contextManager);
@@ -27438,7 +27774,7 @@ var require_trace = __commonJS((exports2) => {
   var NoopTracerProvider_1 = require_NoopTracerProvider(), global_utils_1 = require_global_utils(), TraceAPI = function() {
     function TraceAPI2() {
     }
-    return TraceAPI2.getInstance = function() {
+    return __name(TraceAPI2, "TraceAPI"), TraceAPI2.getInstance = function() {
       return this._instance || (this._instance = new TraceAPI2()), this._instance;
     }, TraceAPI2.prototype.setGlobalTracerProvider = function(provider) {
       return global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY] ? this.getTracerProvider() : (global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, provider, NoopTracerProvider_1.NOOP_TRACER_PROVIDER), this.getTracerProvider());
@@ -27462,7 +27798,7 @@ var require_metrics = __commonJS((exports2) => {
   var NoopMeterProvider_1 = require_NoopMeterProvider(), global_utils_1 = require_global_utils(), MetricsAPI = function() {
     function MetricsAPI2() {
     }
-    return MetricsAPI2.getInstance = function() {
+    return __name(MetricsAPI2, "MetricsAPI"), MetricsAPI2.getInstance = function() {
       return this._instance || (this._instance = new MetricsAPI2()), this._instance;
     }, MetricsAPI2.prototype.setGlobalMeterProvider = function(provider) {
       return global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY] ? this.getMeterProvider() : (global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, provider, NoopMeterProvider_1.NOOP_METER_PROVIDER), provider);
@@ -27486,7 +27822,7 @@ var require_propagation = __commonJS((exports2) => {
   var getter_1 = require_getter(), NoopHttpTextPropagator_1 = require_NoopHttpTextPropagator(), setter_1 = require_setter(), context_1 = require_context2(), global_utils_1 = require_global_utils(), contextApi = context_1.ContextAPI.getInstance(), PropagationAPI = function() {
     function PropagationAPI2() {
     }
-    return PropagationAPI2.getInstance = function() {
+    return __name(PropagationAPI2, "PropagationAPI"), PropagationAPI2.getInstance = function() {
       return this._instance || (this._instance = new PropagationAPI2()), this._instance;
     }, PropagationAPI2.prototype.setGlobalPropagator = function(propagator) {
       return global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY] ? this._getGlobalPropagator() : (global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, propagator, NoopHttpTextPropagator_1.NOOP_HTTP_TEXT_PROPAGATOR), propagator);
@@ -27583,7 +27919,7 @@ var require_dist5 = __commonJS((exports2) => {
   var api = require_src2(), tslib = require_tslib(), NoOpSpan = function() {
     function NoOpSpan2() {
     }
-    return NoOpSpan2.prototype.context = function() {
+    return __name(NoOpSpan2, "NoOpSpan"), NoOpSpan2.prototype.context = function() {
       return {
         spanId: "",
         traceId: "",
@@ -27606,7 +27942,7 @@ var require_dist5 = __commonJS((exports2) => {
   }(), NoOpTracer = function() {
     function NoOpTracer2() {
     }
-    return NoOpTracer2.prototype.startSpan = function(_name, _options) {
+    return __name(NoOpTracer2, "NoOpTracer"), NoOpTracer2.prototype.startSpan = function(_name, _options) {
       return new NoOpSpan();
     }, NoOpTracer2.prototype.getCurrentSpan = function() {
       return new NoOpSpan();
@@ -27619,6 +27955,7 @@ var require_dist5 = __commonJS((exports2) => {
   function getGlobalObject() {
     return global;
   }
+  __name(getGlobalObject, "getGlobalObject");
   var GLOBAL_TRACER_VERSION = 3, GLOBAL_TRACER_SYMBOL = Symbol.for("@azure/core-tracing.tracerCache2"), cache;
   function loadTracerCache() {
     var globalObj = getGlobalObject(), existingCache = globalObj[GLOBAL_TRACER_SYMBOL], setGlobalCache = !0;
@@ -27634,26 +27971,31 @@ var require_dist5 = __commonJS((exports2) => {
       version: GLOBAL_TRACER_VERSION
     }), setGlobalCache && (globalObj[GLOBAL_TRACER_SYMBOL] = cache);
   }
+  __name(loadTracerCache, "loadTracerCache");
   function getCache() {
     return cache || loadTracerCache(), cache;
   }
+  __name(getCache, "getCache");
   var defaultTracer;
   function getDefaultTracer() {
     return defaultTracer || (defaultTracer = new NoOpTracer()), defaultTracer;
   }
+  __name(getDefaultTracer, "getDefaultTracer");
   function setTracer(tracer) {
     var cache2 = getCache();
     cache2.tracer = tracer;
   }
+  __name(setTracer, "setTracer");
   function getTracer() {
     var cache2 = getCache();
     return cache2.tracer ? cache2.tracer : getDefaultTracer();
   }
+  __name(getTracer, "getTracer");
   var OpenCensusTraceStateWrapper = function() {
     function OpenCensusTraceStateWrapper2(state) {
       this._state = state;
     }
-    return OpenCensusTraceStateWrapper2.prototype.get = function(_key) {
+    return __name(OpenCensusTraceStateWrapper2, "OpenCensusTraceStateWrapper"), OpenCensusTraceStateWrapper2.prototype.get = function(_key) {
       throw new Error("Method not implemented.");
     }, OpenCensusTraceStateWrapper2.prototype.set = function(_key, _value) {
       throw new Error("Method not implemented.");
@@ -27666,9 +28008,11 @@ var require_dist5 = __commonJS((exports2) => {
   function isWrappedSpan(span) {
     return !!span && span.getWrappedSpan !== void 0;
   }
+  __name(isWrappedSpan, "isWrappedSpan");
   function isTracer(tracerOrSpan) {
     return tracerOrSpan.getWrappedTracer !== void 0;
   }
+  __name(isTracer, "isTracer");
   var OpenCensusSpanWrapper = function() {
     function OpenCensusSpanWrapper2(tracerOrSpan, name, options) {
       if (name === void 0 && (name = ""), options === void 0 && (options = {}), isTracer(tracerOrSpan)) {
@@ -27684,7 +28028,7 @@ var require_dist5 = __commonJS((exports2) => {
       } else
         this._span = tracerOrSpan;
     }
-    return OpenCensusSpanWrapper2.prototype.getWrappedSpan = function() {
+    return __name(OpenCensusSpanWrapper2, "OpenCensusSpanWrapper"), OpenCensusSpanWrapper2.prototype.getWrappedSpan = function() {
       return this._span;
     }, OpenCensusSpanWrapper2.prototype.end = function(_endTime) {
       this._span.end();
@@ -27713,7 +28057,7 @@ var require_dist5 = __commonJS((exports2) => {
     function OpenCensusTracerWrapper2(tracer) {
       this._tracer = tracer;
     }
-    return OpenCensusTracerWrapper2.prototype.getWrappedTracer = function() {
+    return __name(OpenCensusTracerWrapper2, "OpenCensusTracerWrapper"), OpenCensusTracerWrapper2.prototype.getWrappedTracer = function() {
       return this._tracer;
     }, OpenCensusTracerWrapper2.prototype.startSpan = function(name, options) {
       return new OpenCensusSpanWrapper(this, name, options);
@@ -27732,7 +28076,7 @@ var require_dist5 = __commonJS((exports2) => {
         code: api.CanonicalCode.OK
       }, _this.endCalled = !1, _this._context = context2, _this.attributes = {}, _this;
     }
-    return TestSpan2.prototype.tracer = function() {
+    return __name(TestSpan2, "TestSpan"), TestSpan2.prototype.tracer = function() {
       return this._tracer;
     }, TestSpan2.prototype.context = function() {
       return this._context;
@@ -27757,7 +28101,7 @@ var require_dist5 = __commonJS((exports2) => {
       var _this = _super !== null && _super.apply(this, arguments) || this;
       return _this.traceIdCounter = 0, _this.spanIdCounter = 0, _this.rootSpans = [], _this.knownSpans = [], _this;
     }
-    return TestTracer2.prototype.getNextTraceId = function() {
+    return __name(TestTracer2, "TestTracer"), TestTracer2.prototype.getNextTraceId = function() {
       return this.traceIdCounter++, String(this.traceIdCounter);
     }, TestTracer2.prototype.getNextSpanId = function() {
       return this.spanIdCounter++, String(this.spanIdCounter);
@@ -27817,6 +28161,7 @@ var require_dist5 = __commonJS((exports2) => {
       }
     }
   }
+  __name(extractSpanContextFromTraceParentHeader, "extractSpanContextFromTraceParentHeader");
   function getTraceParentHeader(spanContext) {
     var missingFields = [];
     if (spanContext.traceId || missingFields.push("traceId"), spanContext.spanId || missingFields.push("spanId"), !missingFields.length) {
@@ -27824,6 +28169,7 @@ var require_dist5 = __commonJS((exports2) => {
       return VERSION + "-" + spanContext.traceId + "-" + spanContext.spanId + "-" + traceFlags;
     }
   }
+  __name(getTraceParentHeader, "getTraceParentHeader");
   exports2.NoOpSpan = NoOpSpan;
   exports2.NoOpTracer = NoOpTracer;
   exports2.OpenCensusSpanWrapper = OpenCensusSpanWrapper;
@@ -27843,10 +28189,12 @@ var require_dist6 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
+  __name(_interopDefault, "_interopDefault");
   var tslib = require_tslib(), uuid = require_dist(), tough = require_cookie(), http = require("http"), https = require("https"), node_fetch = _interopDefault(require_lib()), abortController = require_dist2(), FormData = _interopDefault(require_form_data()), util = require("util"), url = require("url"), stream = require("stream"), tunnel = require_tunnel2(), coreAuth = require_dist3(), logger$1 = require_dist4(), xml2js = require_xml2js(), os2 = require("os"), coreTracing = require_dist5(), api = require_src2();
   function getHeaderKey(headerName) {
     return headerName.toLowerCase();
   }
+  __name(getHeaderKey, "getHeaderKey");
   function isHttpHeadersLike(object) {
     if (object && typeof object == "object") {
       var castObject = object;
@@ -27855,13 +28203,14 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return !1;
   }
+  __name(isHttpHeadersLike, "isHttpHeadersLike");
   var HttpHeaders = function() {
     function HttpHeaders2(rawHeaders) {
       if (this._headersMap = {}, rawHeaders)
         for (var headerName in rawHeaders)
           this.set(headerName, rawHeaders[headerName]);
     }
-    return HttpHeaders2.prototype.set = function(headerName, headerValue) {
+    return __name(HttpHeaders2, "HttpHeaders"), HttpHeaders2.prototype.set = function(headerName, headerValue) {
       this._headersMap[getHeaderKey(headerName)] = {
         name: headerName,
         value: headerValue.toString()
@@ -27905,13 +28254,16 @@ var require_dist6 = __commonJS((exports2) => {
   function encodeString(value) {
     return Buffer.from(value).toString("base64");
   }
+  __name(encodeString, "encodeString");
   function encodeByteArray(value) {
     var bufferValue = value instanceof Buffer ? value : Buffer.from(value.buffer);
     return bufferValue.toString("base64");
   }
+  __name(encodeByteArray, "encodeByteArray");
   function decodeString(value) {
     return Buffer.from(value, "base64");
   }
+  __name(decodeString, "decodeString");
   var Constants = {
     coreHttpVersion: "1.2.1",
     HTTP: "http:",
@@ -27944,26 +28296,32 @@ var require_dist6 = __commonJS((exports2) => {
   function encodeUri(uri) {
     return encodeURIComponent(uri).replace(/!/g, "%21").replace(/"/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/\*/g, "%2A");
   }
+  __name(encodeUri, "encodeUri");
   function stripResponse(response) {
     var strippedResponse = {};
     return strippedResponse.body = response.bodyAsText, strippedResponse.headers = response.headers, strippedResponse.status = response.status, strippedResponse;
   }
+  __name(stripResponse, "stripResponse");
   function stripRequest(request) {
     var strippedRequest = request.clone();
     return strippedRequest.headers && strippedRequest.headers.remove("authorization"), strippedRequest;
   }
+  __name(stripRequest, "stripRequest");
   function isValidUuid(uuid2) {
     return validUuidRegex.test(uuid2);
   }
+  __name(isValidUuid, "isValidUuid");
   function generateUuid() {
     return uuid.v4();
   }
+  __name(generateUuid, "generateUuid");
   function executePromisesSequentially(promiseFactories, kickstart) {
     var result = Promise.resolve(kickstart);
     return promiseFactories.forEach(function(promiseFactory) {
       result = result.then(promiseFactory);
     }), result;
   }
+  __name(executePromisesSequentially, "executePromisesSequentially");
   function delay(t, value) {
     return new Promise(function(resolve) {
       return setTimeout(function() {
@@ -27971,6 +28329,7 @@ var require_dist6 = __commonJS((exports2) => {
       }, t);
     });
   }
+  __name(delay, "delay");
   function promiseToCallback(promise) {
     if (typeof promise.then != "function")
       throw new Error("The provided input is not a Promise.");
@@ -27982,6 +28341,7 @@ var require_dist6 = __commonJS((exports2) => {
       });
     };
   }
+  __name(promiseToCallback, "promiseToCallback");
   function promiseToServiceCallback(promise) {
     if (typeof promise.then != "function")
       throw new Error("The provided input is not a Promise.");
@@ -27993,6 +28353,7 @@ var require_dist6 = __commonJS((exports2) => {
       });
     };
   }
+  __name(promiseToServiceCallback, "promiseToServiceCallback");
   function prepareXMLRootList(obj, elementName, xmlNamespaceKey, xmlNamespace) {
     var _a, _b, _c;
     if (Array.isArray(obj) || (obj = [obj]), !xmlNamespaceKey || !xmlNamespace)
@@ -28000,6 +28361,7 @@ var require_dist6 = __commonJS((exports2) => {
     var result = (_b = {}, _b[elementName] = obj, _b);
     return result[XML_ATTRKEY] = (_c = {}, _c[xmlNamespaceKey] = xmlNamespace, _c), result;
   }
+  __name(prepareXMLRootList, "prepareXMLRootList");
   function applyMixins(targetCtorParam, sourceCtors) {
     var castTargetCtorParam = targetCtorParam;
     sourceCtors.forEach(function(sourceCtor) {
@@ -28008,30 +28370,35 @@ var require_dist6 = __commonJS((exports2) => {
       });
     });
   }
+  __name(applyMixins, "applyMixins");
   var validateISODuration = /^(-|\+)?P(?:([-+]?[0-9,.]*)Y)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)W)?(?:([-+]?[0-9,.]*)D)?(?:T(?:([-+]?[0-9,.]*)H)?(?:([-+]?[0-9,.]*)M)?(?:([-+]?[0-9,.]*)S)?)?$/;
   function isDuration(value) {
     return validateISODuration.test(value);
   }
+  __name(isDuration, "isDuration");
   function replaceAll(value, searchValue, replaceValue) {
     return !value || !searchValue ? value : value.split(searchValue).join(replaceValue || "");
   }
+  __name(replaceAll, "replaceAll");
   function isPrimitiveType(value) {
     return typeof value != "object" && typeof value != "function" || value === null;
   }
+  __name(isPrimitiveType, "isPrimitiveType");
   function getEnvironmentValue(name) {
     if (process.env[name])
       return process.env[name];
     if (process.env[name.toLowerCase()])
       return process.env[name.toLowerCase()];
   }
+  __name(getEnvironmentValue, "getEnvironmentValue");
   var Serializer = function() {
     function Serializer2(modelMappers, isXML) {
       modelMappers === void 0 && (modelMappers = {}), this.modelMappers = modelMappers, this.isXML = isXML;
     }
-    return Serializer2.prototype.validateConstraints = function(mapper, value, objectName) {
-      var failValidation = function(constraintName, constraintValue) {
+    return __name(Serializer2, "Serializer"), Serializer2.prototype.validateConstraints = function(mapper, value, objectName) {
+      var failValidation = /* @__PURE__ */ __name(function(constraintName, constraintValue) {
         throw new Error('"' + objectName + '" with value "' + value + '" should satisfy the constraint "' + constraintName + '": ' + constraintValue + ".");
-      };
+      }, "failValidation");
       if (mapper.constraints && value != null) {
         var valueAsNumber = value, _a = mapper.constraints, ExclusiveMaximum = _a.ExclusiveMaximum, ExclusiveMinimum = _a.ExclusiveMinimum, InclusiveMaximum = _a.InclusiveMaximum, InclusiveMinimum = _a.InclusiveMinimum, MaxItems = _a.MaxItems, MaxLength = _a.MaxLength, MinItems = _a.MinItems, MinLength = _a.MinLength, MultipleOf = _a.MultipleOf, Pattern = _a.Pattern, UniqueItems = _a.UniqueItems;
         ExclusiveMaximum != null && valueAsNumber >= ExclusiveMaximum && failValidation("ExclusiveMaximum", ExclusiveMaximum), ExclusiveMinimum != null && valueAsNumber <= ExclusiveMinimum && failValidation("ExclusiveMinimum", ExclusiveMinimum), InclusiveMaximum != null && valueAsNumber > InclusiveMaximum && failValidation("InclusiveMaximum", InclusiveMaximum), InclusiveMinimum != null && valueAsNumber < InclusiveMinimum && failValidation("InclusiveMinimum", InclusiveMinimum);
@@ -28100,6 +28467,7 @@ var require_dist6 = __commonJS((exports2) => {
       --len;
     return str.substr(0, len);
   }
+  __name(trimEnd, "trimEnd");
   function bufferToBase64Url(buffer) {
     if (!!buffer) {
       if (!(buffer instanceof Uint8Array))
@@ -28108,6 +28476,7 @@ var require_dist6 = __commonJS((exports2) => {
       return trimEnd(str, "=").replace(/\+/g, "-").replace(/\//g, "_");
     }
   }
+  __name(bufferToBase64Url, "bufferToBase64Url");
   function base64UrlToByteArray(str) {
     if (!!str) {
       if (str && typeof str.valueOf() != "string")
@@ -28115,6 +28484,7 @@ var require_dist6 = __commonJS((exports2) => {
       return str = str.replace(/-/g, "+").replace(/_/g, "/"), decodeString(str);
     }
   }
+  __name(base64UrlToByteArray, "base64UrlToByteArray");
   function splitSerializeName(prop) {
     var classes = [], partialclass = "";
     if (prop)
@@ -28124,14 +28494,17 @@ var require_dist6 = __commonJS((exports2) => {
       }
     return classes;
   }
+  __name(splitSerializeName, "splitSerializeName");
   function dateToUnixTime(d) {
     if (!!d)
       return typeof d.valueOf() == "string" && (d = new Date(d)), Math.floor(d.getTime() / 1e3);
   }
+  __name(dateToUnixTime, "dateToUnixTime");
   function unixTimeToDate(n) {
     if (!!n)
       return new Date(n * 1e3);
   }
+  __name(unixTimeToDate, "unixTimeToDate");
   function serializeBasicTypes(typeName, objectName, value) {
     if (value != null) {
       if (typeName.match(/^Number$/i) !== null) {
@@ -28154,6 +28527,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return value;
   }
+  __name(serializeBasicTypes, "serializeBasicTypes");
   function serializeEnumType(objectName, allowedValues, value) {
     if (!allowedValues)
       throw new Error("Please provide a set of allowedValues to validate " + objectName + " as an Enum Type.");
@@ -28164,6 +28538,7 @@ var require_dist6 = __commonJS((exports2) => {
       throw new Error(value + " is not a valid value for " + objectName + ". The valid values are: " + JSON.stringify(allowedValues) + ".");
     return value;
   }
+  __name(serializeEnumType, "serializeEnumType");
   function serializeByteArrayType(objectName, value) {
     var returnValue = "";
     if (value != null) {
@@ -28173,6 +28548,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return returnValue;
   }
+  __name(serializeByteArrayType, "serializeByteArrayType");
   function serializeBase64UrlType(objectName, value) {
     var returnValue = "";
     if (value != null) {
@@ -28182,6 +28558,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return returnValue;
   }
+  __name(serializeBase64UrlType, "serializeBase64UrlType");
   function serializeDateTypes(typeName, value, objectName) {
     if (value != null) {
       if (typeName.match(/^Date$/i) !== null) {
@@ -28205,6 +28582,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return value;
   }
+  __name(serializeDateTypes, "serializeDateTypes");
   function serializeSequenceType(serializer, mapper, object, objectName, isXml, options) {
     var _a, _b;
     if (!Array.isArray(object))
@@ -28222,6 +28600,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return tempArray;
   }
+  __name(serializeSequenceType, "serializeSequenceType");
   function serializeDictionaryType(serializer, mapper, object, objectName, isXml, options) {
     var _a;
     if (typeof object != "object")
@@ -28239,6 +28618,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return tempDictionary;
   }
+  __name(serializeDictionaryType, "serializeDictionaryType");
   function resolveAdditionalProperties(serializer, mapper, objectName) {
     var additionalProperties = mapper.type.additionalProperties;
     if (!additionalProperties && mapper.type.className) {
@@ -28247,12 +28627,14 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return additionalProperties;
   }
+  __name(resolveAdditionalProperties, "resolveAdditionalProperties");
   function resolveReferencedMapper(serializer, mapper, objectName) {
     var className = mapper.type.className;
     if (!className)
       throw new Error('Class name for model "' + objectName + '" is not provided in the mapper "' + JSON.stringify(mapper, void 0, 2) + '".');
     return serializer.modelMappers[className];
   }
+  __name(resolveReferencedMapper, "resolveReferencedMapper");
   function resolveModelProperties(serializer, mapper, objectName) {
     var modelProps = mapper.type.modelProperties;
     if (!modelProps) {
@@ -28264,6 +28646,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return modelProps;
   }
+  __name(resolveModelProperties, "resolveModelProperties");
   function serializeCompositeType(serializer, mapper, object, objectName, isXml, options) {
     var _a, _b;
     if (getPolymorphicDiscriminatorRecursively(serializer, mapper) && (mapper = getPolymorphicMapper(serializer, mapper, object, "clientName")), object != null) {
@@ -28298,12 +28681,12 @@ var require_dist6 = __commonJS((exports2) => {
       }
       var additionalPropertiesMapper = resolveAdditionalProperties(serializer, mapper, objectName);
       if (additionalPropertiesMapper) {
-        var propNames = Object.keys(modelProps), _loop_1 = function(clientPropName2) {
+        var propNames = Object.keys(modelProps), _loop_1 = /* @__PURE__ */ __name(function(clientPropName2) {
           var isAdditionalProperty = propNames.every(function(pn) {
             return pn !== clientPropName2;
           });
           isAdditionalProperty && (payload[clientPropName2] = serializer.serialize(additionalPropertiesMapper, object[clientPropName2], objectName + '["' + clientPropName2 + '"]', options));
-        };
+        }, "_loop_1");
         for (var clientPropName in object)
           _loop_1(clientPropName);
       }
@@ -28311,6 +28694,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return object;
   }
+  __name(serializeCompositeType, "serializeCompositeType");
   function getXmlObjectValue(propertyMapper, serializedValue, isXml, options) {
     var _a;
     if (!isXml || !propertyMapper.xmlNamespace)
@@ -28325,9 +28709,11 @@ var require_dist6 = __commonJS((exports2) => {
     var result = {};
     return result[options.xmlCharKey] = serializedValue, result[XML_ATTRKEY] = xmlNamespace, result;
   }
+  __name(getXmlObjectValue, "getXmlObjectValue");
   function isSpecialXmlProperty(propertyName, options) {
     return [XML_ATTRKEY, options.xmlCharKey].includes(propertyName);
   }
+  __name(isSpecialXmlProperty, "isSpecialXmlProperty");
   function deserializeCompositeType(serializer, mapper, responseBody, objectName, options) {
     var _a;
     getPolymorphicDiscriminatorRecursively(serializer, mapper) && (mapper = getPolymorphicMapper(serializer, mapper, responseBody, "serializedName"));
@@ -28372,14 +28758,14 @@ var require_dist6 = __commonJS((exports2) => {
     }
     var additionalPropertiesMapper = mapper.type.additionalProperties;
     if (additionalPropertiesMapper) {
-      var isAdditionalProperty = function(responsePropName2) {
+      var isAdditionalProperty = /* @__PURE__ */ __name(function(responsePropName2) {
         for (var clientPropName in modelProps) {
           var paths2 = splitSerializeName(modelProps[clientPropName].serializedName);
           if (paths2[0] === responsePropName2)
             return !1;
         }
         return !0;
-      };
+      }, "isAdditionalProperty");
       for (var responsePropName in responseBody)
         isAdditionalProperty(responsePropName) && (instance[responsePropName] = serializer.deserialize(additionalPropertiesMapper, responseBody[responsePropName], objectName + '["' + responsePropName + '"]', options));
     } else if (responseBody)
@@ -28389,6 +28775,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     return instance;
   }
+  __name(deserializeCompositeType, "deserializeCompositeType");
   function deserializeDictionaryType(serializer, mapper, responseBody, objectName, options) {
     var value = mapper.type.value;
     if (!value || typeof value != "object")
@@ -28402,6 +28789,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return responseBody;
   }
+  __name(deserializeDictionaryType, "deserializeDictionaryType");
   function deserializeSequenceType(serializer, mapper, responseBody, objectName, options) {
     var element = mapper.type.element;
     if (!element || typeof element != "object")
@@ -28414,6 +28802,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return responseBody;
   }
+  __name(deserializeSequenceType, "deserializeSequenceType");
   function getPolymorphicMapper(serializer, mapper, object, polymorphicPropertyName) {
     var polymorphicDiscriminator = getPolymorphicDiscriminatorRecursively(serializer, mapper);
     if (polymorphicDiscriminator) {
@@ -28428,12 +28817,15 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return mapper;
   }
+  __name(getPolymorphicMapper, "getPolymorphicMapper");
   function getPolymorphicDiscriminatorRecursively(serializer, mapper) {
     return mapper.type.polymorphicDiscriminator || getPolymorphicDiscriminatorSafely(serializer, mapper.type.uberParent) || getPolymorphicDiscriminatorSafely(serializer, mapper.type.className);
   }
+  __name(getPolymorphicDiscriminatorRecursively, "getPolymorphicDiscriminatorRecursively");
   function getPolymorphicDiscriminatorSafely(serializer, typeName) {
     return typeName && serializer.modelMappers[typeName] && serializer.modelMappers[typeName].type.polymorphicDiscriminator;
   }
+  __name(getPolymorphicDiscriminatorSafely, "getPolymorphicDiscriminatorSafely");
   function serializeObject(toSerialize) {
     var castToSerialize = toSerialize;
     if (toSerialize != null) {
@@ -28454,6 +28846,7 @@ var require_dist6 = __commonJS((exports2) => {
       return toSerialize;
     }
   }
+  __name(serializeObject, "serializeObject");
   function strEnum(o) {
     for (var result = {}, _i = 0, o_1 = o; _i < o_1.length; _i++) {
       var key = o_1[_i];
@@ -28461,6 +28854,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(strEnum, "strEnum");
   var MapperType = strEnum([
     "Base64Url",
     "Boolean",
@@ -28487,11 +28881,12 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return !1;
   }
+  __name(isWebResourceLike, "isWebResourceLike");
   var WebResource = function() {
     function WebResource2(url2, method, body, query, headers, streamResponseBody, withCredentials, abortSignal, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse) {
       this.streamResponseBody = streamResponseBody, this.url = url2 || "", this.method = method || "GET", this.headers = isHttpHeadersLike(headers) ? headers : new HttpHeaders(headers), this.body = body, this.query = query, this.formData = void 0, this.withCredentials = withCredentials || !1, this.abortSignal = abortSignal, this.timeout = timeout || 0, this.onUploadProgress = onUploadProgress, this.onDownloadProgress = onDownloadProgress, this.proxySettings = proxySettings, this.keepAlive = keepAlive, this.decompressResponse = decompressResponse, this.requestId = this.headers.get("x-ms-client-request-id") || generateUuid();
     }
-    return WebResource2.prototype.validateRequestProperties = function() {
+    return __name(WebResource2, "WebResource"), WebResource2.prototype.validateRequestProperties = function() {
       if (!this.method)
         throw new Error("WebResource.method is required.");
       if (!this.url)
@@ -28574,7 +28969,7 @@ var require_dist6 = __commonJS((exports2) => {
     function URLQuery2() {
       this._rawQuery = {};
     }
-    return URLQuery2.prototype.any = function() {
+    return __name(URLQuery2, "URLQuery"), URLQuery2.prototype.any = function() {
       return Object.keys(this._rawQuery).length > 0;
     }, URLQuery2.prototype.keys = function() {
       return Object.keys(this._rawQuery);
@@ -28644,7 +29039,7 @@ var require_dist6 = __commonJS((exports2) => {
   }(), URLBuilder = function() {
     function URLBuilder2() {
     }
-    return URLBuilder2.prototype.setScheme = function(scheme) {
+    return __name(URLBuilder2, "URLBuilder"), URLBuilder2.prototype.setScheme = function(scheme) {
       scheme ? this.set(scheme, "SCHEME") : this._scheme = void 0;
     }, URLBuilder2.prototype.getScheme = function() {
       return this._scheme;
@@ -28719,7 +29114,7 @@ var require_dist6 = __commonJS((exports2) => {
     function URLToken2(text, type) {
       this.text = text, this.type = type;
     }
-    return URLToken2.scheme = function(text) {
+    return __name(URLToken2, "URLToken"), URLToken2.scheme = function(text) {
       return new URLToken2(text, "SCHEME");
     }, URLToken2.host = function(text) {
       return new URLToken2(text, "HOST");
@@ -28735,11 +29130,12 @@ var require_dist6 = __commonJS((exports2) => {
     var characterCode = character.charCodeAt(0);
     return 48 <= characterCode && characterCode <= 57 || 65 <= characterCode && characterCode <= 90 || 97 <= characterCode && characterCode <= 122;
   }
+  __name(isAlphaNumericCharacter, "isAlphaNumericCharacter");
   var URLTokenizer = function() {
     function URLTokenizer2(_text, state) {
       this._text = _text, this._textLength = _text ? _text.length : 0, this._currentState = state != null ? state : "SCHEME_OR_HOST", this._currentIndex = 0;
     }
-    return URLTokenizer2.prototype.current = function() {
+    return __name(URLTokenizer2, "URLTokenizer"), URLTokenizer2.prototype.current = function() {
       return this._currentToken;
     }, URLTokenizer2.prototype.next = function() {
       if (!hasCurrentCharacter(this))
@@ -28774,19 +29170,24 @@ var require_dist6 = __commonJS((exports2) => {
     var result = "";
     return tokenizer._currentIndex < tokenizer._textLength && (result = tokenizer._text.substring(tokenizer._currentIndex), tokenizer._currentIndex = tokenizer._textLength), result;
   }
+  __name(readRemaining, "readRemaining");
   function hasCurrentCharacter(tokenizer) {
     return tokenizer._currentIndex < tokenizer._textLength;
   }
+  __name(hasCurrentCharacter, "hasCurrentCharacter");
   function getCurrentCharacter(tokenizer) {
     return tokenizer._text[tokenizer._currentIndex];
   }
+  __name(getCurrentCharacter, "getCurrentCharacter");
   function nextCharacter(tokenizer, step) {
     hasCurrentCharacter(tokenizer) && (step || (step = 1), tokenizer._currentIndex += step);
   }
+  __name(nextCharacter, "nextCharacter");
   function peekCharacters(tokenizer, charactersToPeek) {
     var endIndex = tokenizer._currentIndex + charactersToPeek;
     return tokenizer._textLength < endIndex && (endIndex = tokenizer._textLength), tokenizer._text.substring(tokenizer._currentIndex, endIndex);
   }
+  __name(peekCharacters, "peekCharacters");
   function readWhile(tokenizer, condition) {
     for (var result = ""; hasCurrentCharacter(tokenizer); ) {
       var currentCharacter = getCurrentCharacter(tokenizer);
@@ -28797,11 +29198,13 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(readWhile, "readWhile");
   function readWhileLetterOrDigit(tokenizer) {
     return readWhile(tokenizer, function(character) {
       return isAlphaNumericCharacter(character);
     });
   }
+  __name(readWhileLetterOrDigit, "readWhileLetterOrDigit");
   function readUntilCharacter(tokenizer) {
     for (var terminatingCharacters = [], _i = 1; _i < arguments.length; _i++)
       terminatingCharacters[_i - 1] = arguments[_i];
@@ -28809,33 +29212,40 @@ var require_dist6 = __commonJS((exports2) => {
       return terminatingCharacters.indexOf(character) === -1;
     });
   }
+  __name(readUntilCharacter, "readUntilCharacter");
   function nextScheme(tokenizer) {
     var scheme = readWhileLetterOrDigit(tokenizer);
     tokenizer._currentToken = URLToken.scheme(scheme), hasCurrentCharacter(tokenizer) ? tokenizer._currentState = "HOST" : tokenizer._currentState = "DONE";
   }
+  __name(nextScheme, "nextScheme");
   function nextSchemeOrHost(tokenizer) {
     var schemeOrHost = readUntilCharacter(tokenizer, ":", "/", "?");
     hasCurrentCharacter(tokenizer) ? getCurrentCharacter(tokenizer) === ":" ? peekCharacters(tokenizer, 3) === "://" ? (tokenizer._currentToken = URLToken.scheme(schemeOrHost), tokenizer._currentState = "HOST") : (tokenizer._currentToken = URLToken.host(schemeOrHost), tokenizer._currentState = "PORT") : (tokenizer._currentToken = URLToken.host(schemeOrHost), getCurrentCharacter(tokenizer) === "/" ? tokenizer._currentState = "PATH" : tokenizer._currentState = "QUERY") : (tokenizer._currentToken = URLToken.host(schemeOrHost), tokenizer._currentState = "DONE");
   }
+  __name(nextSchemeOrHost, "nextSchemeOrHost");
   function nextHost(tokenizer) {
     peekCharacters(tokenizer, 3) === "://" && nextCharacter(tokenizer, 3);
     var host = readUntilCharacter(tokenizer, ":", "/", "?");
     tokenizer._currentToken = URLToken.host(host), hasCurrentCharacter(tokenizer) ? getCurrentCharacter(tokenizer) === ":" ? tokenizer._currentState = "PORT" : getCurrentCharacter(tokenizer) === "/" ? tokenizer._currentState = "PATH" : tokenizer._currentState = "QUERY" : tokenizer._currentState = "DONE";
   }
+  __name(nextHost, "nextHost");
   function nextPort(tokenizer) {
     getCurrentCharacter(tokenizer) === ":" && nextCharacter(tokenizer);
     var port = readUntilCharacter(tokenizer, "/", "?");
     tokenizer._currentToken = URLToken.port(port), hasCurrentCharacter(tokenizer) ? getCurrentCharacter(tokenizer) === "/" ? tokenizer._currentState = "PATH" : tokenizer._currentState = "QUERY" : tokenizer._currentState = "DONE";
   }
+  __name(nextPort, "nextPort");
   function nextPath(tokenizer) {
     var path3 = readUntilCharacter(tokenizer, "?");
     tokenizer._currentToken = URLToken.path(path3), hasCurrentCharacter(tokenizer) ? tokenizer._currentState = "QUERY" : tokenizer._currentState = "DONE";
   }
+  __name(nextPath, "nextPath");
   function nextQuery(tokenizer) {
     getCurrentCharacter(tokenizer) === "?" && nextCharacter(tokenizer);
     var query = readRemaining(tokenizer);
     tokenizer._currentToken = URLToken.query(query), tokenizer._currentState = "DONE";
   }
+  __name(nextQuery, "nextQuery");
   var RedactedString = "REDACTED", defaultAllowedHeaderNames = [
     "x-ms-client-request-id",
     "x-ms-return-client-request-id",
@@ -28882,7 +29292,7 @@ var require_dist6 = __commonJS((exports2) => {
         return p.toLowerCase();
       }));
     }
-    return Sanitizer2.prototype.sanitize = function(obj) {
+    return __name(Sanitizer2, "Sanitizer"), Sanitizer2.prototype.sanitize = function(obj) {
       return JSON.stringify(obj, this.replacer.bind(this), 2);
     }, Sanitizer2.prototype.replacer = function(key, value) {
       return value instanceof Error ? tslib.__assign(tslib.__assign({}, value), {name: value.name, message: value.message}) : key === "_headersMap" ? this.sanitizeHeaders(key, value) : key === "url" ? this.sanitizeUrl(value) : key === "query" ? this.sanitizeQuery(value) : key === "body" || key === "response" || key === "operationSpec" ? void 0 : value;
@@ -28920,7 +29330,7 @@ var require_dist6 = __commonJS((exports2) => {
       var _this = _super.call(this, message) || this;
       return _this.name = "RestError", _this.code = code, _this.statusCode = statusCode, _this.request = request, _this.response = response, Object.setPrototypeOf(_this, RestError2.prototype), _this;
     }
-    return RestError2.prototype[custom] = function() {
+    return __name(RestError2, "RestError"), RestError2.prototype[custom] = function() {
       return "RestError: " + this.message + ` 
  ` + errorSanitizer.sanitize(this);
     }, RestError2.REQUEST_SEND_ERROR = "REQUEST_SEND_ERROR", RestError2.PARSE_ERROR = "PARSE_ERROR", RestError2;
@@ -28930,13 +29340,13 @@ var require_dist6 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this.progressCallback = progressCallback, _this.loadedBytes = 0, _this;
     }
-    return ReportTransform2.prototype._transform = function(chunk, _encoding, callback) {
+    return __name(ReportTransform2, "ReportTransform"), ReportTransform2.prototype._transform = function(chunk, _encoding, callback) {
       this.push(chunk), this.loadedBytes += chunk.length, this.progressCallback({loadedBytes: this.loadedBytes}), callback(void 0);
     }, ReportTransform2;
   }(stream.Transform), FetchHttpClient = function() {
     function FetchHttpClient2() {
     }
-    return FetchHttpClient2.prototype.sendRequest = function(httpRequest) {
+    return __name(FetchHttpClient2, "FetchHttpClient"), FetchHttpClient2.prototype.sendRequest = function(httpRequest) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var abortController$1, abortListener, formData, requestForm_1, appendFormValue, _i, _a, formKey, formValue, j, contentType, body, onUploadProgress, uploadReportStream, platformSpecificRequestInit, requestInit, response, headers, operationResponse, _b, onDownloadProgress, responseBody, downloadReportStream, length_1, error_1, fetchError, _c;
         return tslib.__generator(this, function(_d) {
@@ -28947,16 +29357,16 @@ var require_dist6 = __commonJS((exports2) => {
               if (abortController$1 = new abortController.AbortController(), httpRequest.abortSignal) {
                 if (httpRequest.abortSignal.aborted)
                   throw new abortController.AbortError("The operation was aborted.");
-                abortListener = function(event) {
+                abortListener = /* @__PURE__ */ __name(function(event) {
                   event.type === "abort" && abortController$1.abort();
-                }, httpRequest.abortSignal.addEventListener("abort", abortListener);
+                }, "abortListener"), httpRequest.abortSignal.addEventListener("abort", abortListener);
               }
               if (httpRequest.timeout && setTimeout(function() {
                 abortController$1.abort();
               }, httpRequest.timeout), httpRequest.formData) {
-                for (formData = httpRequest.formData, requestForm_1 = new FormData(), appendFormValue = function(key, value) {
+                for (formData = httpRequest.formData, requestForm_1 = new FormData(), appendFormValue = /* @__PURE__ */ __name(function(key, value) {
                   typeof value == "function" && (value = value()), value && Object.prototype.hasOwnProperty.call(value, "value") && Object.prototype.hasOwnProperty.call(value, "options") ? requestForm_1.append(key, value.value, value.options) : requestForm_1.append(key, value);
-                }, _i = 0, _a = Object.keys(formData); _i < _a.length; _i++)
+                }, "appendFormValue"), _i = 0, _a = Object.keys(formData); _i < _a.length; _i++)
                   if (formKey = _a[_i], formValue = formData[formKey], Array.isArray(formValue))
                     for (j = 0; j < formValue.length; j++)
                       appendFormValue(formKey, formValue[j]);
@@ -28998,12 +29408,14 @@ var require_dist6 = __commonJS((exports2) => {
   function isReadableStream(body) {
     return body && typeof body.pipe == "function";
   }
+  __name(isReadableStream, "isReadableStream");
   function parseHeaders(headers) {
     var httpHeaders = new HttpHeaders();
     return headers.forEach(function(value, key) {
       httpHeaders.set(key, value);
     }), httpHeaders;
   }
+  __name(parseHeaders, "parseHeaders");
   function createProxyAgent(requestUrl, proxySettings, headers) {
     var host = URLBuilder.parse(proxySettings.host).getHost();
     if (!host)
@@ -29024,26 +29436,31 @@ var require_dist6 = __commonJS((exports2) => {
     };
     return proxyAgent;
   }
+  __name(createProxyAgent, "createProxyAgent");
   function isUrlHttps(url2) {
     var urlScheme = URLBuilder.parse(url2).getScheme() || "";
     return urlScheme.toLowerCase() === "https";
   }
+  __name(isUrlHttps, "isUrlHttps");
   function createTunnel(isRequestHttps, isProxyHttps, tunnelOptions) {
     return isRequestHttps && isProxyHttps ? tunnel.httpsOverHttps(tunnelOptions) : isRequestHttps && !isProxyHttps ? tunnel.httpsOverHttp(tunnelOptions) : !isRequestHttps && isProxyHttps ? tunnel.httpOverHttps(tunnelOptions) : tunnel.httpOverHttp(tunnelOptions);
   }
+  __name(createTunnel, "createTunnel");
   function isValidPort(port) {
     return 0 <= port && port <= 65535;
   }
+  __name(isValidPort, "isValidPort");
   function getCachedAgent(isHttps, agentCache) {
     return isHttps ? agentCache.httpsAgent : agentCache.httpAgent;
   }
+  __name(getCachedAgent, "getCachedAgent");
   var NodeFetchHttpClient = function(_super) {
     tslib.__extends(NodeFetchHttpClient2, _super);
     function NodeFetchHttpClient2() {
       var _this = _super !== null && _super.apply(this, arguments) || this;
       return _this.proxyAgents = {}, _this.keepAliveAgents = {}, _this.cookieJar = new tough.CookieJar(void 0, {looseMode: !0}), _this;
     }
-    return NodeFetchHttpClient2.prototype.getOrCreateAgent = function(httpRequest) {
+    return __name(NodeFetchHttpClient2, "NodeFetchHttpClient"), NodeFetchHttpClient2.prototype.getOrCreateAgent = function(httpRequest) {
       var isHttps = isUrlHttps(httpRequest.url);
       if (httpRequest.proxySettings) {
         var agent = getCachedAgent(isHttps, this.proxyAgents);
@@ -29112,11 +29529,12 @@ var require_dist6 = __commonJS((exports2) => {
     var requestOptions = opts.requestOptions, tracingOptions = opts.tracingOptions, additionalOptions = tslib.__rest(opts, ["requestOptions", "tracingOptions"]), result = additionalOptions;
     return requestOptions && (result = tslib.__assign(tslib.__assign({}, result), requestOptions)), tracingOptions && (result.spanOptions = tracingOptions.spanOptions), result;
   }
+  __name(operationOptionsToRequestOptionsBase, "operationOptionsToRequestOptionsBase");
   var BaseRequestPolicy = function() {
     function BaseRequestPolicy2(_nextPolicy, _options) {
       this._nextPolicy = _nextPolicy, this._options = _options;
     }
-    return BaseRequestPolicy2.prototype.shouldLog = function(logLevel) {
+    return __name(BaseRequestPolicy2, "BaseRequestPolicy"), BaseRequestPolicy2.prototype.shouldLog = function(logLevel) {
       return this._options.shouldLog(logLevel);
     }, BaseRequestPolicy2.prototype.log = function(logLevel, message) {
       this._options.log(logLevel, message);
@@ -29125,7 +29543,7 @@ var require_dist6 = __commonJS((exports2) => {
     function RequestPolicyOptions2(_logger) {
       this._logger = _logger;
     }
-    return RequestPolicyOptions2.prototype.shouldLog = function(logLevel) {
+    return __name(RequestPolicyOptions2, "RequestPolicyOptions"), RequestPolicyOptions2.prototype.shouldLog = function(logLevel) {
       return !!this._logger && logLevel !== exports2.HttpPipelineLogLevel.OFF && logLevel <= this._logger.minimumLogLevel;
     }, RequestPolicyOptions2.prototype.log = function(logLevel, message) {
       this._logger && this.shouldLog(logLevel) && this._logger.log(logLevel, message);
@@ -29138,13 +29556,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(logPolicy, "logPolicy");
   var LogPolicy = function(_super) {
     tslib.__extends(LogPolicy2, _super);
     function LogPolicy2(nextPolicy, options, _a) {
       var _b = _a === void 0 ? {} : _a, _c = _b.logger, logger$12 = _c === void 0 ? logger.info : _c, _d = _b.allowedHeaderNames, allowedHeaderNames = _d === void 0 ? [] : _d, _e = _b.allowedQueryParameters, allowedQueryParameters = _e === void 0 ? [] : _e, _this = _super.call(this, nextPolicy, options) || this;
       return _this.logger = logger$12, _this.sanitizer = new Sanitizer({allowedHeaderNames, allowedQueryParameters}), _this;
     }
-    return Object.defineProperty(LogPolicy2.prototype, "allowedHeaderNames", {
+    return __name(LogPolicy2, "LogPolicy"), Object.defineProperty(LogPolicy2.prototype, "allowedHeaderNames", {
       get: function() {
         return this.sanitizer.allowedHeaderNames;
       },
@@ -29176,10 +29595,12 @@ var require_dist6 = __commonJS((exports2) => {
   function getPathStringFromParameter(parameter) {
     return getPathStringFromParameterPath(parameter.parameterPath, parameter.mapper);
   }
+  __name(getPathStringFromParameter, "getPathStringFromParameter");
   function getPathStringFromParameterPath(parameterPath, mapper) {
     var result;
     return typeof parameterPath == "string" ? result = parameterPath : Array.isArray(parameterPath) ? result = parameterPath.join(".") : result = mapper.serializedName, result;
   }
+  __name(getPathStringFromParameterPath, "getPathStringFromParameterPath");
   function isStreamOperation(operationSpec) {
     var result = !1;
     for (var statusCode in operationSpec.responses) {
@@ -29191,6 +29612,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(isStreamOperation, "isStreamOperation");
   var xml2jsDefaultOptionsV2 = {
     explicitCharkey: !1,
     trim: !1,
@@ -29244,6 +29666,7 @@ var require_dist6 = __commonJS((exports2) => {
     var builder = new xml2js.Builder(xml2jsBuilderSettings);
     return builder.buildObject(obj);
   }
+  __name(stringifyXML, "stringifyXML");
   function parseXML(str, opts) {
     var _a;
     opts === void 0 && (opts = {}), xml2jsParserSettings.explicitRoot = !!opts.includeRoot, xml2jsParserSettings.charkey = (_a = opts.xmlCharKey) !== null && _a !== void 0 ? _a : XML_CHARKEY;
@@ -29254,6 +29677,7 @@ var require_dist6 = __commonJS((exports2) => {
       }) : reject(new Error("Document is empty"));
     });
   }
+  __name(parseXML, "parseXML");
   function deserializationPolicy(deserializationContentTypes, parsingOptions) {
     return {
       create: function(nextPolicy, options) {
@@ -29261,6 +29685,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(deserializationPolicy, "deserializationPolicy");
   var defaultJsonContentTypes = ["application/json", "text/json"], defaultXmlContentTypes = ["application/xml", "application/atom+xml"], DefaultDeserializationOptions = {
     expectedContentTypes: {
       json: defaultJsonContentTypes,
@@ -29273,7 +29698,7 @@ var require_dist6 = __commonJS((exports2) => {
       var _a, _this = _super.call(this, nextPolicy, requestPolicyOptions) || this;
       return _this.jsonContentTypes = deserializationContentTypes && deserializationContentTypes.json || defaultJsonContentTypes, _this.xmlContentTypes = deserializationContentTypes && deserializationContentTypes.xml || defaultXmlContentTypes, _this.xmlCharKey = (_a = parsingOptions.xmlCharKey) !== null && _a !== void 0 ? _a : XML_CHARKEY, _this;
     }
-    return DeserializationPolicy2.prototype.sendRequest = function(request) {
+    return __name(DeserializationPolicy2, "DeserializationPolicy"), DeserializationPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var _this = this;
         return tslib.__generator(this, function(_a) {
@@ -29294,10 +29719,12 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(getOperationResponse, "getOperationResponse");
   function shouldDeserializeResponse(parsedResponse) {
     var shouldDeserialize = parsedResponse.request.shouldDeserialize, result;
     return shouldDeserialize === void 0 ? result = !0 : typeof shouldDeserialize == "boolean" ? result = shouldDeserialize : result = shouldDeserialize(parsedResponse), result;
   }
+  __name(shouldDeserializeResponse, "shouldDeserializeResponse");
   function deserializeResponseBody(jsonContentTypes, xmlContentTypes, response, options) {
     var _a, _b, _c;
     options === void 0 && (options = {});
@@ -29334,10 +29761,12 @@ var require_dist6 = __commonJS((exports2) => {
       return parsedResponse;
     });
   }
+  __name(deserializeResponseBody, "deserializeResponseBody");
   function isOperationSpecEmpty(operationSpec) {
     var expectedStatusCodes = Object.keys(operationSpec.responses);
     return expectedStatusCodes.length === 0 || expectedStatusCodes.length === 1 && expectedStatusCodes[0] === "default";
   }
+  __name(isOperationSpecEmpty, "isOperationSpecEmpty");
   function handleErrorResponse(parsedResponse, operationSpec, responseSpec) {
     var isSuccessByStatus = 200 <= parsedResponse.status && parsedResponse.status < 300, isExpectedStatusCode = isOperationSpecEmpty(operationSpec) ? isSuccessByStatus : !!responseSpec;
     if (isExpectedStatusCode)
@@ -29366,11 +29795,12 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return {error, shouldReturnResponse: !1};
   }
+  __name(handleErrorResponse, "handleErrorResponse");
   function parse(jsonContentTypes, xmlContentTypes, operationResponse, opts) {
-    var errorHandler = function(err) {
+    var errorHandler = /* @__PURE__ */ __name(function(err) {
       var msg = 'Error "' + err + '" occurred while parsing the response body - ' + operationResponse.bodyAsText + ".", errCode = err.code || RestError.PARSE_ERROR, e = new RestError(msg, errCode, operationResponse.status, operationResponse.request, operationResponse);
       return Promise.reject(e);
-    };
+    }, "errorHandler");
     if (!operationResponse.request.streamResponseBody && operationResponse.bodyAsText) {
       var text_1 = operationResponse.bodyAsText, contentType = operationResponse.headers.get("Content-Type") || "", contentComponents = contentType ? contentType.split(";").map(function(component) {
         return component.toLowerCase();
@@ -29390,18 +29820,22 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return Promise.resolve(operationResponse);
   }
+  __name(parse, "parse");
   var DEFAULT_CLIENT_RETRY_COUNT = 3, DEFAULT_CLIENT_RETRY_INTERVAL = 1e3 * 30, DEFAULT_CLIENT_MAX_RETRY_INTERVAL = 1e3 * 90, DEFAULT_CLIENT_MIN_RETRY_INTERVAL = 1e3 * 3;
   function isNumber(n) {
     return typeof n == "number";
   }
+  __name(isNumber, "isNumber");
   function shouldRetry(retryLimit, predicate, retryData, response, error) {
     return predicate(response, error) ? retryData.retryCount < retryLimit : !1;
   }
+  __name(shouldRetry, "shouldRetry");
   function updateRetryData(retryOptions, retryData, err) {
     retryData === void 0 && (retryData = {retryCount: 0, retryInterval: 0}), err && (retryData.error && (err.innerError = retryData.error), retryData.error = err), retryData.retryCount++;
     var incrementDelta = Math.pow(2, retryData.retryCount - 1) - 1, boundedRandDelta = retryOptions.retryInterval * 0.8 + Math.floor(Math.random() * (retryOptions.retryInterval * 0.4));
     return incrementDelta *= boundedRandDelta, retryData.retryInterval = Math.min(retryOptions.minRetryInterval + incrementDelta, retryOptions.maxRetryInterval), retryData;
   }
+  __name(updateRetryData, "updateRetryData");
   function exponentialRetryPolicy(retryCount, retryInterval, maxRetryInterval) {
     return {
       create: function(nextPolicy, options) {
@@ -29409,6 +29843,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(exponentialRetryPolicy, "exponentialRetryPolicy");
   (function(RetryMode) {
     RetryMode[RetryMode.Exponential = 0] = "Exponential";
   })(exports2.RetryMode || (exports2.RetryMode = {}));
@@ -29422,7 +29857,7 @@ var require_dist6 = __commonJS((exports2) => {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.retryCount = isNumber(retryCount) ? retryCount : DEFAULT_CLIENT_RETRY_COUNT, _this.retryInterval = isNumber(retryInterval) ? retryInterval : DEFAULT_CLIENT_RETRY_INTERVAL, _this.maxRetryInterval = isNumber(maxRetryInterval) ? maxRetryInterval : DEFAULT_CLIENT_MAX_RETRY_INTERVAL, _this;
     }
-    return ExponentialRetryPolicy2.prototype.sendRequest = function(request) {
+    return __name(ExponentialRetryPolicy2, "ExponentialRetryPolicy"), ExponentialRetryPolicy2.prototype.sendRequest = function(request) {
       var _this = this;
       return this._nextPolicy.sendRequest(request.clone()).then(function(response) {
         return retry(_this, request, response);
@@ -29437,6 +29872,7 @@ var require_dist6 = __commonJS((exports2) => {
         var statusCode = responseParam == null ? void 0 : responseParam.status;
         return !(statusCode === void 0 || statusCode < 500 && statusCode !== 408 || statusCode === 501 || statusCode === 505);
       }
+      __name(shouldPolicyRetry, "shouldPolicyRetry");
       var isAborted, res, err_1, err;
       return tslib.__generator(this, function(_a) {
         switch (_a.label) {
@@ -29468,6 +29904,7 @@ var require_dist6 = __commonJS((exports2) => {
       });
     });
   }
+  __name(retry, "retry");
   function generateClientRequestIdPolicy(requestIdHeaderName) {
     return requestIdHeaderName === void 0 && (requestIdHeaderName = "x-ms-client-request-id"), {
       create: function(nextPolicy, options) {
@@ -29475,19 +29912,21 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(generateClientRequestIdPolicy, "generateClientRequestIdPolicy");
   var GenerateClientRequestIdPolicy = function(_super) {
     tslib.__extends(GenerateClientRequestIdPolicy2, _super);
     function GenerateClientRequestIdPolicy2(nextPolicy, options, _requestIdHeaderName) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this._requestIdHeaderName = _requestIdHeaderName, _this;
     }
-    return GenerateClientRequestIdPolicy2.prototype.sendRequest = function(request) {
+    return __name(GenerateClientRequestIdPolicy2, "GenerateClientRequestIdPolicy"), GenerateClientRequestIdPolicy2.prototype.sendRequest = function(request) {
       return request.headers.contains(this._requestIdHeaderName) || request.headers.set(this._requestIdHeaderName, request.requestId), this._nextPolicy.sendRequest(request);
     }, GenerateClientRequestIdPolicy2;
   }(BaseRequestPolicy);
   function getDefaultUserAgentKey() {
     return Constants.HeaderConstants.USER_AGENT;
   }
+  __name(getDefaultUserAgentKey, "getDefaultUserAgentKey");
   function getPlatformSpecificData() {
     var runtimeInfo = {
       key: "Node",
@@ -29498,6 +29937,7 @@ var require_dist6 = __commonJS((exports2) => {
     };
     return [runtimeInfo, osInfo];
   }
+  __name(getPlatformSpecificData, "getPlatformSpecificData");
   function getRuntimeInfo() {
     var msRestRuntime = {
       key: "core-http",
@@ -29505,17 +29945,20 @@ var require_dist6 = __commonJS((exports2) => {
     };
     return [msRestRuntime];
   }
+  __name(getRuntimeInfo, "getRuntimeInfo");
   function getUserAgentString(telemetryInfo, keySeparator, valueSeparator) {
     return keySeparator === void 0 && (keySeparator = " "), valueSeparator === void 0 && (valueSeparator = "/"), telemetryInfo.map(function(info3) {
       var value = info3.value ? "" + valueSeparator + info3.value : "";
       return "" + info3.key + value;
     }).join(keySeparator);
   }
+  __name(getUserAgentString, "getUserAgentString");
   var getDefaultUserAgentHeaderName = getDefaultUserAgentKey;
   function getDefaultUserAgentValue() {
     var runtimeInfo = getRuntimeInfo(), platformSpecificData = getPlatformSpecificData(), userAgent = getUserAgentString(runtimeInfo.concat(platformSpecificData));
     return userAgent;
   }
+  __name(getDefaultUserAgentValue, "getDefaultUserAgentValue");
   function userAgentPolicy(userAgentData) {
     var key = !userAgentData || userAgentData.key === void 0 || userAgentData.key === null ? getDefaultUserAgentKey() : userAgentData.key, value = !userAgentData || userAgentData.value === void 0 || userAgentData.value === null ? getDefaultUserAgentValue() : userAgentData.value;
     return {
@@ -29524,13 +29967,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(userAgentPolicy, "userAgentPolicy");
   var UserAgentPolicy = function(_super) {
     tslib.__extends(UserAgentPolicy2, _super);
     function UserAgentPolicy2(_nextPolicy, _options, headerKey, headerValue) {
       var _this = _super.call(this, _nextPolicy, _options) || this;
       return _this._nextPolicy = _nextPolicy, _this._options = _options, _this.headerKey = headerKey, _this.headerValue = headerValue, _this;
     }
-    return UserAgentPolicy2.prototype.sendRequest = function(request) {
+    return __name(UserAgentPolicy2, "UserAgentPolicy"), UserAgentPolicy2.prototype.sendRequest = function(request) {
       return this.addUserAgentHeader(request), this._nextPolicy.sendRequest(request);
     }, UserAgentPolicy2.prototype.addUserAgentHeader = function(request) {
       request.headers || (request.headers = new HttpHeaders()), !request.headers.get(this.headerKey) && this.headerValue && request.headers.set(this.headerKey, this.headerValue);
@@ -29546,6 +29990,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(redirectPolicy, "redirectPolicy");
   var RedirectPolicy = function(_super) {
     tslib.__extends(RedirectPolicy2, _super);
     function RedirectPolicy2(nextPolicy, options, maxRetries) {
@@ -29553,7 +29998,7 @@ var require_dist6 = __commonJS((exports2) => {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.maxRetries = maxRetries, _this;
     }
-    return RedirectPolicy2.prototype.sendRequest = function(request) {
+    return __name(RedirectPolicy2, "RedirectPolicy"), RedirectPolicy2.prototype.sendRequest = function(request) {
       var _this = this;
       return this._nextPolicy.sendRequest(request).then(function(response) {
         return handleRedirect(_this, response, 0);
@@ -29570,6 +30015,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return Promise.resolve(response);
   }
+  __name(handleRedirect, "handleRedirect");
   function rpRegistrationPolicy(retryTimeout) {
     return retryTimeout === void 0 && (retryTimeout = 30), {
       create: function(nextPolicy, options) {
@@ -29577,6 +30023,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(rpRegistrationPolicy, "rpRegistrationPolicy");
   var RPRegistrationPolicy = function(_super) {
     tslib.__extends(RPRegistrationPolicy2, _super);
     function RPRegistrationPolicy2(nextPolicy, options, _retryTimeout) {
@@ -29584,7 +30031,7 @@ var require_dist6 = __commonJS((exports2) => {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this._retryTimeout = _retryTimeout, _this;
     }
-    return RPRegistrationPolicy2.prototype.sendRequest = function(request) {
+    return __name(RPRegistrationPolicy2, "RPRegistrationPolicy"), RPRegistrationPolicy2.prototype.sendRequest = function(request) {
       var _this = this;
       return this._nextPolicy.sendRequest(request.clone()).then(function(response) {
         return registerIfNeeded(_this, request, response);
@@ -29605,11 +30052,13 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return Promise.resolve(response);
   }
+  __name(registerIfNeeded, "registerIfNeeded");
   function getRequestEssentials(originalRequest, reuseUrlToo) {
     reuseUrlToo === void 0 && (reuseUrlToo = !1);
     var reqOptions = originalRequest.clone();
     return reuseUrlToo && (reqOptions.url = originalRequest.url), reqOptions.headers.set("x-ms-client-request-id", generateUuid()), reqOptions.headers.set("Content-Type", "application/json; charset=utf-8"), reqOptions;
   }
+  __name(getRequestEssentials, "getRequestEssentials");
   function checkRPNotRegisteredError(body) {
     var result, responseBody;
     if (body) {
@@ -29624,6 +30073,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return result;
   }
+  __name(checkRPNotRegisteredError, "checkRPNotRegisteredError");
   function extractSubscriptionUrl(url2) {
     var result, matchRes = url2.match(/.*\/subscriptions\/[a-f0-9-]+\//gi);
     if (matchRes && matchRes[0])
@@ -29632,6 +30082,7 @@ var require_dist6 = __commonJS((exports2) => {
       throw new Error("Unable to extract subscriptionId from the given url - " + url2 + ".");
     return result;
   }
+  __name(extractSubscriptionUrl, "extractSubscriptionUrl");
   function registerRP(policy, urlPrefix, provider, originalRequest) {
     var postUrl = urlPrefix + "providers/" + provider + "/register?api-version=2016-02-01", getUrl = urlPrefix + "providers/" + provider + "?api-version=2016-02-01", reqOptions = getRequestEssentials(originalRequest);
     return reqOptions.method = "POST", reqOptions.url = postUrl, policy._nextPolicy.sendRequest(reqOptions).then(function(response) {
@@ -29640,6 +30091,7 @@ var require_dist6 = __commonJS((exports2) => {
       return getRegistrationStatus(policy, getUrl, originalRequest);
     });
   }
+  __name(registerRP, "registerRP");
   function getRegistrationStatus(policy, url2, originalRequest) {
     var reqOptions = getRequestEssentials(originalRequest);
     return reqOptions.url = url2, reqOptions.method = "GET", policy._nextPolicy.sendRequest(reqOptions).then(function(res) {
@@ -29649,11 +30101,12 @@ var require_dist6 = __commonJS((exports2) => {
       });
     });
   }
+  __name(getRegistrationStatus, "getRegistrationStatus");
   var TokenRefreshBufferMs = 2 * 60 * 1e3, ExpiringAccessTokenCache = function() {
     function ExpiringAccessTokenCache2(tokenRefreshBufferMs) {
       tokenRefreshBufferMs === void 0 && (tokenRefreshBufferMs = TokenRefreshBufferMs), this.cachedToken = void 0, this.tokenRefreshBufferMs = tokenRefreshBufferMs;
     }
-    return ExpiringAccessTokenCache2.prototype.setCachedToken = function(accessToken) {
+    return __name(ExpiringAccessTokenCache2, "ExpiringAccessTokenCache"), ExpiringAccessTokenCache2.prototype.setCachedToken = function(accessToken) {
       this.cachedToken = accessToken;
     }, ExpiringAccessTokenCache2.prototype.getCachedToken = function() {
       return this.cachedToken && Date.now() + this.tokenRefreshBufferMs >= this.cachedToken.expiresOnTimestamp && (this.cachedToken = void 0), this.cachedToken;
@@ -29662,7 +30115,7 @@ var require_dist6 = __commonJS((exports2) => {
     function AccessTokenRefresher2(credential, scopes, requiredMillisecondsBeforeNewRefresh) {
       requiredMillisecondsBeforeNewRefresh === void 0 && (requiredMillisecondsBeforeNewRefresh = 3e4), this.credential = credential, this.scopes = scopes, this.requiredMillisecondsBeforeNewRefresh = requiredMillisecondsBeforeNewRefresh, this.lastCalled = 0;
     }
-    return AccessTokenRefresher2.prototype.isReady = function() {
+    return __name(AccessTokenRefresher2, "AccessTokenRefresher"), AccessTokenRefresher2.prototype.isReady = function() {
       return !this.lastCalled || Date.now() - this.lastCalled > this.requiredMillisecondsBeforeNewRefresh;
     }, AccessTokenRefresher2.prototype.getToken = function(options) {
       return tslib.__awaiter(this, void 0, void 0, function() {
@@ -29688,13 +30141,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(bearerTokenAuthenticationPolicy, "bearerTokenAuthenticationPolicy");
   var BearerTokenAuthenticationPolicy = function(_super) {
     tslib.__extends(BearerTokenAuthenticationPolicy2, _super);
     function BearerTokenAuthenticationPolicy2(nextPolicy, options, tokenCache, tokenRefresher) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.tokenCache = tokenCache, _this.tokenRefresher = tokenRefresher, _this;
     }
-    return BearerTokenAuthenticationPolicy2.prototype.sendRequest = function(webResource) {
+    return __name(BearerTokenAuthenticationPolicy2, "BearerTokenAuthenticationPolicy"), BearerTokenAuthenticationPolicy2.prototype.sendRequest = function(webResource) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var token;
         return tslib.__generator(this, function(_a) {
@@ -29750,13 +30204,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(systemErrorRetryPolicy, "systemErrorRetryPolicy");
   var SystemErrorRetryPolicy = function(_super) {
     tslib.__extends(SystemErrorRetryPolicy2, _super);
     function SystemErrorRetryPolicy2(nextPolicy, options, retryCount, retryInterval, minRetryInterval, maxRetryInterval) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.retryCount = isNumber(retryCount) ? retryCount : DEFAULT_CLIENT_RETRY_COUNT, _this.retryInterval = isNumber(retryInterval) ? retryInterval : DEFAULT_CLIENT_RETRY_INTERVAL, _this.minRetryInterval = isNumber(minRetryInterval) ? minRetryInterval : DEFAULT_CLIENT_MIN_RETRY_INTERVAL, _this.maxRetryInterval = isNumber(maxRetryInterval) ? maxRetryInterval : DEFAULT_CLIENT_MAX_RETRY_INTERVAL, _this;
     }
-    return SystemErrorRetryPolicy2.prototype.sendRequest = function(request) {
+    return __name(SystemErrorRetryPolicy2, "SystemErrorRetryPolicy"), SystemErrorRetryPolicy2.prototype.sendRequest = function(request) {
       var _this = this;
       return this._nextPolicy.sendRequest(request.clone()).catch(function(error) {
         return retry$1(_this, request, error.response, error);
@@ -29768,6 +30223,7 @@ var require_dist6 = __commonJS((exports2) => {
       function shouldPolicyRetry(_response, error) {
         return !!(error && error.code && (error.code === "ETIMEDOUT" || error.code === "ESOCKETTIMEDOUT" || error.code === "ECONNREFUSED" || error.code === "ECONNRESET" || error.code === "ENOENT"));
       }
+      __name(shouldPolicyRetry, "shouldPolicyRetry");
       var nestedErr_1;
       return tslib.__generator(this, function(_a) {
         switch (_a.label) {
@@ -29791,6 +30247,7 @@ var require_dist6 = __commonJS((exports2) => {
       });
     });
   }
+  __name(retry$1, "retry$1");
   (function(QueryCollectionFormat) {
     QueryCollectionFormat.Csv = ",", QueryCollectionFormat.Ssv = " ", QueryCollectionFormat.Tsv = "	", QueryCollectionFormat.Pipes = "|", QueryCollectionFormat.Multi = "Multi";
   })(exports2.QueryCollectionFormat || (exports2.QueryCollectionFormat = {}));
@@ -29801,6 +30258,7 @@ var require_dist6 = __commonJS((exports2) => {
       return httpsProxy || allProxy || httpProxy;
     }
   }
+  __name(loadEnvironmentProxyValue, "loadEnvironmentProxyValue");
   function isBypassed(uri) {
     if (byPassedList.has(uri))
       return byPassedList.get(uri);
@@ -29811,6 +30269,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return byPassedList.set(uri, isBypassedFlag), isBypassedFlag;
   }
+  __name(isBypassed, "isBypassed");
   function loadNoProxy() {
     if (!isNoProxyInitalized) {
       var noProxy = getEnvironmentValue(Constants.NO_PROXY);
@@ -29825,6 +30284,7 @@ var require_dist6 = __commonJS((exports2) => {
       isNoProxyInitalized = !0;
     }
   }
+  __name(loadNoProxy, "loadNoProxy");
   function getDefaultProxySettings(proxyUrl) {
     if (!(!proxyUrl && (proxyUrl = loadEnvironmentProxyValue(), !proxyUrl))) {
       var _a = extractAuthFromUrl(proxyUrl), username = _a.username, password = _a.password, urlWithoutAuth = _a.urlWithoutAuth, parsedUrl = URLBuilder.parse(urlWithoutAuth), schema = parsedUrl.getScheme() ? parsedUrl.getScheme() + "://" : "";
@@ -29836,6 +30296,7 @@ var require_dist6 = __commonJS((exports2) => {
       };
     }
   }
+  __name(getDefaultProxySettings, "getDefaultProxySettings");
   function proxyPolicy(proxySettings) {
     return proxySettings || (proxySettings = getDefaultProxySettings()), {
       create: function(nextPolicy, options) {
@@ -29843,6 +30304,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(proxyPolicy, "proxyPolicy");
   function extractAuthFromUrl(url2) {
     var atIndex = url2.indexOf("@");
     if (atIndex === -1)
@@ -29854,13 +30316,14 @@ var require_dist6 = __commonJS((exports2) => {
       urlWithoutAuth
     };
   }
+  __name(extractAuthFromUrl, "extractAuthFromUrl");
   var ProxyPolicy = function(_super) {
     tslib.__extends(ProxyPolicy2, _super);
     function ProxyPolicy2(nextPolicy, options, proxySettings) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.proxySettings = proxySettings, _this;
     }
-    return ProxyPolicy2.prototype.sendRequest = function(request) {
+    return __name(ProxyPolicy2, "ProxyPolicy"), ProxyPolicy2.prototype.sendRequest = function(request) {
       return !request.proxySettings && !isBypassed(request.url) && (request.proxySettings = this.proxySettings), this._nextPolicy.sendRequest(request);
     }, ProxyPolicy2;
   }(BaseRequestPolicy), StatusCodes = Constants.HttpConstants.StatusCodes;
@@ -29871,13 +30334,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(throttlingRetryPolicy, "throttlingRetryPolicy");
   var ThrottlingRetryPolicy = function(_super) {
     tslib.__extends(ThrottlingRetryPolicy2, _super);
     function ThrottlingRetryPolicy2(nextPolicy, options, _handleResponse) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this._handleResponse = _handleResponse || _this._defaultResponseHandler, _this;
     }
-    return ThrottlingRetryPolicy2.prototype.sendRequest = function(httpRequest) {
+    return __name(ThrottlingRetryPolicy2, "ThrottlingRetryPolicy"), ThrottlingRetryPolicy2.prototype.sendRequest = function(httpRequest) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var _this = this;
         return tslib.__generator(this, function(_a) {
@@ -29914,13 +30378,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(signingPolicy, "signingPolicy");
   var SigningPolicy = function(_super) {
     tslib.__extends(SigningPolicy2, _super);
     function SigningPolicy2(nextPolicy, options, authenticationProvider) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.authenticationProvider = authenticationProvider, _this;
     }
-    return SigningPolicy2.prototype.signRequest = function(request) {
+    return __name(SigningPolicy2, "SigningPolicy"), SigningPolicy2.prototype.signRequest = function(request) {
       return this.authenticationProvider.signRequest(request);
     }, SigningPolicy2.prototype.sendRequest = function(request) {
       var _this = this;
@@ -29938,13 +30403,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(keepAlivePolicy, "keepAlivePolicy");
   var KeepAlivePolicy = function(_super) {
     tslib.__extends(KeepAlivePolicy2, _super);
     function KeepAlivePolicy2(nextPolicy, options, keepAliveOptions) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.keepAliveOptions = keepAliveOptions, _this;
     }
-    return KeepAlivePolicy2.prototype.sendRequest = function(request) {
+    return __name(KeepAlivePolicy2, "KeepAlivePolicy"), KeepAlivePolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           return request.keepAlive = this.keepAliveOptions.enable, [2, this._nextPolicy.sendRequest(request)];
@@ -29959,13 +30425,14 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(tracingPolicy, "tracingPolicy");
   var TracingPolicy = function(_super) {
     tslib.__extends(TracingPolicy2, _super);
     function TracingPolicy2(nextPolicy, options, tracingOptions) {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.userAgent = tracingOptions.userAgent, _this;
     }
-    return TracingPolicy2.prototype.sendRequest = function(request) {
+    return __name(TracingPolicy2, "TracingPolicy"), TracingPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var tracer, spanOptions, path3, span, spanContext, traceParentHeader, traceState, response, serviceRequestId, err_1;
         return tslib.__generator(this, function(_a) {
@@ -29998,12 +30465,13 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(disableResponseDecompressionPolicy, "disableResponseDecompressionPolicy");
   var DisableResponseDecompressionPolicy = function(_super) {
     tslib.__extends(DisableResponseDecompressionPolicy2, _super);
     function DisableResponseDecompressionPolicy2(nextPolicy, options) {
       return _super.call(this, nextPolicy, options) || this;
     }
-    return DisableResponseDecompressionPolicy2.prototype.sendRequest = function(request) {
+    return __name(DisableResponseDecompressionPolicy2, "DisableResponseDecompressionPolicy"), DisableResponseDecompressionPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           return request.decompressResponse = !1, [2, this._nextPolicy.sendRequest(request)];
@@ -30018,12 +30486,13 @@ var require_dist6 = __commonJS((exports2) => {
       }
     };
   }
+  __name(ndJsonPolicy, "ndJsonPolicy");
   var NdJsonPolicy = function(_super) {
     tslib.__extends(NdJsonPolicy2, _super);
     function NdJsonPolicy2(nextPolicy, options) {
       return _super.call(this, nextPolicy, options) || this;
     }
-    return NdJsonPolicy2.prototype.sendRequest = function(request) {
+    return __name(NdJsonPolicy2, "NdJsonPolicy"), NdJsonPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var body;
         return tslib.__generator(this, function(_a) {
@@ -30038,6 +30507,7 @@ var require_dist6 = __commonJS((exports2) => {
   function getCachedDefaultHttpClient() {
     return cachedHttpClient || (cachedHttpClient = new NodeFetchHttpClient()), cachedHttpClient;
   }
+  __name(getCachedDefaultHttpClient, "getCachedDefaultHttpClient");
   var ServiceClient = function() {
     function ServiceClient2(credentials, options) {
       var _this = this;
@@ -30049,7 +30519,7 @@ var require_dist6 = __commonJS((exports2) => {
         var authPolicyFactory = void 0;
         if (coreAuth.isTokenCredential(credentials)) {
           logger.info("ServiceClient: creating bearer token authentication policy from provided credentials");
-          var wrappedPolicyFactory = function() {
+          var wrappedPolicyFactory = /* @__PURE__ */ __name(function() {
             var bearerTokenPolicyFactory = void 0, serviceClient = _this, serviceClientOptions = options;
             return {
               create: function(nextPolicy, createOptions) {
@@ -30059,7 +30529,7 @@ var require_dist6 = __commonJS((exports2) => {
                 return bearerTokenPolicyFactory == null && (bearerTokenPolicyFactory = bearerTokenAuthenticationPolicy(credentials, credentialScopes)), bearerTokenPolicyFactory.create(nextPolicy, createOptions);
               }
             };
-          };
+          }, "wrappedPolicyFactory");
           authPolicyFactory = wrappedPolicyFactory();
         } else if (credentials && typeof credentials.signRequest == "function")
           logger.info("ServiceClient: creating signing policy from provided credentials"), authPolicyFactory = signingPolicy(credentials);
@@ -30072,7 +30542,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
       this._requestPolicyFactories = requestPolicyFactories;
     }
-    return ServiceClient2.prototype.sendRequest = function(options) {
+    return __name(ServiceClient2, "ServiceClient"), ServiceClient2.prototype.sendRequest = function(options) {
       if (options == null || typeof options != "object")
         throw new Error("options cannot be null or undefined and it must be of type object.");
       var httpRequest;
@@ -30200,6 +30670,7 @@ var require_dist6 = __commonJS((exports2) => {
       }
     }
   }
+  __name(serializeRequestBody, "serializeRequestBody");
   function getXmlValueWithNamespace(xmlNamespace, xmlnsKey, typeName, serializedValue, options) {
     var _a;
     if (xmlNamespace && !["Composite", "Sequence", "Dictionary"].includes(typeName)) {
@@ -30208,16 +30679,19 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return serializedValue;
   }
+  __name(getXmlValueWithNamespace, "getXmlValueWithNamespace");
   function getValueOrFunctionResult(value, defaultValueCreator) {
     var result;
     return typeof value == "string" ? result = value : (result = defaultValueCreator(), typeof value == "function" && (result = value(result))), result;
   }
+  __name(getValueOrFunctionResult, "getValueOrFunctionResult");
   function createDefaultRequestPolicyFactories(authPolicyFactory, options) {
     var factories = [];
     options.generateClientRequestIdHeader && factories.push(generateClientRequestIdPolicy(options.clientRequestIdHeaderName)), authPolicyFactory && factories.push(authPolicyFactory);
     var userAgentHeaderName = getValueOrFunctionResult(options.userAgentHeaderName, getDefaultUserAgentHeaderName), userAgentHeaderValue = getValueOrFunctionResult(options.userAgent, getDefaultUserAgentValue);
     return userAgentHeaderName && userAgentHeaderValue && factories.push(userAgentPolicy({key: userAgentHeaderName, value: userAgentHeaderValue})), factories.push(redirectPolicy()), factories.push(rpRegistrationPolicy(options.rpRegistrationRetryTimeout)), options.noRetryPolicy || (factories.push(exponentialRetryPolicy()), factories.push(systemErrorRetryPolicy()), factories.push(throttlingRetryPolicy())), factories.push(deserializationPolicy(options.deserializationContentTypes)), factories.push(proxyPolicy(options.proxySettings)), factories.push(logPolicy({logger: logger.info})), factories;
   }
+  __name(createDefaultRequestPolicyFactories, "createDefaultRequestPolicyFactories");
   function createPipelineFromOptions(pipelineOptions, authPolicyFactory) {
     var requestPolicyFactories = [];
     pipelineOptions.sendStreamingJson && requestPolicyFactories.push(ndJsonPolicy());
@@ -30236,9 +30710,11 @@ var require_dist6 = __commonJS((exports2) => {
       requestPolicyFactories
     };
   }
+  __name(createPipelineFromOptions, "createPipelineFromOptions");
   function getOperationArgumentValueFromParameter(serviceClient, operationArguments, parameter, serializer) {
     return getOperationArgumentValueFromParameterPath(serviceClient, operationArguments, parameter.parameterPath, parameter.mapper, serializer);
   }
+  __name(getOperationArgumentValueFromParameter, "getOperationArgumentValueFromParameter");
   function getOperationArgumentValueFromParameterPath(serviceClient, operationArguments, parameterPath, parameterMapper, serializer) {
     var _a, value;
     typeof parameterPath == "string" && (parameterPath = [parameterPath]);
@@ -30265,6 +30741,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return value;
   }
+  __name(getOperationArgumentValueFromParameterPath, "getOperationArgumentValueFromParameterPath");
   function getPropertyFromParameterPath(parent, parameterPath) {
     for (var result = {propertyFound: !1}, i = 0; i < parameterPath.length; ++i) {
       var parameterPathPart = parameterPath[i];
@@ -30275,12 +30752,13 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return i === parameterPath.length && (result.propertyValue = parent, result.propertyFound = !0), result;
   }
+  __name(getPropertyFromParameterPath, "getPropertyFromParameterPath");
   function flattenResponse(_response, responseSpec) {
-    var parsedHeaders = _response.parsedHeaders, bodyMapper = responseSpec && responseSpec.bodyMapper, addOperationResponse = function(obj) {
+    var parsedHeaders = _response.parsedHeaders, bodyMapper = responseSpec && responseSpec.bodyMapper, addOperationResponse = /* @__PURE__ */ __name(function(obj) {
       return Object.defineProperty(obj, "_response", {
         value: _response
       });
-    };
+    }, "addOperationResponse");
     if (bodyMapper) {
       var typeName = bodyMapper.type.name;
       if (typeName === "Stream")
@@ -30305,6 +30783,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return bodyMapper || _response.request.method === "HEAD" || isPrimitiveType(_response.parsedBody) ? addOperationResponse(tslib.__assign(tslib.__assign({}, parsedHeaders), {body: _response.parsedBody})) : addOperationResponse(tslib.__assign(tslib.__assign({}, parsedHeaders), _response.parsedBody));
   }
+  __name(flattenResponse, "flattenResponse");
   function getCredentialScopes(options, baseUri) {
     if (options == null ? void 0 : options.credentialScopes) {
       var scopes = options.credentialScopes;
@@ -30315,6 +30794,7 @@ var require_dist6 = __commonJS((exports2) => {
     if (baseUri)
       return baseUri + "/.default";
   }
+  __name(getCredentialScopes, "getCredentialScopes");
   function createSpanFunction(_a) {
     var packagePrefix = _a.packagePrefix, namespace = _a.namespace;
     return function(operationName, operationOptions) {
@@ -30329,6 +30809,7 @@ var require_dist6 = __commonJS((exports2) => {
       };
     };
   }
+  __name(createSpanFunction, "createSpanFunction");
   var HeaderConstants = Constants.HeaderConstants, DEFAULT_AUTHORIZATION_SCHEME = "Basic", BasicAuthenticationCredentials = function() {
     function BasicAuthenticationCredentials2(userName, password, authorizationScheme) {
       if (authorizationScheme === void 0 && (authorizationScheme = DEFAULT_AUTHORIZATION_SCHEME), this.authorizationScheme = DEFAULT_AUTHORIZATION_SCHEME, userName == null || typeof userName.valueOf() != "string")
@@ -30337,7 +30818,7 @@ var require_dist6 = __commonJS((exports2) => {
         throw new Error("password cannot be null or undefined and must be of type string.");
       this.userName = userName, this.password = password, this.authorizationScheme = authorizationScheme;
     }
-    return BasicAuthenticationCredentials2.prototype.signRequest = function(webResource) {
+    return __name(BasicAuthenticationCredentials2, "BasicAuthenticationCredentials"), BasicAuthenticationCredentials2.prototype.signRequest = function(webResource) {
       var credentials = this.userName + ":" + this.password, encodedCredentials = this.authorizationScheme + " " + encodeString(credentials);
       return webResource.headers || (webResource.headers = new HttpHeaders()), webResource.headers.set(HeaderConstants.AUTHORIZATION, encodedCredentials), Promise.resolve(webResource);
     }, BasicAuthenticationCredentials2;
@@ -30347,7 +30828,7 @@ var require_dist6 = __commonJS((exports2) => {
         throw new Error('options cannot be null or undefined. Either "inHeader" or "inQuery" property of the options object needs to be provided.');
       this.inHeader = options.inHeader, this.inQuery = options.inQuery;
     }
-    return ApiKeyCredentials2.prototype.signRequest = function(webResource) {
+    return __name(ApiKeyCredentials2, "ApiKeyCredentials"), ApiKeyCredentials2.prototype.signRequest = function(webResource) {
       if (!webResource)
         return Promise.reject(new Error('webResource cannot be null or undefined and must be of type "object".'));
       if (this.inHeader) {
@@ -30377,7 +30858,7 @@ var require_dist6 = __commonJS((exports2) => {
       };
       return _this = _super.call(this, options) || this, _this;
     }
-    return TopicCredentials2;
+    return __name(TopicCredentials2, "TopicCredentials"), TopicCredentials2;
   }(ApiKeyCredentials);
   Object.defineProperty(exports2, "isTokenCredential", {
     enumerable: !0,
@@ -30472,14 +30953,14 @@ var require_dist8 = __commonJS((exports2) => {
       var _this = _super.call(this, message) || this;
       return _this.name = "PollerStoppedError", Object.setPrototypeOf(_this, PollerStoppedError2.prototype), _this;
     }
-    return PollerStoppedError2;
+    return __name(PollerStoppedError2, "PollerStoppedError"), PollerStoppedError2;
   }(Error), PollerCancelledError = function(_super) {
     tslib.__extends(PollerCancelledError2, _super);
     function PollerCancelledError2(message) {
       var _this = _super.call(this, message) || this;
       return _this.name = "PollerCancelledError", Object.setPrototypeOf(_this, PollerCancelledError2.prototype), _this;
     }
-    return PollerCancelledError2;
+    return __name(PollerCancelledError2, "PollerCancelledError"), PollerCancelledError2;
   }(Error), Poller = function() {
     function Poller2(operation) {
       var _this = this;
@@ -30488,7 +30969,7 @@ var require_dist8 = __commonJS((exports2) => {
       }), this.promise.catch(function() {
       });
     }
-    return Poller2.prototype.startPolling = function() {
+    return __name(Poller2, "Poller"), Poller2.prototype.startPolling = function() {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -30549,9 +31030,9 @@ var require_dist8 = __commonJS((exports2) => {
       var _this = this;
       if (options === void 0 && (options = {}), !this.pollOncePromise) {
         this.pollOncePromise = this.pollOnce(options);
-        var clearPollOncePromise = function() {
+        var clearPollOncePromise = /* @__PURE__ */ __name(function() {
           _this.pollOncePromise = void 0;
-        };
+        }, "clearPollOncePromise");
         this.pollOncePromise.then(clearPollOncePromise, clearPollOncePromise).catch(this.reject);
       }
       return this.pollOncePromise;
@@ -38591,7 +39072,7 @@ var require_dist9 = __commonJS((exports2) => {
     function Service2(client) {
       this.client = client;
     }
-    return Service2.prototype.setProperties = function(blobServiceProperties, options, callback) {
+    return __name(Service2, "Service"), Service2.prototype.setProperties = function(blobServiceProperties, options, callback) {
       return this.client.sendOperationRequest({
         blobServiceProperties,
         options
@@ -38898,7 +39379,7 @@ var require_dist9 = __commonJS((exports2) => {
     function Container2(client) {
       this.client = client;
     }
-    return Container2.prototype.create = function(options, callback) {
+    return __name(Container2, "Container"), Container2.prototype.create = function(options, callback) {
       return this.client.sendOperationRequest({
         options
       }, createOperationSpec, callback);
@@ -39476,7 +39957,7 @@ var require_dist9 = __commonJS((exports2) => {
     function Blob2(client) {
       this.client = client;
     }
-    return Blob2.prototype.download = function(options, callback) {
+    return __name(Blob2, "Blob"), Blob2.prototype.download = function(options, callback) {
       return this.client.sendOperationRequest({
         options
       }, downloadOperationSpec, callback);
@@ -40449,7 +40930,7 @@ var require_dist9 = __commonJS((exports2) => {
     function PageBlob2(client) {
       this.client = client;
     }
-    return PageBlob2.prototype.create = function(contentLength2, blobContentLength2, options, callback) {
+    return __name(PageBlob2, "PageBlob"), PageBlob2.prototype.create = function(contentLength2, blobContentLength2, options, callback) {
       return this.client.sendOperationRequest({
         contentLength: contentLength2,
         blobContentLength: blobContentLength2,
@@ -40870,7 +41351,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AppendBlob2(client) {
       this.client = client;
     }
-    return AppendBlob2.prototype.create = function(contentLength2, options, callback) {
+    return __name(AppendBlob2, "AppendBlob"), AppendBlob2.prototype.create = function(contentLength2, options, callback) {
       return this.client.sendOperationRequest({
         contentLength: contentLength2,
         options
@@ -41081,7 +41562,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BlockBlob2(client) {
       this.client = client;
     }
-    return BlockBlob2.prototype.upload = function(body, contentLength2, options, callback) {
+    return __name(BlockBlob2, "BlockBlob"), BlockBlob2.prototype.upload = function(body, contentLength2, options, callback) {
       return this.client.sendOperationRequest({
         body,
         contentLength: contentLength2,
@@ -41568,6 +42049,7 @@ var require_dist9 = __commonJS((exports2) => {
     var urlParsed = coreHttp.URLBuilder.parse(url2), path3 = urlParsed.getPath();
     return path3 = path3 || "/", path3 = escape(path3), urlParsed.setPath(path3), urlParsed.toString();
   }
+  __name(escapeURLPath, "escapeURLPath");
   function getProxyUriFromDevConnString(connectionString) {
     var proxyUri = "";
     if (connectionString.search("DevelopmentStorageProxyUri=") !== -1)
@@ -41577,6 +42059,7 @@ var require_dist9 = __commonJS((exports2) => {
       }
     return proxyUri;
   }
+  __name(getProxyUriFromDevConnString, "getProxyUriFromDevConnString");
   function getValueInConnString(connectionString, argument) {
     for (var elements = connectionString.split(";"), _i = 0, elements_1 = elements; _i < elements_1.length; _i++) {
       var element = elements_1[_i];
@@ -41585,6 +42068,7 @@ var require_dist9 = __commonJS((exports2) => {
     }
     return "";
   }
+  __name(getValueInConnString, "getValueInConnString");
   function extractConnectionStringParts(connectionString) {
     var proxyUri = "";
     connectionString.startsWith("UseDevelopmentStorage=true") && (proxyUri = getProxyUriFromDevConnString(connectionString), connectionString = DevelopmentConnectionString);
@@ -41622,33 +42106,41 @@ var require_dist9 = __commonJS((exports2) => {
       return {kind: "SASConnString", url: blobEndpoint, accountName, accountSas};
     }
   }
+  __name(extractConnectionStringParts, "extractConnectionStringParts");
   function escape(text) {
     return encodeURIComponent(text).replace(/%2F/g, "/").replace(/'/g, "%27").replace(/\+/g, "%20").replace(/%25/g, "%");
   }
+  __name(escape, "escape");
   function appendToURLPath(url2, name) {
     var urlParsed = coreHttp.URLBuilder.parse(url2), path3 = urlParsed.getPath();
     return path3 = path3 ? path3.endsWith("/") ? "" + path3 + name : path3 + "/" + name : name, urlParsed.setPath(path3), urlParsed.toString();
   }
+  __name(appendToURLPath, "appendToURLPath");
   function setURLParameter(url2, name, value) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.setQueryParameter(name, value), urlParsed.toString();
   }
+  __name(setURLParameter, "setURLParameter");
   function getURLParameter(url2, name) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.getQueryParameterValue(name);
   }
+  __name(getURLParameter, "getURLParameter");
   function setURLHost(url2, host) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.setHost(host), urlParsed.toString();
   }
+  __name(setURLHost, "setURLHost");
   function getURLPath(url2) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.getPath();
   }
+  __name(getURLPath, "getURLPath");
   function getURLScheme(url2) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.getScheme();
   }
+  __name(getURLScheme, "getURLScheme");
   function getURLPathAndQuery(url2) {
     var urlParsed = coreHttp.URLBuilder.parse(url2), pathString = urlParsed.getPath();
     if (!pathString)
@@ -41656,6 +42148,7 @@ var require_dist9 = __commonJS((exports2) => {
     var queryString = urlParsed.getQuery() || "";
     return queryString = queryString.trim(), queryString != "" && (queryString = queryString.startsWith("?") ? queryString : "?" + queryString), "" + pathString + queryString;
   }
+  __name(getURLPathAndQuery, "getURLPathAndQuery");
   function getURLQueries(url2) {
     var queryString = coreHttp.URLBuilder.parse(url2).getQuery();
     if (!queryString)
@@ -41672,44 +42165,52 @@ var require_dist9 = __commonJS((exports2) => {
     }
     return queries;
   }
+  __name(getURLQueries, "getURLQueries");
   function appendToURLQuery(url2, queryParts) {
     var urlParsed = coreHttp.URLBuilder.parse(url2), query = urlParsed.getQuery();
     return query ? query += "&" + queryParts : query = queryParts, urlParsed.setQuery(query), urlParsed.toString();
   }
+  __name(appendToURLQuery, "appendToURLQuery");
   function truncatedISO8061Date(date, withMilliseconds) {
     withMilliseconds === void 0 && (withMilliseconds = !0);
     var dateString = date.toISOString();
     return withMilliseconds ? dateString.substring(0, dateString.length - 1) + "0000Z" : dateString.substring(0, dateString.length - 5) + "Z";
   }
+  __name(truncatedISO8061Date, "truncatedISO8061Date");
   function base64encode(content) {
     return coreHttp.isNode ? Buffer.from(content).toString("base64") : btoa(content);
   }
+  __name(base64encode, "base64encode");
   function generateBlockID(blockIDPrefix, blockIndex) {
     var maxSourceStringLength = 48, maxBlockIndexLength = 6, maxAllowedBlockIDPrefixLength = maxSourceStringLength - maxBlockIndexLength;
     blockIDPrefix.length > maxAllowedBlockIDPrefixLength && (blockIDPrefix = blockIDPrefix.slice(0, maxAllowedBlockIDPrefixLength));
     var res = blockIDPrefix + padStart(blockIndex.toString(), maxSourceStringLength - blockIDPrefix.length, "0");
     return base64encode(res);
   }
+  __name(generateBlockID, "generateBlockID");
   function delay(timeInMs, aborter, abortError) {
     return tslib.__awaiter(this, void 0, void 0, function() {
       return tslib.__generator(this, function(_a) {
         return [2, new Promise(function(resolve, reject) {
-          var timeout, abortHandler = function() {
+          var timeout, abortHandler = /* @__PURE__ */ __name(function() {
             timeout !== void 0 && clearTimeout(timeout), reject(abortError);
-          }, resolveHandler = function() {
+          }, "abortHandler"), resolveHandler = /* @__PURE__ */ __name(function() {
             aborter !== void 0 && aborter.removeEventListener("abort", abortHandler), resolve();
-          };
+          }, "resolveHandler");
           timeout = setTimeout(resolveHandler, timeInMs), aborter !== void 0 && aborter.addEventListener("abort", abortHandler);
         })];
       });
     });
   }
+  __name(delay, "delay");
   function padStart(currentString, targetLength, padString) {
     return padString === void 0 && (padString = " "), String.prototype.padStart ? currentString.padStart(targetLength, padString) : (padString = padString || " ", currentString.length > targetLength ? currentString : (targetLength = targetLength - currentString.length, targetLength > padString.length && (padString += padString.repeat(targetLength / padString.length)), padString.slice(0, targetLength) + currentString));
   }
+  __name(padStart, "padStart");
   function iEqual(str1, str2) {
     return str1.toLocaleLowerCase() === str2.toLocaleLowerCase();
   }
+  __name(iEqual, "iEqual");
   function getAccountNameFromUrl(url2) {
     var parsedUrl = coreHttp.URLBuilder.parse(url2), accountName;
     try {
@@ -41718,12 +42219,14 @@ var require_dist9 = __commonJS((exports2) => {
       throw new Error("Unable to extract accountName with provided information.");
     }
   }
+  __name(getAccountNameFromUrl, "getAccountNameFromUrl");
   function isIpEndpointStyle(parsedUrl) {
     if (parsedUrl.getHost() == null)
       return !1;
     var host = parsedUrl.getHost() + (parsedUrl.getPort() == null ? "" : ":" + parsedUrl.getPort());
     return /^.*:.*:.*$|^localhost(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(host);
   }
+  __name(isIpEndpointStyle, "isIpEndpointStyle");
   function toBlobTagsString(tags) {
     if (tags !== void 0) {
       var tagPairs = [];
@@ -41735,6 +42238,7 @@ var require_dist9 = __commonJS((exports2) => {
       return tagPairs.join("&");
     }
   }
+  __name(toBlobTagsString, "toBlobTagsString");
   function toBlobTags(tags) {
     if (tags !== void 0) {
       var res = {
@@ -41751,6 +42255,7 @@ var require_dist9 = __commonJS((exports2) => {
       return res;
     }
   }
+  __name(toBlobTags, "toBlobTags");
   function toTags(tags) {
     if (tags !== void 0) {
       for (var res = {}, _i = 0, _a = tags.blobTagSet; _i < _a.length; _i++) {
@@ -41760,6 +42265,7 @@ var require_dist9 = __commonJS((exports2) => {
       return res;
     }
   }
+  __name(toTags, "toTags");
   function toQuerySerialization(textConfiguration) {
     if (textConfiguration !== void 0)
       switch (textConfiguration.kind) {
@@ -41798,9 +42304,10 @@ var require_dist9 = __commonJS((exports2) => {
           throw Error("Invalid BlobQueryTextConfiguration.");
       }
   }
+  __name(toQuerySerialization, "toQuerySerialization");
   function parseObjectReplicationRecord(objectReplicationRecord) {
     if (!!objectReplicationRecord && !("policy-id" in objectReplicationRecord)) {
-      var orProperties = [], _loop_1 = function(key2) {
+      var orProperties = [], _loop_1 = /* @__PURE__ */ __name(function(key2) {
         var ids = key2.split("_"), policyPrefix = "or-";
         ids[0].startsWith(policyPrefix) && (ids[0] = ids[0].substring(policyPrefix.length));
         var rule = {
@@ -41813,21 +42320,23 @@ var require_dist9 = __commonJS((exports2) => {
           policyId: ids[0],
           rules: [rule]
         });
-      };
+      }, "_loop_1");
       for (var key in objectReplicationRecord)
         _loop_1(key);
       return orProperties;
     }
   }
+  __name(parseObjectReplicationRecord, "parseObjectReplicationRecord");
   function attachCredential(thing, credential) {
     return thing.credential = credential, thing;
   }
+  __name(attachCredential, "attachCredential");
   var StorageBrowserPolicy = function(_super) {
     tslib.__extends(StorageBrowserPolicy2, _super);
     function StorageBrowserPolicy2(nextPolicy, options) {
       return _super.call(this, nextPolicy, options) || this;
     }
-    return StorageBrowserPolicy2.prototype.sendRequest = function(request) {
+    return __name(StorageBrowserPolicy2, "StorageBrowserPolicy"), StorageBrowserPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           return [2, this._nextPolicy.sendRequest(request)];
@@ -41837,7 +42346,7 @@ var require_dist9 = __commonJS((exports2) => {
   }(coreHttp.BaseRequestPolicy), StorageBrowserPolicyFactory = function() {
     function StorageBrowserPolicyFactory2() {
     }
-    return StorageBrowserPolicyFactory2.prototype.create = function(nextPolicy, options) {
+    return __name(StorageBrowserPolicyFactory2, "StorageBrowserPolicyFactory"), StorageBrowserPolicyFactory2.prototype.create = function(nextPolicy, options) {
       return new StorageBrowserPolicy(nextPolicy, options);
     }, StorageBrowserPolicyFactory2;
   }();
@@ -41865,7 +42374,7 @@ var require_dist9 = __commonJS((exports2) => {
         secondaryHost: retryOptions.secondaryHost ? retryOptions.secondaryHost : DEFAULT_RETRY_OPTIONS.secondaryHost
       }, _this;
     }
-    return StorageRetryPolicy2.prototype.sendRequest = function(request) {
+    return __name(StorageRetryPolicy2, "StorageRetryPolicy"), StorageRetryPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           return [2, this.attemptSendRequest(request, !1, 1)];
@@ -41946,7 +42455,7 @@ var require_dist9 = __commonJS((exports2) => {
     function StorageRetryPolicyFactory2(retryOptions) {
       this.retryOptions = retryOptions;
     }
-    return StorageRetryPolicyFactory2.prototype.create = function(nextPolicy, options) {
+    return __name(StorageRetryPolicyFactory2, "StorageRetryPolicyFactory"), StorageRetryPolicyFactory2.prototype.create = function(nextPolicy, options) {
       return new StorageRetryPolicy(nextPolicy, options, this.retryOptions);
     }, StorageRetryPolicyFactory2;
   }(), CredentialPolicy = function(_super) {
@@ -41954,7 +42463,7 @@ var require_dist9 = __commonJS((exports2) => {
     function CredentialPolicy2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return CredentialPolicy2.prototype.sendRequest = function(request) {
+    return __name(CredentialPolicy2, "CredentialPolicy"), CredentialPolicy2.prototype.sendRequest = function(request) {
       return this._nextPolicy.sendRequest(this.signRequest(request));
     }, CredentialPolicy2.prototype.signRequest = function(request) {
       return request;
@@ -41964,11 +42473,11 @@ var require_dist9 = __commonJS((exports2) => {
     function AnonymousCredentialPolicy2(nextPolicy, options) {
       return _super.call(this, nextPolicy, options) || this;
     }
-    return AnonymousCredentialPolicy2;
+    return __name(AnonymousCredentialPolicy2, "AnonymousCredentialPolicy"), AnonymousCredentialPolicy2;
   }(CredentialPolicy), Credential = function() {
     function Credential2() {
     }
-    return Credential2.prototype.create = function(_nextPolicy, _options) {
+    return __name(Credential2, "Credential"), Credential2.prototype.create = function(_nextPolicy, _options) {
       throw new Error("Method should be implemented in children classes.");
     }, Credential2;
   }(), AnonymousCredential = function(_super) {
@@ -41976,7 +42485,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AnonymousCredential2() {
       return _super !== null && _super.apply(this, arguments) || this;
     }
-    return AnonymousCredential2.prototype.create = function(nextPolicy, options) {
+    return __name(AnonymousCredential2, "AnonymousCredential"), AnonymousCredential2.prototype.create = function(nextPolicy, options) {
       return new AnonymousCredentialPolicy(nextPolicy, options);
     }, AnonymousCredential2;
   }(Credential), TelemetryPolicy = function(_super) {
@@ -41985,7 +42494,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.telemetry = telemetry, _this;
     }
-    return TelemetryPolicy2.prototype.sendRequest = function(request) {
+    return __name(TelemetryPolicy2, "TelemetryPolicy"), TelemetryPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           return request.headers || (request.headers = new coreHttp.HttpHeaders()), request.headers.get(HeaderConstants.USER_AGENT) || request.headers.set(HeaderConstants.USER_AGENT, this.telemetry), [2, this._nextPolicy.sendRequest(request)];
@@ -42007,18 +42516,19 @@ var require_dist9 = __commonJS((exports2) => {
       }
       this.telemetryString = userAgentInfo.join(" ");
     }
-    return TelemetryPolicyFactory2.prototype.create = function(nextPolicy, options) {
+    return __name(TelemetryPolicyFactory2, "TelemetryPolicyFactory"), TelemetryPolicyFactory2.prototype.create = function(nextPolicy, options) {
       return new TelemetryPolicy(nextPolicy, options, this.telemetryString);
     }, TelemetryPolicyFactory2;
   }(), _defaultHttpClient = new coreHttp.DefaultHttpClient();
   function getCachedDefaultHttpClient() {
     return _defaultHttpClient;
   }
+  __name(getCachedDefaultHttpClient, "getCachedDefaultHttpClient");
   var Pipeline = function() {
     function Pipeline2(factories, options) {
       options === void 0 && (options = {}), this.factories = factories, this.options = tslib.__assign(tslib.__assign({}, options), {httpClient: options.httpClient || getCachedDefaultHttpClient()});
     }
-    return Pipeline2.prototype.toServiceClientOptions = function() {
+    return __name(Pipeline2, "Pipeline"), Pipeline2.prototype.toServiceClientOptions = function() {
       return {
         httpClient: this.options.httpClient,
         requestPolicyFactories: this.factories
@@ -42043,6 +42553,7 @@ var require_dist9 = __commonJS((exports2) => {
     ];
     return factories.push(coreHttp.proxyPolicy(pipelineOptions.proxyOptions)), factories.push(coreHttp.disableResponseDecompressionPolicy()), factories.push(coreHttp.isTokenCredential(credential) ? attachCredential(coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes), credential) : credential), new Pipeline(factories, pipelineOptions);
   }
+  __name(newPipeline, "newPipeline");
   var ABORT_ERROR = new abortController.AbortError("The operation was aborted."), RetriableReadableStream = function(_super) {
     tslib.__extends(RetriableReadableStream2, _super);
     function RetriableReadableStream2(source, getter, offset, count, options) {
@@ -42052,7 +42563,7 @@ var require_dist9 = __commonJS((exports2) => {
         _this.source.pause(), _this.emit("error", ABORT_ERROR);
       }, _this.aborter = options.abortSignal || abortController.AbortSignal.none, _this.getter = getter, _this.source = source, _this.start = offset, _this.offset = offset, _this.end = offset + count - 1, _this.maxRetryRequests = options.maxRetryRequests && options.maxRetryRequests >= 0 ? options.maxRetryRequests : 0, _this.onProgress = options.onProgress, _this.options = options, _this.aborter.addEventListener("abort", _this.abortHandler), _this.setSourceDataHandler(), _this.setSourceEndHandler(), _this.setSourceErrorHandler(), _this;
     }
-    return RetriableReadableStream2.prototype._read = function() {
+    return __name(RetriableReadableStream2, "RetriableReadableStream"), RetriableReadableStream2.prototype._read = function() {
       this.aborter.aborted || this.source.resume();
     }, RetriableReadableStream2.prototype.setSourceDataHandler = function() {
       var _this = this;
@@ -42082,7 +42593,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BlobDownloadResponse2(originalResponse, getter, offset, count, options) {
       options === void 0 && (options = {}), this.originalResponse = originalResponse, this.blobDownloadStream = new RetriableReadableStream(this.originalResponse.readableStreamBody, getter, offset, count, options);
     }
-    return Object.defineProperty(BlobDownloadResponse2.prototype, "acceptRanges", {
+    return __name(BlobDownloadResponse2, "BlobDownloadResponse"), Object.defineProperty(BlobDownloadResponse2.prototype, "acceptRanges", {
       get: function() {
         return this.originalResponse.acceptRanges;
       },
@@ -42346,10 +42857,11 @@ var require_dist9 = __commonJS((exports2) => {
         return !1;
     return !0;
   }
+  __name(arraysEqual, "arraysEqual");
   var AvroParser = function() {
     function AvroParser2() {
     }
-    return AvroParser2.readFixedBytes = function(stream2, length, options) {
+    return __name(AvroParser2, "AvroParser"), AvroParser2.readFixedBytes = function(stream2, length, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var bytes;
         return tslib.__generator(this, function(_a) {
@@ -42517,7 +43029,7 @@ var require_dist9 = __commonJS((exports2) => {
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
             case 0:
-              return readPairMethod = function(stream3, options2) {
+              return readPairMethod = /* @__PURE__ */ __name(function(stream3, options2) {
                 return options2 === void 0 && (options2 = {}), tslib.__awaiter(_this, void 0, void 0, function() {
                   return tslib.__generator(this, function(_a2) {
                     switch (_a2.label) {
@@ -42528,7 +43040,7 @@ var require_dist9 = __commonJS((exports2) => {
                     }
                   });
                 });
-              }, [4, AvroParser2.readArray(stream2, readPairMethod, options)];
+              }, "readPairMethod"), [4, AvroParser2.readArray(stream2, readPairMethod, options)];
             case 1:
               for (pairs = _a.sent(), dict = {}, _i = 0, pairs_1 = pairs; _i < pairs_1.length; _i++)
                 pair = pairs_1[_i], dict[pair.key] = pair.value;
@@ -42570,7 +43082,7 @@ var require_dist9 = __commonJS((exports2) => {
   var AvroType = function() {
     function AvroType2() {
     }
-    return AvroType2.fromSchema = function(schema) {
+    return __name(AvroType2, "AvroType"), AvroType2.fromSchema = function(schema) {
       return typeof schema == "string" ? AvroType2.fromStringSchema(schema) : Array.isArray(schema) ? AvroType2.fromArraySchema(schema) : AvroType2.fromObjectSchema(schema);
     }, AvroType2.fromStringSchema = function(schema) {
       switch (schema) {
@@ -42634,7 +43146,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this._primitive = primitive, _this;
     }
-    return AvroPrimitiveType2.prototype.read = function(stream2, options) {
+    return __name(AvroPrimitiveType2, "AvroPrimitiveType"), AvroPrimitiveType2.prototype.read = function(stream2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _a;
         return tslib.__generator(this, function(_b) {
@@ -42703,7 +43215,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this._symbols = symbols, _this;
     }
-    return AvroEnumType2.prototype.read = function(stream2, options) {
+    return __name(AvroEnumType2, "AvroEnumType"), AvroEnumType2.prototype.read = function(stream2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var value;
         return tslib.__generator(this, function(_a) {
@@ -42722,7 +43234,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this._types = types, _this;
     }
-    return AvroUnionType2.prototype.read = function(stream2, options) {
+    return __name(AvroUnionType2, "AvroUnionType"), AvroUnionType2.prototype.read = function(stream2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var typeIndex;
         return tslib.__generator(this, function(_a) {
@@ -42743,13 +43255,13 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this._itemType = itemType, _this;
     }
-    return AvroMapType2.prototype.read = function(stream2, options) {
+    return __name(AvroMapType2, "AvroMapType"), AvroMapType2.prototype.read = function(stream2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var readItemMethod, _this = this;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
             case 0:
-              return readItemMethod = function(s, options2) {
+              return readItemMethod = /* @__PURE__ */ __name(function(s, options2) {
                 return tslib.__awaiter(_this, void 0, void 0, function() {
                   return tslib.__generator(this, function(_a2) {
                     switch (_a2.label) {
@@ -42760,7 +43272,7 @@ var require_dist9 = __commonJS((exports2) => {
                     }
                   });
                 });
-              }, [4, AvroParser.readMap(stream2, readItemMethod, options)];
+              }, "readItemMethod"), [4, AvroParser.readMap(stream2, readItemMethod, options)];
             case 1:
               return [2, _a.sent()];
           }
@@ -42773,7 +43285,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this._fields = fields, _this._name = name, _this;
     }
-    return AvroRecordType2.prototype.read = function(stream2, options) {
+    return __name(AvroRecordType2, "AvroRecordType"), AvroRecordType2.prototype.read = function(stream2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var record, _a, _b, _i, key, _c, _d;
         return tslib.__generator(this, function(_e) {
@@ -42799,7 +43311,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AvroReader2(dataStream, headerStream, currentBlockOffset, indexWithinCurrentBlock) {
       this._dataStream = dataStream, this._headerStream = headerStream || dataStream, this._initialized = !1, this._blockOffset = currentBlockOffset || 0, this._objectIndex = indexWithinCurrentBlock || 0, this._initialBlockOffset = currentBlockOffset || 0;
     }
-    return Object.defineProperty(AvroReader2.prototype, "blockOffset", {
+    return __name(AvroReader2, "AvroReader"), Object.defineProperty(AvroReader2.prototype, "blockOffset", {
       get: function() {
         return this._blockOffset;
       },
@@ -42856,7 +43368,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, AvroReader2.prototype.hasNext = function() {
       return !this._initialized || this._itemsRemainingInBlock > 0;
     }, AvroReader2.prototype.parseObjects = function(options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var result, marker, _a, err_1;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
@@ -42898,19 +43410,19 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "parseObjects_1"));
     }, AvroReader2;
   }(), AvroReadable = function() {
     function AvroReadable2() {
     }
-    return AvroReadable2;
+    return __name(AvroReadable2, "AvroReadable"), AvroReadable2;
   }(), ABORT_ERROR$1 = new abortController.AbortError("Reading from the avro stream was aborted."), AvroReadableFromStream = function(_super) {
     tslib.__extends(AvroReadableFromStream2, _super);
     function AvroReadableFromStream2(readable) {
       var _this = _super.call(this) || this;
       return _this._readable = readable, _this._position = 0, _this;
     }
-    return AvroReadableFromStream2.prototype.toUint8Array = function(data) {
+    return __name(AvroReadableFromStream2, "AvroReadableFromStream"), AvroReadableFromStream2.prototype.toUint8Array = function(data) {
       return typeof data == "string" ? Buffer.from(data) : data;
     }, Object.defineProperty(AvroReadableFromStream2.prototype, "position", {
       get: function() {
@@ -42932,16 +43444,16 @@ var require_dist9 = __commonJS((exports2) => {
           if (!this._readable.readable)
             throw new Error("Stream no longer readable.");
           return chunk = this._readable.read(size), chunk ? (this._position += chunk.length, [2, this.toUint8Array(chunk)]) : [2, new Promise(function(resolve, reject) {
-            var cleanUp = function() {
+            var cleanUp = /* @__PURE__ */ __name(function() {
               _this._readable.removeListener("readable", readableCallback), _this._readable.removeListener("error", rejectCallback), _this._readable.removeListener("end", rejectCallback), _this._readable.removeListener("close", rejectCallback), options.abortSignal && options.abortSignal.removeEventListener("abort", abortHandler);
-            }, readableCallback = function() {
+            }, "cleanUp"), readableCallback = /* @__PURE__ */ __name(function() {
               var chunk2 = _this._readable.read(size);
               chunk2 && (_this._position += chunk2.length, cleanUp(), resolve(_this.toUint8Array(chunk2)));
-            }, rejectCallback = function() {
+            }, "readableCallback"), rejectCallback = /* @__PURE__ */ __name(function() {
               cleanUp(), reject();
-            }, abortHandler = function() {
+            }, "rejectCallback"), abortHandler = /* @__PURE__ */ __name(function() {
               cleanUp(), reject(ABORT_ERROR$1);
-            };
+            }, "abortHandler");
             _this._readable.on("readable", readableCallback), _this._readable.once("error", rejectCallback), _this._readable.once("end", rejectCallback), _this._readable.once("close", rejectCallback), options.abortSignal && options.abortSignal.addEventListener("abort", abortHandler);
           })];
         });
@@ -42954,7 +43466,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this.avroPaused = !0, _this.source = source, _this.onProgress = options.onProgress, _this.onError = options.onError, _this.avroReader = new AvroReader(new AvroReadableFromStream(_this.source)), _this.avroIter = _this.avroReader.parseObjects({abortSignal: options.abortSignal}), _this;
     }
-    return BlobQuickQueryStream2.prototype._read = function() {
+    return __name(BlobQuickQueryStream2, "BlobQuickQueryStream"), BlobQuickQueryStream2.prototype._read = function() {
       var _this = this;
       this.avroPaused && this.readInternal().catch(function(err) {
         _this.emit("error", err);
@@ -43028,7 +43540,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BlobQueryResponse2(originalResponse, options) {
       options === void 0 && (options = {}), this.originalResponse = originalResponse, this.blobDownloadStream = new BlobQuickQueryStream(this.originalResponse.readableStreamBody, options);
     }
-    return Object.defineProperty(BlobQueryResponse2.prototype, "acceptRanges", {
+    return __name(BlobQueryResponse2, "BlobQueryResponse"), Object.defineProperty(BlobQueryResponse2.prototype, "acceptRanges", {
       get: function() {
         return this.originalResponse.acceptRanges;
       },
@@ -43249,7 +43761,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this, nextPolicy, options) || this;
       return _this.factory = factory, _this;
     }
-    return StorageSharedKeyCredentialPolicy2.prototype.signRequest = function(request) {
+    return __name(StorageSharedKeyCredentialPolicy2, "StorageSharedKeyCredentialPolicy"), StorageSharedKeyCredentialPolicy2.prototype.signRequest = function(request) {
       request.headers.set(HeaderConstants.X_MS_DATE, new Date().toUTCString()), request.body && typeof request.body == "string" && request.body.length > 0 && request.headers.set(HeaderConstants.CONTENT_LENGTH, Buffer.byteLength(request.body));
       var stringToSign = [
         request.method.toUpperCase(),
@@ -43311,7 +43823,7 @@ var require_dist9 = __commonJS((exports2) => {
       var _this = _super.call(this) || this;
       return _this.accountName = accountName, _this.accountKey = Buffer.from(accountKey, "base64"), _this;
     }
-    return StorageSharedKeyCredential2.prototype.create = function(nextPolicy, options) {
+    return __name(StorageSharedKeyCredential2, "StorageSharedKeyCredential"), StorageSharedKeyCredential2.prototype.create = function(nextPolicy, options) {
       return new StorageSharedKeyCredentialPolicy(nextPolicy, options, this);
     }, StorageSharedKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
       return crypto.createHmac("sha256", this.accountKey).update(stringToSign, "utf8").digest("base64");
@@ -43328,7 +43840,7 @@ var require_dist9 = __commonJS((exports2) => {
       }
       return _this = _super.call(this, void 0, options) || this, _this.version = "2020-04-08", _this.baseUri = "{url}", _this.requestContentType = "application/json; charset=utf-8", _this.url = url2, _this;
     }
-    return StorageClientContext2;
+    return __name(StorageClientContext2, "StorageClientContext"), StorageClientContext2;
   }(coreHttp.ServiceClient);
   (function(BlockBlobTier) {
     BlockBlobTier.Hot = "Hot", BlockBlobTier.Cool = "Cool", BlockBlobTier.Archive = "Archive";
@@ -43340,11 +43852,13 @@ var require_dist9 = __commonJS((exports2) => {
     if (tier != null)
       return tier;
   }
+  __name(toAccessTier, "toAccessTier");
   function ensureCpkIfSpecified(cpk, isHttps) {
     if (cpk && !isHttps)
       throw new RangeError("Customer-provided encryption key must be used over HTTPS.");
     cpk && !cpk.encryptionAlgorithm && (cpk.encryptionAlgorithm = EncryptionAlgorithmAES25);
   }
+  __name(ensureCpkIfSpecified, "ensureCpkIfSpecified");
   function rangeResponseFromModel(response) {
     var pageRange = (response._response.parsedBody.pageRange || []).map(function(x) {
       return {
@@ -43366,6 +43880,7 @@ var require_dist9 = __commonJS((exports2) => {
       }})
     });
   }
+  __name(rangeResponseFromModel, "rangeResponseFromModel");
   var BlobBeginCopyFromUrlPoller = function(_super) {
     tslib.__extends(BlobBeginCopyFromUrlPoller2, _super);
     function BlobBeginCopyFromUrlPoller2(options) {
@@ -43378,10 +43893,10 @@ var require_dist9 = __commonJS((exports2) => {
       }));
       return _this = _super.call(this, operation) || this, typeof onProgress == "function" && _this.onProgress(onProgress), _this.intervalInMs = intervalInMs, _this;
     }
-    return BlobBeginCopyFromUrlPoller2.prototype.delay = function() {
+    return __name(BlobBeginCopyFromUrlPoller2, "BlobBeginCopyFromUrlPoller"), BlobBeginCopyFromUrlPoller2.prototype.delay = function() {
       return coreHttp.delay(this.intervalInMs);
     }, BlobBeginCopyFromUrlPoller2;
-  }(coreLro.Poller), cancel = function(options) {
+  }(coreLro.Poller), cancel = /* @__PURE__ */ __name(function(options) {
     return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
       var state, copyId2;
       return tslib.__generator(this, function(_a) {
@@ -43395,7 +43910,7 @@ var require_dist9 = __commonJS((exports2) => {
         }
       });
     });
-  }, update = function(options) {
+  }, "cancel"), update = /* @__PURE__ */ __name(function(options) {
     return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
       var state, blobClient, copySource2, startCopyFromURLOptions, result, result, copyStatus, copyProgress, prevCopyProgress, err_1;
       return tslib.__generator(this, function(_a) {
@@ -43419,12 +43934,12 @@ var require_dist9 = __commonJS((exports2) => {
         }
       });
     });
-  }, toString = function() {
+  }, "update"), toString = /* @__PURE__ */ __name(function() {
     return JSON.stringify({state: this.state}, function(key, value) {
       if (key !== "blobClient")
         return value;
     });
-  };
+  }, "toString");
   function makeBlobBeginCopyFromURLPollOperation(state) {
     return {
       state: tslib.__assign({}, state),
@@ -43433,6 +43948,7 @@ var require_dist9 = __commonJS((exports2) => {
       update
     };
   }
+  __name(makeBlobBeginCopyFromURLPollOperation, "makeBlobBeginCopyFromURLPollOperation");
   function rangeToString(iRange) {
     if (iRange.offset < 0)
       throw new RangeError("Range.offset cannot be smaller than 0.");
@@ -43440,6 +43956,7 @@ var require_dist9 = __commonJS((exports2) => {
       throw new RangeError("Range.count must be larger than 0. Leave it undefined if you want a range from offset to the end.");
     return iRange.count ? "bytes=" + iRange.offset + "-" + (iRange.offset + iRange.count - 1) : "bytes=" + iRange.offset + "-";
   }
+  __name(rangeToString, "rangeToString");
   var StorageClient = function() {
     function StorageClient2(url2, pipeline) {
       this.url = escapeURLPath(url2), this.accountName = getAccountNameFromUrl(url2), this.pipeline = pipeline, this.storageClientContext = new StorageClientContext(this.url, pipeline.toServiceClientOptions()), this.isHttps = iEqual(getURLScheme(this.url) || "", "https"), this.credential = new AnonymousCredential();
@@ -43450,7 +43967,7 @@ var require_dist9 = __commonJS((exports2) => {
       var storageClientContext = this.storageClientContext;
       storageClientContext.requestContentType = void 0;
     }
-    return StorageClient2;
+    return __name(StorageClient2, "StorageClient"), StorageClient2;
   }(), BatchStates;
   (function(BatchStates2) {
     BatchStates2[BatchStates2.Good = 0] = "Good", BatchStates2[BatchStates2.Error = 1] = "Error";
@@ -43461,7 +43978,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new RangeError("concurrency must be larger than 0");
       this.concurrency = concurrency, this.emitter = new events.EventEmitter();
     }
-    return Batch2.prototype.addOperation = function(operation) {
+    return __name(Batch2, "Batch"), Batch2.prototype.addOperation = function(operation) {
       var _this = this;
       this.operations.push(function() {
         return tslib.__awaiter(_this, void 0, void 0, function() {
@@ -43521,7 +44038,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Data size shouldn't be larger than the total length of buffers.");
       return _this;
     }
-    return BuffersStream2.prototype._read = function(size) {
+    return __name(BuffersStream2, "BuffersStream"), BuffersStream2.prototype._read = function(size) {
       this.pushedBytesLength >= this.byteLength && this.push(null), size || (size = this.readableHighWaterMark);
       for (var outBuffers = [], i = 0; i < size && this.pushedBytesLength < this.byteLength; ) {
         var remainingDataInAllBuffers = this.byteLength - this.pushedBytesLength, remainingCapacityInThisBuffer = this.buffers[this.bufferIndex].byteLength - this.byteOffsetInCurrentBuffer, remaining = Math.min(remainingCapacityInThisBuffer, remainingDataInAllBuffers);
@@ -43545,7 +44062,7 @@ var require_dist9 = __commonJS((exports2) => {
       }
       buffers && this.fill(buffers, totalLength);
     }
-    return Object.defineProperty(PooledBuffer2.prototype, "size", {
+    return __name(PooledBuffer2, "PooledBuffer"), Object.defineProperty(PooledBuffer2.prototype, "size", {
       get: function() {
         return this._size;
       },
@@ -43571,7 +44088,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new RangeError("concurrency must be larger than 0, current is " + concurrency);
       this.bufferSize = bufferSize, this.maxBuffers = maxBuffers, this.readable = readable, this.outgoingHandler = outgoingHandler, this.concurrency = concurrency, this.encoding = encoding;
     }
-    return BufferScheduler2.prototype.do = function() {
+    return __name(BufferScheduler2, "BufferScheduler"), BufferScheduler2.prototype.do = function() {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var _this = this;
         return tslib.__generator(this, function(_a) {
@@ -43666,6 +44183,7 @@ var require_dist9 = __commonJS((exports2) => {
       spanOptions: newOptions
     };
   }
+  __name(createSpan, "createSpan");
   function streamToBuffer(stream2, buffer, offset, end, encoding) {
     return tslib.__awaiter(this, void 0, void 0, function() {
       var pos, count;
@@ -43689,6 +44207,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     });
   }
+  __name(streamToBuffer, "streamToBuffer");
   function streamToBuffer2(stream2, buffer, encoding) {
     return tslib.__awaiter(this, void 0, void 0, function() {
       var pos, bufferSize;
@@ -43710,6 +44229,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     });
   }
+  __name(streamToBuffer2, "streamToBuffer2");
   function readStreamToLocalFile(rs, file) {
     return tslib.__awaiter(this, void 0, void 0, function() {
       return tslib.__generator(this, function(_a) {
@@ -43724,11 +44244,12 @@ var require_dist9 = __commonJS((exports2) => {
       });
     });
   }
+  __name(readStreamToLocalFile, "readStreamToLocalFile");
   var fsStat = util.promisify(fs3.stat), fsCreateReadStream = fs3.createReadStream, BlobSASPermissions = function() {
     function BlobSASPermissions2() {
       this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.tag = !1, this.move = !1, this.execute = !1;
     }
-    return BlobSASPermissions2.parse = function(permissions) {
+    return __name(BlobSASPermissions2, "BlobSASPermissions"), BlobSASPermissions2.parse = function(permissions) {
       for (var blobSASPermissions = new BlobSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
         var char = permissions_1[_i];
         switch (char) {
@@ -43775,7 +44296,7 @@ var require_dist9 = __commonJS((exports2) => {
     function ContainerSASPermissions2() {
       this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.tag = !1, this.move = !1, this.execute = !1;
     }
-    return ContainerSASPermissions2.parse = function(permissions) {
+    return __name(ContainerSASPermissions2, "ContainerSASPermissions"), ContainerSASPermissions2.parse = function(permissions) {
       for (var containerSASPermissions = new ContainerSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
         var char = permissions_1[_i];
         switch (char) {
@@ -43825,13 +44346,14 @@ var require_dist9 = __commonJS((exports2) => {
     function UserDelegationKeyCredential2(accountName, userDelegationKey) {
       this.accountName = accountName, this.userDelegationKey = userDelegationKey, this.key = Buffer.from(userDelegationKey.value, "base64");
     }
-    return UserDelegationKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
+    return __name(UserDelegationKeyCredential2, "UserDelegationKeyCredential"), UserDelegationKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
       return crypto.createHmac("sha256", this.key).update(stringToSign, "utf8").digest("base64");
     }, UserDelegationKeyCredential2;
   }();
   function ipRangeToString(ipRange) {
     return ipRange.end ? ipRange.start + "-" + ipRange.end : ipRange.start;
   }
+  __name(ipRangeToString, "ipRangeToString");
   (function(SASProtocol) {
     SASProtocol.Https = "https", SASProtocol.HttpsAndHttp = "https,http";
   })(exports2.SASProtocol || (exports2.SASProtocol = {}));
@@ -43839,7 +44361,7 @@ var require_dist9 = __commonJS((exports2) => {
     function SASQueryParameters2(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl2, contentDisposition2, contentEncoding2, contentLanguage2, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
       this.version = version2, this.signature = signature, permissionsOrOptions !== void 0 && typeof permissionsOrOptions != "string" ? (this.permissions = permissionsOrOptions.permissions, this.services = permissionsOrOptions.services, this.resourceTypes = permissionsOrOptions.resourceTypes, this.protocol = permissionsOrOptions.protocol, this.startsOn = permissionsOrOptions.startsOn, this.expiresOn = permissionsOrOptions.expiresOn, this.ipRangeInner = permissionsOrOptions.ipRange, this.identifier = permissionsOrOptions.identifier, this.resource = permissionsOrOptions.resource, this.cacheControl = permissionsOrOptions.cacheControl, this.contentDisposition = permissionsOrOptions.contentDisposition, this.contentEncoding = permissionsOrOptions.contentEncoding, this.contentLanguage = permissionsOrOptions.contentLanguage, this.contentType = permissionsOrOptions.contentType, permissionsOrOptions.userDelegationKey && (this.signedOid = permissionsOrOptions.userDelegationKey.signedObjectId, this.signedTenantId = permissionsOrOptions.userDelegationKey.signedTenantId, this.signedStartsOn = permissionsOrOptions.userDelegationKey.signedStartsOn, this.signedExpiresOn = permissionsOrOptions.userDelegationKey.signedExpiresOn, this.signedService = permissionsOrOptions.userDelegationKey.signedService, this.signedVersion = permissionsOrOptions.userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = permissionsOrOptions.preauthorizedAgentObjectId, this.correlationId = permissionsOrOptions.correlationId)) : (this.services = services, this.resourceTypes = resourceTypes, this.expiresOn = expiresOn2, this.permissions = permissionsOrOptions, this.protocol = protocol, this.startsOn = startsOn, this.ipRangeInner = ipRange, this.identifier = identifier, this.resource = resource, this.cacheControl = cacheControl2, this.contentDisposition = contentDisposition2, this.contentEncoding = contentEncoding2, this.contentLanguage = contentLanguage2, this.contentType = contentType2, userDelegationKey && (this.signedOid = userDelegationKey.signedObjectId, this.signedTenantId = userDelegationKey.signedTenantId, this.signedStartsOn = userDelegationKey.signedStartsOn, this.signedExpiresOn = userDelegationKey.signedExpiresOn, this.signedService = userDelegationKey.signedService, this.signedVersion = userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = preauthorizedAgentObjectId, this.correlationId = correlationId));
     }
-    return Object.defineProperty(SASQueryParameters2.prototype, "ipRange", {
+    return __name(SASQueryParameters2, "SASQueryParameters"), Object.defineProperty(SASQueryParameters2.prototype, "ipRange", {
       get: function() {
         if (this.ipRangeInner)
           return {
@@ -43970,6 +44492,7 @@ var require_dist9 = __commonJS((exports2) => {
     }
     throw new RangeError("'version' must be >= '2015-04-05'.");
   }
+  __name(generateBlobSASQueryParameters, "generateBlobSASQueryParameters");
   function generateBlobSASQueryParameters20150405(blobSASSignatureValues, sharedKeyCredential) {
     if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !(blobSASSignatureValues.permissions && blobSASSignatureValues.expiresOn))
       throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
@@ -43995,6 +44518,7 @@ var require_dist9 = __commonJS((exports2) => {
 `), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
     return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
   }
+  __name(generateBlobSASQueryParameters20150405, "generateBlobSASQueryParameters20150405");
   function generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential) {
     if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !(blobSASSignatureValues.permissions && blobSASSignatureValues.expiresOn))
       throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
@@ -44022,6 +44546,7 @@ var require_dist9 = __commonJS((exports2) => {
 `), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
     return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
   }
+  __name(generateBlobSASQueryParameters20181109, "generateBlobSASQueryParameters20181109");
   function generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential) {
     if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
       throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
@@ -44054,6 +44579,7 @@ var require_dist9 = __commonJS((exports2) => {
 `), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
     return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey);
   }
+  __name(generateBlobSASQueryParametersUDK20181109, "generateBlobSASQueryParametersUDK20181109");
   function generateBlobSASQueryParametersUDK20200210(blobSASSignatureValues, userDelegationKeyCredential) {
     if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
       throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
@@ -44089,10 +44615,12 @@ var require_dist9 = __commonJS((exports2) => {
 `), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
     return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey, blobSASSignatureValues.preauthorizedAgentObjectId, blobSASSignatureValues.correlationId);
   }
+  __name(generateBlobSASQueryParametersUDK20200210, "generateBlobSASQueryParametersUDK20200210");
   function getCanonicalName(accountName, containerName, blobName) {
     var elements = ["/blob/" + accountName + "/" + containerName];
     return blobName && elements.push("/" + blobName), elements.join("");
   }
+  __name(getCanonicalName, "getCanonicalName");
   function SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues) {
     var version2 = blobSASSignatureValues.version ? blobSASSignatureValues.version : SERVICE_VERSION;
     if (blobSASSignatureValues.snapshotTime && version2 < "2018-11-09")
@@ -44113,6 +44641,7 @@ var require_dist9 = __commonJS((exports2) => {
       throw RangeError("'version' must be >= '2020-02-10' when providing 'preauthorizedAgentObjectId' or 'correlationId'.");
     return blobSASSignatureValues.version = version2, blobSASSignatureValues;
   }
+  __name(SASSignatureValuesSanityCheckAndAutofill, "SASSignatureValuesSanityCheckAndAutofill");
   var BlobClient = function(_super) {
     tslib.__extends(BlobClient2, _super);
     function BlobClient2(urlOrConnectionString, credentialOrPipelineOrContainerName, blobNameOrOptions, options) {
@@ -44138,7 +44667,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Expecting non-empty strings for containerName and blobName parameters");
       return _this = _super.call(this, url2, pipeline) || this, _a = _this.getBlobAndContainerNamesFromUrl(), _this._name = _a.blobName, _this._containerName = _a.containerName, _this.blobContext = new Blob$1(_this.storageClientContext), _this._snapshot = getURLParameter(_this.url, URLConstants.Parameters.SNAPSHOT), _this._versionId = getURLParameter(_this.url, URLConstants.Parameters.VERSIONID), _this;
     }
-    return Object.defineProperty(BlobClient2.prototype, "name", {
+    return __name(BlobClient2, "BlobClient"), Object.defineProperty(BlobClient2.prototype, "name", {
       get: function() {
         return this._name;
       },
@@ -44696,7 +45225,7 @@ var require_dist9 = __commonJS((exports2) => {
                 }
               if (buffer.length < count)
                 throw new RangeError("The buffer's size should be equal to or larger than the request count of bytes: " + count);
-              for (transferProgress_1 = 0, batch = new Batch(options.concurrency), _loop_1 = function(off2) {
+              for (transferProgress_1 = 0, batch = new Batch(options.concurrency), _loop_1 = /* @__PURE__ */ __name(function(off2) {
                 batch.addOperation(function() {
                   return tslib.__awaiter(_this, void 0, void 0, function() {
                     var chunkEnd, response2, stream2;
@@ -44718,7 +45247,7 @@ var require_dist9 = __commonJS((exports2) => {
                     });
                   });
                 });
-              }, off = offset; off < offset + count; off = off + options.blockSize)
+              }, "_loop_1"), off = offset; off < offset + count; off = off + options.blockSize)
                 _loop_1(off);
               return [4, batch.do()];
             case 4:
@@ -44855,7 +45384,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Expecting non-empty strings for containerName and blobName parameters");
       return _this = _super.call(this, url2, pipeline) || this, _this.appendBlobContext = new AppendBlob(_this.storageClientContext), _this;
     }
-    return AppendBlobClient2.prototype.withSnapshot = function(snapshot2) {
+    return __name(AppendBlobClient2, "AppendBlobClient"), AppendBlobClient2.prototype.withSnapshot = function(snapshot2) {
       return new AppendBlobClient2(setURLParameter(this.url, URLConstants.Parameters.SNAPSHOT, snapshot2.length === 0 ? void 0 : snapshot2), this.pipeline);
     }, AppendBlobClient2.prototype.create = function(options) {
       var _a;
@@ -45052,7 +45581,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Expecting non-empty strings for containerName and blobName parameters");
       return _this = _super.call(this, url2, pipeline) || this, _this.blockBlobContext = new BlockBlob(_this.storageClientContext), _this._blobContext = new Blob$1(_this.storageClientContext), _this;
     }
-    return BlockBlobClient2.prototype.withSnapshot = function(snapshot2) {
+    return __name(BlockBlobClient2, "BlockBlobClient"), BlockBlobClient2.prototype.withSnapshot = function(snapshot2) {
       return new BlockBlobClient2(setURLParameter(this.url, URLConstants.Parameters.SNAPSHOT, snapshot2.length === 0 ? void 0 : snapshot2), this.pipeline);
     }, BlockBlobClient2.prototype.query = function(query, options) {
       var _a;
@@ -45354,7 +45883,7 @@ var require_dist9 = __commonJS((exports2) => {
             case 3:
               if (numBlocks_1 = Math.floor((size - 1) / options.blockSize) + 1, numBlocks_1 > BLOCK_BLOB_MAX_BLOCKS)
                 throw new RangeError("The buffer's size is too big or the BlockSize is too small;" + ("the number of blocks must be <= " + BLOCK_BLOB_MAX_BLOCKS));
-              for (blockList_1 = [], blockIDPrefix_1 = coreHttp.generateUuid(), transferProgress_2 = 0, batch = new Batch(options.concurrency), _loop_2 = function(i2) {
+              for (blockList_1 = [], blockIDPrefix_1 = coreHttp.generateUuid(), transferProgress_2 = 0, batch = new Batch(options.concurrency), _loop_2 = /* @__PURE__ */ __name(function(i2) {
                 batch.addOperation(function() {
                   return tslib.__awaiter(_this, void 0, void 0, function() {
                     var blockID, start, end, contentLength2;
@@ -45375,7 +45904,7 @@ var require_dist9 = __commonJS((exports2) => {
                     });
                   });
                 });
-              }, i = 0; i < numBlocks_1; i++)
+              }, "_loop_2"), i = 0; i < numBlocks_1; i++)
                 _loop_2(i);
               return [4, batch.do()];
             case 4:
@@ -45490,7 +46019,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Expecting non-empty strings for containerName and blobName parameters");
       return _this = _super.call(this, url2, pipeline) || this, _this.pageBlobContext = new PageBlob(_this.storageClientContext), _this;
     }
-    return PageBlobClient2.prototype.withSnapshot = function(snapshot2) {
+    return __name(PageBlobClient2, "PageBlobClient"), PageBlobClient2.prototype.withSnapshot = function(snapshot2) {
       return new PageBlobClient2(setURLParameter(this.url, URLConstants.Parameters.SNAPSHOT, snapshot2.length === 0 ? void 0 : snapshot2), this.pipeline);
     }, PageBlobClient2.prototype.create = function(size, options) {
       var _a;
@@ -45854,7 +46383,7 @@ var require_dist9 = __commonJS((exports2) => {
       var clientContext = new StorageClientContext(client.url, client.pipeline.toServiceClientOptions());
       this._url = client.url, client instanceof ContainerClient ? (this._isContainer = !0, this._containerOrBlobOperation = new Container(clientContext)) : (this._isContainer = !1, this._containerOrBlobOperation = new Blob$1(clientContext)), leaseId || (leaseId = coreHttp.generateUuid()), this._leaseId = leaseId;
     }
-    return Object.defineProperty(BlobLeaseClient2.prototype, "leaseId", {
+    return __name(BlobLeaseClient2, "BlobLeaseClient"), Object.defineProperty(BlobLeaseClient2.prototype, "leaseId", {
       get: function() {
         return this._leaseId;
       },
@@ -46043,7 +46572,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new Error("Expecting non-empty strings for containerName parameter");
       return _this = _super.call(this, url2, pipeline) || this, _this._containerName = _this.getContainerNameFromUrl(), _this.containerContext = new Container(_this.storageClientContext), _this;
     }
-    return Object.defineProperty(ContainerClient2.prototype, "containerName", {
+    return __name(ContainerClient2, "ContainerClient"), Object.defineProperty(ContainerClient2.prototype, "containerName", {
       get: function() {
         return this._containerName;
       },
@@ -46443,7 +46972,7 @@ var require_dist9 = __commonJS((exports2) => {
         });
       });
     }, ContainerClient2.prototype.listSegments = function(marker, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var listBlobsFlatSegmentResponse;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -46469,9 +46998,9 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listSegments_1"));
     }, ContainerClient2.prototype.listItems = function(options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var marker, _a, _b, listBlobsFlatSegmentResponse, e_63_1, e_63, _c;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
@@ -46507,7 +47036,7 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listItems_1"));
     }, ContainerClient2.prototype.listBlobsFlat = function(options) {
       var _a, _this = this;
       options === void 0 && (options = {});
@@ -46524,7 +47053,7 @@ var require_dist9 = __commonJS((exports2) => {
         return settings === void 0 && (settings = {}), _this.listSegments(settings.continuationToken, tslib.__assign({maxPageSize: settings.maxPageSize}, updatedOptions));
       }, _a;
     }, ContainerClient2.prototype.listHierarchySegments = function(delimiter2, marker, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var listBlobsHierarchySegmentResponse;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -46550,9 +47079,9 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listHierarchySegments_1"));
     }, ContainerClient2.prototype.listItemsByHierarchy = function(delimiter2, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var marker, _a, _b, listBlobsHierarchySegmentResponse, segment, _i, _c, prefix2, _d, _e, blob, e_64_1, e_64, _f;
         return tslib.__generator(this, function(_g) {
           switch (_g.label) {
@@ -46606,7 +47135,7 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listItemsByHierarchy_1"));
     }, ContainerClient2.prototype.listBlobsByHierarchy = function(delimiter2, options) {
       var _a, _this = this;
       if (options === void 0 && (options = {}), delimiter2 === "")
@@ -46660,9 +47189,11 @@ var require_dist9 = __commonJS((exports2) => {
       });
     });
   }
+  __name(getBodyAsText, "getBodyAsText");
   function utf8ByteLength(str) {
     return Buffer.byteLength(str);
   }
+  __name(utf8ByteLength, "utf8ByteLength");
   var HTTP_HEADER_DELIMITER = ": ", SPACE_DELIMITER = " ", NOT_FOUND = -1, BatchResponseParser = function() {
     function BatchResponseParser2(batchResponse, subRequests) {
       if (!batchResponse || !batchResponse.contentType)
@@ -46671,7 +47202,7 @@ var require_dist9 = __commonJS((exports2) => {
         throw new RangeError("Invalid state: subRequests is not provided or size is 0.");
       this.batchResponse = batchResponse, this.subRequests = subRequests, this.responseBatchBoundary = this.batchResponse.contentType.split("=")[1], this.perResponsePrefix = "--" + this.responseBatchBoundary + HTTP_LINE_ENDING, this.batchResponseEnding = "--" + this.responseBatchBoundary + "--";
     }
-    return BatchResponseParser2.prototype.parseBatchResponse = function() {
+    return __name(BatchResponseParser2, "BatchResponseParser"), BatchResponseParser2.prototype.parseBatchResponse = function() {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var responseBodyAsText, subResponses, subResponseCount, deserializedSubResponses, subResponsesSucceededCount, subResponsesFailedCount, index, subResponse, deserializedSubResponse, responseLines, subRespHeaderStartFound, subRespHeaderEndFound, subRespFailed, contentId, _i, responseLines_1, responseLine, tokens, tokens;
         return tslib.__generator(this, function(_a) {
@@ -46719,7 +47250,7 @@ var require_dist9 = __commonJS((exports2) => {
   var Mutex = function() {
     function Mutex2() {
     }
-    return Mutex2.lock = function(key) {
+    return __name(Mutex2, "Mutex"), Mutex2.lock = function(key) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var _this = this;
         return tslib.__generator(this, function(_a) {
@@ -46754,7 +47285,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BlobBatch2() {
       this.batch = "batch", this.batchRequest = new InnerBatchRequest();
     }
-    return BlobBatch2.prototype.getMultiPartContentType = function() {
+    return __name(BlobBatch2, "BlobBatch"), BlobBatch2.prototype.getMultiPartContentType = function() {
       return this.batchRequest.getMultipartContentType();
     }, BlobBatch2.prototype.getHttpRequestBody = function() {
       return this.batchRequest.getHttpRequestBody();
@@ -46877,7 +47408,7 @@ var require_dist9 = __commonJS((exports2) => {
       var tempGuid = coreHttp.generateUuid();
       this.boundary = "batch_" + tempGuid, this.subRequestPrefix = "--" + this.boundary + HTTP_LINE_ENDING + HeaderConstants.CONTENT_TYPE + ": application/http" + HTTP_LINE_ENDING + HeaderConstants.CONTENT_TRANSFER_ENCODING + ": binary", this.multipartContentType = "multipart/mixed; boundary=" + this.boundary, this.batchRequestEnding = "--" + this.boundary + "--", this.subRequests = new Map();
     }
-    return InnerBatchRequest2.prototype.createPipeline = function(credential) {
+    return __name(InnerBatchRequest2, "InnerBatchRequest"), InnerBatchRequest2.prototype.createPipeline = function(credential) {
       var isAnonymousCreds = credential instanceof AnonymousCredential, policyFactoryLength = 3 + (isAnonymousCreds ? 0 : 1), factories = new Array(policyFactoryLength);
       return factories[0] = coreHttp.deserializationPolicy(), factories[1] = new BatchHeaderFilterPolicyFactory(), isAnonymousCreds || (factories[2] = coreHttp.isTokenCredential(credential) ? attachCredential(coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes), credential) : credential), factories[policyFactoryLength - 1] = new BatchRequestAssemblePolicyFactory(this), new Pipeline(factories, {});
     }, InnerBatchRequest2.prototype.appendSubRequestToBody = function(request) {
@@ -46917,7 +47448,7 @@ var require_dist9 = __commonJS((exports2) => {
         headers: new coreHttp.HttpHeaders()
       }, _this.batchRequest = batchRequest, _this;
     }
-    return BatchRequestAssemblePolicy2.prototype.sendRequest = function(request) {
+    return __name(BatchRequestAssemblePolicy2, "BatchRequestAssemblePolicy"), BatchRequestAssemblePolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -46933,7 +47464,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BatchRequestAssemblePolicyFactory2(batchRequest) {
       this.batchRequest = batchRequest;
     }
-    return BatchRequestAssemblePolicyFactory2.prototype.create = function(nextPolicy, options) {
+    return __name(BatchRequestAssemblePolicyFactory2, "BatchRequestAssemblePolicyFactory"), BatchRequestAssemblePolicyFactory2.prototype.create = function(nextPolicy, options) {
       return new BatchRequestAssemblePolicy(this.batchRequest, nextPolicy, options);
     }, BatchRequestAssemblePolicyFactory2;
   }(), BatchHeaderFilterPolicy = function(_super) {
@@ -46941,7 +47472,7 @@ var require_dist9 = __commonJS((exports2) => {
     function BatchHeaderFilterPolicy2(nextPolicy, options) {
       return _super.call(this, nextPolicy, options) || this;
     }
-    return BatchHeaderFilterPolicy2.prototype.sendRequest = function(request) {
+    return __name(BatchHeaderFilterPolicy2, "BatchHeaderFilterPolicy"), BatchHeaderFilterPolicy2.prototype.sendRequest = function(request) {
       return tslib.__awaiter(this, void 0, void 0, function() {
         var xMsHeaderName, _i, _a, header;
         return tslib.__generator(this, function(_b) {
@@ -46954,7 +47485,7 @@ var require_dist9 = __commonJS((exports2) => {
   }(coreHttp.BaseRequestPolicy), BatchHeaderFilterPolicyFactory = function() {
     function BatchHeaderFilterPolicyFactory2() {
     }
-    return BatchHeaderFilterPolicyFactory2.prototype.create = function(nextPolicy, options) {
+    return __name(BatchHeaderFilterPolicyFactory2, "BatchHeaderFilterPolicyFactory"), BatchHeaderFilterPolicyFactory2.prototype.create = function(nextPolicy, options) {
       return new BatchHeaderFilterPolicy(nextPolicy, options);
     }, BatchHeaderFilterPolicyFactory2;
   }(), BlobBatchClient = function() {
@@ -46964,7 +47495,7 @@ var require_dist9 = __commonJS((exports2) => {
       var storageClientContext = new StorageClientContext(url2, pipeline.toServiceClientOptions());
       this._serviceContext = new Service(storageClientContext);
     }
-    return BlobBatchClient2.prototype.createBatch = function() {
+    return __name(BlobBatchClient2, "BlobBatchClient"), BlobBatchClient2.prototype.createBatch = function() {
       return new BlobBatch();
     }, BlobBatchClient2.prototype.deleteBlobs = function(urlsOrBlobClients, credentialOrOptions, options) {
       return tslib.__awaiter(this, void 0, void 0, function() {
@@ -47052,7 +47583,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AccountSASPermissions2() {
       this.read = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.add = !1, this.create = !1, this.update = !1, this.process = !1, this.tag = !1, this.filter = !1;
     }
-    return AccountSASPermissions2.parse = function(permissions) {
+    return __name(AccountSASPermissions2, "AccountSASPermissions"), AccountSASPermissions2.parse = function(permissions) {
       for (var accountSASPermissions = new AccountSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
         var c = permissions_1[_i];
         switch (c) {
@@ -47105,7 +47636,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AccountSASResourceTypes2() {
       this.service = !1, this.container = !1, this.object = !1;
     }
-    return AccountSASResourceTypes2.parse = function(resourceTypes) {
+    return __name(AccountSASResourceTypes2, "AccountSASResourceTypes"), AccountSASResourceTypes2.parse = function(resourceTypes) {
       for (var accountSASResourceTypes = new AccountSASResourceTypes2(), _i = 0, resourceTypes_1 = resourceTypes; _i < resourceTypes_1.length; _i++) {
         var c = resourceTypes_1[_i];
         switch (c) {
@@ -47131,7 +47662,7 @@ var require_dist9 = __commonJS((exports2) => {
     function AccountSASServices2() {
       this.blob = !1, this.file = !1, this.queue = !1, this.table = !1;
     }
-    return AccountSASServices2.parse = function(services) {
+    return __name(AccountSASServices2, "AccountSASServices"), AccountSASServices2.parse = function(services) {
       for (var accountSASServices = new AccountSASServices2(), _i = 0, services_1 = services; _i < services_1.length; _i++) {
         var c = services_1[_i];
         switch (c) {
@@ -47180,13 +47711,14 @@ var require_dist9 = __commonJS((exports2) => {
 `), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
     return new SASQueryParameters(version2, signature, parsedPermissions.toString(), parsedServices, parsedResourceTypes, accountSASSignatureValues.protocol, accountSASSignatureValues.startsOn, accountSASSignatureValues.expiresOn, accountSASSignatureValues.ipRange);
   }
+  __name(generateAccountSASQueryParameters, "generateAccountSASQueryParameters");
   var BlobServiceClient = function(_super) {
     tslib.__extends(BlobServiceClient2, _super);
     function BlobServiceClient2(url2, credentialOrPipeline, options) {
       var _this = this, pipeline;
       return credentialOrPipeline instanceof Pipeline ? pipeline = credentialOrPipeline : coreHttp.isNode && credentialOrPipeline instanceof StorageSharedKeyCredential || credentialOrPipeline instanceof AnonymousCredential || coreHttp.isTokenCredential(credentialOrPipeline) ? pipeline = newPipeline(credentialOrPipeline, options) : pipeline = newPipeline(new AnonymousCredential(), options), _this = _super.call(this, url2, pipeline) || this, _this.serviceContext = new Service(_this.storageClientContext), _this;
     }
-    return BlobServiceClient2.fromConnectionString = function(connectionString, options) {
+    return __name(BlobServiceClient2, "BlobServiceClient"), BlobServiceClient2.fromConnectionString = function(connectionString, options) {
       options = options || {};
       var extractedCreds = extractConnectionStringParts(connectionString);
       if (extractedCreds.kind === "AccountConnString") {
@@ -47436,7 +47968,7 @@ var require_dist9 = __commonJS((exports2) => {
         });
       });
     }, BlobServiceClient2.prototype.findBlobsByTagsSegments = function(tagFilterSqlExpression, marker, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var response;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -47460,9 +47992,9 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "findBlobsByTagsSegments_1"));
     }, BlobServiceClient2.prototype.findBlobsByTagsItems = function(tagFilterSqlExpression, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var marker, _a, _b, segment, e_10_1, e_10, _c;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
@@ -47498,7 +48030,7 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "findBlobsByTagsItems_1"));
     }, BlobServiceClient2.prototype.findBlobsByTags = function(tagFilterSqlExpression, options) {
       var _a, _this = this;
       options === void 0 && (options = {});
@@ -47513,7 +48045,7 @@ var require_dist9 = __commonJS((exports2) => {
         return settings === void 0 && (settings = {}), _this.findBlobsByTagsSegments(tagFilterSqlExpression, settings.continuationToken, tslib.__assign({maxPageSize: settings.maxPageSize}, listSegmentOptions));
       }, _a;
     }, BlobServiceClient2.prototype.listSegments = function(marker, options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var listContainersSegmentResponse;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
@@ -47539,9 +48071,9 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listSegments_1"));
     }, BlobServiceClient2.prototype.listItems = function(options) {
-      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
+      return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function() {
         var marker, _a, _b, segment, e_11_1, e_11, _c;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
@@ -47577,7 +48109,7 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
-      });
+      }, "listItems_1"));
     }, BlobServiceClient2.prototype.listContainers = function(options) {
       var _a, _this = this;
       options === void 0 && (options = {}), options.prefix === "" && (options.prefix = void 0);
@@ -47726,7 +48258,7 @@ var require_requestUtils = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -47734,6 +48266,7 @@ var require_requestUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -47741,10 +48274,11 @@ var require_requestUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -47760,10 +48294,12 @@ var require_requestUtils = __commonJS((exports2) => {
   function isSuccessStatusCode(statusCode) {
     return statusCode ? statusCode >= 200 && statusCode < 300 : !1;
   }
+  __name(isSuccessStatusCode, "isSuccessStatusCode");
   exports2.isSuccessStatusCode = isSuccessStatusCode;
   function isServerErrorStatusCode(statusCode) {
     return statusCode ? statusCode >= 500 : !0;
   }
+  __name(isServerErrorStatusCode, "isServerErrorStatusCode");
   exports2.isServerErrorStatusCode = isServerErrorStatusCode;
   function isRetryableStatusCode(statusCode) {
     return statusCode ? [
@@ -47772,12 +48308,14 @@ var require_requestUtils = __commonJS((exports2) => {
       http_client_1.HttpCodes.GatewayTimeout
     ].includes(statusCode) : !1;
   }
+  __name(isRetryableStatusCode, "isRetryableStatusCode");
   exports2.isRetryableStatusCode = isRetryableStatusCode;
   function sleep(milliseconds) {
     return __awaiter(this, void 0, void 0, function* () {
       return new Promise((resolve) => setTimeout(resolve, milliseconds));
     });
   }
+  __name(sleep, "sleep");
   function retry(name, method, getStatusCode, maxAttempts = constants_1.DefaultRetryAttempts, delay = constants_1.DefaultRetryDelay, onError = void 0) {
     return __awaiter(this, void 0, void 0, function* () {
       let errorMessage = "", attempt = 1;
@@ -47799,6 +48337,7 @@ var require_requestUtils = __commonJS((exports2) => {
       throw Error(`${name} failed: ${errorMessage}`);
     });
   }
+  __name(retry, "retry");
   exports2.retry = retry;
   function retryTypedResponse(name, method, maxAttempts = constants_1.DefaultRetryAttempts, delay = constants_1.DefaultRetryDelay) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -47812,12 +48351,14 @@ var require_requestUtils = __commonJS((exports2) => {
       });
     });
   }
+  __name(retryTypedResponse, "retryTypedResponse");
   exports2.retryTypedResponse = retryTypedResponse;
   function retryHttpClientResponse(name, method, maxAttempts = constants_1.DefaultRetryAttempts, delay = constants_1.DefaultRetryDelay) {
     return __awaiter(this, void 0, void 0, function* () {
       return yield retry(name, method, (response) => response.message.statusCode, maxAttempts, delay);
     });
   }
+  __name(retryHttpClientResponse, "retryHttpClientResponse");
   exports2.retryHttpClientResponse = retryHttpClientResponse;
 });
 
@@ -47830,7 +48371,7 @@ var require_downloadUtils = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -47838,6 +48379,7 @@ var require_downloadUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -47845,10 +48387,11 @@ var require_downloadUtils = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -47866,6 +48409,7 @@ var require_downloadUtils = __commonJS((exports2) => {
       yield util.promisify(stream.pipeline)(response.message, output);
     });
   }
+  __name(pipeResponseToStream, "pipeResponseToStream");
   var DownloadProgress = class {
     constructor(contentLength) {
       this.contentLength = contentLength, this.segmentIndex = 0, this.segmentSize = 0, this.segmentOffset = 0, this.receivedBytes = 0, this.displayedComplete = !1, this.startTime = Date.now();
@@ -47894,15 +48438,16 @@ var require_downloadUtils = __commonJS((exports2) => {
       };
     }
     startDisplayTimer(delayInMs = 1e3) {
-      let displayCallback = () => {
+      let displayCallback = /* @__PURE__ */ __name(() => {
         this.display(), this.isDone() || (this.timeoutHandle = setTimeout(displayCallback, delayInMs));
-      };
+      }, "displayCallback");
       this.timeoutHandle = setTimeout(displayCallback, delayInMs);
     }
     stopDisplayTimer() {
       this.timeoutHandle && (clearTimeout(this.timeoutHandle), this.timeoutHandle = void 0), this.display();
     }
   };
+  __name(DownloadProgress, "DownloadProgress");
   exports2.DownloadProgress = DownloadProgress;
   function downloadCacheHttpClient(archiveLocation, archivePath) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -47921,6 +48466,7 @@ var require_downloadUtils = __commonJS((exports2) => {
         core.debug("Unable to validate download, no Content-Length header");
     });
   }
+  __name(downloadCacheHttpClient, "downloadCacheHttpClient");
   exports2.downloadCacheHttpClient = downloadCacheHttpClient;
   function downloadCacheStorageSDK(archiveLocation, archivePath, options) {
     var _a;
@@ -47950,6 +48496,7 @@ var require_downloadUtils = __commonJS((exports2) => {
       }
     });
   }
+  __name(downloadCacheStorageSDK, "downloadCacheStorageSDK");
   exports2.downloadCacheStorageSDK = downloadCacheStorageSDK;
 });
 
@@ -47974,6 +48521,7 @@ var require_options = __commonJS((exports2) => {
     };
     return copy && (typeof copy.uploadConcurrency == "number" && (result.uploadConcurrency = copy.uploadConcurrency), typeof copy.uploadChunkSize == "number" && (result.uploadChunkSize = copy.uploadChunkSize)), core.debug(`Upload concurrency: ${result.uploadConcurrency}`), core.debug(`Upload chunk size: ${result.uploadChunkSize}`), result;
   }
+  __name(getUploadOptions, "getUploadOptions");
   exports2.getUploadOptions = getUploadOptions;
   function getDownloadOptions(copy) {
     let result = {
@@ -47983,6 +48531,7 @@ var require_options = __commonJS((exports2) => {
     };
     return copy && (typeof copy.useAzureSdk == "boolean" && (result.useAzureSdk = copy.useAzureSdk), typeof copy.downloadConcurrency == "number" && (result.downloadConcurrency = copy.downloadConcurrency), typeof copy.timeoutInMs == "number" && (result.timeoutInMs = copy.timeoutInMs)), core.debug(`Use Azure SDK: ${result.useAzureSdk}`), core.debug(`Download concurrency: ${result.downloadConcurrency}`), core.debug(`Request timeout (ms): ${result.timeoutInMs}`), result;
   }
+  __name(getDownloadOptions, "getDownloadOptions");
   exports2.getDownloadOptions = getDownloadOptions;
 });
 
@@ -47995,7 +48544,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -48003,6 +48552,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -48010,10 +48560,11 @@ var require_cacheHttpClient = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -48033,9 +48584,11 @@ var require_cacheHttpClient = __commonJS((exports2) => {
     let url = `${baseUrl}_apis/artifactcache/${resource}`;
     return core.debug(`Resource Url: ${url}`), url;
   }
+  __name(getCacheApiUrl, "getCacheApiUrl");
   function createAcceptHeader(type, apiVersion) {
     return `${type};api-version=${apiVersion}`;
   }
+  __name(createAcceptHeader, "createAcceptHeader");
   function getRequestOptions() {
     return {
       headers: {
@@ -48043,14 +48596,17 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       }
     };
   }
+  __name(getRequestOptions, "getRequestOptions");
   function createHttpClient() {
     let token = process.env.ACTIONS_RUNTIME_TOKEN || "", bearerCredentialHandler = new auth_1.BearerCredentialHandler(token);
     return new http_client_1.HttpClient("actions/cache", [bearerCredentialHandler], getRequestOptions());
   }
+  __name(createHttpClient, "createHttpClient");
   function getCacheVersion(paths, compressionMethod) {
     let components = paths.concat(!compressionMethod || compressionMethod === constants_1.CompressionMethod.Gzip ? [] : [compressionMethod]);
     return components.push(versionSalt), crypto.createHash("sha256").update(components.join("|")).digest("hex");
   }
+  __name(getCacheVersion, "getCacheVersion");
   exports2.getCacheVersion = getCacheVersion;
   function getCacheEntry(keys, paths, options) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -48067,6 +48623,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       return core.setSecret(cacheDownloadUrl), core.debug("Cache Result:"), core.debug(JSON.stringify(cacheResult)), cacheResult;
     });
   }
+  __name(getCacheEntry, "getCacheEntry");
   exports2.getCacheEntry = getCacheEntry;
   function downloadCache(archiveLocation, archivePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -48074,6 +48631,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       downloadOptions.useAzureSdk && archiveUrl.hostname.endsWith(".blob.core.windows.net") ? yield downloadUtils_1.downloadCacheStorageSDK(archiveLocation, archivePath, downloadOptions) : yield downloadUtils_1.downloadCacheHttpClient(archiveLocation, archivePath);
     });
   }
+  __name(downloadCache, "downloadCache");
   exports2.downloadCache = downloadCache;
   function reserveCache(key, paths, options) {
     var _a, _b;
@@ -48087,10 +48645,12 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       return (_b = (_a = response == null ? void 0 : response.result) === null || _a === void 0 ? void 0 : _a.cacheId) !== null && _b !== void 0 ? _b : -1;
     });
   }
+  __name(reserveCache, "reserveCache");
   exports2.reserveCache = reserveCache;
   function getContentRange(start, end) {
     return `bytes ${start}-${end}/*`;
   }
+  __name(getContentRange, "getContentRange");
   function uploadChunk(httpClient, resourceUrl, openStream, start, end) {
     return __awaiter(this, void 0, void 0, function* () {
       core.debug(`Uploading chunk of size ${end - start + 1} bytes at offset ${start} with content range: ${getContentRange(start, end)}`);
@@ -48104,6 +48664,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
         throw new Error(`Cache service responded with ${uploadChunkResponse.message.statusCode} during upload chunk.`);
     });
   }
+  __name(uploadChunk, "uploadChunk");
   function uploadFile(httpClient, cacheId, archivePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
       let fileSize = fs3.statSync(archivePath).size, resourceUrl = getCacheApiUrl(`caches/${cacheId.toString()}`), fd = fs3.openSync(archivePath, "r"), uploadOptions = options_1.getUploadOptions(options), concurrency = utils.assertDefined("uploadConcurrency", uploadOptions.uploadConcurrency), maxChunkSize = utils.assertDefined("uploadChunkSize", uploadOptions.uploadChunkSize), parallelUploads = [...new Array(concurrency).keys()];
@@ -48128,6 +48689,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       }
     });
   }
+  __name(uploadFile, "uploadFile");
   function commitCache(httpClient, cacheId, filesize) {
     return __awaiter(this, void 0, void 0, function* () {
       let commitCacheRequest = {size: filesize};
@@ -48136,6 +48698,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       }));
     });
   }
+  __name(commitCache, "commitCache");
   function saveCache(cacheId, archivePath, options) {
     return __awaiter(this, void 0, void 0, function* () {
       let httpClient = createHttpClient();
@@ -48146,6 +48709,7 @@ var require_cacheHttpClient = __commonJS((exports2) => {
       core.info("Cache saved successfully");
     });
   }
+  __name(saveCache, "saveCache");
   exports2.saveCache = saveCache;
 });
 
@@ -48158,7 +48722,7 @@ var require_tar = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -48166,6 +48730,7 @@ var require_tar = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -48173,10 +48738,11 @@ var require_tar = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -48204,6 +48770,7 @@ var require_tar = __commonJS((exports2) => {
       return yield io.which("tar", !0);
     });
   }
+  __name(getTarPath, "getTarPath");
   function execTar(args, compressionMethod, cwd) {
     return __awaiter(this, void 0, void 0, function* () {
       try {
@@ -48213,10 +48780,12 @@ var require_tar = __commonJS((exports2) => {
       }
     });
   }
+  __name(execTar, "execTar");
   function getWorkingDirectory() {
     var _a;
     return (_a = process.env.GITHUB_WORKSPACE) !== null && _a !== void 0 ? _a : process.cwd();
   }
+  __name(getWorkingDirectory, "getWorkingDirectory");
   function extractTar(archivePath, compressionMethod) {
     return __awaiter(this, void 0, void 0, function* () {
       let workingDirectory = getWorkingDirectory();
@@ -48231,6 +48800,7 @@ var require_tar = __commonJS((exports2) => {
             return ["-z"];
         }
       }
+      __name(getCompressionProgram, "getCompressionProgram");
       let args = [
         ...getCompressionProgram(),
         "-xf",
@@ -48242,6 +48812,7 @@ var require_tar = __commonJS((exports2) => {
       yield execTar(args, compressionMethod);
     });
   }
+  __name(extractTar, "extractTar");
   exports2.extractTar = extractTar;
   function createTar(archiveFolder, sourceDirectories, compressionMethod) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -48259,6 +48830,7 @@ var require_tar = __commonJS((exports2) => {
             return ["-z"];
         }
       }
+      __name(getCompressionProgram, "getCompressionProgram");
       let args = [
         "--posix",
         ...getCompressionProgram(),
@@ -48273,6 +48845,7 @@ var require_tar = __commonJS((exports2) => {
       yield execTar(args, compressionMethod, archiveFolder);
     });
   }
+  __name(createTar, "createTar");
   exports2.createTar = createTar;
 });
 
@@ -48285,7 +48858,7 @@ var require_cache = __commonJS((exports2) => {
         resolve(value);
       });
     }
-    return new (P || (P = Promise))(function(resolve, reject) {
+    return __name(adopt, "adopt"), new (P || (P = Promise))(function(resolve, reject) {
       function fulfilled(value) {
         try {
           step(generator.next(value));
@@ -48293,6 +48866,7 @@ var require_cache = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(fulfilled, "fulfilled");
       function rejected(value) {
         try {
           step(generator.throw(value));
@@ -48300,10 +48874,11 @@ var require_cache = __commonJS((exports2) => {
           reject(e);
         }
       }
+      __name(rejected, "rejected");
       function step(result) {
         result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
       }
-      step((generator = generator.apply(thisArg, _arguments || [])).next());
+      __name(step, "step"), step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
@@ -48321,6 +48896,7 @@ var require_cache = __commonJS((exports2) => {
       this.name = "ValidationError", Object.setPrototypeOf(this, ValidationError.prototype);
     }
   };
+  __name(ValidationError, "ValidationError");
   exports2.ValidationError = ValidationError;
   var ReserveCacheError = class extends Error {
     constructor(message) {
@@ -48328,17 +48904,20 @@ var require_cache = __commonJS((exports2) => {
       this.name = "ReserveCacheError", Object.setPrototypeOf(this, ReserveCacheError.prototype);
     }
   };
+  __name(ReserveCacheError, "ReserveCacheError");
   exports2.ReserveCacheError = ReserveCacheError;
   function checkPaths(paths) {
     if (!paths || paths.length === 0)
       throw new ValidationError("Path Validation Error: At least one directory or file path is required");
   }
+  __name(checkPaths, "checkPaths");
   function checkKey(key) {
     if (key.length > 512)
       throw new ValidationError(`Key Validation Error: ${key} cannot be larger than 512 characters.`);
     if (!/^[^,]*$/.test(key))
       throw new ValidationError(`Key Validation Error: ${key} cannot contain commas.`);
   }
+  __name(checkKey, "checkKey");
   function restoreCache2(paths, primaryKey, restoreKeys, options) {
     return __awaiter(this, void 0, void 0, function* () {
       checkPaths(paths), restoreKeys = restoreKeys || [];
@@ -48368,6 +48947,7 @@ var require_cache = __commonJS((exports2) => {
       return cacheEntry.cacheKey;
     });
   }
+  __name(restoreCache2, "restoreCache");
   exports2.restoreCache = restoreCache2;
   function saveCache(paths, key, options) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -48390,6 +48970,7 @@ var require_cache = __commonJS((exports2) => {
       return core.debug(`Saving Cache (ID: ${cacheId})`), yield cacheHttpClient.saveCache(cacheId, archivePath, options), cacheId;
     });
   }
+  __name(saveCache, "saveCache");
   exports2.saveCache = saveCache;
 });
 
@@ -48426,6 +49007,7 @@ var require_context3 = __commonJS((exports2) => {
       throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
     }
   };
+  __name(Context, "Context");
   exports2.Context = Context;
 });
 
@@ -48461,14 +49043,17 @@ var require_utils2 = __commonJS((exports2) => {
       throw new Error("Parameters token and opts.auth may not both be specified");
     return typeof options.auth == "string" ? options.auth : `token ${token}`;
   }
+  __name(getAuthString, "getAuthString");
   exports2.getAuthString = getAuthString;
   function getProxyAgent(destinationUrl) {
     return new httpClient.HttpClient().getAgent(destinationUrl);
   }
+  __name(getProxyAgent, "getProxyAgent");
   exports2.getProxyAgent = getProxyAgent;
   function getApiBaseUrl() {
     return process.env.GITHUB_API_URL || "https://api.github.com";
   }
+  __name(getApiBaseUrl, "getApiBaseUrl");
   exports2.getApiBaseUrl = getApiBaseUrl;
 });
 
@@ -48479,6 +49064,7 @@ var require_dist_node = __commonJS((exports2) => {
   function getUserAgent() {
     return typeof navigator == "object" && "userAgent" in navigator ? navigator.userAgent : typeof process == "object" && "version" in process ? `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})` : "<environment undetectable>";
   }
+  __name(getUserAgent, "getUserAgent");
   exports2.getUserAgent = getUserAgent;
 });
 
@@ -48496,6 +49082,7 @@ var require_register = __commonJS((exports2, module2) => {
       }, method)() : method(options);
     });
   }
+  __name(register, "register");
 });
 
 // ../node_modules/before-after-hook/lib/add.js
@@ -48503,24 +49090,25 @@ var require_add = __commonJS((exports2, module2) => {
   module2.exports = addHook;
   function addHook(state, kind, name, hook) {
     var orig = hook;
-    state.registry[name] || (state.registry[name] = []), kind === "before" && (hook = function(method, options) {
+    state.registry[name] || (state.registry[name] = []), kind === "before" && (hook = /* @__PURE__ */ __name(function(method, options) {
       return Promise.resolve().then(orig.bind(null, options)).then(method.bind(null, options));
-    }), kind === "after" && (hook = function(method, options) {
+    }, "hook")), kind === "after" && (hook = /* @__PURE__ */ __name(function(method, options) {
       var result;
       return Promise.resolve().then(method.bind(null, options)).then(function(result_) {
         return result = result_, orig(result, options);
       }).then(function() {
         return result;
       });
-    }), kind === "error" && (hook = function(method, options) {
+    }, "hook")), kind === "error" && (hook = /* @__PURE__ */ __name(function(method, options) {
       return Promise.resolve().then(method.bind(null, options)).catch(function(error) {
         return orig(error, options);
       });
-    }), state.registry[name].push({
+    }, "hook")), state.registry[name].push({
       hook,
       orig
     });
   }
+  __name(addHook, "addHook");
 });
 
 // ../node_modules/before-after-hook/lib/remove.js
@@ -48534,6 +49122,7 @@ var require_remove = __commonJS((exports2, module2) => {
       index !== -1 && state.registry[name].splice(index, 1);
     }
   }
+  __name(removeHook, "removeHook");
 });
 
 // ../node_modules/before-after-hook/index.js
@@ -48546,22 +49135,26 @@ var require_before_after_hook = __commonJS((exports2, module2) => {
       hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
     });
   }
+  __name(bindApi, "bindApi");
   function HookSingular() {
     var singularHookName = "h", singularHookState = {
       registry: {}
     }, singularHook = register.bind(null, singularHookState, singularHookName);
     return bindApi(singularHook, singularHookState, singularHookName), singularHook;
   }
+  __name(HookSingular, "HookSingular");
   function HookCollection() {
     var state = {
       registry: {}
     }, hook = register.bind(null, state);
     return bindApi(hook, state), hook;
   }
+  __name(HookCollection, "HookCollection");
   var collectionHookDeprecationMessageDisplayed = !1;
   function Hook() {
     return collectionHookDeprecationMessageDisplayed || (console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'), collectionHookDeprecationMessageDisplayed = !0), HookCollection();
   }
+  __name(Hook, "Hook");
   Hook.Singular = HookSingular.bind();
   Hook.Collection = HookCollection.bind();
   module2.exports = Hook;
@@ -48583,10 +49176,12 @@ var require_is_plain_object = __commonJS((exports2) => {
   function isObject(o) {
     return Object.prototype.toString.call(o) === "[object Object]";
   }
+  __name(isObject, "isObject");
   function isPlainObject(o) {
     var ctor, prot;
     return isObject(o) === !1 ? !1 : (ctor = o.constructor, ctor === void 0 ? !0 : (prot = ctor.prototype, !(isObject(prot) === !1 || prot.hasOwnProperty("isPrototypeOf") === !1)));
   }
+  __name(isPlainObject, "isPlainObject");
   exports2.isPlainObject = isPlainObject;
 });
 
@@ -48598,6 +49193,7 @@ var require_dist_node2 = __commonJS((exports2) => {
   function lowercaseKeys(object) {
     return object ? Object.keys(object).reduce((newObj, key) => (newObj[key.toLowerCase()] = object[key], newObj), {}) : {};
   }
+  __name(lowercaseKeys, "lowercaseKeys");
   function mergeDeep(defaults, options) {
     let result = Object.assign({}, defaults);
     return Object.keys(options).forEach((key) => {
@@ -48608,11 +49204,13 @@ var require_dist_node2 = __commonJS((exports2) => {
       });
     }), result;
   }
+  __name(mergeDeep, "mergeDeep");
   function removeUndefinedProperties(obj) {
     for (let key in obj)
       obj[key] === void 0 && delete obj[key];
     return obj;
   }
+  __name(removeUndefinedProperties, "removeUndefinedProperties");
   function merge(defaults, route, options) {
     if (typeof route == "string") {
       let [method, url] = route.split(" ");
@@ -48628,40 +49226,50 @@ var require_dist_node2 = __commonJS((exports2) => {
     let mergedOptions = mergeDeep(defaults || {}, options);
     return defaults && defaults.mediaType.previews.length && (mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews)), mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map((preview) => preview.replace(/-preview/, "")), mergedOptions;
   }
+  __name(merge, "merge");
   function addQueryParameters(url, parameters) {
     let separator = /\?/.test(url) ? "&" : "?", names = Object.keys(parameters);
     return names.length === 0 ? url : url + separator + names.map((name) => name === "q" ? "q=" + parameters.q.split("+").map(encodeURIComponent).join("+") : `${name}=${encodeURIComponent(parameters[name])}`).join("&");
   }
+  __name(addQueryParameters, "addQueryParameters");
   var urlVariableRegex = /\{[^}]+\}/g;
   function removeNonChars(variableName) {
     return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
   }
+  __name(removeNonChars, "removeNonChars");
   function extractUrlVariableNames(url) {
     let matches = url.match(urlVariableRegex);
     return matches ? matches.map(removeNonChars).reduce((a, b) => a.concat(b), []) : [];
   }
+  __name(extractUrlVariableNames, "extractUrlVariableNames");
   function omit(object, keysToOmit) {
     return Object.keys(object).filter((option) => !keysToOmit.includes(option)).reduce((obj, key) => (obj[key] = object[key], obj), {});
   }
+  __name(omit, "omit");
   function encodeReserved(str) {
     return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
       return /%[0-9A-Fa-f]/.test(part) || (part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]")), part;
     }).join("");
   }
+  __name(encodeReserved, "encodeReserved");
   function encodeUnreserved(str) {
     return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
       return "%" + c.charCodeAt(0).toString(16).toUpperCase();
     });
   }
+  __name(encodeUnreserved, "encodeUnreserved");
   function encodeValue(operator, value, key) {
     return value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value), key ? encodeUnreserved(key) + "=" + value : value;
   }
+  __name(encodeValue, "encodeValue");
   function isDefined(value) {
     return value != null;
   }
+  __name(isDefined, "isDefined");
   function isKeyOperator(operator) {
     return operator === ";" || operator === "&" || operator === "?";
   }
+  __name(isKeyOperator, "isKeyOperator");
   function getValues(context2, operator, key, modifier) {
     var value = context2[key], result = [];
     if (isDefined(value) && value !== "")
@@ -48685,11 +49293,13 @@ var require_dist_node2 = __commonJS((exports2) => {
       operator === ";" ? isDefined(value) && result.push(encodeUnreserved(key)) : value === "" && (operator === "&" || operator === "?") ? result.push(encodeUnreserved(key) + "=") : value === "" && result.push("");
     return result;
   }
+  __name(getValues, "getValues");
   function parseUrl(template) {
     return {
       expand: expand.bind(null, template)
     };
   }
+  __name(parseUrl, "parseUrl");
   function expand(template, context2) {
     var operators = ["+", "#", ".", "/", ";", "?", "&"];
     return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
@@ -48707,6 +49317,7 @@ var require_dist_node2 = __commonJS((exports2) => {
         return encodeReserved(literal);
     });
   }
+  __name(expand, "expand");
   function parse(options) {
     let method = options.method.toUpperCase(), url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}"), headers = Object.assign({}, options.headers), body, parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]), urlVariableNames = extractUrlVariableNames(url);
     url = parseUrl(url).expand(parameters), /^http/.test(url) || (url = options.baseUrl + url);
@@ -48728,9 +49339,11 @@ var require_dist_node2 = __commonJS((exports2) => {
       request: options.request
     } : null);
   }
+  __name(parse, "parse");
   function endpointWithDefaults(defaults, route, options) {
     return parse(merge(defaults, route, options));
   }
+  __name(endpointWithDefaults, "endpointWithDefaults");
   function withDefaults(oldDefaults, newDefaults) {
     let DEFAULTS2 = merge(oldDefaults, newDefaults), endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
     return Object.assign(endpoint2, {
@@ -48740,6 +49353,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
+  __name(withDefaults, "withDefaults");
   var VERSION = "6.0.11", userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`, DEFAULTS = {
     method: "GET",
     baseUrl: "https://api.github.com",
@@ -48768,10 +49382,12 @@ var require_is_plain_object2 = __commonJS((exports2) => {
   function isObject(o) {
     return Object.prototype.toString.call(o) === "[object Object]";
   }
+  __name(isObject, "isObject");
   function isPlainObject(o) {
     var ctor, prot;
     return isObject(o) === !1 ? !1 : (ctor = o.constructor, ctor === void 0 ? !0 : (prot = ctor.prototype, !(isObject(prot) === !1 || prot.hasOwnProperty("isPrototypeOf") === !1)));
   }
+  __name(isPlainObject, "isPlainObject");
   exports2.isPlainObject = isPlainObject;
 });
 
@@ -48785,6 +49401,7 @@ var require_dist_node3 = __commonJS((exports2) => {
       Error.captureStackTrace && Error.captureStackTrace(this, this.constructor), this.name = "Deprecation";
     }
   };
+  __name(Deprecation, "Deprecation");
   exports2.Deprecation = Deprecation;
 });
 
@@ -48807,7 +49424,9 @@ var require_wrappy = __commonJS((exports2, module2) => {
         ret[k] = cb2[k];
       }), ret;
     }
+    __name(wrapper, "wrapper");
   }
+  __name(wrappy, "wrappy");
 });
 
 // ../node_modules/once/once.js
@@ -48829,19 +49448,21 @@ var require_once = __commonJS((exports2, module2) => {
     });
   });
   function once(fn) {
-    var f = function() {
+    var f = /* @__PURE__ */ __name(function() {
       return f.called ? f.value : (f.called = !0, f.value = fn.apply(this, arguments));
-    };
+    }, "f");
     return f.called = !1, f;
   }
+  __name(once, "once");
   function onceStrict(fn) {
-    var f = function() {
+    var f = /* @__PURE__ */ __name(function() {
       if (f.called)
         throw new Error(f.onceError);
       return f.called = !0, f.value = fn.apply(this, arguments);
-    }, name = fn.name || "Function wrapped with `once`";
+    }, "f"), name = fn.name || "Function wrapped with `once`";
     return f.onceError = name + " shouldn't be called more than once", f.called = !1, f;
   }
+  __name(onceStrict, "onceStrict");
 });
 
 // ../node_modules/@octokit/request-error/dist-node/index.js
@@ -48851,6 +49472,7 @@ var require_dist_node4 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
+  __name(_interopDefault, "_interopDefault");
   var deprecation = require_dist_node3(), once = _interopDefault(require_once()), logOnce = once((deprecation2) => console.warn(deprecation2)), RequestError = class extends Error {
     constructor(message, statusCode, options) {
       super(message);
@@ -48865,6 +49487,7 @@ var require_dist_node4 = __commonJS((exports2) => {
       })), requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]"), this.request = requestCopy;
     }
   };
+  __name(RequestError, "RequestError");
   exports2.RequestError = RequestError;
 });
 
@@ -48875,10 +49498,12 @@ var require_dist_node5 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
+  __name(_interopDefault, "_interopDefault");
   var endpoint = require_dist_node2(), universalUserAgent = require_dist_node(), isPlainObject = require_is_plain_object2(), nodeFetch = _interopDefault(require_lib()), requestError = require_dist_node4(), VERSION = "5.4.13";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
+  __name(getBufferResponse, "getBufferResponse");
   function fetchWrapper(requestOptions) {
     (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) && (requestOptions.body = JSON.stringify(requestOptions.body));
     let headers = {}, status, url;
@@ -48935,22 +49560,24 @@ var require_dist_node5 = __commonJS((exports2) => {
       });
     });
   }
+  __name(fetchWrapper, "fetchWrapper");
   function withDefaults(oldEndpoint, newDefaults) {
     let endpoint2 = oldEndpoint.defaults(newDefaults);
-    return Object.assign(function(route, parameters) {
+    return Object.assign(/* @__PURE__ */ __name(function(route, parameters) {
       let endpointOptions = endpoint2.merge(route, parameters);
       if (!endpointOptions.request || !endpointOptions.request.hook)
         return fetchWrapper(endpoint2.parse(endpointOptions));
-      let request2 = (route2, parameters2) => fetchWrapper(endpoint2.parse(endpoint2.merge(route2, parameters2)));
+      let request2 = /* @__PURE__ */ __name((route2, parameters2) => fetchWrapper(endpoint2.parse(endpoint2.merge(route2, parameters2))), "request");
       return Object.assign(request2, {
         endpoint: endpoint2,
         defaults: withDefaults.bind(null, endpoint2)
       }), endpointOptions.request.hook(request2, endpointOptions);
-    }, {
+    }, "newApi"), {
       endpoint: endpoint2,
       defaults: withDefaults.bind(null, endpoint2)
     });
   }
+  __name(withDefaults, "withDefaults");
   var request = withDefaults(endpoint.endpoint, {
     headers: {
       "user-agent": `octokit-request.js/${VERSION} ${universalUserAgent.getUserAgent()}`
@@ -48971,7 +49598,9 @@ var require_dist_node6 = __commonJS((exports2) => {
         headers: response.headers
       }), this.name = "GraphqlError", this.request = request2, Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
     }
-  }, NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"], GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+  };
+  __name(GraphqlError, "GraphqlError");
+  var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"], GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
   function graphql(request2, query, options) {
     if (typeof query == "string" && options && "query" in options)
       return Promise.reject(new Error('[@octokit/graphql] "query" cannot be used as variable name'));
@@ -48991,13 +49620,15 @@ var require_dist_node6 = __commonJS((exports2) => {
       return response.data.data;
     });
   }
+  __name(graphql, "graphql");
   function withDefaults(request$1, newDefaults) {
     let newRequest = request$1.defaults(newDefaults);
-    return Object.assign((query, options) => graphql(newRequest, query, options), {
+    return Object.assign(/* @__PURE__ */ __name((query, options) => graphql(newRequest, query, options), "newApi"), {
       defaults: withDefaults.bind(null, newRequest),
       endpoint: request.request.endpoint
     });
   }
+  __name(withDefaults, "withDefaults");
   var graphql$1 = withDefaults(request.request, {
     headers: {
       "user-agent": `octokit-graphql.js/${VERSION} ${universalUserAgent.getUserAgent()}`
@@ -49011,6 +49642,7 @@ var require_dist_node6 = __commonJS((exports2) => {
       url: "/graphql"
     });
   }
+  __name(withCustomRequest, "withCustomRequest");
   exports2.graphql = graphql$1;
   exports2.withCustomRequest = withCustomRequest;
 });
@@ -49027,14 +49659,17 @@ var require_dist_node7 = __commonJS((exports2) => {
       tokenType
     };
   }
+  __name(auth, "auth");
   function withAuthorizationPrefix(token) {
     return token.split(/\./).length === 3 ? `bearer ${token}` : `token ${token}`;
   }
+  __name(withAuthorizationPrefix, "withAuthorizationPrefix");
   async function hook(token, request, route, parameters) {
     let endpoint = request.endpoint.merge(route, parameters);
     return endpoint.headers.authorization = withAuthorizationPrefix(token), request(endpoint);
   }
-  var createTokenAuth = function(token) {
+  __name(hook, "hook");
+  var createTokenAuth = /* @__PURE__ */ __name(function(token) {
     if (!token)
       throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
     if (typeof token != "string")
@@ -49042,7 +49677,7 @@ var require_dist_node7 = __commonJS((exports2) => {
     return token = token.replace(/^(token|bearer) +/i, ""), Object.assign(auth.bind(null, token), {
       hook: hook.bind(null, token)
     });
-  };
+  }, "createTokenAuth");
   exports2.createTokenAuth = createTokenAuth;
 });
 
@@ -49059,6 +49694,7 @@ var require_dist_node8 = __commonJS((exports2) => {
       key = sourceKeys[i], !(excluded.indexOf(key) >= 0) && (target[key] = source[key]);
     return target;
   }
+  __name(_objectWithoutPropertiesLoose, "_objectWithoutPropertiesLoose");
   function _objectWithoutProperties(source, excluded) {
     if (source == null)
       return {};
@@ -49070,6 +49706,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
+  __name(_objectWithoutProperties, "_objectWithoutProperties");
   var VERSION = "3.2.5", Octokit = class {
     constructor(options = {}) {
       let hook = new beforeAfterHook.Collection(), requestDefaults = {
@@ -49113,7 +49750,7 @@ var require_dist_node8 = __commonJS((exports2) => {
       });
     }
     static defaults(defaults) {
-      return class extends this {
+      return /* @__PURE__ */ __name(class extends this {
         constructor(...args) {
           let options = args[0] || {};
           if (typeof defaults == "function") {
@@ -49124,15 +49761,16 @@ var require_dist_node8 = __commonJS((exports2) => {
             userAgent: `${options.userAgent} ${defaults.userAgent}`
           } : null));
         }
-      };
+      }, "OctokitWithDefaults");
     }
     static plugin(...newPlugins) {
       var _a;
       let currentPlugins = this.plugins;
-      return _a = class extends this {
-      }, _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a;
+      return _a = /* @__PURE__ */ __name(class extends this {
+      }, "_a"), _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a;
     }
   };
+  __name(Octokit, "Octokit");
   Octokit.VERSION = VERSION;
   Octokit.plugins = [];
   exports2.Octokit = Octokit;
@@ -50191,6 +50829,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       }
     return newMethods;
   }
+  __name(endpointsToMethods, "endpointsToMethods");
   function decorate(octokit, scope, methodName, defaults, decorations) {
     let requestWithDefaults = octokit.request.defaults(defaults);
     function withDecorations(...args) {
@@ -50212,11 +50851,13 @@ var require_dist_node9 = __commonJS((exports2) => {
       }
       return requestWithDefaults(...args);
     }
-    return Object.assign(withDecorations, requestWithDefaults);
+    return __name(withDecorations, "withDecorations"), Object.assign(withDecorations, requestWithDefaults);
   }
+  __name(decorate, "decorate");
   function restEndpointMethods(octokit) {
     return endpointsToMethods(octokit, Endpoints);
   }
+  __name(restEndpointMethods, "restEndpointMethods");
   restEndpointMethods.VERSION = VERSION;
   exports2.restEndpointMethods = restEndpointMethods;
 });
@@ -50234,6 +50875,7 @@ var require_dist_node10 = __commonJS((exports2) => {
     let namespaceKey = Object.keys(response.data)[0], data = response.data[namespaceKey];
     return response.data = data, typeof incompleteResults != "undefined" && (response.data.incomplete_results = incompleteResults), typeof repositorySelection != "undefined" && (response.data.repository_selection = repositorySelection), response.data.total_count = totalCount, response;
   }
+  __name(normalizePaginatedListResponse, "normalizePaginatedListResponse");
   function iterator(octokit, route, parameters) {
     let options = typeof route == "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters), requestMethod = typeof route == "function" ? route : octokit.request, method = options.method, headers = options.headers, url = options.url;
     return {
@@ -50255,9 +50897,11 @@ var require_dist_node10 = __commonJS((exports2) => {
       })
     };
   }
+  __name(iterator, "iterator");
   function paginate(octokit, route, parameters, mapFn) {
     return typeof parameters == "function" && (mapFn = parameters, parameters = void 0), gather(octokit, [], iterator(octokit, route, parameters)[Symbol.asyncIterator](), mapFn);
   }
+  __name(paginate, "paginate");
   function gather(octokit, results, iterator2, mapFn) {
     return iterator2.next().then((result) => {
       if (result.done)
@@ -50266,9 +50910,10 @@ var require_dist_node10 = __commonJS((exports2) => {
       function done() {
         earlyExit = !0;
       }
-      return results = results.concat(mapFn ? mapFn(result.value, done) : result.value.data), earlyExit ? results : gather(octokit, results, iterator2, mapFn);
+      return __name(done, "done"), results = results.concat(mapFn ? mapFn(result.value, done) : result.value.data), earlyExit ? results : gather(octokit, results, iterator2, mapFn);
     });
   }
+  __name(gather, "gather");
   var composePaginateRest = Object.assign(paginate, {
     iterator
   });
@@ -50279,6 +50924,7 @@ var require_dist_node10 = __commonJS((exports2) => {
       })
     };
   }
+  __name(paginateRest, "paginateRest");
   paginateRest.VERSION = VERSION;
   exports2.composePaginateRest = composePaginateRest;
   exports2.paginateRest = paginateRest;
@@ -50321,6 +50967,7 @@ var require_utils3 = __commonJS((exports2) => {
     let opts = Object.assign({}, options || {}), auth = Utils.getAuthString(token, opts);
     return auth && (opts.auth = auth), opts;
   }
+  __name(getOctokitOptions, "getOctokitOptions");
   exports2.getOctokitOptions = getOctokitOptions;
 });
 
@@ -50353,6 +51000,7 @@ var require_github = __commonJS((exports2) => {
   function getOctokit2(token, options) {
     return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
   }
+  __name(getOctokit2, "getOctokit");
   exports2.getOctokit = getOctokit2;
 });
 
@@ -50399,10 +51047,10 @@ var require_pretty_bytes = __commonJS((exports2, module2) => {
     "Eibit",
     "Zibit",
     "Yibit"
-  ], toLocaleString = (number, locale) => {
+  ], toLocaleString = /* @__PURE__ */ __name((number, locale) => {
     let result = number;
     return typeof locale == "string" || Array.isArray(locale) ? result = number.toLocaleString(locale) : locale === !0 && (result = number.toLocaleString()), result;
-  };
+  }, "toLocaleString");
   module2.exports = (number, options) => {
     if (!Number.isFinite(number))
       throw new TypeError(`Expected a finite number, got ${typeof number}: ${number}`);
@@ -50450,6 +51098,7 @@ async function sendReport({
   let body = reportTitle + content;
   previousCommentID != null ? (import_core.info(`Updating previous report with ID "${previousCommentID}"\u2026`), await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", {...import_github.context.repo, body, comment_id: previousCommentID})) : (import_core.info("Sending new report\u2026"), await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", {...import_github.context.repo, body, issue_number: Number(pr)}));
 }
+__name(sendReport, "sendReport");
 
 // report/index.ts
 var import_fs2 = __toModule(require("fs")), import_util2 = __toModule(require("util"));
@@ -50459,13 +51108,16 @@ var import_pretty_bytes = __toModule(require_pretty_bytes()), import_util = __to
 function toFinite(value) {
   return typeof value == "number" && Number.isFinite(value) ? value : 0;
 }
+__name(toFinite, "toFinite");
 function normalizeDelta(delta, deltaThreshold = 256) {
   let absoluteDelta = Math.abs(delta);
   return absoluteDelta < deltaThreshold ? 0 : Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
+__name(normalizeDelta, "normalizeDelta");
 function getDiffIcon(diff) {
   return diff >= 0.5 ? "\u{1F198}" : diff >= 0.2 ? "\u{1F6A8}" : diff >= 0.1 ? "\u26A0\uFE0F" : diff >= 0.05 ? "\u{1F50D}" : diff <= -0.5 ? "\u{1F3C6}" : diff <= -0.2 ? "\u{1F389}" : diff <= -0.1 ? "\u{1F44F}" : diff <= -0.05 ? "\u2705" : "";
 }
+__name(getDiffIcon, "getDiffIcon");
 function formatRow(size, delta) {
   if (size === 0 && delta < 0)
     return [import_util.format("~%s~", import_pretty_bytes.default(Math.abs(delta))), "", "removed", ""];
@@ -50475,6 +51127,7 @@ function formatRow(size, delta) {
   let formattedDelta = import_pretty_bytes.default(delta, {signed: !0}), diff = delta / size, diffFormat = diff > 0 ? "+%s" : "%s", formattedDiff = import_util.format(diffFormat, diff.toLocaleString("en-US", {style: "percent"}));
   return [formattedSize, formattedDelta, formattedDiff, getDiffIcon(diff)];
 }
+__name(formatRow, "formatRow");
 function createBuildSizeDiffReport(currentSizes, previousSizes, {deltaThreshold} = {}) {
   let totalSize = 0, totalDelta = 0, changedRows = [], unChangedRows = [], files = Object.keys({
     ...currentSizes,
@@ -50495,6 +51148,7 @@ function createBuildSizeDiffReport(currentSizes, previousSizes, {deltaThreshold}
   return totalDelta !== 0 && (lines.push(""), lines.push(import_util.format("**Size Change**: %s (%s) %s", formattedTotalDelta, formattedTotalDiff, totalDiffIcon))), lines.push(""), changedRows.length > 0 && (lines.push("| Filename | Size | Change |     |"), lines.push("| :------- | ---: | -----: | :-: |"), lines.push(...changedRows)), unChangedRows.length > 0 && (lines.push("", ""), lines.push("<details><summary>\u2139\uFE0F <strong>View Unchanged</strong></summary>"), lines.push("", ""), lines.push("| Filename | Size |"), lines.push("| :------- | ---: |"), lines.push(...unChangedRows)), lines.join(`
 `);
 }
+__name(createBuildSizeDiffReport, "createBuildSizeDiffReport");
 
 // utils/BuildSizes.ts
 var import_glob = __toModule(require_glob()), import_fs = __toModule(require("fs")), import_path = __toModule(require("path")), import_zlib = __toModule(require("zlib"));
@@ -50506,12 +51160,15 @@ async function computeFileSize(filename) {
     });
   });
 }
+__name(computeFileSize, "computeFileSize");
 function isValidFile(filename) {
   return /\.(js|css)$/.test(filename) && !/service-worker\.js$/.test(filename) && !/precache-manifest\.[0-9a-f]+\.js$/.test(filename);
 }
+__name(isValidFile, "isValidFile");
 function getFileNameKey(filename, buildPath) {
   return import_path.default.relative(buildPath, filename).replace(/\.([a-f0-9])+\./, ".[hash].");
 }
+__name(getFileNameKey, "getFileNameKey");
 async function getBuildSizes(dir) {
   let globber = await import_glob.create(dir), [buildPath] = globber.getSearchPaths(), sizes = {};
   for await (let filename of globber.globGenerator()) {
@@ -50522,6 +51179,7 @@ async function getBuildSizes(dir) {
   }
   return sizes;
 }
+__name(getBuildSizes, "getBuildSizes");
 
 // utils/BuildSnapshotMeta.ts
 var import_os = __toModule(require("os")), import_path2 = __toModule(require("path"));
@@ -50536,6 +51194,7 @@ function getBuildSnapshotMeta({
     filename: import_path2.default.join(import_os.default.tmpdir(), `${name}.json`)
   };
 }
+__name(getBuildSnapshotMeta, "getBuildSnapshotMeta");
 
 // report/index.ts
 async function getReportContent(dir, sha, label) {
@@ -50550,6 +51209,7 @@ async function getReportContent(dir, sha, label) {
   let previousSizesJSON = await import_fs2.promises.readFile(meta.filename, "utf-8"), previousSizes = JSON.parse(previousSizesJSON), currentSizes = await getBuildSizes(dir);
   return createBuildSizeDiffReport(currentSizes, previousSizes);
 }
+__name(getReportContent, "getReportContent");
 async function main() {
   let pr = import_core2.getInput("pr", {required: !0}), dir = import_core2.getInput("dir", {required: !0}), sha = import_core2.getInput("sha", {required: !0}), label = import_core2.getInput("label", {required: !0}), token = import_core2.getInput("token", {required: !0}), content = await getReportContent(dir, sha, label);
   await sendReport({
@@ -50560,4 +51220,5 @@ async function main() {
     title: "Build Size Report"
   });
 }
+__name(main, "main");
 main().catch(import_core2.setFailed);
