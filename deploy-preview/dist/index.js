@@ -1,48 +1,22 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __markAsModule = (target) => __defProp(target, "__esModule", {value: true});
-var __commonJS = (callback, module2) => () => {
-  if (!module2) {
-    module2 = {exports: {}};
-    callback(module2.exports, module2);
-  }
-  return module2.exports;
-};
-var __export = (target, all) => {
+var __create = Object.create, __defProp = Object.defineProperty, __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty, __getOwnPropNames = Object.getOwnPropertyNames, __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __markAsModule = (target) => __defProp(target, "__esModule", {value: !0});
+var __commonJS = (callback, module2) => () => (module2 || (module2 = {exports: {}}, callback(module2.exports, module2)), module2.exports), __export = (target, all) => {
   __markAsModule(target);
   for (var name in all)
-    __defProp(target, name, {get: all[name], enumerable: true});
-};
-var __exportStar = (target, module2, desc) => {
-  __markAsModule(target);
-  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
+    __defProp(target, name, {get: all[name], enumerable: !0});
+}, __exportStar = (target, module2, desc) => {
+  if (__markAsModule(target), module2 && typeof module2 == "object" || typeof module2 == "function")
     for (let key of __getOwnPropNames(module2))
-      if (!__hasOwnProp.call(target, key) && key !== "default")
-        __defProp(target, key, {get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable});
-  }
+      !__hasOwnProp.call(target, key) && key !== "default" && __defProp(target, key, {get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable});
   return target;
-};
-var __toModule = (module2) => {
-  if (module2 && module2.__esModule)
-    return module2;
-  return __exportStar(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: true}), module2);
-};
+}, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0}), module2);
 
 // ../node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS((exports2) => {
   "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   function toCommandValue(input) {
-    if (input === null || input === void 0) {
-      return "";
-    } else if (typeof input === "string" || input instanceof String) {
-      return input;
-    }
-    return JSON.stringify(input);
+    return input == null ? "" : typeof input == "string" || input instanceof String ? input : JSON.stringify(input);
   }
   exports2.toCommandValue = toCommandValue;
 });
@@ -54,19 +28,15 @@ var require_command = __commonJS((exports2) => {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          result[k] = mod[k];
-    }
-    result["default"] = mod;
-    return result;
+        Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
+    return result.default = mod, result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var os = __importStar(require("os"));
-  var utils_1 = require_utils();
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var os = __importStar(require("os")), utils_1 = require_utils();
   function issueCommand(command, properties, message) {
-    const cmd = new Command(command, properties, message);
+    let cmd = new Command(command, properties, message);
     process.stdout.write(cmd.toString() + os.EOL);
   }
   exports2.issueCommand = issueCommand;
@@ -74,37 +44,22 @@ var require_command = __commonJS((exports2) => {
     issueCommand(name, {}, message);
   }
   exports2.issue = issue;
-  var CMD_STRING = "::";
-  var Command = class {
+  var CMD_STRING = "::", Command = class {
     constructor(command, properties, message) {
-      if (!command) {
-        command = "missing.command";
-      }
-      this.command = command;
-      this.properties = properties;
-      this.message = message;
+      command || (command = "missing.command"), this.command = command, this.properties = properties, this.message = message;
     }
     toString() {
       let cmdStr = CMD_STRING + this.command;
       if (this.properties && Object.keys(this.properties).length > 0) {
         cmdStr += " ";
-        let first = true;
-        for (const key in this.properties) {
+        let first = !0;
+        for (let key in this.properties)
           if (this.properties.hasOwnProperty(key)) {
-            const val = this.properties[key];
-            if (val) {
-              if (first) {
-                first = false;
-              } else {
-                cmdStr += ",";
-              }
-              cmdStr += `${key}=${escapeProperty(val)}`;
-            }
+            let val = this.properties[key];
+            val && (first ? first = !1 : cmdStr += ",", cmdStr += `${key}=${escapeProperty(val)}`);
           }
-        }
       }
-      cmdStr += `${CMD_STRING}${escapeData(this.message)}`;
-      return cmdStr;
+      return cmdStr += `${CMD_STRING}${escapeData(this.message)}`, cmdStr;
     }
   };
   function escapeData(s) {
@@ -122,26 +77,19 @@ var require_file_command = __commonJS((exports2) => {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          result[k] = mod[k];
-    }
-    result["default"] = mod;
-    return result;
+        Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
+    return result.default = mod, result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var fs = __importStar(require("fs"));
-  var os = __importStar(require("os"));
-  var utils_1 = require_utils();
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var fs = __importStar(require("fs")), os = __importStar(require("os")), utils_1 = require_utils();
   function issueCommand(command, message) {
-    const filePath = process.env[`GITHUB_${command}`];
-    if (!filePath) {
+    let filePath = process.env[`GITHUB_${command}`];
+    if (!filePath)
       throw new Error(`Unable to find environment variable for file command ${command}`);
-    }
-    if (!fs.existsSync(filePath)) {
+    if (!fs.existsSync(filePath))
       throw new Error(`Missing file at path: ${filePath}`);
-    }
     fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
       encoding: "utf8"
     });
@@ -168,7 +116,7 @@ var require_core = __commonJS((exports2) => {
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator.throw(value));
         } catch (e) {
           reject(e);
         }
@@ -178,41 +126,27 @@ var require_core = __commonJS((exports2) => {
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+  }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          result[k] = mod[k];
-    }
-    result["default"] = mod;
-    return result;
+        Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
+    return result.default = mod, result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var command_1 = require_command();
-  var file_command_1 = require_file_command();
-  var utils_1 = require_utils();
-  var os = __importStar(require("os"));
-  var path = __importStar(require("path"));
-  var ExitCode;
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var command_1 = require_command(), file_command_1 = require_file_command(), utils_1 = require_utils(), os = __importStar(require("os")), path = __importStar(require("path")), ExitCode;
   (function(ExitCode2) {
-    ExitCode2[ExitCode2["Success"] = 0] = "Success";
-    ExitCode2[ExitCode2["Failure"] = 1] = "Failure";
+    ExitCode2[ExitCode2.Success = 0] = "Success", ExitCode2[ExitCode2.Failure = 1] = "Failure";
   })(ExitCode = exports2.ExitCode || (exports2.ExitCode = {}));
   function exportVariable(name, val) {
-    const convertedVal = utils_1.toCommandValue(val);
-    process.env[name] = convertedVal;
-    const filePath = process.env["GITHUB_ENV"] || "";
-    if (filePath) {
-      const delimiter = "_GitHubActionsFileCommandDelimeter_";
-      const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
+    let convertedVal = utils_1.toCommandValue(val);
+    if (process.env[name] = convertedVal, process.env.GITHUB_ENV || "") {
+      let delimiter = "_GitHubActionsFileCommandDelimeter_", commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
       file_command_1.issueCommand("ENV", commandValue);
-    } else {
+    } else
       command_1.issueCommand("set-env", {name}, convertedVal);
-    }
   }
   exports2.exportVariable = exportVariable;
   function setSecret(secret) {
@@ -220,20 +154,13 @@ var require_core = __commonJS((exports2) => {
   }
   exports2.setSecret = setSecret;
   function addPath(inputPath) {
-    const filePath = process.env["GITHUB_PATH"] || "";
-    if (filePath) {
-      file_command_1.issueCommand("PATH", inputPath);
-    } else {
-      command_1.issueCommand("add-path", {}, inputPath);
-    }
-    process.env["PATH"] = `${inputPath}${path.delimiter}${process.env["PATH"]}`;
+    process.env.GITHUB_PATH || "" ? file_command_1.issueCommand("PATH", inputPath) : command_1.issueCommand("add-path", {}, inputPath), process.env.PATH = `${inputPath}${path.delimiter}${process.env.PATH}`;
   }
   exports2.addPath = addPath;
   function getInput2(name, options) {
-    const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
-    if (options && options.required && !val) {
+    let val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
+    if (options && options.required && !val)
       throw new Error(`Input required and not supplied: ${name}`);
-    }
     return val.trim();
   }
   exports2.getInput = getInput2;
@@ -246,12 +173,11 @@ var require_core = __commonJS((exports2) => {
   }
   exports2.setCommandEcho = setCommandEcho;
   function setFailed2(message) {
-    process.exitCode = ExitCode.Failure;
-    error(message);
+    process.exitCode = ExitCode.Failure, error(message);
   }
   exports2.setFailed = setFailed2;
   function isDebug() {
-    return process.env["RUNNER_DEBUG"] === "1";
+    return process.env.RUNNER_DEBUG === "1";
   }
   exports2.isDebug = isDebug;
   function debug(message) {
@@ -320,7 +246,7 @@ var require_io_util = __commonJS((exports2) => {
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator.throw(value));
         } catch (e) {
           reject(e);
         }
@@ -330,12 +256,9 @@ var require_io_util = __commonJS((exports2) => {
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
-  var _a;
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var assert_1 = require("assert");
-  var fs = require("fs");
-  var path = require("path");
+  }, _a;
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var assert_1 = require("assert"), fs = require("fs"), path = require("path");
   _a = fs.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
   exports2.IS_WINDOWS = process.platform === "win32";
   function exists(fsPath) {
@@ -343,38 +266,29 @@ var require_io_util = __commonJS((exports2) => {
       try {
         yield exports2.stat(fsPath);
       } catch (err) {
-        if (err.code === "ENOENT") {
-          return false;
-        }
+        if (err.code === "ENOENT")
+          return !1;
         throw err;
       }
-      return true;
+      return !0;
     });
   }
   exports2.exists = exists;
-  function isDirectory(fsPath, useStat = false) {
+  function isDirectory(fsPath, useStat = !1) {
     return __awaiter(this, void 0, void 0, function* () {
-      const stats = useStat ? yield exports2.stat(fsPath) : yield exports2.lstat(fsPath);
-      return stats.isDirectory();
+      return (useStat ? yield exports2.stat(fsPath) : yield exports2.lstat(fsPath)).isDirectory();
     });
   }
   exports2.isDirectory = isDirectory;
   function isRooted(p) {
-    p = normalizeSeparators(p);
-    if (!p) {
+    if (p = normalizeSeparators(p), !p)
       throw new Error('isRooted() parameter "p" cannot be empty');
-    }
-    if (exports2.IS_WINDOWS) {
-      return p.startsWith("\\") || /^[A-Z]:/i.test(p);
-    }
-    return p.startsWith("/");
+    return exports2.IS_WINDOWS ? p.startsWith("\\") || /^[A-Z]:/i.test(p) : p.startsWith("/");
   }
   exports2.isRooted = isRooted;
   function mkdirP(fsPath, maxDepth = 1e3, depth = 1) {
     return __awaiter(this, void 0, void 0, function* () {
-      assert_1.ok(fsPath, "a path argument must be provided");
-      fsPath = path.resolve(fsPath);
-      if (depth >= maxDepth)
+      if (assert_1.ok(fsPath, "a path argument must be provided"), fsPath = path.resolve(fsPath), depth >= maxDepth)
         return exports2.mkdir(fsPath);
       try {
         yield exports2.mkdir(fsPath);
@@ -382,8 +296,7 @@ var require_io_util = __commonJS((exports2) => {
       } catch (err) {
         switch (err.code) {
           case "ENOENT": {
-            yield mkdirP(path.dirname(fsPath), maxDepth, depth + 1);
-            yield exports2.mkdir(fsPath);
+            yield mkdirP(path.dirname(fsPath), maxDepth, depth + 1), yield exports2.mkdir(fsPath);
             return;
           }
           default: {
@@ -403,57 +316,43 @@ var require_io_util = __commonJS((exports2) => {
   exports2.mkdirP = mkdirP;
   function tryGetExecutablePath(filePath, extensions) {
     return __awaiter(this, void 0, void 0, function* () {
-      let stats = void 0;
+      let stats;
       try {
         stats = yield exports2.stat(filePath);
       } catch (err) {
-        if (err.code !== "ENOENT") {
-          console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
-        }
+        err.code !== "ENOENT" && console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
       }
       if (stats && stats.isFile()) {
         if (exports2.IS_WINDOWS) {
-          const upperExt = path.extname(filePath).toUpperCase();
-          if (extensions.some((validExt) => validExt.toUpperCase() === upperExt)) {
+          let upperExt = path.extname(filePath).toUpperCase();
+          if (extensions.some((validExt) => validExt.toUpperCase() === upperExt))
             return filePath;
-          }
-        } else {
-          if (isUnixExecutable(stats)) {
-            return filePath;
-          }
-        }
+        } else if (isUnixExecutable(stats))
+          return filePath;
       }
-      const originalFilePath = filePath;
-      for (const extension of extensions) {
-        filePath = originalFilePath + extension;
-        stats = void 0;
+      let originalFilePath = filePath;
+      for (let extension of extensions) {
+        filePath = originalFilePath + extension, stats = void 0;
         try {
           stats = yield exports2.stat(filePath);
         } catch (err) {
-          if (err.code !== "ENOENT") {
-            console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
-          }
+          err.code !== "ENOENT" && console.log(`Unexpected error attempting to determine if executable file exists '${filePath}': ${err}`);
         }
         if (stats && stats.isFile()) {
           if (exports2.IS_WINDOWS) {
             try {
-              const directory = path.dirname(filePath);
-              const upperName = path.basename(filePath).toUpperCase();
-              for (const actualName of yield exports2.readdir(directory)) {
+              let directory = path.dirname(filePath), upperName = path.basename(filePath).toUpperCase();
+              for (let actualName of yield exports2.readdir(directory))
                 if (upperName === actualName.toUpperCase()) {
                   filePath = path.join(directory, actualName);
                   break;
                 }
-              }
             } catch (err) {
               console.log(`Unexpected error attempting to determine the actual case of the file '${filePath}': ${err}`);
             }
             return filePath;
-          } else {
-            if (isUnixExecutable(stats)) {
-              return filePath;
-            }
-          }
+          } else if (isUnixExecutable(stats))
+            return filePath;
         }
       }
       return "";
@@ -461,12 +360,7 @@ var require_io_util = __commonJS((exports2) => {
   }
   exports2.tryGetExecutablePath = tryGetExecutablePath;
   function normalizeSeparators(p) {
-    p = p || "";
-    if (exports2.IS_WINDOWS) {
-      p = p.replace(/\//g, "\\");
-      return p.replace(/\\\\+/g, "\\");
-    }
-    return p.replace(/\/\/+/g, "/");
+    return p = p || "", exports2.IS_WINDOWS ? (p = p.replace(/\//g, "\\"), p.replace(/\\\\+/g, "\\")) : p.replace(/\/\/+/g, "/");
   }
   function isUnixExecutable(stats) {
     return (stats.mode & 1) > 0 || (stats.mode & 8) > 0 && stats.gid === process.getgid() || (stats.mode & 64) > 0 && stats.uid === process.getuid();
@@ -492,7 +386,7 @@ var require_io = __commonJS((exports2) => {
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator.throw(value));
         } catch (e) {
           reject(e);
         }
@@ -503,34 +397,24 @@ var require_io = __commonJS((exports2) => {
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var childProcess = require("child_process");
-  var path = require("path");
-  var util_1 = require("util");
-  var ioUtil = require_io_util();
-  var exec2 = util_1.promisify(childProcess.exec);
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var childProcess = require("child_process"), path = require("path"), util_1 = require("util"), ioUtil = require_io_util(), exec2 = util_1.promisify(childProcess.exec);
   function cp(source, dest, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
-      const {force, recursive} = readCopyOptions(options);
-      const destStat = (yield ioUtil.exists(dest)) ? yield ioUtil.stat(dest) : null;
-      if (destStat && destStat.isFile() && !force) {
+      let {force, recursive} = readCopyOptions(options), destStat = (yield ioUtil.exists(dest)) ? yield ioUtil.stat(dest) : null;
+      if (destStat && destStat.isFile() && !force)
         return;
-      }
-      const newDest = destStat && destStat.isDirectory() ? path.join(dest, path.basename(source)) : dest;
-      if (!(yield ioUtil.exists(source))) {
+      let newDest = destStat && destStat.isDirectory() ? path.join(dest, path.basename(source)) : dest;
+      if (!(yield ioUtil.exists(source)))
         throw new Error(`no such file or directory: ${source}`);
-      }
-      const sourceStat = yield ioUtil.stat(source);
-      if (sourceStat.isDirectory()) {
-        if (!recursive) {
-          throw new Error(`Failed to copy. ${source} is a directory, but tried to copy without recursive flag.`);
-        } else {
+      if ((yield ioUtil.stat(source)).isDirectory())
+        if (recursive)
           yield cpDirRecursive(source, newDest, 0, force);
-        }
-      } else {
-        if (path.relative(source, newDest) === "") {
+        else
+          throw new Error(`Failed to copy. ${source} is a directory, but tried to copy without recursive flag.`);
+      else {
+        if (path.relative(source, newDest) === "")
           throw new Error(`'${newDest}' and '${source}' are the same file`);
-        }
         yield copyFile(source, newDest, force);
       }
     });
@@ -539,21 +423,14 @@ var require_io = __commonJS((exports2) => {
   function mv(source, dest, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
       if (yield ioUtil.exists(dest)) {
-        let destExists = true;
-        if (yield ioUtil.isDirectory(dest)) {
-          dest = path.join(dest, path.basename(source));
-          destExists = yield ioUtil.exists(dest);
-        }
-        if (destExists) {
-          if (options.force == null || options.force) {
+        let destExists = !0;
+        if ((yield ioUtil.isDirectory(dest)) && (dest = path.join(dest, path.basename(source)), destExists = yield ioUtil.exists(dest)), destExists)
+          if (options.force == null || options.force)
             yield rmRF(dest);
-          } else {
+          else
             throw new Error("Destination already exists");
-          }
-        }
       }
-      yield mkdirP(path.dirname(dest));
-      yield ioUtil.rename(source, dest);
+      yield mkdirP(path.dirname(dest)), yield ioUtil.rename(source, dest);
     });
   }
   exports2.mv = mv;
@@ -561,11 +438,7 @@ var require_io = __commonJS((exports2) => {
     return __awaiter(this, void 0, void 0, function* () {
       if (ioUtil.IS_WINDOWS) {
         try {
-          if (yield ioUtil.isDirectory(inputPath, true)) {
-            yield exec2(`rd /s /q "${inputPath}"`);
-          } else {
-            yield exec2(`del /f /a "${inputPath}"`);
-          }
+          (yield ioUtil.isDirectory(inputPath, !0)) ? yield exec2(`rd /s /q "${inputPath}"`) : yield exec2(`del /f /a "${inputPath}"`);
         } catch (err) {
           if (err.code !== "ENOENT")
             throw err;
@@ -577,7 +450,7 @@ var require_io = __commonJS((exports2) => {
             throw err;
         }
       } else {
-        let isDir = false;
+        let isDir = !1;
         try {
           isDir = yield ioUtil.isDirectory(inputPath);
         } catch (err) {
@@ -585,11 +458,7 @@ var require_io = __commonJS((exports2) => {
             throw err;
           return;
         }
-        if (isDir) {
-          yield exec2(`rm -rf "${inputPath}"`);
-        } else {
-          yield ioUtil.unlink(inputPath);
-        }
+        isDir ? yield exec2(`rm -rf "${inputPath}"`) : yield ioUtil.unlink(inputPath);
       }
     });
   }
@@ -602,51 +471,29 @@ var require_io = __commonJS((exports2) => {
   exports2.mkdirP = mkdirP;
   function which(tool, check) {
     return __awaiter(this, void 0, void 0, function* () {
-      if (!tool) {
+      if (!tool)
         throw new Error("parameter 'tool' is required");
-      }
-      if (check) {
-        const result = yield which(tool, false);
-        if (!result) {
-          if (ioUtil.IS_WINDOWS) {
-            throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`);
-          } else {
-            throw new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also check the file mode to verify the file is executable.`);
-          }
-        }
-      }
+      if (check && !(yield which(tool, !1)))
+        throw ioUtil.IS_WINDOWS ? new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also verify the file has a valid extension for an executable file.`) : new Error(`Unable to locate executable file: ${tool}. Please verify either the file path exists or the file can be found within a directory specified by the PATH environment variable. Also check the file mode to verify the file is executable.`);
       try {
-        const extensions = [];
-        if (ioUtil.IS_WINDOWS && process.env.PATHEXT) {
-          for (const extension of process.env.PATHEXT.split(path.delimiter)) {
-            if (extension) {
-              extensions.push(extension);
-            }
-          }
-        }
+        let extensions = [];
+        if (ioUtil.IS_WINDOWS && process.env.PATHEXT)
+          for (let extension of process.env.PATHEXT.split(path.delimiter))
+            extension && extensions.push(extension);
         if (ioUtil.isRooted(tool)) {
-          const filePath = yield ioUtil.tryGetExecutablePath(tool, extensions);
-          if (filePath) {
-            return filePath;
-          }
+          let filePath = yield ioUtil.tryGetExecutablePath(tool, extensions);
+          return filePath || "";
+        }
+        if (tool.includes("/") || ioUtil.IS_WINDOWS && tool.includes("\\"))
           return "";
-        }
-        if (tool.includes("/") || ioUtil.IS_WINDOWS && tool.includes("\\")) {
-          return "";
-        }
-        const directories = [];
-        if (process.env.PATH) {
-          for (const p of process.env.PATH.split(path.delimiter)) {
-            if (p) {
-              directories.push(p);
-            }
-          }
-        }
-        for (const directory of directories) {
-          const filePath = yield ioUtil.tryGetExecutablePath(directory + path.sep + tool, extensions);
-          if (filePath) {
+        let directories = [];
+        if (process.env.PATH)
+          for (let p of process.env.PATH.split(path.delimiter))
+            p && directories.push(p);
+        for (let directory of directories) {
+          let filePath = yield ioUtil.tryGetExecutablePath(directory + path.sep + tool, extensions);
+          if (filePath)
             return filePath;
-          }
         }
         return "";
       } catch (err) {
@@ -656,26 +503,18 @@ var require_io = __commonJS((exports2) => {
   }
   exports2.which = which;
   function readCopyOptions(options) {
-    const force = options.force == null ? true : options.force;
-    const recursive = Boolean(options.recursive);
+    let force = options.force == null ? !0 : options.force, recursive = Boolean(options.recursive);
     return {force, recursive};
   }
   function cpDirRecursive(sourceDir, destDir, currentDepth, force) {
     return __awaiter(this, void 0, void 0, function* () {
       if (currentDepth >= 255)
         return;
-      currentDepth++;
-      yield mkdirP(destDir);
-      const files = yield ioUtil.readdir(sourceDir);
-      for (const fileName of files) {
-        const srcFile = `${sourceDir}/${fileName}`;
-        const destFile = `${destDir}/${fileName}`;
-        const srcFileStat = yield ioUtil.lstat(srcFile);
-        if (srcFileStat.isDirectory()) {
-          yield cpDirRecursive(srcFile, destFile, currentDepth, force);
-        } else {
-          yield copyFile(srcFile, destFile, force);
-        }
+      currentDepth++, yield mkdirP(destDir);
+      let files = yield ioUtil.readdir(sourceDir);
+      for (let fileName of files) {
+        let srcFile = `${sourceDir}/${fileName}`, destFile = `${destDir}/${fileName}`;
+        (yield ioUtil.lstat(srcFile)).isDirectory() ? yield cpDirRecursive(srcFile, destFile, currentDepth, force) : yield copyFile(srcFile, destFile, force);
       }
       yield ioUtil.chmod(destDir, (yield ioUtil.stat(sourceDir)).mode);
     });
@@ -684,19 +523,14 @@ var require_io = __commonJS((exports2) => {
     return __awaiter(this, void 0, void 0, function* () {
       if ((yield ioUtil.lstat(srcFile)).isSymbolicLink()) {
         try {
-          yield ioUtil.lstat(destFile);
-          yield ioUtil.unlink(destFile);
+          yield ioUtil.lstat(destFile), yield ioUtil.unlink(destFile);
         } catch (e) {
-          if (e.code === "EPERM") {
-            yield ioUtil.chmod(destFile, "0666");
-            yield ioUtil.unlink(destFile);
-          }
+          e.code === "EPERM" && (yield ioUtil.chmod(destFile, "0666"), yield ioUtil.unlink(destFile));
         }
-        const symlinkFull = yield ioUtil.readlink(srcFile);
+        let symlinkFull = yield ioUtil.readlink(srcFile);
         yield ioUtil.symlink(symlinkFull, destFile, ioUtil.IS_WINDOWS ? "junction" : null);
-      } else if (!(yield ioUtil.exists(destFile)) || force) {
-        yield ioUtil.copyFile(srcFile, destFile);
-      }
+      } else
+        (!(yield ioUtil.exists(destFile)) || force) && (yield ioUtil.copyFile(srcFile, destFile));
     });
   }
 });
@@ -720,7 +554,7 @@ var require_toolrunner = __commonJS((exports2) => {
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator.throw(value));
         } catch (e) {
           reject(e);
         }
@@ -730,80 +564,55 @@ var require_toolrunner = __commonJS((exports2) => {
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+  }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          result[k] = mod[k];
-    }
-    result["default"] = mod;
-    return result;
+        Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
+    return result.default = mod, result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var os = __importStar(require("os"));
-  var events = __importStar(require("events"));
-  var child = __importStar(require("child_process"));
-  var path = __importStar(require("path"));
-  var io = __importStar(require_io());
-  var ioUtil = __importStar(require_io_util());
-  var IS_WINDOWS = process.platform === "win32";
-  var ToolRunner = class extends events.EventEmitter {
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var os = __importStar(require("os")), events = __importStar(require("events")), child = __importStar(require("child_process")), path = __importStar(require("path")), io = __importStar(require_io()), ioUtil = __importStar(require_io_util()), IS_WINDOWS = process.platform === "win32", ToolRunner = class extends events.EventEmitter {
     constructor(toolPath, args, options) {
       super();
-      if (!toolPath) {
+      if (!toolPath)
         throw new Error("Parameter 'toolPath' cannot be null or empty.");
-      }
-      this.toolPath = toolPath;
-      this.args = args || [];
-      this.options = options || {};
+      this.toolPath = toolPath, this.args = args || [], this.options = options || {};
     }
     _debug(message) {
-      if (this.options.listeners && this.options.listeners.debug) {
-        this.options.listeners.debug(message);
-      }
+      this.options.listeners && this.options.listeners.debug && this.options.listeners.debug(message);
     }
     _getCommandString(options, noPrefix) {
-      const toolPath = this._getSpawnFileName();
-      const args = this._getSpawnArgs(options);
-      let cmd = noPrefix ? "" : "[command]";
-      if (IS_WINDOWS) {
+      let toolPath = this._getSpawnFileName(), args = this._getSpawnArgs(options), cmd = noPrefix ? "" : "[command]";
+      if (IS_WINDOWS)
         if (this._isCmdFile()) {
           cmd += toolPath;
-          for (const a of args) {
+          for (let a of args)
             cmd += ` ${a}`;
-          }
         } else if (options.windowsVerbatimArguments) {
           cmd += `"${toolPath}"`;
-          for (const a of args) {
+          for (let a of args)
             cmd += ` ${a}`;
-          }
         } else {
           cmd += this._windowsQuoteCmdArg(toolPath);
-          for (const a of args) {
+          for (let a of args)
             cmd += ` ${this._windowsQuoteCmdArg(a)}`;
-          }
         }
-      } else {
+      else {
         cmd += toolPath;
-        for (const a of args) {
+        for (let a of args)
           cmd += ` ${a}`;
-        }
       }
       return cmd;
     }
     _processLineBuffer(data, strBuffer, onLine) {
       try {
-        let s = strBuffer + data.toString();
-        let n = s.indexOf(os.EOL);
-        while (n > -1) {
-          const line = s.substring(0, n);
-          onLine(line);
-          s = s.substring(n + os.EOL.length);
-          n = s.indexOf(os.EOL);
+        let s = strBuffer + data.toString(), n = s.indexOf(os.EOL);
+        for (; n > -1; ) {
+          let line = s.substring(0, n);
+          onLine(line), s = s.substring(n + os.EOL.length), n = s.indexOf(os.EOL);
         }
         strBuffer = s;
       } catch (err) {
@@ -811,24 +620,14 @@ var require_toolrunner = __commonJS((exports2) => {
       }
     }
     _getSpawnFileName() {
-      if (IS_WINDOWS) {
-        if (this._isCmdFile()) {
-          return process.env["COMSPEC"] || "cmd.exe";
-        }
-      }
-      return this.toolPath;
+      return IS_WINDOWS && this._isCmdFile() ? process.env.COMSPEC || "cmd.exe" : this.toolPath;
     }
     _getSpawnArgs(options) {
-      if (IS_WINDOWS) {
-        if (this._isCmdFile()) {
-          let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
-          for (const a of this.args) {
-            argline += " ";
-            argline += options.windowsVerbatimArguments ? a : this._windowsQuoteCmdArg(a);
-          }
-          argline += '"';
-          return [argline];
-        }
+      if (IS_WINDOWS && this._isCmdFile()) {
+        let argline = `/D /S /C "${this._windowsQuoteCmdArg(this.toolPath)}`;
+        for (let a of this.args)
+          argline += " ", argline += options.windowsVerbatimArguments ? a : this._windowsQuoteCmdArg(a);
+        return argline += '"', [argline];
       }
       return this.args;
     }
@@ -836,17 +635,15 @@ var require_toolrunner = __commonJS((exports2) => {
       return str.endsWith(end);
     }
     _isCmdFile() {
-      const upperToolPath = this.toolPath.toUpperCase();
+      let upperToolPath = this.toolPath.toUpperCase();
       return this._endsWith(upperToolPath, ".CMD") || this._endsWith(upperToolPath, ".BAT");
     }
     _windowsQuoteCmdArg(arg) {
-      if (!this._isCmdFile()) {
+      if (!this._isCmdFile())
         return this._uvQuoteCmdArg(arg);
-      }
-      if (!arg) {
+      if (!arg)
         return '""';
-      }
-      const cmdSpecialChars = [
+      let cmdSpecialChars = [
         " ",
         "	",
         "&",
@@ -869,178 +666,83 @@ var require_toolrunner = __commonJS((exports2) => {
         "<",
         ">",
         '"'
-      ];
-      let needsQuotes = false;
-      for (const char of arg) {
+      ], needsQuotes = !1;
+      for (let char of arg)
         if (cmdSpecialChars.some((x) => x === char)) {
-          needsQuotes = true;
+          needsQuotes = !0;
           break;
         }
-      }
-      if (!needsQuotes) {
+      if (!needsQuotes)
         return arg;
-      }
-      let reverse = '"';
-      let quoteHit = true;
-      for (let i = arg.length; i > 0; i--) {
-        reverse += arg[i - 1];
-        if (quoteHit && arg[i - 1] === "\\") {
-          reverse += "\\";
-        } else if (arg[i - 1] === '"') {
-          quoteHit = true;
-          reverse += '"';
-        } else {
-          quoteHit = false;
-        }
-      }
-      reverse += '"';
-      return reverse.split("").reverse().join("");
+      let reverse = '"', quoteHit = !0;
+      for (let i = arg.length; i > 0; i--)
+        reverse += arg[i - 1], quoteHit && arg[i - 1] === "\\" ? reverse += "\\" : arg[i - 1] === '"' ? (quoteHit = !0, reverse += '"') : quoteHit = !1;
+      return reverse += '"', reverse.split("").reverse().join("");
     }
     _uvQuoteCmdArg(arg) {
-      if (!arg) {
+      if (!arg)
         return '""';
-      }
-      if (!arg.includes(" ") && !arg.includes("	") && !arg.includes('"')) {
+      if (!arg.includes(" ") && !arg.includes("	") && !arg.includes('"'))
         return arg;
-      }
-      if (!arg.includes('"') && !arg.includes("\\")) {
+      if (!arg.includes('"') && !arg.includes("\\"))
         return `"${arg}"`;
-      }
-      let reverse = '"';
-      let quoteHit = true;
-      for (let i = arg.length; i > 0; i--) {
-        reverse += arg[i - 1];
-        if (quoteHit && arg[i - 1] === "\\") {
-          reverse += "\\";
-        } else if (arg[i - 1] === '"') {
-          quoteHit = true;
-          reverse += "\\";
-        } else {
-          quoteHit = false;
-        }
-      }
-      reverse += '"';
-      return reverse.split("").reverse().join("");
+      let reverse = '"', quoteHit = !0;
+      for (let i = arg.length; i > 0; i--)
+        reverse += arg[i - 1], quoteHit && arg[i - 1] === "\\" ? reverse += "\\" : arg[i - 1] === '"' ? (quoteHit = !0, reverse += "\\") : quoteHit = !1;
+      return reverse += '"', reverse.split("").reverse().join("");
     }
     _cloneExecOptions(options) {
       options = options || {};
-      const result = {
+      let result = {
         cwd: options.cwd || process.cwd(),
         env: options.env || process.env,
-        silent: options.silent || false,
-        windowsVerbatimArguments: options.windowsVerbatimArguments || false,
-        failOnStdErr: options.failOnStdErr || false,
-        ignoreReturnCode: options.ignoreReturnCode || false,
+        silent: options.silent || !1,
+        windowsVerbatimArguments: options.windowsVerbatimArguments || !1,
+        failOnStdErr: options.failOnStdErr || !1,
+        ignoreReturnCode: options.ignoreReturnCode || !1,
         delay: options.delay || 1e4
       };
-      result.outStream = options.outStream || process.stdout;
-      result.errStream = options.errStream || process.stderr;
-      return result;
+      return result.outStream = options.outStream || process.stdout, result.errStream = options.errStream || process.stderr, result;
     }
     _getSpawnOptions(options, toolPath) {
       options = options || {};
-      const result = {};
-      result.cwd = options.cwd;
-      result.env = options.env;
-      result["windowsVerbatimArguments"] = options.windowsVerbatimArguments || this._isCmdFile();
-      if (options.windowsVerbatimArguments) {
-        result.argv0 = `"${toolPath}"`;
-      }
-      return result;
+      let result = {};
+      return result.cwd = options.cwd, result.env = options.env, result.windowsVerbatimArguments = options.windowsVerbatimArguments || this._isCmdFile(), options.windowsVerbatimArguments && (result.argv0 = `"${toolPath}"`), result;
     }
     exec() {
       return __awaiter(this, void 0, void 0, function* () {
-        if (!ioUtil.isRooted(this.toolPath) && (this.toolPath.includes("/") || IS_WINDOWS && this.toolPath.includes("\\"))) {
-          this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
-        }
-        this.toolPath = yield io.which(this.toolPath, true);
-        return new Promise((resolve, reject) => {
-          this._debug(`exec tool: ${this.toolPath}`);
-          this._debug("arguments:");
-          for (const arg of this.args) {
+        return !ioUtil.isRooted(this.toolPath) && (this.toolPath.includes("/") || IS_WINDOWS && this.toolPath.includes("\\")) && (this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath)), this.toolPath = yield io.which(this.toolPath, !0), new Promise((resolve, reject) => {
+          this._debug(`exec tool: ${this.toolPath}`), this._debug("arguments:");
+          for (let arg of this.args)
             this._debug(`   ${arg}`);
-          }
-          const optionsNonNull = this._cloneExecOptions(this.options);
-          if (!optionsNonNull.silent && optionsNonNull.outStream) {
-            optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
-          }
-          const state = new ExecState(optionsNonNull, this.toolPath);
+          let optionsNonNull = this._cloneExecOptions(this.options);
+          !optionsNonNull.silent && optionsNonNull.outStream && optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
+          let state = new ExecState(optionsNonNull, this.toolPath);
           state.on("debug", (message) => {
             this._debug(message);
           });
-          const fileName = this._getSpawnFileName();
-          const cp = child.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
-          const stdbuffer = "";
-          if (cp.stdout) {
-            cp.stdout.on("data", (data) => {
-              if (this.options.listeners && this.options.listeners.stdout) {
-                this.options.listeners.stdout(data);
-              }
-              if (!optionsNonNull.silent && optionsNonNull.outStream) {
-                optionsNonNull.outStream.write(data);
-              }
-              this._processLineBuffer(data, stdbuffer, (line) => {
-                if (this.options.listeners && this.options.listeners.stdline) {
-                  this.options.listeners.stdline(line);
-                }
-              });
+          let fileName = this._getSpawnFileName(), cp = child.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName)), stdbuffer = "";
+          cp.stdout && cp.stdout.on("data", (data) => {
+            this.options.listeners && this.options.listeners.stdout && this.options.listeners.stdout(data), !optionsNonNull.silent && optionsNonNull.outStream && optionsNonNull.outStream.write(data), this._processLineBuffer(data, stdbuffer, (line) => {
+              this.options.listeners && this.options.listeners.stdline && this.options.listeners.stdline(line);
             });
-          }
-          const errbuffer = "";
-          if (cp.stderr) {
-            cp.stderr.on("data", (data) => {
-              state.processStderr = true;
-              if (this.options.listeners && this.options.listeners.stderr) {
-                this.options.listeners.stderr(data);
-              }
-              if (!optionsNonNull.silent && optionsNonNull.errStream && optionsNonNull.outStream) {
-                const s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
-                s.write(data);
-              }
-              this._processLineBuffer(data, errbuffer, (line) => {
-                if (this.options.listeners && this.options.listeners.errline) {
-                  this.options.listeners.errline(line);
-                }
-              });
+          });
+          let errbuffer = "";
+          if (cp.stderr && cp.stderr.on("data", (data) => {
+            state.processStderr = !0, this.options.listeners && this.options.listeners.stderr && this.options.listeners.stderr(data), !optionsNonNull.silent && optionsNonNull.errStream && optionsNonNull.outStream && (optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream).write(data), this._processLineBuffer(data, errbuffer, (line) => {
+              this.options.listeners && this.options.listeners.errline && this.options.listeners.errline(line);
             });
-          }
-          cp.on("error", (err) => {
-            state.processError = err.message;
-            state.processExited = true;
-            state.processClosed = true;
-            state.CheckComplete();
-          });
-          cp.on("exit", (code) => {
-            state.processExitCode = code;
-            state.processExited = true;
-            this._debug(`Exit code ${code} received from tool '${this.toolPath}'`);
-            state.CheckComplete();
-          });
-          cp.on("close", (code) => {
-            state.processExitCode = code;
-            state.processExited = true;
-            state.processClosed = true;
-            this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
-            state.CheckComplete();
-          });
-          state.on("done", (error, exitCode) => {
-            if (stdbuffer.length > 0) {
-              this.emit("stdline", stdbuffer);
-            }
-            if (errbuffer.length > 0) {
-              this.emit("errline", errbuffer);
-            }
-            cp.removeAllListeners();
-            if (error) {
-              reject(error);
-            } else {
-              resolve(exitCode);
-            }
-          });
-          if (this.options.input) {
-            if (!cp.stdin) {
+          }), cp.on("error", (err) => {
+            state.processError = err.message, state.processExited = !0, state.processClosed = !0, state.CheckComplete();
+          }), cp.on("exit", (code) => {
+            state.processExitCode = code, state.processExited = !0, this._debug(`Exit code ${code} received from tool '${this.toolPath}'`), state.CheckComplete();
+          }), cp.on("close", (code) => {
+            state.processExitCode = code, state.processExited = !0, state.processClosed = !0, this._debug(`STDIO streams have closed for tool '${this.toolPath}'`), state.CheckComplete();
+          }), state.on("done", (error, exitCode) => {
+            stdbuffer.length > 0 && this.emit("stdline", stdbuffer), errbuffer.length > 0 && this.emit("errline", errbuffer), cp.removeAllListeners(), error ? reject(error) : resolve(exitCode);
+          }), this.options.input) {
+            if (!cp.stdin)
               throw new Error("child process missing stdin");
-            }
             cp.stdin.end(this.options.input);
           }
         });
@@ -1049,25 +751,14 @@ var require_toolrunner = __commonJS((exports2) => {
   };
   exports2.ToolRunner = ToolRunner;
   function argStringToArray(argString) {
-    const args = [];
-    let inQuotes = false;
-    let escaped = false;
-    let arg = "";
+    let args = [], inQuotes = !1, escaped = !1, arg = "";
     function append(c) {
-      if (escaped && c !== '"') {
-        arg += "\\";
-      }
-      arg += c;
-      escaped = false;
+      escaped && c !== '"' && (arg += "\\"), arg += c, escaped = !1;
     }
     for (let i = 0; i < argString.length; i++) {
-      const c = argString.charAt(i);
+      let c = argString.charAt(i);
       if (c === '"') {
-        if (!escaped) {
-          inQuotes = !inQuotes;
-        } else {
-          append(c);
-        }
+        escaped ? append(c) : inQuotes = !inQuotes;
         continue;
       }
       if (c === "\\" && escaped) {
@@ -1075,84 +766,43 @@ var require_toolrunner = __commonJS((exports2) => {
         continue;
       }
       if (c === "\\" && inQuotes) {
-        escaped = true;
+        escaped = !0;
         continue;
       }
       if (c === " " && !inQuotes) {
-        if (arg.length > 0) {
-          args.push(arg);
-          arg = "";
-        }
+        arg.length > 0 && (args.push(arg), arg = "");
         continue;
       }
       append(c);
     }
-    if (arg.length > 0) {
-      args.push(arg.trim());
-    }
-    return args;
+    return arg.length > 0 && args.push(arg.trim()), args;
   }
   exports2.argStringToArray = argStringToArray;
   var ExecState = class extends events.EventEmitter {
     constructor(options, toolPath) {
       super();
-      this.processClosed = false;
-      this.processError = "";
-      this.processExitCode = 0;
-      this.processExited = false;
-      this.processStderr = false;
-      this.delay = 1e4;
-      this.done = false;
-      this.timeout = null;
-      if (!toolPath) {
+      if (this.processClosed = !1, this.processError = "", this.processExitCode = 0, this.processExited = !1, this.processStderr = !1, this.delay = 1e4, this.done = !1, this.timeout = null, !toolPath)
         throw new Error("toolPath must not be empty");
-      }
-      this.options = options;
-      this.toolPath = toolPath;
-      if (options.delay) {
-        this.delay = options.delay;
-      }
+      this.options = options, this.toolPath = toolPath, options.delay && (this.delay = options.delay);
     }
     CheckComplete() {
-      if (this.done) {
-        return;
-      }
-      if (this.processClosed) {
-        this._setResult();
-      } else if (this.processExited) {
-        this.timeout = setTimeout(ExecState.HandleTimeout, this.delay, this);
-      }
+      this.done || (this.processClosed ? this._setResult() : this.processExited && (this.timeout = setTimeout(ExecState.HandleTimeout, this.delay, this)));
     }
     _debug(message) {
       this.emit("debug", message);
     }
     _setResult() {
       let error;
-      if (this.processExited) {
-        if (this.processError) {
-          error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
-        } else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) {
-          error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
-        } else if (this.processStderr && this.options.failOnStdErr) {
-          error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
-        }
-      }
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.timeout = null;
-      }
-      this.done = true;
-      this.emit("done", error, this.processExitCode);
+      this.processExited && (this.processError ? error = new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`) : this.processExitCode !== 0 && !this.options.ignoreReturnCode ? error = new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`) : this.processStderr && this.options.failOnStdErr && (error = new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`))), this.timeout && (clearTimeout(this.timeout), this.timeout = null), this.done = !0, this.emit("done", error, this.processExitCode);
     }
     static HandleTimeout(state) {
-      if (state.done) {
-        return;
+      if (!state.done) {
+        if (!state.processClosed && state.processExited) {
+          let message = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+          state._debug(message);
+        }
+        state._setResult();
       }
-      if (!state.processClosed && state.processExited) {
-        const message = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
-        state._debug(message);
-      }
-      state._setResult();
     }
   };
 });
@@ -1176,7 +826,7 @@ var require_exec = __commonJS((exports2) => {
       }
       function rejected(value) {
         try {
-          step(generator["throw"](value));
+          step(generator.throw(value));
         } catch (e) {
           reject(e);
         }
@@ -1186,31 +836,24 @@ var require_exec = __commonJS((exports2) => {
       }
       step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
-  };
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+  }, __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          result[k] = mod[k];
-    }
-    result["default"] = mod;
-    return result;
+        Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
+    return result.default = mod, result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   var tr = __importStar(require_toolrunner());
   function exec2(commandLine, args, options) {
     return __awaiter(this, void 0, void 0, function* () {
-      const commandArgs = tr.argStringToArray(commandLine);
-      if (commandArgs.length === 0) {
-        throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
-      }
-      const toolPath = commandArgs[0];
-      args = commandArgs.slice(1).concat(args || []);
-      const runner = new tr.ToolRunner(toolPath, args, options);
-      return runner.exec();
+      let commandArgs = tr.argStringToArray(commandLine);
+      if (commandArgs.length === 0)
+        throw new Error("Parameter 'commandLine' cannot be null or empty.");
+      let toolPath = commandArgs[0];
+      return args = commandArgs.slice(1).concat(args || []), new tr.ToolRunner(toolPath, args, options).exec();
     });
   }
   exports2.exec = exec2;
@@ -1219,46 +862,33 @@ var require_exec = __commonJS((exports2) => {
 // ../node_modules/@actions/github/lib/context.js
 var require_context = __commonJS((exports2) => {
   "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   exports2.Context = void 0;
-  var fs_1 = require("fs");
-  var os_1 = require("os");
-  var Context = class {
+  var fs_1 = require("fs"), os_1 = require("os"), Context = class {
     constructor() {
-      this.payload = {};
-      if (process.env.GITHUB_EVENT_PATH) {
-        if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
+      if (this.payload = {}, process.env.GITHUB_EVENT_PATH)
+        if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH))
           this.payload = JSON.parse(fs_1.readFileSync(process.env.GITHUB_EVENT_PATH, {encoding: "utf8"}));
-        } else {
-          const path = process.env.GITHUB_EVENT_PATH;
+        else {
+          let path = process.env.GITHUB_EVENT_PATH;
           process.stdout.write(`GITHUB_EVENT_PATH ${path} does not exist${os_1.EOL}`);
         }
-      }
-      this.eventName = process.env.GITHUB_EVENT_NAME;
-      this.sha = process.env.GITHUB_SHA;
-      this.ref = process.env.GITHUB_REF;
-      this.workflow = process.env.GITHUB_WORKFLOW;
-      this.action = process.env.GITHUB_ACTION;
-      this.actor = process.env.GITHUB_ACTOR;
-      this.job = process.env.GITHUB_JOB;
-      this.runNumber = parseInt(process.env.GITHUB_RUN_NUMBER, 10);
-      this.runId = parseInt(process.env.GITHUB_RUN_ID, 10);
+      this.eventName = process.env.GITHUB_EVENT_NAME, this.sha = process.env.GITHUB_SHA, this.ref = process.env.GITHUB_REF, this.workflow = process.env.GITHUB_WORKFLOW, this.action = process.env.GITHUB_ACTION, this.actor = process.env.GITHUB_ACTOR, this.job = process.env.GITHUB_JOB, this.runNumber = parseInt(process.env.GITHUB_RUN_NUMBER, 10), this.runId = parseInt(process.env.GITHUB_RUN_ID, 10);
     }
     get issue() {
-      const payload = this.payload;
+      let payload = this.payload;
       return Object.assign(Object.assign({}, this.repo), {number: (payload.issue || payload.pull_request || payload).number});
     }
     get repo() {
       if (process.env.GITHUB_REPOSITORY) {
-        const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+        let [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
         return {owner, repo};
       }
-      if (this.payload.repository) {
+      if (this.payload.repository)
         return {
           owner: this.payload.repository.owner.login,
           repo: this.payload.repository.name
         };
-      }
       throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
     }
   };
@@ -1268,51 +898,29 @@ var require_context = __commonJS((exports2) => {
 // ../node_modules/@actions/http-client/proxy.js
 var require_proxy = __commonJS((exports2) => {
   "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   function getProxyUrl(reqUrl) {
-    let usingSsl = reqUrl.protocol === "https:";
-    let proxyUrl;
-    if (checkBypass(reqUrl)) {
+    let usingSsl = reqUrl.protocol === "https:", proxyUrl;
+    if (checkBypass(reqUrl))
       return proxyUrl;
-    }
     let proxyVar;
-    if (usingSsl) {
-      proxyVar = process.env["https_proxy"] || process.env["HTTPS_PROXY"];
-    } else {
-      proxyVar = process.env["http_proxy"] || process.env["HTTP_PROXY"];
-    }
-    if (proxyVar) {
-      proxyUrl = new URL(proxyVar);
-    }
-    return proxyUrl;
+    return usingSsl ? proxyVar = process.env.https_proxy || process.env.HTTPS_PROXY : proxyVar = process.env.http_proxy || process.env.HTTP_PROXY, proxyVar && (proxyUrl = new URL(proxyVar)), proxyUrl;
   }
   exports2.getProxyUrl = getProxyUrl;
   function checkBypass(reqUrl) {
-    if (!reqUrl.hostname) {
-      return false;
-    }
-    let noProxy = process.env["no_proxy"] || process.env["NO_PROXY"] || "";
-    if (!noProxy) {
-      return false;
-    }
+    if (!reqUrl.hostname)
+      return !1;
+    let noProxy = process.env.no_proxy || process.env.NO_PROXY || "";
+    if (!noProxy)
+      return !1;
     let reqPort;
-    if (reqUrl.port) {
-      reqPort = Number(reqUrl.port);
-    } else if (reqUrl.protocol === "http:") {
-      reqPort = 80;
-    } else if (reqUrl.protocol === "https:") {
-      reqPort = 443;
-    }
+    reqUrl.port ? reqPort = Number(reqUrl.port) : reqUrl.protocol === "http:" ? reqPort = 80 : reqUrl.protocol === "https:" && (reqPort = 443);
     let upperReqHosts = [reqUrl.hostname.toUpperCase()];
-    if (typeof reqPort === "number") {
-      upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
-    }
-    for (let upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x)) {
-      if (upperReqHosts.some((x) => x === upperNoProxyItem)) {
-        return true;
-      }
-    }
-    return false;
+    typeof reqPort == "number" && upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
+    for (let upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x))
+      if (upperReqHosts.some((x) => x === upperNoProxyItem))
+        return !0;
+    return !1;
   }
   exports2.checkBypass = checkBypass;
 });
@@ -1320,115 +928,73 @@ var require_proxy = __commonJS((exports2) => {
 // ../node_modules/tunnel/lib/tunnel.js
 var require_tunnel = __commonJS((exports2) => {
   "use strict";
-  var net = require("net");
-  var tls = require("tls");
-  var http = require("http");
-  var https = require("https");
-  var events = require("events");
-  var assert = require("assert");
-  var util = require("util");
+  var net = require("net"), tls = require("tls"), http2 = require("http"), https2 = require("https"), events = require("events"), assert = require("assert"), util = require("util");
   exports2.httpOverHttp = httpOverHttp;
   exports2.httpsOverHttp = httpsOverHttp;
   exports2.httpOverHttps = httpOverHttps;
   exports2.httpsOverHttps = httpsOverHttps;
   function httpOverHttp(options) {
     var agent = new TunnelingAgent(options);
-    agent.request = http.request;
-    return agent;
+    return agent.request = http2.request, agent;
   }
   function httpsOverHttp(options) {
     var agent = new TunnelingAgent(options);
-    agent.request = http.request;
-    agent.createSocket = createSecureSocket;
-    agent.defaultPort = 443;
-    return agent;
+    return agent.request = http2.request, agent.createSocket = createSecureSocket, agent.defaultPort = 443, agent;
   }
   function httpOverHttps(options) {
     var agent = new TunnelingAgent(options);
-    agent.request = https.request;
-    return agent;
+    return agent.request = https2.request, agent;
   }
   function httpsOverHttps(options) {
     var agent = new TunnelingAgent(options);
-    agent.request = https.request;
-    agent.createSocket = createSecureSocket;
-    agent.defaultPort = 443;
-    return agent;
+    return agent.request = https2.request, agent.createSocket = createSecureSocket, agent.defaultPort = 443, agent;
   }
   function TunnelingAgent(options) {
     var self = this;
-    self.options = options || {};
-    self.proxyOptions = self.options.proxy || {};
-    self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
-    self.requests = [];
-    self.sockets = [];
-    self.on("free", function onFree(socket, host, port, localAddress) {
-      var options2 = toOptions(host, port, localAddress);
-      for (var i = 0, len = self.requests.length; i < len; ++i) {
+    self.options = options || {}, self.proxyOptions = self.options.proxy || {}, self.maxSockets = self.options.maxSockets || http2.Agent.defaultMaxSockets, self.requests = [], self.sockets = [], self.on("free", function(socket, host, port, localAddress) {
+      for (var options2 = toOptions(host, port, localAddress), i = 0, len = self.requests.length; i < len; ++i) {
         var pending = self.requests[i];
         if (pending.host === options2.host && pending.port === options2.port) {
-          self.requests.splice(i, 1);
-          pending.request.onSocket(socket);
+          self.requests.splice(i, 1), pending.request.onSocket(socket);
           return;
         }
       }
-      socket.destroy();
-      self.removeSocket(socket);
+      socket.destroy(), self.removeSocket(socket);
     });
   }
   util.inherits(TunnelingAgent, events.EventEmitter);
-  TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
-    var self = this;
-    var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+  TunnelingAgent.prototype.addRequest = function(req, host, port, localAddress) {
+    var self = this, options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
     if (self.sockets.length >= this.maxSockets) {
       self.requests.push(options);
       return;
     }
     self.createSocket(options, function(socket) {
-      socket.on("free", onFree);
-      socket.on("close", onCloseOrRemove);
-      socket.on("agentRemove", onCloseOrRemove);
-      req.onSocket(socket);
+      socket.on("free", onFree), socket.on("close", onCloseOrRemove), socket.on("agentRemove", onCloseOrRemove), req.onSocket(socket);
       function onFree() {
         self.emit("free", socket, options);
       }
       function onCloseOrRemove(err) {
-        self.removeSocket(socket);
-        socket.removeListener("free", onFree);
-        socket.removeListener("close", onCloseOrRemove);
-        socket.removeListener("agentRemove", onCloseOrRemove);
+        self.removeSocket(socket), socket.removeListener("free", onFree), socket.removeListener("close", onCloseOrRemove), socket.removeListener("agentRemove", onCloseOrRemove);
       }
     });
   };
-  TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
-    var self = this;
-    var placeholder = {};
+  TunnelingAgent.prototype.createSocket = function(options, cb) {
+    var self = this, placeholder = {};
     self.sockets.push(placeholder);
     var connectOptions = mergeOptions({}, self.proxyOptions, {
       method: "CONNECT",
       path: options.host + ":" + options.port,
-      agent: false,
+      agent: !1,
       headers: {
         host: options.host + ":" + options.port
       }
     });
-    if (options.localAddress) {
-      connectOptions.localAddress = options.localAddress;
-    }
-    if (connectOptions.proxyAuth) {
-      connectOptions.headers = connectOptions.headers || {};
-      connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
-    }
-    debug("making CONNECT request");
+    options.localAddress && (connectOptions.localAddress = options.localAddress), connectOptions.proxyAuth && (connectOptions.headers = connectOptions.headers || {}, connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64")), debug("making CONNECT request");
     var connectReq = self.request(connectOptions);
-    connectReq.useChunkedEncodingByDefault = false;
-    connectReq.once("response", onResponse);
-    connectReq.once("upgrade", onUpgrade);
-    connectReq.once("connect", onConnect);
-    connectReq.once("error", onError);
-    connectReq.end();
+    connectReq.useChunkedEncodingByDefault = !1, connectReq.once("response", onResponse), connectReq.once("upgrade", onUpgrade), connectReq.once("connect", onConnect), connectReq.once("error", onError), connectReq.end();
     function onResponse(res) {
-      res.upgrade = true;
+      res.upgrade = !0;
     }
     function onUpgrade(res, socket, head) {
       process.nextTick(function() {
@@ -1436,48 +1002,33 @@ var require_tunnel = __commonJS((exports2) => {
       });
     }
     function onConnect(res, socket, head) {
-      connectReq.removeAllListeners();
-      socket.removeAllListeners();
-      if (res.statusCode !== 200) {
-        debug("tunneling socket could not be established, statusCode=%d", res.statusCode);
-        socket.destroy();
+      if (connectReq.removeAllListeners(), socket.removeAllListeners(), res.statusCode !== 200) {
+        debug("tunneling socket could not be established, statusCode=%d", res.statusCode), socket.destroy();
         var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
-        error.code = "ECONNRESET";
-        options.request.emit("error", error);
-        self.removeSocket(placeholder);
+        error.code = "ECONNRESET", options.request.emit("error", error), self.removeSocket(placeholder);
         return;
       }
       if (head.length > 0) {
-        debug("got illegal response body from proxy");
-        socket.destroy();
+        debug("got illegal response body from proxy"), socket.destroy();
         var error = new Error("got illegal response body from proxy");
-        error.code = "ECONNRESET";
-        options.request.emit("error", error);
-        self.removeSocket(placeholder);
+        error.code = "ECONNRESET", options.request.emit("error", error), self.removeSocket(placeholder);
         return;
       }
-      debug("tunneling connection has established");
-      self.sockets[self.sockets.indexOf(placeholder)] = socket;
-      return cb(socket);
+      return debug("tunneling connection has established"), self.sockets[self.sockets.indexOf(placeholder)] = socket, cb(socket);
     }
     function onError(cause) {
-      connectReq.removeAllListeners();
-      debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+      connectReq.removeAllListeners(), debug(`tunneling socket could not be established, cause=%s
+`, cause.message, cause.stack);
       var error = new Error("tunneling socket could not be established, cause=" + cause.message);
-      error.code = "ECONNRESET";
-      options.request.emit("error", error);
-      self.removeSocket(placeholder);
+      error.code = "ECONNRESET", options.request.emit("error", error), self.removeSocket(placeholder);
     }
   };
-  TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  TunnelingAgent.prototype.removeSocket = function(socket) {
     var pos = this.sockets.indexOf(socket);
-    if (pos === -1) {
-      return;
-    }
-    this.sockets.splice(pos, 1);
-    var pending = this.requests.shift();
-    if (pending) {
-      this.createSocket(pending, function(socket2) {
+    if (pos !== -1) {
+      this.sockets.splice(pos, 1);
+      var pending = this.requests.shift();
+      pending && this.createSocket(pending, function(socket2) {
         pending.request.onSocket(socket2);
       });
     }
@@ -1485,56 +1036,37 @@ var require_tunnel = __commonJS((exports2) => {
   function createSecureSocket(options, cb) {
     var self = this;
     TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
-      var hostHeader = options.request.getHeader("host");
-      var tlsOptions = mergeOptions({}, self.options, {
+      var hostHeader = options.request.getHeader("host"), tlsOptions = mergeOptions({}, self.options, {
         socket,
         servername: hostHeader ? hostHeader.replace(/:.*$/, "") : options.host
-      });
-      var secureSocket = tls.connect(0, tlsOptions);
-      self.sockets[self.sockets.indexOf(socket)] = secureSocket;
-      cb(secureSocket);
+      }), secureSocket = tls.connect(0, tlsOptions);
+      self.sockets[self.sockets.indexOf(socket)] = secureSocket, cb(secureSocket);
     });
   }
   function toOptions(host, port, localAddress) {
-    if (typeof host === "string") {
-      return {
-        host,
-        port,
-        localAddress
-      };
-    }
-    return host;
+    return typeof host == "string" ? {
+      host,
+      port,
+      localAddress
+    } : host;
   }
   function mergeOptions(target) {
     for (var i = 1, len = arguments.length; i < len; ++i) {
       var overrides = arguments[i];
-      if (typeof overrides === "object") {
-        var keys = Object.keys(overrides);
-        for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+      if (typeof overrides == "object")
+        for (var keys = Object.keys(overrides), j = 0, keyLen = keys.length; j < keyLen; ++j) {
           var k = keys[j];
-          if (overrides[k] !== void 0) {
-            target[k] = overrides[k];
-          }
+          overrides[k] !== void 0 && (target[k] = overrides[k]);
         }
-      }
     }
     return target;
   }
   var debug;
-  if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-    debug = function() {
-      var args = Array.prototype.slice.call(arguments);
-      if (typeof args[0] === "string") {
-        args[0] = "TUNNEL: " + args[0];
-      } else {
-        args.unshift("TUNNEL:");
-      }
-      console.error.apply(console, args);
-    };
-  } else {
-    debug = function() {
-    };
-  }
+  process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG) ? debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    typeof args[0] == "string" ? args[0] = "TUNNEL: " + args[0] : args.unshift("TUNNEL:"), console.error.apply(console, args);
+  } : debug = function() {
+  };
   exports2.debug = debug;
 });
 
@@ -1546,49 +1078,18 @@ var require_tunnel2 = __commonJS((exports2, module2) => {
 // ../node_modules/@actions/http-client/index.js
 var require_http_client = __commonJS((exports2) => {
   "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var http = require("http");
-  var https = require("https");
-  var pm = require_proxy();
-  var tunnel;
-  var HttpCodes;
+  Object.defineProperty(exports2, "__esModule", {value: !0});
+  var http2 = require("http"), https2 = require("https"), pm = require_proxy(), tunnel, HttpCodes;
   (function(HttpCodes2) {
-    HttpCodes2[HttpCodes2["OK"] = 200] = "OK";
-    HttpCodes2[HttpCodes2["MultipleChoices"] = 300] = "MultipleChoices";
-    HttpCodes2[HttpCodes2["MovedPermanently"] = 301] = "MovedPermanently";
-    HttpCodes2[HttpCodes2["ResourceMoved"] = 302] = "ResourceMoved";
-    HttpCodes2[HttpCodes2["SeeOther"] = 303] = "SeeOther";
-    HttpCodes2[HttpCodes2["NotModified"] = 304] = "NotModified";
-    HttpCodes2[HttpCodes2["UseProxy"] = 305] = "UseProxy";
-    HttpCodes2[HttpCodes2["SwitchProxy"] = 306] = "SwitchProxy";
-    HttpCodes2[HttpCodes2["TemporaryRedirect"] = 307] = "TemporaryRedirect";
-    HttpCodes2[HttpCodes2["PermanentRedirect"] = 308] = "PermanentRedirect";
-    HttpCodes2[HttpCodes2["BadRequest"] = 400] = "BadRequest";
-    HttpCodes2[HttpCodes2["Unauthorized"] = 401] = "Unauthorized";
-    HttpCodes2[HttpCodes2["PaymentRequired"] = 402] = "PaymentRequired";
-    HttpCodes2[HttpCodes2["Forbidden"] = 403] = "Forbidden";
-    HttpCodes2[HttpCodes2["NotFound"] = 404] = "NotFound";
-    HttpCodes2[HttpCodes2["MethodNotAllowed"] = 405] = "MethodNotAllowed";
-    HttpCodes2[HttpCodes2["NotAcceptable"] = 406] = "NotAcceptable";
-    HttpCodes2[HttpCodes2["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
-    HttpCodes2[HttpCodes2["RequestTimeout"] = 408] = "RequestTimeout";
-    HttpCodes2[HttpCodes2["Conflict"] = 409] = "Conflict";
-    HttpCodes2[HttpCodes2["Gone"] = 410] = "Gone";
-    HttpCodes2[HttpCodes2["TooManyRequests"] = 429] = "TooManyRequests";
-    HttpCodes2[HttpCodes2["InternalServerError"] = 500] = "InternalServerError";
-    HttpCodes2[HttpCodes2["NotImplemented"] = 501] = "NotImplemented";
-    HttpCodes2[HttpCodes2["BadGateway"] = 502] = "BadGateway";
-    HttpCodes2[HttpCodes2["ServiceUnavailable"] = 503] = "ServiceUnavailable";
-    HttpCodes2[HttpCodes2["GatewayTimeout"] = 504] = "GatewayTimeout";
+    HttpCodes2[HttpCodes2.OK = 200] = "OK", HttpCodes2[HttpCodes2.MultipleChoices = 300] = "MultipleChoices", HttpCodes2[HttpCodes2.MovedPermanently = 301] = "MovedPermanently", HttpCodes2[HttpCodes2.ResourceMoved = 302] = "ResourceMoved", HttpCodes2[HttpCodes2.SeeOther = 303] = "SeeOther", HttpCodes2[HttpCodes2.NotModified = 304] = "NotModified", HttpCodes2[HttpCodes2.UseProxy = 305] = "UseProxy", HttpCodes2[HttpCodes2.SwitchProxy = 306] = "SwitchProxy", HttpCodes2[HttpCodes2.TemporaryRedirect = 307] = "TemporaryRedirect", HttpCodes2[HttpCodes2.PermanentRedirect = 308] = "PermanentRedirect", HttpCodes2[HttpCodes2.BadRequest = 400] = "BadRequest", HttpCodes2[HttpCodes2.Unauthorized = 401] = "Unauthorized", HttpCodes2[HttpCodes2.PaymentRequired = 402] = "PaymentRequired", HttpCodes2[HttpCodes2.Forbidden = 403] = "Forbidden", HttpCodes2[HttpCodes2.NotFound = 404] = "NotFound", HttpCodes2[HttpCodes2.MethodNotAllowed = 405] = "MethodNotAllowed", HttpCodes2[HttpCodes2.NotAcceptable = 406] = "NotAcceptable", HttpCodes2[HttpCodes2.ProxyAuthenticationRequired = 407] = "ProxyAuthenticationRequired", HttpCodes2[HttpCodes2.RequestTimeout = 408] = "RequestTimeout", HttpCodes2[HttpCodes2.Conflict = 409] = "Conflict", HttpCodes2[HttpCodes2.Gone = 410] = "Gone", HttpCodes2[HttpCodes2.TooManyRequests = 429] = "TooManyRequests", HttpCodes2[HttpCodes2.InternalServerError = 500] = "InternalServerError", HttpCodes2[HttpCodes2.NotImplemented = 501] = "NotImplemented", HttpCodes2[HttpCodes2.BadGateway = 502] = "BadGateway", HttpCodes2[HttpCodes2.ServiceUnavailable = 503] = "ServiceUnavailable", HttpCodes2[HttpCodes2.GatewayTimeout = 504] = "GatewayTimeout";
   })(HttpCodes = exports2.HttpCodes || (exports2.HttpCodes = {}));
-  var Headers;
-  (function(Headers2) {
-    Headers2["Accept"] = "accept";
-    Headers2["ContentType"] = "content-type";
-  })(Headers = exports2.Headers || (exports2.Headers = {}));
+  var Headers2;
+  (function(Headers3) {
+    Headers3.Accept = "accept", Headers3.ContentType = "content-type";
+  })(Headers2 = exports2.Headers || (exports2.Headers = {}));
   var MediaTypes;
   (function(MediaTypes2) {
-    MediaTypes2["ApplicationJson"] = "application/json";
+    MediaTypes2.ApplicationJson = "application/json";
   })(MediaTypes = exports2.MediaTypes || (exports2.MediaTypes = {}));
   function getProxyUrl(serverUrl) {
     let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
@@ -1601,21 +1102,14 @@ var require_http_client = __commonJS((exports2) => {
     HttpCodes.SeeOther,
     HttpCodes.TemporaryRedirect,
     HttpCodes.PermanentRedirect
-  ];
-  var HttpResponseRetryCodes = [
+  ], HttpResponseRetryCodes = [
     HttpCodes.BadGateway,
     HttpCodes.ServiceUnavailable,
     HttpCodes.GatewayTimeout
-  ];
-  var RetryableHttpVerbs = ["OPTIONS", "GET", "DELETE", "HEAD"];
-  var ExponentialBackoffCeiling = 10;
-  var ExponentialBackoffTimeSlice = 5;
-  var HttpClientError = class extends Error {
+  ], RetryableHttpVerbs = ["OPTIONS", "GET", "DELETE", "HEAD"], ExponentialBackoffCeiling = 10, ExponentialBackoffTimeSlice = 5, HttpClientError = class extends Error {
     constructor(message, statusCode) {
       super(message);
-      this.name = "HttpClientError";
-      this.statusCode = statusCode;
-      Object.setPrototypeOf(this, HttpClientError.prototype);
+      this.name = "HttpClientError", this.statusCode = statusCode, Object.setPrototypeOf(this, HttpClientError.prototype);
     }
   };
   exports2.HttpClientError = HttpClientError;
@@ -1628,8 +1122,7 @@ var require_http_client = __commonJS((exports2) => {
         let output = Buffer.alloc(0);
         this.message.on("data", (chunk) => {
           output = Buffer.concat([output, chunk]);
-        });
-        this.message.on("end", () => {
+        }), this.message.on("end", () => {
           resolve(output.toString());
         });
       });
@@ -1637,47 +1130,12 @@ var require_http_client = __commonJS((exports2) => {
   };
   exports2.HttpClientResponse = HttpClientResponse;
   function isHttps(requestUrl) {
-    let parsedUrl = new URL(requestUrl);
-    return parsedUrl.protocol === "https:";
+    return new URL(requestUrl).protocol === "https:";
   }
   exports2.isHttps = isHttps;
   var HttpClient = class {
-    constructor(userAgent, handlers, requestOptions) {
-      this._ignoreSslError = false;
-      this._allowRedirects = true;
-      this._allowRedirectDowngrade = false;
-      this._maxRedirects = 50;
-      this._allowRetries = false;
-      this._maxRetries = 1;
-      this._keepAlive = false;
-      this._disposed = false;
-      this.userAgent = userAgent;
-      this.handlers = handlers || [];
-      this.requestOptions = requestOptions;
-      if (requestOptions) {
-        if (requestOptions.ignoreSslError != null) {
-          this._ignoreSslError = requestOptions.ignoreSslError;
-        }
-        this._socketTimeout = requestOptions.socketTimeout;
-        if (requestOptions.allowRedirects != null) {
-          this._allowRedirects = requestOptions.allowRedirects;
-        }
-        if (requestOptions.allowRedirectDowngrade != null) {
-          this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
-        }
-        if (requestOptions.maxRedirects != null) {
-          this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
-        }
-        if (requestOptions.keepAlive != null) {
-          this._keepAlive = requestOptions.keepAlive;
-        }
-        if (requestOptions.allowRetries != null) {
-          this._allowRetries = requestOptions.allowRetries;
-        }
-        if (requestOptions.maxRetries != null) {
-          this._maxRetries = requestOptions.maxRetries;
-        }
-      }
+    constructor(userAgent2, handlers, requestOptions) {
+      this._ignoreSslError = !1, this._allowRedirects = !0, this._allowRedirectDowngrade = !1, this._maxRedirects = 50, this._allowRetries = !1, this._maxRetries = 1, this._keepAlive = !1, this._disposed = !1, this.userAgent = userAgent2, this.handlers = handlers || [], this.requestOptions = requestOptions, requestOptions && (requestOptions.ignoreSslError != null && (this._ignoreSslError = requestOptions.ignoreSslError), this._socketTimeout = requestOptions.socketTimeout, requestOptions.allowRedirects != null && (this._allowRedirects = requestOptions.allowRedirects), requestOptions.allowRedirectDowngrade != null && (this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade), requestOptions.maxRedirects != null && (this._maxRedirects = Math.max(requestOptions.maxRedirects, 0)), requestOptions.keepAlive != null && (this._keepAlive = requestOptions.keepAlive), requestOptions.allowRetries != null && (this._allowRetries = requestOptions.allowRetries), requestOptions.maxRetries != null && (this._maxRetries = requestOptions.maxRetries));
     }
     options(requestUrl, additionalHeaders) {
       return this.request("OPTIONS", requestUrl, null, additionalHeaders || {});
@@ -1704,211 +1162,121 @@ var require_http_client = __commonJS((exports2) => {
       return this.request(verb, requestUrl, stream, additionalHeaders);
     }
     async getJson(requestUrl, additionalHeaders = {}) {
-      additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+      additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson);
       let res = await this.get(requestUrl, additionalHeaders);
       return this._processResponse(res, this.requestOptions);
     }
     async postJson(requestUrl, obj, additionalHeaders = {}) {
       let data = JSON.stringify(obj, null, 2);
-      additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-      additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+      additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson), additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
       let res = await this.post(requestUrl, data, additionalHeaders);
       return this._processResponse(res, this.requestOptions);
     }
     async putJson(requestUrl, obj, additionalHeaders = {}) {
       let data = JSON.stringify(obj, null, 2);
-      additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-      additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+      additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson), additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
       let res = await this.put(requestUrl, data, additionalHeaders);
       return this._processResponse(res, this.requestOptions);
     }
     async patchJson(requestUrl, obj, additionalHeaders = {}) {
       let data = JSON.stringify(obj, null, 2);
-      additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-      additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+      additionalHeaders[Headers2.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.Accept, MediaTypes.ApplicationJson), additionalHeaders[Headers2.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers2.ContentType, MediaTypes.ApplicationJson);
       let res = await this.patch(requestUrl, data, additionalHeaders);
       return this._processResponse(res, this.requestOptions);
     }
     async request(verb, requestUrl, data, headers) {
-      if (this._disposed) {
+      if (this._disposed)
         throw new Error("Client has already been disposed.");
-      }
-      let parsedUrl = new URL(requestUrl);
-      let info3 = this._prepareRequest(verb, parsedUrl, headers);
-      let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
-      let numTries = 0;
-      let response;
-      while (numTries < maxTries) {
-        response = await this.requestRaw(info3, data);
-        if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
+      let parsedUrl = new URL(requestUrl), info3 = this._prepareRequest(verb, parsedUrl, headers), maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1, numTries = 0, response;
+      for (; numTries < maxTries; ) {
+        if (response = await this.requestRaw(info3, data), response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
           let authenticationHandler;
-          for (let i = 0; i < this.handlers.length; i++) {
+          for (let i = 0; i < this.handlers.length; i++)
             if (this.handlers[i].canHandleAuthentication(response)) {
               authenticationHandler = this.handlers[i];
               break;
             }
-          }
-          if (authenticationHandler) {
-            return authenticationHandler.handleAuthentication(this, info3, data);
-          } else {
-            return response;
-          }
+          return authenticationHandler ? authenticationHandler.handleAuthentication(this, info3, data) : response;
         }
         let redirectsRemaining = this._maxRedirects;
-        while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 && this._allowRedirects && redirectsRemaining > 0) {
-          const redirectUrl = response.message.headers["location"];
-          if (!redirectUrl) {
+        for (; HttpRedirectCodes.indexOf(response.message.statusCode) != -1 && this._allowRedirects && redirectsRemaining > 0; ) {
+          let redirectUrl = response.message.headers.location;
+          if (!redirectUrl)
             break;
-          }
           let parsedRedirectUrl = new URL(redirectUrl);
-          if (parsedUrl.protocol == "https:" && parsedUrl.protocol != parsedRedirectUrl.protocol && !this._allowRedirectDowngrade) {
+          if (parsedUrl.protocol == "https:" && parsedUrl.protocol != parsedRedirectUrl.protocol && !this._allowRedirectDowngrade)
             throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.");
-          }
-          await response.readBody();
-          if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
-            for (let header in headers) {
-              if (header.toLowerCase() === "authorization") {
-                delete headers[header];
-              }
-            }
-          }
-          info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-          response = await this.requestRaw(info3, data);
-          redirectsRemaining--;
+          if (await response.readBody(), parsedRedirectUrl.hostname !== parsedUrl.hostname)
+            for (let header in headers)
+              header.toLowerCase() === "authorization" && delete headers[header];
+          info3 = this._prepareRequest(verb, parsedRedirectUrl, headers), response = await this.requestRaw(info3, data), redirectsRemaining--;
         }
-        if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
+        if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1)
           return response;
-        }
-        numTries += 1;
-        if (numTries < maxTries) {
-          await response.readBody();
-          await this._performExponentialBackoff(numTries);
-        }
+        numTries += 1, numTries < maxTries && (await response.readBody(), await this._performExponentialBackoff(numTries));
       }
       return response;
     }
     dispose() {
-      if (this._agent) {
-        this._agent.destroy();
-      }
-      this._disposed = true;
+      this._agent && this._agent.destroy(), this._disposed = !0;
     }
     requestRaw(info3, data) {
       return new Promise((resolve, reject) => {
         let callbackForResult = function(err, res) {
-          if (err) {
-            reject(err);
-          }
-          resolve(res);
+          err && reject(err), resolve(res);
         };
         this.requestRawWithCallback(info3, data, callbackForResult);
       });
     }
     requestRawWithCallback(info3, data, onResult) {
       let socket;
-      if (typeof data === "string") {
-        info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
-      }
-      let callbackCalled = false;
-      let handleResult = (err, res) => {
-        if (!callbackCalled) {
-          callbackCalled = true;
-          onResult(err, res);
-        }
-      };
-      let req = info3.httpModule.request(info3.options, (msg) => {
+      typeof data == "string" && (info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8"));
+      let callbackCalled = !1, handleResult = (err, res) => {
+        callbackCalled || (callbackCalled = !0, onResult(err, res));
+      }, req = info3.httpModule.request(info3.options, (msg) => {
         let res = new HttpClientResponse(msg);
         handleResult(null, res);
       });
       req.on("socket", (sock) => {
         socket = sock;
-      });
-      req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
-        if (socket) {
-          socket.end();
-        }
-        handleResult(new Error("Request timeout: " + info3.options.path), null);
-      });
-      req.on("error", function(err) {
+      }), req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
+        socket && socket.end(), handleResult(new Error("Request timeout: " + info3.options.path), null);
+      }), req.on("error", function(err) {
         handleResult(err, null);
-      });
-      if (data && typeof data === "string") {
-        req.write(data, "utf8");
-      }
-      if (data && typeof data !== "string") {
-        data.on("close", function() {
-          req.end();
-        });
-        data.pipe(req);
-      } else {
+      }), data && typeof data == "string" && req.write(data, "utf8"), data && typeof data != "string" ? (data.on("close", function() {
         req.end();
-      }
+      }), data.pipe(req)) : req.end();
     }
     getAgent(serverUrl) {
       let parsedUrl = new URL(serverUrl);
       return this._getAgent(parsedUrl);
     }
     _prepareRequest(method, requestUrl, headers) {
-      const info3 = {};
+      let info3 = {};
       info3.parsedUrl = requestUrl;
-      const usingSsl = info3.parsedUrl.protocol === "https:";
-      info3.httpModule = usingSsl ? https : http;
-      const defaultPort = usingSsl ? 443 : 80;
-      info3.options = {};
-      info3.options.host = info3.parsedUrl.hostname;
-      info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
-      info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
-      info3.options.method = method;
-      info3.options.headers = this._mergeHeaders(headers);
-      if (this.userAgent != null) {
-        info3.options.headers["user-agent"] = this.userAgent;
-      }
-      info3.options.agent = this._getAgent(info3.parsedUrl);
-      if (this.handlers) {
-        this.handlers.forEach((handler) => {
-          handler.prepareRequest(info3.options);
-        });
-      }
-      return info3;
+      let usingSsl = info3.parsedUrl.protocol === "https:";
+      info3.httpModule = usingSsl ? https2 : http2;
+      let defaultPort = usingSsl ? 443 : 80;
+      return info3.options = {}, info3.options.host = info3.parsedUrl.hostname, info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort, info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || ""), info3.options.method = method, info3.options.headers = this._mergeHeaders(headers), this.userAgent != null && (info3.options.headers["user-agent"] = this.userAgent), info3.options.agent = this._getAgent(info3.parsedUrl), this.handlers && this.handlers.forEach((handler) => {
+        handler.prepareRequest(info3.options);
+      }), info3;
     }
     _mergeHeaders(headers) {
-      const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
-      if (this.requestOptions && this.requestOptions.headers) {
-        return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
-      }
-      return lowercaseKeys(headers || {});
+      let lowercaseKeys2 = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
+      return this.requestOptions && this.requestOptions.headers ? Object.assign({}, lowercaseKeys2(this.requestOptions.headers), lowercaseKeys2(headers)) : lowercaseKeys2(headers || {});
     }
     _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
-      const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {});
-      let clientHeader;
-      if (this.requestOptions && this.requestOptions.headers) {
-        clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
-      }
-      return additionalHeaders[header] || clientHeader || _default;
+      let lowercaseKeys2 = (obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), clientHeader;
+      return this.requestOptions && this.requestOptions.headers && (clientHeader = lowercaseKeys2(this.requestOptions.headers)[header]), additionalHeaders[header] || clientHeader || _default;
     }
     _getAgent(parsedUrl) {
-      let agent;
-      let proxyUrl = pm.getProxyUrl(parsedUrl);
-      let useProxy = proxyUrl && proxyUrl.hostname;
-      if (this._keepAlive && useProxy) {
-        agent = this._proxyAgent;
-      }
-      if (this._keepAlive && !useProxy) {
-        agent = this._agent;
-      }
-      if (!!agent) {
+      let agent, proxyUrl = pm.getProxyUrl(parsedUrl), useProxy = proxyUrl && proxyUrl.hostname;
+      if (this._keepAlive && useProxy && (agent = this._proxyAgent), this._keepAlive && !useProxy && (agent = this._agent), agent)
         return agent;
-      }
-      const usingSsl = parsedUrl.protocol === "https:";
-      let maxSockets = 100;
-      if (!!this.requestOptions) {
-        maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
-      }
-      if (useProxy) {
-        if (!tunnel) {
-          tunnel = require_tunnel2();
-        }
-        const agentOptions = {
+      let usingSsl = parsedUrl.protocol === "https:", maxSockets = 100;
+      if (this.requestOptions && (maxSockets = this.requestOptions.maxSockets || http2.globalAgent.maxSockets), useProxy) {
+        tunnel || (tunnel = require_tunnel2());
+        let agentOptions = {
           maxSockets,
           keepAlive: this._keepAlive,
           proxy: {
@@ -1916,87 +1284,50 @@ var require_http_client = __commonJS((exports2) => {
             host: proxyUrl.hostname,
             port: proxyUrl.port
           }
-        };
-        let tunnelAgent;
-        const overHttps = proxyUrl.protocol === "https:";
-        if (usingSsl) {
-          tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
-        } else {
-          tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
-        }
-        agent = tunnelAgent(agentOptions);
-        this._proxyAgent = agent;
+        }, tunnelAgent, overHttps = proxyUrl.protocol === "https:";
+        usingSsl ? tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp : tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp, agent = tunnelAgent(agentOptions), this._proxyAgent = agent;
       }
       if (this._keepAlive && !agent) {
-        const options = {keepAlive: this._keepAlive, maxSockets};
-        agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
-        this._agent = agent;
+        let options = {keepAlive: this._keepAlive, maxSockets};
+        agent = usingSsl ? new https2.Agent(options) : new http2.Agent(options), this._agent = agent;
       }
-      if (!agent) {
-        agent = usingSsl ? https.globalAgent : http.globalAgent;
-      }
-      if (usingSsl && this._ignoreSslError) {
-        agent.options = Object.assign(agent.options || {}, {
-          rejectUnauthorized: false
-        });
-      }
-      return agent;
+      return agent || (agent = usingSsl ? https2.globalAgent : http2.globalAgent), usingSsl && this._ignoreSslError && (agent.options = Object.assign(agent.options || {}, {
+        rejectUnauthorized: !1
+      })), agent;
     }
     _performExponentialBackoff(retryNumber) {
       retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
-      const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+      let ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
       return new Promise((resolve) => setTimeout(() => resolve(), ms));
     }
     static dateTimeDeserializer(key, value) {
-      if (typeof value === "string") {
+      if (typeof value == "string") {
         let a = new Date(value);
-        if (!isNaN(a.valueOf())) {
+        if (!isNaN(a.valueOf()))
           return a;
-        }
       }
       return value;
     }
     async _processResponse(res, options) {
       return new Promise(async (resolve, reject) => {
-        const statusCode = res.message.statusCode;
-        const response = {
+        let statusCode = res.message.statusCode, response = {
           statusCode,
           result: null,
           headers: {}
         };
-        if (statusCode == HttpCodes.NotFound) {
-          resolve(response);
-        }
-        let obj;
-        let contents;
+        statusCode == HttpCodes.NotFound && resolve(response);
+        let obj, contents;
         try {
-          contents = await res.readBody();
-          if (contents && contents.length > 0) {
-            if (options && options.deserializeDates) {
-              obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
-            } else {
-              obj = JSON.parse(contents);
-            }
-            response.result = obj;
-          }
-          response.headers = res.message.headers;
+          contents = await res.readBody(), contents && contents.length > 0 && (options && options.deserializeDates ? obj = JSON.parse(contents, HttpClient.dateTimeDeserializer) : obj = JSON.parse(contents), response.result = obj), response.headers = res.message.headers;
         } catch (err) {
         }
         if (statusCode > 299) {
           let msg;
-          if (obj && obj.message) {
-            msg = obj.message;
-          } else if (contents && contents.length > 0) {
-            msg = contents;
-          } else {
-            msg = "Failed request: (" + statusCode + ")";
-          }
+          obj && obj.message ? msg = obj.message : contents && contents.length > 0 ? msg = contents : msg = "Failed request: (" + statusCode + ")";
           let err = new HttpClientError(msg, statusCode);
-          err.result = response.result;
-          reject(err);
-        } else {
+          err.result = response.result, reject(err);
+        } else
           resolve(response);
-        }
       });
     }
   };
@@ -2007,94 +1338,57 @@ var require_http_client = __commonJS((exports2) => {
 var require_utils2 = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    Object.defineProperty(o, k2, {enumerable: true, get: function() {
+    k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
       return m[k];
     }});
   } : function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    o[k2] = m[k];
-  });
-  var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-    Object.defineProperty(o, "default", {enumerable: true, value: v});
+    k2 === void 0 && (k2 = k), o[k2] = m[k];
+  }), __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {enumerable: !0, value: v});
   } : function(o, v) {
-    o["default"] = v;
-  });
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+    o.default = v;
+  }), __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          __createBinding(result, mod, k);
-    }
-    __setModuleDefault(result, mod);
-    return result;
+        Object.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
+    return __setModuleDefault(result, mod), result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
   var httpClient = __importStar(require_http_client());
   function getAuthString(token, options) {
-    if (!token && !options.auth) {
+    if (!token && !options.auth)
       throw new Error("Parameter token or opts.auth is required");
-    } else if (token && options.auth) {
+    if (token && options.auth)
       throw new Error("Parameters token and opts.auth may not both be specified");
-    }
-    return typeof options.auth === "string" ? options.auth : `token ${token}`;
+    return typeof options.auth == "string" ? options.auth : `token ${token}`;
   }
   exports2.getAuthString = getAuthString;
   function getProxyAgent(destinationUrl) {
-    const hc = new httpClient.HttpClient();
-    return hc.getAgent(destinationUrl);
+    return new httpClient.HttpClient().getAgent(destinationUrl);
   }
   exports2.getProxyAgent = getProxyAgent;
   function getApiBaseUrl() {
-    return process.env["GITHUB_API_URL"] || "https://api.github.com";
+    return process.env.GITHUB_API_URL || "https://api.github.com";
   }
   exports2.getApiBaseUrl = getApiBaseUrl;
-});
-
-// ../node_modules/universal-user-agent/dist-node/index.js
-var require_dist_node = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  function getUserAgent() {
-    if (typeof navigator === "object" && "userAgent" in navigator) {
-      return navigator.userAgent;
-    }
-    if (typeof process === "object" && "version" in process) {
-      return `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})`;
-    }
-    return "<environment undetectable>";
-  }
-  exports2.getUserAgent = getUserAgent;
 });
 
 // ../node_modules/before-after-hook/lib/register.js
 var require_register = __commonJS((exports2, module2) => {
   module2.exports = register;
   function register(state, name, method, options) {
-    if (typeof method !== "function") {
+    if (typeof method != "function")
       throw new Error("method for before hook must be a function");
-    }
-    if (!options) {
-      options = {};
-    }
-    if (Array.isArray(name)) {
-      return name.reverse().reduce(function(callback, name2) {
-        return register.bind(null, state, name2, callback, options);
-      }, method)();
-    }
-    return Promise.resolve().then(function() {
-      if (!state.registry[name]) {
-        return method(options);
-      }
-      return state.registry[name].reduce(function(method2, registered) {
+    return options || (options = {}), Array.isArray(name) ? name.reverse().reduce(function(callback, name2) {
+      return register.bind(null, state, name2, callback, options);
+    }, method)() : Promise.resolve().then(function() {
+      return state.registry[name] ? state.registry[name].reduce(function(method2, registered) {
         return registered.hook.bind(null, method2, options);
-      }, method)();
+      }, method)() : method(options);
     });
   }
 });
@@ -2102,36 +1396,23 @@ var require_register = __commonJS((exports2, module2) => {
 // ../node_modules/before-after-hook/lib/add.js
 var require_add = __commonJS((exports2, module2) => {
   module2.exports = addHook;
-  function addHook(state, kind, name, hook) {
-    var orig = hook;
-    if (!state.registry[name]) {
-      state.registry[name] = [];
-    }
-    if (kind === "before") {
-      hook = function(method, options) {
-        return Promise.resolve().then(orig.bind(null, options)).then(method.bind(null, options));
-      };
-    }
-    if (kind === "after") {
-      hook = function(method, options) {
-        var result;
-        return Promise.resolve().then(method.bind(null, options)).then(function(result_) {
-          result = result_;
-          return orig(result, options);
-        }).then(function() {
-          return result;
-        });
-      };
-    }
-    if (kind === "error") {
-      hook = function(method, options) {
-        return Promise.resolve().then(method.bind(null, options)).catch(function(error) {
-          return orig(error, options);
-        });
-      };
-    }
-    state.registry[name].push({
-      hook,
+  function addHook(state, kind, name, hook2) {
+    var orig = hook2;
+    state.registry[name] || (state.registry[name] = []), kind === "before" && (hook2 = function(method, options) {
+      return Promise.resolve().then(orig.bind(null, options)).then(method.bind(null, options));
+    }), kind === "after" && (hook2 = function(method, options) {
+      var result;
+      return Promise.resolve().then(method.bind(null, options)).then(function(result_) {
+        return result = result_, orig(result, options);
+      }).then(function() {
+        return result;
+      });
+    }), kind === "error" && (hook2 = function(method, options) {
+      return Promise.resolve().then(method.bind(null, options)).catch(function(error) {
+        return orig(error, options);
+      });
+    }), state.registry[name].push({
+      hook: hook2,
       orig
     });
   }
@@ -2141,59 +1422,40 @@ var require_add = __commonJS((exports2, module2) => {
 var require_remove = __commonJS((exports2, module2) => {
   module2.exports = removeHook;
   function removeHook(state, name, method) {
-    if (!state.registry[name]) {
-      return;
+    if (!!state.registry[name]) {
+      var index = state.registry[name].map(function(registered) {
+        return registered.orig;
+      }).indexOf(method);
+      index !== -1 && state.registry[name].splice(index, 1);
     }
-    var index = state.registry[name].map(function(registered) {
-      return registered.orig;
-    }).indexOf(method);
-    if (index === -1) {
-      return;
-    }
-    state.registry[name].splice(index, 1);
   }
 });
 
 // ../node_modules/before-after-hook/index.js
 var require_before_after_hook = __commonJS((exports2, module2) => {
-  var register = require_register();
-  var addHook = require_add();
-  var removeHook = require_remove();
-  var bind = Function.bind;
-  var bindable = bind.bind(bind);
-  function bindApi(hook, state, name) {
+  var register = require_register(), addHook = require_add(), removeHook = require_remove(), bind = Function.bind, bindable = bind.bind(bind);
+  function bindApi(hook2, state, name) {
     var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state]);
-    hook.api = {remove: removeHookRef};
-    hook.remove = removeHookRef;
-    ["before", "error", "after", "wrap"].forEach(function(kind) {
+    hook2.api = {remove: removeHookRef}, hook2.remove = removeHookRef, ["before", "error", "after", "wrap"].forEach(function(kind) {
       var args = name ? [state, kind, name] : [state, kind];
-      hook[kind] = hook.api[kind] = bindable(addHook, null).apply(null, args);
+      hook2[kind] = hook2.api[kind] = bindable(addHook, null).apply(null, args);
     });
   }
   function HookSingular() {
-    var singularHookName = "h";
-    var singularHookState = {
+    var singularHookName = "h", singularHookState = {
       registry: {}
-    };
-    var singularHook = register.bind(null, singularHookState, singularHookName);
-    bindApi(singularHook, singularHookState, singularHookName);
-    return singularHook;
+    }, singularHook = register.bind(null, singularHookState, singularHookName);
+    return bindApi(singularHook, singularHookState, singularHookName), singularHook;
   }
   function HookCollection() {
     var state = {
       registry: {}
-    };
-    var hook = register.bind(null, state);
-    bindApi(hook, state);
-    return hook;
+    }, hook2 = register.bind(null, state);
+    return bindApi(hook2, state), hook2;
   }
-  var collectionHookDeprecationMessageDisplayed = false;
+  var collectionHookDeprecationMessageDisplayed = !1;
   function Hook() {
-    if (!collectionHookDeprecationMessageDisplayed) {
-      console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4');
-      collectionHookDeprecationMessageDisplayed = true;
-    }
-    return HookCollection();
+    return collectionHookDeprecationMessageDisplayed || (console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'), collectionHookDeprecationMessageDisplayed = !0), HookCollection();
   }
   Hook.Singular = HookSingular.bind();
   Hook.Collection = HookCollection.bind();
@@ -2203,432 +1465,39 @@ var require_before_after_hook = __commonJS((exports2, module2) => {
   module2.exports.Collection = Hook.Collection;
 });
 
-// ../node_modules/@octokit/endpoint/node_modules/is-plain-object/dist/is-plain-object.js
-var require_is_plain_object = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  /*!
-   * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
-   *
-   * Copyright (c) 2014-2017, Jon Schlinkert.
-   * Released under the MIT License.
-   */
-  function isObject(o) {
-    return Object.prototype.toString.call(o) === "[object Object]";
-  }
-  function isPlainObject(o) {
-    var ctor, prot;
-    if (isObject(o) === false)
-      return false;
-    ctor = o.constructor;
-    if (ctor === void 0)
-      return true;
-    prot = ctor.prototype;
-    if (isObject(prot) === false)
-      return false;
-    if (prot.hasOwnProperty("isPrototypeOf") === false) {
-      return false;
-    }
-    return true;
-  }
-  exports2.isPlainObject = isPlainObject;
-});
-
-// ../node_modules/@octokit/endpoint/dist-node/index.js
-var require_dist_node2 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var isPlainObject = require_is_plain_object();
-  var universalUserAgent = require_dist_node();
-  function lowercaseKeys(object) {
-    if (!object) {
-      return {};
-    }
-    return Object.keys(object).reduce((newObj, key) => {
-      newObj[key.toLowerCase()] = object[key];
-      return newObj;
-    }, {});
-  }
-  function mergeDeep(defaults, options) {
-    const result = Object.assign({}, defaults);
-    Object.keys(options).forEach((key) => {
-      if (isPlainObject.isPlainObject(options[key])) {
-        if (!(key in defaults))
-          Object.assign(result, {
-            [key]: options[key]
-          });
-        else
-          result[key] = mergeDeep(defaults[key], options[key]);
-      } else {
-        Object.assign(result, {
-          [key]: options[key]
-        });
-      }
-    });
-    return result;
-  }
-  function removeUndefinedProperties(obj) {
-    for (const key in obj) {
-      if (obj[key] === void 0) {
-        delete obj[key];
-      }
-    }
-    return obj;
-  }
-  function merge(defaults, route, options) {
-    if (typeof route === "string") {
-      let [method, url] = route.split(" ");
-      options = Object.assign(url ? {
-        method,
-        url
-      } : {
-        url: method
-      }, options);
-    } else {
-      options = Object.assign({}, route);
-    }
-    options.headers = lowercaseKeys(options.headers);
-    removeUndefinedProperties(options);
-    removeUndefinedProperties(options.headers);
-    const mergedOptions = mergeDeep(defaults || {}, options);
-    if (defaults && defaults.mediaType.previews.length) {
-      mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews);
-    }
-    mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map((preview) => preview.replace(/-preview/, ""));
-    return mergedOptions;
-  }
-  function addQueryParameters(url, parameters) {
-    const separator = /\?/.test(url) ? "&" : "?";
-    const names = Object.keys(parameters);
-    if (names.length === 0) {
-      return url;
-    }
-    return url + separator + names.map((name) => {
-      if (name === "q") {
-        return "q=" + parameters.q.split("+").map(encodeURIComponent).join("+");
-      }
-      return `${name}=${encodeURIComponent(parameters[name])}`;
-    }).join("&");
-  }
-  var urlVariableRegex = /\{[^}]+\}/g;
-  function removeNonChars(variableName) {
-    return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
-  }
-  function extractUrlVariableNames(url) {
-    const matches = url.match(urlVariableRegex);
-    if (!matches) {
-      return [];
-    }
-    return matches.map(removeNonChars).reduce((a, b) => a.concat(b), []);
-  }
-  function omit(object, keysToOmit) {
-    return Object.keys(object).filter((option) => !keysToOmit.includes(option)).reduce((obj, key) => {
-      obj[key] = object[key];
-      return obj;
-    }, {});
-  }
-  function encodeReserved(str) {
-    return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
-      if (!/%[0-9A-Fa-f]/.test(part)) {
-        part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]");
-      }
-      return part;
-    }).join("");
-  }
-  function encodeUnreserved(str) {
-    return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-      return "%" + c.charCodeAt(0).toString(16).toUpperCase();
-    });
-  }
-  function encodeValue(operator, value, key) {
-    value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value);
-    if (key) {
-      return encodeUnreserved(key) + "=" + value;
-    } else {
-      return value;
-    }
-  }
-  function isDefined(value) {
-    return value !== void 0 && value !== null;
-  }
-  function isKeyOperator(operator) {
-    return operator === ";" || operator === "&" || operator === "?";
-  }
-  function getValues(context3, operator, key, modifier) {
-    var value = context3[key], result = [];
-    if (isDefined(value) && value !== "") {
-      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-        value = value.toString();
-        if (modifier && modifier !== "*") {
-          value = value.substring(0, parseInt(modifier, 10));
-        }
-        result.push(encodeValue(operator, value, isKeyOperator(operator) ? key : ""));
-      } else {
-        if (modifier === "*") {
-          if (Array.isArray(value)) {
-            value.filter(isDefined).forEach(function(value2) {
-              result.push(encodeValue(operator, value2, isKeyOperator(operator) ? key : ""));
-            });
-          } else {
-            Object.keys(value).forEach(function(k) {
-              if (isDefined(value[k])) {
-                result.push(encodeValue(operator, value[k], k));
-              }
-            });
-          }
-        } else {
-          const tmp = [];
-          if (Array.isArray(value)) {
-            value.filter(isDefined).forEach(function(value2) {
-              tmp.push(encodeValue(operator, value2));
-            });
-          } else {
-            Object.keys(value).forEach(function(k) {
-              if (isDefined(value[k])) {
-                tmp.push(encodeUnreserved(k));
-                tmp.push(encodeValue(operator, value[k].toString()));
-              }
-            });
-          }
-          if (isKeyOperator(operator)) {
-            result.push(encodeUnreserved(key) + "=" + tmp.join(","));
-          } else if (tmp.length !== 0) {
-            result.push(tmp.join(","));
-          }
-        }
-      }
-    } else {
-      if (operator === ";") {
-        if (isDefined(value)) {
-          result.push(encodeUnreserved(key));
-        }
-      } else if (value === "" && (operator === "&" || operator === "?")) {
-        result.push(encodeUnreserved(key) + "=");
-      } else if (value === "") {
-        result.push("");
-      }
-    }
-    return result;
-  }
-  function parseUrl(template) {
-    return {
-      expand: expand.bind(null, template)
-    };
-  }
-  function expand(template, context3) {
-    var operators = ["+", "#", ".", "/", ";", "?", "&"];
-    return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
-      if (expression) {
-        let operator = "";
-        const values = [];
-        if (operators.indexOf(expression.charAt(0)) !== -1) {
-          operator = expression.charAt(0);
-          expression = expression.substr(1);
-        }
-        expression.split(/,/g).forEach(function(variable) {
-          var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-          values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
-        });
-        if (operator && operator !== "+") {
-          var separator = ",";
-          if (operator === "?") {
-            separator = "&";
-          } else if (operator !== "#") {
-            separator = operator;
-          }
-          return (values.length !== 0 ? operator : "") + values.join(separator);
-        } else {
-          return values.join(",");
-        }
-      } else {
-        return encodeReserved(literal);
-      }
-    });
-  }
-  function parse(options) {
-    let method = options.method.toUpperCase();
-    let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
-    let headers = Object.assign({}, options.headers);
-    let body;
-    let parameters = omit(options, ["method", "baseUrl", "url", "headers", "request", "mediaType"]);
-    const urlVariableNames = extractUrlVariableNames(url);
-    url = parseUrl(url).expand(parameters);
-    if (!/^http/.test(url)) {
-      url = options.baseUrl + url;
-    }
-    const omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl");
-    const remainingParameters = omit(parameters, omittedParameters);
-    const isBinaryRequest = /application\/octet-stream/i.test(headers.accept);
-    if (!isBinaryRequest) {
-      if (options.mediaType.format) {
-        headers.accept = headers.accept.split(/,/).map((preview) => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",");
-      }
-      if (options.mediaType.previews.length) {
-        const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
-        headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-          const format2 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-          return `application/vnd.github.${preview}-preview${format2}`;
-        }).join(",");
-      }
-    }
-    if (["GET", "HEAD"].includes(method)) {
-      url = addQueryParameters(url, remainingParameters);
-    } else {
-      if ("data" in remainingParameters) {
-        body = remainingParameters.data;
-      } else {
-        if (Object.keys(remainingParameters).length) {
-          body = remainingParameters;
-        } else {
-          headers["content-length"] = 0;
-        }
-      }
-    }
-    if (!headers["content-type"] && typeof body !== "undefined") {
-      headers["content-type"] = "application/json; charset=utf-8";
-    }
-    if (["PATCH", "PUT"].includes(method) && typeof body === "undefined") {
-      body = "";
-    }
-    return Object.assign({
-      method,
-      url,
-      headers
-    }, typeof body !== "undefined" ? {
-      body
-    } : null, options.request ? {
-      request: options.request
-    } : null);
-  }
-  function endpointWithDefaults(defaults, route, options) {
-    return parse(merge(defaults, route, options));
-  }
-  function withDefaults(oldDefaults, newDefaults) {
-    const DEFAULTS2 = merge(oldDefaults, newDefaults);
-    const endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
-    return Object.assign(endpoint2, {
-      DEFAULTS: DEFAULTS2,
-      defaults: withDefaults.bind(null, DEFAULTS2),
-      merge: merge.bind(null, DEFAULTS2),
-      parse
-    });
-  }
-  var VERSION = "6.0.10";
-  var userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`;
-  var DEFAULTS = {
-    method: "GET",
-    baseUrl: "https://api.github.com",
-    headers: {
-      accept: "application/vnd.github.v3+json",
-      "user-agent": userAgent
-    },
-    mediaType: {
-      format: "",
-      previews: []
-    }
-  };
-  var endpoint = withDefaults(null, DEFAULTS);
-  exports2.endpoint = endpoint;
-});
-
-// ../node_modules/@octokit/request/node_modules/is-plain-object/dist/is-plain-object.js
-var require_is_plain_object2 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  /*!
-   * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
-   *
-   * Copyright (c) 2014-2017, Jon Schlinkert.
-   * Released under the MIT License.
-   */
-  function isObject(o) {
-    return Object.prototype.toString.call(o) === "[object Object]";
-  }
-  function isPlainObject(o) {
-    var ctor, prot;
-    if (isObject(o) === false)
-      return false;
-    ctor = o.constructor;
-    if (ctor === void 0)
-      return true;
-    prot = ctor.prototype;
-    if (isObject(prot) === false)
-      return false;
-    if (prot.hasOwnProperty("isPrototypeOf") === false) {
-      return false;
-    }
-    return true;
-  }
-  exports2.isPlainObject = isPlainObject;
-});
-
 // ../node_modules/safer-buffer/safer.js
 var require_safer = __commonJS((exports2, module2) => {
   "use strict";
-  var buffer = require("buffer");
-  var Buffer2 = buffer.Buffer;
-  var safer = {};
-  var key;
-  for (key in buffer) {
-    if (!buffer.hasOwnProperty(key))
-      continue;
-    if (key === "SlowBuffer" || key === "Buffer")
-      continue;
-    safer[key] = buffer[key];
-  }
+  var buffer = require("buffer"), Buffer2 = buffer.Buffer, safer = {}, key;
+  for (key in buffer)
+    !buffer.hasOwnProperty(key) || key === "SlowBuffer" || key === "Buffer" || (safer[key] = buffer[key]);
   var Safer = safer.Buffer = {};
-  for (key in Buffer2) {
-    if (!Buffer2.hasOwnProperty(key))
-      continue;
-    if (key === "allocUnsafe" || key === "allocUnsafeSlow")
-      continue;
-    Safer[key] = Buffer2[key];
-  }
+  for (key in Buffer2)
+    !Buffer2.hasOwnProperty(key) || key === "allocUnsafe" || key === "allocUnsafeSlow" || (Safer[key] = Buffer2[key]);
   safer.Buffer.prototype = Buffer2.prototype;
-  if (!Safer.from || Safer.from === Uint8Array.from) {
-    Safer.from = function(value, encodingOrOffset, length) {
-      if (typeof value === "number") {
-        throw new TypeError('The "value" argument must not be of type number. Received type ' + typeof value);
-      }
-      if (value && typeof value.length === "undefined") {
-        throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof value);
-      }
-      return Buffer2(value, encodingOrOffset, length);
-    };
-  }
-  if (!Safer.alloc) {
-    Safer.alloc = function(size, fill, encoding) {
-      if (typeof size !== "number") {
-        throw new TypeError('The "size" argument must be of type number. Received type ' + typeof size);
-      }
-      if (size < 0 || size >= 2 * (1 << 30)) {
-        throw new RangeError('The value "' + size + '" is invalid for option "size"');
-      }
-      var buf = Buffer2(size);
-      if (!fill || fill.length === 0) {
-        buf.fill(0);
-      } else if (typeof encoding === "string") {
-        buf.fill(fill, encoding);
-      } else {
-        buf.fill(fill);
-      }
-      return buf;
-    };
-  }
-  if (!safer.kStringMaxLength) {
+  (!Safer.from || Safer.from === Uint8Array.from) && (Safer.from = function(value, encodingOrOffset, length) {
+    if (typeof value == "number")
+      throw new TypeError('The "value" argument must not be of type number. Received type ' + typeof value);
+    if (value && typeof value.length == "undefined")
+      throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type " + typeof value);
+    return Buffer2(value, encodingOrOffset, length);
+  });
+  Safer.alloc || (Safer.alloc = function(size, fill, encoding) {
+    if (typeof size != "number")
+      throw new TypeError('The "size" argument must be of type number. Received type ' + typeof size);
+    if (size < 0 || size >= 2 * (1 << 30))
+      throw new RangeError('The value "' + size + '" is invalid for option "size"');
+    var buf = Buffer2(size);
+    return !fill || fill.length === 0 ? buf.fill(0) : typeof encoding == "string" ? buf.fill(fill, encoding) : buf.fill(fill), buf;
+  });
+  if (!safer.kStringMaxLength)
     try {
       safer.kStringMaxLength = process.binding("buffer").kStringMaxLength;
     } catch (e) {
     }
-  }
-  if (!safer.constants) {
-    safer.constants = {
-      MAX_LENGTH: safer.kMaxLength
-    };
-    if (safer.kStringMaxLength) {
-      safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength;
-    }
-  }
+  safer.constants || (safer.constants = {
+    MAX_LENGTH: safer.kMaxLength
+  }, safer.kStringMaxLength && (safer.constants.MAX_STRING_LENGTH = safer.kStringMaxLength));
   module2.exports = safer;
 });
 
@@ -2638,36 +1507,21 @@ var require_bom_handling = __commonJS((exports2) => {
   var BOMChar = "\uFEFF";
   exports2.PrependBOM = PrependBOMWrapper;
   function PrependBOMWrapper(encoder, options) {
-    this.encoder = encoder;
-    this.addBOM = true;
+    this.encoder = encoder, this.addBOM = !0;
   }
   PrependBOMWrapper.prototype.write = function(str) {
-    if (this.addBOM) {
-      str = BOMChar + str;
-      this.addBOM = false;
-    }
-    return this.encoder.write(str);
+    return this.addBOM && (str = BOMChar + str, this.addBOM = !1), this.encoder.write(str);
   };
   PrependBOMWrapper.prototype.end = function() {
     return this.encoder.end();
   };
   exports2.StripBOM = StripBOMWrapper;
   function StripBOMWrapper(decoder, options) {
-    this.decoder = decoder;
-    this.pass = false;
-    this.options = options || {};
+    this.decoder = decoder, this.pass = !1, this.options = options || {};
   }
   StripBOMWrapper.prototype.write = function(buf) {
     var res = this.decoder.write(buf);
-    if (this.pass || !res)
-      return res;
-    if (res[0] === BOMChar) {
-      res = res.slice(1);
-      if (typeof this.options.stripBOM === "function")
-        this.options.stripBOM();
-    }
-    this.pass = true;
-    return res;
+    return this.pass || !res || (res[0] === BOMChar && (res = res.slice(1), typeof this.options.stripBOM == "function" && this.options.stripBOM()), this.pass = !0), res;
   };
   StripBOMWrapper.prototype.end = function() {
     return this.decoder.end();
@@ -2679,10 +1533,10 @@ var require_internal = __commonJS((exports2, module2) => {
   "use strict";
   var Buffer2 = require_safer().Buffer;
   module2.exports = {
-    utf8: {type: "_internal", bomAware: true},
-    cesu8: {type: "_internal", bomAware: true},
+    utf8: {type: "_internal", bomAware: !0},
+    cesu8: {type: "_internal", bomAware: !0},
     unicode11utf8: "utf8",
-    ucs2: {type: "_internal", bomAware: true},
+    ucs2: {type: "_internal", bomAware: !0},
     utf16le: "ucs2",
     binary: {type: "_internal"},
     base64: {type: "_internal"},
@@ -2690,33 +1544,18 @@ var require_internal = __commonJS((exports2, module2) => {
     _internal: InternalCodec
   };
   function InternalCodec(codecOptions, iconv) {
-    this.enc = codecOptions.encodingName;
-    this.bomAware = codecOptions.bomAware;
-    if (this.enc === "base64")
-      this.encoder = InternalEncoderBase64;
-    else if (this.enc === "cesu8") {
-      this.enc = "utf8";
-      this.encoder = InternalEncoderCesu8;
-      if (Buffer2.from("eda0bdedb2a9", "hex").toString() !== "\u{1F4A9}") {
-        this.decoder = InternalDecoderCesu8;
-        this.defaultCharUnicode = iconv.defaultCharUnicode;
-      }
-    }
+    this.enc = codecOptions.encodingName, this.bomAware = codecOptions.bomAware, this.enc === "base64" ? this.encoder = InternalEncoderBase64 : this.enc === "cesu8" && (this.enc = "utf8", this.encoder = InternalEncoderCesu8, Buffer2.from("eda0bdedb2a9", "hex").toString() !== "\u{1F4A9}" && (this.decoder = InternalDecoderCesu8, this.defaultCharUnicode = iconv.defaultCharUnicode));
   }
   InternalCodec.prototype.encoder = InternalEncoder;
   InternalCodec.prototype.decoder = InternalDecoder;
   var StringDecoder = require("string_decoder").StringDecoder;
-  if (!StringDecoder.prototype.end)
-    StringDecoder.prototype.end = function() {
-    };
+  StringDecoder.prototype.end || (StringDecoder.prototype.end = function() {
+  });
   function InternalDecoder(options, codec) {
     this.decoder = new StringDecoder(codec.enc);
   }
   InternalDecoder.prototype.write = function(buf) {
-    if (!Buffer2.isBuffer(buf)) {
-      buf = Buffer2.from(buf);
-    }
-    return this.decoder.write(buf);
+    return Buffer2.isBuffer(buf) || (buf = Buffer2.from(buf)), this.decoder.write(buf);
   };
   InternalDecoder.prototype.end = function() {
     return this.decoder.end();
@@ -2735,9 +1574,7 @@ var require_internal = __commonJS((exports2, module2) => {
   InternalEncoderBase64.prototype.write = function(str) {
     str = this.prevStr + str;
     var completeQuads = str.length - str.length % 4;
-    this.prevStr = str.slice(completeQuads);
-    str = str.slice(0, completeQuads);
-    return Buffer2.from(str, "base64");
+    return this.prevStr = str.slice(completeQuads), str = str.slice(0, completeQuads), Buffer2.from(str, "base64");
   };
   InternalEncoderBase64.prototype.end = function() {
     return Buffer2.from(this.prevStr, "base64");
@@ -2745,80 +1582,27 @@ var require_internal = __commonJS((exports2, module2) => {
   function InternalEncoderCesu8(options, codec) {
   }
   InternalEncoderCesu8.prototype.write = function(str) {
-    var buf = Buffer2.alloc(str.length * 3), bufIdx = 0;
-    for (var i = 0; i < str.length; i++) {
+    for (var buf = Buffer2.alloc(str.length * 3), bufIdx = 0, i = 0; i < str.length; i++) {
       var charCode = str.charCodeAt(i);
-      if (charCode < 128)
-        buf[bufIdx++] = charCode;
-      else if (charCode < 2048) {
-        buf[bufIdx++] = 192 + (charCode >>> 6);
-        buf[bufIdx++] = 128 + (charCode & 63);
-      } else {
-        buf[bufIdx++] = 224 + (charCode >>> 12);
-        buf[bufIdx++] = 128 + (charCode >>> 6 & 63);
-        buf[bufIdx++] = 128 + (charCode & 63);
-      }
+      charCode < 128 ? buf[bufIdx++] = charCode : charCode < 2048 ? (buf[bufIdx++] = 192 + (charCode >>> 6), buf[bufIdx++] = 128 + (charCode & 63)) : (buf[bufIdx++] = 224 + (charCode >>> 12), buf[bufIdx++] = 128 + (charCode >>> 6 & 63), buf[bufIdx++] = 128 + (charCode & 63));
     }
     return buf.slice(0, bufIdx);
   };
   InternalEncoderCesu8.prototype.end = function() {
   };
   function InternalDecoderCesu8(options, codec) {
-    this.acc = 0;
-    this.contBytes = 0;
-    this.accBytes = 0;
-    this.defaultCharUnicode = codec.defaultCharUnicode;
+    this.acc = 0, this.contBytes = 0, this.accBytes = 0, this.defaultCharUnicode = codec.defaultCharUnicode;
   }
   InternalDecoderCesu8.prototype.write = function(buf) {
-    var acc = this.acc, contBytes = this.contBytes, accBytes = this.accBytes, res = "";
-    for (var i = 0; i < buf.length; i++) {
+    for (var acc = this.acc, contBytes = this.contBytes, accBytes = this.accBytes, res = "", i = 0; i < buf.length; i++) {
       var curByte = buf[i];
-      if ((curByte & 192) !== 128) {
-        if (contBytes > 0) {
-          res += this.defaultCharUnicode;
-          contBytes = 0;
-        }
-        if (curByte < 128) {
-          res += String.fromCharCode(curByte);
-        } else if (curByte < 224) {
-          acc = curByte & 31;
-          contBytes = 1;
-          accBytes = 1;
-        } else if (curByte < 240) {
-          acc = curByte & 15;
-          contBytes = 2;
-          accBytes = 1;
-        } else {
-          res += this.defaultCharUnicode;
-        }
-      } else {
-        if (contBytes > 0) {
-          acc = acc << 6 | curByte & 63;
-          contBytes--;
-          accBytes++;
-          if (contBytes === 0) {
-            if (accBytes === 2 && acc < 128 && acc > 0)
-              res += this.defaultCharUnicode;
-            else if (accBytes === 3 && acc < 2048)
-              res += this.defaultCharUnicode;
-            else
-              res += String.fromCharCode(acc);
-          }
-        } else {
-          res += this.defaultCharUnicode;
-        }
-      }
+      (curByte & 192) != 128 ? (contBytes > 0 && (res += this.defaultCharUnicode, contBytes = 0), curByte < 128 ? res += String.fromCharCode(curByte) : curByte < 224 ? (acc = curByte & 31, contBytes = 1, accBytes = 1) : curByte < 240 ? (acc = curByte & 15, contBytes = 2, accBytes = 1) : res += this.defaultCharUnicode) : contBytes > 0 ? (acc = acc << 6 | curByte & 63, contBytes--, accBytes++, contBytes === 0 && (accBytes === 2 && acc < 128 && acc > 0 ? res += this.defaultCharUnicode : accBytes === 3 && acc < 2048 ? res += this.defaultCharUnicode : res += String.fromCharCode(acc))) : res += this.defaultCharUnicode;
     }
-    this.acc = acc;
-    this.contBytes = contBytes;
-    this.accBytes = accBytes;
-    return res;
+    return this.acc = acc, this.contBytes = contBytes, this.accBytes = accBytes, res;
   };
   InternalDecoderCesu8.prototype.end = function() {
     var res = 0;
-    if (this.contBytes > 0)
-      res += this.defaultCharUnicode;
-    return res;
+    return this.contBytes > 0 && (res += this.defaultCharUnicode), res;
   };
 });
 
@@ -2828,119 +1612,64 @@ var require_utf32 = __commonJS((exports2) => {
   var Buffer2 = require_safer().Buffer;
   exports2._utf32 = Utf32Codec;
   function Utf32Codec(codecOptions, iconv) {
-    this.iconv = iconv;
-    this.bomAware = true;
-    this.isLE = codecOptions.isLE;
+    this.iconv = iconv, this.bomAware = !0, this.isLE = codecOptions.isLE;
   }
-  exports2.utf32le = {type: "_utf32", isLE: true};
-  exports2.utf32be = {type: "_utf32", isLE: false};
+  exports2.utf32le = {type: "_utf32", isLE: !0};
+  exports2.utf32be = {type: "_utf32", isLE: !1};
   exports2.ucs4le = "utf32le";
   exports2.ucs4be = "utf32be";
   Utf32Codec.prototype.encoder = Utf32Encoder;
   Utf32Codec.prototype.decoder = Utf32Decoder;
   function Utf32Encoder(options, codec) {
-    this.isLE = codec.isLE;
-    this.highSurrogate = 0;
+    this.isLE = codec.isLE, this.highSurrogate = 0;
   }
   Utf32Encoder.prototype.write = function(str) {
-    var src = Buffer2.from(str, "ucs2");
-    var dst = Buffer2.alloc(src.length * 2);
-    var write32 = this.isLE ? dst.writeUInt32LE : dst.writeUInt32BE;
-    var offset = 0;
-    for (var i = 0; i < src.length; i += 2) {
-      var code = src.readUInt16LE(i);
-      var isHighSurrogate = 55296 <= code && code < 56320;
-      var isLowSurrogate = 56320 <= code && code < 57344;
-      if (this.highSurrogate) {
-        if (isHighSurrogate || !isLowSurrogate) {
-          write32.call(dst, this.highSurrogate, offset);
-          offset += 4;
-        } else {
+    for (var src = Buffer2.from(str, "ucs2"), dst = Buffer2.alloc(src.length * 2), write32 = this.isLE ? dst.writeUInt32LE : dst.writeUInt32BE, offset = 0, i = 0; i < src.length; i += 2) {
+      var code = src.readUInt16LE(i), isHighSurrogate = 55296 <= code && code < 56320, isLowSurrogate = 56320 <= code && code < 57344;
+      if (this.highSurrogate)
+        if (isHighSurrogate || !isLowSurrogate)
+          write32.call(dst, this.highSurrogate, offset), offset += 4;
+        else {
           var codepoint = (this.highSurrogate - 55296 << 10 | code - 56320) + 65536;
-          write32.call(dst, codepoint, offset);
-          offset += 4;
-          this.highSurrogate = 0;
+          write32.call(dst, codepoint, offset), offset += 4, this.highSurrogate = 0;
           continue;
         }
-      }
-      if (isHighSurrogate)
-        this.highSurrogate = code;
-      else {
-        write32.call(dst, code, offset);
-        offset += 4;
-        this.highSurrogate = 0;
-      }
+      isHighSurrogate ? this.highSurrogate = code : (write32.call(dst, code, offset), offset += 4, this.highSurrogate = 0);
     }
-    if (offset < dst.length)
-      dst = dst.slice(0, offset);
-    return dst;
+    return offset < dst.length && (dst = dst.slice(0, offset)), dst;
   };
   Utf32Encoder.prototype.end = function() {
-    if (!this.highSurrogate)
-      return;
-    var buf = Buffer2.alloc(4);
-    if (this.isLE)
-      buf.writeUInt32LE(this.highSurrogate, 0);
-    else
-      buf.writeUInt32BE(this.highSurrogate, 0);
-    this.highSurrogate = 0;
-    return buf;
+    if (!!this.highSurrogate) {
+      var buf = Buffer2.alloc(4);
+      return this.isLE ? buf.writeUInt32LE(this.highSurrogate, 0) : buf.writeUInt32BE(this.highSurrogate, 0), this.highSurrogate = 0, buf;
+    }
   };
   function Utf32Decoder(options, codec) {
-    this.isLE = codec.isLE;
-    this.badChar = codec.iconv.defaultCharUnicode.charCodeAt(0);
-    this.overflow = [];
+    this.isLE = codec.isLE, this.badChar = codec.iconv.defaultCharUnicode.charCodeAt(0), this.overflow = [];
   }
   Utf32Decoder.prototype.write = function(src) {
     if (src.length === 0)
       return "";
-    var i = 0;
-    var codepoint = 0;
-    var dst = Buffer2.alloc(src.length + 4);
-    var offset = 0;
-    var isLE = this.isLE;
-    var overflow = this.overflow;
-    var badChar = this.badChar;
+    var i = 0, codepoint = 0, dst = Buffer2.alloc(src.length + 4), offset = 0, isLE = this.isLE, overflow = this.overflow, badChar = this.badChar;
     if (overflow.length > 0) {
       for (; i < src.length && overflow.length < 4; i++)
         overflow.push(src[i]);
-      if (overflow.length === 4) {
-        if (isLE) {
-          codepoint = overflow[i] | overflow[i + 1] << 8 | overflow[i + 2] << 16 | overflow[i + 3] << 24;
-        } else {
-          codepoint = overflow[i + 3] | overflow[i + 2] << 8 | overflow[i + 1] << 16 | overflow[i] << 24;
-        }
-        overflow.length = 0;
-        offset = _writeCodepoint(dst, offset, codepoint, badChar);
-      }
+      overflow.length === 4 && (isLE ? codepoint = overflow[i] | overflow[i + 1] << 8 | overflow[i + 2] << 16 | overflow[i + 3] << 24 : codepoint = overflow[i + 3] | overflow[i + 2] << 8 | overflow[i + 1] << 16 | overflow[i] << 24, overflow.length = 0, offset = _writeCodepoint(dst, offset, codepoint, badChar));
     }
-    for (; i < src.length - 3; i += 4) {
-      if (isLE) {
-        codepoint = src[i] | src[i + 1] << 8 | src[i + 2] << 16 | src[i + 3] << 24;
-      } else {
-        codepoint = src[i + 3] | src[i + 2] << 8 | src[i + 1] << 16 | src[i] << 24;
-      }
-      offset = _writeCodepoint(dst, offset, codepoint, badChar);
-    }
-    for (; i < src.length; i++) {
+    for (; i < src.length - 3; i += 4)
+      isLE ? codepoint = src[i] | src[i + 1] << 8 | src[i + 2] << 16 | src[i + 3] << 24 : codepoint = src[i + 3] | src[i + 2] << 8 | src[i + 1] << 16 | src[i] << 24, offset = _writeCodepoint(dst, offset, codepoint, badChar);
+    for (; i < src.length; i++)
       overflow.push(src[i]);
-    }
     return dst.slice(0, offset).toString("ucs2");
   };
   function _writeCodepoint(dst, offset, codepoint, badChar) {
-    if (codepoint < 0 || codepoint > 1114111) {
-      codepoint = badChar;
-    }
-    if (codepoint >= 65536) {
+    if ((codepoint < 0 || codepoint > 1114111) && (codepoint = badChar), codepoint >= 65536) {
       codepoint -= 65536;
       var high = 55296 | codepoint >> 10;
-      dst[offset++] = high & 255;
-      dst[offset++] = high >> 8;
+      dst[offset++] = high & 255, dst[offset++] = high >> 8;
       var codepoint = 56320 | codepoint & 1023;
     }
-    dst[offset++] = codepoint & 255;
-    dst[offset++] = codepoint >> 8;
-    return offset;
+    return dst[offset++] = codepoint & 255, dst[offset++] = codepoint >> 8, offset;
   }
   Utf32Decoder.prototype.end = function() {
     this.overflow.length = 0;
@@ -2953,10 +1682,7 @@ var require_utf32 = __commonJS((exports2) => {
   Utf32AutoCodec.prototype.encoder = Utf32AutoEncoder;
   Utf32AutoCodec.prototype.decoder = Utf32AutoDecoder;
   function Utf32AutoEncoder(options, codec) {
-    options = options || {};
-    if (options.addBOM === void 0)
-      options.addBOM = true;
-    this.encoder = codec.iconv.getEncoder(options.defaultEncoding || "utf-32le", options);
+    options = options || {}, options.addBOM === void 0 && (options.addBOM = !0), this.encoder = codec.iconv.getEncoder(options.defaultEncoding || "utf-32le", options);
   }
   Utf32AutoEncoder.prototype.write = function(str) {
     return this.encoder.write(str);
@@ -2965,25 +1691,17 @@ var require_utf32 = __commonJS((exports2) => {
     return this.encoder.end();
   };
   function Utf32AutoDecoder(options, codec) {
-    this.decoder = null;
-    this.initialBufs = [];
-    this.initialBufsLen = 0;
-    this.options = options || {};
-    this.iconv = codec.iconv;
+    this.decoder = null, this.initialBufs = [], this.initialBufsLen = 0, this.options = options || {}, this.iconv = codec.iconv;
   }
   Utf32AutoDecoder.prototype.write = function(buf) {
     if (!this.decoder) {
-      this.initialBufs.push(buf);
-      this.initialBufsLen += buf.length;
-      if (this.initialBufsLen < 32)
+      if (this.initialBufs.push(buf), this.initialBufsLen += buf.length, this.initialBufsLen < 32)
         return "";
       var encoding = detectEncoding(this.initialBufs, this.options.defaultEncoding);
       this.decoder = this.iconv.getDecoder(encoding, this.options);
-      var resStr = "";
-      for (var i = 0; i < this.initialBufs.length; i++)
+      for (var resStr = "", i = 0; i < this.initialBufs.length; i++)
         resStr += this.decoder.write(this.initialBufs[i]);
-      this.initialBufs.length = this.initialBufsLen = 0;
-      return resStr;
+      return this.initialBufs.length = this.initialBufsLen = 0, resStr;
     }
     return this.decoder.write(buf);
   };
@@ -2991,57 +1709,29 @@ var require_utf32 = __commonJS((exports2) => {
     if (!this.decoder) {
       var encoding = detectEncoding(this.initialBufs, this.options.defaultEncoding);
       this.decoder = this.iconv.getDecoder(encoding, this.options);
-      var resStr = "";
-      for (var i = 0; i < this.initialBufs.length; i++)
+      for (var resStr = "", i = 0; i < this.initialBufs.length; i++)
         resStr += this.decoder.write(this.initialBufs[i]);
       var trail = this.decoder.end();
-      if (trail)
-        resStr += trail;
-      this.initialBufs.length = this.initialBufsLen = 0;
-      return resStr;
+      return trail && (resStr += trail), this.initialBufs.length = this.initialBufsLen = 0, resStr;
     }
     return this.decoder.end();
   };
   function detectEncoding(bufs, defaultEncoding) {
-    var b = [];
-    var charsProcessed = 0;
-    var invalidLE = 0, invalidBE = 0;
-    var bmpCharsLE = 0, bmpCharsBE = 0;
+    var b = [], charsProcessed = 0, invalidLE = 0, invalidBE = 0, bmpCharsLE = 0, bmpCharsBE = 0;
     outer_loop:
-      for (var i = 0; i < bufs.length; i++) {
-        var buf = bufs[i];
-        for (var j = 0; j < buf.length; j++) {
-          b.push(buf[j]);
-          if (b.length === 4) {
+      for (var i = 0; i < bufs.length; i++)
+        for (var buf = bufs[i], j = 0; j < buf.length; j++)
+          if (b.push(buf[j]), b.length === 4) {
             if (charsProcessed === 0) {
-              if (b[0] === 255 && b[1] === 254 && b[2] === 0 && b[3] === 0) {
+              if (b[0] === 255 && b[1] === 254 && b[2] === 0 && b[3] === 0)
                 return "utf-32le";
-              }
-              if (b[0] === 0 && b[1] === 0 && b[2] === 254 && b[3] === 255) {
+              if (b[0] === 0 && b[1] === 0 && b[2] === 254 && b[3] === 255)
                 return "utf-32be";
-              }
             }
-            if (b[0] !== 0 || b[1] > 16)
-              invalidBE++;
-            if (b[3] !== 0 || b[2] > 16)
-              invalidLE++;
-            if (b[0] === 0 && b[1] === 0 && (b[2] !== 0 || b[3] !== 0))
-              bmpCharsBE++;
-            if ((b[0] !== 0 || b[1] !== 0) && b[2] === 0 && b[3] === 0)
-              bmpCharsLE++;
-            b.length = 0;
-            charsProcessed++;
-            if (charsProcessed >= 100) {
+            if ((b[0] !== 0 || b[1] > 16) && invalidBE++, (b[3] !== 0 || b[2] > 16) && invalidLE++, b[0] === 0 && b[1] === 0 && (b[2] !== 0 || b[3] !== 0) && bmpCharsBE++, (b[0] !== 0 || b[1] !== 0) && b[2] === 0 && b[3] === 0 && bmpCharsLE++, b.length = 0, charsProcessed++, charsProcessed >= 100)
               break outer_loop;
-            }
           }
-        }
-      }
-    if (bmpCharsBE - invalidBE > bmpCharsLE - invalidLE)
-      return "utf-32be";
-    if (bmpCharsBE - invalidBE < bmpCharsLE - invalidLE)
-      return "utf-32le";
-    return defaultEncoding || "utf-32le";
+    return bmpCharsBE - invalidBE > bmpCharsLE - invalidLE ? "utf-32be" : bmpCharsBE - invalidBE < bmpCharsLE - invalidLE ? "utf-32le" : defaultEncoding || "utf-32le";
   }
 });
 
@@ -3054,15 +1744,13 @@ var require_utf16 = __commonJS((exports2) => {
   }
   Utf16BECodec.prototype.encoder = Utf16BEEncoder;
   Utf16BECodec.prototype.decoder = Utf16BEDecoder;
-  Utf16BECodec.prototype.bomAware = true;
+  Utf16BECodec.prototype.bomAware = !0;
   function Utf16BEEncoder() {
   }
   Utf16BEEncoder.prototype.write = function(str) {
-    var buf = Buffer2.from(str, "ucs2");
-    for (var i = 0; i < buf.length; i += 2) {
+    for (var buf = Buffer2.from(str, "ucs2"), i = 0; i < buf.length; i += 2) {
       var tmp = buf[i];
-      buf[i] = buf[i + 1];
-      buf[i + 1] = tmp;
+      buf[i] = buf[i + 1], buf[i + 1] = tmp;
     }
     return buf;
   };
@@ -3075,18 +1763,9 @@ var require_utf16 = __commonJS((exports2) => {
     if (buf.length == 0)
       return "";
     var buf2 = Buffer2.alloc(buf.length + 1), i = 0, j = 0;
-    if (this.overflowByte !== -1) {
-      buf2[0] = buf[0];
-      buf2[1] = this.overflowByte;
-      i = 1;
-      j = 2;
-    }
-    for (; i < buf.length - 1; i += 2, j += 2) {
-      buf2[j] = buf[i + 1];
-      buf2[j + 1] = buf[i];
-    }
-    this.overflowByte = i == buf.length - 1 ? buf[buf.length - 1] : -1;
-    return buf2.slice(0, j).toString("ucs2");
+    for (this.overflowByte !== -1 && (buf2[0] = buf[0], buf2[1] = this.overflowByte, i = 1, j = 2); i < buf.length - 1; i += 2, j += 2)
+      buf2[j] = buf[i + 1], buf2[j + 1] = buf[i];
+    return this.overflowByte = i == buf.length - 1 ? buf[buf.length - 1] : -1, buf2.slice(0, j).toString("ucs2");
   };
   Utf16BEDecoder.prototype.end = function() {
     this.overflowByte = -1;
@@ -3098,10 +1777,7 @@ var require_utf16 = __commonJS((exports2) => {
   Utf16Codec.prototype.encoder = Utf16Encoder;
   Utf16Codec.prototype.decoder = Utf16Decoder;
   function Utf16Encoder(options, codec) {
-    options = options || {};
-    if (options.addBOM === void 0)
-      options.addBOM = true;
-    this.encoder = codec.iconv.getEncoder("utf-16le", options);
+    options = options || {}, options.addBOM === void 0 && (options.addBOM = !0), this.encoder = codec.iconv.getEncoder("utf-16le", options);
   }
   Utf16Encoder.prototype.write = function(str) {
     return this.encoder.write(str);
@@ -3110,25 +1786,17 @@ var require_utf16 = __commonJS((exports2) => {
     return this.encoder.end();
   };
   function Utf16Decoder(options, codec) {
-    this.decoder = null;
-    this.initialBufs = [];
-    this.initialBufsLen = 0;
-    this.options = options || {};
-    this.iconv = codec.iconv;
+    this.decoder = null, this.initialBufs = [], this.initialBufsLen = 0, this.options = options || {}, this.iconv = codec.iconv;
   }
   Utf16Decoder.prototype.write = function(buf) {
     if (!this.decoder) {
-      this.initialBufs.push(buf);
-      this.initialBufsLen += buf.length;
-      if (this.initialBufsLen < 16)
+      if (this.initialBufs.push(buf), this.initialBufsLen += buf.length, this.initialBufsLen < 16)
         return "";
       var encoding = detectEncoding(this.initialBufs, this.options.defaultEncoding);
       this.decoder = this.iconv.getDecoder(encoding, this.options);
-      var resStr = "";
-      for (var i = 0; i < this.initialBufs.length; i++)
+      for (var resStr = "", i = 0; i < this.initialBufs.length; i++)
         resStr += this.decoder.write(this.initialBufs[i]);
-      this.initialBufs.length = this.initialBufsLen = 0;
-      return resStr;
+      return this.initialBufs.length = this.initialBufsLen = 0, resStr;
     }
     return this.decoder.write(buf);
   };
@@ -3136,50 +1804,29 @@ var require_utf16 = __commonJS((exports2) => {
     if (!this.decoder) {
       var encoding = detectEncoding(this.initialBufs, this.options.defaultEncoding);
       this.decoder = this.iconv.getDecoder(encoding, this.options);
-      var resStr = "";
-      for (var i = 0; i < this.initialBufs.length; i++)
+      for (var resStr = "", i = 0; i < this.initialBufs.length; i++)
         resStr += this.decoder.write(this.initialBufs[i]);
       var trail = this.decoder.end();
-      if (trail)
-        resStr += trail;
-      this.initialBufs.length = this.initialBufsLen = 0;
-      return resStr;
+      return trail && (resStr += trail), this.initialBufs.length = this.initialBufsLen = 0, resStr;
     }
     return this.decoder.end();
   };
   function detectEncoding(bufs, defaultEncoding) {
-    var b = [];
-    var charsProcessed = 0;
-    var asciiCharsLE = 0, asciiCharsBE = 0;
+    var b = [], charsProcessed = 0, asciiCharsLE = 0, asciiCharsBE = 0;
     outer_loop:
-      for (var i = 0; i < bufs.length; i++) {
-        var buf = bufs[i];
-        for (var j = 0; j < buf.length; j++) {
-          b.push(buf[j]);
-          if (b.length === 2) {
+      for (var i = 0; i < bufs.length; i++)
+        for (var buf = bufs[i], j = 0; j < buf.length; j++)
+          if (b.push(buf[j]), b.length === 2) {
             if (charsProcessed === 0) {
               if (b[0] === 255 && b[1] === 254)
                 return "utf-16le";
               if (b[0] === 254 && b[1] === 255)
                 return "utf-16be";
             }
-            if (b[0] === 0 && b[1] !== 0)
-              asciiCharsBE++;
-            if (b[0] !== 0 && b[1] === 0)
-              asciiCharsLE++;
-            b.length = 0;
-            charsProcessed++;
-            if (charsProcessed >= 100) {
+            if (b[0] === 0 && b[1] !== 0 && asciiCharsBE++, b[0] !== 0 && b[1] === 0 && asciiCharsLE++, b.length = 0, charsProcessed++, charsProcessed >= 100)
               break outer_loop;
-            }
           }
-        }
-      }
-    if (asciiCharsBE > asciiCharsLE)
-      return "utf-16be";
-    if (asciiCharsBE < asciiCharsLE)
-      return "utf-16le";
-    return defaultEncoding || "utf-16le";
+    return asciiCharsBE > asciiCharsLE ? "utf-16be" : asciiCharsBE < asciiCharsLE ? "utf-16le" : defaultEncoding || "utf-16le";
   }
 });
 
@@ -3194,7 +1841,7 @@ var require_utf7 = __commonJS((exports2) => {
   }
   Utf7Codec.prototype.encoder = Utf7Encoder;
   Utf7Codec.prototype.decoder = Utf7Decoder;
-  Utf7Codec.prototype.bomAware = true;
+  Utf7Codec.prototype.bomAware = !0;
   var nonDirectChars = /[^A-Za-z0-9'\(\),-\.\/:\? \n\r\t]+/g;
   function Utf7Encoder(options, codec) {
     this.iconv = codec.iconv;
@@ -3207,62 +1854,36 @@ var require_utf7 = __commonJS((exports2) => {
   Utf7Encoder.prototype.end = function() {
   };
   function Utf7Decoder(options, codec) {
-    this.iconv = codec.iconv;
-    this.inBase64 = false;
-    this.base64Accum = "";
+    this.iconv = codec.iconv, this.inBase64 = !1, this.base64Accum = "";
   }
-  var base64Regex = /[A-Za-z0-9\/+]/;
-  var base64Chars = [];
+  var base64Regex = /[A-Za-z0-9\/+]/, base64Chars = [];
   for (var i = 0; i < 256; i++)
     base64Chars[i] = base64Regex.test(String.fromCharCode(i));
-  var plusChar = "+".charCodeAt(0);
-  var minusChar = "-".charCodeAt(0);
-  var andChar = "&".charCodeAt(0);
+  var plusChar = "+".charCodeAt(0), minusChar = "-".charCodeAt(0), andChar = "&".charCodeAt(0);
   Utf7Decoder.prototype.write = function(buf) {
-    var res = "", lastI = 0, inBase64 = this.inBase64, base64Accum = this.base64Accum;
-    for (var i2 = 0; i2 < buf.length; i2++) {
-      if (!inBase64) {
-        if (buf[i2] == plusChar) {
-          res += this.iconv.decode(buf.slice(lastI, i2), "ascii");
-          lastI = i2 + 1;
-          inBase64 = true;
+    for (var res = "", lastI = 0, inBase64 = this.inBase64, base64Accum = this.base64Accum, i2 = 0; i2 < buf.length; i2++)
+      if (!inBase64)
+        buf[i2] == plusChar && (res += this.iconv.decode(buf.slice(lastI, i2), "ascii"), lastI = i2 + 1, inBase64 = !0);
+      else if (!base64Chars[buf[i2]]) {
+        if (i2 == lastI && buf[i2] == minusChar)
+          res += "+";
+        else {
+          var b64str = base64Accum + this.iconv.decode(buf.slice(lastI, i2), "ascii");
+          res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
         }
-      } else {
-        if (!base64Chars[buf[i2]]) {
-          if (i2 == lastI && buf[i2] == minusChar) {
-            res += "+";
-          } else {
-            var b64str = base64Accum + this.iconv.decode(buf.slice(lastI, i2), "ascii");
-            res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
-          }
-          if (buf[i2] != minusChar)
-            i2--;
-          lastI = i2 + 1;
-          inBase64 = false;
-          base64Accum = "";
-        }
+        buf[i2] != minusChar && i2--, lastI = i2 + 1, inBase64 = !1, base64Accum = "";
       }
-    }
-    if (!inBase64) {
+    if (!inBase64)
       res += this.iconv.decode(buf.slice(lastI), "ascii");
-    } else {
-      var b64str = base64Accum + this.iconv.decode(buf.slice(lastI), "ascii");
-      var canBeDecoded = b64str.length - b64str.length % 8;
-      base64Accum = b64str.slice(canBeDecoded);
-      b64str = b64str.slice(0, canBeDecoded);
-      res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
+    else {
+      var b64str = base64Accum + this.iconv.decode(buf.slice(lastI), "ascii"), canBeDecoded = b64str.length - b64str.length % 8;
+      base64Accum = b64str.slice(canBeDecoded), b64str = b64str.slice(0, canBeDecoded), res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
     }
-    this.inBase64 = inBase64;
-    this.base64Accum = base64Accum;
-    return res;
+    return this.inBase64 = inBase64, this.base64Accum = base64Accum, res;
   };
   Utf7Decoder.prototype.end = function() {
     var res = "";
-    if (this.inBase64 && this.base64Accum.length > 0)
-      res = this.iconv.decode(Buffer2.from(this.base64Accum, "base64"), "utf16-be");
-    this.inBase64 = false;
-    this.base64Accum = "";
-    return res;
+    return this.inBase64 && this.base64Accum.length > 0 && (res = this.iconv.decode(Buffer2.from(this.base64Accum, "base64"), "utf16-be")), this.inBase64 = !1, this.base64Accum = "", res;
   };
   exports2.utf7imap = Utf7IMAPCodec;
   function Utf7IMAPCodec(codecOptions, iconv) {
@@ -3270,114 +1891,50 @@ var require_utf7 = __commonJS((exports2) => {
   }
   Utf7IMAPCodec.prototype.encoder = Utf7IMAPEncoder;
   Utf7IMAPCodec.prototype.decoder = Utf7IMAPDecoder;
-  Utf7IMAPCodec.prototype.bomAware = true;
+  Utf7IMAPCodec.prototype.bomAware = !0;
   function Utf7IMAPEncoder(options, codec) {
-    this.iconv = codec.iconv;
-    this.inBase64 = false;
-    this.base64Accum = Buffer2.alloc(6);
-    this.base64AccumIdx = 0;
+    this.iconv = codec.iconv, this.inBase64 = !1, this.base64Accum = Buffer2.alloc(6), this.base64AccumIdx = 0;
   }
   Utf7IMAPEncoder.prototype.write = function(str) {
-    var inBase64 = this.inBase64, base64Accum = this.base64Accum, base64AccumIdx = this.base64AccumIdx, buf = Buffer2.alloc(str.length * 5 + 10), bufIdx = 0;
-    for (var i2 = 0; i2 < str.length; i2++) {
+    for (var inBase64 = this.inBase64, base64Accum = this.base64Accum, base64AccumIdx = this.base64AccumIdx, buf = Buffer2.alloc(str.length * 5 + 10), bufIdx = 0, i2 = 0; i2 < str.length; i2++) {
       var uChar = str.charCodeAt(i2);
-      if (32 <= uChar && uChar <= 126) {
-        if (inBase64) {
-          if (base64AccumIdx > 0) {
-            bufIdx += buf.write(base64Accum.slice(0, base64AccumIdx).toString("base64").replace(/\//g, ",").replace(/=+$/, ""), bufIdx);
-            base64AccumIdx = 0;
-          }
-          buf[bufIdx++] = minusChar;
-          inBase64 = false;
-        }
-        if (!inBase64) {
-          buf[bufIdx++] = uChar;
-          if (uChar === andChar)
-            buf[bufIdx++] = minusChar;
-        }
-      } else {
-        if (!inBase64) {
-          buf[bufIdx++] = andChar;
-          inBase64 = true;
-        }
-        if (inBase64) {
-          base64Accum[base64AccumIdx++] = uChar >> 8;
-          base64Accum[base64AccumIdx++] = uChar & 255;
-          if (base64AccumIdx == base64Accum.length) {
-            bufIdx += buf.write(base64Accum.toString("base64").replace(/\//g, ","), bufIdx);
-            base64AccumIdx = 0;
-          }
-        }
-      }
+      32 <= uChar && uChar <= 126 ? (inBase64 && (base64AccumIdx > 0 && (bufIdx += buf.write(base64Accum.slice(0, base64AccumIdx).toString("base64").replace(/\//g, ",").replace(/=+$/, ""), bufIdx), base64AccumIdx = 0), buf[bufIdx++] = minusChar, inBase64 = !1), inBase64 || (buf[bufIdx++] = uChar, uChar === andChar && (buf[bufIdx++] = minusChar))) : (inBase64 || (buf[bufIdx++] = andChar, inBase64 = !0), inBase64 && (base64Accum[base64AccumIdx++] = uChar >> 8, base64Accum[base64AccumIdx++] = uChar & 255, base64AccumIdx == base64Accum.length && (bufIdx += buf.write(base64Accum.toString("base64").replace(/\//g, ","), bufIdx), base64AccumIdx = 0)));
     }
-    this.inBase64 = inBase64;
-    this.base64AccumIdx = base64AccumIdx;
-    return buf.slice(0, bufIdx);
+    return this.inBase64 = inBase64, this.base64AccumIdx = base64AccumIdx, buf.slice(0, bufIdx);
   };
   Utf7IMAPEncoder.prototype.end = function() {
     var buf = Buffer2.alloc(10), bufIdx = 0;
-    if (this.inBase64) {
-      if (this.base64AccumIdx > 0) {
-        bufIdx += buf.write(this.base64Accum.slice(0, this.base64AccumIdx).toString("base64").replace(/\//g, ",").replace(/=+$/, ""), bufIdx);
-        this.base64AccumIdx = 0;
-      }
-      buf[bufIdx++] = minusChar;
-      this.inBase64 = false;
-    }
-    return buf.slice(0, bufIdx);
+    return this.inBase64 && (this.base64AccumIdx > 0 && (bufIdx += buf.write(this.base64Accum.slice(0, this.base64AccumIdx).toString("base64").replace(/\//g, ",").replace(/=+$/, ""), bufIdx), this.base64AccumIdx = 0), buf[bufIdx++] = minusChar, this.inBase64 = !1), buf.slice(0, bufIdx);
   };
   function Utf7IMAPDecoder(options, codec) {
-    this.iconv = codec.iconv;
-    this.inBase64 = false;
-    this.base64Accum = "";
+    this.iconv = codec.iconv, this.inBase64 = !1, this.base64Accum = "";
   }
   var base64IMAPChars = base64Chars.slice();
-  base64IMAPChars[",".charCodeAt(0)] = true;
+  base64IMAPChars[",".charCodeAt(0)] = !0;
   Utf7IMAPDecoder.prototype.write = function(buf) {
-    var res = "", lastI = 0, inBase64 = this.inBase64, base64Accum = this.base64Accum;
-    for (var i2 = 0; i2 < buf.length; i2++) {
-      if (!inBase64) {
-        if (buf[i2] == andChar) {
-          res += this.iconv.decode(buf.slice(lastI, i2), "ascii");
-          lastI = i2 + 1;
-          inBase64 = true;
+    for (var res = "", lastI = 0, inBase64 = this.inBase64, base64Accum = this.base64Accum, i2 = 0; i2 < buf.length; i2++)
+      if (!inBase64)
+        buf[i2] == andChar && (res += this.iconv.decode(buf.slice(lastI, i2), "ascii"), lastI = i2 + 1, inBase64 = !0);
+      else if (!base64IMAPChars[buf[i2]]) {
+        if (i2 == lastI && buf[i2] == minusChar)
+          res += "&";
+        else {
+          var b64str = base64Accum + this.iconv.decode(buf.slice(lastI, i2), "ascii").replace(/,/g, "/");
+          res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
         }
-      } else {
-        if (!base64IMAPChars[buf[i2]]) {
-          if (i2 == lastI && buf[i2] == minusChar) {
-            res += "&";
-          } else {
-            var b64str = base64Accum + this.iconv.decode(buf.slice(lastI, i2), "ascii").replace(/,/g, "/");
-            res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
-          }
-          if (buf[i2] != minusChar)
-            i2--;
-          lastI = i2 + 1;
-          inBase64 = false;
-          base64Accum = "";
-        }
+        buf[i2] != minusChar && i2--, lastI = i2 + 1, inBase64 = !1, base64Accum = "";
       }
-    }
-    if (!inBase64) {
+    if (!inBase64)
       res += this.iconv.decode(buf.slice(lastI), "ascii");
-    } else {
-      var b64str = base64Accum + this.iconv.decode(buf.slice(lastI), "ascii").replace(/,/g, "/");
-      var canBeDecoded = b64str.length - b64str.length % 8;
-      base64Accum = b64str.slice(canBeDecoded);
-      b64str = b64str.slice(0, canBeDecoded);
-      res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
+    else {
+      var b64str = base64Accum + this.iconv.decode(buf.slice(lastI), "ascii").replace(/,/g, "/"), canBeDecoded = b64str.length - b64str.length % 8;
+      base64Accum = b64str.slice(canBeDecoded), b64str = b64str.slice(0, canBeDecoded), res += this.iconv.decode(Buffer2.from(b64str, "base64"), "utf16-be");
     }
-    this.inBase64 = inBase64;
-    this.base64Accum = base64Accum;
-    return res;
+    return this.inBase64 = inBase64, this.base64Accum = base64Accum, res;
   };
   Utf7IMAPDecoder.prototype.end = function() {
     var res = "";
-    if (this.inBase64 && this.base64Accum.length > 0)
-      res = this.iconv.decode(Buffer2.from(this.base64Accum, "base64"), "utf16-be");
-    this.inBase64 = false;
-    this.base64Accum = "";
-    return res;
+    return this.inBase64 && this.base64Accum.length > 0 && (res = this.iconv.decode(Buffer2.from(this.base64Accum, "base64"), "utf16-be")), this.inBase64 = !1, this.base64Accum = "", res;
   };
 });
 
@@ -3392,14 +1949,12 @@ var require_sbcs_codec = __commonJS((exports2) => {
     if (!codecOptions.chars || codecOptions.chars.length !== 128 && codecOptions.chars.length !== 256)
       throw new Error("Encoding '" + codecOptions.type + "' has incorrect 'chars' (must be of len 128 or 256)");
     if (codecOptions.chars.length === 128) {
-      var asciiString = "";
-      for (var i = 0; i < 128; i++)
+      for (var asciiString = "", i = 0; i < 128; i++)
         asciiString += String.fromCharCode(i);
       codecOptions.chars = asciiString + codecOptions.chars;
     }
     this.decodeBuf = Buffer2.from(codecOptions.chars, "ucs2");
-    var encodeBuf = Buffer2.alloc(65536, iconv.defaultCharSingleByte.charCodeAt(0));
-    for (var i = 0; i < codecOptions.chars.length; i++)
+    for (var encodeBuf = Buffer2.alloc(65536, iconv.defaultCharSingleByte.charCodeAt(0)), i = 0; i < codecOptions.chars.length; i++)
       encodeBuf[codecOptions.chars.charCodeAt(i)] = i;
     this.encodeBuf = encodeBuf;
   }
@@ -3409,8 +1964,7 @@ var require_sbcs_codec = __commonJS((exports2) => {
     this.encodeBuf = codec.encodeBuf;
   }
   SBCSEncoder.prototype.write = function(str) {
-    var buf = Buffer2.alloc(str.length);
-    for (var i = 0; i < str.length; i++)
+    for (var buf = Buffer2.alloc(str.length), i = 0; i < str.length; i++)
       buf[i] = this.encodeBuf[str.charCodeAt(i)];
     return buf;
   };
@@ -3420,15 +1974,8 @@ var require_sbcs_codec = __commonJS((exports2) => {
     this.decodeBuf = codec.decodeBuf;
   }
   SBCSDecoder.prototype.write = function(buf) {
-    var decodeBuf = this.decodeBuf;
-    var newBuf = Buffer2.alloc(buf.length * 2);
-    var idx1 = 0, idx2 = 0;
-    for (var i = 0; i < buf.length; i++) {
-      idx1 = buf[i] * 2;
-      idx2 = i * 2;
-      newBuf[idx2] = decodeBuf[idx1];
-      newBuf[idx2 + 1] = decodeBuf[idx1 + 1];
-    }
+    for (var decodeBuf = this.decodeBuf, newBuf = Buffer2.alloc(buf.length * 2), idx1 = 0, idx2 = 0, i = 0; i < buf.length; i++)
+      idx1 = buf[i] * 2, idx2 = i * 2, newBuf[idx2] = decodeBuf[idx1], newBuf[idx2 + 1] = decodeBuf[idx1 + 1];
     return newBuf.toString("ucs2");
   };
   SBCSDecoder.prototype.end = function() {
@@ -3854,7 +2401,8 @@ var require_sbcs_data_generated = __commonJS((exports2, module2) => {
     csibm863: "cp863",
     cp864: {
       type: "_sbcs",
-      chars: "\0\x07\b	\n\v\f\r !\"#$\u066A&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7F\xB0\xB7\u2219\u221A\u2592\u2500\u2502\u253C\u2524\u252C\u251C\u2534\u2510\u250C\u2514\u2518\u03B2\u221E\u03C6\xB1\xBD\xBC\u2248\xAB\xBB\uFEF7\uFEF8\uFFFD\uFFFD\uFEFB\uFEFC\uFFFD\xA0\xAD\uFE82\xA3\xA4\uFE84\uFFFD\uFFFD\uFE8E\uFE8F\uFE95\uFE99\u060C\uFE9D\uFEA1\uFEA5\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669\uFED1\u061B\uFEB1\uFEB5\uFEB9\u061F\xA2\uFE80\uFE81\uFE83\uFE85\uFECA\uFE8B\uFE8D\uFE91\uFE93\uFE97\uFE9B\uFE9F\uFEA3\uFEA7\uFEA9\uFEAB\uFEAD\uFEAF\uFEB3\uFEB7\uFEBB\uFEBF\uFEC1\uFEC5\uFECB\uFECF\xA6\xAC\xF7\xD7\uFEC9\u0640\uFED3\uFED7\uFEDB\uFEDF\uFEE3\uFEE7\uFEEB\uFEED\uFEEF\uFEF3\uFEBD\uFECC\uFECE\uFECD\uFEE1\uFE7D\u0651\uFEE5\uFEE9\uFEEC\uFEF0\uFEF2\uFED0\uFED5\uFEF5\uFEF6\uFEDD\uFED9\uFEF1\u25A0\uFFFD"
+      chars: `\0\x07\b	
+\v\f\r !"#$\u066A&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~\x7F\xB0\xB7\u2219\u221A\u2592\u2500\u2502\u253C\u2524\u252C\u251C\u2534\u2510\u250C\u2514\u2518\u03B2\u221E\u03C6\xB1\xBD\xBC\u2248\xAB\xBB\uFEF7\uFEF8\uFFFD\uFFFD\uFEFB\uFEFC\uFFFD\xA0\xAD\uFE82\xA3\xA4\uFE84\uFFFD\uFFFD\uFE8E\uFE8F\uFE95\uFE99\u060C\uFE9D\uFEA1\uFEA5\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669\uFED1\u061B\uFEB1\uFEB5\uFEB9\u061F\xA2\uFE80\uFE81\uFE83\uFE85\uFECA\uFE8B\uFE8D\uFE91\uFE93\uFE97\uFE9B\uFE9F\uFEA3\uFEA7\uFEA9\uFEAB\uFEAD\uFEAF\uFEB3\uFEB7\uFEBB\uFEBF\uFEC1\uFEC5\uFECB\uFECF\xA6\xAC\xF7\xD7\uFEC9\u0640\uFED3\uFED7\uFEDB\uFEDF\uFEE3\uFEE7\uFEEB\uFEED\uFEEF\uFEF3\uFEBD\uFECC\uFECE\uFECD\uFEE1\uFE7D\u0651\uFEE5\uFEE9\uFEEC\uFEF0\uFEF2\uFED0\uFED5\uFEF5\uFEF6\uFEDD\uFED9\uFEF1\u25A0\uFFFD`
     },
     ibm864: "cp864",
     csibm864: "cp864",
@@ -3992,7 +2540,8 @@ var require_sbcs_data_generated = __commonJS((exports2, module2) => {
     },
     tcvn: {
       type: "_sbcs",
-      chars: "\0\xDA\u1EE4\u1EEA\u1EEC\u1EEE\x07\b	\n\v\f\r\u1EE8\u1EF0\u1EF2\u1EF6\u1EF8\xDD\u1EF4 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7F\xC0\u1EA2\xC3\xC1\u1EA0\u1EB6\u1EAC\xC8\u1EBA\u1EBC\xC9\u1EB8\u1EC6\xCC\u1EC8\u0128\xCD\u1ECA\xD2\u1ECE\xD5\xD3\u1ECC\u1ED8\u1EDC\u1EDE\u1EE0\u1EDA\u1EE2\xD9\u1EE6\u0168\xA0\u0102\xC2\xCA\xD4\u01A0\u01AF\u0110\u0103\xE2\xEA\xF4\u01A1\u01B0\u0111\u1EB0\u0300\u0309\u0303\u0301\u0323\xE0\u1EA3\xE3\xE1\u1EA1\u1EB2\u1EB1\u1EB3\u1EB5\u1EAF\u1EB4\u1EAE\u1EA6\u1EA8\u1EAA\u1EA4\u1EC0\u1EB7\u1EA7\u1EA9\u1EAB\u1EA5\u1EAD\xE8\u1EC2\u1EBB\u1EBD\xE9\u1EB9\u1EC1\u1EC3\u1EC5\u1EBF\u1EC7\xEC\u1EC9\u1EC4\u1EBE\u1ED2\u0129\xED\u1ECB\xF2\u1ED4\u1ECF\xF5\xF3\u1ECD\u1ED3\u1ED5\u1ED7\u1ED1\u1ED9\u1EDD\u1EDF\u1EE1\u1EDB\u1EE3\xF9\u1ED6\u1EE7\u0169\xFA\u1EE5\u1EEB\u1EED\u1EEF\u1EE9\u1EF1\u1EF3\u1EF7\u1EF9\xFD\u1EF5\u1ED0"
+      chars: `\0\xDA\u1EE4\u1EEA\u1EEC\u1EEE\x07\b	
+\v\f\r\u1EE8\u1EF0\u1EF2\u1EF6\u1EF8\xDD\u1EF4 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~\x7F\xC0\u1EA2\xC3\xC1\u1EA0\u1EB6\u1EAC\xC8\u1EBA\u1EBC\xC9\u1EB8\u1EC6\xCC\u1EC8\u0128\xCD\u1ECA\xD2\u1ECE\xD5\xD3\u1ECC\u1ED8\u1EDC\u1EDE\u1EE0\u1EDA\u1EE2\xD9\u1EE6\u0168\xA0\u0102\xC2\xCA\xD4\u01A0\u01AF\u0110\u0103\xE2\xEA\xF4\u01A1\u01B0\u0111\u1EB0\u0300\u0309\u0303\u0301\u0323\xE0\u1EA3\xE3\xE1\u1EA1\u1EB2\u1EB1\u1EB3\u1EB5\u1EAF\u1EB4\u1EAE\u1EA6\u1EA8\u1EAA\u1EA4\u1EC0\u1EB7\u1EA7\u1EA9\u1EAB\u1EA5\u1EAD\xE8\u1EC2\u1EBB\u1EBD\xE9\u1EB9\u1EC1\u1EC3\u1EC5\u1EBF\u1EC7\xEC\u1EC9\u1EC4\u1EBE\u1ED2\u0129\xED\u1ECB\xF2\u1ED4\u1ECF\xF5\xF3\u1ECD\u1ED3\u1ED5\u1ED7\u1ED1\u1ED9\u1EDD\u1EDF\u1EE1\u1EDB\u1EE3\xF9\u1ED6\u1EE7\u0169\xFA\u1EE5\u1EEB\u1EED\u1EEF\u1EE9\u1EF1\u1EF3\u1EF7\u1EF9\xFD\u1EF5\u1ED0`
     },
     georgianacademy: {
       type: "_sbcs",
@@ -4008,15 +2557,18 @@ var require_sbcs_data_generated = __commonJS((exports2, module2) => {
     },
     viscii: {
       type: "_sbcs",
-      chars: "\0\u1EB2\u1EB4\u1EAA\x07\b	\n\v\f\r\u1EF6\u1EF8\u1EF4 !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7F\u1EA0\u1EAE\u1EB0\u1EB6\u1EA4\u1EA6\u1EA8\u1EAC\u1EBC\u1EB8\u1EBE\u1EC0\u1EC2\u1EC4\u1EC6\u1ED0\u1ED2\u1ED4\u1ED6\u1ED8\u1EE2\u1EDA\u1EDC\u1EDE\u1ECA\u1ECE\u1ECC\u1EC8\u1EE6\u0168\u1EE4\u1EF2\xD5\u1EAF\u1EB1\u1EB7\u1EA5\u1EA7\u1EA9\u1EAD\u1EBD\u1EB9\u1EBF\u1EC1\u1EC3\u1EC5\u1EC7\u1ED1\u1ED3\u1ED5\u1ED7\u1EE0\u01A0\u1ED9\u1EDD\u1EDF\u1ECB\u1EF0\u1EE8\u1EEA\u1EEC\u01A1\u1EDB\u01AF\xC0\xC1\xC2\xC3\u1EA2\u0102\u1EB3\u1EB5\xC8\xC9\xCA\u1EBA\xCC\xCD\u0128\u1EF3\u0110\u1EE9\xD2\xD3\xD4\u1EA1\u1EF7\u1EEB\u1EED\xD9\xDA\u1EF9\u1EF5\xDD\u1EE1\u01B0\xE0\xE1\xE2\xE3\u1EA3\u0103\u1EEF\u1EAB\xE8\xE9\xEA\u1EBB\xEC\xED\u0129\u1EC9\u0111\u1EF1\xF2\xF3\xF4\xF5\u1ECF\u1ECD\u1EE5\xF9\xFA\u0169\u1EE7\xFD\u1EE3\u1EEE"
+      chars: `\0\u1EB2\u1EB4\u1EAA\x07\b	
+\v\f\r\u1EF6\u1EF8\u1EF4 !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}~\x7F\u1EA0\u1EAE\u1EB0\u1EB6\u1EA4\u1EA6\u1EA8\u1EAC\u1EBC\u1EB8\u1EBE\u1EC0\u1EC2\u1EC4\u1EC6\u1ED0\u1ED2\u1ED4\u1ED6\u1ED8\u1EE2\u1EDA\u1EDC\u1EDE\u1ECA\u1ECE\u1ECC\u1EC8\u1EE6\u0168\u1EE4\u1EF2\xD5\u1EAF\u1EB1\u1EB7\u1EA5\u1EA7\u1EA9\u1EAD\u1EBD\u1EB9\u1EBF\u1EC1\u1EC3\u1EC5\u1EC7\u1ED1\u1ED3\u1ED5\u1ED7\u1EE0\u01A0\u1ED9\u1EDD\u1EDF\u1ECB\u1EF0\u1EE8\u1EEA\u1EEC\u01A1\u1EDB\u01AF\xC0\xC1\xC2\xC3\u1EA2\u0102\u1EB3\u1EB5\xC8\xC9\xCA\u1EBA\xCC\xCD\u0128\u1EF3\u0110\u1EE9\xD2\xD3\xD4\u1EA1\u1EF7\u1EEB\u1EED\xD9\xDA\u1EF9\u1EF5\xDD\u1EE1\u01B0\xE0\xE1\xE2\xE3\u1EA3\u0103\u1EEF\u1EAB\xE8\xE9\xEA\u1EBB\xEC\xED\u0129\u1EC9\u0111\u1EF1\xF2\xF3\xF4\xF5\u1ECF\u1ECD\u1EE5\xF9\xFA\u0169\u1EE7\xFD\u1EE3\u1EEE`
     },
     iso646cn: {
       type: "_sbcs",
-      chars: "\0\x07\b	\n\v\f\r !\"#\xA5%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}\u203E\x7F\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+      chars: `\0\x07\b	
+\v\f\r !"#\xA5%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_\`abcdefghijklmnopqrstuvwxyz{|}\u203E\x7F\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD`
     },
     iso646jp: {
       type: "_sbcs",
-      chars: "\0\x07\b	\n\v\f\r !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\xA5]^_`abcdefghijklmnopqrstuvwxyz{|}\u203E\x7F\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD"
+      chars: `\0\x07\b	
+\v\f\r !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\xA5]^_\`abcdefghijklmnopqrstuvwxyz{|}\u203E\x7F\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD`
     },
     hproman8: {
       type: "_sbcs",
@@ -4042,112 +2594,83 @@ var require_dbcs_codec = __commonJS((exports2) => {
   "use strict";
   var Buffer2 = require_safer().Buffer;
   exports2._dbcs = DBCSCodec;
-  var UNASSIGNED = -1;
-  var GB18030_CODE = -2;
-  var SEQ_START = -10;
-  var NODE_START = -1e3;
-  var UNASSIGNED_NODE = new Array(256);
-  var DEF_CHAR = -1;
+  var UNASSIGNED = -1, GB18030_CODE = -2, SEQ_START = -10, NODE_START = -1e3, UNASSIGNED_NODE = new Array(256), DEF_CHAR = -1;
   for (var i = 0; i < 256; i++)
     UNASSIGNED_NODE[i] = UNASSIGNED;
   function DBCSCodec(codecOptions, iconv) {
-    this.encodingName = codecOptions.encodingName;
-    if (!codecOptions)
+    if (this.encodingName = codecOptions.encodingName, !codecOptions)
       throw new Error("DBCS codec is called without the data.");
     if (!codecOptions.table)
       throw new Error("Encoding '" + this.encodingName + "' has no data.");
     var mappingTable = codecOptions.table();
-    this.decodeTables = [];
-    this.decodeTables[0] = UNASSIGNED_NODE.slice(0);
-    this.decodeTableSeq = [];
+    this.decodeTables = [], this.decodeTables[0] = UNASSIGNED_NODE.slice(0), this.decodeTableSeq = [];
     for (var i2 = 0; i2 < mappingTable.length; i2++)
       this._addDecodeChunk(mappingTable[i2]);
-    if (typeof codecOptions.gb18030 === "function") {
+    if (typeof codecOptions.gb18030 == "function") {
       this.gb18030 = codecOptions.gb18030();
       var commonThirdByteNodeIdx = this.decodeTables.length;
       this.decodeTables.push(UNASSIGNED_NODE.slice(0));
       var commonFourthByteNodeIdx = this.decodeTables.length;
       this.decodeTables.push(UNASSIGNED_NODE.slice(0));
-      var firstByteNode = this.decodeTables[0];
-      for (var i2 = 129; i2 <= 254; i2++) {
-        var secondByteNode = this.decodeTables[NODE_START - firstByteNode[i2]];
-        for (var j = 48; j <= 57; j++) {
-          if (secondByteNode[j] === UNASSIGNED) {
+      for (var firstByteNode = this.decodeTables[0], i2 = 129; i2 <= 254; i2++)
+        for (var secondByteNode = this.decodeTables[NODE_START - firstByteNode[i2]], j = 48; j <= 57; j++) {
+          if (secondByteNode[j] === UNASSIGNED)
             secondByteNode[j] = NODE_START - commonThirdByteNodeIdx;
-          } else if (secondByteNode[j] > NODE_START) {
+          else if (secondByteNode[j] > NODE_START)
             throw new Error("gb18030 decode tables conflict at byte 2");
-          }
-          var thirdByteNode = this.decodeTables[NODE_START - secondByteNode[j]];
-          for (var k = 129; k <= 254; k++) {
-            if (thirdByteNode[k] === UNASSIGNED) {
+          for (var thirdByteNode = this.decodeTables[NODE_START - secondByteNode[j]], k = 129; k <= 254; k++) {
+            if (thirdByteNode[k] === UNASSIGNED)
               thirdByteNode[k] = NODE_START - commonFourthByteNodeIdx;
-            } else if (thirdByteNode[k] === NODE_START - commonFourthByteNodeIdx) {
-              continue;
-            } else if (thirdByteNode[k] > NODE_START) {
-              throw new Error("gb18030 decode tables conflict at byte 3");
+            else {
+              if (thirdByteNode[k] === NODE_START - commonFourthByteNodeIdx)
+                continue;
+              if (thirdByteNode[k] > NODE_START)
+                throw new Error("gb18030 decode tables conflict at byte 3");
             }
-            var fourthByteNode = this.decodeTables[NODE_START - thirdByteNode[k]];
-            for (var l = 48; l <= 57; l++) {
-              if (fourthByteNode[l] === UNASSIGNED)
-                fourthByteNode[l] = GB18030_CODE;
-            }
+            for (var fourthByteNode = this.decodeTables[NODE_START - thirdByteNode[k]], l = 48; l <= 57; l++)
+              fourthByteNode[l] === UNASSIGNED && (fourthByteNode[l] = GB18030_CODE);
           }
         }
-      }
     }
-    this.defaultCharUnicode = iconv.defaultCharUnicode;
-    this.encodeTable = [];
-    this.encodeTableSeq = [];
+    this.defaultCharUnicode = iconv.defaultCharUnicode, this.encodeTable = [], this.encodeTableSeq = [];
     var skipEncodeChars = {};
     if (codecOptions.encodeSkipVals)
       for (var i2 = 0; i2 < codecOptions.encodeSkipVals.length; i2++) {
         var val = codecOptions.encodeSkipVals[i2];
-        if (typeof val === "number")
-          skipEncodeChars[val] = true;
+        if (typeof val == "number")
+          skipEncodeChars[val] = !0;
         else
           for (var j = val.from; j <= val.to; j++)
-            skipEncodeChars[j] = true;
+            skipEncodeChars[j] = !0;
       }
-    this._fillEncodeTable(0, 0, skipEncodeChars);
-    if (codecOptions.encodeAdd) {
+    if (this._fillEncodeTable(0, 0, skipEncodeChars), codecOptions.encodeAdd)
       for (var uChar in codecOptions.encodeAdd)
-        if (Object.prototype.hasOwnProperty.call(codecOptions.encodeAdd, uChar))
-          this._setEncodeChar(uChar.charCodeAt(0), codecOptions.encodeAdd[uChar]);
-    }
-    this.defCharSB = this.encodeTable[0][iconv.defaultCharSingleByte.charCodeAt(0)];
-    if (this.defCharSB === UNASSIGNED)
-      this.defCharSB = this.encodeTable[0]["?"];
-    if (this.defCharSB === UNASSIGNED)
-      this.defCharSB = "?".charCodeAt(0);
+        Object.prototype.hasOwnProperty.call(codecOptions.encodeAdd, uChar) && this._setEncodeChar(uChar.charCodeAt(0), codecOptions.encodeAdd[uChar]);
+    this.defCharSB = this.encodeTable[0][iconv.defaultCharSingleByte.charCodeAt(0)], this.defCharSB === UNASSIGNED && (this.defCharSB = this.encodeTable[0]["?"]), this.defCharSB === UNASSIGNED && (this.defCharSB = "?".charCodeAt(0));
   }
   DBCSCodec.prototype.encoder = DBCSEncoder;
   DBCSCodec.prototype.decoder = DBCSDecoder;
   DBCSCodec.prototype._getDecodeTrieNode = function(addr) {
-    var bytes = [];
-    for (; addr > 0; addr >>>= 8)
+    for (var bytes = []; addr > 0; addr >>>= 8)
       bytes.push(addr & 255);
-    if (bytes.length == 0)
-      bytes.push(0);
-    var node = this.decodeTables[0];
-    for (var i2 = bytes.length - 1; i2 > 0; i2--) {
+    bytes.length == 0 && bytes.push(0);
+    for (var node = this.decodeTables[0], i2 = bytes.length - 1; i2 > 0; i2--) {
       var val = node[bytes[i2]];
-      if (val == UNASSIGNED) {
-        node[bytes[i2]] = NODE_START - this.decodeTables.length;
-        this.decodeTables.push(node = UNASSIGNED_NODE.slice(0));
-      } else if (val <= NODE_START) {
+      if (val == UNASSIGNED)
+        node[bytes[i2]] = NODE_START - this.decodeTables.length, this.decodeTables.push(node = UNASSIGNED_NODE.slice(0));
+      else if (val <= NODE_START)
         node = this.decodeTables[NODE_START - val];
-      } else
+      else
         throw new Error("Overwrite byte in " + this.encodingName + ", addr: " + addr.toString(16));
     }
     return node;
   };
   DBCSCodec.prototype._addDecodeChunk = function(chunk) {
-    var curAddr = parseInt(chunk[0], 16);
-    var writeTable = this._getDecodeTrieNode(curAddr);
+    var curAddr = parseInt(chunk[0], 16), writeTable = this._getDecodeTrieNode(curAddr);
     curAddr = curAddr & 255;
     for (var k = 1; k < chunk.length; k++) {
       var part = chunk[k];
-      if (typeof part === "string") {
+      if (typeof part == "string")
         for (var l = 0; l < part.length; ) {
           var code = part.charCodeAt(l++);
           if (55296 <= code && code < 56320) {
@@ -4157,20 +2680,16 @@ var require_dbcs_codec = __commonJS((exports2) => {
             else
               throw new Error("Incorrect surrogate pair in " + this.encodingName + " at chunk " + chunk[0]);
           } else if (4080 < code && code <= 4095) {
-            var len = 4095 - code + 2;
-            var seq = [];
-            for (var m = 0; m < len; m++)
+            for (var len = 4095 - code + 2, seq = [], m = 0; m < len; m++)
               seq.push(part.charCodeAt(l++));
-            writeTable[curAddr++] = SEQ_START - this.decodeTableSeq.length;
-            this.decodeTableSeq.push(seq);
+            writeTable[curAddr++] = SEQ_START - this.decodeTableSeq.length, this.decodeTableSeq.push(seq);
           } else
             writeTable[curAddr++] = code;
         }
-      } else if (typeof part === "number") {
-        var charCode = writeTable[curAddr - 1] + 1;
-        for (var l = 0; l < part; l++)
+      else if (typeof part == "number")
+        for (var charCode = writeTable[curAddr - 1] + 1, l = 0; l < part; l++)
           writeTable[curAddr++] = charCode++;
-      } else
+      else
         throw new Error("Incorrect type '" + typeof part + "' given in " + this.encodingName + " at chunk " + chunk[0]);
     }
     if (curAddr > 255)
@@ -4178,84 +2697,43 @@ var require_dbcs_codec = __commonJS((exports2) => {
   };
   DBCSCodec.prototype._getEncodeBucket = function(uCode) {
     var high = uCode >> 8;
-    if (this.encodeTable[high] === void 0)
-      this.encodeTable[high] = UNASSIGNED_NODE.slice(0);
-    return this.encodeTable[high];
+    return this.encodeTable[high] === void 0 && (this.encodeTable[high] = UNASSIGNED_NODE.slice(0)), this.encodeTable[high];
   };
   DBCSCodec.prototype._setEncodeChar = function(uCode, dbcsCode) {
-    var bucket = this._getEncodeBucket(uCode);
-    var low = uCode & 255;
-    if (bucket[low] <= SEQ_START)
-      this.encodeTableSeq[SEQ_START - bucket[low]][DEF_CHAR] = dbcsCode;
-    else if (bucket[low] == UNASSIGNED)
-      bucket[low] = dbcsCode;
+    var bucket = this._getEncodeBucket(uCode), low = uCode & 255;
+    bucket[low] <= SEQ_START ? this.encodeTableSeq[SEQ_START - bucket[low]][DEF_CHAR] = dbcsCode : bucket[low] == UNASSIGNED && (bucket[low] = dbcsCode);
   };
   DBCSCodec.prototype._setEncodeSequence = function(seq, dbcsCode) {
-    var uCode = seq[0];
-    var bucket = this._getEncodeBucket(uCode);
-    var low = uCode & 255;
-    var node;
-    if (bucket[low] <= SEQ_START) {
-      node = this.encodeTableSeq[SEQ_START - bucket[low]];
-    } else {
-      node = {};
-      if (bucket[low] !== UNASSIGNED)
-        node[DEF_CHAR] = bucket[low];
-      bucket[low] = SEQ_START - this.encodeTableSeq.length;
-      this.encodeTableSeq.push(node);
-    }
+    var uCode = seq[0], bucket = this._getEncodeBucket(uCode), low = uCode & 255, node;
+    bucket[low] <= SEQ_START ? node = this.encodeTableSeq[SEQ_START - bucket[low]] : (node = {}, bucket[low] !== UNASSIGNED && (node[DEF_CHAR] = bucket[low]), bucket[low] = SEQ_START - this.encodeTableSeq.length, this.encodeTableSeq.push(node));
     for (var j = 1; j < seq.length - 1; j++) {
       var oldVal = node[uCode];
-      if (typeof oldVal === "object")
-        node = oldVal;
-      else {
-        node = node[uCode] = {};
-        if (oldVal !== void 0)
-          node[DEF_CHAR] = oldVal;
-      }
+      typeof oldVal == "object" ? node = oldVal : (node = node[uCode] = {}, oldVal !== void 0 && (node[DEF_CHAR] = oldVal));
     }
-    uCode = seq[seq.length - 1];
-    node[uCode] = dbcsCode;
+    uCode = seq[seq.length - 1], node[uCode] = dbcsCode;
   };
   DBCSCodec.prototype._fillEncodeTable = function(nodeIdx, prefix, skipEncodeChars) {
-    var node = this.decodeTables[nodeIdx];
-    var hasValues = false;
-    var subNodeEmpty = {};
-    for (var i2 = 0; i2 < 256; i2++) {
-      var uCode = node[i2];
-      var mbCode = prefix + i2;
-      if (skipEncodeChars[mbCode])
-        continue;
-      if (uCode >= 0) {
-        this._setEncodeChar(uCode, mbCode);
-        hasValues = true;
-      } else if (uCode <= NODE_START) {
-        var subNodeIdx = NODE_START - uCode;
-        if (!subNodeEmpty[subNodeIdx]) {
-          var newPrefix = mbCode << 8 >>> 0;
-          if (this._fillEncodeTable(subNodeIdx, newPrefix, skipEncodeChars))
-            hasValues = true;
-          else
-            subNodeEmpty[subNodeIdx] = true;
-        }
-      } else if (uCode <= SEQ_START) {
-        this._setEncodeSequence(this.decodeTableSeq[SEQ_START - uCode], mbCode);
-        hasValues = true;
-      }
+    for (var node = this.decodeTables[nodeIdx], hasValues = !1, subNodeEmpty = {}, i2 = 0; i2 < 256; i2++) {
+      var uCode = node[i2], mbCode = prefix + i2;
+      if (!skipEncodeChars[mbCode])
+        if (uCode >= 0)
+          this._setEncodeChar(uCode, mbCode), hasValues = !0;
+        else if (uCode <= NODE_START) {
+          var subNodeIdx = NODE_START - uCode;
+          if (!subNodeEmpty[subNodeIdx]) {
+            var newPrefix = mbCode << 8 >>> 0;
+            this._fillEncodeTable(subNodeIdx, newPrefix, skipEncodeChars) ? hasValues = !0 : subNodeEmpty[subNodeIdx] = !0;
+          }
+        } else
+          uCode <= SEQ_START && (this._setEncodeSequence(this.decodeTableSeq[SEQ_START - uCode], mbCode), hasValues = !0);
     }
     return hasValues;
   };
   function DBCSEncoder(options, codec) {
-    this.leadSurrogate = -1;
-    this.seqObj = void 0;
-    this.encodeTable = codec.encodeTable;
-    this.encodeTableSeq = codec.encodeTableSeq;
-    this.defaultCharSingleByte = codec.defCharSB;
-    this.gb18030 = codec.gb18030;
+    this.leadSurrogate = -1, this.seqObj = void 0, this.encodeTable = codec.encodeTable, this.encodeTableSeq = codec.encodeTableSeq, this.defaultCharSingleByte = codec.defCharSB, this.gb18030 = codec.gb18030;
   }
   DBCSEncoder.prototype.write = function(str) {
-    var newBuf = Buffer2.alloc(str.length * (this.gb18030 ? 4 : 3)), leadSurrogate = this.leadSurrogate, seqObj = this.seqObj, nextChar = -1, i2 = 0, j = 0;
-    while (true) {
+    for (var newBuf = Buffer2.alloc(str.length * (this.gb18030 ? 4 : 3)), leadSurrogate = this.leadSurrogate, seqObj = this.seqObj, nextChar = -1, i2 = 0, j = 0; ; ) {
       if (nextChar === -1) {
         if (i2 == str.length)
           break;
@@ -4264,50 +2742,29 @@ var require_dbcs_codec = __commonJS((exports2) => {
         var uCode = nextChar;
         nextChar = -1;
       }
-      if (55296 <= uCode && uCode < 57344) {
-        if (uCode < 56320) {
+      if (55296 <= uCode && uCode < 57344)
+        if (uCode < 56320)
           if (leadSurrogate === -1) {
             leadSurrogate = uCode;
             continue;
-          } else {
-            leadSurrogate = uCode;
-            uCode = UNASSIGNED;
-          }
-        } else {
-          if (leadSurrogate !== -1) {
-            uCode = 65536 + (leadSurrogate - 55296) * 1024 + (uCode - 56320);
-            leadSurrogate = -1;
-          } else {
-            uCode = UNASSIGNED;
-          }
-        }
-      } else if (leadSurrogate !== -1) {
-        nextChar = uCode;
-        uCode = UNASSIGNED;
-        leadSurrogate = -1;
-      }
+          } else
+            leadSurrogate = uCode, uCode = UNASSIGNED;
+        else
+          leadSurrogate !== -1 ? (uCode = 65536 + (leadSurrogate - 55296) * 1024 + (uCode - 56320), leadSurrogate = -1) : uCode = UNASSIGNED;
+      else
+        leadSurrogate !== -1 && (nextChar = uCode, uCode = UNASSIGNED, leadSurrogate = -1);
       var dbcsCode = UNASSIGNED;
       if (seqObj !== void 0 && uCode != UNASSIGNED) {
         var resCode = seqObj[uCode];
-        if (typeof resCode === "object") {
+        if (typeof resCode == "object") {
           seqObj = resCode;
           continue;
-        } else if (typeof resCode == "number") {
-          dbcsCode = resCode;
-        } else if (resCode == void 0) {
-          resCode = seqObj[DEF_CHAR];
-          if (resCode !== void 0) {
-            dbcsCode = resCode;
-            nextChar = uCode;
-          } else {
-          }
-        }
+        } else
+          typeof resCode == "number" ? dbcsCode = resCode : resCode == null && (resCode = seqObj[DEF_CHAR], resCode !== void 0 && (dbcsCode = resCode, nextChar = uCode));
         seqObj = void 0;
       } else if (uCode >= 0) {
         var subtable = this.encodeTable[uCode >> 8];
-        if (subtable !== void 0)
-          dbcsCode = subtable[uCode & 255];
-        if (dbcsCode <= SEQ_START) {
+        if (subtable !== void 0 && (dbcsCode = subtable[uCode & 255]), dbcsCode <= SEQ_START) {
           seqObj = this.encodeTableSeq[SEQ_START - dbcsCode];
           continue;
         }
@@ -4315,141 +2772,74 @@ var require_dbcs_codec = __commonJS((exports2) => {
           var idx = findIdx(this.gb18030.uChars, uCode);
           if (idx != -1) {
             var dbcsCode = this.gb18030.gbChars[idx] + (uCode - this.gb18030.uChars[idx]);
-            newBuf[j++] = 129 + Math.floor(dbcsCode / 12600);
-            dbcsCode = dbcsCode % 12600;
-            newBuf[j++] = 48 + Math.floor(dbcsCode / 1260);
-            dbcsCode = dbcsCode % 1260;
-            newBuf[j++] = 129 + Math.floor(dbcsCode / 10);
-            dbcsCode = dbcsCode % 10;
-            newBuf[j++] = 48 + dbcsCode;
+            newBuf[j++] = 129 + Math.floor(dbcsCode / 12600), dbcsCode = dbcsCode % 12600, newBuf[j++] = 48 + Math.floor(dbcsCode / 1260), dbcsCode = dbcsCode % 1260, newBuf[j++] = 129 + Math.floor(dbcsCode / 10), dbcsCode = dbcsCode % 10, newBuf[j++] = 48 + dbcsCode;
             continue;
           }
         }
       }
-      if (dbcsCode === UNASSIGNED)
-        dbcsCode = this.defaultCharSingleByte;
-      if (dbcsCode < 256) {
-        newBuf[j++] = dbcsCode;
-      } else if (dbcsCode < 65536) {
-        newBuf[j++] = dbcsCode >> 8;
-        newBuf[j++] = dbcsCode & 255;
-      } else if (dbcsCode < 16777216) {
-        newBuf[j++] = dbcsCode >> 16;
-        newBuf[j++] = dbcsCode >> 8 & 255;
-        newBuf[j++] = dbcsCode & 255;
-      } else {
-        newBuf[j++] = dbcsCode >>> 24;
-        newBuf[j++] = dbcsCode >>> 16 & 255;
-        newBuf[j++] = dbcsCode >>> 8 & 255;
-        newBuf[j++] = dbcsCode & 255;
-      }
+      dbcsCode === UNASSIGNED && (dbcsCode = this.defaultCharSingleByte), dbcsCode < 256 ? newBuf[j++] = dbcsCode : dbcsCode < 65536 ? (newBuf[j++] = dbcsCode >> 8, newBuf[j++] = dbcsCode & 255) : dbcsCode < 16777216 ? (newBuf[j++] = dbcsCode >> 16, newBuf[j++] = dbcsCode >> 8 & 255, newBuf[j++] = dbcsCode & 255) : (newBuf[j++] = dbcsCode >>> 24, newBuf[j++] = dbcsCode >>> 16 & 255, newBuf[j++] = dbcsCode >>> 8 & 255, newBuf[j++] = dbcsCode & 255);
     }
-    this.seqObj = seqObj;
-    this.leadSurrogate = leadSurrogate;
-    return newBuf.slice(0, j);
+    return this.seqObj = seqObj, this.leadSurrogate = leadSurrogate, newBuf.slice(0, j);
   };
   DBCSEncoder.prototype.end = function() {
-    if (this.leadSurrogate === -1 && this.seqObj === void 0)
-      return;
-    var newBuf = Buffer2.alloc(10), j = 0;
-    if (this.seqObj) {
-      var dbcsCode = this.seqObj[DEF_CHAR];
-      if (dbcsCode !== void 0) {
-        if (dbcsCode < 256) {
-          newBuf[j++] = dbcsCode;
-        } else {
-          newBuf[j++] = dbcsCode >> 8;
-          newBuf[j++] = dbcsCode & 255;
-        }
-      } else {
+    if (!(this.leadSurrogate === -1 && this.seqObj === void 0)) {
+      var newBuf = Buffer2.alloc(10), j = 0;
+      if (this.seqObj) {
+        var dbcsCode = this.seqObj[DEF_CHAR];
+        dbcsCode !== void 0 && (dbcsCode < 256 ? newBuf[j++] = dbcsCode : (newBuf[j++] = dbcsCode >> 8, newBuf[j++] = dbcsCode & 255)), this.seqObj = void 0;
       }
-      this.seqObj = void 0;
+      return this.leadSurrogate !== -1 && (newBuf[j++] = this.defaultCharSingleByte, this.leadSurrogate = -1), newBuf.slice(0, j);
     }
-    if (this.leadSurrogate !== -1) {
-      newBuf[j++] = this.defaultCharSingleByte;
-      this.leadSurrogate = -1;
-    }
-    return newBuf.slice(0, j);
   };
   DBCSEncoder.prototype.findIdx = findIdx;
   function DBCSDecoder(options, codec) {
-    this.nodeIdx = 0;
-    this.prevBytes = [];
-    this.decodeTables = codec.decodeTables;
-    this.decodeTableSeq = codec.decodeTableSeq;
-    this.defaultCharUnicode = codec.defaultCharUnicode;
-    this.gb18030 = codec.gb18030;
+    this.nodeIdx = 0, this.prevBytes = [], this.decodeTables = codec.decodeTables, this.decodeTableSeq = codec.decodeTableSeq, this.defaultCharUnicode = codec.defaultCharUnicode, this.gb18030 = codec.gb18030;
   }
   DBCSDecoder.prototype.write = function(buf) {
-    var newBuf = Buffer2.alloc(buf.length * 2), nodeIdx = this.nodeIdx, prevBytes = this.prevBytes, prevOffset = this.prevBytes.length, seqStart = -this.prevBytes.length, uCode;
-    for (var i2 = 0, j = 0; i2 < buf.length; i2++) {
-      var curByte = i2 >= 0 ? buf[i2] : prevBytes[i2 + prevOffset];
-      var uCode = this.decodeTables[nodeIdx][curByte];
-      if (uCode >= 0) {
-      } else if (uCode === UNASSIGNED) {
-        uCode = this.defaultCharUnicode.charCodeAt(0);
-        i2 = seqStart;
-      } else if (uCode === GB18030_CODE) {
-        if (i2 >= 3) {
-          var ptr = (buf[i2 - 3] - 129) * 12600 + (buf[i2 - 2] - 48) * 1260 + (buf[i2 - 1] - 129) * 10 + (curByte - 48);
-        } else {
-          var ptr = (prevBytes[i2 - 3 + prevOffset] - 129) * 12600 + ((i2 - 2 >= 0 ? buf[i2 - 2] : prevBytes[i2 - 2 + prevOffset]) - 48) * 1260 + ((i2 - 1 >= 0 ? buf[i2 - 1] : prevBytes[i2 - 1 + prevOffset]) - 129) * 10 + (curByte - 48);
-        }
-        var idx = findIdx(this.gb18030.gbChars, ptr);
-        uCode = this.gb18030.uChars[idx] + ptr - this.gb18030.gbChars[idx];
-      } else if (uCode <= NODE_START) {
-        nodeIdx = NODE_START - uCode;
-        continue;
-      } else if (uCode <= SEQ_START) {
-        var seq = this.decodeTableSeq[SEQ_START - uCode];
-        for (var k = 0; k < seq.length - 1; k++) {
-          uCode = seq[k];
-          newBuf[j++] = uCode & 255;
-          newBuf[j++] = uCode >> 8;
-        }
-        uCode = seq[seq.length - 1];
-      } else
-        throw new Error("iconv-lite internal error: invalid decoding table value " + uCode + " at " + nodeIdx + "/" + curByte);
+    for (var newBuf = Buffer2.alloc(buf.length * 2), nodeIdx = this.nodeIdx, prevBytes = this.prevBytes, prevOffset = this.prevBytes.length, seqStart = -this.prevBytes.length, uCode, i2 = 0, j = 0; i2 < buf.length; i2++) {
+      var curByte = i2 >= 0 ? buf[i2] : prevBytes[i2 + prevOffset], uCode = this.decodeTables[nodeIdx][curByte];
+      if (!(uCode >= 0))
+        if (uCode === UNASSIGNED)
+          uCode = this.defaultCharUnicode.charCodeAt(0), i2 = seqStart;
+        else if (uCode === GB18030_CODE) {
+          if (i2 >= 3)
+            var ptr = (buf[i2 - 3] - 129) * 12600 + (buf[i2 - 2] - 48) * 1260 + (buf[i2 - 1] - 129) * 10 + (curByte - 48);
+          else
+            var ptr = (prevBytes[i2 - 3 + prevOffset] - 129) * 12600 + ((i2 - 2 >= 0 ? buf[i2 - 2] : prevBytes[i2 - 2 + prevOffset]) - 48) * 1260 + ((i2 - 1 >= 0 ? buf[i2 - 1] : prevBytes[i2 - 1 + prevOffset]) - 129) * 10 + (curByte - 48);
+          var idx = findIdx(this.gb18030.gbChars, ptr);
+          uCode = this.gb18030.uChars[idx] + ptr - this.gb18030.gbChars[idx];
+        } else if (uCode <= NODE_START) {
+          nodeIdx = NODE_START - uCode;
+          continue;
+        } else if (uCode <= SEQ_START) {
+          for (var seq = this.decodeTableSeq[SEQ_START - uCode], k = 0; k < seq.length - 1; k++)
+            uCode = seq[k], newBuf[j++] = uCode & 255, newBuf[j++] = uCode >> 8;
+          uCode = seq[seq.length - 1];
+        } else
+          throw new Error("iconv-lite internal error: invalid decoding table value " + uCode + " at " + nodeIdx + "/" + curByte);
       if (uCode >= 65536) {
         uCode -= 65536;
         var uCodeLead = 55296 | uCode >> 10;
-        newBuf[j++] = uCodeLead & 255;
-        newBuf[j++] = uCodeLead >> 8;
-        uCode = 56320 | uCode & 1023;
+        newBuf[j++] = uCodeLead & 255, newBuf[j++] = uCodeLead >> 8, uCode = 56320 | uCode & 1023;
       }
-      newBuf[j++] = uCode & 255;
-      newBuf[j++] = uCode >> 8;
-      nodeIdx = 0;
-      seqStart = i2 + 1;
+      newBuf[j++] = uCode & 255, newBuf[j++] = uCode >> 8, nodeIdx = 0, seqStart = i2 + 1;
     }
-    this.nodeIdx = nodeIdx;
-    this.prevBytes = seqStart >= 0 ? Array.prototype.slice.call(buf, seqStart) : prevBytes.slice(seqStart + prevOffset).concat(Array.prototype.slice.call(buf));
-    return newBuf.slice(0, j).toString("ucs2");
+    return this.nodeIdx = nodeIdx, this.prevBytes = seqStart >= 0 ? Array.prototype.slice.call(buf, seqStart) : prevBytes.slice(seqStart + prevOffset).concat(Array.prototype.slice.call(buf)), newBuf.slice(0, j).toString("ucs2");
   };
   DBCSDecoder.prototype.end = function() {
-    var ret = "";
-    while (this.prevBytes.length > 0) {
+    for (var ret = ""; this.prevBytes.length > 0; ) {
       ret += this.defaultCharUnicode;
       var bytesArr = this.prevBytes.slice(1);
-      this.prevBytes = [];
-      this.nodeIdx = 0;
-      if (bytesArr.length > 0)
-        ret += this.write(bytesArr);
+      this.prevBytes = [], this.nodeIdx = 0, bytesArr.length > 0 && (ret += this.write(bytesArr));
     }
-    this.prevBytes = [];
-    this.nodeIdx = 0;
-    return ret;
+    return this.prevBytes = [], this.nodeIdx = 0, ret;
   };
   function findIdx(table, val) {
     if (table[0] > val)
       return -1;
-    var l = 0, r = table.length;
-    while (l < r - 1) {
+    for (var l = 0, r = table.length; l < r - 1; ) {
       var mid = l + (r - l + 1 >> 1);
-      if (table[mid] <= val)
-        l = mid;
-      else
-        r = mid;
+      table[mid] <= val ? l = mid : r = mid;
     }
     return l;
   }
@@ -5808,8 +4198,7 @@ var require_encodings = __commonJS((exports2, module2) => {
   for (var i = 0; i < modules.length; i++) {
     module2 = modules[i];
     for (var enc in module2)
-      if (Object.prototype.hasOwnProperty.call(module2, enc))
-        exports2[enc] = module2[enc];
+      Object.prototype.hasOwnProperty.call(module2, enc) && (exports2[enc] = module2[enc]);
   }
   var module2;
 });
@@ -5821,90 +4210,63 @@ var require_streams = __commonJS((exports2, module2) => {
   module2.exports = function(stream_module) {
     var Transform = stream_module.Transform;
     function IconvLiteEncoderStream(conv, options) {
-      this.conv = conv;
-      options = options || {};
-      options.decodeStrings = false;
-      Transform.call(this, options);
+      this.conv = conv, options = options || {}, options.decodeStrings = !1, Transform.call(this, options);
     }
     IconvLiteEncoderStream.prototype = Object.create(Transform.prototype, {
       constructor: {value: IconvLiteEncoderStream}
-    });
-    IconvLiteEncoderStream.prototype._transform = function(chunk, encoding, done) {
+    }), IconvLiteEncoderStream.prototype._transform = function(chunk, encoding, done) {
       if (typeof chunk != "string")
         return done(new Error("Iconv encoding stream needs strings as its input."));
       try {
         var res = this.conv.write(chunk);
-        if (res && res.length)
-          this.push(res);
-        done();
+        res && res.length && this.push(res), done();
       } catch (e) {
         done(e);
       }
-    };
-    IconvLiteEncoderStream.prototype._flush = function(done) {
+    }, IconvLiteEncoderStream.prototype._flush = function(done) {
       try {
         var res = this.conv.end();
-        if (res && res.length)
-          this.push(res);
-        done();
+        res && res.length && this.push(res), done();
       } catch (e) {
         done(e);
       }
-    };
-    IconvLiteEncoderStream.prototype.collect = function(cb) {
+    }, IconvLiteEncoderStream.prototype.collect = function(cb) {
       var chunks = [];
-      this.on("error", cb);
-      this.on("data", function(chunk) {
+      return this.on("error", cb), this.on("data", function(chunk) {
         chunks.push(chunk);
-      });
-      this.on("end", function() {
+      }), this.on("end", function() {
         cb(null, Buffer2.concat(chunks));
-      });
-      return this;
+      }), this;
     };
     function IconvLiteDecoderStream(conv, options) {
-      this.conv = conv;
-      options = options || {};
-      options.encoding = this.encoding = "utf8";
-      Transform.call(this, options);
+      this.conv = conv, options = options || {}, options.encoding = this.encoding = "utf8", Transform.call(this, options);
     }
-    IconvLiteDecoderStream.prototype = Object.create(Transform.prototype, {
+    return IconvLiteDecoderStream.prototype = Object.create(Transform.prototype, {
       constructor: {value: IconvLiteDecoderStream}
-    });
-    IconvLiteDecoderStream.prototype._transform = function(chunk, encoding, done) {
+    }), IconvLiteDecoderStream.prototype._transform = function(chunk, encoding, done) {
       if (!Buffer2.isBuffer(chunk) && !(chunk instanceof Uint8Array))
         return done(new Error("Iconv decoding stream needs buffers as its input."));
       try {
         var res = this.conv.write(chunk);
-        if (res && res.length)
-          this.push(res, this.encoding);
-        done();
+        res && res.length && this.push(res, this.encoding), done();
       } catch (e) {
         done(e);
       }
-    };
-    IconvLiteDecoderStream.prototype._flush = function(done) {
+    }, IconvLiteDecoderStream.prototype._flush = function(done) {
       try {
         var res = this.conv.end();
-        if (res && res.length)
-          this.push(res, this.encoding);
-        done();
+        res && res.length && this.push(res, this.encoding), done();
       } catch (e) {
         done(e);
       }
-    };
-    IconvLiteDecoderStream.prototype.collect = function(cb) {
+    }, IconvLiteDecoderStream.prototype.collect = function(cb) {
       var res = "";
-      this.on("error", cb);
-      this.on("data", function(chunk) {
+      return this.on("error", cb), this.on("data", function(chunk) {
         res += chunk;
-      });
-      this.on("end", function() {
+      }), this.on("end", function() {
         cb(null, res);
-      });
-      return this;
-    };
-    return {
+      }), this;
+    }, {
       IconvLiteEncoderStream,
       IconvLiteDecoderStream
     };
@@ -5914,49 +4276,33 @@ var require_streams = __commonJS((exports2, module2) => {
 // ../node_modules/encoding/node_modules/iconv-lite/lib/index.js
 var require_lib = __commonJS((exports2, module2) => {
   "use strict";
-  var Buffer2 = require_safer().Buffer;
-  var bomHandling = require_bom_handling();
-  var iconv = module2.exports;
+  var Buffer2 = require_safer().Buffer, bomHandling = require_bom_handling(), iconv = module2.exports;
   iconv.encodings = null;
   iconv.defaultCharUnicode = "\uFFFD";
   iconv.defaultCharSingleByte = "?";
-  iconv.encode = function encode(str, encoding, options) {
+  iconv.encode = function(str, encoding, options) {
     str = "" + (str || "");
-    var encoder = iconv.getEncoder(encoding, options);
-    var res = encoder.write(str);
-    var trail = encoder.end();
+    var encoder = iconv.getEncoder(encoding, options), res = encoder.write(str), trail = encoder.end();
     return trail && trail.length > 0 ? Buffer2.concat([res, trail]) : res;
   };
-  iconv.decode = function decode(buf, encoding, options) {
-    if (typeof buf === "string") {
-      if (!iconv.skipDecodeWarning) {
-        console.error("Iconv-lite warning: decode()-ing strings is deprecated. Refer to https://github.com/ashtuchkin/iconv-lite/wiki/Use-Buffers-when-decoding");
-        iconv.skipDecodeWarning = true;
-      }
-      buf = Buffer2.from("" + (buf || ""), "binary");
-    }
-    var decoder = iconv.getDecoder(encoding, options);
-    var res = decoder.write(buf);
-    var trail = decoder.end();
+  iconv.decode = function(buf, encoding, options) {
+    typeof buf == "string" && (iconv.skipDecodeWarning || (console.error("Iconv-lite warning: decode()-ing strings is deprecated. Refer to https://github.com/ashtuchkin/iconv-lite/wiki/Use-Buffers-when-decoding"), iconv.skipDecodeWarning = !0), buf = Buffer2.from("" + (buf || ""), "binary"));
+    var decoder = iconv.getDecoder(encoding, options), res = decoder.write(buf), trail = decoder.end();
     return trail ? res + trail : res;
   };
-  iconv.encodingExists = function encodingExists(enc) {
+  iconv.encodingExists = function(enc) {
     try {
-      iconv.getCodec(enc);
-      return true;
+      return iconv.getCodec(enc), !0;
     } catch (e) {
-      return false;
+      return !1;
     }
   };
   iconv.toEncoding = iconv.encode;
   iconv.fromEncoding = iconv.decode;
   iconv._codecDataCache = {};
-  iconv.getCodec = function getCodec(encoding) {
-    if (!iconv.encodings)
-      iconv.encodings = require_encodings();
-    var enc = iconv._canonicalizeEncoding(encoding);
-    var codecOptions = {};
-    while (true) {
+  iconv.getCodec = function(encoding) {
+    iconv.encodings || (iconv.encodings = require_encodings());
+    for (var enc = iconv._canonicalizeEncoding(encoding), codecOptions = {}; ; ) {
       var codec = iconv._codecDataCache[enc];
       if (codec)
         return codec;
@@ -5968,16 +4314,10 @@ var require_lib = __commonJS((exports2, module2) => {
         case "object":
           for (var key in codecDef)
             codecOptions[key] = codecDef[key];
-          if (!codecOptions.encodingName)
-            codecOptions.encodingName = enc;
-          enc = codecDef.type;
+          codecOptions.encodingName || (codecOptions.encodingName = enc), enc = codecDef.type;
           break;
         case "function":
-          if (!codecOptions.encodingName)
-            codecOptions.encodingName = enc;
-          codec = new codecDef(codecOptions, iconv);
-          iconv._codecDataCache[codecOptions.encodingName] = codec;
-          return codec;
+          return codecOptions.encodingName || (codecOptions.encodingName = enc), codec = new codecDef(codecOptions, iconv), iconv._codecDataCache[codecOptions.encodingName] = codec, codec;
         default:
           throw new Error("Encoding not recognized: '" + encoding + "' (searched as: '" + enc + "')");
       }
@@ -5986,1148 +4326,58 @@ var require_lib = __commonJS((exports2, module2) => {
   iconv._canonicalizeEncoding = function(encoding) {
     return ("" + encoding).toLowerCase().replace(/:\d{4}$|[^0-9a-z]/g, "");
   };
-  iconv.getEncoder = function getEncoder(encoding, options) {
+  iconv.getEncoder = function(encoding, options) {
     var codec = iconv.getCodec(encoding), encoder = new codec.encoder(options, codec);
-    if (codec.bomAware && options && options.addBOM)
-      encoder = new bomHandling.PrependBOM(encoder, options);
-    return encoder;
+    return codec.bomAware && options && options.addBOM && (encoder = new bomHandling.PrependBOM(encoder, options)), encoder;
   };
-  iconv.getDecoder = function getDecoder(encoding, options) {
+  iconv.getDecoder = function(encoding, options) {
     var codec = iconv.getCodec(encoding), decoder = new codec.decoder(options, codec);
-    if (codec.bomAware && !(options && options.stripBOM === false))
-      decoder = new bomHandling.StripBOM(decoder, options);
-    return decoder;
+    return codec.bomAware && !(options && options.stripBOM === !1) && (decoder = new bomHandling.StripBOM(decoder, options)), decoder;
   };
-  iconv.enableStreamingAPI = function enableStreamingAPI(stream_module2) {
-    if (iconv.supportsStreams)
-      return;
-    var streams = require_streams()(stream_module2);
-    iconv.IconvLiteEncoderStream = streams.IconvLiteEncoderStream;
-    iconv.IconvLiteDecoderStream = streams.IconvLiteDecoderStream;
-    iconv.encodeStream = function encodeStream(encoding, options) {
-      return new iconv.IconvLiteEncoderStream(iconv.getEncoder(encoding, options), options);
-    };
-    iconv.decodeStream = function decodeStream(encoding, options) {
-      return new iconv.IconvLiteDecoderStream(iconv.getDecoder(encoding, options), options);
-    };
-    iconv.supportsStreams = true;
+  iconv.enableStreamingAPI = function(stream_module2) {
+    if (!iconv.supportsStreams) {
+      var streams = require_streams()(stream_module2);
+      iconv.IconvLiteEncoderStream = streams.IconvLiteEncoderStream, iconv.IconvLiteDecoderStream = streams.IconvLiteDecoderStream, iconv.encodeStream = function(encoding, options) {
+        return new iconv.IconvLiteEncoderStream(iconv.getEncoder(encoding, options), options);
+      }, iconv.decodeStream = function(encoding, options) {
+        return new iconv.IconvLiteDecoderStream(iconv.getDecoder(encoding, options), options);
+      }, iconv.supportsStreams = !0;
+    }
   };
   var stream_module;
   try {
     stream_module = require("stream");
   } catch (e) {
   }
-  if (stream_module && stream_module.Transform) {
-    iconv.enableStreamingAPI(stream_module);
-  } else {
-    iconv.encodeStream = iconv.decodeStream = function() {
-      throw new Error("iconv-lite Streaming API is not enabled. Use iconv.enableStreamingAPI(require('stream')); to enable it.");
-    };
-  }
-  if (false) {
-    console.error("iconv-lite warning: js files use non-utf8 encoding. See https://github.com/ashtuchkin/iconv-lite/wiki/Javascript-source-file-encodings for more info.");
-  }
+  stream_module && stream_module.Transform ? iconv.enableStreamingAPI(stream_module) : iconv.encodeStream = iconv.decodeStream = function() {
+    throw new Error("iconv-lite Streaming API is not enabled. Use iconv.enableStreamingAPI(require('stream')); to enable it.");
+  };
 });
 
 // ../node_modules/encoding/lib/encoding.js
 var require_encoding = __commonJS((exports2, module2) => {
   "use strict";
   var iconvLite = require_lib();
-  module2.exports.convert = convert;
-  function convert(str, to, from) {
-    from = checkEncoding(from || "UTF-8");
-    to = checkEncoding(to || "UTF-8");
-    str = str || "";
+  module2.exports.convert = convert2;
+  function convert2(str, to, from) {
+    from = checkEncoding(from || "UTF-8"), to = checkEncoding(to || "UTF-8"), str = str || "";
     var result;
-    if (from !== "UTF-8" && typeof str === "string") {
-      str = Buffer.from(str, "binary");
-    }
-    if (from === to) {
-      if (typeof str === "string") {
-        result = Buffer.from(str);
-      } else {
-        result = str;
-      }
-    } else {
+    if (from !== "UTF-8" && typeof str == "string" && (str = Buffer.from(str, "binary")), from === to)
+      typeof str == "string" ? result = Buffer.from(str) : result = str;
+    else
       try {
         result = convertIconvLite(str, to, from);
       } catch (E) {
-        console.error(E);
-        result = str;
+        console.error(E), result = str;
       }
-    }
-    if (typeof result === "string") {
-      result = Buffer.from(result, "utf-8");
-    }
-    return result;
+    return typeof result == "string" && (result = Buffer.from(result, "utf-8")), result;
   }
   function convertIconvLite(str, to, from) {
-    if (to === "UTF-8") {
-      return iconvLite.decode(str, from);
-    } else if (from === "UTF-8") {
-      return iconvLite.encode(str, to);
-    } else {
-      return iconvLite.encode(iconvLite.decode(str, from), to);
-    }
+    return to === "UTF-8" ? iconvLite.decode(str, from) : from === "UTF-8" ? iconvLite.encode(str, to) : iconvLite.encode(iconvLite.decode(str, from), to);
   }
   function checkEncoding(name) {
     return (name || "").toString().trim().replace(/^latin[\-_]?(\d+)$/i, "ISO-8859-$1").replace(/^win(?:dows)?[\-_]?(\d+)$/i, "WINDOWS-$1").replace(/^utf[\-_]?(\d+)$/i, "UTF-$1").replace(/^ks_c_5601\-1987$/i, "CP949").replace(/^us[\-_]?ascii$/i, "ASCII").toUpperCase();
   }
-});
-
-// ../node_modules/node-fetch/lib/index.mjs
-var require_lib2 = __commonJS((exports2) => {
-  __export(exports2, {
-    FetchError: () => FetchError,
-    Headers: () => Headers,
-    Request: () => Request,
-    Response: () => Response,
-    default: () => lib_default
-  });
-  var import_stream = __toModule(require("stream"));
-  var import_http = __toModule(require("http"));
-  var import_url = __toModule(require("url"));
-  var import_https = __toModule(require("https"));
-  var import_zlib = __toModule(require("zlib"));
-  var Readable = import_stream.default.Readable;
-  var BUFFER = Symbol("buffer");
-  var TYPE = Symbol("type");
-  var Blob = class {
-    constructor() {
-      this[TYPE] = "";
-      const blobParts = arguments[0];
-      const options = arguments[1];
-      const buffers = [];
-      let size = 0;
-      if (blobParts) {
-        const a = blobParts;
-        const length = Number(a.length);
-        for (let i = 0; i < length; i++) {
-          const element = a[i];
-          let buffer;
-          if (element instanceof Buffer) {
-            buffer = element;
-          } else if (ArrayBuffer.isView(element)) {
-            buffer = Buffer.from(element.buffer, element.byteOffset, element.byteLength);
-          } else if (element instanceof ArrayBuffer) {
-            buffer = Buffer.from(element);
-          } else if (element instanceof Blob) {
-            buffer = element[BUFFER];
-          } else {
-            buffer = Buffer.from(typeof element === "string" ? element : String(element));
-          }
-          size += buffer.length;
-          buffers.push(buffer);
-        }
-      }
-      this[BUFFER] = Buffer.concat(buffers);
-      let type = options && options.type !== void 0 && String(options.type).toLowerCase();
-      if (type && !/[^\u0020-\u007E]/.test(type)) {
-        this[TYPE] = type;
-      }
-    }
-    get size() {
-      return this[BUFFER].length;
-    }
-    get type() {
-      return this[TYPE];
-    }
-    text() {
-      return Promise.resolve(this[BUFFER].toString());
-    }
-    arrayBuffer() {
-      const buf = this[BUFFER];
-      const ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-      return Promise.resolve(ab);
-    }
-    stream() {
-      const readable = new Readable();
-      readable._read = function() {
-      };
-      readable.push(this[BUFFER]);
-      readable.push(null);
-      return readable;
-    }
-    toString() {
-      return "[object Blob]";
-    }
-    slice() {
-      const size = this.size;
-      const start = arguments[0];
-      const end = arguments[1];
-      let relativeStart, relativeEnd;
-      if (start === void 0) {
-        relativeStart = 0;
-      } else if (start < 0) {
-        relativeStart = Math.max(size + start, 0);
-      } else {
-        relativeStart = Math.min(start, size);
-      }
-      if (end === void 0) {
-        relativeEnd = size;
-      } else if (end < 0) {
-        relativeEnd = Math.max(size + end, 0);
-      } else {
-        relativeEnd = Math.min(end, size);
-      }
-      const span = Math.max(relativeEnd - relativeStart, 0);
-      const buffer = this[BUFFER];
-      const slicedBuffer = buffer.slice(relativeStart, relativeStart + span);
-      const blob = new Blob([], {type: arguments[2]});
-      blob[BUFFER] = slicedBuffer;
-      return blob;
-    }
-  };
-  Object.defineProperties(Blob.prototype, {
-    size: {enumerable: true},
-    type: {enumerable: true},
-    slice: {enumerable: true}
-  });
-  Object.defineProperty(Blob.prototype, Symbol.toStringTag, {
-    value: "Blob",
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  function FetchError(message, type, systemError) {
-    Error.call(this, message);
-    this.message = message;
-    this.type = type;
-    if (systemError) {
-      this.code = this.errno = systemError.code;
-    }
-    Error.captureStackTrace(this, this.constructor);
-  }
-  FetchError.prototype = Object.create(Error.prototype);
-  FetchError.prototype.constructor = FetchError;
-  FetchError.prototype.name = "FetchError";
-  var convert;
-  try {
-    convert = require_encoding().convert;
-  } catch (e) {
-  }
-  var INTERNALS = Symbol("Body internals");
-  var PassThrough = import_stream.default.PassThrough;
-  function Body(body) {
-    var _this = this;
-    var _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$size = _ref.size;
-    let size = _ref$size === void 0 ? 0 : _ref$size;
-    var _ref$timeout = _ref.timeout;
-    let timeout = _ref$timeout === void 0 ? 0 : _ref$timeout;
-    if (body == null) {
-      body = null;
-    } else if (isURLSearchParams(body)) {
-      body = Buffer.from(body.toString());
-    } else if (isBlob(body))
-      ;
-    else if (Buffer.isBuffer(body))
-      ;
-    else if (Object.prototype.toString.call(body) === "[object ArrayBuffer]") {
-      body = Buffer.from(body);
-    } else if (ArrayBuffer.isView(body)) {
-      body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-    } else if (body instanceof import_stream.default)
-      ;
-    else {
-      body = Buffer.from(String(body));
-    }
-    this[INTERNALS] = {
-      body,
-      disturbed: false,
-      error: null
-    };
-    this.size = size;
-    this.timeout = timeout;
-    if (body instanceof import_stream.default) {
-      body.on("error", function(err) {
-        const error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
-        _this[INTERNALS].error = error;
-      });
-    }
-  }
-  Body.prototype = {
-    get body() {
-      return this[INTERNALS].body;
-    },
-    get bodyUsed() {
-      return this[INTERNALS].disturbed;
-    },
-    arrayBuffer() {
-      return consumeBody.call(this).then(function(buf) {
-        return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
-      });
-    },
-    blob() {
-      let ct = this.headers && this.headers.get("content-type") || "";
-      return consumeBody.call(this).then(function(buf) {
-        return Object.assign(new Blob([], {
-          type: ct.toLowerCase()
-        }), {
-          [BUFFER]: buf
-        });
-      });
-    },
-    json() {
-      var _this2 = this;
-      return consumeBody.call(this).then(function(buffer) {
-        try {
-          return JSON.parse(buffer.toString());
-        } catch (err) {
-          return Body.Promise.reject(new FetchError(`invalid json response body at ${_this2.url} reason: ${err.message}`, "invalid-json"));
-        }
-      });
-    },
-    text() {
-      return consumeBody.call(this).then(function(buffer) {
-        return buffer.toString();
-      });
-    },
-    buffer() {
-      return consumeBody.call(this);
-    },
-    textConverted() {
-      var _this3 = this;
-      return consumeBody.call(this).then(function(buffer) {
-        return convertBody(buffer, _this3.headers);
-      });
-    }
-  };
-  Object.defineProperties(Body.prototype, {
-    body: {enumerable: true},
-    bodyUsed: {enumerable: true},
-    arrayBuffer: {enumerable: true},
-    blob: {enumerable: true},
-    json: {enumerable: true},
-    text: {enumerable: true}
-  });
-  Body.mixIn = function(proto) {
-    for (const name of Object.getOwnPropertyNames(Body.prototype)) {
-      if (!(name in proto)) {
-        const desc = Object.getOwnPropertyDescriptor(Body.prototype, name);
-        Object.defineProperty(proto, name, desc);
-      }
-    }
-  };
-  function consumeBody() {
-    var _this4 = this;
-    if (this[INTERNALS].disturbed) {
-      return Body.Promise.reject(new TypeError(`body used already for: ${this.url}`));
-    }
-    this[INTERNALS].disturbed = true;
-    if (this[INTERNALS].error) {
-      return Body.Promise.reject(this[INTERNALS].error);
-    }
-    let body = this.body;
-    if (body === null) {
-      return Body.Promise.resolve(Buffer.alloc(0));
-    }
-    if (isBlob(body)) {
-      body = body.stream();
-    }
-    if (Buffer.isBuffer(body)) {
-      return Body.Promise.resolve(body);
-    }
-    if (!(body instanceof import_stream.default)) {
-      return Body.Promise.resolve(Buffer.alloc(0));
-    }
-    let accum = [];
-    let accumBytes = 0;
-    let abort = false;
-    return new Body.Promise(function(resolve, reject) {
-      let resTimeout;
-      if (_this4.timeout) {
-        resTimeout = setTimeout(function() {
-          abort = true;
-          reject(new FetchError(`Response timeout while trying to fetch ${_this4.url} (over ${_this4.timeout}ms)`, "body-timeout"));
-        }, _this4.timeout);
-      }
-      body.on("error", function(err) {
-        if (err.name === "AbortError") {
-          abort = true;
-          reject(err);
-        } else {
-          reject(new FetchError(`Invalid response body while trying to fetch ${_this4.url}: ${err.message}`, "system", err));
-        }
-      });
-      body.on("data", function(chunk) {
-        if (abort || chunk === null) {
-          return;
-        }
-        if (_this4.size && accumBytes + chunk.length > _this4.size) {
-          abort = true;
-          reject(new FetchError(`content size at ${_this4.url} over limit: ${_this4.size}`, "max-size"));
-          return;
-        }
-        accumBytes += chunk.length;
-        accum.push(chunk);
-      });
-      body.on("end", function() {
-        if (abort) {
-          return;
-        }
-        clearTimeout(resTimeout);
-        try {
-          resolve(Buffer.concat(accum, accumBytes));
-        } catch (err) {
-          reject(new FetchError(`Could not create Buffer from response body for ${_this4.url}: ${err.message}`, "system", err));
-        }
-      });
-    });
-  }
-  function convertBody(buffer, headers) {
-    if (typeof convert !== "function") {
-      throw new Error("The package `encoding` must be installed to use the textConverted() function");
-    }
-    const ct = headers.get("content-type");
-    let charset = "utf-8";
-    let res, str;
-    if (ct) {
-      res = /charset=([^;]*)/i.exec(ct);
-    }
-    str = buffer.slice(0, 1024).toString();
-    if (!res && str) {
-      res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str);
-    }
-    if (!res && str) {
-      res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
-      if (!res) {
-        res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
-        if (res) {
-          res.pop();
-        }
-      }
-      if (res) {
-        res = /charset=(.*)/i.exec(res.pop());
-      }
-    }
-    if (!res && str) {
-      res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str);
-    }
-    if (res) {
-      charset = res.pop();
-      if (charset === "gb2312" || charset === "gbk") {
-        charset = "gb18030";
-      }
-    }
-    return convert(buffer, "UTF-8", charset).toString();
-  }
-  function isURLSearchParams(obj) {
-    if (typeof obj !== "object" || typeof obj.append !== "function" || typeof obj.delete !== "function" || typeof obj.get !== "function" || typeof obj.getAll !== "function" || typeof obj.has !== "function" || typeof obj.set !== "function") {
-      return false;
-    }
-    return obj.constructor.name === "URLSearchParams" || Object.prototype.toString.call(obj) === "[object URLSearchParams]" || typeof obj.sort === "function";
-  }
-  function isBlob(obj) {
-    return typeof obj === "object" && typeof obj.arrayBuffer === "function" && typeof obj.type === "string" && typeof obj.stream === "function" && typeof obj.constructor === "function" && typeof obj.constructor.name === "string" && /^(Blob|File)$/.test(obj.constructor.name) && /^(Blob|File)$/.test(obj[Symbol.toStringTag]);
-  }
-  function clone(instance) {
-    let p1, p2;
-    let body = instance.body;
-    if (instance.bodyUsed) {
-      throw new Error("cannot clone body after it is used");
-    }
-    if (body instanceof import_stream.default && typeof body.getBoundary !== "function") {
-      p1 = new PassThrough();
-      p2 = new PassThrough();
-      body.pipe(p1);
-      body.pipe(p2);
-      instance[INTERNALS].body = p1;
-      body = p2;
-    }
-    return body;
-  }
-  function extractContentType(body) {
-    if (body === null) {
-      return null;
-    } else if (typeof body === "string") {
-      return "text/plain;charset=UTF-8";
-    } else if (isURLSearchParams(body)) {
-      return "application/x-www-form-urlencoded;charset=UTF-8";
-    } else if (isBlob(body)) {
-      return body.type || null;
-    } else if (Buffer.isBuffer(body)) {
-      return null;
-    } else if (Object.prototype.toString.call(body) === "[object ArrayBuffer]") {
-      return null;
-    } else if (ArrayBuffer.isView(body)) {
-      return null;
-    } else if (typeof body.getBoundary === "function") {
-      return `multipart/form-data;boundary=${body.getBoundary()}`;
-    } else if (body instanceof import_stream.default) {
-      return null;
-    } else {
-      return "text/plain;charset=UTF-8";
-    }
-  }
-  function getTotalBytes(instance) {
-    const body = instance.body;
-    if (body === null) {
-      return 0;
-    } else if (isBlob(body)) {
-      return body.size;
-    } else if (Buffer.isBuffer(body)) {
-      return body.length;
-    } else if (body && typeof body.getLengthSync === "function") {
-      if (body._lengthRetrievers && body._lengthRetrievers.length == 0 || body.hasKnownLength && body.hasKnownLength()) {
-        return body.getLengthSync();
-      }
-      return null;
-    } else {
-      return null;
-    }
-  }
-  function writeToStream(dest, instance) {
-    const body = instance.body;
-    if (body === null) {
-      dest.end();
-    } else if (isBlob(body)) {
-      body.stream().pipe(dest);
-    } else if (Buffer.isBuffer(body)) {
-      dest.write(body);
-      dest.end();
-    } else {
-      body.pipe(dest);
-    }
-  }
-  Body.Promise = global.Promise;
-  var invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/;
-  var invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
-  function validateName(name) {
-    name = `${name}`;
-    if (invalidTokenRegex.test(name) || name === "") {
-      throw new TypeError(`${name} is not a legal HTTP header name`);
-    }
-  }
-  function validateValue(value) {
-    value = `${value}`;
-    if (invalidHeaderCharRegex.test(value)) {
-      throw new TypeError(`${value} is not a legal HTTP header value`);
-    }
-  }
-  function find(map, name) {
-    name = name.toLowerCase();
-    for (const key in map) {
-      if (key.toLowerCase() === name) {
-        return key;
-      }
-    }
-    return void 0;
-  }
-  var MAP = Symbol("map");
-  var Headers = class {
-    constructor() {
-      let init = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : void 0;
-      this[MAP] = Object.create(null);
-      if (init instanceof Headers) {
-        const rawHeaders = init.raw();
-        const headerNames = Object.keys(rawHeaders);
-        for (const headerName of headerNames) {
-          for (const value of rawHeaders[headerName]) {
-            this.append(headerName, value);
-          }
-        }
-        return;
-      }
-      if (init == null)
-        ;
-      else if (typeof init === "object") {
-        const method = init[Symbol.iterator];
-        if (method != null) {
-          if (typeof method !== "function") {
-            throw new TypeError("Header pairs must be iterable");
-          }
-          const pairs = [];
-          for (const pair of init) {
-            if (typeof pair !== "object" || typeof pair[Symbol.iterator] !== "function") {
-              throw new TypeError("Each header pair must be iterable");
-            }
-            pairs.push(Array.from(pair));
-          }
-          for (const pair of pairs) {
-            if (pair.length !== 2) {
-              throw new TypeError("Each header pair must be a name/value tuple");
-            }
-            this.append(pair[0], pair[1]);
-          }
-        } else {
-          for (const key of Object.keys(init)) {
-            const value = init[key];
-            this.append(key, value);
-          }
-        }
-      } else {
-        throw new TypeError("Provided initializer must be an object");
-      }
-    }
-    get(name) {
-      name = `${name}`;
-      validateName(name);
-      const key = find(this[MAP], name);
-      if (key === void 0) {
-        return null;
-      }
-      return this[MAP][key].join(", ");
-    }
-    forEach(callback) {
-      let thisArg = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : void 0;
-      let pairs = getHeaders(this);
-      let i = 0;
-      while (i < pairs.length) {
-        var _pairs$i = pairs[i];
-        const name = _pairs$i[0], value = _pairs$i[1];
-        callback.call(thisArg, value, name, this);
-        pairs = getHeaders(this);
-        i++;
-      }
-    }
-    set(name, value) {
-      name = `${name}`;
-      value = `${value}`;
-      validateName(name);
-      validateValue(value);
-      const key = find(this[MAP], name);
-      this[MAP][key !== void 0 ? key : name] = [value];
-    }
-    append(name, value) {
-      name = `${name}`;
-      value = `${value}`;
-      validateName(name);
-      validateValue(value);
-      const key = find(this[MAP], name);
-      if (key !== void 0) {
-        this[MAP][key].push(value);
-      } else {
-        this[MAP][name] = [value];
-      }
-    }
-    has(name) {
-      name = `${name}`;
-      validateName(name);
-      return find(this[MAP], name) !== void 0;
-    }
-    delete(name) {
-      name = `${name}`;
-      validateName(name);
-      const key = find(this[MAP], name);
-      if (key !== void 0) {
-        delete this[MAP][key];
-      }
-    }
-    raw() {
-      return this[MAP];
-    }
-    keys() {
-      return createHeadersIterator(this, "key");
-    }
-    values() {
-      return createHeadersIterator(this, "value");
-    }
-    [Symbol.iterator]() {
-      return createHeadersIterator(this, "key+value");
-    }
-  };
-  Headers.prototype.entries = Headers.prototype[Symbol.iterator];
-  Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
-    value: "Headers",
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperties(Headers.prototype, {
-    get: {enumerable: true},
-    forEach: {enumerable: true},
-    set: {enumerable: true},
-    append: {enumerable: true},
-    has: {enumerable: true},
-    delete: {enumerable: true},
-    keys: {enumerable: true},
-    values: {enumerable: true},
-    entries: {enumerable: true}
-  });
-  function getHeaders(headers) {
-    let kind = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "key+value";
-    const keys = Object.keys(headers[MAP]).sort();
-    return keys.map(kind === "key" ? function(k) {
-      return k.toLowerCase();
-    } : kind === "value" ? function(k) {
-      return headers[MAP][k].join(", ");
-    } : function(k) {
-      return [k.toLowerCase(), headers[MAP][k].join(", ")];
-    });
-  }
-  var INTERNAL = Symbol("internal");
-  function createHeadersIterator(target, kind) {
-    const iterator = Object.create(HeadersIteratorPrototype);
-    iterator[INTERNAL] = {
-      target,
-      kind,
-      index: 0
-    };
-    return iterator;
-  }
-  var HeadersIteratorPrototype = Object.setPrototypeOf({
-    next() {
-      if (!this || Object.getPrototypeOf(this) !== HeadersIteratorPrototype) {
-        throw new TypeError("Value of `this` is not a HeadersIterator");
-      }
-      var _INTERNAL = this[INTERNAL];
-      const target = _INTERNAL.target, kind = _INTERNAL.kind, index = _INTERNAL.index;
-      const values = getHeaders(target, kind);
-      const len = values.length;
-      if (index >= len) {
-        return {
-          value: void 0,
-          done: true
-        };
-      }
-      this[INTERNAL].index = index + 1;
-      return {
-        value: values[index],
-        done: false
-      };
-    }
-  }, Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
-  Object.defineProperty(HeadersIteratorPrototype, Symbol.toStringTag, {
-    value: "HeadersIterator",
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  function exportNodeCompatibleHeaders(headers) {
-    const obj = Object.assign({__proto__: null}, headers[MAP]);
-    const hostHeaderKey = find(headers[MAP], "Host");
-    if (hostHeaderKey !== void 0) {
-      obj[hostHeaderKey] = obj[hostHeaderKey][0];
-    }
-    return obj;
-  }
-  function createHeadersLenient(obj) {
-    const headers = new Headers();
-    for (const name of Object.keys(obj)) {
-      if (invalidTokenRegex.test(name)) {
-        continue;
-      }
-      if (Array.isArray(obj[name])) {
-        for (const val of obj[name]) {
-          if (invalidHeaderCharRegex.test(val)) {
-            continue;
-          }
-          if (headers[MAP][name] === void 0) {
-            headers[MAP][name] = [val];
-          } else {
-            headers[MAP][name].push(val);
-          }
-        }
-      } else if (!invalidHeaderCharRegex.test(obj[name])) {
-        headers[MAP][name] = [obj[name]];
-      }
-    }
-    return headers;
-  }
-  var INTERNALS$1 = Symbol("Response internals");
-  var STATUS_CODES = import_http.default.STATUS_CODES;
-  var Response = class {
-    constructor() {
-      let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
-      let opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-      Body.call(this, body, opts);
-      const status = opts.status || 200;
-      const headers = new Headers(opts.headers);
-      if (body != null && !headers.has("Content-Type")) {
-        const contentType = extractContentType(body);
-        if (contentType) {
-          headers.append("Content-Type", contentType);
-        }
-      }
-      this[INTERNALS$1] = {
-        url: opts.url,
-        status,
-        statusText: opts.statusText || STATUS_CODES[status],
-        headers,
-        counter: opts.counter
-      };
-    }
-    get url() {
-      return this[INTERNALS$1].url || "";
-    }
-    get status() {
-      return this[INTERNALS$1].status;
-    }
-    get ok() {
-      return this[INTERNALS$1].status >= 200 && this[INTERNALS$1].status < 300;
-    }
-    get redirected() {
-      return this[INTERNALS$1].counter > 0;
-    }
-    get statusText() {
-      return this[INTERNALS$1].statusText;
-    }
-    get headers() {
-      return this[INTERNALS$1].headers;
-    }
-    clone() {
-      return new Response(clone(this), {
-        url: this.url,
-        status: this.status,
-        statusText: this.statusText,
-        headers: this.headers,
-        ok: this.ok,
-        redirected: this.redirected
-      });
-    }
-  };
-  Body.mixIn(Response.prototype);
-  Object.defineProperties(Response.prototype, {
-    url: {enumerable: true},
-    status: {enumerable: true},
-    ok: {enumerable: true},
-    redirected: {enumerable: true},
-    statusText: {enumerable: true},
-    headers: {enumerable: true},
-    clone: {enumerable: true}
-  });
-  Object.defineProperty(Response.prototype, Symbol.toStringTag, {
-    value: "Response",
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  var INTERNALS$2 = Symbol("Request internals");
-  var parse_url = import_url.default.parse;
-  var format_url = import_url.default.format;
-  var streamDestructionSupported = "destroy" in import_stream.default.Readable.prototype;
-  function isRequest(input) {
-    return typeof input === "object" && typeof input[INTERNALS$2] === "object";
-  }
-  function isAbortSignal(signal) {
-    const proto = signal && typeof signal === "object" && Object.getPrototypeOf(signal);
-    return !!(proto && proto.constructor.name === "AbortSignal");
-  }
-  var Request = class {
-    constructor(input) {
-      let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-      let parsedURL;
-      if (!isRequest(input)) {
-        if (input && input.href) {
-          parsedURL = parse_url(input.href);
-        } else {
-          parsedURL = parse_url(`${input}`);
-        }
-        input = {};
-      } else {
-        parsedURL = parse_url(input.url);
-      }
-      let method = init.method || input.method || "GET";
-      method = method.toUpperCase();
-      if ((init.body != null || isRequest(input) && input.body !== null) && (method === "GET" || method === "HEAD")) {
-        throw new TypeError("Request with GET/HEAD method cannot have body");
-      }
-      let inputBody = init.body != null ? init.body : isRequest(input) && input.body !== null ? clone(input) : null;
-      Body.call(this, inputBody, {
-        timeout: init.timeout || input.timeout || 0,
-        size: init.size || input.size || 0
-      });
-      const headers = new Headers(init.headers || input.headers || {});
-      if (inputBody != null && !headers.has("Content-Type")) {
-        const contentType = extractContentType(inputBody);
-        if (contentType) {
-          headers.append("Content-Type", contentType);
-        }
-      }
-      let signal = isRequest(input) ? input.signal : null;
-      if ("signal" in init)
-        signal = init.signal;
-      if (signal != null && !isAbortSignal(signal)) {
-        throw new TypeError("Expected signal to be an instanceof AbortSignal");
-      }
-      this[INTERNALS$2] = {
-        method,
-        redirect: init.redirect || input.redirect || "follow",
-        headers,
-        parsedURL,
-        signal
-      };
-      this.follow = init.follow !== void 0 ? init.follow : input.follow !== void 0 ? input.follow : 20;
-      this.compress = init.compress !== void 0 ? init.compress : input.compress !== void 0 ? input.compress : true;
-      this.counter = init.counter || input.counter || 0;
-      this.agent = init.agent || input.agent;
-    }
-    get method() {
-      return this[INTERNALS$2].method;
-    }
-    get url() {
-      return format_url(this[INTERNALS$2].parsedURL);
-    }
-    get headers() {
-      return this[INTERNALS$2].headers;
-    }
-    get redirect() {
-      return this[INTERNALS$2].redirect;
-    }
-    get signal() {
-      return this[INTERNALS$2].signal;
-    }
-    clone() {
-      return new Request(this);
-    }
-  };
-  Body.mixIn(Request.prototype);
-  Object.defineProperty(Request.prototype, Symbol.toStringTag, {
-    value: "Request",
-    writable: false,
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperties(Request.prototype, {
-    method: {enumerable: true},
-    url: {enumerable: true},
-    headers: {enumerable: true},
-    redirect: {enumerable: true},
-    clone: {enumerable: true},
-    signal: {enumerable: true}
-  });
-  function getNodeRequestOptions(request) {
-    const parsedURL = request[INTERNALS$2].parsedURL;
-    const headers = new Headers(request[INTERNALS$2].headers);
-    if (!headers.has("Accept")) {
-      headers.set("Accept", "*/*");
-    }
-    if (!parsedURL.protocol || !parsedURL.hostname) {
-      throw new TypeError("Only absolute URLs are supported");
-    }
-    if (!/^https?:$/.test(parsedURL.protocol)) {
-      throw new TypeError("Only HTTP(S) protocols are supported");
-    }
-    if (request.signal && request.body instanceof import_stream.default.Readable && !streamDestructionSupported) {
-      throw new Error("Cancellation of streamed requests with AbortSignal is not supported in node < 8");
-    }
-    let contentLengthValue = null;
-    if (request.body == null && /^(POST|PUT)$/i.test(request.method)) {
-      contentLengthValue = "0";
-    }
-    if (request.body != null) {
-      const totalBytes = getTotalBytes(request);
-      if (typeof totalBytes === "number") {
-        contentLengthValue = String(totalBytes);
-      }
-    }
-    if (contentLengthValue) {
-      headers.set("Content-Length", contentLengthValue);
-    }
-    if (!headers.has("User-Agent")) {
-      headers.set("User-Agent", "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)");
-    }
-    if (request.compress && !headers.has("Accept-Encoding")) {
-      headers.set("Accept-Encoding", "gzip,deflate");
-    }
-    let agent = request.agent;
-    if (typeof agent === "function") {
-      agent = agent(parsedURL);
-    }
-    if (!headers.has("Connection") && !agent) {
-      headers.set("Connection", "close");
-    }
-    return Object.assign({}, parsedURL, {
-      method: request.method,
-      headers: exportNodeCompatibleHeaders(headers),
-      agent
-    });
-  }
-  function AbortError(message) {
-    Error.call(this, message);
-    this.type = "aborted";
-    this.message = message;
-    Error.captureStackTrace(this, this.constructor);
-  }
-  AbortError.prototype = Object.create(Error.prototype);
-  AbortError.prototype.constructor = AbortError;
-  AbortError.prototype.name = "AbortError";
-  var PassThrough$1 = import_stream.default.PassThrough;
-  var resolve_url = import_url.default.resolve;
-  function fetch(url, opts) {
-    if (!fetch.Promise) {
-      throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
-    }
-    Body.Promise = fetch.Promise;
-    return new fetch.Promise(function(resolve, reject) {
-      const request = new Request(url, opts);
-      const options = getNodeRequestOptions(request);
-      const send = (options.protocol === "https:" ? import_https.default : import_http.default).request;
-      const signal = request.signal;
-      let response = null;
-      const abort = function abort2() {
-        let error = new AbortError("The user aborted a request.");
-        reject(error);
-        if (request.body && request.body instanceof import_stream.default.Readable) {
-          request.body.destroy(error);
-        }
-        if (!response || !response.body)
-          return;
-        response.body.emit("error", error);
-      };
-      if (signal && signal.aborted) {
-        abort();
-        return;
-      }
-      const abortAndFinalize = function abortAndFinalize2() {
-        abort();
-        finalize();
-      };
-      const req = send(options);
-      let reqTimeout;
-      if (signal) {
-        signal.addEventListener("abort", abortAndFinalize);
-      }
-      function finalize() {
-        req.abort();
-        if (signal)
-          signal.removeEventListener("abort", abortAndFinalize);
-        clearTimeout(reqTimeout);
-      }
-      if (request.timeout) {
-        req.once("socket", function(socket) {
-          reqTimeout = setTimeout(function() {
-            reject(new FetchError(`network timeout at: ${request.url}`, "request-timeout"));
-            finalize();
-          }, request.timeout);
-        });
-      }
-      req.on("error", function(err) {
-        reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, "system", err));
-        finalize();
-      });
-      req.on("response", function(res) {
-        clearTimeout(reqTimeout);
-        const headers = createHeadersLenient(res.headers);
-        if (fetch.isRedirect(res.statusCode)) {
-          const location = headers.get("Location");
-          const locationURL = location === null ? null : resolve_url(request.url, location);
-          switch (request.redirect) {
-            case "error":
-              reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, "no-redirect"));
-              finalize();
-              return;
-            case "manual":
-              if (locationURL !== null) {
-                try {
-                  headers.set("Location", locationURL);
-                } catch (err) {
-                  reject(err);
-                }
-              }
-              break;
-            case "follow":
-              if (locationURL === null) {
-                break;
-              }
-              if (request.counter >= request.follow) {
-                reject(new FetchError(`maximum redirect reached at: ${request.url}`, "max-redirect"));
-                finalize();
-                return;
-              }
-              const requestOpts = {
-                headers: new Headers(request.headers),
-                follow: request.follow,
-                counter: request.counter + 1,
-                agent: request.agent,
-                compress: request.compress,
-                method: request.method,
-                body: request.body,
-                signal: request.signal,
-                timeout: request.timeout,
-                size: request.size
-              };
-              if (res.statusCode !== 303 && request.body && getTotalBytes(request) === null) {
-                reject(new FetchError("Cannot follow redirect with body being a readable stream", "unsupported-redirect"));
-                finalize();
-                return;
-              }
-              if (res.statusCode === 303 || (res.statusCode === 301 || res.statusCode === 302) && request.method === "POST") {
-                requestOpts.method = "GET";
-                requestOpts.body = void 0;
-                requestOpts.headers.delete("content-length");
-              }
-              resolve(fetch(new Request(locationURL, requestOpts)));
-              finalize();
-              return;
-          }
-        }
-        res.once("end", function() {
-          if (signal)
-            signal.removeEventListener("abort", abortAndFinalize);
-        });
-        let body = res.pipe(new PassThrough$1());
-        const response_options = {
-          url: request.url,
-          status: res.statusCode,
-          statusText: res.statusMessage,
-          headers,
-          size: request.size,
-          timeout: request.timeout,
-          counter: request.counter
-        };
-        const codings = headers.get("Content-Encoding");
-        if (!request.compress || request.method === "HEAD" || codings === null || res.statusCode === 204 || res.statusCode === 304) {
-          response = new Response(body, response_options);
-          resolve(response);
-          return;
-        }
-        const zlibOptions = {
-          flush: import_zlib.default.Z_SYNC_FLUSH,
-          finishFlush: import_zlib.default.Z_SYNC_FLUSH
-        };
-        if (codings == "gzip" || codings == "x-gzip") {
-          body = body.pipe(import_zlib.default.createGunzip(zlibOptions));
-          response = new Response(body, response_options);
-          resolve(response);
-          return;
-        }
-        if (codings == "deflate" || codings == "x-deflate") {
-          const raw = res.pipe(new PassThrough$1());
-          raw.once("data", function(chunk) {
-            if ((chunk[0] & 15) === 8) {
-              body = body.pipe(import_zlib.default.createInflate());
-            } else {
-              body = body.pipe(import_zlib.default.createInflateRaw());
-            }
-            response = new Response(body, response_options);
-            resolve(response);
-          });
-          return;
-        }
-        if (codings == "br" && typeof import_zlib.default.createBrotliDecompress === "function") {
-          body = body.pipe(import_zlib.default.createBrotliDecompress());
-          response = new Response(body, response_options);
-          resolve(response);
-          return;
-        }
-        response = new Response(body, response_options);
-        resolve(response);
-      });
-      writeToStream(req, request);
-    });
-  }
-  fetch.isRedirect = function(code) {
-    return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
-  };
-  fetch.Promise = global.Promise;
-  var lib_default = fetch;
-});
-
-// ../node_modules/deprecation/dist-node/index.js
-var require_dist_node3 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var Deprecation = class extends Error {
-    constructor(message) {
-      super(message);
-      if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-      }
-      this.name = "Deprecation";
-    }
-  };
-  exports2.Deprecation = Deprecation;
 });
 
 // ../node_modules/wrappy/wrappy.js
@@ -7136,25 +4386,18 @@ var require_wrappy = __commonJS((exports2, module2) => {
   function wrappy(fn, cb) {
     if (fn && cb)
       return wrappy(fn)(cb);
-    if (typeof fn !== "function")
+    if (typeof fn != "function")
       throw new TypeError("need wrapper function");
-    Object.keys(fn).forEach(function(k) {
+    return Object.keys(fn).forEach(function(k) {
       wrapper[k] = fn[k];
-    });
-    return wrapper;
+    }), wrapper;
     function wrapper() {
-      var args = new Array(arguments.length);
-      for (var i = 0; i < args.length; i++) {
+      for (var args = new Array(arguments.length), i = 0; i < args.length; i++)
         args[i] = arguments[i];
-      }
-      var ret = fn.apply(this, args);
-      var cb2 = args[args.length - 1];
-      if (typeof ret === "function" && ret !== cb2) {
-        Object.keys(cb2).forEach(function(k) {
-          ret[k] = cb2[k];
-        });
-      }
-      return ret;
+      var ret = fn.apply(this, args), cb2 = args[args.length - 1];
+      return typeof ret == "function" && ret !== cb2 && Object.keys(cb2).forEach(function(k) {
+        ret[k] = cb2[k];
+      }), ret;
     }
   }
 });
@@ -7162,442 +4405,90 @@ var require_wrappy = __commonJS((exports2, module2) => {
 // ../node_modules/once/once.js
 var require_once = __commonJS((exports2, module2) => {
   var wrappy = require_wrappy();
-  module2.exports = wrappy(once);
+  module2.exports = wrappy(once2);
   module2.exports.strict = wrappy(onceStrict);
-  once.proto = once(function() {
+  once2.proto = once2(function() {
     Object.defineProperty(Function.prototype, "once", {
       value: function() {
-        return once(this);
+        return once2(this);
       },
-      configurable: true
-    });
-    Object.defineProperty(Function.prototype, "onceStrict", {
+      configurable: !0
+    }), Object.defineProperty(Function.prototype, "onceStrict", {
       value: function() {
         return onceStrict(this);
       },
-      configurable: true
+      configurable: !0
     });
   });
-  function once(fn) {
+  function once2(fn) {
     var f = function() {
-      if (f.called)
-        return f.value;
-      f.called = true;
-      return f.value = fn.apply(this, arguments);
+      return f.called ? f.value : (f.called = !0, f.value = fn.apply(this, arguments));
     };
-    f.called = false;
-    return f;
+    return f.called = !1, f;
   }
   function onceStrict(fn) {
     var f = function() {
       if (f.called)
         throw new Error(f.onceError);
-      f.called = true;
-      return f.value = fn.apply(this, arguments);
-    };
-    var name = fn.name || "Function wrapped with `once`";
-    f.onceError = name + " shouldn't be called more than once";
-    f.called = false;
-    return f;
+      return f.called = !0, f.value = fn.apply(this, arguments);
+    }, name = fn.name || "Function wrapped with `once`";
+    return f.onceError = name + " shouldn't be called more than once", f.called = !1, f;
   }
 });
 
-// ../node_modules/@octokit/request-error/dist-node/index.js
-var require_dist_node4 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  function _interopDefault(ex) {
-    return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
-  }
-  var deprecation = require_dist_node3();
-  var once = _interopDefault(require_once());
-  var logOnce = once((deprecation2) => console.warn(deprecation2));
-  var RequestError = class extends Error {
-    constructor(message, statusCode, options) {
-      super(message);
-      if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-      }
-      this.name = "HttpError";
-      this.status = statusCode;
-      Object.defineProperty(this, "code", {
-        get() {
-          logOnce(new deprecation.Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`."));
-          return statusCode;
-        }
-      });
-      this.headers = options.headers || {};
-      const requestCopy = Object.assign({}, options.request);
-      if (options.request.headers.authorization) {
-        requestCopy.headers = Object.assign({}, options.request.headers, {
-          authorization: options.request.headers.authorization.replace(/ .*$/, " [REDACTED]")
-        });
-      }
-      requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]");
-      this.request = requestCopy;
-    }
-  };
-  exports2.RequestError = RequestError;
-});
-
-// ../node_modules/@octokit/request/dist-node/index.js
-var require_dist_node5 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  function _interopDefault(ex) {
-    return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
-  }
-  var endpoint = require_dist_node2();
-  var universalUserAgent = require_dist_node();
-  var isPlainObject = require_is_plain_object2();
-  var nodeFetch = _interopDefault(require_lib2());
-  var requestError = require_dist_node4();
-  var VERSION = "5.4.12";
-  function getBufferResponse(response) {
-    return response.arrayBuffer();
-  }
-  function fetchWrapper(requestOptions) {
-    if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
-      requestOptions.body = JSON.stringify(requestOptions.body);
-    }
-    let headers = {};
-    let status;
-    let url;
-    const fetch = requestOptions.request && requestOptions.request.fetch || nodeFetch;
-    return fetch(requestOptions.url, Object.assign({
-      method: requestOptions.method,
-      body: requestOptions.body,
-      headers: requestOptions.headers,
-      redirect: requestOptions.redirect
-    }, requestOptions.request)).then((response) => {
-      url = response.url;
-      status = response.status;
-      for (const keyAndValue of response.headers) {
-        headers[keyAndValue[0]] = keyAndValue[1];
-      }
-      if (status === 204 || status === 205) {
-        return;
-      }
-      if (requestOptions.method === "HEAD") {
-        if (status < 400) {
-          return;
-        }
-        throw new requestError.RequestError(response.statusText, status, {
-          headers,
-          request: requestOptions
-        });
-      }
-      if (status === 304) {
-        throw new requestError.RequestError("Not modified", status, {
-          headers,
-          request: requestOptions
-        });
-      }
-      if (status >= 400) {
-        return response.text().then((message) => {
-          const error = new requestError.RequestError(message, status, {
-            headers,
-            request: requestOptions
-          });
-          try {
-            let responseBody = JSON.parse(error.message);
-            Object.assign(error, responseBody);
-            let errors = responseBody.errors;
-            error.message = error.message + ": " + errors.map(JSON.stringify).join(", ");
-          } catch (e) {
-          }
-          throw error;
-        });
-      }
-      const contentType = response.headers.get("content-type");
-      if (/application\/json/.test(contentType)) {
-        return response.json();
-      }
-      if (!contentType || /^text\/|charset=utf-8$/.test(contentType)) {
-        return response.text();
-      }
-      return getBufferResponse(response);
-    }).then((data) => {
-      return {
-        status,
-        url,
-        headers,
-        data
-      };
-    }).catch((error) => {
-      if (error instanceof requestError.RequestError) {
-        throw error;
-      }
-      throw new requestError.RequestError(error.message, 500, {
-        headers,
-        request: requestOptions
-      });
-    });
-  }
-  function withDefaults(oldEndpoint, newDefaults) {
-    const endpoint2 = oldEndpoint.defaults(newDefaults);
-    const newApi = function(route, parameters) {
-      const endpointOptions = endpoint2.merge(route, parameters);
-      if (!endpointOptions.request || !endpointOptions.request.hook) {
-        return fetchWrapper(endpoint2.parse(endpointOptions));
-      }
-      const request2 = (route2, parameters2) => {
-        return fetchWrapper(endpoint2.parse(endpoint2.merge(route2, parameters2)));
-      };
-      Object.assign(request2, {
-        endpoint: endpoint2,
-        defaults: withDefaults.bind(null, endpoint2)
-      });
-      return endpointOptions.request.hook(request2, endpointOptions);
-    };
-    return Object.assign(newApi, {
-      endpoint: endpoint2,
-      defaults: withDefaults.bind(null, endpoint2)
-    });
-  }
-  var request = withDefaults(endpoint.endpoint, {
-    headers: {
-      "user-agent": `octokit-request.js/${VERSION} ${universalUserAgent.getUserAgent()}`
-    }
+// ../node_modules/@octokit/core/dist-web/index.js
+var require_dist_web = __commonJS((exports2) => {
+  __export(exports2, {
+    Octokit: () => Octokit
   });
-  exports2.request = request;
-});
-
-// ../node_modules/@octokit/graphql/dist-node/index.js
-var require_dist_node6 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var request = require_dist_node5();
-  var universalUserAgent = require_dist_node();
-  var VERSION = "4.5.8";
-  var GraphqlError = class extends Error {
-    constructor(request2, response) {
-      const message = response.data.errors[0].message;
-      super(message);
-      Object.assign(this, response.data);
-      Object.assign(this, {
-        headers: response.headers
-      });
-      this.name = "GraphqlError";
-      this.request = request2;
-      if (Error.captureStackTrace) {
-        Error.captureStackTrace(this, this.constructor);
-      }
-    }
-  };
-  var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
-  var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
-  function graphql(request2, query, options) {
-    if (typeof query === "string" && options && "query" in options) {
-      return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
-    }
-    const parsedOptions = typeof query === "string" ? Object.assign({
-      query
-    }, options) : query;
-    const requestOptions = Object.keys(parsedOptions).reduce((result, key) => {
-      if (NON_VARIABLE_OPTIONS.includes(key)) {
-        result[key] = parsedOptions[key];
-        return result;
-      }
-      if (!result.variables) {
-        result.variables = {};
-      }
-      result.variables[key] = parsedOptions[key];
-      return result;
-    }, {});
-    const baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
-    if (GHES_V3_SUFFIX_REGEX.test(baseUrl)) {
-      requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql");
-    }
-    return request2(requestOptions).then((response) => {
-      if (response.data.errors) {
-        const headers = {};
-        for (const key of Object.keys(response.headers)) {
-          headers[key] = response.headers[key];
-        }
-        throw new GraphqlError(requestOptions, {
-          headers,
-          data: response.data
-        });
-      }
-      return response.data.data;
-    });
-  }
-  function withDefaults(request$1, newDefaults) {
-    const newRequest = request$1.defaults(newDefaults);
-    const newApi = (query, options) => {
-      return graphql(newRequest, query, options);
-    };
-    return Object.assign(newApi, {
-      defaults: withDefaults.bind(null, newRequest),
-      endpoint: request.request.endpoint
-    });
-  }
-  var graphql$1 = withDefaults(request.request, {
-    headers: {
-      "user-agent": `octokit-graphql.js/${VERSION} ${universalUserAgent.getUserAgent()}`
-    },
-    method: "POST",
-    url: "/graphql"
-  });
-  function withCustomRequest(customRequest) {
-    return withDefaults(customRequest, {
-      method: "POST",
-      url: "/graphql"
-    });
-  }
-  exports2.graphql = graphql$1;
-  exports2.withCustomRequest = withCustomRequest;
-});
-
-// ../node_modules/@octokit/auth-token/dist-node/index.js
-var require_dist_node7 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  async function auth(token) {
-    const tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
-    return {
-      type: "token",
-      token,
-      tokenType
-    };
-  }
-  function withAuthorizationPrefix(token) {
-    if (token.split(/\./).length === 3) {
-      return `bearer ${token}`;
-    }
-    return `token ${token}`;
-  }
-  async function hook(token, request, route, parameters) {
-    const endpoint = request.endpoint.merge(route, parameters);
-    endpoint.headers.authorization = withAuthorizationPrefix(token);
-    return request(endpoint);
-  }
-  var createTokenAuth = function createTokenAuth2(token) {
-    if (!token) {
-      throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
-    }
-    if (typeof token !== "string") {
-      throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
-    }
-    token = token.replace(/^(token|bearer) +/i, "");
-    return Object.assign(auth.bind(null, token), {
-      hook: hook.bind(null, token)
-    });
-  };
-  exports2.createTokenAuth = createTokenAuth;
-});
-
-// ../node_modules/@octokit/core/dist-node/index.js
-var require_dist_node8 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var universalUserAgent = require_dist_node();
-  var beforeAfterHook = require_before_after_hook();
-  var request = require_dist_node5();
-  var graphql = require_dist_node6();
-  var authToken = require_dist_node7();
-  function _objectWithoutPropertiesLoose(source, excluded) {
-    if (source == null)
-      return {};
-    var target = {};
-    var sourceKeys = Object.keys(source);
-    var key, i;
-    for (i = 0; i < sourceKeys.length; i++) {
-      key = sourceKeys[i];
-      if (excluded.indexOf(key) >= 0)
-        continue;
-      target[key] = source[key];
-    }
-    return target;
-  }
-  function _objectWithoutProperties(source, excluded) {
-    if (source == null)
-      return {};
-    var target = _objectWithoutPropertiesLoose(source, excluded);
-    var key, i;
-    if (Object.getOwnPropertySymbols) {
-      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-      for (i = 0; i < sourceSymbolKeys.length; i++) {
-        key = sourceSymbolKeys[i];
-        if (excluded.indexOf(key) >= 0)
-          continue;
-        if (!Object.prototype.propertyIsEnumerable.call(source, key))
-          continue;
-        target[key] = source[key];
-      }
-    }
-    return target;
-  }
-  var VERSION = "3.2.4";
-  var Octokit = class {
+  var import_before_after_hook = __toModule(require_before_after_hook()), VERSION4 = "3.2.4", Octokit = class {
     constructor(options = {}) {
-      const hook = new beforeAfterHook.Collection();
-      const requestDefaults = {
-        baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
+      let hook2 = new import_before_after_hook.Collection(), requestDefaults = {
+        baseUrl: request.endpoint.DEFAULTS.baseUrl,
         headers: {},
         request: Object.assign({}, options.request, {
-          hook: hook.bind(null, "request")
+          hook: hook2.bind(null, "request")
         }),
         mediaType: {
           previews: [],
           format: ""
         }
       };
-      requestDefaults.headers["user-agent"] = [options.userAgent, `octokit-core.js/${VERSION} ${universalUserAgent.getUserAgent()}`].filter(Boolean).join(" ");
-      if (options.baseUrl) {
-        requestDefaults.baseUrl = options.baseUrl;
-      }
-      if (options.previews) {
-        requestDefaults.mediaType.previews = options.previews;
-      }
-      if (options.timeZone) {
-        requestDefaults.headers["time-zone"] = options.timeZone;
-      }
-      this.request = request.request.defaults(requestDefaults);
-      this.graphql = graphql.withCustomRequest(this.request).defaults(requestDefaults);
-      this.log = Object.assign({
+      if (requestDefaults.headers["user-agent"] = [
+        options.userAgent,
+        `octokit-core.js/${VERSION4} ${getUserAgent()}`
+      ].filter(Boolean).join(" "), options.baseUrl && (requestDefaults.baseUrl = options.baseUrl), options.previews && (requestDefaults.mediaType.previews = options.previews), options.timeZone && (requestDefaults.headers["time-zone"] = options.timeZone), this.request = request.defaults(requestDefaults), this.graphql = withCustomRequest(this.request).defaults(requestDefaults), this.log = Object.assign({
         debug: () => {
         },
         info: () => {
         },
         warn: console.warn.bind(console),
         error: console.error.bind(console)
-      }, options.log);
-      this.hook = hook;
-      if (!options.authStrategy) {
-        if (!options.auth) {
-          this.auth = async () => ({
-            type: "unauthenticated"
-          });
-        } else {
-          const auth = authToken.createTokenAuth(options.auth);
-          hook.wrap("request", auth.hook);
-          this.auth = auth;
-        }
-      } else {
-        const {
-          authStrategy
-        } = options, otherOptions = _objectWithoutProperties(options, ["authStrategy"]);
-        const auth = authStrategy(Object.assign({
+      }, options.log), this.hook = hook2, options.authStrategy) {
+        let {authStrategy, ...otherOptions} = options, auth2 = authStrategy(Object.assign({
           request: this.request,
           log: this.log,
           octokit: this,
           octokitOptions: otherOptions
         }, options.auth));
-        hook.wrap("request", auth.hook);
-        this.auth = auth;
+        hook2.wrap("request", auth2.hook), this.auth = auth2;
+      } else if (!options.auth)
+        this.auth = async () => ({
+          type: "unauthenticated"
+        });
+      else {
+        let auth2 = createTokenAuth(options.auth);
+        hook2.wrap("request", auth2.hook), this.auth = auth2;
       }
-      const classConstructor = this.constructor;
-      classConstructor.plugins.forEach((plugin) => {
+      this.constructor.plugins.forEach((plugin) => {
         Object.assign(this, plugin(this, options));
       });
     }
     static defaults(defaults) {
-      const OctokitWithDefaults = class extends this {
+      return class extends this {
         constructor(...args) {
-          const options = args[0] || {};
-          if (typeof defaults === "function") {
+          let options = args[0] || {};
+          if (typeof defaults == "function") {
             super(defaults(options));
             return;
           }
@@ -7606,111 +4497,199 @@ var require_dist_node8 = __commonJS((exports2) => {
           } : null));
         }
       };
-      return OctokitWithDefaults;
     }
     static plugin(...newPlugins) {
       var _a;
-      const currentPlugins = this.plugins;
-      const NewOctokit = (_a = class extends this {
-      }, _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a);
-      return NewOctokit;
+      let currentPlugins = this.plugins;
+      return _a = class extends this {
+      }, _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a;
     }
   };
-  Octokit.VERSION = VERSION;
+  Octokit.VERSION = VERSION4;
   Octokit.plugins = [];
-  exports2.Octokit = Octokit;
 });
 
-// ../node_modules/@octokit/plugin-rest-endpoint-methods/dist-node/index.js
-var require_dist_node9 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
+// ../node_modules/@octokit/plugin-rest-endpoint-methods/dist-web/index.js
+var require_dist_web2 = __commonJS((exports2) => {
+  __export(exports2, {
+    restEndpointMethods: () => restEndpointMethods
+  });
   var Endpoints = {
     actions: {
-      addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
-      cancelWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],
+      addSelectedRepoToOrgSecret: [
+        "PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"
+      ],
+      cancelWorkflowRun: [
+        "POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"
+      ],
       createOrUpdateOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}"],
-      createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
-      createRegistrationTokenForOrg: ["POST /orgs/{org}/actions/runners/registration-token"],
-      createRegistrationTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/registration-token"],
+      createOrUpdateRepoSecret: [
+        "PUT /repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      ],
+      createRegistrationTokenForOrg: [
+        "POST /orgs/{org}/actions/runners/registration-token"
+      ],
+      createRegistrationTokenForRepo: [
+        "POST /repos/{owner}/{repo}/actions/runners/registration-token"
+      ],
       createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
-      createRemoveTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/remove-token"],
-      createWorkflowDispatch: ["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],
-      deleteArtifact: ["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
+      createRemoveTokenForRepo: [
+        "POST /repos/{owner}/{repo}/actions/runners/remove-token"
+      ],
+      createWorkflowDispatch: [
+        "POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"
+      ],
+      deleteArtifact: [
+        "DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"
+      ],
       deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
-      deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
-      deleteSelfHostedRunnerFromOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}"],
-      deleteSelfHostedRunnerFromRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"],
+      deleteRepoSecret: [
+        "DELETE /repos/{owner}/{repo}/actions/secrets/{secret_name}"
+      ],
+      deleteSelfHostedRunnerFromOrg: [
+        "DELETE /orgs/{org}/actions/runners/{runner_id}"
+      ],
+      deleteSelfHostedRunnerFromRepo: [
+        "DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}"
+      ],
       deleteWorkflowRun: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}"],
-      deleteWorkflowRunLogs: ["DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
-      disableSelectedRepositoryGithubActionsOrganization: ["DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"],
-      disableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"],
-      downloadArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],
-      downloadJobLogsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],
-      downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
-      enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
-      enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
-      getAllowedActionsOrganization: ["GET /orgs/{org}/actions/permissions/selected-actions"],
-      getAllowedActionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/selected-actions"],
+      deleteWorkflowRunLogs: [
+        "DELETE /repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+      ],
+      disableSelectedRepositoryGithubActionsOrganization: [
+        "DELETE /orgs/{org}/actions/permissions/repositories/{repository_id}"
+      ],
+      disableWorkflow: [
+        "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"
+      ],
+      downloadArtifact: [
+        "GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"
+      ],
+      downloadJobLogsForWorkflowRun: [
+        "GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"
+      ],
+      downloadWorkflowRunLogs: [
+        "GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"
+      ],
+      enableSelectedRepositoryGithubActionsOrganization: [
+        "PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"
+      ],
+      enableWorkflow: [
+        "PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"
+      ],
+      getAllowedActionsOrganization: [
+        "GET /orgs/{org}/actions/permissions/selected-actions"
+      ],
+      getAllowedActionsRepository: [
+        "GET /repos/{owner}/{repo}/actions/permissions/selected-actions"
+      ],
       getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
-      getGithubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
-      getGithubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
+      getGithubActionsPermissionsOrganization: [
+        "GET /orgs/{org}/actions/permissions"
+      ],
+      getGithubActionsPermissionsRepository: [
+        "GET /repos/{owner}/{repo}/actions/permissions"
+      ],
       getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
       getOrgPublicKey: ["GET /orgs/{org}/actions/secrets/public-key"],
       getOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}"],
-      getRepoPermissions: ["GET /repos/{owner}/{repo}/actions/permissions", {}, {
-        renamed: ["actions", "getGithubActionsPermissionsRepository"]
-      }],
+      getRepoPermissions: [
+        "GET /repos/{owner}/{repo}/actions/permissions",
+        {},
+        {renamed: ["actions", "getGithubActionsPermissionsRepository"]}
+      ],
       getRepoPublicKey: ["GET /repos/{owner}/{repo}/actions/secrets/public-key"],
       getRepoSecret: ["GET /repos/{owner}/{repo}/actions/secrets/{secret_name}"],
       getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
-      getSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],
+      getSelfHostedRunnerForRepo: [
+        "GET /repos/{owner}/{repo}/actions/runners/{runner_id}"
+      ],
       getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
       getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
-      getWorkflowRunUsage: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],
-      getWorkflowUsage: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"],
+      getWorkflowRunUsage: [
+        "GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"
+      ],
+      getWorkflowUsage: [
+        "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"
+      ],
       listArtifactsForRepo: ["GET /repos/{owner}/{repo}/actions/artifacts"],
-      listJobsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],
+      listJobsForWorkflowRun: [
+        "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
+      ],
       listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
       listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
       listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
       listRunnerApplicationsForOrg: ["GET /orgs/{org}/actions/runners/downloads"],
-      listRunnerApplicationsForRepo: ["GET /repos/{owner}/{repo}/actions/runners/downloads"],
-      listSelectedReposForOrgSecret: ["GET /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-      listSelectedRepositoriesEnabledGithubActionsOrganization: ["GET /orgs/{org}/actions/permissions/repositories"],
+      listRunnerApplicationsForRepo: [
+        "GET /repos/{owner}/{repo}/actions/runners/downloads"
+      ],
+      listSelectedReposForOrgSecret: [
+        "GET /orgs/{org}/actions/secrets/{secret_name}/repositories"
+      ],
+      listSelectedRepositoriesEnabledGithubActionsOrganization: [
+        "GET /orgs/{org}/actions/permissions/repositories"
+      ],
       listSelfHostedRunnersForOrg: ["GET /orgs/{org}/actions/runners"],
       listSelfHostedRunnersForRepo: ["GET /repos/{owner}/{repo}/actions/runners"],
-      listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
-      listWorkflowRuns: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],
+      listWorkflowRunArtifacts: [
+        "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"
+      ],
+      listWorkflowRuns: [
+        "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"
+      ],
       listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
       reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
-      removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
-      setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
-      setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
-      setGithubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
-      setGithubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
-      setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-      setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"]
+      removeSelectedRepoFromOrgSecret: [
+        "DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"
+      ],
+      setAllowedActionsOrganization: [
+        "PUT /orgs/{org}/actions/permissions/selected-actions"
+      ],
+      setAllowedActionsRepository: [
+        "PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"
+      ],
+      setGithubActionsPermissionsOrganization: [
+        "PUT /orgs/{org}/actions/permissions"
+      ],
+      setGithubActionsPermissionsRepository: [
+        "PUT /repos/{owner}/{repo}/actions/permissions"
+      ],
+      setSelectedReposForOrgSecret: [
+        "PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"
+      ],
+      setSelectedRepositoriesEnabledGithubActionsOrganization: [
+        "PUT /orgs/{org}/actions/permissions/repositories"
+      ]
     },
     activity: {
       checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
       deleteRepoSubscription: ["DELETE /repos/{owner}/{repo}/subscription"],
-      deleteThreadSubscription: ["DELETE /notifications/threads/{thread_id}/subscription"],
+      deleteThreadSubscription: [
+        "DELETE /notifications/threads/{thread_id}/subscription"
+      ],
       getFeeds: ["GET /feeds"],
       getRepoSubscription: ["GET /repos/{owner}/{repo}/subscription"],
       getThread: ["GET /notifications/threads/{thread_id}"],
-      getThreadSubscriptionForAuthenticatedUser: ["GET /notifications/threads/{thread_id}/subscription"],
+      getThreadSubscriptionForAuthenticatedUser: [
+        "GET /notifications/threads/{thread_id}/subscription"
+      ],
       listEventsForAuthenticatedUser: ["GET /users/{username}/events"],
       listNotificationsForAuthenticatedUser: ["GET /notifications"],
-      listOrgEventsForAuthenticatedUser: ["GET /users/{username}/events/orgs/{org}"],
+      listOrgEventsForAuthenticatedUser: [
+        "GET /users/{username}/events/orgs/{org}"
+      ],
       listPublicEvents: ["GET /events"],
       listPublicEventsForRepoNetwork: ["GET /networks/{owner}/{repo}/events"],
       listPublicEventsForUser: ["GET /users/{username}/events/public"],
       listPublicOrgEvents: ["GET /orgs/{org}/events"],
       listReceivedEventsForUser: ["GET /users/{username}/received_events"],
-      listReceivedPublicEventsForUser: ["GET /users/{username}/received_events/public"],
+      listReceivedPublicEventsForUser: [
+        "GET /users/{username}/received_events/public"
+      ],
       listRepoEvents: ["GET /repos/{owner}/{repo}/events"],
-      listRepoNotificationsForAuthenticatedUser: ["GET /repos/{owner}/{repo}/notifications"],
+      listRepoNotificationsForAuthenticatedUser: [
+        "GET /repos/{owner}/{repo}/notifications"
+      ],
       listReposStarredByAuthenticatedUser: ["GET /user/starred"],
       listReposStarredByUser: ["GET /users/{username}/starred"],
       listReposWatchedByUser: ["GET /users/{username}/subscriptions"],
@@ -7721,20 +4700,25 @@ var require_dist_node9 = __commonJS((exports2) => {
       markRepoNotificationsAsRead: ["PUT /repos/{owner}/{repo}/notifications"],
       markThreadAsRead: ["PATCH /notifications/threads/{thread_id}"],
       setRepoSubscription: ["PUT /repos/{owner}/{repo}/subscription"],
-      setThreadSubscription: ["PUT /notifications/threads/{thread_id}/subscription"],
+      setThreadSubscription: [
+        "PUT /notifications/threads/{thread_id}/subscription"
+      ],
       starRepoForAuthenticatedUser: ["PUT /user/starred/{owner}/{repo}"],
       unstarRepoForAuthenticatedUser: ["DELETE /user/starred/{owner}/{repo}"]
     },
     apps: {
-      addRepoToInstallation: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
+      addRepoToInstallation: [
+        "PUT /user/installations/{installation_id}/repositories/{repository_id}"
+      ],
       checkToken: ["POST /applications/{client_id}/token"],
-      createContentAttachment: ["POST /content_references/{content_reference_id}/attachments", {
-        mediaType: {
-          previews: ["corsair"]
-        }
-      }],
+      createContentAttachment: [
+        "POST /content_references/{content_reference_id}/attachments",
+        {mediaType: {previews: ["corsair"]}}
+      ],
       createFromManifest: ["POST /app-manifests/{code}/conversions"],
-      createInstallationAccessToken: ["POST /app/installations/{installation_id}/access_tokens"],
+      createInstallationAccessToken: [
+        "POST /app/installations/{installation_id}/access_tokens"
+      ],
       deleteAuthorization: ["DELETE /applications/{client_id}/grant"],
       deleteInstallation: ["DELETE /app/installations/{installation_id}"],
       deleteToken: ["DELETE /applications/{client_id}/token"],
@@ -7743,88 +4727,131 @@ var require_dist_node9 = __commonJS((exports2) => {
       getInstallation: ["GET /app/installations/{installation_id}"],
       getOrgInstallation: ["GET /orgs/{org}/installation"],
       getRepoInstallation: ["GET /repos/{owner}/{repo}/installation"],
-      getSubscriptionPlanForAccount: ["GET /marketplace_listing/accounts/{account_id}"],
-      getSubscriptionPlanForAccountStubbed: ["GET /marketplace_listing/stubbed/accounts/{account_id}"],
+      getSubscriptionPlanForAccount: [
+        "GET /marketplace_listing/accounts/{account_id}"
+      ],
+      getSubscriptionPlanForAccountStubbed: [
+        "GET /marketplace_listing/stubbed/accounts/{account_id}"
+      ],
       getUserInstallation: ["GET /users/{username}/installation"],
       getWebhookConfigForApp: ["GET /app/hook/config"],
       listAccountsForPlan: ["GET /marketplace_listing/plans/{plan_id}/accounts"],
-      listAccountsForPlanStubbed: ["GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"],
-      listInstallationReposForAuthenticatedUser: ["GET /user/installations/{installation_id}/repositories"],
+      listAccountsForPlanStubbed: [
+        "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"
+      ],
+      listInstallationReposForAuthenticatedUser: [
+        "GET /user/installations/{installation_id}/repositories"
+      ],
       listInstallations: ["GET /app/installations"],
       listInstallationsForAuthenticatedUser: ["GET /user/installations"],
       listPlans: ["GET /marketplace_listing/plans"],
       listPlansStubbed: ["GET /marketplace_listing/stubbed/plans"],
       listReposAccessibleToInstallation: ["GET /installation/repositories"],
       listSubscriptionsForAuthenticatedUser: ["GET /user/marketplace_purchases"],
-      listSubscriptionsForAuthenticatedUserStubbed: ["GET /user/marketplace_purchases/stubbed"],
-      removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
+      listSubscriptionsForAuthenticatedUserStubbed: [
+        "GET /user/marketplace_purchases/stubbed"
+      ],
+      removeRepoFromInstallation: [
+        "DELETE /user/installations/{installation_id}/repositories/{repository_id}"
+      ],
       resetToken: ["PATCH /applications/{client_id}/token"],
       revokeInstallationAccessToken: ["DELETE /installation/token"],
       suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
-      unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"],
+      unsuspendInstallation: [
+        "DELETE /app/installations/{installation_id}/suspended"
+      ],
       updateWebhookConfigForApp: ["PATCH /app/hook/config"]
     },
     billing: {
       getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
-      getGithubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
+      getGithubActionsBillingUser: [
+        "GET /users/{username}/settings/billing/actions"
+      ],
       getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
-      getGithubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
-      getSharedStorageBillingOrg: ["GET /orgs/{org}/settings/billing/shared-storage"],
-      getSharedStorageBillingUser: ["GET /users/{username}/settings/billing/shared-storage"]
+      getGithubPackagesBillingUser: [
+        "GET /users/{username}/settings/billing/packages"
+      ],
+      getSharedStorageBillingOrg: [
+        "GET /orgs/{org}/settings/billing/shared-storage"
+      ],
+      getSharedStorageBillingUser: [
+        "GET /users/{username}/settings/billing/shared-storage"
+      ]
     },
     checks: {
       create: ["POST /repos/{owner}/{repo}/check-runs"],
       createSuite: ["POST /repos/{owner}/{repo}/check-suites"],
       get: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}"],
       getSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}"],
-      listAnnotations: ["GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"],
+      listAnnotations: [
+        "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations"
+      ],
       listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs"],
-      listForSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"],
+      listForSuite: [
+        "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"
+      ],
       listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites"],
-      rerequestSuite: ["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"],
-      setSuitesPreferences: ["PATCH /repos/{owner}/{repo}/check-suites/preferences"],
+      rerequestSuite: [
+        "POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"
+      ],
+      setSuitesPreferences: [
+        "PATCH /repos/{owner}/{repo}/check-suites/preferences"
+      ],
       update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}"]
     },
     codeScanning: {
-      getAlert: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}", {}, {
-        renamedParameters: {
-          alert_id: "alert_number"
-        }
-      }],
+      getAlert: [
+        "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}",
+        {},
+        {renamedParameters: {alert_id: "alert_number"}}
+      ],
       listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
       listRecentAnalyses: ["GET /repos/{owner}/{repo}/code-scanning/analyses"],
-      updateAlert: ["PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"],
+      updateAlert: [
+        "PATCH /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}"
+      ],
       uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
     },
     codesOfConduct: {
-      getAllCodesOfConduct: ["GET /codes_of_conduct", {
-        mediaType: {
-          previews: ["scarlet-witch"]
-        }
-      }],
-      getConductCode: ["GET /codes_of_conduct/{key}", {
-        mediaType: {
-          previews: ["scarlet-witch"]
-        }
-      }],
-      getForRepo: ["GET /repos/{owner}/{repo}/community/code_of_conduct", {
-        mediaType: {
-          previews: ["scarlet-witch"]
-        }
-      }]
+      getAllCodesOfConduct: [
+        "GET /codes_of_conduct",
+        {mediaType: {previews: ["scarlet-witch"]}}
+      ],
+      getConductCode: [
+        "GET /codes_of_conduct/{key}",
+        {mediaType: {previews: ["scarlet-witch"]}}
+      ],
+      getForRepo: [
+        "GET /repos/{owner}/{repo}/community/code_of_conduct",
+        {mediaType: {previews: ["scarlet-witch"]}}
+      ]
     },
-    emojis: {
-      get: ["GET /emojis"]
-    },
+    emojis: {get: ["GET /emojis"]},
     enterpriseAdmin: {
-      disableSelectedOrganizationGithubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
-      enableSelectedOrganizationGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
-      getAllowedActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/selected-actions"],
-      getGithubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
-      listSelectedOrganizationsEnabledGithubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
-      setAllowedActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/selected-actions"],
-      setGithubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
-      setSelectedOrganizationsEnabledGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
+      disableSelectedOrganizationGithubActionsEnterprise: [
+        "DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"
+      ],
+      enableSelectedOrganizationGithubActionsEnterprise: [
+        "PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"
+      ],
+      getAllowedActionsEnterprise: [
+        "GET /enterprises/{enterprise}/actions/permissions/selected-actions"
+      ],
+      getGithubActionsPermissionsEnterprise: [
+        "GET /enterprises/{enterprise}/actions/permissions"
+      ],
+      listSelectedOrganizationsEnabledGithubActionsEnterprise: [
+        "GET /enterprises/{enterprise}/actions/permissions/organizations"
+      ],
+      setAllowedActionsEnterprise: [
+        "PUT /enterprises/{enterprise}/actions/permissions/selected-actions"
+      ],
+      setGithubActionsPermissionsEnterprise: [
+        "PUT /enterprises/{enterprise}/actions/permissions"
+      ],
+      setSelectedOrganizationsEnabledGithubActionsEnterprise: [
+        "PUT /enterprises/{enterprise}/actions/permissions/organizations"
+      ]
     },
     gists: {
       checkIsStarred: ["GET /gists/{gist_id}/star"],
@@ -7872,23 +4899,33 @@ var require_dist_node9 = __commonJS((exports2) => {
       getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits"],
       getRestrictionsForYourPublicRepos: ["GET /user/interaction-limits"],
       removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits"],
-      removeRestrictionsForRepo: ["DELETE /repos/{owner}/{repo}/interaction-limits"],
+      removeRestrictionsForRepo: [
+        "DELETE /repos/{owner}/{repo}/interaction-limits"
+      ],
       removeRestrictionsForYourPublicRepos: ["DELETE /user/interaction-limits"],
       setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits"],
       setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits"],
       setRestrictionsForYourPublicRepos: ["PUT /user/interaction-limits"]
     },
     issues: {
-      addAssignees: ["POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
+      addAssignees: [
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/assignees"
+      ],
       addLabels: ["POST /repos/{owner}/{repo}/issues/{issue_number}/labels"],
       checkUserCanBeAssigned: ["GET /repos/{owner}/{repo}/assignees/{assignee}"],
       create: ["POST /repos/{owner}/{repo}/issues"],
-      createComment: ["POST /repos/{owner}/{repo}/issues/{issue_number}/comments"],
+      createComment: [
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/comments"
+      ],
       createLabel: ["POST /repos/{owner}/{repo}/labels"],
       createMilestone: ["POST /repos/{owner}/{repo}/milestones"],
-      deleteComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}"],
+      deleteComment: [
+        "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}"
+      ],
       deleteLabel: ["DELETE /repos/{owner}/{repo}/labels/{name}"],
-      deleteMilestone: ["DELETE /repos/{owner}/{repo}/milestones/{milestone_number}"],
+      deleteMilestone: [
+        "DELETE /repos/{owner}/{repo}/milestones/{milestone_number}"
+      ],
       get: ["GET /repos/{owner}/{repo}/issues/{issue_number}"],
       getComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}"],
       getEvent: ["GET /repos/{owner}/{repo}/issues/events/{event_id}"],
@@ -7900,28 +4937,39 @@ var require_dist_node9 = __commonJS((exports2) => {
       listCommentsForRepo: ["GET /repos/{owner}/{repo}/issues/comments"],
       listEvents: ["GET /repos/{owner}/{repo}/issues/{issue_number}/events"],
       listEventsForRepo: ["GET /repos/{owner}/{repo}/issues/events"],
-      listEventsForTimeline: ["GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", {
-        mediaType: {
-          previews: ["mockingbird"]
-        }
-      }],
+      listEventsForTimeline: [
+        "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline",
+        {mediaType: {previews: ["mockingbird"]}}
+      ],
       listForAuthenticatedUser: ["GET /user/issues"],
       listForOrg: ["GET /orgs/{org}/issues"],
       listForRepo: ["GET /repos/{owner}/{repo}/issues"],
-      listLabelsForMilestone: ["GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels"],
+      listLabelsForMilestone: [
+        "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels"
+      ],
       listLabelsForRepo: ["GET /repos/{owner}/{repo}/labels"],
-      listLabelsOnIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/labels"],
+      listLabelsOnIssue: [
+        "GET /repos/{owner}/{repo}/issues/{issue_number}/labels"
+      ],
       listMilestones: ["GET /repos/{owner}/{repo}/milestones"],
       lock: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/lock"],
-      removeAllLabels: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels"],
-      removeAssignees: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees"],
-      removeLabel: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"],
+      removeAllLabels: [
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels"
+      ],
+      removeAssignees: [
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/assignees"
+      ],
+      removeLabel: [
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels/{name}"
+      ],
       setLabels: ["PUT /repos/{owner}/{repo}/issues/{issue_number}/labels"],
       unlock: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/lock"],
       update: ["PATCH /repos/{owner}/{repo}/issues/{issue_number}"],
       updateComment: ["PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}"],
       updateLabel: ["PATCH /repos/{owner}/{repo}/labels/{name}"],
-      updateMilestone: ["PATCH /repos/{owner}/{repo}/milestones/{milestone_number}"]
+      updateMilestone: [
+        "PATCH /repos/{owner}/{repo}/milestones/{milestone_number}"
+      ]
     },
     licenses: {
       get: ["GET /licenses/{license}"],
@@ -7930,11 +4978,10 @@ var require_dist_node9 = __commonJS((exports2) => {
     },
     markdown: {
       render: ["POST /markdown"],
-      renderRaw: ["POST /markdown/raw", {
-        headers: {
-          "content-type": "text/plain; charset=utf-8"
-        }
-      }]
+      renderRaw: [
+        "POST /markdown/raw",
+        {headers: {"content-type": "text/plain; charset=utf-8"}}
+      ]
     },
     meta: {
       get: ["GET /meta"],
@@ -7944,74 +4991,62 @@ var require_dist_node9 = __commonJS((exports2) => {
     },
     migrations: {
       cancelImport: ["DELETE /repos/{owner}/{repo}/import"],
-      deleteArchiveForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/archive", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      deleteArchiveForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/archive", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      downloadArchiveForOrg: ["GET /orgs/{org}/migrations/{migration_id}/archive", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      getArchiveForAuthenticatedUser: ["GET /user/migrations/{migration_id}/archive", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
+      deleteArchiveForAuthenticatedUser: [
+        "DELETE /user/migrations/{migration_id}/archive",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      deleteArchiveForOrg: [
+        "DELETE /orgs/{org}/migrations/{migration_id}/archive",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      downloadArchiveForOrg: [
+        "GET /orgs/{org}/migrations/{migration_id}/archive",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      getArchiveForAuthenticatedUser: [
+        "GET /user/migrations/{migration_id}/archive",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
       getCommitAuthors: ["GET /repos/{owner}/{repo}/import/authors"],
       getImportStatus: ["GET /repos/{owner}/{repo}/import"],
       getLargeFiles: ["GET /repos/{owner}/{repo}/import/large_files"],
-      getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      listForAuthenticatedUser: ["GET /user/migrations", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      listForOrg: ["GET /orgs/{org}/migrations", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      listReposForOrg: ["GET /orgs/{org}/migrations/{migration_id}/repositories", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
+      getStatusForAuthenticatedUser: [
+        "GET /user/migrations/{migration_id}",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      getStatusForOrg: [
+        "GET /orgs/{org}/migrations/{migration_id}",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      listForAuthenticatedUser: [
+        "GET /user/migrations",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      listForOrg: [
+        "GET /orgs/{org}/migrations",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      listReposForOrg: [
+        "GET /orgs/{org}/migrations/{migration_id}/repositories",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      listReposForUser: [
+        "GET /user/migrations/{migration_id}/repositories",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
       mapCommitAuthor: ["PATCH /repos/{owner}/{repo}/import/authors/{author_id}"],
       setLfsPreference: ["PATCH /repos/{owner}/{repo}/import/lfs"],
       startForAuthenticatedUser: ["POST /user/migrations"],
       startForOrg: ["POST /orgs/{org}/migrations"],
       startImport: ["PUT /repos/{owner}/{repo}/import"],
-      unlockRepoForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
-      unlockRepoForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock", {
-        mediaType: {
-          previews: ["wyandotte"]
-        }
-      }],
+      unlockRepoForAuthenticatedUser: [
+        "DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
+      unlockRepoForOrg: [
+        "DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock",
+        {mediaType: {previews: ["wyandotte"]}}
+      ],
       updateImport: ["PATCH /repos/{owner}/{repo}/import"]
     },
     orgs: {
@@ -8019,7 +5054,9 @@ var require_dist_node9 = __commonJS((exports2) => {
       checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
       checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
       checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
-      convertMemberToOutsideCollaborator: ["PUT /orgs/{org}/outside_collaborators/{username}"],
+      convertMemberToOutsideCollaborator: [
+        "PUT /orgs/{org}/outside_collaborators/{username}"
+      ],
       createInvitation: ["POST /orgs/{org}/invitations"],
       createWebhook: ["POST /orgs/{org}/hooks"],
       deleteWebhook: ["DELETE /orgs/{org}/hooks/{hook_id}"],
@@ -8043,439 +5080,474 @@ var require_dist_node9 = __commonJS((exports2) => {
       pingWebhook: ["POST /orgs/{org}/hooks/{hook_id}/pings"],
       removeMember: ["DELETE /orgs/{org}/members/{username}"],
       removeMembershipForUser: ["DELETE /orgs/{org}/memberships/{username}"],
-      removeOutsideCollaborator: ["DELETE /orgs/{org}/outside_collaborators/{username}"],
-      removePublicMembershipForAuthenticatedUser: ["DELETE /orgs/{org}/public_members/{username}"],
+      removeOutsideCollaborator: [
+        "DELETE /orgs/{org}/outside_collaborators/{username}"
+      ],
+      removePublicMembershipForAuthenticatedUser: [
+        "DELETE /orgs/{org}/public_members/{username}"
+      ],
       setMembershipForUser: ["PUT /orgs/{org}/memberships/{username}"],
-      setPublicMembershipForAuthenticatedUser: ["PUT /orgs/{org}/public_members/{username}"],
+      setPublicMembershipForAuthenticatedUser: [
+        "PUT /orgs/{org}/public_members/{username}"
+      ],
       unblockUser: ["DELETE /orgs/{org}/blocks/{username}"],
       update: ["PATCH /orgs/{org}"],
-      updateMembershipForAuthenticatedUser: ["PATCH /user/memberships/orgs/{org}"],
+      updateMembershipForAuthenticatedUser: [
+        "PATCH /user/memberships/orgs/{org}"
+      ],
       updateWebhook: ["PATCH /orgs/{org}/hooks/{hook_id}"],
       updateWebhookConfigForOrg: ["PATCH /orgs/{org}/hooks/{hook_id}/config"]
     },
     projects: {
-      addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      createCard: ["POST /projects/columns/{column_id}/cards", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      createColumn: ["POST /projects/{project_id}/columns", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      createForAuthenticatedUser: ["POST /user/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      createForOrg: ["POST /orgs/{org}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      createForRepo: ["POST /repos/{owner}/{repo}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      delete: ["DELETE /projects/{project_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      deleteCard: ["DELETE /projects/columns/cards/{card_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      deleteColumn: ["DELETE /projects/columns/{column_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      get: ["GET /projects/{project_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      getCard: ["GET /projects/columns/cards/{card_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      getColumn: ["GET /projects/columns/{column_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      getPermissionForUser: ["GET /projects/{project_id}/collaborators/{username}/permission", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listCards: ["GET /projects/columns/{column_id}/cards", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listCollaborators: ["GET /projects/{project_id}/collaborators", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listColumns: ["GET /projects/{project_id}/columns", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listForOrg: ["GET /orgs/{org}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listForRepo: ["GET /repos/{owner}/{repo}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      listForUser: ["GET /users/{username}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      moveCard: ["POST /projects/columns/cards/{card_id}/moves", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      moveColumn: ["POST /projects/columns/{column_id}/moves", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      removeCollaborator: ["DELETE /projects/{project_id}/collaborators/{username}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      update: ["PATCH /projects/{project_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      updateCard: ["PATCH /projects/columns/cards/{card_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      updateColumn: ["PATCH /projects/columns/{column_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }]
+      addCollaborator: [
+        "PUT /projects/{project_id}/collaborators/{username}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      createCard: [
+        "POST /projects/columns/{column_id}/cards",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      createColumn: [
+        "POST /projects/{project_id}/columns",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      createForAuthenticatedUser: [
+        "POST /user/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      createForOrg: [
+        "POST /orgs/{org}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      createForRepo: [
+        "POST /repos/{owner}/{repo}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      delete: [
+        "DELETE /projects/{project_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      deleteCard: [
+        "DELETE /projects/columns/cards/{card_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      deleteColumn: [
+        "DELETE /projects/columns/{column_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      get: [
+        "GET /projects/{project_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      getCard: [
+        "GET /projects/columns/cards/{card_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      getColumn: [
+        "GET /projects/columns/{column_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      getPermissionForUser: [
+        "GET /projects/{project_id}/collaborators/{username}/permission",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listCards: [
+        "GET /projects/columns/{column_id}/cards",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listCollaborators: [
+        "GET /projects/{project_id}/collaborators",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listColumns: [
+        "GET /projects/{project_id}/columns",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listForOrg: [
+        "GET /orgs/{org}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listForRepo: [
+        "GET /repos/{owner}/{repo}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      listForUser: [
+        "GET /users/{username}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      moveCard: [
+        "POST /projects/columns/cards/{card_id}/moves",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      moveColumn: [
+        "POST /projects/columns/{column_id}/moves",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      removeCollaborator: [
+        "DELETE /projects/{project_id}/collaborators/{username}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      update: [
+        "PATCH /projects/{project_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      updateCard: [
+        "PATCH /projects/columns/cards/{card_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      updateColumn: [
+        "PATCH /projects/columns/{column_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ]
     },
     pulls: {
       checkIfMerged: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
       create: ["POST /repos/{owner}/{repo}/pulls"],
-      createReplyForReviewComment: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"],
+      createReplyForReviewComment: [
+        "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments/{comment_id}/replies"
+      ],
       createReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
-      createReviewComment: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/comments"],
-      deletePendingReview: ["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
-      deleteReviewComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}"],
-      dismissReview: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals"],
+      createReviewComment: [
+        "POST /repos/{owner}/{repo}/pulls/{pull_number}/comments"
+      ],
+      deletePendingReview: [
+        "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+      ],
+      deleteReviewComment: [
+        "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}"
+      ],
+      dismissReview: [
+        "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/dismissals"
+      ],
       get: ["GET /repos/{owner}/{repo}/pulls/{pull_number}"],
-      getReview: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
+      getReview: [
+        "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+      ],
       getReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}"],
       list: ["GET /repos/{owner}/{repo}/pulls"],
-      listCommentsForReview: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"],
+      listCommentsForReview: [
+        "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments"
+      ],
       listCommits: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/commits"],
       listFiles: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/files"],
-      listRequestedReviewers: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
-      listReviewComments: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/comments"],
+      listRequestedReviewers: [
+        "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+      ],
+      listReviewComments: [
+        "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments"
+      ],
       listReviewCommentsForRepo: ["GET /repos/{owner}/{repo}/pulls/comments"],
       listReviews: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews"],
       merge: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
-      removeRequestedReviewers: ["DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
-      requestReviewers: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
-      submitReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"],
+      removeRequestedReviewers: [
+        "DELETE /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+      ],
+      requestReviewers: [
+        "POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"
+      ],
+      submitReview: [
+        "POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"
+      ],
       update: ["PATCH /repos/{owner}/{repo}/pulls/{pull_number}"],
-      updateBranch: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch", {
-        mediaType: {
-          previews: ["lydian"]
-        }
-      }],
-      updateReview: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
-      updateReviewComment: ["PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"]
+      updateBranch: [
+        "PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch",
+        {mediaType: {previews: ["lydian"]}}
+      ],
+      updateReview: [
+        "PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"
+      ],
+      updateReviewComment: [
+        "PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"
+      ]
     },
-    rateLimit: {
-      get: ["GET /rate_limit"]
-    },
+    rateLimit: {get: ["GET /rate_limit"]},
     reactions: {
-      createForCommitComment: ["POST /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
+      createForCommitComment: [
+        "POST /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      createForIssue: [
+        "POST /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      createForIssueComment: [
+        "POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      createForPullRequestReviewComment: [
+        "POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      createForTeamDiscussionCommentInOrg: [
+        "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      createForTeamDiscussionInOrg: [
+        "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForCommitComment: [
+        "DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForIssue: [
+        "DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForIssueComment: [
+        "DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForPullRequestComment: [
+        "DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForTeamDiscussion: [
+        "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteForTeamDiscussionComment: [
+        "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      deleteLegacy: [
+        "DELETE /reactions/{reaction_id}",
+        {mediaType: {previews: ["squirrel-girl"]}},
+        {
+          deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://docs.github.com/v3/reactions/#delete-a-reaction-legacy"
         }
-      }],
-      createForIssue: ["POST /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      createForIssueComment: ["POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      createForPullRequestReviewComment: ["POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      createForTeamDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      createForTeamDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      deleteLegacy: ["DELETE /reactions/{reaction_id}", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }, {
-        deprecated: "octokit.reactions.deleteLegacy() is deprecated, see https://docs.github.com/v3/reactions/#delete-a-reaction-legacy"
-      }],
-      listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }],
-      listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
-        mediaType: {
-          previews: ["squirrel-girl"]
-        }
-      }]
+      ],
+      listForCommitComment: [
+        "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      listForIssue: [
+        "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      listForIssueComment: [
+        "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      listForPullRequestReviewComment: [
+        "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      listForTeamDiscussionCommentInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ],
+      listForTeamDiscussionInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions",
+        {mediaType: {previews: ["squirrel-girl"]}}
+      ]
     },
     repos: {
       acceptInvitation: ["PATCH /user/repository_invitations/{invitation_id}"],
-      addAppAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
-        mapToData: "apps"
-      }],
+      addAppAccessRestrictions: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        {},
+        {mapToData: "apps"}
+      ],
       addCollaborator: ["PUT /repos/{owner}/{repo}/collaborators/{username}"],
-      addStatusCheckContexts: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
-        mapToData: "contexts"
-      }],
-      addTeamAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
-        mapToData: "teams"
-      }],
-      addUserAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
-        mapToData: "users"
-      }],
+      addStatusCheckContexts: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        {},
+        {mapToData: "contexts"}
+      ],
+      addTeamAccessRestrictions: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        {},
+        {mapToData: "teams"}
+      ],
+      addUserAccessRestrictions: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        {},
+        {mapToData: "users"}
+      ],
       checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
-      checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts", {
-        mediaType: {
-          previews: ["dorian"]
-        }
-      }],
+      checkVulnerabilityAlerts: [
+        "GET /repos/{owner}/{repo}/vulnerability-alerts",
+        {mediaType: {previews: ["dorian"]}}
+      ],
       compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
-      createCommitComment: ["POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
-      createCommitSignatureProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-        mediaType: {
-          previews: ["zzzax"]
-        }
-      }],
+      createCommitComment: [
+        "POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"
+      ],
+      createCommitSignatureProtection: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        {mediaType: {previews: ["zzzax"]}}
+      ],
       createCommitStatus: ["POST /repos/{owner}/{repo}/statuses/{sha}"],
       createDeployKey: ["POST /repos/{owner}/{repo}/keys"],
       createDeployment: ["POST /repos/{owner}/{repo}/deployments"],
-      createDeploymentStatus: ["POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],
+      createDeploymentStatus: [
+        "POST /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+      ],
       createDispatchEvent: ["POST /repos/{owner}/{repo}/dispatches"],
       createForAuthenticatedUser: ["POST /user/repos"],
       createFork: ["POST /repos/{owner}/{repo}/forks"],
       createInOrg: ["POST /orgs/{org}/repos"],
       createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
-      createPagesSite: ["POST /repos/{owner}/{repo}/pages", {
-        mediaType: {
-          previews: ["switcheroo"]
-        }
-      }],
+      createPagesSite: [
+        "POST /repos/{owner}/{repo}/pages",
+        {mediaType: {previews: ["switcheroo"]}}
+      ],
       createRelease: ["POST /repos/{owner}/{repo}/releases"],
-      createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate", {
-        mediaType: {
-          previews: ["baptiste"]
-        }
-      }],
+      createUsingTemplate: [
+        "POST /repos/{template_owner}/{template_repo}/generate",
+        {mediaType: {previews: ["baptiste"]}}
+      ],
       createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
       declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}"],
       delete: ["DELETE /repos/{owner}/{repo}"],
-      deleteAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
-      deleteAdminBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
-      deleteBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection"],
+      deleteAccessRestrictions: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+      ],
+      deleteAdminBranchProtection: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      ],
+      deleteBranchProtection: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection"
+      ],
       deleteCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}"],
-      deleteCommitSignatureProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-        mediaType: {
-          previews: ["zzzax"]
-        }
-      }],
+      deleteCommitSignatureProtection: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        {mediaType: {previews: ["zzzax"]}}
+      ],
       deleteDeployKey: ["DELETE /repos/{owner}/{repo}/keys/{key_id}"],
-      deleteDeployment: ["DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"],
+      deleteDeployment: [
+        "DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"
+      ],
       deleteFile: ["DELETE /repos/{owner}/{repo}/contents/{path}"],
-      deleteInvitation: ["DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"],
-      deletePagesSite: ["DELETE /repos/{owner}/{repo}/pages", {
-        mediaType: {
-          previews: ["switcheroo"]
-        }
-      }],
-      deletePullRequestReviewProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+      deleteInvitation: [
+        "DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"
+      ],
+      deletePagesSite: [
+        "DELETE /repos/{owner}/{repo}/pages",
+        {mediaType: {previews: ["switcheroo"]}}
+      ],
+      deletePullRequestReviewProtection: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      ],
       deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
-      deleteReleaseAsset: ["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+      deleteReleaseAsset: [
+        "DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"
+      ],
       deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
-      disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes", {
-        mediaType: {
-          previews: ["london"]
-        }
-      }],
-      disableVulnerabilityAlerts: ["DELETE /repos/{owner}/{repo}/vulnerability-alerts", {
-        mediaType: {
-          previews: ["dorian"]
-        }
-      }],
-      downloadArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}", {}, {
-        renamed: ["repos", "downloadZipballArchive"]
-      }],
+      disableAutomatedSecurityFixes: [
+        "DELETE /repos/{owner}/{repo}/automated-security-fixes",
+        {mediaType: {previews: ["london"]}}
+      ],
+      disableVulnerabilityAlerts: [
+        "DELETE /repos/{owner}/{repo}/vulnerability-alerts",
+        {mediaType: {previews: ["dorian"]}}
+      ],
+      downloadArchive: [
+        "GET /repos/{owner}/{repo}/zipball/{ref}",
+        {},
+        {renamed: ["repos", "downloadZipballArchive"]}
+      ],
       downloadTarballArchive: ["GET /repos/{owner}/{repo}/tarball/{ref}"],
       downloadZipballArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}"],
-      enableAutomatedSecurityFixes: ["PUT /repos/{owner}/{repo}/automated-security-fixes", {
-        mediaType: {
-          previews: ["london"]
-        }
-      }],
-      enableVulnerabilityAlerts: ["PUT /repos/{owner}/{repo}/vulnerability-alerts", {
-        mediaType: {
-          previews: ["dorian"]
-        }
-      }],
+      enableAutomatedSecurityFixes: [
+        "PUT /repos/{owner}/{repo}/automated-security-fixes",
+        {mediaType: {previews: ["london"]}}
+      ],
+      enableVulnerabilityAlerts: [
+        "PUT /repos/{owner}/{repo}/vulnerability-alerts",
+        {mediaType: {previews: ["dorian"]}}
+      ],
       get: ["GET /repos/{owner}/{repo}"],
-      getAccessRestrictions: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
-      getAdminBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
-      getAllStatusCheckContexts: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"],
-      getAllTopics: ["GET /repos/{owner}/{repo}/topics", {
-        mediaType: {
-          previews: ["mercy"]
-        }
-      }],
-      getAppsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],
+      getAccessRestrictions: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"
+      ],
+      getAdminBranchProtection: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      ],
+      getAllStatusCheckContexts: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"
+      ],
+      getAllTopics: [
+        "GET /repos/{owner}/{repo}/topics",
+        {mediaType: {previews: ["mercy"]}}
+      ],
+      getAppsWithAccessToProtectedBranch: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"
+      ],
       getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
-      getBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection"],
+      getBranchProtection: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection"
+      ],
       getClones: ["GET /repos/{owner}/{repo}/traffic/clones"],
       getCodeFrequencyStats: ["GET /repos/{owner}/{repo}/stats/code_frequency"],
-      getCollaboratorPermissionLevel: ["GET /repos/{owner}/{repo}/collaborators/{username}/permission"],
+      getCollaboratorPermissionLevel: [
+        "GET /repos/{owner}/{repo}/collaborators/{username}/permission"
+      ],
       getCombinedStatusForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/status"],
       getCommit: ["GET /repos/{owner}/{repo}/commits/{ref}"],
       getCommitActivityStats: ["GET /repos/{owner}/{repo}/stats/commit_activity"],
       getCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}"],
-      getCommitSignatureProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-        mediaType: {
-          previews: ["zzzax"]
-        }
-      }],
+      getCommitSignatureProtection: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        {mediaType: {previews: ["zzzax"]}}
+      ],
       getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile"],
       getContent: ["GET /repos/{owner}/{repo}/contents/{path}"],
       getContributorsStats: ["GET /repos/{owner}/{repo}/stats/contributors"],
       getDeployKey: ["GET /repos/{owner}/{repo}/keys/{key_id}"],
       getDeployment: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}"],
-      getDeploymentStatus: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"],
+      getDeploymentStatus: [
+        "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses/{status_id}"
+      ],
       getLatestPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/latest"],
       getLatestRelease: ["GET /repos/{owner}/{repo}/releases/latest"],
       getPages: ["GET /repos/{owner}/{repo}/pages"],
       getPagesBuild: ["GET /repos/{owner}/{repo}/pages/builds/{build_id}"],
       getParticipationStats: ["GET /repos/{owner}/{repo}/stats/participation"],
-      getPullRequestReviewProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+      getPullRequestReviewProtection: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      ],
       getPunchCardStats: ["GET /repos/{owner}/{repo}/stats/punch_card"],
       getReadme: ["GET /repos/{owner}/{repo}/readme"],
       getRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}"],
       getReleaseAsset: ["GET /repos/{owner}/{repo}/releases/assets/{asset_id}"],
       getReleaseByTag: ["GET /repos/{owner}/{repo}/releases/tags/{tag}"],
-      getStatusChecksProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
-      getTeamsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"],
+      getStatusChecksProtection: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      ],
+      getTeamsWithAccessToProtectedBranch: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams"
+      ],
       getTopPaths: ["GET /repos/{owner}/{repo}/traffic/popular/paths"],
       getTopReferrers: ["GET /repos/{owner}/{repo}/traffic/popular/referrers"],
-      getUsersWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"],
+      getUsersWithAccessToProtectedBranch: [
+        "GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users"
+      ],
       getViews: ["GET /repos/{owner}/{repo}/traffic/views"],
       getWebhook: ["GET /repos/{owner}/{repo}/hooks/{hook_id}"],
-      getWebhookConfigForRepo: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/config"],
+      getWebhookConfigForRepo: [
+        "GET /repos/{owner}/{repo}/hooks/{hook_id}/config"
+      ],
       listBranches: ["GET /repos/{owner}/{repo}/branches"],
-      listBranchesForHeadCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", {
-        mediaType: {
-          previews: ["groot"]
-        }
-      }],
+      listBranchesForHeadCommit: [
+        "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head",
+        {mediaType: {previews: ["groot"]}}
+      ],
       listCollaborators: ["GET /repos/{owner}/{repo}/collaborators"],
-      listCommentsForCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
+      listCommentsForCommit: [
+        "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"
+      ],
       listCommitCommentsForRepo: ["GET /repos/{owner}/{repo}/comments"],
-      listCommitStatusesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/statuses"],
+      listCommitStatusesForRef: [
+        "GET /repos/{owner}/{repo}/commits/{ref}/statuses"
+      ],
       listCommits: ["GET /repos/{owner}/{repo}/commits"],
       listContributors: ["GET /repos/{owner}/{repo}/contributors"],
       listDeployKeys: ["GET /repos/{owner}/{repo}/keys"],
-      listDeploymentStatuses: ["GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"],
+      listDeploymentStatuses: [
+        "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses"
+      ],
       listDeployments: ["GET /repos/{owner}/{repo}/deployments"],
       listForAuthenticatedUser: ["GET /user/repos"],
       listForOrg: ["GET /orgs/{org}/repos"],
@@ -8486,135 +5558,197 @@ var require_dist_node9 = __commonJS((exports2) => {
       listLanguages: ["GET /repos/{owner}/{repo}/languages"],
       listPagesBuilds: ["GET /repos/{owner}/{repo}/pages/builds"],
       listPublic: ["GET /repositories"],
-      listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", {
-        mediaType: {
-          previews: ["groot"]
-        }
-      }],
-      listReleaseAssets: ["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],
+      listPullRequestsAssociatedWithCommit: [
+        "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls",
+        {mediaType: {previews: ["groot"]}}
+      ],
+      listReleaseAssets: [
+        "GET /repos/{owner}/{repo}/releases/{release_id}/assets"
+      ],
       listReleases: ["GET /repos/{owner}/{repo}/releases"],
       listTags: ["GET /repos/{owner}/{repo}/tags"],
       listTeams: ["GET /repos/{owner}/{repo}/teams"],
       listWebhooks: ["GET /repos/{owner}/{repo}/hooks"],
       merge: ["POST /repos/{owner}/{repo}/merges"],
       pingWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/pings"],
-      removeAppAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
-        mapToData: "apps"
-      }],
-      removeCollaborator: ["DELETE /repos/{owner}/{repo}/collaborators/{username}"],
-      removeStatusCheckContexts: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
-        mapToData: "contexts"
-      }],
-      removeStatusCheckProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
-      removeTeamAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
-        mapToData: "teams"
-      }],
-      removeUserAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
-        mapToData: "users"
-      }],
-      replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
-        mediaType: {
-          previews: ["mercy"]
-        }
-      }],
+      removeAppAccessRestrictions: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        {},
+        {mapToData: "apps"}
+      ],
+      removeCollaborator: [
+        "DELETE /repos/{owner}/{repo}/collaborators/{username}"
+      ],
+      removeStatusCheckContexts: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        {},
+        {mapToData: "contexts"}
+      ],
+      removeStatusCheckProtection: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      ],
+      removeTeamAccessRestrictions: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        {},
+        {mapToData: "teams"}
+      ],
+      removeUserAccessRestrictions: [
+        "DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        {},
+        {mapToData: "users"}
+      ],
+      replaceAllTopics: [
+        "PUT /repos/{owner}/{repo}/topics",
+        {mediaType: {previews: ["mercy"]}}
+      ],
       requestPagesBuild: ["POST /repos/{owner}/{repo}/pages/builds"],
-      setAdminBranchProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
-      setAppAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
-        mapToData: "apps"
-      }],
-      setStatusCheckContexts: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts", {}, {
-        mapToData: "contexts"
-      }],
-      setTeamAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams", {}, {
-        mapToData: "teams"
-      }],
-      setUserAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
-        mapToData: "users"
-      }],
+      setAdminBranchProtection: [
+        "POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"
+      ],
+      setAppAccessRestrictions: [
+        "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        {},
+        {mapToData: "apps"}
+      ],
+      setStatusCheckContexts: [
+        "PUT /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        {},
+        {mapToData: "contexts"}
+      ],
+      setTeamAccessRestrictions: [
+        "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        {},
+        {mapToData: "teams"}
+      ],
+      setUserAccessRestrictions: [
+        "PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        {},
+        {mapToData: "users"}
+      ],
       testPushWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/tests"],
       transfer: ["POST /repos/{owner}/{repo}/transfer"],
       update: ["PATCH /repos/{owner}/{repo}"],
-      updateBranchProtection: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection"],
+      updateBranchProtection: [
+        "PUT /repos/{owner}/{repo}/branches/{branch}/protection"
+      ],
       updateCommitComment: ["PATCH /repos/{owner}/{repo}/comments/{comment_id}"],
       updateInformationAboutPagesSite: ["PUT /repos/{owner}/{repo}/pages"],
-      updateInvitation: ["PATCH /repos/{owner}/{repo}/invitations/{invitation_id}"],
-      updatePullRequestReviewProtection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
+      updateInvitation: [
+        "PATCH /repos/{owner}/{repo}/invitations/{invitation_id}"
+      ],
+      updatePullRequestReviewProtection: [
+        "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"
+      ],
       updateRelease: ["PATCH /repos/{owner}/{repo}/releases/{release_id}"],
-      updateReleaseAsset: ["PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"],
-      updateStatusCheckPotection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks", {}, {
-        renamed: ["repos", "updateStatusCheckProtection"]
-      }],
-      updateStatusCheckProtection: ["PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"],
+      updateReleaseAsset: [
+        "PATCH /repos/{owner}/{repo}/releases/assets/{asset_id}"
+      ],
+      updateStatusCheckPotection: [
+        "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        {},
+        {renamed: ["repos", "updateStatusCheckProtection"]}
+      ],
+      updateStatusCheckProtection: [
+        "PATCH /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks"
+      ],
       updateWebhook: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}"],
-      updateWebhookConfigForRepo: ["PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config"],
-      uploadReleaseAsset: ["POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}", {
-        baseUrl: "https://uploads.github.com"
-      }]
+      updateWebhookConfigForRepo: [
+        "PATCH /repos/{owner}/{repo}/hooks/{hook_id}/config"
+      ],
+      uploadReleaseAsset: [
+        "POST /repos/{owner}/{repo}/releases/{release_id}/assets{?name,label}",
+        {baseUrl: "https://uploads.github.com"}
+      ]
     },
     search: {
       code: ["GET /search/code"],
-      commits: ["GET /search/commits", {
-        mediaType: {
-          previews: ["cloak"]
-        }
-      }],
+      commits: ["GET /search/commits", {mediaType: {previews: ["cloak"]}}],
       issuesAndPullRequests: ["GET /search/issues"],
       labels: ["GET /search/labels"],
       repos: ["GET /search/repositories"],
-      topics: ["GET /search/topics", {
-        mediaType: {
-          previews: ["mercy"]
-        }
-      }],
+      topics: ["GET /search/topics", {mediaType: {previews: ["mercy"]}}],
       users: ["GET /search/users"]
     },
     secretScanning: {
-      getAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"],
+      getAlert: [
+        "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
+      ],
       listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
-      updateAlert: ["PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"]
+      updateAlert: [
+        "PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"
+      ]
     },
     teams: {
-      addOrUpdateMembershipForUserInOrg: ["PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"],
-      addOrUpdateProjectPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      addOrUpdateRepoPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
-      checkPermissionsForProjectInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
-      checkPermissionsForRepoInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
+      addOrUpdateMembershipForUserInOrg: [
+        "PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"
+      ],
+      addOrUpdateProjectPermissionsInOrg: [
+        "PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      addOrUpdateRepoPermissionsInOrg: [
+        "PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+      ],
+      checkPermissionsForProjectInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/projects/{project_id}",
+        {mediaType: {previews: ["inertia"]}}
+      ],
+      checkPermissionsForRepoInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+      ],
       create: ["POST /orgs/{org}/teams"],
-      createDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],
+      createDiscussionCommentInOrg: [
+        "POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"
+      ],
       createDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions"],
-      deleteDiscussionCommentInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
-      deleteDiscussionInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
+      deleteDiscussionCommentInOrg: [
+        "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+      ],
+      deleteDiscussionInOrg: [
+        "DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+      ],
       deleteInOrg: ["DELETE /orgs/{org}/teams/{team_slug}"],
       getByName: ["GET /orgs/{org}/teams/{team_slug}"],
-      getDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
-      getDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
-      getMembershipForUserInOrg: ["GET /orgs/{org}/teams/{team_slug}/memberships/{username}"],
+      getDiscussionCommentInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+      ],
+      getDiscussionInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+      ],
+      getMembershipForUserInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/memberships/{username}"
+      ],
       list: ["GET /orgs/{org}/teams"],
       listChildInOrg: ["GET /orgs/{org}/teams/{team_slug}/teams"],
-      listDiscussionCommentsInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],
+      listDiscussionCommentsInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"
+      ],
       listDiscussionsInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions"],
       listForAuthenticatedUser: ["GET /user/teams"],
       listMembersInOrg: ["GET /orgs/{org}/teams/{team_slug}/members"],
-      listPendingInvitationsInOrg: ["GET /orgs/{org}/teams/{team_slug}/invitations"],
-      listProjectsInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects", {
-        mediaType: {
-          previews: ["inertia"]
-        }
-      }],
+      listPendingInvitationsInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/invitations"
+      ],
+      listProjectsInOrg: [
+        "GET /orgs/{org}/teams/{team_slug}/projects",
+        {mediaType: {previews: ["inertia"]}}
+      ],
       listReposInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos"],
-      removeMembershipForUserInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"],
-      removeProjectInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"],
-      removeRepoInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
-      updateDiscussionCommentInOrg: ["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"],
-      updateDiscussionInOrg: ["PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"],
+      removeMembershipForUserInOrg: [
+        "DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"
+      ],
+      removeProjectInOrg: [
+        "DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"
+      ],
+      removeRepoInOrg: [
+        "DELETE /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"
+      ],
+      updateDiscussionCommentInOrg: [
+        "PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}"
+      ],
+      updateDiscussionInOrg: [
+        "PATCH /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}"
+      ],
       updateInOrg: ["PATCH /orgs/{org}/teams/{team_slug}"]
     },
     users: {
@@ -8651,60 +5785,39 @@ var require_dist_node9 = __commonJS((exports2) => {
       unfollow: ["DELETE /user/following/{username}"],
       updateAuthenticated: ["PATCH /user"]
     }
-  };
-  var VERSION = "4.4.1";
+  }, VERSION4 = "4.4.1";
   function endpointsToMethods(octokit, endpointsMap) {
-    const newMethods = {};
-    for (const [scope, endpoints] of Object.entries(endpointsMap)) {
-      for (const [methodName, endpoint] of Object.entries(endpoints)) {
-        const [route, defaults, decorations] = endpoint;
-        const [method, url] = route.split(/ /);
-        const endpointDefaults = Object.assign({
-          method,
-          url
-        }, defaults);
-        if (!newMethods[scope]) {
-          newMethods[scope] = {};
-        }
-        const scopeMethods = newMethods[scope];
+    let newMethods = {};
+    for (let [scope, endpoints] of Object.entries(endpointsMap))
+      for (let [methodName, endpoint2] of Object.entries(endpoints)) {
+        let [route, defaults, decorations] = endpoint2, [method, url] = route.split(/ /), endpointDefaults = Object.assign({method, url}, defaults);
+        newMethods[scope] || (newMethods[scope] = {});
+        let scopeMethods = newMethods[scope];
         if (decorations) {
           scopeMethods[methodName] = decorate(octokit, scope, methodName, endpointDefaults, decorations);
           continue;
         }
         scopeMethods[methodName] = octokit.request.defaults(endpointDefaults);
       }
-    }
     return newMethods;
   }
   function decorate(octokit, scope, methodName, defaults, decorations) {
-    const requestWithDefaults = octokit.request.defaults(defaults);
+    let requestWithDefaults = octokit.request.defaults(defaults);
     function withDecorations(...args) {
       let options = requestWithDefaults.endpoint.merge(...args);
-      if (decorations.mapToData) {
-        options = Object.assign({}, options, {
+      if (decorations.mapToData)
+        return options = Object.assign({}, options, {
           data: options[decorations.mapToData],
           [decorations.mapToData]: void 0
-        });
-        return requestWithDefaults(options);
-      }
+        }), requestWithDefaults(options);
       if (decorations.renamed) {
-        const [newScope, newMethodName] = decorations.renamed;
+        let [newScope, newMethodName] = decorations.renamed;
         octokit.log.warn(`octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`);
       }
-      if (decorations.deprecated) {
-        octokit.log.warn(decorations.deprecated);
-      }
-      if (decorations.renamedParameters) {
-        const options2 = requestWithDefaults.endpoint.merge(...args);
-        for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
-          if (name in options2) {
-            octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
-            if (!(alias in options2)) {
-              options2[alias] = options2[name];
-            }
-            delete options2[name];
-          }
-        }
+      if (decorations.deprecated && octokit.log.warn(decorations.deprecated), decorations.renamedParameters) {
+        let options2 = requestWithDefaults.endpoint.merge(...args);
+        for (let [name, alias] of Object.entries(decorations.renamedParameters))
+          name in options2 && (octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`), alias in options2 || (options2[alias] = options2[name]), delete options2[name]);
         return requestWithDefaults(options2);
       }
       return requestWithDefaults(...args);
@@ -8714,85 +5827,49 @@ var require_dist_node9 = __commonJS((exports2) => {
   function restEndpointMethods(octokit) {
     return endpointsToMethods(octokit, Endpoints);
   }
-  restEndpointMethods.VERSION = VERSION;
-  exports2.restEndpointMethods = restEndpointMethods;
+  restEndpointMethods.VERSION = VERSION4;
 });
 
-// ../node_modules/@octokit/plugin-paginate-rest/dist-node/index.js
-var require_dist_node10 = __commonJS((exports2) => {
-  "use strict";
-  Object.defineProperty(exports2, "__esModule", {value: true});
-  var VERSION = "2.6.2";
+// ../node_modules/@octokit/plugin-paginate-rest/dist-web/index.js
+var require_dist_web3 = __commonJS((exports2) => {
+  __export(exports2, {
+    composePaginateRest: () => composePaginateRest,
+    paginateRest: () => paginateRest
+  });
+  var VERSION4 = "2.6.2";
   function normalizePaginatedListResponse(response) {
-    const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
-    if (!responseNeedsNormalization)
+    if (!("total_count" in response.data && !("url" in response.data)))
       return response;
-    const incompleteResults = response.data.incomplete_results;
-    const repositorySelection = response.data.repository_selection;
-    const totalCount = response.data.total_count;
-    delete response.data.incomplete_results;
-    delete response.data.repository_selection;
-    delete response.data.total_count;
-    const namespaceKey = Object.keys(response.data)[0];
-    const data = response.data[namespaceKey];
-    response.data = data;
-    if (typeof incompleteResults !== "undefined") {
-      response.data.incomplete_results = incompleteResults;
-    }
-    if (typeof repositorySelection !== "undefined") {
-      response.data.repository_selection = repositorySelection;
-    }
-    response.data.total_count = totalCount;
-    return response;
+    let incompleteResults = response.data.incomplete_results, repositorySelection = response.data.repository_selection, totalCount = response.data.total_count;
+    delete response.data.incomplete_results, delete response.data.repository_selection, delete response.data.total_count;
+    let namespaceKey = Object.keys(response.data)[0], data = response.data[namespaceKey];
+    return response.data = data, typeof incompleteResults != "undefined" && (response.data.incomplete_results = incompleteResults), typeof repositorySelection != "undefined" && (response.data.repository_selection = repositorySelection), response.data.total_count = totalCount, response;
   }
   function iterator(octokit, route, parameters) {
-    const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
-    const requestMethod = typeof route === "function" ? route : octokit.request;
-    const method = options.method;
-    const headers = options.headers;
-    let url = options.url;
+    let options = typeof route == "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters), requestMethod = typeof route == "function" ? route : octokit.request, method = options.method, headers = options.headers, url = options.url;
     return {
       [Symbol.asyncIterator]: () => ({
         async next() {
           if (!url)
-            return {
-              done: true
-            };
-          const response = await requestMethod({
-            method,
-            url,
-            headers
-          });
-          const normalizedResponse = normalizePaginatedListResponse(response);
-          url = ((normalizedResponse.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1];
-          return {
-            value: normalizedResponse
-          };
+            return {done: !0};
+          let response = await requestMethod({method, url, headers}), normalizedResponse = normalizePaginatedListResponse(response);
+          return url = ((normalizedResponse.headers.link || "").match(/<([^>]+)>;\s*rel="next"/) || [])[1], {value: normalizedResponse};
         }
       })
     };
   }
   function paginate(octokit, route, parameters, mapFn) {
-    if (typeof parameters === "function") {
-      mapFn = parameters;
-      parameters = void 0;
-    }
-    return gather(octokit, [], iterator(octokit, route, parameters)[Symbol.asyncIterator](), mapFn);
+    return typeof parameters == "function" && (mapFn = parameters, parameters = void 0), gather(octokit, [], iterator(octokit, route, parameters)[Symbol.asyncIterator](), mapFn);
   }
   function gather(octokit, results, iterator2, mapFn) {
     return iterator2.next().then((result) => {
-      if (result.done) {
+      if (result.done)
         return results;
-      }
-      let earlyExit = false;
+      let earlyExit = !1;
       function done() {
-        earlyExit = true;
+        earlyExit = !0;
       }
-      results = results.concat(mapFn ? mapFn(result.value, done) : result.value.data);
-      if (earlyExit) {
-        return results;
-      }
-      return gather(octokit, results, iterator2, mapFn);
+      return results = results.concat(mapFn ? mapFn(result.value, done) : result.value.data), earlyExit ? results : gather(octokit, results, iterator2, mapFn);
     });
   }
   var composePaginateRest = Object.assign(paginate, {
@@ -8805,52 +5882,36 @@ var require_dist_node10 = __commonJS((exports2) => {
       })
     };
   }
-  paginateRest.VERSION = VERSION;
-  exports2.composePaginateRest = composePaginateRest;
-  exports2.paginateRest = paginateRest;
+  paginateRest.VERSION = VERSION4;
 });
 
 // ../node_modules/@actions/github/lib/utils.js
 var require_utils3 = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    Object.defineProperty(o, k2, {enumerable: true, get: function() {
+    k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
       return m[k];
     }});
   } : function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    o[k2] = m[k];
-  });
-  var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-    Object.defineProperty(o, "default", {enumerable: true, value: v});
+    k2 === void 0 && (k2 = k), o[k2] = m[k];
+  }), __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {enumerable: !0, value: v});
   } : function(o, v) {
-    o["default"] = v;
-  });
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+    o.default = v;
+  }), __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          __createBinding(result, mod, k);
-    }
-    __setModuleDefault(result, mod);
-    return result;
+        Object.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
+    return __setModuleDefault(result, mod), result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   exports2.getOctokitOptions = exports2.GitHub = exports2.context = void 0;
-  var Context = __importStar(require_context());
-  var Utils = __importStar(require_utils2());
-  var core_1 = require_dist_node8();
-  var plugin_rest_endpoint_methods_1 = require_dist_node9();
-  var plugin_paginate_rest_1 = require_dist_node10();
+  var Context = __importStar(require_context()), Utils = __importStar(require_utils2()), core_1 = require_dist_web(), plugin_rest_endpoint_methods_1 = require_dist_web2(), plugin_paginate_rest_1 = require_dist_web3();
   exports2.context = new Context.Context();
-  var baseUrl = Utils.getApiBaseUrl();
-  var defaults = {
+  var baseUrl = Utils.getApiBaseUrl(), defaults = {
     baseUrl,
     request: {
       agent: Utils.getProxyAgent(baseUrl)
@@ -8858,12 +5919,8 @@ var require_utils3 = __commonJS((exports2) => {
   };
   exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
   function getOctokitOptions(token, options) {
-    const opts = Object.assign({}, options || {});
-    const auth = Utils.getAuthString(token, opts);
-    if (auth) {
-      opts.auth = auth;
-    }
-    return opts;
+    let opts = Object.assign({}, options || {}), auth2 = Utils.getAuthString(token, opts);
+    return auth2 && (opts.auth = auth2), opts;
   }
   exports2.getOctokitOptions = getOctokitOptions;
 });
@@ -8872,37 +5929,27 @@ var require_utils3 = __commonJS((exports2) => {
 var require_github = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    Object.defineProperty(o, k2, {enumerable: true, get: function() {
+    k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
       return m[k];
     }});
   } : function(o, m, k, k2) {
-    if (k2 === void 0)
-      k2 = k;
-    o[k2] = m[k];
-  });
-  var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-    Object.defineProperty(o, "default", {enumerable: true, value: v});
+    k2 === void 0 && (k2 = k), o[k2] = m[k];
+  }), __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    Object.defineProperty(o, "default", {enumerable: !0, value: v});
   } : function(o, v) {
-    o["default"] = v;
-  });
-  var __importStar = exports2 && exports2.__importStar || function(mod) {
+    o.default = v;
+  }), __importStar = exports2 && exports2.__importStar || function(mod) {
     if (mod && mod.__esModule)
       return mod;
     var result = {};
-    if (mod != null) {
+    if (mod != null)
       for (var k in mod)
-        if (Object.hasOwnProperty.call(mod, k))
-          __createBinding(result, mod, k);
-    }
-    __setModuleDefault(result, mod);
-    return result;
+        Object.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
+    return __setModuleDefault(result, mod), result;
   };
-  Object.defineProperty(exports2, "__esModule", {value: true});
+  Object.defineProperty(exports2, "__esModule", {value: !0});
   exports2.getOctokit = exports2.context = void 0;
-  var Context = __importStar(require_context());
-  var utils_1 = require_utils3();
+  var Context = __importStar(require_context()), utils_1 = require_utils3();
   exports2.context = new Context.Context();
   function getOctokit2(token, options) {
     return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
@@ -8911,14 +5958,1037 @@ var require_github = __commonJS((exports2) => {
 });
 
 // index.ts
-var import_core2 = __toModule(require_core());
-var import_exec = __toModule(require_exec());
+var import_core2 = __toModule(require_core()), import_exec = __toModule(require_exec());
+
+// ../node_modules/universal-user-agent/dist-web/index.js
+function getUserAgent() {
+  return typeof navigator == "object" && "userAgent" in navigator ? navigator.userAgent : typeof process == "object" && "version" in process ? `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})` : "<environment undetectable>";
+}
+
+// ../node_modules/@octokit/endpoint/node_modules/is-plain-object/dist/is-plain-object.mjs
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+function isObject(o) {
+  return Object.prototype.toString.call(o) === "[object Object]";
+}
+function isPlainObject(o) {
+  var ctor, prot;
+  return isObject(o) === !1 ? !1 : (ctor = o.constructor, ctor === void 0 ? !0 : (prot = ctor.prototype, !(isObject(prot) === !1 || prot.hasOwnProperty("isPrototypeOf") === !1)));
+}
+
+// ../node_modules/@octokit/endpoint/dist-web/index.js
+function lowercaseKeys(object) {
+  return object ? Object.keys(object).reduce((newObj, key) => (newObj[key.toLowerCase()] = object[key], newObj), {}) : {};
+}
+function mergeDeep(defaults, options) {
+  let result = Object.assign({}, defaults);
+  return Object.keys(options).forEach((key) => {
+    isPlainObject(options[key]) ? key in defaults ? result[key] = mergeDeep(defaults[key], options[key]) : Object.assign(result, {[key]: options[key]}) : Object.assign(result, {[key]: options[key]});
+  }), result;
+}
+function removeUndefinedProperties(obj) {
+  for (let key in obj)
+    obj[key] === void 0 && delete obj[key];
+  return obj;
+}
+function merge(defaults, route, options) {
+  if (typeof route == "string") {
+    let [method, url] = route.split(" ");
+    options = Object.assign(url ? {method, url} : {url: method}, options);
+  } else
+    options = Object.assign({}, route);
+  options.headers = lowercaseKeys(options.headers), removeUndefinedProperties(options), removeUndefinedProperties(options.headers);
+  let mergedOptions = mergeDeep(defaults || {}, options);
+  return defaults && defaults.mediaType.previews.length && (mergedOptions.mediaType.previews = defaults.mediaType.previews.filter((preview) => !mergedOptions.mediaType.previews.includes(preview)).concat(mergedOptions.mediaType.previews)), mergedOptions.mediaType.previews = mergedOptions.mediaType.previews.map((preview) => preview.replace(/-preview/, "")), mergedOptions;
+}
+function addQueryParameters(url, parameters) {
+  let separator = /\?/.test(url) ? "&" : "?", names = Object.keys(parameters);
+  return names.length === 0 ? url : url + separator + names.map((name) => name === "q" ? "q=" + parameters.q.split("+").map(encodeURIComponent).join("+") : `${name}=${encodeURIComponent(parameters[name])}`).join("&");
+}
+var urlVariableRegex = /\{[^}]+\}/g;
+function removeNonChars(variableName) {
+  return variableName.replace(/^\W+|\W+$/g, "").split(/,/);
+}
+function extractUrlVariableNames(url) {
+  let matches = url.match(urlVariableRegex);
+  return matches ? matches.map(removeNonChars).reduce((a, b) => a.concat(b), []) : [];
+}
+function omit(object, keysToOmit) {
+  return Object.keys(object).filter((option) => !keysToOmit.includes(option)).reduce((obj, key) => (obj[key] = object[key], obj), {});
+}
+function encodeReserved(str) {
+  return str.split(/(%[0-9A-Fa-f]{2})/g).map(function(part) {
+    return /%[0-9A-Fa-f]/.test(part) || (part = encodeURI(part).replace(/%5B/g, "[").replace(/%5D/g, "]")), part;
+  }).join("");
+}
+function encodeUnreserved(str) {
+  return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    return "%" + c.charCodeAt(0).toString(16).toUpperCase();
+  });
+}
+function encodeValue(operator, value, key) {
+  return value = operator === "+" || operator === "#" ? encodeReserved(value) : encodeUnreserved(value), key ? encodeUnreserved(key) + "=" + value : value;
+}
+function isDefined(value) {
+  return value != null;
+}
+function isKeyOperator(operator) {
+  return operator === ";" || operator === "&" || operator === "?";
+}
+function getValues(context3, operator, key, modifier) {
+  var value = context3[key], result = [];
+  if (isDefined(value) && value !== "")
+    if (typeof value == "string" || typeof value == "number" || typeof value == "boolean")
+      value = value.toString(), modifier && modifier !== "*" && (value = value.substring(0, parseInt(modifier, 10))), result.push(encodeValue(operator, value, isKeyOperator(operator) ? key : ""));
+    else if (modifier === "*")
+      Array.isArray(value) ? value.filter(isDefined).forEach(function(value2) {
+        result.push(encodeValue(operator, value2, isKeyOperator(operator) ? key : ""));
+      }) : Object.keys(value).forEach(function(k) {
+        isDefined(value[k]) && result.push(encodeValue(operator, value[k], k));
+      });
+    else {
+      let tmp = [];
+      Array.isArray(value) ? value.filter(isDefined).forEach(function(value2) {
+        tmp.push(encodeValue(operator, value2));
+      }) : Object.keys(value).forEach(function(k) {
+        isDefined(value[k]) && (tmp.push(encodeUnreserved(k)), tmp.push(encodeValue(operator, value[k].toString())));
+      }), isKeyOperator(operator) ? result.push(encodeUnreserved(key) + "=" + tmp.join(",")) : tmp.length !== 0 && result.push(tmp.join(","));
+    }
+  else
+    operator === ";" ? isDefined(value) && result.push(encodeUnreserved(key)) : value === "" && (operator === "&" || operator === "?") ? result.push(encodeUnreserved(key) + "=") : value === "" && result.push("");
+  return result;
+}
+function parseUrl(template) {
+  return {
+    expand: expand.bind(null, template)
+  };
+}
+function expand(template, context3) {
+  var operators = ["+", "#", ".", "/", ";", "?", "&"];
+  return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
+    if (expression) {
+      let operator = "", values = [];
+      if (operators.indexOf(expression.charAt(0)) !== -1 && (operator = expression.charAt(0), expression = expression.substr(1)), expression.split(/,/g).forEach(function(variable) {
+        var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
+        values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
+      }), operator && operator !== "+") {
+        var separator = ",";
+        return operator === "?" ? separator = "&" : operator !== "#" && (separator = operator), (values.length !== 0 ? operator : "") + values.join(separator);
+      } else
+        return values.join(",");
+    } else
+      return encodeReserved(literal);
+  });
+}
+function parse(options) {
+  let method = options.method.toUpperCase(), url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}"), headers = Object.assign({}, options.headers), body, parameters = omit(options, [
+    "method",
+    "baseUrl",
+    "url",
+    "headers",
+    "request",
+    "mediaType"
+  ]), urlVariableNames = extractUrlVariableNames(url);
+  url = parseUrl(url).expand(parameters), /^http/.test(url) || (url = options.baseUrl + url);
+  let omittedParameters = Object.keys(options).filter((option) => urlVariableNames.includes(option)).concat("baseUrl"), remainingParameters = omit(parameters, omittedParameters);
+  if (!/application\/octet-stream/i.test(headers.accept) && (options.mediaType.format && (headers.accept = headers.accept.split(/,/).map((preview) => preview.replace(/application\/vnd(\.\w+)(\.v3)?(\.\w+)?(\+json)?$/, `application/vnd$1$2.${options.mediaType.format}`)).join(",")), options.mediaType.previews.length)) {
+    let previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
+    headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
+      let format2 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+      return `application/vnd.github.${preview}-preview${format2}`;
+    }).join(",");
+  }
+  return ["GET", "HEAD"].includes(method) ? url = addQueryParameters(url, remainingParameters) : "data" in remainingParameters ? body = remainingParameters.data : Object.keys(remainingParameters).length ? body = remainingParameters : headers["content-length"] = 0, !headers["content-type"] && typeof body != "undefined" && (headers["content-type"] = "application/json; charset=utf-8"), ["PATCH", "PUT"].includes(method) && typeof body == "undefined" && (body = ""), Object.assign({method, url, headers}, typeof body != "undefined" ? {body} : null, options.request ? {request: options.request} : null);
+}
+function endpointWithDefaults(defaults, route, options) {
+  return parse(merge(defaults, route, options));
+}
+function withDefaults(oldDefaults, newDefaults) {
+  let DEFAULTS2 = merge(oldDefaults, newDefaults), endpoint2 = endpointWithDefaults.bind(null, DEFAULTS2);
+  return Object.assign(endpoint2, {
+    DEFAULTS: DEFAULTS2,
+    defaults: withDefaults.bind(null, DEFAULTS2),
+    merge: merge.bind(null, DEFAULTS2),
+    parse
+  });
+}
+var VERSION = "6.0.10", userAgent = `octokit-endpoint.js/${VERSION} ${getUserAgent()}`, DEFAULTS = {
+  method: "GET",
+  baseUrl: "https://api.github.com",
+  headers: {
+    accept: "application/vnd.github.v3+json",
+    "user-agent": userAgent
+  },
+  mediaType: {
+    format: "",
+    previews: []
+  }
+}, endpoint = withDefaults(null, DEFAULTS);
+
+// ../node_modules/@octokit/request/node_modules/is-plain-object/dist/is-plain-object.mjs
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+function isObject2(o) {
+  return Object.prototype.toString.call(o) === "[object Object]";
+}
+function isPlainObject2(o) {
+  var ctor, prot;
+  return isObject2(o) === !1 ? !1 : (ctor = o.constructor, ctor === void 0 ? !0 : (prot = ctor.prototype, !(isObject2(prot) === !1 || prot.hasOwnProperty("isPrototypeOf") === !1)));
+}
+
+// ../node_modules/node-fetch/lib/index.mjs
+var import_stream = __toModule(require("stream")), import_http = __toModule(require("http")), import_url = __toModule(require("url")), import_https = __toModule(require("https")), import_zlib = __toModule(require("zlib")), Readable = import_stream.default.Readable, BUFFER = Symbol("buffer"), TYPE = Symbol("type"), Blob = class {
+  constructor() {
+    this[TYPE] = "";
+    let blobParts = arguments[0], options = arguments[1], buffers = [], size = 0;
+    if (blobParts) {
+      let a = blobParts, length = Number(a.length);
+      for (let i = 0; i < length; i++) {
+        let element = a[i], buffer;
+        element instanceof Buffer ? buffer = element : ArrayBuffer.isView(element) ? buffer = Buffer.from(element.buffer, element.byteOffset, element.byteLength) : element instanceof ArrayBuffer ? buffer = Buffer.from(element) : element instanceof Blob ? buffer = element[BUFFER] : buffer = Buffer.from(typeof element == "string" ? element : String(element)), size += buffer.length, buffers.push(buffer);
+      }
+    }
+    this[BUFFER] = Buffer.concat(buffers);
+    let type = options && options.type !== void 0 && String(options.type).toLowerCase();
+    type && !/[^\u0020-\u007E]/.test(type) && (this[TYPE] = type);
+  }
+  get size() {
+    return this[BUFFER].length;
+  }
+  get type() {
+    return this[TYPE];
+  }
+  text() {
+    return Promise.resolve(this[BUFFER].toString());
+  }
+  arrayBuffer() {
+    let buf = this[BUFFER], ab = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+    return Promise.resolve(ab);
+  }
+  stream() {
+    let readable = new Readable();
+    return readable._read = function() {
+    }, readable.push(this[BUFFER]), readable.push(null), readable;
+  }
+  toString() {
+    return "[object Blob]";
+  }
+  slice() {
+    let size = this.size, start = arguments[0], end = arguments[1], relativeStart, relativeEnd;
+    start === void 0 ? relativeStart = 0 : start < 0 ? relativeStart = Math.max(size + start, 0) : relativeStart = Math.min(start, size), end === void 0 ? relativeEnd = size : end < 0 ? relativeEnd = Math.max(size + end, 0) : relativeEnd = Math.min(end, size);
+    let span = Math.max(relativeEnd - relativeStart, 0), slicedBuffer = this[BUFFER].slice(relativeStart, relativeStart + span), blob = new Blob([], {type: arguments[2]});
+    return blob[BUFFER] = slicedBuffer, blob;
+  }
+};
+Object.defineProperties(Blob.prototype, {
+  size: {enumerable: !0},
+  type: {enumerable: !0},
+  slice: {enumerable: !0}
+});
+Object.defineProperty(Blob.prototype, Symbol.toStringTag, {
+  value: "Blob",
+  writable: !1,
+  enumerable: !1,
+  configurable: !0
+});
+function FetchError(message, type, systemError) {
+  Error.call(this, message), this.message = message, this.type = type, systemError && (this.code = this.errno = systemError.code), Error.captureStackTrace(this, this.constructor);
+}
+FetchError.prototype = Object.create(Error.prototype);
+FetchError.prototype.constructor = FetchError;
+FetchError.prototype.name = "FetchError";
+var convert;
+try {
+  convert = require_encoding().convert;
+} catch (e) {
+}
+var INTERNALS = Symbol("Body internals"), PassThrough = import_stream.default.PassThrough;
+function Body(body) {
+  var _this = this, _ref = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, _ref$size = _ref.size;
+  let size = _ref$size === void 0 ? 0 : _ref$size;
+  var _ref$timeout = _ref.timeout;
+  let timeout = _ref$timeout === void 0 ? 0 : _ref$timeout;
+  body == null ? body = null : isURLSearchParams(body) ? body = Buffer.from(body.toString()) : isBlob(body) || Buffer.isBuffer(body) || (Object.prototype.toString.call(body) === "[object ArrayBuffer]" ? body = Buffer.from(body) : ArrayBuffer.isView(body) ? body = Buffer.from(body.buffer, body.byteOffset, body.byteLength) : body instanceof import_stream.default || (body = Buffer.from(String(body)))), this[INTERNALS] = {
+    body,
+    disturbed: !1,
+    error: null
+  }, this.size = size, this.timeout = timeout, body instanceof import_stream.default && body.on("error", function(err) {
+    let error = err.name === "AbortError" ? err : new FetchError(`Invalid response body while trying to fetch ${_this.url}: ${err.message}`, "system", err);
+    _this[INTERNALS].error = error;
+  });
+}
+Body.prototype = {
+  get body() {
+    return this[INTERNALS].body;
+  },
+  get bodyUsed() {
+    return this[INTERNALS].disturbed;
+  },
+  arrayBuffer() {
+    return consumeBody.call(this).then(function(buf) {
+      return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+    });
+  },
+  blob() {
+    let ct = this.headers && this.headers.get("content-type") || "";
+    return consumeBody.call(this).then(function(buf) {
+      return Object.assign(new Blob([], {
+        type: ct.toLowerCase()
+      }), {
+        [BUFFER]: buf
+      });
+    });
+  },
+  json() {
+    var _this2 = this;
+    return consumeBody.call(this).then(function(buffer) {
+      try {
+        return JSON.parse(buffer.toString());
+      } catch (err) {
+        return Body.Promise.reject(new FetchError(`invalid json response body at ${_this2.url} reason: ${err.message}`, "invalid-json"));
+      }
+    });
+  },
+  text() {
+    return consumeBody.call(this).then(function(buffer) {
+      return buffer.toString();
+    });
+  },
+  buffer() {
+    return consumeBody.call(this);
+  },
+  textConverted() {
+    var _this3 = this;
+    return consumeBody.call(this).then(function(buffer) {
+      return convertBody(buffer, _this3.headers);
+    });
+  }
+};
+Object.defineProperties(Body.prototype, {
+  body: {enumerable: !0},
+  bodyUsed: {enumerable: !0},
+  arrayBuffer: {enumerable: !0},
+  blob: {enumerable: !0},
+  json: {enumerable: !0},
+  text: {enumerable: !0}
+});
+Body.mixIn = function(proto) {
+  for (let name of Object.getOwnPropertyNames(Body.prototype))
+    if (!(name in proto)) {
+      let desc = Object.getOwnPropertyDescriptor(Body.prototype, name);
+      Object.defineProperty(proto, name, desc);
+    }
+};
+function consumeBody() {
+  var _this4 = this;
+  if (this[INTERNALS].disturbed)
+    return Body.Promise.reject(new TypeError(`body used already for: ${this.url}`));
+  if (this[INTERNALS].disturbed = !0, this[INTERNALS].error)
+    return Body.Promise.reject(this[INTERNALS].error);
+  let body = this.body;
+  if (body === null)
+    return Body.Promise.resolve(Buffer.alloc(0));
+  if (isBlob(body) && (body = body.stream()), Buffer.isBuffer(body))
+    return Body.Promise.resolve(body);
+  if (!(body instanceof import_stream.default))
+    return Body.Promise.resolve(Buffer.alloc(0));
+  let accum = [], accumBytes = 0, abort = !1;
+  return new Body.Promise(function(resolve, reject) {
+    let resTimeout;
+    _this4.timeout && (resTimeout = setTimeout(function() {
+      abort = !0, reject(new FetchError(`Response timeout while trying to fetch ${_this4.url} (over ${_this4.timeout}ms)`, "body-timeout"));
+    }, _this4.timeout)), body.on("error", function(err) {
+      err.name === "AbortError" ? (abort = !0, reject(err)) : reject(new FetchError(`Invalid response body while trying to fetch ${_this4.url}: ${err.message}`, "system", err));
+    }), body.on("data", function(chunk) {
+      if (!(abort || chunk === null)) {
+        if (_this4.size && accumBytes + chunk.length > _this4.size) {
+          abort = !0, reject(new FetchError(`content size at ${_this4.url} over limit: ${_this4.size}`, "max-size"));
+          return;
+        }
+        accumBytes += chunk.length, accum.push(chunk);
+      }
+    }), body.on("end", function() {
+      if (!abort) {
+        clearTimeout(resTimeout);
+        try {
+          resolve(Buffer.concat(accum, accumBytes));
+        } catch (err) {
+          reject(new FetchError(`Could not create Buffer from response body for ${_this4.url}: ${err.message}`, "system", err));
+        }
+      }
+    });
+  });
+}
+function convertBody(buffer, headers) {
+  if (typeof convert != "function")
+    throw new Error("The package `encoding` must be installed to use the textConverted() function");
+  let ct = headers.get("content-type"), charset = "utf-8", res, str;
+  return ct && (res = /charset=([^;]*)/i.exec(ct)), str = buffer.slice(0, 1024).toString(), !res && str && (res = /<meta.+?charset=(['"])(.+?)\1/i.exec(str)), !res && str && (res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str), res || (res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str), res && res.pop()), res && (res = /charset=(.*)/i.exec(res.pop()))), !res && str && (res = /<\?xml.+?encoding=(['"])(.+?)\1/i.exec(str)), res && (charset = res.pop(), (charset === "gb2312" || charset === "gbk") && (charset = "gb18030")), convert(buffer, "UTF-8", charset).toString();
+}
+function isURLSearchParams(obj) {
+  return typeof obj != "object" || typeof obj.append != "function" || typeof obj.delete != "function" || typeof obj.get != "function" || typeof obj.getAll != "function" || typeof obj.has != "function" || typeof obj.set != "function" ? !1 : obj.constructor.name === "URLSearchParams" || Object.prototype.toString.call(obj) === "[object URLSearchParams]" || typeof obj.sort == "function";
+}
+function isBlob(obj) {
+  return typeof obj == "object" && typeof obj.arrayBuffer == "function" && typeof obj.type == "string" && typeof obj.stream == "function" && typeof obj.constructor == "function" && typeof obj.constructor.name == "string" && /^(Blob|File)$/.test(obj.constructor.name) && /^(Blob|File)$/.test(obj[Symbol.toStringTag]);
+}
+function clone(instance) {
+  let p1, p2, body = instance.body;
+  if (instance.bodyUsed)
+    throw new Error("cannot clone body after it is used");
+  return body instanceof import_stream.default && typeof body.getBoundary != "function" && (p1 = new PassThrough(), p2 = new PassThrough(), body.pipe(p1), body.pipe(p2), instance[INTERNALS].body = p1, body = p2), body;
+}
+function extractContentType(body) {
+  return body === null ? null : typeof body == "string" ? "text/plain;charset=UTF-8" : isURLSearchParams(body) ? "application/x-www-form-urlencoded;charset=UTF-8" : isBlob(body) ? body.type || null : Buffer.isBuffer(body) || Object.prototype.toString.call(body) === "[object ArrayBuffer]" || ArrayBuffer.isView(body) ? null : typeof body.getBoundary == "function" ? `multipart/form-data;boundary=${body.getBoundary()}` : body instanceof import_stream.default ? null : "text/plain;charset=UTF-8";
+}
+function getTotalBytes(instance) {
+  let body = instance.body;
+  return body === null ? 0 : isBlob(body) ? body.size : Buffer.isBuffer(body) ? body.length : body && typeof body.getLengthSync == "function" && (body._lengthRetrievers && body._lengthRetrievers.length == 0 || body.hasKnownLength && body.hasKnownLength()) ? body.getLengthSync() : null;
+}
+function writeToStream(dest, instance) {
+  let body = instance.body;
+  body === null ? dest.end() : isBlob(body) ? body.stream().pipe(dest) : Buffer.isBuffer(body) ? (dest.write(body), dest.end()) : body.pipe(dest);
+}
+Body.Promise = global.Promise;
+var invalidTokenRegex = /[^\^_`a-zA-Z\-0-9!#$%&'*+.|~]/, invalidHeaderCharRegex = /[^\t\x20-\x7e\x80-\xff]/;
+function validateName(name) {
+  if (name = `${name}`, invalidTokenRegex.test(name) || name === "")
+    throw new TypeError(`${name} is not a legal HTTP header name`);
+}
+function validateValue(value) {
+  if (value = `${value}`, invalidHeaderCharRegex.test(value))
+    throw new TypeError(`${value} is not a legal HTTP header value`);
+}
+function find(map, name) {
+  name = name.toLowerCase();
+  for (let key in map)
+    if (key.toLowerCase() === name)
+      return key;
+}
+var MAP = Symbol("map"), Headers = class {
+  constructor() {
+    let init = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : void 0;
+    if (this[MAP] = Object.create(null), init instanceof Headers) {
+      let rawHeaders = init.raw(), headerNames = Object.keys(rawHeaders);
+      for (let headerName of headerNames)
+        for (let value of rawHeaders[headerName])
+          this.append(headerName, value);
+      return;
+    }
+    if (init != null)
+      if (typeof init == "object") {
+        let method = init[Symbol.iterator];
+        if (method != null) {
+          if (typeof method != "function")
+            throw new TypeError("Header pairs must be iterable");
+          let pairs = [];
+          for (let pair of init) {
+            if (typeof pair != "object" || typeof pair[Symbol.iterator] != "function")
+              throw new TypeError("Each header pair must be iterable");
+            pairs.push(Array.from(pair));
+          }
+          for (let pair of pairs) {
+            if (pair.length !== 2)
+              throw new TypeError("Each header pair must be a name/value tuple");
+            this.append(pair[0], pair[1]);
+          }
+        } else
+          for (let key of Object.keys(init)) {
+            let value = init[key];
+            this.append(key, value);
+          }
+      } else
+        throw new TypeError("Provided initializer must be an object");
+  }
+  get(name) {
+    name = `${name}`, validateName(name);
+    let key = find(this[MAP], name);
+    return key === void 0 ? null : this[MAP][key].join(", ");
+  }
+  forEach(callback) {
+    let thisArg = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : void 0, pairs = getHeaders(this), i = 0;
+    for (; i < pairs.length; ) {
+      var _pairs$i = pairs[i];
+      let name = _pairs$i[0], value = _pairs$i[1];
+      callback.call(thisArg, value, name, this), pairs = getHeaders(this), i++;
+    }
+  }
+  set(name, value) {
+    name = `${name}`, value = `${value}`, validateName(name), validateValue(value);
+    let key = find(this[MAP], name);
+    this[MAP][key !== void 0 ? key : name] = [value];
+  }
+  append(name, value) {
+    name = `${name}`, value = `${value}`, validateName(name), validateValue(value);
+    let key = find(this[MAP], name);
+    key !== void 0 ? this[MAP][key].push(value) : this[MAP][name] = [value];
+  }
+  has(name) {
+    return name = `${name}`, validateName(name), find(this[MAP], name) !== void 0;
+  }
+  delete(name) {
+    name = `${name}`, validateName(name);
+    let key = find(this[MAP], name);
+    key !== void 0 && delete this[MAP][key];
+  }
+  raw() {
+    return this[MAP];
+  }
+  keys() {
+    return createHeadersIterator(this, "key");
+  }
+  values() {
+    return createHeadersIterator(this, "value");
+  }
+  [Symbol.iterator]() {
+    return createHeadersIterator(this, "key+value");
+  }
+};
+Headers.prototype.entries = Headers.prototype[Symbol.iterator];
+Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
+  value: "Headers",
+  writable: !1,
+  enumerable: !1,
+  configurable: !0
+});
+Object.defineProperties(Headers.prototype, {
+  get: {enumerable: !0},
+  forEach: {enumerable: !0},
+  set: {enumerable: !0},
+  append: {enumerable: !0},
+  has: {enumerable: !0},
+  delete: {enumerable: !0},
+  keys: {enumerable: !0},
+  values: {enumerable: !0},
+  entries: {enumerable: !0}
+});
+function getHeaders(headers) {
+  let kind = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "key+value";
+  return Object.keys(headers[MAP]).sort().map(kind === "key" ? function(k) {
+    return k.toLowerCase();
+  } : kind === "value" ? function(k) {
+    return headers[MAP][k].join(", ");
+  } : function(k) {
+    return [k.toLowerCase(), headers[MAP][k].join(", ")];
+  });
+}
+var INTERNAL = Symbol("internal");
+function createHeadersIterator(target, kind) {
+  let iterator = Object.create(HeadersIteratorPrototype);
+  return iterator[INTERNAL] = {
+    target,
+    kind,
+    index: 0
+  }, iterator;
+}
+var HeadersIteratorPrototype = Object.setPrototypeOf({
+  next() {
+    if (!this || Object.getPrototypeOf(this) !== HeadersIteratorPrototype)
+      throw new TypeError("Value of `this` is not a HeadersIterator");
+    var _INTERNAL = this[INTERNAL];
+    let target = _INTERNAL.target, kind = _INTERNAL.kind, index = _INTERNAL.index, values = getHeaders(target, kind), len = values.length;
+    return index >= len ? {
+      value: void 0,
+      done: !0
+    } : (this[INTERNAL].index = index + 1, {
+      value: values[index],
+      done: !1
+    });
+  }
+}, Object.getPrototypeOf(Object.getPrototypeOf([][Symbol.iterator]())));
+Object.defineProperty(HeadersIteratorPrototype, Symbol.toStringTag, {
+  value: "HeadersIterator",
+  writable: !1,
+  enumerable: !1,
+  configurable: !0
+});
+function exportNodeCompatibleHeaders(headers) {
+  let obj = Object.assign({__proto__: null}, headers[MAP]), hostHeaderKey = find(headers[MAP], "Host");
+  return hostHeaderKey !== void 0 && (obj[hostHeaderKey] = obj[hostHeaderKey][0]), obj;
+}
+function createHeadersLenient(obj) {
+  let headers = new Headers();
+  for (let name of Object.keys(obj))
+    if (!invalidTokenRegex.test(name))
+      if (Array.isArray(obj[name]))
+        for (let val of obj[name])
+          invalidHeaderCharRegex.test(val) || (headers[MAP][name] === void 0 ? headers[MAP][name] = [val] : headers[MAP][name].push(val));
+      else
+        invalidHeaderCharRegex.test(obj[name]) || (headers[MAP][name] = [obj[name]]);
+  return headers;
+}
+var INTERNALS$1 = Symbol("Response internals"), STATUS_CODES = import_http.default.STATUS_CODES, Response = class {
+  constructor() {
+    let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null, opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
+    Body.call(this, body, opts);
+    let status = opts.status || 200, headers = new Headers(opts.headers);
+    if (body != null && !headers.has("Content-Type")) {
+      let contentType = extractContentType(body);
+      contentType && headers.append("Content-Type", contentType);
+    }
+    this[INTERNALS$1] = {
+      url: opts.url,
+      status,
+      statusText: opts.statusText || STATUS_CODES[status],
+      headers,
+      counter: opts.counter
+    };
+  }
+  get url() {
+    return this[INTERNALS$1].url || "";
+  }
+  get status() {
+    return this[INTERNALS$1].status;
+  }
+  get ok() {
+    return this[INTERNALS$1].status >= 200 && this[INTERNALS$1].status < 300;
+  }
+  get redirected() {
+    return this[INTERNALS$1].counter > 0;
+  }
+  get statusText() {
+    return this[INTERNALS$1].statusText;
+  }
+  get headers() {
+    return this[INTERNALS$1].headers;
+  }
+  clone() {
+    return new Response(clone(this), {
+      url: this.url,
+      status: this.status,
+      statusText: this.statusText,
+      headers: this.headers,
+      ok: this.ok,
+      redirected: this.redirected
+    });
+  }
+};
+Body.mixIn(Response.prototype);
+Object.defineProperties(Response.prototype, {
+  url: {enumerable: !0},
+  status: {enumerable: !0},
+  ok: {enumerable: !0},
+  redirected: {enumerable: !0},
+  statusText: {enumerable: !0},
+  headers: {enumerable: !0},
+  clone: {enumerable: !0}
+});
+Object.defineProperty(Response.prototype, Symbol.toStringTag, {
+  value: "Response",
+  writable: !1,
+  enumerable: !1,
+  configurable: !0
+});
+var INTERNALS$2 = Symbol("Request internals"), parse_url = import_url.default.parse, format_url = import_url.default.format, streamDestructionSupported = "destroy" in import_stream.default.Readable.prototype;
+function isRequest(input) {
+  return typeof input == "object" && typeof input[INTERNALS$2] == "object";
+}
+function isAbortSignal(signal) {
+  let proto = signal && typeof signal == "object" && Object.getPrototypeOf(signal);
+  return !!(proto && proto.constructor.name === "AbortSignal");
+}
+var Request = class {
+  constructor(input) {
+    let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, parsedURL;
+    isRequest(input) ? parsedURL = parse_url(input.url) : (input && input.href ? parsedURL = parse_url(input.href) : parsedURL = parse_url(`${input}`), input = {});
+    let method = init.method || input.method || "GET";
+    if (method = method.toUpperCase(), (init.body != null || isRequest(input) && input.body !== null) && (method === "GET" || method === "HEAD"))
+      throw new TypeError("Request with GET/HEAD method cannot have body");
+    let inputBody = init.body != null ? init.body : isRequest(input) && input.body !== null ? clone(input) : null;
+    Body.call(this, inputBody, {
+      timeout: init.timeout || input.timeout || 0,
+      size: init.size || input.size || 0
+    });
+    let headers = new Headers(init.headers || input.headers || {});
+    if (inputBody != null && !headers.has("Content-Type")) {
+      let contentType = extractContentType(inputBody);
+      contentType && headers.append("Content-Type", contentType);
+    }
+    let signal = isRequest(input) ? input.signal : null;
+    if ("signal" in init && (signal = init.signal), signal != null && !isAbortSignal(signal))
+      throw new TypeError("Expected signal to be an instanceof AbortSignal");
+    this[INTERNALS$2] = {
+      method,
+      redirect: init.redirect || input.redirect || "follow",
+      headers,
+      parsedURL,
+      signal
+    }, this.follow = init.follow !== void 0 ? init.follow : input.follow !== void 0 ? input.follow : 20, this.compress = init.compress !== void 0 ? init.compress : input.compress !== void 0 ? input.compress : !0, this.counter = init.counter || input.counter || 0, this.agent = init.agent || input.agent;
+  }
+  get method() {
+    return this[INTERNALS$2].method;
+  }
+  get url() {
+    return format_url(this[INTERNALS$2].parsedURL);
+  }
+  get headers() {
+    return this[INTERNALS$2].headers;
+  }
+  get redirect() {
+    return this[INTERNALS$2].redirect;
+  }
+  get signal() {
+    return this[INTERNALS$2].signal;
+  }
+  clone() {
+    return new Request(this);
+  }
+};
+Body.mixIn(Request.prototype);
+Object.defineProperty(Request.prototype, Symbol.toStringTag, {
+  value: "Request",
+  writable: !1,
+  enumerable: !1,
+  configurable: !0
+});
+Object.defineProperties(Request.prototype, {
+  method: {enumerable: !0},
+  url: {enumerable: !0},
+  headers: {enumerable: !0},
+  redirect: {enumerable: !0},
+  clone: {enumerable: !0},
+  signal: {enumerable: !0}
+});
+function getNodeRequestOptions(request2) {
+  let parsedURL = request2[INTERNALS$2].parsedURL, headers = new Headers(request2[INTERNALS$2].headers);
+  if (headers.has("Accept") || headers.set("Accept", "*/*"), !parsedURL.protocol || !parsedURL.hostname)
+    throw new TypeError("Only absolute URLs are supported");
+  if (!/^https?:$/.test(parsedURL.protocol))
+    throw new TypeError("Only HTTP(S) protocols are supported");
+  if (request2.signal && request2.body instanceof import_stream.default.Readable && !streamDestructionSupported)
+    throw new Error("Cancellation of streamed requests with AbortSignal is not supported in node < 8");
+  let contentLengthValue = null;
+  if (request2.body == null && /^(POST|PUT)$/i.test(request2.method) && (contentLengthValue = "0"), request2.body != null) {
+    let totalBytes = getTotalBytes(request2);
+    typeof totalBytes == "number" && (contentLengthValue = String(totalBytes));
+  }
+  contentLengthValue && headers.set("Content-Length", contentLengthValue), headers.has("User-Agent") || headers.set("User-Agent", "node-fetch/1.0 (+https://github.com/bitinn/node-fetch)"), request2.compress && !headers.has("Accept-Encoding") && headers.set("Accept-Encoding", "gzip,deflate");
+  let agent = request2.agent;
+  return typeof agent == "function" && (agent = agent(parsedURL)), !headers.has("Connection") && !agent && headers.set("Connection", "close"), Object.assign({}, parsedURL, {
+    method: request2.method,
+    headers: exportNodeCompatibleHeaders(headers),
+    agent
+  });
+}
+function AbortError(message) {
+  Error.call(this, message), this.type = "aborted", this.message = message, Error.captureStackTrace(this, this.constructor);
+}
+AbortError.prototype = Object.create(Error.prototype);
+AbortError.prototype.constructor = AbortError;
+AbortError.prototype.name = "AbortError";
+var PassThrough$1 = import_stream.default.PassThrough, resolve_url = import_url.default.resolve;
+function fetch(url, opts) {
+  if (!fetch.Promise)
+    throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
+  return Body.Promise = fetch.Promise, new fetch.Promise(function(resolve, reject) {
+    let request2 = new Request(url, opts), options = getNodeRequestOptions(request2), send = (options.protocol === "https:" ? import_https.default : import_http.default).request, signal = request2.signal, response = null, abort = function() {
+      let error = new AbortError("The user aborted a request.");
+      reject(error), request2.body && request2.body instanceof import_stream.default.Readable && request2.body.destroy(error), !(!response || !response.body) && response.body.emit("error", error);
+    };
+    if (signal && signal.aborted) {
+      abort();
+      return;
+    }
+    let abortAndFinalize = function() {
+      abort(), finalize();
+    }, req = send(options), reqTimeout;
+    signal && signal.addEventListener("abort", abortAndFinalize);
+    function finalize() {
+      req.abort(), signal && signal.removeEventListener("abort", abortAndFinalize), clearTimeout(reqTimeout);
+    }
+    request2.timeout && req.once("socket", function(socket) {
+      reqTimeout = setTimeout(function() {
+        reject(new FetchError(`network timeout at: ${request2.url}`, "request-timeout")), finalize();
+      }, request2.timeout);
+    }), req.on("error", function(err) {
+      reject(new FetchError(`request to ${request2.url} failed, reason: ${err.message}`, "system", err)), finalize();
+    }), req.on("response", function(res) {
+      clearTimeout(reqTimeout);
+      let headers = createHeadersLenient(res.headers);
+      if (fetch.isRedirect(res.statusCode)) {
+        let location = headers.get("Location"), locationURL = location === null ? null : resolve_url(request2.url, location);
+        switch (request2.redirect) {
+          case "error":
+            reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request2.url}`, "no-redirect")), finalize();
+            return;
+          case "manual":
+            if (locationURL !== null)
+              try {
+                headers.set("Location", locationURL);
+              } catch (err) {
+                reject(err);
+              }
+            break;
+          case "follow":
+            if (locationURL === null)
+              break;
+            if (request2.counter >= request2.follow) {
+              reject(new FetchError(`maximum redirect reached at: ${request2.url}`, "max-redirect")), finalize();
+              return;
+            }
+            let requestOpts = {
+              headers: new Headers(request2.headers),
+              follow: request2.follow,
+              counter: request2.counter + 1,
+              agent: request2.agent,
+              compress: request2.compress,
+              method: request2.method,
+              body: request2.body,
+              signal: request2.signal,
+              timeout: request2.timeout,
+              size: request2.size
+            };
+            if (res.statusCode !== 303 && request2.body && getTotalBytes(request2) === null) {
+              reject(new FetchError("Cannot follow redirect with body being a readable stream", "unsupported-redirect")), finalize();
+              return;
+            }
+            (res.statusCode === 303 || (res.statusCode === 301 || res.statusCode === 302) && request2.method === "POST") && (requestOpts.method = "GET", requestOpts.body = void 0, requestOpts.headers.delete("content-length")), resolve(fetch(new Request(locationURL, requestOpts))), finalize();
+            return;
+        }
+      }
+      res.once("end", function() {
+        signal && signal.removeEventListener("abort", abortAndFinalize);
+      });
+      let body = res.pipe(new PassThrough$1()), response_options = {
+        url: request2.url,
+        status: res.statusCode,
+        statusText: res.statusMessage,
+        headers,
+        size: request2.size,
+        timeout: request2.timeout,
+        counter: request2.counter
+      }, codings = headers.get("Content-Encoding");
+      if (!request2.compress || request2.method === "HEAD" || codings === null || res.statusCode === 204 || res.statusCode === 304) {
+        response = new Response(body, response_options), resolve(response);
+        return;
+      }
+      let zlibOptions = {
+        flush: import_zlib.default.Z_SYNC_FLUSH,
+        finishFlush: import_zlib.default.Z_SYNC_FLUSH
+      };
+      if (codings == "gzip" || codings == "x-gzip") {
+        body = body.pipe(import_zlib.default.createGunzip(zlibOptions)), response = new Response(body, response_options), resolve(response);
+        return;
+      }
+      if (codings == "deflate" || codings == "x-deflate") {
+        res.pipe(new PassThrough$1()).once("data", function(chunk) {
+          (chunk[0] & 15) == 8 ? body = body.pipe(import_zlib.default.createInflate()) : body = body.pipe(import_zlib.default.createInflateRaw()), response = new Response(body, response_options), resolve(response);
+        });
+        return;
+      }
+      if (codings == "br" && typeof import_zlib.default.createBrotliDecompress == "function") {
+        body = body.pipe(import_zlib.default.createBrotliDecompress()), response = new Response(body, response_options), resolve(response);
+        return;
+      }
+      response = new Response(body, response_options), resolve(response);
+    }), writeToStream(req, request2);
+  });
+}
+fetch.isRedirect = function(code) {
+  return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
+};
+fetch.Promise = global.Promise;
+var lib_default = fetch;
+
+// ../node_modules/deprecation/dist-web/index.js
+var Deprecation = class extends Error {
+  constructor(message) {
+    super(message);
+    Error.captureStackTrace && Error.captureStackTrace(this, this.constructor), this.name = "Deprecation";
+  }
+};
+
+// ../node_modules/@octokit/request-error/dist-web/index.js
+var import_once = __toModule(require_once()), logOnce = import_once.default((deprecation) => console.warn(deprecation)), RequestError = class extends Error {
+  constructor(message, statusCode, options) {
+    super(message);
+    Error.captureStackTrace && Error.captureStackTrace(this, this.constructor), this.name = "HttpError", this.status = statusCode, Object.defineProperty(this, "code", {
+      get() {
+        return logOnce(new Deprecation("[@octokit/request-error] `error.code` is deprecated, use `error.status`.")), statusCode;
+      }
+    }), this.headers = options.headers || {};
+    let requestCopy = Object.assign({}, options.request);
+    options.request.headers.authorization && (requestCopy.headers = Object.assign({}, options.request.headers, {
+      authorization: options.request.headers.authorization.replace(/ .*$/, " [REDACTED]")
+    })), requestCopy.url = requestCopy.url.replace(/\bclient_secret=\w+/g, "client_secret=[REDACTED]").replace(/\baccess_token=\w+/g, "access_token=[REDACTED]"), this.request = requestCopy;
+  }
+};
+
+// ../node_modules/@octokit/request/dist-web/index.js
+var VERSION2 = "5.4.12";
+function getBufferResponse(response) {
+  return response.arrayBuffer();
+}
+function fetchWrapper(requestOptions) {
+  (isPlainObject2(requestOptions.body) || Array.isArray(requestOptions.body)) && (requestOptions.body = JSON.stringify(requestOptions.body));
+  let headers = {}, status, url;
+  return (requestOptions.request && requestOptions.request.fetch || lib_default)(requestOptions.url, Object.assign({
+    method: requestOptions.method,
+    body: requestOptions.body,
+    headers: requestOptions.headers,
+    redirect: requestOptions.redirect
+  }, requestOptions.request)).then((response) => {
+    url = response.url, status = response.status;
+    for (let keyAndValue of response.headers)
+      headers[keyAndValue[0]] = keyAndValue[1];
+    if (status === 204 || status === 205)
+      return;
+    if (requestOptions.method === "HEAD") {
+      if (status < 400)
+        return;
+      throw new RequestError(response.statusText, status, {
+        headers,
+        request: requestOptions
+      });
+    }
+    if (status === 304)
+      throw new RequestError("Not modified", status, {
+        headers,
+        request: requestOptions
+      });
+    if (status >= 400)
+      return response.text().then((message) => {
+        let error = new RequestError(message, status, {
+          headers,
+          request: requestOptions
+        });
+        try {
+          let responseBody = JSON.parse(error.message);
+          Object.assign(error, responseBody);
+          let errors = responseBody.errors;
+          error.message = error.message + ": " + errors.map(JSON.stringify).join(", ");
+        } catch (e) {
+        }
+        throw error;
+      });
+    let contentType = response.headers.get("content-type");
+    return /application\/json/.test(contentType) ? response.json() : !contentType || /^text\/|charset=utf-8$/.test(contentType) ? response.text() : getBufferResponse(response);
+  }).then((data) => ({
+    status,
+    url,
+    headers,
+    data
+  })).catch((error) => {
+    throw error instanceof RequestError ? error : new RequestError(error.message, 500, {
+      headers,
+      request: requestOptions
+    });
+  });
+}
+function withDefaults2(oldEndpoint, newDefaults) {
+  let endpoint2 = oldEndpoint.defaults(newDefaults);
+  return Object.assign(function(route, parameters) {
+    let endpointOptions = endpoint2.merge(route, parameters);
+    if (!endpointOptions.request || !endpointOptions.request.hook)
+      return fetchWrapper(endpoint2.parse(endpointOptions));
+    let request2 = (route2, parameters2) => fetchWrapper(endpoint2.parse(endpoint2.merge(route2, parameters2)));
+    return Object.assign(request2, {
+      endpoint: endpoint2,
+      defaults: withDefaults2.bind(null, endpoint2)
+    }), endpointOptions.request.hook(request2, endpointOptions);
+  }, {
+    endpoint: endpoint2,
+    defaults: withDefaults2.bind(null, endpoint2)
+  });
+}
+var request = withDefaults2(endpoint, {
+  headers: {
+    "user-agent": `octokit-request.js/${VERSION2} ${getUserAgent()}`
+  }
+});
+
+// ../node_modules/@octokit/graphql/dist-web/index.js
+var VERSION3 = "4.5.8", GraphqlError = class extends Error {
+  constructor(request2, response) {
+    let message = response.data.errors[0].message;
+    super(message);
+    Object.assign(this, response.data), Object.assign(this, {headers: response.headers}), this.name = "GraphqlError", this.request = request2, Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
+  }
+}, NON_VARIABLE_OPTIONS = [
+  "method",
+  "baseUrl",
+  "url",
+  "headers",
+  "request",
+  "query",
+  "mediaType"
+], GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
+function graphql(request2, query, options) {
+  if (typeof query == "string" && options && "query" in options)
+    return Promise.reject(new Error('[@octokit/graphql] "query" cannot be used as variable name'));
+  let parsedOptions = typeof query == "string" ? Object.assign({query}, options) : query, requestOptions = Object.keys(parsedOptions).reduce((result, key) => NON_VARIABLE_OPTIONS.includes(key) ? (result[key] = parsedOptions[key], result) : (result.variables || (result.variables = {}), result.variables[key] = parsedOptions[key], result), {}), baseUrl = parsedOptions.baseUrl || request2.endpoint.DEFAULTS.baseUrl;
+  return GHES_V3_SUFFIX_REGEX.test(baseUrl) && (requestOptions.url = baseUrl.replace(GHES_V3_SUFFIX_REGEX, "/api/graphql")), request2(requestOptions).then((response) => {
+    if (response.data.errors) {
+      let headers = {};
+      for (let key of Object.keys(response.headers))
+        headers[key] = response.headers[key];
+      throw new GraphqlError(requestOptions, {
+        headers,
+        data: response.data
+      });
+    }
+    return response.data.data;
+  });
+}
+function withDefaults3(request$1, newDefaults) {
+  let newRequest = request$1.defaults(newDefaults);
+  return Object.assign((query, options) => graphql(newRequest, query, options), {
+    defaults: withDefaults3.bind(null, newRequest),
+    endpoint: request.endpoint
+  });
+}
+var graphql$1 = withDefaults3(request, {
+  headers: {
+    "user-agent": `octokit-graphql.js/${VERSION3} ${getUserAgent()}`
+  },
+  method: "POST",
+  url: "/graphql"
+});
+function withCustomRequest(customRequest) {
+  return withDefaults3(customRequest, {
+    method: "POST",
+    url: "/graphql"
+  });
+}
+
+// ../node_modules/@octokit/auth-token/dist-web/index.js
+async function auth(token) {
+  let tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
+  return {
+    type: "token",
+    token,
+    tokenType
+  };
+}
+function withAuthorizationPrefix(token) {
+  return token.split(/\./).length === 3 ? `bearer ${token}` : `token ${token}`;
+}
+async function hook(token, request2, route, parameters) {
+  let endpoint2 = request2.endpoint.merge(route, parameters);
+  return endpoint2.headers.authorization = withAuthorizationPrefix(token), request2(endpoint2);
+}
+var createTokenAuth = function(token) {
+  if (!token)
+    throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
+  if (typeof token != "string")
+    throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
+  return token = token.replace(/^(token|bearer) +/i, ""), Object.assign(auth.bind(null, token), {
+    hook: hook.bind(null, token)
+  });
+};
+
+// index.ts
 var import_github2 = __toModule(require_github());
 
 // ../utils/sendReport.ts
-var import_core = __toModule(require_core());
-var import_github = __toModule(require_github());
-var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
+var import_core = __toModule(require_core()), import_github = __toModule(require_github()), GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
 async function sendReport({
   pr,
   token,
@@ -8926,50 +6996,28 @@ async function sendReport({
   title,
   content
 }) {
-  const octokit = import_github.getOctokit(token);
-  const reportTitle = `### ${!label ? title : `${title} (${label})`}
-`;
-  let previousCommentID = void 0;
+  let octokit = import_github.getOctokit(token), reportTitle = `### ${label ? `${title} (${label})` : title}
+`, previousCommentID;
   import_core.info("Looking for the previous report\u2026");
-  for await (const {data: comments} of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", {
+  for await (let {data: comments} of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", {
     ...import_github.context.repo,
     per_page: 100,
     issue_number: Number(pr)
-  })) {
-    for (const {id, body: body2, user} of comments) {
-      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
-        if (previousCommentID == null) {
-          import_core.info(`Found previous report with ID "${id}"`);
-          previousCommentID = id;
-          break;
-        }
+  }))
+    for (let {id, body: body2, user} of comments)
+      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle)) && previousCommentID == null) {
+        import_core.info(`Found previous report with ID "${id}"`), previousCommentID = id;
+        break;
       }
-    }
-  }
-  const body = reportTitle + content;
-  if (previousCommentID != null) {
-    import_core.info(`Updating previous report with ID "${previousCommentID}"\u2026`);
-    await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", {...import_github.context.repo, body, comment_id: previousCommentID});
-  } else {
-    import_core.info("Sending new report\u2026");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", {...import_github.context.repo, body, issue_number: Number(pr)});
-  }
+  let body = reportTitle + content;
+  previousCommentID != null ? (import_core.info(`Updating previous report with ID "${previousCommentID}"\u2026`), await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", {...import_github.context.repo, body, comment_id: previousCommentID})) : (import_core.info("Sending new report\u2026"), await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", {...import_github.context.repo, body, issue_number: Number(pr)}));
 }
 
 // index.ts
 var import_util = __toModule(require("util"));
 async function main() {
-  const pr = import_core2.getInput("pr", {required: true});
-  const defaultAlias = `preview-${pr}`;
-  const dir = import_core2.getInput("dir", {required: true});
-  const alias = import_core2.getInput("alias") || defaultAlias;
-  const token = import_core2.getInput("token", {required: true});
-  const netlifyToken = import_core2.getInput("netlify-token", {required: true});
-  const netlifySiteID = import_core2.getInput("netlify-site-id", {required: true});
-  const label = alias === defaultAlias ? "" : alias;
-  let deployJSON = "";
-  import_core2.info(import_util.format('Deploying "%s" from "%s"\u2026', alias, dir));
-  await import_exec.exec("netlify", [
+  let pr = import_core2.getInput("pr", {required: !0}), defaultAlias = `preview-${pr}`, dir = import_core2.getInput("dir", {required: !0}), alias = import_core2.getInput("alias") || defaultAlias, token = import_core2.getInput("token", {required: !0}), netlifyToken = import_core2.getInput("netlify-token", {required: !0}), netlifySiteID = import_core2.getInput("netlify-site-id", {required: !0}), label = alias === defaultAlias ? "" : alias, deployJSON = "";
+  import_core2.info(import_util.format('Deploying "%s" from "%s"\u2026', alias, dir)), await import_exec.exec("netlify", [
     "deploy",
     "--json",
     `--dir=${dir}`,
@@ -8983,8 +7031,7 @@ async function main() {
       }
     }
   });
-  const {deploy_url: previewURL} = JSON.parse(deployJSON);
-  const content = `Built with commit ${import_github2.context.sha}
+  let {deploy_url: previewURL} = JSON.parse(deployJSON), content = `Built with commit ${import_github2.context.sha}
 ${previewURL}`;
   await sendReport({
     pr,

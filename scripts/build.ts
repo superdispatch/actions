@@ -13,17 +13,13 @@ async function main() {
 
   await build({
     bundle: true,
-    platform: 'node',
-
     entryPoints: [entry],
     outdir: out,
 
     target: 'node12',
-
-    // define: {
-    //   // Eliminate dead code.
-    //   'process.env.NODE_ENV': JSON.stringify('production'),
-    // },
+    platform: 'node',
+    minifySyntax: true,
+    mainFields: ['module', 'main'],
   });
 }
 
