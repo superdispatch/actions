@@ -1,4 +1,5 @@
 import { exec } from '@actions/exec';
+import { build } from 'esbuild';
 import path from 'path';
 
 async function main() {
@@ -10,15 +11,28 @@ async function main() {
 
   await exec('rm', ['-rf', out]);
 
-  await exec('ncc', [
-    'build',
-    entry,
-    '--out',
-    out,
-    '--external',
-    'encoding', // Optional dependency of the `node-fetch`.
-    '--source-map',
-  ]);
+  await build({
+    bundle: true,
+    entryPoints: [entry],
+    outdir: out,
+
+    target: 'node12',
+    platform: 'node',
+
+    // Only perform syntax optimization
+    minifySyntax: true,
+
+    // Prefer ESM versions
+    mainFields: ['module', 'main'],
+
+    external: [
+      // Optional dependency of the `node-fetch`.
+      'encoding',
+    ],
+
+    // Fix for the https://github.com/node-fetch/node-fetch/issues/784
+    keepNames: true,
+  });
 }
 
 main().catch((error) => {
