@@ -1,6 +1,6 @@
 {
   "name": "@sd/prune-artifacts",
-  "version": "1.0.8",
+  "version": "1.0.13",
   "license": "MIT",
   "scripts": {
     "version": "ts-node-script ../scripts/build.ts"
