@@ -1645,7 +1645,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
-  var VERSION = "6.0.10", userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`, DEFAULTS = {
+  var VERSION = "6.0.11", userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`, DEFAULTS = {
     method: "GET",
     baseUrl: "https://api.github.com",
     headers: {
@@ -2442,7 +2442,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
-  var endpoint = require_dist_node2(), universalUserAgent = require_dist_node(), isPlainObject = require_is_plain_object2(), nodeFetch = _interopDefault(require_lib()), requestError = require_dist_node4(), VERSION = "5.4.12";
+  var endpoint = require_dist_node2(), universalUserAgent = require_dist_node(), isPlainObject = require_is_plain_object2(), nodeFetch = _interopDefault(require_lib()), requestError = require_dist_node4(), VERSION = "5.4.13";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -2530,7 +2530,7 @@ var require_dist_node5 = __commonJS((exports2) => {
 var require_dist_node6 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var request = require_dist_node5(), universalUserAgent = require_dist_node(), VERSION = "4.5.8", GraphqlError = class extends Error {
+  var request = require_dist_node5(), universalUserAgent = require_dist_node(), VERSION = "4.5.9", GraphqlError = class extends Error {
     constructor(request2, response) {
       let message = response.data.errors[0].message;
       super(message);
@@ -2637,7 +2637,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.2.4", Octokit = class {
+  var VERSION = "3.2.5", Octokit = class {
     constructor(options = {}) {
       let hook = new beforeAfterHook.Collection(), requestDefaults = {
         baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
@@ -2844,6 +2844,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
       resetToken: ["PATCH /applications/{client_id}/token"],
       revokeInstallationAccessToken: ["DELETE /installation/token"],
+      scopeToken: ["POST /applications/{client_id}/token/scoped"],
       suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
       unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"],
       updateWebhookConfigForApp: ["PATCH /app/hook/config"]
@@ -3100,6 +3101,7 @@ var require_dist_node9 = __commonJS((exports2) => {
     },
     orgs: {
       blockUser: ["PUT /orgs/{org}/blocks/{username}"],
+      cancelInvitation: ["DELETE /orgs/{org}/invitations/{invitation_id}"],
       checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
       checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
       checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
@@ -3115,6 +3117,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       list: ["GET /organizations"],
       listAppInstallations: ["GET /orgs/{org}/installations"],
       listBlockedUsers: ["GET /orgs/{org}/blocks"],
+      listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
       listForAuthenticatedUser: ["GET /user/orgs"],
       listForUser: ["GET /users/{username}/orgs"],
       listInvitationTeams: ["GET /orgs/{org}/invitations/{invitation_id}/teams"],
@@ -3596,6 +3599,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       removeUserAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
         mapToData: "users"
       }],
+      renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
       replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
         mediaType: {
           previews: ["mercy"]
@@ -3735,7 +3739,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       unfollow: ["DELETE /user/following/{username}"],
       updateAuthenticated: ["PATCH /user"]
     }
-  }, VERSION = "4.4.1";
+  }, VERSION = "4.9.0";
   function endpointsToMethods(octokit, endpointsMap) {
     let newMethods = {};
     for (let [scope, endpoints] of Object.entries(endpointsMap))
@@ -3788,7 +3792,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var VERSION = "2.6.2";
+  var VERSION = "2.9.0";
   function normalizePaginatedListResponse(response) {
     if (!("total_count" in response.data && !("url" in response.data)))
       return response;

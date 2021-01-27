@@ -3373,7 +3373,7 @@ var require_auth = __commonJS((exports2) => {
   exports2.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
 });
 
-// ../node_modules/@azure/core-http/node_modules/tslib/tslib.js
+// ../node_modules/tslib/tslib.js
 var require_tslib = __commonJS((exports2, module2) => {
   /*! *****************************************************************************
   Copyright (c) Microsoft Corporation.
@@ -3389,7 +3389,7 @@ var require_tslib = __commonJS((exports2, module2) => {
   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
   PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
-  var __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar2, __values2, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __createBinding;
+  var __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar2, __values2, __read, __spread, __spreadArrays, __spreadArray, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __createBinding;
   (function(factory) {
     var root = typeof global == "object" ? global : typeof self == "object" ? self : typeof this == "object" ? this : {};
     typeof define == "function" && define.amd ? define("tslib", ["exports"], function(exports3) {
@@ -3408,6 +3408,8 @@ var require_tslib = __commonJS((exports2, module2) => {
         Object.prototype.hasOwnProperty.call(b, p) && (d[p] = b[p]);
     };
     __extends = function(d, b) {
+      if (typeof b != "function" && b !== null)
+        throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
       extendStatics(d, b);
       function __() {
         this.constructor = d;
@@ -3583,6 +3585,10 @@ var require_tslib = __commonJS((exports2, module2) => {
         for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
           r[k] = a[j];
       return r;
+    }, __spreadArray = function(to, from) {
+      for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+      return to;
     }, __await = function(v) {
       return this instanceof __await ? (this.v = v, this) : new __await(v);
     }, __asyncGenerator = function(thisArg, _arguments, generator) {
@@ -3675,7 +3681,7 @@ var require_tslib = __commonJS((exports2, module2) => {
       if (!privateMap.has(receiver))
         throw new TypeError("attempted to set private field on non-instance");
       return privateMap.set(receiver, value), value;
-    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
+    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__spreadArray", __spreadArray), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
   });
 });
 
@@ -14602,307 +14608,11 @@ var require_lib = __commonJS((exports2) => {
   var lib_default = fetch;
 });
 
-// ../node_modules/tslib/tslib.js
-var require_tslib2 = __commonJS((exports2, module2) => {
-  /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation.
-  
-  Permission to use, copy, modify, and/or distribute this software for any
-  purpose with or without fee is hereby granted.
-  
-  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-  PERFORMANCE OF THIS SOFTWARE.
-  ***************************************************************************** */
-  var __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar2, __values2, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __createBinding;
-  (function(factory) {
-    var root = typeof global == "object" ? global : typeof self == "object" ? self : typeof this == "object" ? this : {};
-    typeof define == "function" && define.amd ? define("tslib", ["exports"], function(exports3) {
-      factory(createExporter(root, createExporter(exports3)));
-    }) : typeof module2 == "object" && typeof module2.exports == "object" ? factory(createExporter(root, createExporter(module2.exports))) : factory(createExporter(root));
-    function createExporter(exports3, previous) {
-      return exports3 !== root && (typeof Object.create == "function" ? Object.defineProperty(exports3, "__esModule", {value: !0}) : exports3.__esModule = !0), function(id, v) {
-        return exports3[id] = previous ? previous(id, v) : v;
-      };
-    }
-  })(function(exporter) {
-    var extendStatics = Object.setPrototypeOf || {__proto__: []} instanceof Array && function(d, b) {
-      d.__proto__ = b;
-    } || function(d, b) {
-      for (var p in b)
-        b.hasOwnProperty(p) && (d[p] = b[p]);
-    };
-    __extends = function(d, b) {
-      extendStatics(d, b);
-      function __() {
-        this.constructor = d;
-      }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }, __assign = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-          Object.prototype.hasOwnProperty.call(s, p) && (t[p] = s[p]);
-      }
-      return t;
-    }, __rest = function(s, e) {
-      var t = {};
-      for (var p in s)
-        Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0 && (t[p] = s[p]);
-      if (s != null && typeof Object.getOwnPropertySymbols == "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
-          e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]) && (t[p[i]] = s[p[i]]);
-      return t;
-    }, __decorate = function(decorators, target, key, desc) {
-      var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-      if (typeof Reflect == "object" && typeof Reflect.decorate == "function")
-        r = Reflect.decorate(decorators, target, key, desc);
-      else
-        for (var i = decorators.length - 1; i >= 0; i--)
-          (d = decorators[i]) && (r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r);
-      return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }, __param = function(paramIndex, decorator) {
-      return function(target, key) {
-        decorator(target, key, paramIndex);
-      };
-    }, __metadata = function(metadataKey, metadataValue) {
-      if (typeof Reflect == "object" && typeof Reflect.metadata == "function")
-        return Reflect.metadata(metadataKey, metadataValue);
-    }, __awaiter = function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function rejected(value) {
-          try {
-            step(generator.throw(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    }, __generator = function(thisArg, body) {
-      var _ = {label: 0, sent: function() {
-        if (t[0] & 1)
-          throw t[1];
-        return t[1];
-      }, trys: [], ops: []}, f, y, t, g;
-      return g = {next: verb(0), throw: verb(1), return: verb(2)}, typeof Symbol == "function" && (g[Symbol.iterator] = function() {
-        return this;
-      }), g;
-      function verb(n) {
-        return function(v) {
-          return step([n, v]);
-        };
-      }
-      function step(op) {
-        if (f)
-          throw new TypeError("Generator is already executing.");
-        for (; _; )
-          try {
-            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-              return t;
-            switch (y = 0, t && (op = [op[0] & 2, t.value]), op[0]) {
-              case 0:
-              case 1:
-                t = op;
-                break;
-              case 4:
-                return _.label++, {value: op[1], done: !1};
-              case 5:
-                _.label++, y = op[1], op = [0];
-                continue;
-              case 7:
-                op = _.ops.pop(), _.trys.pop();
-                continue;
-              default:
-                if (t = _.trys, !(t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                  _ = 0;
-                  continue;
-                }
-                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                  _.label = op[1];
-                  break;
-                }
-                if (op[0] === 6 && _.label < t[1]) {
-                  _.label = t[1], t = op;
-                  break;
-                }
-                if (t && _.label < t[2]) {
-                  _.label = t[2], _.ops.push(op);
-                  break;
-                }
-                t[2] && _.ops.pop(), _.trys.pop();
-                continue;
-            }
-            op = body.call(thisArg, _);
-          } catch (e) {
-            op = [6, e], y = 0;
-          } finally {
-            f = t = 0;
-          }
-        if (op[0] & 5)
-          throw op[1];
-        return {value: op[0] ? op[1] : void 0, done: !0};
-      }
-    }, __createBinding = function(o, m, k, k2) {
-      k2 === void 0 && (k2 = k), o[k2] = m[k];
-    }, __exportStar2 = function(m, exports3) {
-      for (var p in m)
-        p !== "default" && !exports3.hasOwnProperty(p) && (exports3[p] = m[p]);
-    }, __values2 = function(o) {
-      var s = typeof Symbol == "function" && Symbol.iterator, m = s && o[s], i = 0;
-      if (m)
-        return m.call(o);
-      if (o && typeof o.length == "number")
-        return {
-          next: function() {
-            return o && i >= o.length && (o = void 0), {value: o && o[i++], done: !o};
-          }
-        };
-      throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-    }, __read = function(o, n) {
-      var m = typeof Symbol == "function" && o[Symbol.iterator];
-      if (!m)
-        return o;
-      var i = m.call(o), r, ar = [], e;
-      try {
-        for (; (n === void 0 || n-- > 0) && !(r = i.next()).done; )
-          ar.push(r.value);
-      } catch (error) {
-        e = {error};
-      } finally {
-        try {
-          r && !r.done && (m = i.return) && m.call(i);
-        } finally {
-          if (e)
-            throw e.error;
-        }
-      }
-      return ar;
-    }, __spread = function() {
-      for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read(arguments[i]));
-      return ar;
-    }, __spreadArrays = function() {
-      for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-        s += arguments[i].length;
-      for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-          r[k] = a[j];
-      return r;
-    }, __await = function(v) {
-      return this instanceof __await ? (this.v = v, this) : new __await(v);
-    }, __asyncGenerator = function(thisArg, _arguments, generator) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var g = generator.apply(thisArg, _arguments || []), i, q = [];
-      return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i;
-      function verb(n) {
-        g[n] && (i[n] = function(v) {
-          return new Promise(function(a, b) {
-            q.push([n, v, a, b]) > 1 || resume(n, v);
-          });
-        });
-      }
-      function resume(n, v) {
-        try {
-          step(g[n](v));
-        } catch (e) {
-          settle(q[0][3], e);
-        }
-      }
-      function step(r) {
-        r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
-      }
-      function fulfill(value) {
-        resume("next", value);
-      }
-      function reject(value) {
-        resume("throw", value);
-      }
-      function settle(f, v) {
-        f(v), q.shift(), q.length && resume(q[0][0], q[0][1]);
-      }
-    }, __asyncDelegator = function(o) {
-      var i, p;
-      return i = {}, verb("next"), verb("throw", function(e) {
-        throw e;
-      }), verb("return"), i[Symbol.iterator] = function() {
-        return this;
-      }, i;
-      function verb(n, f) {
-        i[n] = o[n] ? function(v) {
-          return (p = !p) ? {value: __await(o[n](v)), done: n === "return"} : f ? f(v) : v;
-        } : f;
-      }
-    }, __asyncValues = function(o) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var m = o[Symbol.asyncIterator], i;
-      return m ? m.call(o) : (o = typeof __values2 == "function" ? __values2(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i);
-      function verb(n) {
-        i[n] = o[n] && function(v) {
-          return new Promise(function(resolve, reject) {
-            v = o[n](v), settle(resolve, reject, v.done, v.value);
-          });
-        };
-      }
-      function settle(resolve, reject, d, v) {
-        Promise.resolve(v).then(function(v2) {
-          resolve({value: v2, done: d});
-        }, reject);
-      }
-    }, __makeTemplateObject = function(cooked, raw) {
-      return Object.defineProperty ? Object.defineProperty(cooked, "raw", {value: raw}) : cooked.raw = raw, cooked;
-    }, __importStar = function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null)
-        for (var k in mod)
-          Object.hasOwnProperty.call(mod, k) && (result[k] = mod[k]);
-      return result.default = mod, result;
-    }, __importDefault = function(mod) {
-      return mod && mod.__esModule ? mod : {default: mod};
-    }, __classPrivateFieldGet = function(receiver, privateMap) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to get private field on non-instance");
-      return privateMap.get(receiver);
-    }, __classPrivateFieldSet = function(receiver, privateMap, value) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to set private field on non-instance");
-      return privateMap.set(receiver, value), value;
-    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
-  });
-});
-
 // ../node_modules/@azure/abort-controller/dist/index.js
 var require_dist2 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var tslib = require_tslib2(), listenersMap = new WeakMap(), abortedMap = new WeakMap(), AbortSignal = function() {
+  var tslib = require_tslib(), listenersMap = new WeakMap(), abortedMap = new WeakMap(), AbortSignal = function() {
     function AbortSignal2() {
       this.onabort = null, listenersMap.set(this, []), abortedMap.set(this, !1);
     }
@@ -14912,13 +14622,13 @@ var require_dist2 = __commonJS((exports2) => {
           throw new TypeError("Expected `this` to be an instance of AbortSignal.");
         return abortedMap.get(this);
       },
-      enumerable: !0,
+      enumerable: !1,
       configurable: !0
     }), Object.defineProperty(AbortSignal2, "none", {
       get: function() {
         return new AbortSignal2();
       },
-      enumerable: !0,
+      enumerable: !1,
       configurable: !0
     }), AbortSignal2.prototype.addEventListener = function(_type, listener) {
       if (!listenersMap.has(this))
@@ -14967,7 +14677,7 @@ var require_dist2 = __commonJS((exports2) => {
       get: function() {
         return this._signal;
       },
-      enumerable: !0,
+      enumerable: !1,
       configurable: !0
     }), AbortController2.prototype.abort = function() {
       abortSignal(this._signal);
@@ -15335,9 +15045,8 @@ var require_db = __commonJS((exports2, module2) => {
     "application/cals-1840": {
       source: "iana"
     },
-    "application/cap+xml": {
+    "application/captive+json": {
       source: "iana",
-      charset: "UTF-8",
       compressible: !0
     },
     "application/cbor": {
@@ -15565,6 +15274,11 @@ var require_db = __commonJS((exports2, module2) => {
     },
     "application/efi": {
       source: "iana"
+    },
+    "application/emergencycalldata.cap+xml": {
+      source: "iana",
+      charset: "UTF-8",
+      compressible: !0
     },
     "application/emergencycalldata.comment+xml": {
       source: "iana",
@@ -16185,6 +15899,10 @@ var require_db = __commonJS((exports2, module2) => {
       source: "apache",
       extensions: ["onetoc", "onetoc2", "onetmp", "onepkg"]
     },
+    "application/opc-nodeset+xml": {
+      source: "iana",
+      compressible: !0
+    },
     "application/oscore": {
       source: "iana"
     },
@@ -16472,6 +16190,10 @@ var require_db = __commonJS((exports2, module2) => {
       compressible: !0
     },
     "application/samlmetadata+xml": {
+      source: "iana",
+      compressible: !0
+    },
+    "application/sarif+json": {
       source: "iana",
       compressible: !0
     },
@@ -16774,6 +16496,10 @@ var require_db = __commonJS((exports2, module2) => {
     "application/tzif-leap": {
       source: "iana"
     },
+    "application/ubjson": {
+      compressible: !1,
+      extensions: ["ubj"]
+    },
     "application/ulpfec": {
       source: "iana"
     },
@@ -16788,7 +16514,8 @@ var require_db = __commonJS((exports2, module2) => {
     },
     "application/urc-targetdesc+xml": {
       source: "iana",
-      compressible: !0
+      compressible: !0,
+      extensions: ["td"]
     },
     "application/urc-uisocketdesc+xml": {
       source: "iana",
@@ -17167,7 +16894,7 @@ var require_db = __commonJS((exports2, module2) => {
     },
     "application/vnd.apple.keynote": {
       source: "iana",
-      extensions: ["keynote"]
+      extensions: ["key"]
     },
     "application/vnd.apple.mpegurl": {
       source: "iana",
@@ -17484,6 +17211,12 @@ var require_db = __commonJS((exports2, module2) => {
       source: "iana",
       compressible: !1
     },
+    "application/vnd.d3m-dataset": {
+      source: "iana"
+    },
+    "application/vnd.d3m-problem": {
+      source: "iana"
+    },
     "application/vnd.dart": {
       source: "iana",
       compressible: !0,
@@ -17502,7 +17235,8 @@ var require_db = __commonJS((exports2, module2) => {
       compressible: !0
     },
     "application/vnd.dbf": {
-      source: "iana"
+      source: "iana",
+      extensions: ["dbf"]
     },
     "application/vnd.debian.binary-package": {
       source: "iana"
@@ -19232,6 +18966,9 @@ var require_db = __commonJS((exports2, module2) => {
       source: "iana",
       compressible: !0
     },
+    "application/vnd.oma.lwm2m+cbor": {
+      source: "iana"
+    },
     "application/vnd.oma.lwm2m+json": {
       source: "iana",
       compressible: !0
@@ -19842,7 +19579,8 @@ var require_db = __commonJS((exports2, module2) => {
       source: "iana"
     },
     "application/vnd.rar": {
-      source: "iana"
+      source: "iana",
+      extensions: ["rar"]
     },
     "application/vnd.realvnc.bed": {
       source: "iana",
@@ -20140,6 +19878,10 @@ var require_db = __commonJS((exports2, module2) => {
     },
     "application/vnd.swiftview-ics": {
       source: "iana"
+    },
+    "application/vnd.sycle+xml": {
+      source: "iana",
+      compressible: !0
     },
     "application/vnd.symbian.install": {
       source: "apache",
@@ -21224,7 +20966,7 @@ var require_db = __commonJS((exports2, module2) => {
     "application/xslt+xml": {
       source: "iana",
       compressible: !0,
-      extensions: ["xslt"]
+      extensions: ["xsl", "xslt"]
     },
     "application/xspf+xml": {
       source: "apache",
@@ -21607,6 +21349,9 @@ var require_db = __commonJS((exports2, module2) => {
     "audio/smv0": {
       source: "iana"
     },
+    "audio/sofa": {
+      source: "iana"
+    },
     "audio/sp-midi": {
       source: "iana"
     },
@@ -21629,6 +21374,9 @@ var require_db = __commonJS((exports2, module2) => {
       source: "iana"
     },
     "audio/tone": {
+      source: "iana"
+    },
+    "audio/tsvcis": {
       source: "iana"
     },
     "audio/uemclip": {
@@ -21930,6 +21678,10 @@ var require_db = __commonJS((exports2, module2) => {
     "image/avcs": {
       source: "iana"
     },
+    "image/avif": {
+      compressible: !1,
+      extensions: ["avif"]
+    },
     "image/bmp": {
       source: "iana",
       compressible: !0,
@@ -22051,6 +21803,10 @@ var require_db = __commonJS((exports2, module2) => {
     "image/ktx": {
       source: "iana",
       extensions: ["ktx"]
+    },
+    "image/ktx2": {
+      source: "iana",
+      extensions: ["ktx2"]
     },
     "image/naplps": {
       source: "iana"
@@ -22175,6 +21931,10 @@ var require_db = __commonJS((exports2, module2) => {
     "image/vnd.net-fpx": {
       source: "iana",
       extensions: ["npx"]
+    },
+    "image/vnd.pco.b16": {
+      source: "iana",
+      extensions: ["b16"]
     },
     "image/vnd.radiance": {
       source: "iana"
@@ -22376,6 +22136,9 @@ var require_db = __commonJS((exports2, module2) => {
     "model/3mf": {
       source: "iana",
       extensions: ["3mf"]
+    },
+    "model/e57": {
+      source: "iana"
     },
     "model/gltf+json": {
       source: "iana",
@@ -22608,6 +22371,9 @@ var require_db = __commonJS((exports2, module2) => {
     "text/fwdred": {
       source: "iana"
     },
+    "text/gff3": {
+      source: "iana"
+    },
     "text/grammar-ref-list": {
       source: "iana"
     },
@@ -22714,11 +22480,18 @@ var require_db = __commonJS((exports2, module2) => {
       source: "iana",
       extensions: ["sgml", "sgm"]
     },
+    "text/shaclc": {
+      source: "iana"
+    },
     "text/shex": {
       extensions: ["shex"]
     },
     "text/slim": {
       extensions: ["slim", "slm"]
+    },
+    "text/spdx": {
+      source: "iana",
+      extensions: ["spdx"]
     },
     "text/strings": {
       source: "iana"
@@ -22813,6 +22586,9 @@ var require_db = __commonJS((exports2, module2) => {
     "text/vnd.graphviz": {
       source: "iana",
       extensions: ["gv"]
+    },
+    "text/vnd.hans": {
+      source: "iana"
     },
     "text/vnd.hgl": {
       source: "iana"
@@ -23735,7 +23511,8 @@ var require_dist3 = __commonJS((exports2) => {
     }, AzureKeyCredential2;
   }();
   function isTokenCredential(credential) {
-    return credential && typeof credential.getToken == "function" && (credential.signRequest === void 0 || credential.getToken.length > 0);
+    var castCredential = credential;
+    return castCredential && typeof castCredential.getToken == "function" && (castCredential.signRequest === void 0 || castCredential.getToken.length > 0);
   }
   exports2.AzureKeyCredential = AzureKeyCredential;
   exports2.isTokenCredential = isTokenCredential;
@@ -23748,7 +23525,7 @@ var require_dist4 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
-  var tslib = require_tslib2(), util = _interopDefault(require("util")), os2 = require("os");
+  var tslib = require_tslib(), util = _interopDefault(require("util")), os2 = require("os");
   function log(message) {
     for (var args = [], _i = 1; _i < arguments.length; _i++)
       args[_i - 1] = arguments[_i];
@@ -23756,6 +23533,14 @@ var require_dist4 = __commonJS((exports2) => {
   }
   var debugEnvVariable = typeof process != "undefined" && process.env && process.env.DEBUG || void 0, enabledString, enabledNamespaces = [], skippedNamespaces = [], debuggers = [];
   debugEnvVariable && enable(debugEnvVariable);
+  var debugObj = Object.assign(function(namespace) {
+    return createDebugger(namespace);
+  }, {
+    enable,
+    enabled,
+    disable,
+    log
+  });
   function enable(namespaces) {
     var e_1, _a, e_2, _b;
     enabledString = namespaces, enabledNamespaces = [], skippedNamespaces = [];
@@ -23815,8 +23600,8 @@ var require_dist4 = __commonJS((exports2) => {
     }
     try {
       for (var enabledNamespaces_1 = tslib.__values(enabledNamespaces), enabledNamespaces_1_1 = enabledNamespaces_1.next(); !enabledNamespaces_1_1.done; enabledNamespaces_1_1 = enabledNamespaces_1.next()) {
-        var enabled_1 = enabledNamespaces_1_1.value;
-        if (enabled_1.test(namespace))
+        var enabledNamespace = enabledNamespaces_1_1.value;
+        if (enabledNamespace.test(namespace))
           return !0;
       }
     } catch (e_4_1) {
@@ -23836,11 +23621,6 @@ var require_dist4 = __commonJS((exports2) => {
     return enable(""), result;
   }
   function createDebugger(namespace) {
-    function debug() {
-      for (var args = [], _i = 0; _i < arguments.length; _i++)
-        args[_i] = arguments[_i];
-      !newDebugger.enabled || (args.length > 0 && (args[0] = namespace + " " + args[0]), newDebugger.log.apply(newDebugger, tslib.__spread(args)));
-    }
     var newDebugger = Object.assign(debug, {
       enabled: enabled(namespace),
       destroy,
@@ -23848,6 +23628,11 @@ var require_dist4 = __commonJS((exports2) => {
       namespace,
       extend
     });
+    function debug() {
+      for (var args = [], _i = 0; _i < arguments.length; _i++)
+        args[_i] = arguments[_i];
+      !newDebugger.enabled || (args.length > 0 && (args[0] = namespace + " " + args[0]), newDebugger.log.apply(newDebugger, tslib.__spread(args)));
+    }
     return debuggers.push(newDebugger), newDebugger;
   }
   function destroy() {
@@ -23858,14 +23643,7 @@ var require_dist4 = __commonJS((exports2) => {
     var newDebugger = createDebugger(this.namespace + ":" + namespace);
     return newDebugger.log = this.log, newDebugger;
   }
-  var debugObj = Object.assign(function(namespace) {
-    return createDebugger(namespace);
-  }, {
-    enable,
-    enabled,
-    disable,
-    log
-  }), registeredLoggers = new Set(), logLevelFromEnv = typeof process != "undefined" && process.env && process.env.AZURE_LOG_LEVEL || void 0, azureLogLevel, AzureLogger = debugObj("azure");
+  var registeredLoggers = new Set(), logLevelFromEnv = typeof process != "undefined" && process.env && process.env.AZURE_LOG_LEVEL || void 0, azureLogLevel, AzureLogger = debugObj("azure");
   AzureLogger.log = function() {
     for (var args = [], _i = 0; _i < arguments.length; _i++)
       args[_i] = arguments[_i];
@@ -27798,317 +27576,11 @@ var require_src2 = __commonJS((exports2) => {
   };
 });
 
-// ../node_modules/@azure/core-tracing/node_modules/tslib/tslib.js
-var require_tslib3 = __commonJS((exports2, module2) => {
-  /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation.
-  
-  Permission to use, copy, modify, and/or distribute this software for any
-  purpose with or without fee is hereby granted.
-  
-  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-  PERFORMANCE OF THIS SOFTWARE.
-  ***************************************************************************** */
-  var __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar2, __values2, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __createBinding;
-  (function(factory) {
-    var root = typeof global == "object" ? global : typeof self == "object" ? self : typeof this == "object" ? this : {};
-    typeof define == "function" && define.amd ? define("tslib", ["exports"], function(exports3) {
-      factory(createExporter(root, createExporter(exports3)));
-    }) : typeof module2 == "object" && typeof module2.exports == "object" ? factory(createExporter(root, createExporter(module2.exports))) : factory(createExporter(root));
-    function createExporter(exports3, previous) {
-      return exports3 !== root && (typeof Object.create == "function" ? Object.defineProperty(exports3, "__esModule", {value: !0}) : exports3.__esModule = !0), function(id, v) {
-        return exports3[id] = previous ? previous(id, v) : v;
-      };
-    }
-  })(function(exporter) {
-    var extendStatics = Object.setPrototypeOf || {__proto__: []} instanceof Array && function(d, b) {
-      d.__proto__ = b;
-    } || function(d, b) {
-      for (var p in b)
-        Object.prototype.hasOwnProperty.call(b, p) && (d[p] = b[p]);
-    };
-    __extends = function(d, b) {
-      extendStatics(d, b);
-      function __() {
-        this.constructor = d;
-      }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }, __assign = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-          Object.prototype.hasOwnProperty.call(s, p) && (t[p] = s[p]);
-      }
-      return t;
-    }, __rest = function(s, e) {
-      var t = {};
-      for (var p in s)
-        Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0 && (t[p] = s[p]);
-      if (s != null && typeof Object.getOwnPropertySymbols == "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
-          e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]) && (t[p[i]] = s[p[i]]);
-      return t;
-    }, __decorate = function(decorators, target, key, desc) {
-      var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-      if (typeof Reflect == "object" && typeof Reflect.decorate == "function")
-        r = Reflect.decorate(decorators, target, key, desc);
-      else
-        for (var i = decorators.length - 1; i >= 0; i--)
-          (d = decorators[i]) && (r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r);
-      return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }, __param = function(paramIndex, decorator) {
-      return function(target, key) {
-        decorator(target, key, paramIndex);
-      };
-    }, __metadata = function(metadataKey, metadataValue) {
-      if (typeof Reflect == "object" && typeof Reflect.metadata == "function")
-        return Reflect.metadata(metadataKey, metadataValue);
-    }, __awaiter = function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function rejected(value) {
-          try {
-            step(generator.throw(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    }, __generator = function(thisArg, body) {
-      var _ = {label: 0, sent: function() {
-        if (t[0] & 1)
-          throw t[1];
-        return t[1];
-      }, trys: [], ops: []}, f, y, t, g;
-      return g = {next: verb(0), throw: verb(1), return: verb(2)}, typeof Symbol == "function" && (g[Symbol.iterator] = function() {
-        return this;
-      }), g;
-      function verb(n) {
-        return function(v) {
-          return step([n, v]);
-        };
-      }
-      function step(op) {
-        if (f)
-          throw new TypeError("Generator is already executing.");
-        for (; _; )
-          try {
-            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-              return t;
-            switch (y = 0, t && (op = [op[0] & 2, t.value]), op[0]) {
-              case 0:
-              case 1:
-                t = op;
-                break;
-              case 4:
-                return _.label++, {value: op[1], done: !1};
-              case 5:
-                _.label++, y = op[1], op = [0];
-                continue;
-              case 7:
-                op = _.ops.pop(), _.trys.pop();
-                continue;
-              default:
-                if (t = _.trys, !(t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                  _ = 0;
-                  continue;
-                }
-                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                  _.label = op[1];
-                  break;
-                }
-                if (op[0] === 6 && _.label < t[1]) {
-                  _.label = t[1], t = op;
-                  break;
-                }
-                if (t && _.label < t[2]) {
-                  _.label = t[2], _.ops.push(op);
-                  break;
-                }
-                t[2] && _.ops.pop(), _.trys.pop();
-                continue;
-            }
-            op = body.call(thisArg, _);
-          } catch (e) {
-            op = [6, e], y = 0;
-          } finally {
-            f = t = 0;
-          }
-        if (op[0] & 5)
-          throw op[1];
-        return {value: op[0] ? op[1] : void 0, done: !0};
-      }
-    }, __exportStar2 = function(m, o) {
-      for (var p in m)
-        p !== "default" && !Object.prototype.hasOwnProperty.call(o, p) && __createBinding(o, m, p);
-    }, __createBinding = Object.create ? function(o, m, k, k2) {
-      k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
-        return m[k];
-      }});
-    } : function(o, m, k, k2) {
-      k2 === void 0 && (k2 = k), o[k2] = m[k];
-    }, __values2 = function(o) {
-      var s = typeof Symbol == "function" && Symbol.iterator, m = s && o[s], i = 0;
-      if (m)
-        return m.call(o);
-      if (o && typeof o.length == "number")
-        return {
-          next: function() {
-            return o && i >= o.length && (o = void 0), {value: o && o[i++], done: !o};
-          }
-        };
-      throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-    }, __read = function(o, n) {
-      var m = typeof Symbol == "function" && o[Symbol.iterator];
-      if (!m)
-        return o;
-      var i = m.call(o), r, ar = [], e;
-      try {
-        for (; (n === void 0 || n-- > 0) && !(r = i.next()).done; )
-          ar.push(r.value);
-      } catch (error) {
-        e = {error};
-      } finally {
-        try {
-          r && !r.done && (m = i.return) && m.call(i);
-        } finally {
-          if (e)
-            throw e.error;
-        }
-      }
-      return ar;
-    }, __spread = function() {
-      for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read(arguments[i]));
-      return ar;
-    }, __spreadArrays = function() {
-      for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-        s += arguments[i].length;
-      for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-          r[k] = a[j];
-      return r;
-    }, __await = function(v) {
-      return this instanceof __await ? (this.v = v, this) : new __await(v);
-    }, __asyncGenerator = function(thisArg, _arguments, generator) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var g = generator.apply(thisArg, _arguments || []), i, q = [];
-      return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i;
-      function verb(n) {
-        g[n] && (i[n] = function(v) {
-          return new Promise(function(a, b) {
-            q.push([n, v, a, b]) > 1 || resume(n, v);
-          });
-        });
-      }
-      function resume(n, v) {
-        try {
-          step(g[n](v));
-        } catch (e) {
-          settle(q[0][3], e);
-        }
-      }
-      function step(r) {
-        r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
-      }
-      function fulfill(value) {
-        resume("next", value);
-      }
-      function reject(value) {
-        resume("throw", value);
-      }
-      function settle(f, v) {
-        f(v), q.shift(), q.length && resume(q[0][0], q[0][1]);
-      }
-    }, __asyncDelegator = function(o) {
-      var i, p;
-      return i = {}, verb("next"), verb("throw", function(e) {
-        throw e;
-      }), verb("return"), i[Symbol.iterator] = function() {
-        return this;
-      }, i;
-      function verb(n, f) {
-        i[n] = o[n] ? function(v) {
-          return (p = !p) ? {value: __await(o[n](v)), done: n === "return"} : f ? f(v) : v;
-        } : f;
-      }
-    }, __asyncValues = function(o) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var m = o[Symbol.asyncIterator], i;
-      return m ? m.call(o) : (o = typeof __values2 == "function" ? __values2(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i);
-      function verb(n) {
-        i[n] = o[n] && function(v) {
-          return new Promise(function(resolve, reject) {
-            v = o[n](v), settle(resolve, reject, v.done, v.value);
-          });
-        };
-      }
-      function settle(resolve, reject, d, v) {
-        Promise.resolve(v).then(function(v2) {
-          resolve({value: v2, done: d});
-        }, reject);
-      }
-    }, __makeTemplateObject = function(cooked, raw) {
-      return Object.defineProperty ? Object.defineProperty(cooked, "raw", {value: raw}) : cooked.raw = raw, cooked;
-    };
-    var __setModuleDefault = Object.create ? function(o, v) {
-      Object.defineProperty(o, "default", {enumerable: !0, value: v});
-    } : function(o, v) {
-      o.default = v;
-    };
-    __importStar = function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null)
-        for (var k in mod)
-          k !== "default" && Object.prototype.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
-      return __setModuleDefault(result, mod), result;
-    }, __importDefault = function(mod) {
-      return mod && mod.__esModule ? mod : {default: mod};
-    }, __classPrivateFieldGet = function(receiver, privateMap) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to get private field on non-instance");
-      return privateMap.get(receiver);
-    }, __classPrivateFieldSet = function(receiver, privateMap, value) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to set private field on non-instance");
-      return privateMap.set(receiver, value), value;
-    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
-  });
-});
-
 // ../node_modules/@azure/core-tracing/dist/index.js
 var require_dist5 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var api = require_src2(), tslib = require_tslib3(), NoOpSpan = function() {
+  var api = require_src2(), tslib = require_tslib(), NoOpSpan = function() {
     function NoOpSpan2() {
     }
     return NoOpSpan2.prototype.context = function() {
@@ -28376,7 +27848,12 @@ var require_dist6 = __commonJS((exports2) => {
     return headerName.toLowerCase();
   }
   function isHttpHeadersLike(object) {
-    return !object || typeof object != "object" ? !1 : typeof object.rawHeaders == "function" && typeof object.clone == "function" && typeof object.get == "function" && typeof object.set == "function" && typeof object.contains == "function" && typeof object.remove == "function" && typeof object.headersArray == "function" && typeof object.headerValues == "function" && typeof object.headerNames == "function" && typeof object.toJson == "function";
+    if (object && typeof object == "object") {
+      var castObject = object;
+      if (typeof castObject.rawHeaders == "function" && typeof castObject.clone == "function" && typeof castObject.get == "function" && typeof castObject.set == "function" && typeof castObject.contains == "function" && typeof castObject.remove == "function" && typeof castObject.headersArray == "function" && typeof castObject.headerValues == "function" && typeof castObject.headerNames == "function" && typeof castObject.toJson == "function")
+        return !0;
+    }
+    return !1;
   }
   var HttpHeaders = function() {
     function HttpHeaders2(rawHeaders) {
@@ -28523,10 +28000,11 @@ var require_dist6 = __commonJS((exports2) => {
     var result = (_b = {}, _b[elementName] = obj, _b);
     return result[XML_ATTRKEY] = (_c = {}, _c[xmlNamespaceKey] = xmlNamespace, _c), result;
   }
-  function applyMixins(targetCtor, sourceCtors) {
-    sourceCtors.forEach(function(sourceCtors2) {
-      Object.getOwnPropertyNames(sourceCtors2.prototype).forEach(function(name) {
-        targetCtor.prototype[name] = sourceCtors2.prototype[name];
+  function applyMixins(targetCtorParam, sourceCtors) {
+    var castTargetCtorParam = targetCtorParam;
+    sourceCtors.forEach(function(sourceCtor) {
+      Object.getOwnPropertyNames(sourceCtor.prototype).forEach(function(name) {
+        castTargetCtorParam.prototype[name] = sourceCtor.prototype[name];
       });
     });
   }
@@ -28555,12 +28033,14 @@ var require_dist6 = __commonJS((exports2) => {
         throw new Error('"' + objectName + '" with value "' + value + '" should satisfy the constraint "' + constraintName + '": ' + constraintValue + ".");
       };
       if (mapper.constraints && value != null) {
-        var _a = mapper.constraints, ExclusiveMaximum = _a.ExclusiveMaximum, ExclusiveMinimum = _a.ExclusiveMinimum, InclusiveMaximum = _a.InclusiveMaximum, InclusiveMinimum = _a.InclusiveMinimum, MaxItems = _a.MaxItems, MaxLength = _a.MaxLength, MinItems = _a.MinItems, MinLength = _a.MinLength, MultipleOf = _a.MultipleOf, Pattern = _a.Pattern, UniqueItems = _a.UniqueItems;
-        if (ExclusiveMaximum != null && value >= ExclusiveMaximum && failValidation("ExclusiveMaximum", ExclusiveMaximum), ExclusiveMinimum != null && value <= ExclusiveMinimum && failValidation("ExclusiveMinimum", ExclusiveMinimum), InclusiveMaximum != null && value > InclusiveMaximum && failValidation("InclusiveMaximum", InclusiveMaximum), InclusiveMinimum != null && value < InclusiveMinimum && failValidation("InclusiveMinimum", InclusiveMinimum), MaxItems != null && value.length > MaxItems && failValidation("MaxItems", MaxItems), MaxLength != null && value.length > MaxLength && failValidation("MaxLength", MaxLength), MinItems != null && value.length < MinItems && failValidation("MinItems", MinItems), MinLength != null && value.length < MinLength && failValidation("MinLength", MinLength), MultipleOf != null && value % MultipleOf != 0 && failValidation("MultipleOf", MultipleOf), Pattern) {
+        var valueAsNumber = value, _a = mapper.constraints, ExclusiveMaximum = _a.ExclusiveMaximum, ExclusiveMinimum = _a.ExclusiveMinimum, InclusiveMaximum = _a.InclusiveMaximum, InclusiveMinimum = _a.InclusiveMinimum, MaxItems = _a.MaxItems, MaxLength = _a.MaxLength, MinItems = _a.MinItems, MinLength = _a.MinLength, MultipleOf = _a.MultipleOf, Pattern = _a.Pattern, UniqueItems = _a.UniqueItems;
+        ExclusiveMaximum != null && valueAsNumber >= ExclusiveMaximum && failValidation("ExclusiveMaximum", ExclusiveMaximum), ExclusiveMinimum != null && valueAsNumber <= ExclusiveMinimum && failValidation("ExclusiveMinimum", ExclusiveMinimum), InclusiveMaximum != null && valueAsNumber > InclusiveMaximum && failValidation("InclusiveMaximum", InclusiveMaximum), InclusiveMinimum != null && valueAsNumber < InclusiveMinimum && failValidation("InclusiveMinimum", InclusiveMinimum);
+        var valueAsArray = value;
+        if (MaxItems != null && valueAsArray.length > MaxItems && failValidation("MaxItems", MaxItems), MaxLength != null && valueAsArray.length > MaxLength && failValidation("MaxLength", MaxLength), MinItems != null && valueAsArray.length < MinItems && failValidation("MinItems", MinItems), MinLength != null && valueAsArray.length < MinLength && failValidation("MinLength", MinLength), MultipleOf != null && valueAsNumber % MultipleOf != 0 && failValidation("MultipleOf", MultipleOf), Pattern) {
           var pattern = typeof Pattern == "string" ? new RegExp(Pattern) : Pattern;
           (typeof value != "string" || value.match(pattern) === null) && failValidation("Pattern", Pattern);
         }
-        UniqueItems && value.some(function(item, i, ar) {
+        UniqueItems && valueAsArray.some(function(item, i, ar) {
           return ar.indexOf(item) !== i;
         }) && failValidation("UniqueItems", UniqueItems);
       }
@@ -28607,8 +28087,8 @@ var require_dist6 = __commonJS((exports2) => {
         payload = deserializeCompositeType(this, mapper, responseBody, objectName, updatedOptions);
       else {
         if (this.isXML) {
-          var xmlCharKey = updatedOptions.xmlCharKey;
-          responseBody[XML_ATTRKEY] != null && responseBody[xmlCharKey] != null && (responseBody = responseBody[xmlCharKey]);
+          var xmlCharKey = updatedOptions.xmlCharKey, castResponseBody = responseBody;
+          castResponseBody[XML_ATTRKEY] != null && castResponseBody[xmlCharKey] != null && (responseBody = castResponseBody[xmlCharKey]);
         }
         mapperType.match(/^Number$/i) !== null ? (payload = parseFloat(responseBody), isNaN(payload) && (payload = responseBody)) : mapperType.match(/^Boolean$/i) !== null ? responseBody === "true" ? payload = !0 : responseBody === "false" ? payload = !1 : payload = responseBody : mapperType.match(/^(String|Enum|Object|Stream|Uuid|TimeSpan|any)$/i) !== null ? payload = responseBody : mapperType.match(/^(Date|DateTime|DateTimeRfc1123)$/i) !== null ? payload = new Date(responseBody) : mapperType.match(/^UnixTime$/i) !== null ? payload = unixTimeToDate(responseBody) : mapperType.match(/^ByteArray$/i) !== null ? payload = decodeString(responseBody) : mapperType.match(/^Base64Url$/i) !== null ? payload = base64UrlToByteArray(responseBody) : mapperType.match(/^Sequence$/i) !== null ? payload = deserializeSequenceType(this, mapper, responseBody, objectName, updatedOptions) : mapperType.match(/^Dictionary$/i) !== null && (payload = deserializeDictionaryType(this, mapper, responseBody, objectName, updatedOptions));
       }
@@ -28955,6 +28435,7 @@ var require_dist6 = __commonJS((exports2) => {
     return typeName && serializer.modelMappers[typeName] && serializer.modelMappers[typeName].type.polymorphicDiscriminator;
   }
   function serializeObject(toSerialize) {
+    var castToSerialize = toSerialize;
     if (toSerialize != null) {
       if (toSerialize instanceof Uint8Array)
         return toSerialize = encodeByteArray(toSerialize), toSerialize;
@@ -28967,7 +28448,7 @@ var require_dist6 = __commonJS((exports2) => {
       } else if (typeof toSerialize == "object") {
         var dictionary = {};
         for (var property in toSerialize)
-          dictionary[property] = serializeObject(toSerialize[property]);
+          dictionary[property] = serializeObject(castToSerialize[property]);
         return dictionary;
       }
       return toSerialize;
@@ -28999,7 +28480,12 @@ var require_dist6 = __commonJS((exports2) => {
     "UnixTime"
   ]);
   function isWebResourceLike(object) {
-    return typeof object != "object" ? !1 : !!(typeof object.url == "string" && typeof object.method == "string" && typeof object.headers == "object" && isHttpHeadersLike(object.headers) && typeof object.validateRequestProperties == "function" && typeof object.prepare == "function" && typeof object.clone == "function");
+    if (object && typeof object == "object") {
+      var castObject = object;
+      if (typeof castObject.url == "string" && typeof castObject.method == "string" && typeof castObject.headers == "object" && isHttpHeadersLike(castObject.headers) && typeof castObject.validateRequestProperties == "function" && typeof castObject.prepare == "function" && typeof castObject.clone == "function")
+        return !0;
+    }
+    return !1;
   }
   var WebResource = function() {
     function WebResource2(url2, method, body, query, headers, streamResponseBody, withCredentials, abortSignal, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse) {
@@ -29093,9 +28579,10 @@ var require_dist6 = __commonJS((exports2) => {
     }, URLQuery2.prototype.keys = function() {
       return Object.keys(this._rawQuery);
     }, URLQuery2.prototype.set = function(parameterName, parameterValue) {
+      var caseParameterValue = parameterValue;
       if (parameterName)
-        if (parameterValue != null) {
-          var newValue = Array.isArray(parameterValue) ? parameterValue : parameterValue.toString();
+        if (caseParameterValue != null) {
+          var newValue = Array.isArray(caseParameterValue) ? caseParameterValue : caseParameterValue.toString();
           this._rawQuery[parameterName] = newValue;
         } else
           delete this._rawQuery[parameterName];
@@ -29451,7 +28938,7 @@ var require_dist6 = __commonJS((exports2) => {
     }
     return FetchHttpClient2.prototype.sendRequest = function(httpRequest) {
       return tslib.__awaiter(this, void 0, void 0, function() {
-        var abortController$1, abortListener, formData, requestForm_1, appendFormValue, _i, _a, formKey, formValue, j, contentType, body, onUploadProgress, uploadReportStream, platformSpecificRequestInit, requestInit, response, headers, operationResponse, _b, _c, onDownloadProgress, responseBody, downloadReportStream, length_1, error_1, fetchError;
+        var abortController$1, abortListener, formData, requestForm_1, appendFormValue, _i, _a, formKey, formValue, j, contentType, body, onUploadProgress, uploadReportStream, platformSpecificRequestInit, requestInit, response, headers, operationResponse, _b, onDownloadProgress, responseBody, downloadReportStream, length_1, error_1, fetchError, _c;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
             case 0:
@@ -29483,18 +28970,18 @@ var require_dist6 = __commonJS((exports2) => {
             case 2:
               return _d.trys.push([2, 8, 9, 10]), [4, this.fetch(httpRequest.url, requestInit)];
             case 3:
-              return response = _d.sent(), headers = parseHeaders(response.headers), _b = {
+              return response = _d.sent(), headers = parseHeaders(response.headers), _c = {
                 headers,
                 request: httpRequest,
                 status: response.status,
                 readableStreamBody: httpRequest.streamResponseBody ? response.body : void 0
               }, httpRequest.streamResponseBody ? [3, 5] : [4, response.text()];
             case 4:
-              return _c = _d.sent(), [3, 6];
+              return _b = _d.sent(), [3, 6];
             case 5:
-              _c = void 0, _d.label = 6;
+              _b = void 0, _d.label = 6;
             case 6:
-              return operationResponse = (_b.bodyAsText = _c, _b), onDownloadProgress = httpRequest.onDownloadProgress, onDownloadProgress && (responseBody = response.body || void 0, isReadableStream(responseBody) ? (downloadReportStream = new ReportTransform(onDownloadProgress), responseBody.pipe(downloadReportStream), operationResponse.readableStreamBody = downloadReportStream) : (length_1 = parseInt(headers.get("Content-Length")) || void 0, length_1 && onDownloadProgress({loadedBytes: length_1}))), [4, this.processRequest(operationResponse)];
+              return operationResponse = (_c.bodyAsText = _b, _c), onDownloadProgress = httpRequest.onDownloadProgress, onDownloadProgress && (responseBody = response.body || void 0, isReadableStream(responseBody) ? (downloadReportStream = new ReportTransform(onDownloadProgress), responseBody.pipe(downloadReportStream), operationResponse.readableStreamBody = downloadReportStream) : (length_1 = parseInt(headers.get("Content-Length")) || void 0, length_1 && onDownloadProgress({loadedBytes: length_1}))), [4, this.processRequest(operationResponse)];
             case 7:
               return _d.sent(), [2, operationResponse];
             case 8:
@@ -29836,8 +29323,8 @@ var require_dist6 = __commonJS((exports2) => {
           operationSpec.isXML && responseSpec.bodyMapper.type.name === MapperType.Sequence && (valueToDeserialize = typeof valueToDeserialize == "object" ? valueToDeserialize[responseSpec.bodyMapper.xmlElementName] : []);
           try {
             parsedResponse.parsedBody = operationSpec.serializer.deserialize(responseSpec.bodyMapper, valueToDeserialize, "operationRes.parsedBody", options);
-          } catch (error2) {
-            var restError = new RestError("Error " + error2 + " occurred in deserializing the responseBody - " + parsedResponse.bodyAsText, void 0, parsedResponse.status, parsedResponse.request, parsedResponse);
+          } catch (innerError) {
+            var restError = new RestError("Error " + innerError + " occurred in deserializing the responseBody - " + parsedResponse.bodyAsText, void 0, parsedResponse.status, parsedResponse.request, parsedResponse);
             throw restError;
           }
         } else
@@ -29946,8 +29433,8 @@ var require_dist6 = __commonJS((exports2) => {
   }(BaseRequestPolicy);
   function retry(policy, request, response, retryData, requestError) {
     return tslib.__awaiter(this, void 0, void 0, function() {
-      function shouldPolicyRetry(response2) {
-        var statusCode = response2 == null ? void 0 : response2.status;
+      function shouldPolicyRetry(responseParam) {
+        var statusCode = responseParam == null ? void 0 : responseParam.status;
         return !(statusCode === void 0 || statusCode < 500 && statusCode !== 408 || statusCode === 501 || statusCode === 505);
       }
       var isAborted, res, err_1, err;
@@ -30281,7 +29768,7 @@ var require_dist6 = __commonJS((exports2) => {
       function shouldPolicyRetry(_response, error) {
         return !!(error && error.code && (error.code === "ETIMEDOUT" || error.code === "ESOCKETTIMEDOUT" || error.code === "ECONNREFUSED" || error.code === "ECONNRESET" || error.code === "ENOENT"));
       }
-      var err_1;
+      var nestedErr_1;
       return tslib.__generator(this, function(_a) {
         switch (_a.label) {
           case 0:
@@ -30293,7 +29780,7 @@ var require_dist6 = __commonJS((exports2) => {
           case 2:
             return _a.sent(), [2, policy._nextPolicy.sendRequest(request.clone())];
           case 3:
-            return err_1 = _a.sent(), [2, retry$1(policy, request, operationResponse, err_1, retryData)];
+            return nestedErr_1 = _a.sent(), [2, retry$1(policy, request, operationResponse, nestedErr_1, retryData)];
           case 4:
             return [3, 6];
           case 5:
@@ -30318,11 +29805,11 @@ var require_dist6 = __commonJS((exports2) => {
     if (byPassedList.has(uri))
       return byPassedList.get(uri);
     loadNoProxy();
-    for (var isBypassed2 = !1, host = URLBuilder.parse(uri).getHost(), _i = 0, noProxyList_1 = noProxyList; _i < noProxyList_1.length; _i++) {
+    for (var isBypassedFlag = !1, host = URLBuilder.parse(uri).getHost(), _i = 0, noProxyList_1 = noProxyList; _i < noProxyList_1.length; _i++) {
       var proxyString = noProxyList_1[_i];
-      proxyString[0] === "." ? (uri.endsWith(proxyString) || host === proxyString.slice(1) && host.length === proxyString.length - 1) && (isBypassed2 = !0) : host === proxyString && (isBypassed2 = !0);
+      proxyString[0] === "." ? (uri.endsWith(proxyString) || host === proxyString.slice(1) && host.length === proxyString.length - 1) && (isBypassedFlag = !0) : host === proxyString && (isBypassedFlag = !0);
     }
-    return byPassedList.set(uri, isBypassed2), isBypassed2;
+    return byPassedList.set(uri, isBypassedFlag), isBypassedFlag;
   }
   function loadNoProxy() {
     if (!isNoProxyInitalized) {
@@ -30547,10 +30034,14 @@ var require_dist6 = __commonJS((exports2) => {
         });
       });
     }, NdJsonPolicy2;
-  }(BaseRequestPolicy), ServiceClient = function() {
+  }(BaseRequestPolicy), cachedHttpClient;
+  function getCachedDefaultHttpClient() {
+    return cachedHttpClient || (cachedHttpClient = new NodeFetchHttpClient()), cachedHttpClient;
+  }
+  var ServiceClient = function() {
     function ServiceClient2(credentials, options) {
       var _this = this;
-      options || (options = {}), this._withCredentials = options.withCredentials || !1, this._httpClient = options.httpClient || new NodeFetchHttpClient(), this._requestPolicyOptions = new RequestPolicyOptions(options.httpPipelineLogger);
+      options || (options = {}), this._withCredentials = options.withCredentials || !1, this._httpClient = options.httpClient || getCachedDefaultHttpClient(), this._requestPolicyOptions = new RequestPolicyOptions(options.httpPipelineLogger);
       var requestPolicyFactories;
       if (Array.isArray(options.requestPolicyFactories))
         logger.info("ServiceClient: using custom request policies"), requestPolicyFactories = options.requestPolicyFactories;
@@ -30561,11 +30052,11 @@ var require_dist6 = __commonJS((exports2) => {
           var wrappedPolicyFactory = function() {
             var bearerTokenPolicyFactory = void 0, serviceClient = _this, serviceClientOptions = options;
             return {
-              create: function(nextPolicy, options2) {
+              create: function(nextPolicy, createOptions) {
                 var credentialScopes = getCredentialScopes(serviceClientOptions, serviceClient.baseUri);
                 if (!credentialScopes)
                   throw new Error("When using credential, the ServiceClient must contain a baseUri or a credentialScopes in ServiceClientOptions. Unable to create a bearerTokenAuthenticationPolicy");
-                return bearerTokenPolicyFactory == null && (bearerTokenPolicyFactory = bearerTokenAuthenticationPolicy(credentials, credentialScopes)), bearerTokenPolicyFactory.create(nextPolicy, options2);
+                return bearerTokenPolicyFactory == null && (bearerTokenPolicyFactory = bearerTokenAuthenticationPolicy(credentials, credentialScopes)), bearerTokenPolicyFactory.create(nextPolicy, createOptions);
               }
             };
           };
@@ -30951,312 +30442,6 @@ var require_dist6 = __commonJS((exports2) => {
   exports2.userAgentPolicy = userAgentPolicy;
 });
 
-// ../node_modules/@azure/storage-blob/node_modules/tslib/tslib.js
-var require_tslib4 = __commonJS((exports2, module2) => {
-  /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation.
-  
-  Permission to use, copy, modify, and/or distribute this software for any
-  purpose with or without fee is hereby granted.
-  
-  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-  PERFORMANCE OF THIS SOFTWARE.
-  ***************************************************************************** */
-  var __extends, __assign, __rest, __decorate, __param, __metadata, __awaiter, __generator, __exportStar2, __values2, __read, __spread, __spreadArrays, __await, __asyncGenerator, __asyncDelegator, __asyncValues, __makeTemplateObject, __importStar, __importDefault, __classPrivateFieldGet, __classPrivateFieldSet, __createBinding;
-  (function(factory) {
-    var root = typeof global == "object" ? global : typeof self == "object" ? self : typeof this == "object" ? this : {};
-    typeof define == "function" && define.amd ? define("tslib", ["exports"], function(exports3) {
-      factory(createExporter(root, createExporter(exports3)));
-    }) : typeof module2 == "object" && typeof module2.exports == "object" ? factory(createExporter(root, createExporter(module2.exports))) : factory(createExporter(root));
-    function createExporter(exports3, previous) {
-      return exports3 !== root && (typeof Object.create == "function" ? Object.defineProperty(exports3, "__esModule", {value: !0}) : exports3.__esModule = !0), function(id, v) {
-        return exports3[id] = previous ? previous(id, v) : v;
-      };
-    }
-  })(function(exporter) {
-    var extendStatics = Object.setPrototypeOf || {__proto__: []} instanceof Array && function(d, b) {
-      d.__proto__ = b;
-    } || function(d, b) {
-      for (var p in b)
-        Object.prototype.hasOwnProperty.call(b, p) && (d[p] = b[p]);
-    };
-    __extends = function(d, b) {
-      extendStatics(d, b);
-      function __() {
-        this.constructor = d;
-      }
-      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }, __assign = Object.assign || function(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s)
-          Object.prototype.hasOwnProperty.call(s, p) && (t[p] = s[p]);
-      }
-      return t;
-    }, __rest = function(s, e) {
-      var t = {};
-      for (var p in s)
-        Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0 && (t[p] = s[p]);
-      if (s != null && typeof Object.getOwnPropertySymbols == "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++)
-          e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]) && (t[p[i]] = s[p[i]]);
-      return t;
-    }, __decorate = function(decorators, target, key, desc) {
-      var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-      if (typeof Reflect == "object" && typeof Reflect.decorate == "function")
-        r = Reflect.decorate(decorators, target, key, desc);
-      else
-        for (var i = decorators.length - 1; i >= 0; i--)
-          (d = decorators[i]) && (r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r);
-      return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }, __param = function(paramIndex, decorator) {
-      return function(target, key) {
-        decorator(target, key, paramIndex);
-      };
-    }, __metadata = function(metadataKey, metadataValue) {
-      if (typeof Reflect == "object" && typeof Reflect.metadata == "function")
-        return Reflect.metadata(metadataKey, metadataValue);
-    }, __awaiter = function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function rejected(value) {
-          try {
-            step(generator.throw(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    }, __generator = function(thisArg, body) {
-      var _ = {label: 0, sent: function() {
-        if (t[0] & 1)
-          throw t[1];
-        return t[1];
-      }, trys: [], ops: []}, f, y, t, g;
-      return g = {next: verb(0), throw: verb(1), return: verb(2)}, typeof Symbol == "function" && (g[Symbol.iterator] = function() {
-        return this;
-      }), g;
-      function verb(n) {
-        return function(v) {
-          return step([n, v]);
-        };
-      }
-      function step(op) {
-        if (f)
-          throw new TypeError("Generator is already executing.");
-        for (; _; )
-          try {
-            if (f = 1, y && (t = op[0] & 2 ? y.return : op[0] ? y.throw || ((t = y.return) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-              return t;
-            switch (y = 0, t && (op = [op[0] & 2, t.value]), op[0]) {
-              case 0:
-              case 1:
-                t = op;
-                break;
-              case 4:
-                return _.label++, {value: op[1], done: !1};
-              case 5:
-                _.label++, y = op[1], op = [0];
-                continue;
-              case 7:
-                op = _.ops.pop(), _.trys.pop();
-                continue;
-              default:
-                if (t = _.trys, !(t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                  _ = 0;
-                  continue;
-                }
-                if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                  _.label = op[1];
-                  break;
-                }
-                if (op[0] === 6 && _.label < t[1]) {
-                  _.label = t[1], t = op;
-                  break;
-                }
-                if (t && _.label < t[2]) {
-                  _.label = t[2], _.ops.push(op);
-                  break;
-                }
-                t[2] && _.ops.pop(), _.trys.pop();
-                continue;
-            }
-            op = body.call(thisArg, _);
-          } catch (e) {
-            op = [6, e], y = 0;
-          } finally {
-            f = t = 0;
-          }
-        if (op[0] & 5)
-          throw op[1];
-        return {value: op[0] ? op[1] : void 0, done: !0};
-      }
-    }, __exportStar2 = function(m, o) {
-      for (var p in m)
-        p !== "default" && !Object.prototype.hasOwnProperty.call(o, p) && __createBinding(o, m, p);
-    }, __createBinding = Object.create ? function(o, m, k, k2) {
-      k2 === void 0 && (k2 = k), Object.defineProperty(o, k2, {enumerable: !0, get: function() {
-        return m[k];
-      }});
-    } : function(o, m, k, k2) {
-      k2 === void 0 && (k2 = k), o[k2] = m[k];
-    }, __values2 = function(o) {
-      var s = typeof Symbol == "function" && Symbol.iterator, m = s && o[s], i = 0;
-      if (m)
-        return m.call(o);
-      if (o && typeof o.length == "number")
-        return {
-          next: function() {
-            return o && i >= o.length && (o = void 0), {value: o && o[i++], done: !o};
-          }
-        };
-      throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-    }, __read = function(o, n) {
-      var m = typeof Symbol == "function" && o[Symbol.iterator];
-      if (!m)
-        return o;
-      var i = m.call(o), r, ar = [], e;
-      try {
-        for (; (n === void 0 || n-- > 0) && !(r = i.next()).done; )
-          ar.push(r.value);
-      } catch (error) {
-        e = {error};
-      } finally {
-        try {
-          r && !r.done && (m = i.return) && m.call(i);
-        } finally {
-          if (e)
-            throw e.error;
-        }
-      }
-      return ar;
-    }, __spread = function() {
-      for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read(arguments[i]));
-      return ar;
-    }, __spreadArrays = function() {
-      for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-        s += arguments[i].length;
-      for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-          r[k] = a[j];
-      return r;
-    }, __await = function(v) {
-      return this instanceof __await ? (this.v = v, this) : new __await(v);
-    }, __asyncGenerator = function(thisArg, _arguments, generator) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var g = generator.apply(thisArg, _arguments || []), i, q = [];
-      return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i;
-      function verb(n) {
-        g[n] && (i[n] = function(v) {
-          return new Promise(function(a, b) {
-            q.push([n, v, a, b]) > 1 || resume(n, v);
-          });
-        });
-      }
-      function resume(n, v) {
-        try {
-          step(g[n](v));
-        } catch (e) {
-          settle(q[0][3], e);
-        }
-      }
-      function step(r) {
-        r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
-      }
-      function fulfill(value) {
-        resume("next", value);
-      }
-      function reject(value) {
-        resume("throw", value);
-      }
-      function settle(f, v) {
-        f(v), q.shift(), q.length && resume(q[0][0], q[0][1]);
-      }
-    }, __asyncDelegator = function(o) {
-      var i, p;
-      return i = {}, verb("next"), verb("throw", function(e) {
-        throw e;
-      }), verb("return"), i[Symbol.iterator] = function() {
-        return this;
-      }, i;
-      function verb(n, f) {
-        i[n] = o[n] ? function(v) {
-          return (p = !p) ? {value: __await(o[n](v)), done: n === "return"} : f ? f(v) : v;
-        } : f;
-      }
-    }, __asyncValues = function(o) {
-      if (!Symbol.asyncIterator)
-        throw new TypeError("Symbol.asyncIterator is not defined.");
-      var m = o[Symbol.asyncIterator], i;
-      return m ? m.call(o) : (o = typeof __values2 == "function" ? __values2(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
-        return this;
-      }, i);
-      function verb(n) {
-        i[n] = o[n] && function(v) {
-          return new Promise(function(resolve, reject) {
-            v = o[n](v), settle(resolve, reject, v.done, v.value);
-          });
-        };
-      }
-      function settle(resolve, reject, d, v) {
-        Promise.resolve(v).then(function(v2) {
-          resolve({value: v2, done: d});
-        }, reject);
-      }
-    }, __makeTemplateObject = function(cooked, raw) {
-      return Object.defineProperty ? Object.defineProperty(cooked, "raw", {value: raw}) : cooked.raw = raw, cooked;
-    };
-    var __setModuleDefault = Object.create ? function(o, v) {
-      Object.defineProperty(o, "default", {enumerable: !0, value: v});
-    } : function(o, v) {
-      o.default = v;
-    };
-    __importStar = function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null)
-        for (var k in mod)
-          k !== "default" && Object.prototype.hasOwnProperty.call(mod, k) && __createBinding(result, mod, k);
-      return __setModuleDefault(result, mod), result;
-    }, __importDefault = function(mod) {
-      return mod && mod.__esModule ? mod : {default: mod};
-    }, __classPrivateFieldGet = function(receiver, privateMap) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to get private field on non-instance");
-      return privateMap.get(receiver);
-    }, __classPrivateFieldSet = function(receiver, privateMap, value) {
-      if (!privateMap.has(receiver))
-        throw new TypeError("attempted to set private field on non-instance");
-      return privateMap.set(receiver, value), value;
-    }, exporter("__extends", __extends), exporter("__assign", __assign), exporter("__rest", __rest), exporter("__decorate", __decorate), exporter("__param", __param), exporter("__metadata", __metadata), exporter("__awaiter", __awaiter), exporter("__generator", __generator), exporter("__exportStar", __exportStar2), exporter("__createBinding", __createBinding), exporter("__values", __values2), exporter("__read", __read), exporter("__spread", __spread), exporter("__spreadArrays", __spreadArrays), exporter("__await", __await), exporter("__asyncGenerator", __asyncGenerator), exporter("__asyncDelegator", __asyncDelegator), exporter("__asyncValues", __asyncValues), exporter("__makeTemplateObject", __makeTemplateObject), exporter("__importStar", __importStar), exporter("__importDefault", __importDefault), exporter("__classPrivateFieldGet", __classPrivateFieldGet), exporter("__classPrivateFieldSet", __classPrivateFieldSet);
-  });
-});
-
 // ../node_modules/@azure/core-asynciterator-polyfill/dist-esm/index.js
 var require_dist_esm = __commonJS(() => {
   "use strict";
@@ -31277,11 +30462,11 @@ var require_dist8 = __commonJS((exports2) => {
    * Licensed under the MIT License. See License.txt in the project root for
    * license information.
    * 
-   * Azure Core LRO SDK for JavaScript - 1.0.2
+   * Azure Core LRO SDK for JavaScript - 1.0.3
    */
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var tslib = require_tslib2(), PollerStoppedError = function(_super) {
+  var tslib = require_tslib(), PollerStoppedError = function(_super) {
     tslib.__extends(PollerStoppedError2, _super);
     function PollerStoppedError2(message) {
       var _this = _super.call(this, message) || this;
@@ -31367,7 +30552,7 @@ var require_dist8 = __commonJS((exports2) => {
         var clearPollOncePromise = function() {
           _this.pollOncePromise = void 0;
         };
-        this.pollOncePromise.then(clearPollOncePromise, clearPollOncePromise);
+        this.pollOncePromise.then(clearPollOncePromise, clearPollOncePromise).catch(this.reject);
       }
       return this.pollOncePromise;
     }, Poller2.prototype.pollUntilDone = function() {
@@ -31414,7 +30599,7 @@ var require_dist8 = __commonJS((exports2) => {
 var require_dist9 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var coreHttp = require_dist6(), tslib = require_tslib4(), api = require_src2(), logger$1 = require_dist4(), abortController = require_dist2(), os2 = require("os"), stream = require("stream");
+  var coreHttp = require_dist6(), tslib = require_tslib(), api = require_src2(), logger$1 = require_dist4(), abortController = require_dist2(), os2 = require("os"), stream = require("stream");
   require_dist7();
   var crypto = require("crypto"), coreLro = require_dist8(), events = require("events"), coreTracing = require_dist5(), fs3 = require("fs"), util = require("util"), KeyInfo = {
     serializedName: "KeyInfo",
@@ -32773,12 +31958,12 @@ var require_dist9 = __commonJS((exports2) => {
             name: "String"
           }
         },
-        tagValue: {
-          xmlName: "TagValue",
-          required: !0,
-          serializedName: "TagValue",
+        tags: {
+          xmlName: "Tags",
+          serializedName: "Tags",
           type: {
-            name: "String"
+            name: "Composite",
+            className: "BlobTags"
           }
         }
       }
@@ -33532,6 +32717,12 @@ var require_dist9 = __commonJS((exports2) => {
               "FileStorage",
               "BlockBlobStorage"
             ]
+          }
+        },
+        isHierarchicalNamespaceEnabled: {
+          serializedName: "x-ms-is-hns-enabled",
+          type: {
+            name: "Boolean"
           }
         },
         errorCode: {
@@ -35430,6 +34621,86 @@ var require_dist9 = __commonJS((exports2) => {
     type: {
       name: "Composite",
       className: "BlockBlobUploadHeaders",
+      modelProperties: {
+        etag: {
+          serializedName: "etag",
+          type: {
+            name: "String"
+          }
+        },
+        lastModified: {
+          serializedName: "last-modified",
+          type: {
+            name: "DateTimeRfc1123"
+          }
+        },
+        contentMD5: {
+          serializedName: "content-md5",
+          type: {
+            name: "ByteArray"
+          }
+        },
+        clientRequestId: {
+          serializedName: "x-ms-client-request-id",
+          type: {
+            name: "String"
+          }
+        },
+        requestId: {
+          serializedName: "x-ms-request-id",
+          type: {
+            name: "String"
+          }
+        },
+        version: {
+          serializedName: "x-ms-version",
+          type: {
+            name: "String"
+          }
+        },
+        versionId: {
+          serializedName: "x-ms-version-id",
+          type: {
+            name: "String"
+          }
+        },
+        date: {
+          serializedName: "date",
+          type: {
+            name: "DateTimeRfc1123"
+          }
+        },
+        isServerEncrypted: {
+          serializedName: "x-ms-request-server-encrypted",
+          type: {
+            name: "Boolean"
+          }
+        },
+        encryptionKeySha256: {
+          serializedName: "x-ms-encryption-key-sha256",
+          type: {
+            name: "String"
+          }
+        },
+        encryptionScope: {
+          serializedName: "x-ms-encryption-scope",
+          type: {
+            name: "String"
+          }
+        },
+        errorCode: {
+          serializedName: "x-ms-error-code",
+          type: {
+            name: "String"
+          }
+        }
+      }
+    }
+  }, BlockBlobPutBlobFromUrlHeaders = {
+    serializedName: "blockblob-putblobfromurl-headers",
+    type: {
+      name: "Composite",
+      className: "BlockBlobPutBlobFromUrlHeaders",
       modelProperties: {
         etag: {
           serializedName: "etag",
@@ -37724,6 +36995,8 @@ var require_dist9 = __commonJS((exports2) => {
     __proto__: null,
     BlobServiceProperties,
     BlobServiceStatistics,
+    BlobTag,
+    BlobTags,
     ContainerItem,
     ContainerProperties,
     CorsRule,
@@ -37925,6 +37198,20 @@ var require_dist9 = __commonJS((exports2) => {
       serializedName: "x-ms-blob-content-type",
       type: {
         name: "String"
+      }
+    }
+  }, blobDeleteType = {
+    parameterPath: [
+      "options",
+      "blobDeleteType"
+    ],
+    mapper: {
+      serializedName: "deletetype",
+      type: {
+        name: "Enum",
+        allowedValues: [
+          "Permanent"
+        ]
       }
     }
   }, blobSequenceNumber = {
@@ -38352,6 +37639,17 @@ var require_dist9 = __commonJS((exports2) => {
       serializedName: "x-ms-copy-source",
       type: {
         name: "String"
+      }
+    }
+  }, copySourceBlobProperties = {
+    parameterPath: [
+      "options",
+      "copySourceBlobProperties"
+    ],
+    mapper: {
+      serializedName: "x-ms-copy-source-blob-properties",
+      type: {
+        name: "Boolean"
       }
     }
   }, defaultEncryptionScope = {
@@ -39251,7 +38549,7 @@ var require_dist9 = __commonJS((exports2) => {
       required: !0,
       isConstant: !0,
       serializedName: "x-ms-version",
-      defaultValue: "2020-02-10",
+      defaultValue: "2020-04-08",
       type: {
         name: "String"
       }
@@ -40382,7 +39680,8 @@ var require_dist9 = __commonJS((exports2) => {
     queryParameters: [
       snapshot,
       versionId,
-      timeoutInSeconds
+      timeoutInSeconds,
+      blobDeleteType
     ],
     headerParameters: [
       deleteSnapshots,
@@ -41078,7 +40377,8 @@ var require_dist9 = __commonJS((exports2) => {
     headerParameters: [
       version,
       requestId,
-      ifTags
+      ifTags,
+      leaseId0
     ],
     responses: {
       200: {
@@ -41108,7 +40408,8 @@ var require_dist9 = __commonJS((exports2) => {
       transactionalContentMD5,
       transactionalContentCrc64,
       requestId,
-      ifTags
+      ifTags,
+      leaseId0
     ],
     requestBody: {
       parameterPath: [
@@ -41769,6 +41070,7 @@ var require_dist9 = __commonJS((exports2) => {
     Block,
     BlockBlobCommitBlockListHeaders,
     BlockBlobGetBlockListHeaders,
+    BlockBlobPutBlobFromUrlHeaders,
     BlockBlobStageBlockFromURLHeaders,
     BlockBlobStageBlockHeaders,
     BlockBlobUploadHeaders,
@@ -41785,6 +41087,12 @@ var require_dist9 = __commonJS((exports2) => {
         contentLength: contentLength2,
         options
       }, uploadOperationSpec, callback);
+    }, BlockBlob2.prototype.putBlobFromUrl = function(contentLength2, copySource2, options, callback) {
+      return this.client.sendOperationRequest({
+        contentLength: contentLength2,
+        copySource: copySource2,
+        options
+      }, putBlobFromUrlOperationSpec, callback);
     }, BlockBlob2.prototype.stageBlock = function(blockId2, contentLength2, body, options, callback) {
       return this.client.sendOperationRequest({
         blockId: blockId2,
@@ -41863,6 +41171,60 @@ var require_dist9 = __commonJS((exports2) => {
       default: {
         bodyMapper: StorageError,
         headersMapper: BlockBlobUploadHeaders
+      }
+    },
+    isXML: !0,
+    serializer: serializer$5
+  }, putBlobFromUrlOperationSpec = {
+    httpMethod: "PUT",
+    path: "{containerName}/{blob}",
+    urlParameters: [
+      url
+    ],
+    queryParameters: [
+      timeoutInSeconds
+    ],
+    headerParameters: [
+      transactionalContentMD5,
+      contentLength,
+      metadata,
+      encryptionScope,
+      tier0,
+      version,
+      requestId,
+      sourceContentMD5,
+      blobTagsString,
+      copySource,
+      copySourceBlobProperties,
+      blobType2,
+      blobContentType,
+      blobContentEncoding,
+      blobContentLanguage,
+      blobContentMD5,
+      blobCacheControl,
+      blobContentDisposition,
+      leaseId0,
+      encryptionKey,
+      encryptionKeySha256,
+      encryptionAlgorithm,
+      ifModifiedSince,
+      ifUnmodifiedSince,
+      ifMatch,
+      ifNoneMatch,
+      ifTags,
+      sourceIfModifiedSince,
+      sourceIfUnmodifiedSince,
+      sourceIfMatch,
+      sourceIfNoneMatch,
+      sourceIfTags
+    ],
+    responses: {
+      201: {
+        headersMapper: BlockBlobPutBlobFromUrlHeaders
+      },
+      default: {
+        bodyMapper: StorageError,
+        headersMapper: BlockBlobPutBlobFromUrlHeaders
       }
     },
     isXML: !0,
@@ -42033,7 +41395,7 @@ var require_dist9 = __commonJS((exports2) => {
     },
     isXML: !0,
     serializer: serializer$5
-  }, logger = logger$1.createClientLogger("storage-blob"), SDK_VERSION = "12.3.0", SERVICE_VERSION = "2020-02-10", BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024, BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024, BLOCK_BLOB_MAX_BLOCKS = 5e4, DEFAULT_BLOCK_BUFFER_SIZE_BYTES = 8 * 1024 * 1024, DEFAULT_BLOB_DOWNLOAD_BLOCK_BYTES = 4 * 1024 * 1024, DEFAULT_MAX_DOWNLOAD_RETRY_REQUESTS = 5, StorageOAuthScopes = "https://storage.azure.com/.default", URLConstants = {
+  }, logger = logger$1.createClientLogger("storage-blob"), SDK_VERSION = "12.4.0", SERVICE_VERSION = "2020-04-08", BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024, BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024, BLOCK_BLOB_MAX_BLOCKS = 5e4, DEFAULT_BLOCK_BUFFER_SIZE_BYTES = 8 * 1024 * 1024, DEFAULT_BLOB_DOWNLOAD_BLOCK_BYTES = 4 * 1024 * 1024, DEFAULT_MAX_DOWNLOAD_RETRY_REQUESTS = 5, StorageOAuthScopes = "https://storage.azure.com/.default", URLConstants = {
     Parameters: {
       FORCE_BROWSER_NO_CACHE: "_",
       SIGNATURE: "sig",
@@ -42271,6 +41633,10 @@ var require_dist9 = __commonJS((exports2) => {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.setQueryParameter(name, value), urlParsed.toString();
   }
+  function getURLParameter(url2, name) {
+    var urlParsed = coreHttp.URLBuilder.parse(url2);
+    return urlParsed.getQueryParameterValue(name);
+  }
   function setURLHost(url2, host) {
     var urlParsed = coreHttp.URLBuilder.parse(url2);
     return urlParsed.setHost(host), urlParsed.toString();
@@ -42305,6 +41671,10 @@ var require_dist9 = __commonJS((exports2) => {
       queries[key] = value;
     }
     return queries;
+  }
+  function appendToURLQuery(url2, queryParts) {
+    var urlParsed = coreHttp.URLBuilder.parse(url2), query = urlParsed.getQuery();
+    return query ? query += "&" + queryParts : query = queryParts, urlParsed.setQuery(query), urlParsed.toString();
   }
   function truncatedISO8061Date(date, withMilliseconds) {
     withMilliseconds === void 0 && (withMilliseconds = !0);
@@ -42448,6 +41818,9 @@ var require_dist9 = __commonJS((exports2) => {
         _loop_1(key);
       return orProperties;
     }
+  }
+  function attachCredential(thing, credential) {
+    return thing.credential = credential, thing;
   }
   var StorageBrowserPolicy = function(_super) {
     tslib.__extends(StorageBrowserPolicy2, _super);
@@ -42624,7 +41997,7 @@ var require_dist9 = __commonJS((exports2) => {
       var userAgentInfo = [];
       {
         if (telemetry) {
-          var telemetryString = (telemetry.userAgentPrefix || "").replace(" ", "");
+          var telemetryString = telemetry.userAgentPrefix || "";
           telemetryString.length > 0 && userAgentInfo.indexOf(telemetryString) === -1 && userAgentInfo.push(telemetryString);
         }
         var libInfo = "azsdk-js-storageblob/" + SDK_VERSION;
@@ -42668,7 +42041,7 @@ var require_dist9 = __commonJS((exports2) => {
         allowedQueryParameters: StorageBlobLoggingAllowedQueryParameters
       })
     ];
-    return factories.push(coreHttp.proxyPolicy(pipelineOptions.proxyOptions)), factories.push(coreHttp.disableResponseDecompressionPolicy()), factories.push(coreHttp.isTokenCredential(credential) ? coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes) : credential), new Pipeline(factories, pipelineOptions);
+    return factories.push(coreHttp.proxyPolicy(pipelineOptions.proxyOptions)), factories.push(coreHttp.disableResponseDecompressionPolicy()), factories.push(coreHttp.isTokenCredential(credential) ? attachCredential(coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes), credential) : credential), new Pipeline(factories, pipelineOptions);
   }
   var ABORT_ERROR = new abortController.AbortError("The operation was aborted."), RetriableReadableStream = function(_super) {
     tslib.__extends(RetriableReadableStream2, _super);
@@ -43579,33 +42952,32 @@ var require_dist9 = __commonJS((exports2) => {
     function BlobQuickQueryStream2(source, options) {
       options === void 0 && (options = {});
       var _this = _super.call(this) || this;
-      return _this.source = source, _this.onProgress = options.onProgress, _this.onError = options.onError, _this.avroReader = new AvroReader(new AvroReadableFromStream(_this.source)), _this.avroIter = _this.avroReader.parseObjects({abortSignal: options.abortSignal}), _this;
+      return _this.avroPaused = !0, _this.source = source, _this.onProgress = options.onProgress, _this.onError = options.onError, _this.avroReader = new AvroReader(new AvroReadableFromStream(_this.source)), _this.avroIter = _this.avroReader.parseObjects({abortSignal: options.abortSignal}), _this;
     }
     return BlobQuickQueryStream2.prototype._read = function() {
       var _this = this;
-      this.readInternal().catch(function(err) {
+      this.avroPaused && this.readInternal().catch(function(err) {
         _this.emit("error", err);
       });
     }, BlobQuickQueryStream2.prototype.readInternal = function() {
-      var e_1, _a;
       return tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, _c, obj, schema, exit, data, bytesScanned, totalBytes, fatal, name_1, description, position, e_1_1;
-        return tslib.__generator(this, function(_d) {
-          switch (_d.label) {
+        var avroNext, obj, schema, data, bytesScanned, totalBytes, fatal, name_1, description, position;
+        return tslib.__generator(this, function(_a) {
+          switch (_a.label) {
             case 0:
-              _d.trys.push([0, 5, 6, 11]), _b = tslib.__asyncValues(this.avroIter), _d.label = 1;
+              this.avroPaused = !1, _a.label = 1;
             case 1:
-              return [4, _b.next()];
+              return [4, this.avroIter.next()];
             case 2:
-              if (_c = _d.sent(), !!_c.done)
+              if (avroNext = _a.sent(), avroNext.done)
                 return [3, 4];
-              if (obj = _c.value, schema = obj.$schema, typeof schema != "string")
+              if (obj = avroNext.value, schema = obj.$schema, typeof schema != "string")
                 throw Error("Missing schema in avro record.");
-              switch (exit = !1, schema) {
+              switch (schema) {
                 case "com.microsoft.azure.storage.queryBlobContents.resultData":
                   if (data = obj.data, !(data instanceof Uint8Array))
                     throw Error("Invalid data in avro result record.");
-                  this.push(Buffer.from(data)) || (exit = !0);
+                  this.push(Buffer.from(data)) || (this.avroPaused = !0);
                   break;
                 case "com.microsoft.azure.storage.queryBlobContents.progress":
                   if (bytesScanned = obj.bytesScanned, typeof bytesScanned != "number")
@@ -43641,28 +43013,12 @@ var require_dist9 = __commonJS((exports2) => {
                 default:
                   throw Error("Unknown schema " + schema + " in avro progress record.");
               }
-              if (exit)
-                return [3, 4];
-              _d.label = 3;
+              _a.label = 3;
             case 3:
-              return [3, 1];
+              if (!avroNext.done && !this.avroPaused)
+                return [3, 1];
+              _a.label = 4;
             case 4:
-              return [3, 11];
-            case 5:
-              return e_1_1 = _d.sent(), e_1 = {error: e_1_1}, [3, 11];
-            case 6:
-              return _d.trys.push([6, , 9, 10]), _c && !_c.done && (_a = _b.return) ? [4, _a.call(_b)] : [3, 8];
-            case 7:
-              _d.sent(), _d.label = 8;
-            case 8:
-              return [3, 10];
-            case 9:
-              if (e_1)
-                throw e_1.error;
-              return [7];
-            case 10:
-              return [7];
-            case 11:
               return [2];
           }
         });
@@ -43960,7 +43316,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, StorageSharedKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
       return crypto.createHmac("sha256", this.accountKey).update(stringToSign, "utf8").digest("base64");
     }, StorageSharedKeyCredential2;
-  }(Credential), packageName = "azure-storage-blob", packageVersion = "12.3.0", StorageClientContext = function(_super) {
+  }(Credential), packageName = "azure-storage-blob", packageVersion = "12.4.0", StorageClientContext = function(_super) {
     tslib.__extends(StorageClientContext2, _super);
     function StorageClientContext2(url2, options) {
       var _this = this;
@@ -43970,7 +43326,7 @@ var require_dist9 = __commonJS((exports2) => {
         var defaultUserAgent = coreHttp.getDefaultUserAgentValue();
         options.userAgent = packageName + "/" + packageVersion + " " + defaultUserAgent;
       }
-      return _this = _super.call(this, void 0, options) || this, _this.version = "2020-02-10", _this.baseUri = "{url}", _this.requestContentType = "application/json; charset=utf-8", _this.url = url2, _this;
+      return _this = _super.call(this, void 0, options) || this, _this.version = "2020-04-08", _this.baseUri = "{url}", _this.requestContentType = "application/json; charset=utf-8", _this.url = url2, _this;
     }
     return StorageClientContext2;
   }(coreHttp.ServiceClient);
@@ -44089,7 +43445,7 @@ var require_dist9 = __commonJS((exports2) => {
       this.url = escapeURLPath(url2), this.accountName = getAccountNameFromUrl(url2), this.pipeline = pipeline, this.storageClientContext = new StorageClientContext(this.url, pipeline.toServiceClientOptions()), this.isHttps = iEqual(getURLScheme(this.url) || "", "https"), this.credential = new AnonymousCredential();
       for (var _i = 0, _a = this.pipeline.factories; _i < _a.length; _i++) {
         var factory = _a[_i];
-        (coreHttp.isNode && factory instanceof StorageSharedKeyCredential || factory instanceof AnonymousCredential || coreHttp.isTokenCredential(factory)) && (this.credential = factory);
+        coreHttp.isNode && factory instanceof StorageSharedKeyCredential || factory instanceof AnonymousCredential ? this.credential = factory : coreHttp.isTokenCredential(factory.credential) && (this.credential = factory.credential);
       }
       var storageClientContext = this.storageClientContext;
       storageClientContext.requestContentType = void 0;
@@ -44368,7 +43724,396 @@ var require_dist9 = __commonJS((exports2) => {
       });
     });
   }
-  var fsStat = util.promisify(fs3.stat), fsCreateReadStream = fs3.createReadStream, BlobClient = function(_super) {
+  var fsStat = util.promisify(fs3.stat), fsCreateReadStream = fs3.createReadStream, BlobSASPermissions = function() {
+    function BlobSASPermissions2() {
+      this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.tag = !1, this.move = !1, this.execute = !1;
+    }
+    return BlobSASPermissions2.parse = function(permissions) {
+      for (var blobSASPermissions = new BlobSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
+        var char = permissions_1[_i];
+        switch (char) {
+          case "r":
+            blobSASPermissions.read = !0;
+            break;
+          case "a":
+            blobSASPermissions.add = !0;
+            break;
+          case "c":
+            blobSASPermissions.create = !0;
+            break;
+          case "w":
+            blobSASPermissions.write = !0;
+            break;
+          case "d":
+            blobSASPermissions.delete = !0;
+            break;
+          case "x":
+            blobSASPermissions.deleteVersion = !0;
+            break;
+          case "t":
+            blobSASPermissions.tag = !0;
+            break;
+          case "m":
+            blobSASPermissions.move = !0;
+            break;
+          case "e":
+            blobSASPermissions.execute = !0;
+            break;
+          default:
+            throw new RangeError("Invalid permission: " + char);
+        }
+      }
+      return blobSASPermissions;
+    }, BlobSASPermissions2.from = function(permissionLike) {
+      var blobSASPermissions = new BlobSASPermissions2();
+      return permissionLike.read && (blobSASPermissions.read = !0), permissionLike.add && (blobSASPermissions.add = !0), permissionLike.create && (blobSASPermissions.create = !0), permissionLike.write && (blobSASPermissions.write = !0), permissionLike.delete && (blobSASPermissions.delete = !0), permissionLike.deleteVersion && (blobSASPermissions.deleteVersion = !0), permissionLike.tag && (blobSASPermissions.tag = !0), permissionLike.move && (blobSASPermissions.move = !0), permissionLike.execute && (blobSASPermissions.execute = !0), blobSASPermissions;
+    }, BlobSASPermissions2.prototype.toString = function() {
+      var permissions = [];
+      return this.read && permissions.push("r"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.tag && permissions.push("t"), this.move && permissions.push("m"), this.execute && permissions.push("e"), permissions.join("");
+    }, BlobSASPermissions2;
+  }(), ContainerSASPermissions = function() {
+    function ContainerSASPermissions2() {
+      this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.tag = !1, this.move = !1, this.execute = !1;
+    }
+    return ContainerSASPermissions2.parse = function(permissions) {
+      for (var containerSASPermissions = new ContainerSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
+        var char = permissions_1[_i];
+        switch (char) {
+          case "r":
+            containerSASPermissions.read = !0;
+            break;
+          case "a":
+            containerSASPermissions.add = !0;
+            break;
+          case "c":
+            containerSASPermissions.create = !0;
+            break;
+          case "w":
+            containerSASPermissions.write = !0;
+            break;
+          case "d":
+            containerSASPermissions.delete = !0;
+            break;
+          case "l":
+            containerSASPermissions.list = !0;
+            break;
+          case "t":
+            containerSASPermissions.tag = !0;
+            break;
+          case "x":
+            containerSASPermissions.deleteVersion = !0;
+            break;
+          case "m":
+            containerSASPermissions.move = !0;
+            break;
+          case "e":
+            containerSASPermissions.execute = !0;
+            break;
+          default:
+            throw new RangeError("Invalid permission " + char);
+        }
+      }
+      return containerSASPermissions;
+    }, ContainerSASPermissions2.from = function(permissionLike) {
+      var containerSASPermissions = new ContainerSASPermissions2();
+      return permissionLike.read && (containerSASPermissions.read = !0), permissionLike.add && (containerSASPermissions.add = !0), permissionLike.create && (containerSASPermissions.create = !0), permissionLike.write && (containerSASPermissions.write = !0), permissionLike.delete && (containerSASPermissions.delete = !0), permissionLike.list && (containerSASPermissions.list = !0), permissionLike.deleteVersion && (containerSASPermissions.deleteVersion = !0), permissionLike.tag && (containerSASPermissions.tag = !0), permissionLike.move && (containerSASPermissions.move = !0), permissionLike.execute && (containerSASPermissions.execute = !0), containerSASPermissions;
+    }, ContainerSASPermissions2.prototype.toString = function() {
+      var permissions = [];
+      return this.read && permissions.push("r"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.list && permissions.push("l"), this.tag && permissions.push("t"), this.move && permissions.push("m"), this.execute && permissions.push("e"), permissions.join("");
+    }, ContainerSASPermissions2;
+  }(), UserDelegationKeyCredential = function() {
+    function UserDelegationKeyCredential2(accountName, userDelegationKey) {
+      this.accountName = accountName, this.userDelegationKey = userDelegationKey, this.key = Buffer.from(userDelegationKey.value, "base64");
+    }
+    return UserDelegationKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
+      return crypto.createHmac("sha256", this.key).update(stringToSign, "utf8").digest("base64");
+    }, UserDelegationKeyCredential2;
+  }();
+  function ipRangeToString(ipRange) {
+    return ipRange.end ? ipRange.start + "-" + ipRange.end : ipRange.start;
+  }
+  (function(SASProtocol) {
+    SASProtocol.Https = "https", SASProtocol.HttpsAndHttp = "https,http";
+  })(exports2.SASProtocol || (exports2.SASProtocol = {}));
+  var SASQueryParameters = function() {
+    function SASQueryParameters2(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl2, contentDisposition2, contentEncoding2, contentLanguage2, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
+      this.version = version2, this.signature = signature, permissionsOrOptions !== void 0 && typeof permissionsOrOptions != "string" ? (this.permissions = permissionsOrOptions.permissions, this.services = permissionsOrOptions.services, this.resourceTypes = permissionsOrOptions.resourceTypes, this.protocol = permissionsOrOptions.protocol, this.startsOn = permissionsOrOptions.startsOn, this.expiresOn = permissionsOrOptions.expiresOn, this.ipRangeInner = permissionsOrOptions.ipRange, this.identifier = permissionsOrOptions.identifier, this.resource = permissionsOrOptions.resource, this.cacheControl = permissionsOrOptions.cacheControl, this.contentDisposition = permissionsOrOptions.contentDisposition, this.contentEncoding = permissionsOrOptions.contentEncoding, this.contentLanguage = permissionsOrOptions.contentLanguage, this.contentType = permissionsOrOptions.contentType, permissionsOrOptions.userDelegationKey && (this.signedOid = permissionsOrOptions.userDelegationKey.signedObjectId, this.signedTenantId = permissionsOrOptions.userDelegationKey.signedTenantId, this.signedStartsOn = permissionsOrOptions.userDelegationKey.signedStartsOn, this.signedExpiresOn = permissionsOrOptions.userDelegationKey.signedExpiresOn, this.signedService = permissionsOrOptions.userDelegationKey.signedService, this.signedVersion = permissionsOrOptions.userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = permissionsOrOptions.preauthorizedAgentObjectId, this.correlationId = permissionsOrOptions.correlationId)) : (this.services = services, this.resourceTypes = resourceTypes, this.expiresOn = expiresOn2, this.permissions = permissionsOrOptions, this.protocol = protocol, this.startsOn = startsOn, this.ipRangeInner = ipRange, this.identifier = identifier, this.resource = resource, this.cacheControl = cacheControl2, this.contentDisposition = contentDisposition2, this.contentEncoding = contentEncoding2, this.contentLanguage = contentLanguage2, this.contentType = contentType2, userDelegationKey && (this.signedOid = userDelegationKey.signedObjectId, this.signedTenantId = userDelegationKey.signedTenantId, this.signedStartsOn = userDelegationKey.signedStartsOn, this.signedExpiresOn = userDelegationKey.signedExpiresOn, this.signedService = userDelegationKey.signedService, this.signedVersion = userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = preauthorizedAgentObjectId, this.correlationId = correlationId));
+    }
+    return Object.defineProperty(SASQueryParameters2.prototype, "ipRange", {
+      get: function() {
+        if (this.ipRangeInner)
+          return {
+            end: this.ipRangeInner.end,
+            start: this.ipRangeInner.start
+          };
+      },
+      enumerable: !1,
+      configurable: !0
+    }), SASQueryParameters2.prototype.toString = function() {
+      for (var params = [
+        "sv",
+        "ss",
+        "srt",
+        "spr",
+        "st",
+        "se",
+        "sip",
+        "si",
+        "skoid",
+        "sktid",
+        "skt",
+        "ske",
+        "sks",
+        "skv",
+        "sr",
+        "sp",
+        "sig",
+        "rscc",
+        "rscd",
+        "rsce",
+        "rscl",
+        "rsct",
+        "saoid",
+        "scid"
+      ], queries = [], _i = 0, params_1 = params; _i < params_1.length; _i++) {
+        var param = params_1[_i];
+        switch (param) {
+          case "sv":
+            this.tryAppendQueryParameter(queries, param, this.version);
+            break;
+          case "ss":
+            this.tryAppendQueryParameter(queries, param, this.services);
+            break;
+          case "srt":
+            this.tryAppendQueryParameter(queries, param, this.resourceTypes);
+            break;
+          case "spr":
+            this.tryAppendQueryParameter(queries, param, this.protocol);
+            break;
+          case "st":
+            this.tryAppendQueryParameter(queries, param, this.startsOn ? truncatedISO8061Date(this.startsOn, !1) : void 0);
+            break;
+          case "se":
+            this.tryAppendQueryParameter(queries, param, this.expiresOn ? truncatedISO8061Date(this.expiresOn, !1) : void 0);
+            break;
+          case "sip":
+            this.tryAppendQueryParameter(queries, param, this.ipRange ? ipRangeToString(this.ipRange) : void 0);
+            break;
+          case "si":
+            this.tryAppendQueryParameter(queries, param, this.identifier);
+            break;
+          case "skoid":
+            this.tryAppendQueryParameter(queries, param, this.signedOid);
+            break;
+          case "sktid":
+            this.tryAppendQueryParameter(queries, param, this.signedTenantId);
+            break;
+          case "skt":
+            this.tryAppendQueryParameter(queries, param, this.signedStartsOn ? truncatedISO8061Date(this.signedStartsOn, !1) : void 0);
+            break;
+          case "ske":
+            this.tryAppendQueryParameter(queries, param, this.signedExpiresOn ? truncatedISO8061Date(this.signedExpiresOn, !1) : void 0);
+            break;
+          case "sks":
+            this.tryAppendQueryParameter(queries, param, this.signedService);
+            break;
+          case "skv":
+            this.tryAppendQueryParameter(queries, param, this.signedVersion);
+            break;
+          case "sr":
+            this.tryAppendQueryParameter(queries, param, this.resource);
+            break;
+          case "sp":
+            this.tryAppendQueryParameter(queries, param, this.permissions);
+            break;
+          case "sig":
+            this.tryAppendQueryParameter(queries, param, this.signature);
+            break;
+          case "rscc":
+            this.tryAppendQueryParameter(queries, param, this.cacheControl);
+            break;
+          case "rscd":
+            this.tryAppendQueryParameter(queries, param, this.contentDisposition);
+            break;
+          case "rsce":
+            this.tryAppendQueryParameter(queries, param, this.contentEncoding);
+            break;
+          case "rscl":
+            this.tryAppendQueryParameter(queries, param, this.contentLanguage);
+            break;
+          case "rsct":
+            this.tryAppendQueryParameter(queries, param, this.contentType);
+            break;
+          case "saoid":
+            this.tryAppendQueryParameter(queries, param, this.preauthorizedAgentObjectId);
+            break;
+          case "scid":
+            this.tryAppendQueryParameter(queries, param, this.correlationId);
+            break;
+        }
+      }
+      return queries.join("&");
+    }, SASQueryParameters2.prototype.tryAppendQueryParameter = function(queries, key, value) {
+      !value || (key = encodeURIComponent(key), value = encodeURIComponent(value), key.length > 0 && value.length > 0 && queries.push(key + "=" + value));
+    }, SASQueryParameters2;
+  }();
+  function generateBlobSASQueryParameters(blobSASSignatureValues, sharedKeyCredentialOrUserDelegationKey, accountName) {
+    var version2 = blobSASSignatureValues.version ? blobSASSignatureValues.version : SERVICE_VERSION, sharedKeyCredential = sharedKeyCredentialOrUserDelegationKey instanceof StorageSharedKeyCredential ? sharedKeyCredentialOrUserDelegationKey : void 0, userDelegationKeyCredential;
+    if (sharedKeyCredential === void 0 && accountName !== void 0 && (userDelegationKeyCredential = new UserDelegationKeyCredential(accountName, sharedKeyCredentialOrUserDelegationKey)), sharedKeyCredential === void 0 && userDelegationKeyCredential === void 0)
+      throw TypeError("Invalid sharedKeyCredential, userDelegationKey or accountName.");
+    if (version2 >= "2018-11-09")
+      return sharedKeyCredential !== void 0 ? generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential) : version2 >= "2020-02-10" ? generateBlobSASQueryParametersUDK20200210(blobSASSignatureValues, userDelegationKeyCredential) : generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential);
+    if (version2 >= "2015-04-05") {
+      if (sharedKeyCredential !== void 0)
+        return generateBlobSASQueryParameters20150405(blobSASSignatureValues, sharedKeyCredential);
+      throw new RangeError("'version' must be >= '2018-11-09' when generating user delegation SAS using user delegation key.");
+    }
+    throw new RangeError("'version' must be >= '2015-04-05'.");
+  }
+  function generateBlobSASQueryParameters20150405(blobSASSignatureValues, sharedKeyCredential) {
+    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !(blobSASSignatureValues.permissions && blobSASSignatureValues.expiresOn))
+      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+    var resource = "c";
+    blobSASSignatureValues.blobName && (resource = "b");
+    var verifiedPermissions;
+    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
+    var stringToSign = [
+      verifiedPermissions || "",
+      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
+      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
+      getCanonicalName(sharedKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+      blobSASSignatureValues.identifier,
+      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+      blobSASSignatureValues.version,
+      blobSASSignatureValues.cacheControl ? blobSASSignatureValues.cacheControl : "",
+      blobSASSignatureValues.contentDisposition ? blobSASSignatureValues.contentDisposition : "",
+      blobSASSignatureValues.contentEncoding ? blobSASSignatureValues.contentEncoding : "",
+      blobSASSignatureValues.contentLanguage ? blobSASSignatureValues.contentLanguage : "",
+      blobSASSignatureValues.contentType ? blobSASSignatureValues.contentType : ""
+    ].join(`
+`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
+    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
+  }
+  function generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential) {
+    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !(blobSASSignatureValues.permissions && blobSASSignatureValues.expiresOn))
+      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
+    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
+    var verifiedPermissions;
+    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
+    var stringToSign = [
+      verifiedPermissions || "",
+      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
+      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
+      getCanonicalName(sharedKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+      blobSASSignatureValues.identifier,
+      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+      blobSASSignatureValues.version,
+      resource,
+      timestamp,
+      blobSASSignatureValues.cacheControl ? blobSASSignatureValues.cacheControl : "",
+      blobSASSignatureValues.contentDisposition ? blobSASSignatureValues.contentDisposition : "",
+      blobSASSignatureValues.contentEncoding ? blobSASSignatureValues.contentEncoding : "",
+      blobSASSignatureValues.contentLanguage ? blobSASSignatureValues.contentLanguage : "",
+      blobSASSignatureValues.contentType ? blobSASSignatureValues.contentType : ""
+    ].join(`
+`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
+    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
+  }
+  function generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential) {
+    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
+      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
+    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
+    var verifiedPermissions;
+    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
+    var stringToSign = [
+      verifiedPermissions || "",
+      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
+      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
+      getCanonicalName(userDelegationKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+      userDelegationKeyCredential.userDelegationKey.signedObjectId,
+      userDelegationKeyCredential.userDelegationKey.signedTenantId,
+      userDelegationKeyCredential.userDelegationKey.signedStartsOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedStartsOn, !1) : "",
+      userDelegationKeyCredential.userDelegationKey.signedExpiresOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedExpiresOn, !1) : "",
+      userDelegationKeyCredential.userDelegationKey.signedService,
+      userDelegationKeyCredential.userDelegationKey.signedVersion,
+      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+      blobSASSignatureValues.version,
+      resource,
+      timestamp,
+      blobSASSignatureValues.cacheControl,
+      blobSASSignatureValues.contentDisposition,
+      blobSASSignatureValues.contentEncoding,
+      blobSASSignatureValues.contentLanguage,
+      blobSASSignatureValues.contentType
+    ].join(`
+`), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
+    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey);
+  }
+  function generateBlobSASQueryParametersUDK20200210(blobSASSignatureValues, userDelegationKeyCredential) {
+    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
+      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
+    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
+    var verifiedPermissions;
+    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
+    var stringToSign = [
+      verifiedPermissions || "",
+      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
+      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
+      getCanonicalName(userDelegationKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+      userDelegationKeyCredential.userDelegationKey.signedObjectId,
+      userDelegationKeyCredential.userDelegationKey.signedTenantId,
+      userDelegationKeyCredential.userDelegationKey.signedStartsOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedStartsOn, !1) : "",
+      userDelegationKeyCredential.userDelegationKey.signedExpiresOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedExpiresOn, !1) : "",
+      userDelegationKeyCredential.userDelegationKey.signedService,
+      userDelegationKeyCredential.userDelegationKey.signedVersion,
+      blobSASSignatureValues.preauthorizedAgentObjectId,
+      void 0,
+      blobSASSignatureValues.correlationId,
+      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+      blobSASSignatureValues.version,
+      resource,
+      timestamp,
+      blobSASSignatureValues.cacheControl,
+      blobSASSignatureValues.contentDisposition,
+      blobSASSignatureValues.contentEncoding,
+      blobSASSignatureValues.contentLanguage,
+      blobSASSignatureValues.contentType
+    ].join(`
+`), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
+    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey, blobSASSignatureValues.preauthorizedAgentObjectId, blobSASSignatureValues.correlationId);
+  }
+  function getCanonicalName(accountName, containerName, blobName) {
+    var elements = ["/blob/" + accountName + "/" + containerName];
+    return blobName && elements.push("/" + blobName), elements.join("");
+  }
+  function SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues) {
+    var version2 = blobSASSignatureValues.version ? blobSASSignatureValues.version : SERVICE_VERSION;
+    if (blobSASSignatureValues.snapshotTime && version2 < "2018-11-09")
+      throw RangeError("'version' must be >= '2018-11-09' when providing 'snapshotTime'.");
+    if (blobSASSignatureValues.blobName === void 0 && blobSASSignatureValues.snapshotTime)
+      throw RangeError("Must provide 'blobName' when providing 'snapshotTime'.");
+    if (blobSASSignatureValues.versionId && version2 < "2019-10-10")
+      throw RangeError("'version' must be >= '2019-10-10' when providing 'versionId'.");
+    if (blobSASSignatureValues.blobName === void 0 && blobSASSignatureValues.versionId)
+      throw RangeError("Must provide 'blobName' when providing 'versionId'.");
+    if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10")
+      throw RangeError("'version' must be >= '2019-10-10' when providing 'x' permission.");
+    if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.tag && version2 < "2019-12-12")
+      throw RangeError("'version' must be >= '2019-12-12' when providing 't' permission.");
+    if (version2 < "2020-02-10" && blobSASSignatureValues.permissions && (blobSASSignatureValues.permissions.move || blobSASSignatureValues.permissions.execute))
+      throw RangeError("'version' must be >= '2020-02-10' when providing the 'm' or 'e' permission.");
+    if (version2 < "2020-02-10" && (blobSASSignatureValues.preauthorizedAgentObjectId || blobSASSignatureValues.correlationId))
+      throw RangeError("'version' must be >= '2020-02-10' when providing 'preauthorizedAgentObjectId' or 'correlationId'.");
+    return blobSASSignatureValues.version = version2, blobSASSignatureValues;
+  }
+  var BlobClient = function(_super) {
     tslib.__extends(BlobClient2, _super);
     function BlobClient2(urlOrConnectionString, credentialOrPipelineOrContainerName, blobNameOrOptions, options) {
       var _a, _this = this;
@@ -44391,7 +44136,7 @@ var require_dist9 = __commonJS((exports2) => {
           throw new Error("Connection string must be either an Account connection string or a SAS connection string");
       } else
         throw new Error("Expecting non-empty strings for containerName and blobName parameters");
-      return _this = _super.call(this, url2, pipeline) || this, _a = _this.getBlobAndContainerNamesFromUrl(), _this._name = _a.blobName, _this._containerName = _a.containerName, _this.blobContext = new Blob$1(_this.storageClientContext), _this;
+      return _this = _super.call(this, url2, pipeline) || this, _a = _this.getBlobAndContainerNamesFromUrl(), _this._name = _a.blobName, _this._containerName = _a.containerName, _this.blobContext = new Blob$1(_this.storageClientContext), _this._snapshot = getURLParameter(_this.url, URLConstants.Parameters.SNAPSHOT), _this._versionId = getURLParameter(_this.url, URLConstants.Parameters.VERSIONID), _this;
     }
     return Object.defineProperty(BlobClient2.prototype, "name", {
       get: function() {
@@ -44711,6 +44456,7 @@ var require_dist9 = __commonJS((exports2) => {
             case 1:
               return _c.trys.push([1, 3, 4, 5]), [4, this.blobContext.setTags({
                 abortSignal: options.abortSignal,
+                leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
                 spanOptions,
                 tags: toBlobTags(tags)
@@ -44740,6 +44486,7 @@ var require_dist9 = __commonJS((exports2) => {
             case 1:
               return _c.trys.push([1, 3, 4, 5]), [4, this.blobContext.getTags({
                 abortSignal: options.abortSignal,
+                leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
                 spanOptions
               })];
@@ -45029,11 +44776,8 @@ var require_dist9 = __commonJS((exports2) => {
           var pathComponents = parsedUrl.getPath().match("/([^/]*)(/(.*))?");
           containerName = pathComponents[1], blobName = pathComponents[3];
         }
-        if (containerName = decodeURIComponent(containerName), blobName = decodeURIComponent(blobName), blobName = blobName.replace(/\\/g, "/"), blobName) {
-          if (!containerName)
-            throw new Error("Provided containerName is invalid.");
-        } else
-          throw new Error("Provided blobName is invalid.");
+        if (containerName = decodeURIComponent(containerName), blobName = decodeURIComponent(blobName), blobName = blobName.replace(/\\/g, "/"), !containerName)
+          throw new Error("Provided containerName is invalid.");
         return {blobName, containerName};
       } catch (error) {
         throw new Error("Unable to extract blobName and containerName with provided information.");
@@ -45078,6 +44822,14 @@ var require_dist9 = __commonJS((exports2) => {
               return [2];
           }
         });
+      });
+    }, BlobClient2.prototype.generateSasUrl = function(options) {
+      var _this = this;
+      return new Promise(function(resolve) {
+        if (!(_this.credential instanceof StorageSharedKeyCredential))
+          throw new RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
+        var sas = generateBlobSASQueryParameters(tslib.__assign({containerName: _this._containerName, blobName: _this._name, snapshotTime: _this._snapshot, versionId: _this._versionId}, options), _this.credential).toString();
+        resolve(appendToURLQuery(_this.url, sas));
       });
     }, BlobClient2;
   }(StorageClient), AppendBlobClient = function(_super) {
@@ -45376,9 +45128,39 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
+    }, BlockBlobClient2.prototype.syncUploadFromURL = function(sourceURL, options) {
+      var _a, _b, _c, _d, _e;
+      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+        var _f, span, spanOptions, e_25;
+        return tslib.__generator(this, function(_g) {
+          switch (_g.label) {
+            case 0:
+              options.conditions = options.conditions || {}, _f = createSpan("BlockBlobClient-syncUploadFromURL", options.tracingOptions), span = _f.span, spanOptions = _f.spanOptions, _g.label = 1;
+            case 1:
+              return _g.trys.push([1, 3, 4, 5]), ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps), [4, this.blockBlobContext.putBlobFromUrl(0, sourceURL, tslib.__assign(tslib.__assign({}, options), {leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: options.conditions.tagConditions}), sourceModifiedAccessConditions: {
+                sourceIfMatch: (_a = options.sourceConditions) === null || _a === void 0 ? void 0 : _a.ifMatch,
+                sourceIfModifiedSince: (_b = options.sourceConditions) === null || _b === void 0 ? void 0 : _b.ifModifiedSince,
+                sourceIfNoneMatch: (_c = options.sourceConditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch,
+                sourceIfUnmodifiedSince: (_d = options.sourceConditions) === null || _d === void 0 ? void 0 : _d.ifUnmodifiedSince,
+                sourceIfTags: (_e = options.sourceConditions) === null || _e === void 0 ? void 0 : _e.tagConditions
+              }, cpkInfo: options.customerProvidedKey, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags), spanOptions}))];
+            case 2:
+              return [2, _g.sent()];
+            case 3:
+              throw e_25 = _g.sent(), span.setStatus({
+                code: api.CanonicalCode.UNKNOWN,
+                message: e_25.message
+              }), e_25;
+            case 4:
+              return span.end(), [7];
+            case 5:
+              return [2];
+          }
+        });
+      });
     }, BlockBlobClient2.prototype.stageBlock = function(blockId2, body, contentLength2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_25;
+        var _a, span, spanOptions, e_26;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45397,10 +45179,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _b.sent()];
             case 3:
-              throw e_25 = _b.sent(), span.setStatus({
+              throw e_26 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_25.message
-              }), e_25;
+                message: e_26.message
+              }), e_26;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45410,7 +45192,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlockBlobClient2.prototype.stageBlockFromURL = function(blockId2, sourceURL, offset, count, options) {
       return offset === void 0 && (offset = 0), options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_26;
+        var _a, span, spanOptions, e_27;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45429,10 +45211,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _b.sent()];
             case 3:
-              throw e_26 = _b.sent(), span.setStatus({
+              throw e_27 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_26.message
-              }), e_26;
+                message: e_27.message
+              }), e_27;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45443,7 +45225,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, BlockBlobClient2.prototype.commitBlockList = function(blocks, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_27;
+        var _b, span, spanOptions, e_28;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45464,10 +45246,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_27 = _c.sent(), span.setStatus({
+              throw e_28 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_27.message
-              }), e_27;
+                message: e_28.message
+              }), e_28;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45478,7 +45260,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, BlockBlobClient2.prototype.getBlockList = function(listType2, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, res, e_28;
+        var _b, span, spanOptions, res, e_29;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45493,10 +45275,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return res = _c.sent(), res.committedBlocks || (res.committedBlocks = []), res.uncommittedBlocks || (res.uncommittedBlocks = []), [2, res];
             case 3:
-              throw e_28 = _c.sent(), span.setStatus({
+              throw e_29 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_28.message
-              }), e_28;
+                message: e_29.message
+              }), e_29;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45526,7 +45308,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlockBlobClient2.prototype.uploadBrowserData = function(browserData, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, browserBlob_2, e_29;
+        var _a, span, spanOptions, browserBlob_2, e_30;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45538,10 +45320,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _b.sent()];
             case 3:
-              throw e_29 = _b.sent(), span.setStatus({
+              throw e_30 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_29.message
-              }), e_29;
+                message: e_30.message
+              }), e_30;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45551,7 +45333,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlockBlobClient2.prototype.uploadSeekableInternal = function(bodyFactory, size, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, numBlocks_1, blockList_1, blockIDPrefix_1, transferProgress_2, batch, _loop_2, i, e_30, _this = this;
+        var _a, span, spanOptions, numBlocks_1, blockList_1, blockIDPrefix_1, transferProgress_2, batch, _loop_2, i, e_31, _this = this;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45599,10 +45381,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 4:
               return _b.sent(), [2, this.commitBlockList(blockList_1, tslib.__assign(tslib.__assign({}, options), {tracingOptions: tslib.__assign(tslib.__assign({}, options.tracingOptions), {spanOptions})}))];
             case 5:
-              throw e_30 = _b.sent(), span.setStatus({
+              throw e_31 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_30.message
-              }), e_30;
+                message: e_31.message
+              }), e_31;
             case 6:
               return span.end(), [7];
             case 7:
@@ -45612,7 +45394,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlockBlobClient2.prototype.uploadFile = function(filePath, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, size, e_31;
+        var _a, span, spanOptions, size, e_32;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45632,10 +45414,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 3:
               return [2, _b.sent()];
             case 4:
-              throw e_31 = _b.sent(), span.setStatus({
+              throw e_32 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_31.message
-              }), e_31;
+                message: e_32.message
+              }), e_32;
             case 5:
               return span.end(), [7];
             case 6:
@@ -45645,7 +45427,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlockBlobClient2.prototype.uploadStream = function(stream2, bufferSize, maxConcurrency, options) {
       return bufferSize === void 0 && (bufferSize = DEFAULT_BLOCK_BUFFER_SIZE_BYTES), maxConcurrency === void 0 && (maxConcurrency = 5), options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, blockNum_1, blockIDPrefix_2, transferProgress_3, blockList_2, scheduler, e_32, _this = this;
+        var _a, span, spanOptions, blockNum_1, blockIDPrefix_2, transferProgress_3, blockList_2, scheduler, e_33, _this = this;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -45673,10 +45455,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 3:
               return [2, _b.sent()];
             case 4:
-              throw e_32 = _b.sent(), span.setStatus({
+              throw e_33 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_32.message
-              }), e_32;
+                message: e_33.message
+              }), e_33;
             case 5:
               return span.end(), [7];
             case 6:
@@ -45713,7 +45495,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, PageBlobClient2.prototype.create = function(size, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_33;
+        var _b, span, spanOptions, e_34;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45735,10 +45517,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_33 = _c.sent(), span.setStatus({
+              throw e_34 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_33.message
-              }), e_33;
+                message: e_34.message
+              }), e_34;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45749,7 +45531,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, PageBlobClient2.prototype.createIfNotExists = function(size, options) {
       var _a, _b;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _c, span, spanOptions, conditions, res, e_34;
+        var _c, span, spanOptions, conditions, res, e_35;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
             case 0:
@@ -45761,15 +45543,15 @@ var require_dist9 = __commonJS((exports2) => {
                 _response: res._response
               })];
             case 3:
-              if (e_34 = _d.sent(), ((_a = e_34.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists")
+              if (e_35 = _d.sent(), ((_a = e_35.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists")
                 return span.setStatus({
                   code: api.CanonicalCode.ALREADY_EXISTS,
                   message: "Expected exception when creating a blob only if it does not already exist."
-                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_34.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_34.response})];
+                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_35.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_35.response})];
               throw span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_34.message
-              }), e_34;
+                message: e_35.message
+              }), e_35;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45780,7 +45562,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, PageBlobClient2.prototype.uploadPages = function(body, offset, count, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_35;
+        var _b, span, spanOptions, e_36;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45802,10 +45584,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_35 = _c.sent(), span.setStatus({
+              throw e_36 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_35.message
-              }), e_35;
+                message: e_36.message
+              }), e_36;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45816,7 +45598,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, PageBlobClient2.prototype.uploadPagesFromURL = function(sourceURL, sourceOffset, destOffset, count, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_36;
+        var _b, span, spanOptions, e_37;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45842,10 +45624,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_36 = _c.sent(), span.setStatus({
+              throw e_37 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_36.message
-              }), e_36;
+                message: e_37.message
+              }), e_37;
             case 4:
               return span.end(), [7];
             case 5:
@@ -45856,7 +45638,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, PageBlobClient2.prototype.clearPages = function(offset, count, options) {
       var _a;
       return offset === void 0 && (offset = 0), options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_37;
+        var _b, span, spanOptions, e_38;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -45875,36 +45657,6 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_37 = _c.sent(), span.setStatus({
-                code: api.CanonicalCode.UNKNOWN,
-                message: e_37.message
-              }), e_37;
-            case 4:
-              return span.end(), [7];
-            case 5:
-              return [2];
-          }
-        });
-      });
-    }, PageBlobClient2.prototype.getPageRanges = function(offset, count, options) {
-      var _a;
-      return offset === void 0 && (offset = 0), options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _b, span, spanOptions, e_38;
-        return tslib.__generator(this, function(_c) {
-          switch (_c.label) {
-            case 0:
-              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-getPageRanges", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
-            case 1:
-              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.getPageRanges({
-                abortSignal: options.abortSignal,
-                leaseAccessConditions: options.conditions,
-                modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
-                range: rangeToString({offset, count}),
-                spanOptions
-              }).then(rangeResponseFromModel)];
-            case 2:
-              return [2, _c.sent()];
-            case 3:
               throw e_38 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
                 message: e_38.message
@@ -45916,20 +45668,19 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, PageBlobClient2.prototype.getPageRangesDiff = function(offset, count, prevSnapshot, options) {
+    }, PageBlobClient2.prototype.getPageRanges = function(offset, count, options) {
       var _a;
-      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+      return offset === void 0 && (offset = 0), options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _b, span, spanOptions, e_39;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
-              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-getPageRangesDiff", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
+              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-getPageRanges", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
             case 1:
-              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.getPageRangesDiff({
+              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.getPageRanges({
                 abortSignal: options.abortSignal,
                 leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
-                prevsnapshot: prevSnapshot,
                 range: rangeToString({offset, count}),
                 spanOptions
               }).then(rangeResponseFromModel)];
@@ -45947,20 +45698,20 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, PageBlobClient2.prototype.getPageRangesDiffForManagedDisks = function(offset, count, prevSnapshotUrl2, options) {
+    }, PageBlobClient2.prototype.getPageRangesDiff = function(offset, count, prevSnapshot, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _b, span, spanOptions, e_40;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
-              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-GetPageRangesDiffForManagedDisks", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
+              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-getPageRangesDiff", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
             case 1:
               return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.getPageRangesDiff({
                 abortSignal: options.abortSignal,
                 leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
-                prevSnapshotUrl: prevSnapshotUrl2,
+                prevsnapshot: prevSnapshot,
                 range: rangeToString({offset, count}),
                 spanOptions
               }).then(rangeResponseFromModel)];
@@ -45978,22 +45729,23 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, PageBlobClient2.prototype.resize = function(size, options) {
+    }, PageBlobClient2.prototype.getPageRangesDiffForManagedDisks = function(offset, count, prevSnapshotUrl2, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _b, span, spanOptions, e_41;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
-              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-resize", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
+              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-GetPageRangesDiffForManagedDisks", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
             case 1:
-              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.resize(size, {
+              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.getPageRangesDiff({
                 abortSignal: options.abortSignal,
                 leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
-                encryptionScope: options.encryptionScope,
+                prevSnapshotUrl: prevSnapshotUrl2,
+                range: rangeToString({offset, count}),
                 spanOptions
-              })];
+              }).then(rangeResponseFromModel)];
             case 2:
               return [2, _c.sent()];
             case 3:
@@ -46008,20 +45760,20 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, PageBlobClient2.prototype.updateSequenceNumber = function(sequenceNumberAction2, sequenceNumber, options) {
+    }, PageBlobClient2.prototype.resize = function(size, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _b, span, spanOptions, e_42;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
-              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-updateSequenceNumber", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
+              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-resize", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
             case 1:
-              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.updateSequenceNumber(sequenceNumberAction2, {
+              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.resize(size, {
                 abortSignal: options.abortSignal,
-                blobSequenceNumber: sequenceNumber,
                 leaseAccessConditions: options.conditions,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
+                encryptionScope: options.encryptionScope,
                 spanOptions
               })];
             case 2:
@@ -46038,10 +45790,40 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, PageBlobClient2.prototype.startCopyIncremental = function(copySource2, options) {
+    }, PageBlobClient2.prototype.updateSequenceNumber = function(sequenceNumberAction2, sequenceNumber, options) {
       var _a;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _b, span, spanOptions, e_43;
+        return tslib.__generator(this, function(_c) {
+          switch (_c.label) {
+            case 0:
+              options.conditions = options.conditions || {}, _b = createSpan("PageBlobClient-updateSequenceNumber", options.tracingOptions), span = _b.span, spanOptions = _b.spanOptions, _c.label = 1;
+            case 1:
+              return _c.trys.push([1, 3, 4, 5]), [4, this.pageBlobContext.updateSequenceNumber(sequenceNumberAction2, {
+                abortSignal: options.abortSignal,
+                blobSequenceNumber: sequenceNumber,
+                leaseAccessConditions: options.conditions,
+                modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions}),
+                spanOptions
+              })];
+            case 2:
+              return [2, _c.sent()];
+            case 3:
+              throw e_43 = _c.sent(), span.setStatus({
+                code: api.CanonicalCode.UNKNOWN,
+                message: e_43.message
+              }), e_43;
+            case 4:
+              return span.end(), [7];
+            case 5:
+              return [2];
+          }
+        });
+      });
+    }, PageBlobClient2.prototype.startCopyIncremental = function(copySource2, options) {
+      var _a;
+      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+        var _b, span, spanOptions, e_44;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -46055,10 +45837,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_43 = _c.sent(), span.setStatus({
+              throw e_44 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_43.message
-              }), e_43;
+                message: e_44.message
+              }), e_44;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46087,7 +45869,7 @@ var require_dist9 = __commonJS((exports2) => {
     }), BlobLeaseClient2.prototype.acquireLease = function(duration2, options) {
       var _a, _b, _c, _d, _e, _f;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _g, span, spanOptions, e_44;
+        var _g, span, spanOptions, e_45;
         return tslib.__generator(this, function(_h) {
           switch (_h.label) {
             case 0:
@@ -46105,10 +45887,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _h.sent()];
             case 3:
-              throw e_44 = _h.sent(), span.setStatus({
+              throw e_45 = _h.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_44.message
-              }), e_44;
+                message: e_45.message
+              }), e_45;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46119,7 +45901,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, BlobLeaseClient2.prototype.changeLease = function(proposedLeaseId, options) {
       var _a, _b, _c, _d, _e, _f;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _g, span, spanOptions, response, e_45;
+        var _g, span, spanOptions, response, e_46;
         return tslib.__generator(this, function(_h) {
           switch (_h.label) {
             case 0:
@@ -46135,36 +45917,6 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return response = _h.sent(), this._leaseId = proposedLeaseId, [2, response];
             case 3:
-              throw e_45 = _h.sent(), span.setStatus({
-                code: api.CanonicalCode.UNKNOWN,
-                message: e_45.message
-              }), e_45;
-            case 4:
-              return span.end(), [7];
-            case 5:
-              return [2];
-          }
-        });
-      });
-    }, BlobLeaseClient2.prototype.releaseLease = function(options) {
-      var _a, _b, _c, _d, _e, _f;
-      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _g, span, spanOptions, e_46;
-        return tslib.__generator(this, function(_h) {
-          switch (_h.label) {
-            case 0:
-              if (_g = createSpan("BlobLeaseClient-releaseLease", options.tracingOptions), span = _g.span, spanOptions = _g.spanOptions, this._isContainer && (((_a = options.conditions) === null || _a === void 0 ? void 0 : _a.ifMatch) && ((_b = options.conditions) === null || _b === void 0 ? void 0 : _b.ifMatch) !== ETagNone || ((_c = options.conditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch) && ((_d = options.conditions) === null || _d === void 0 ? void 0 : _d.ifNoneMatch) !== ETagNone || ((_e = options.conditions) === null || _e === void 0 ? void 0 : _e.tagConditions)))
-                throw new RangeError("The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable.");
-              _h.label = 1;
-            case 1:
-              return _h.trys.push([1, 3, 4, 5]), [4, this._containerOrBlobOperation.releaseLease(this._leaseId, {
-                abortSignal: options.abortSignal,
-                modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_f = options.conditions) === null || _f === void 0 ? void 0 : _f.tagConditions}),
-                spanOptions
-              })];
-            case 2:
-              return [2, _h.sent()];
-            case 3:
               throw e_46 = _h.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
                 message: e_46.message
@@ -46176,18 +45928,18 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, BlobLeaseClient2.prototype.renewLease = function(options) {
+    }, BlobLeaseClient2.prototype.releaseLease = function(options) {
       var _a, _b, _c, _d, _e, _f;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _g, span, spanOptions, e_47;
         return tslib.__generator(this, function(_h) {
           switch (_h.label) {
             case 0:
-              if (_g = createSpan("BlobLeaseClient-renewLease", options.tracingOptions), span = _g.span, spanOptions = _g.spanOptions, this._isContainer && (((_a = options.conditions) === null || _a === void 0 ? void 0 : _a.ifMatch) && ((_b = options.conditions) === null || _b === void 0 ? void 0 : _b.ifMatch) !== ETagNone || ((_c = options.conditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch) && ((_d = options.conditions) === null || _d === void 0 ? void 0 : _d.ifNoneMatch) !== ETagNone || ((_e = options.conditions) === null || _e === void 0 ? void 0 : _e.tagConditions)))
+              if (_g = createSpan("BlobLeaseClient-releaseLease", options.tracingOptions), span = _g.span, spanOptions = _g.spanOptions, this._isContainer && (((_a = options.conditions) === null || _a === void 0 ? void 0 : _a.ifMatch) && ((_b = options.conditions) === null || _b === void 0 ? void 0 : _b.ifMatch) !== ETagNone || ((_c = options.conditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch) && ((_d = options.conditions) === null || _d === void 0 ? void 0 : _d.ifNoneMatch) !== ETagNone || ((_e = options.conditions) === null || _e === void 0 ? void 0 : _e.tagConditions)))
                 throw new RangeError("The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable.");
               _h.label = 1;
             case 1:
-              return _h.trys.push([1, 3, 4, 5]), [4, this._containerOrBlobOperation.renewLease(this._leaseId, {
+              return _h.trys.push([1, 3, 4, 5]), [4, this._containerOrBlobOperation.releaseLease(this._leaseId, {
                 abortSignal: options.abortSignal,
                 modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_f = options.conditions) === null || _f === void 0 ? void 0 : _f.tagConditions}),
                 spanOptions
@@ -46206,10 +45958,40 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
+    }, BlobLeaseClient2.prototype.renewLease = function(options) {
+      var _a, _b, _c, _d, _e, _f;
+      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+        var _g, span, spanOptions, e_48;
+        return tslib.__generator(this, function(_h) {
+          switch (_h.label) {
+            case 0:
+              if (_g = createSpan("BlobLeaseClient-renewLease", options.tracingOptions), span = _g.span, spanOptions = _g.spanOptions, this._isContainer && (((_a = options.conditions) === null || _a === void 0 ? void 0 : _a.ifMatch) && ((_b = options.conditions) === null || _b === void 0 ? void 0 : _b.ifMatch) !== ETagNone || ((_c = options.conditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch) && ((_d = options.conditions) === null || _d === void 0 ? void 0 : _d.ifNoneMatch) !== ETagNone || ((_e = options.conditions) === null || _e === void 0 ? void 0 : _e.tagConditions)))
+                throw new RangeError("The IfMatch, IfNoneMatch and tags access conditions are ignored by the service. Values other than undefined or their default values are not acceptable.");
+              _h.label = 1;
+            case 1:
+              return _h.trys.push([1, 3, 4, 5]), [4, this._containerOrBlobOperation.renewLease(this._leaseId, {
+                abortSignal: options.abortSignal,
+                modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), {ifTags: (_f = options.conditions) === null || _f === void 0 ? void 0 : _f.tagConditions}),
+                spanOptions
+              })];
+            case 2:
+              return [2, _h.sent()];
+            case 3:
+              throw e_48 = _h.sent(), span.setStatus({
+                code: api.CanonicalCode.UNKNOWN,
+                message: e_48.message
+              }), e_48;
+            case 4:
+              return span.end(), [7];
+            case 5:
+              return [2];
+          }
+        });
+      });
     }, BlobLeaseClient2.prototype.breakLease = function(breakPeriod2, options) {
       var _a, _b, _c, _d, _e, _f;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _g, span, spanOptions, operationOptions, e_48;
+        var _g, span, spanOptions, operationOptions, e_49;
         return tslib.__generator(this, function(_h) {
           switch (_h.label) {
             case 0:
@@ -46226,10 +46008,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _h.sent()];
             case 3:
-              throw e_48 = _h.sent(), span.setStatus({
+              throw e_49 = _h.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_48.message
-              }), e_48;
+                message: e_49.message
+              }), e_49;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46269,7 +46051,7 @@ var require_dist9 = __commonJS((exports2) => {
       configurable: !0
     }), ContainerClient2.prototype.create = function(options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_49;
+        var _a, span, spanOptions, e_50;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46279,10 +46061,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _b.sent()];
             case 3:
-              throw e_49 = _b.sent(), span.setStatus({
+              throw e_50 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_49.message
-              }), e_49;
+                message: e_50.message
+              }), e_50;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46293,7 +46075,7 @@ var require_dist9 = __commonJS((exports2) => {
     }, ContainerClient2.prototype.createIfNotExists = function(options) {
       var _a, _b;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _c, span, spanOptions, res, e_50;
+        var _c, span, spanOptions, res, e_51;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
             case 0:
@@ -46305,15 +46087,15 @@ var require_dist9 = __commonJS((exports2) => {
                 _response: res._response
               })];
             case 3:
-              if (e_50 = _d.sent(), ((_a = e_50.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerAlreadyExists")
+              if (e_51 = _d.sent(), ((_a = e_51.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerAlreadyExists")
                 return span.setStatus({
                   code: api.CanonicalCode.ALREADY_EXISTS,
                   message: "Expected exception when creating a container only if it does not already exist."
-                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_50.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_50.response})];
+                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_51.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_51.response})];
               throw span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_50.message
-              }), e_50;
+                message: e_51.message
+              }), e_51;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46323,7 +46105,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.exists = function(options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_51;
+        var _a, span, spanOptions, e_52;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46336,15 +46118,15 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return _b.sent(), [2, !0];
             case 3:
-              if (e_51 = _b.sent(), e_51.statusCode === 404)
+              if (e_52 = _b.sent(), e_52.statusCode === 404)
                 return span.setStatus({
                   code: api.CanonicalCode.NOT_FOUND,
                   message: "Expected exception when checking container existence"
                 }), [2, !1];
               throw span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_51.message
-              }), e_51;
+                message: e_52.message
+              }), e_52;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46362,41 +46144,13 @@ var require_dist9 = __commonJS((exports2) => {
       return new PageBlobClient(appendToURLPath(this.url, encodeURIComponent(blobName)), this.pipeline);
     }, ContainerClient2.prototype.getProperties = function(options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_52;
+        var _a, span, spanOptions, e_53;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
               options.conditions || (options.conditions = {}), _a = createSpan("ContainerClient-getProperties", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
             case 1:
               return _b.trys.push([1, 3, 4, 5]), [4, this.containerContext.getProperties(tslib.__assign(tslib.__assign({abortSignal: options.abortSignal}, options.conditions), {spanOptions}))];
-            case 2:
-              return [2, _b.sent()];
-            case 3:
-              throw e_52 = _b.sent(), span.setStatus({
-                code: api.CanonicalCode.UNKNOWN,
-                message: e_52.message
-              }), e_52;
-            case 4:
-              return span.end(), [7];
-            case 5:
-              return [2];
-          }
-        });
-      });
-    }, ContainerClient2.prototype.delete = function(options) {
-      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_53;
-        return tslib.__generator(this, function(_b) {
-          switch (_b.label) {
-            case 0:
-              options.conditions || (options.conditions = {}), _a = createSpan("ContainerClient-delete", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
-            case 1:
-              return _b.trys.push([1, 3, 4, 5]), [4, this.containerContext.deleteMethod({
-                abortSignal: options.abortSignal,
-                leaseAccessConditions: options.conditions,
-                modifiedAccessConditions: options.conditions,
-                spanOptions
-              })];
             case 2:
               return [2, _b.sent()];
             case 3:
@@ -46411,10 +46165,38 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
+    }, ContainerClient2.prototype.delete = function(options) {
+      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+        var _a, span, spanOptions, e_54;
+        return tslib.__generator(this, function(_b) {
+          switch (_b.label) {
+            case 0:
+              options.conditions || (options.conditions = {}), _a = createSpan("ContainerClient-delete", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
+            case 1:
+              return _b.trys.push([1, 3, 4, 5]), [4, this.containerContext.deleteMethod({
+                abortSignal: options.abortSignal,
+                leaseAccessConditions: options.conditions,
+                modifiedAccessConditions: options.conditions,
+                spanOptions
+              })];
+            case 2:
+              return [2, _b.sent()];
+            case 3:
+              throw e_54 = _b.sent(), span.setStatus({
+                code: api.CanonicalCode.UNKNOWN,
+                message: e_54.message
+              }), e_54;
+            case 4:
+              return span.end(), [7];
+            case 5:
+              return [2];
+          }
+        });
+      });
     }, ContainerClient2.prototype.deleteIfExists = function(options) {
       var _a, _b;
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _c, span, spanOptions, res, e_54;
+        var _c, span, spanOptions, res, e_55;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
             case 0:
@@ -46426,15 +46208,15 @@ var require_dist9 = __commonJS((exports2) => {
                 _response: res._response
               })];
             case 3:
-              if (e_54 = _d.sent(), ((_a = e_54.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerNotFound")
+              if (e_55 = _d.sent(), ((_a = e_55.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerNotFound")
                 return span.setStatus({
                   code: api.CanonicalCode.NOT_FOUND,
                   message: "Expected exception when deleting a container only if it exists."
-                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_54.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_54.response})];
+                }), [2, tslib.__assign(tslib.__assign({succeeded: !1}, (_b = e_55.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), {_response: e_55.response})];
               throw span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_54.message
-              }), e_54;
+                message: e_55.message
+              }), e_55;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46444,7 +46226,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.setMetadata = function(metadata2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_55;
+        var _a, span, spanOptions, e_56;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46462,10 +46244,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _b.sent()];
             case 3:
-              throw e_55 = _b.sent(), span.setStatus({
+              throw e_56 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_55.message
-              }), e_55;
+                message: e_56.message
+              }), e_56;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46475,7 +46257,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.getAccessPolicy = function(options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, response, res, _i, response_1, identifier, accessPolicy, e_56;
+        var _a, span, spanOptions, response, res, _i, response_1, identifier, accessPolicy, e_57;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46507,10 +46289,10 @@ var require_dist9 = __commonJS((exports2) => {
                 });
               return [2, res];
             case 3:
-              throw e_56 = _b.sent(), span.setStatus({
+              throw e_57 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_56.message
-              }), e_56;
+                message: e_57.message
+              }), e_57;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46520,7 +46302,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.setAccessPolicy = function(access2, containerAcl, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, acl, _i, _b, identifier, e_57;
+        var _a, span, spanOptions, acl, _i, _b, identifier, e_58;
         return tslib.__generator(this, function(_c) {
           switch (_c.label) {
             case 0:
@@ -46546,10 +46328,10 @@ var require_dist9 = __commonJS((exports2) => {
             case 2:
               return [2, _c.sent()];
             case 3:
-              throw e_57 = _c.sent(), span.setStatus({
+              throw e_58 = _c.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_57.message
-              }), e_57;
+                message: e_58.message
+              }), e_58;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46561,7 +46343,7 @@ var require_dist9 = __commonJS((exports2) => {
       return new BlobLeaseClient(this, proposeLeaseId);
     }, ContainerClient2.prototype.uploadBlockBlob = function(blobName, body, contentLength2, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, blockBlobClient, response, e_58;
+        var _a, span, spanOptions, blockBlobClient, response, e_59;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46574,29 +46356,6 @@ var require_dist9 = __commonJS((exports2) => {
                 response
               }];
             case 3:
-              throw e_58 = _b.sent(), span.setStatus({
-                code: api.CanonicalCode.UNKNOWN,
-                message: e_58.message
-              }), e_58;
-            case 4:
-              return span.end(), [7];
-            case 5:
-              return [2];
-          }
-        });
-      });
-    }, ContainerClient2.prototype.deleteBlob = function(blobName, options) {
-      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, blobClient, e_59;
-        return tslib.__generator(this, function(_b) {
-          switch (_b.label) {
-            case 0:
-              _a = createSpan("ContainerClient-deleteBlob", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
-            case 1:
-              return _b.trys.push([1, 3, 4, 5]), blobClient = this.getBlobClient(blobName), options.versionId && (blobClient = blobClient.withVersion(options.versionId)), [4, blobClient.delete(tslib.__assign(tslib.__assign({}, options), {tracingOptions: tslib.__assign(tslib.__assign({}, options.tracingOptions), {spanOptions})}))];
-            case 2:
-              return [2, _b.sent()];
-            case 3:
               throw e_59 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
                 message: e_59.message
@@ -46608,20 +46367,17 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, ContainerClient2.prototype.listBlobFlatSegment = function(marker, options) {
+    }, ContainerClient2.prototype.deleteBlob = function(blobName, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, response, wrappedResponse, e_60;
+        var _a, span, spanOptions, blobClient, e_60;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
-              _a = createSpan("ContainerClient-listBlobFlatSegment", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
+              _a = createSpan("ContainerClient-deleteBlob", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
             case 1:
-              return _b.trys.push([1, 3, 4, 5]), [4, this.containerContext.listBlobFlatSegment(tslib.__assign(tslib.__assign({marker}, options), {spanOptions}))];
+              return _b.trys.push([1, 3, 4, 5]), blobClient = this.getBlobClient(blobName), options.versionId && (blobClient = blobClient.withVersion(options.versionId)), [4, blobClient.delete(tslib.__assign(tslib.__assign({}, options), {tracingOptions: tslib.__assign(tslib.__assign({}, options.tracingOptions), {spanOptions})}))];
             case 2:
-              return response = _b.sent(), wrappedResponse = tslib.__assign(tslib.__assign({}, response), {_response: response._response, segment: tslib.__assign(tslib.__assign({}, response.segment), {blobItems: response.segment.blobItems.map(function(blobItemInteral) {
-                var blobItem = tslib.__assign(tslib.__assign({}, blobItemInteral), {tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata)});
-                return blobItem;
-              })})}), [2, wrappedResponse];
+              return [2, _b.sent()];
             case 3:
               throw e_60 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
@@ -46634,9 +46390,35 @@ var require_dist9 = __commonJS((exports2) => {
           }
         });
       });
-    }, ContainerClient2.prototype.listBlobHierarchySegment = function(delimiter2, marker, options) {
+    }, ContainerClient2.prototype.listBlobFlatSegment = function(marker, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
         var _a, span, spanOptions, response, wrappedResponse, e_61;
+        return tslib.__generator(this, function(_b) {
+          switch (_b.label) {
+            case 0:
+              _a = createSpan("ContainerClient-listBlobFlatSegment", options.tracingOptions), span = _a.span, spanOptions = _a.spanOptions, _b.label = 1;
+            case 1:
+              return _b.trys.push([1, 3, 4, 5]), [4, this.containerContext.listBlobFlatSegment(tslib.__assign(tslib.__assign({marker}, options), {spanOptions}))];
+            case 2:
+              return response = _b.sent(), wrappedResponse = tslib.__assign(tslib.__assign({}, response), {_response: response._response, segment: tslib.__assign(tslib.__assign({}, response.segment), {blobItems: response.segment.blobItems.map(function(blobItemInteral) {
+                var blobItem = tslib.__assign(tslib.__assign({}, blobItemInteral), {tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata)});
+                return blobItem;
+              })})}), [2, wrappedResponse];
+            case 3:
+              throw e_61 = _b.sent(), span.setStatus({
+                code: api.CanonicalCode.UNKNOWN,
+                message: e_61.message
+              }), e_61;
+            case 4:
+              return span.end(), [7];
+            case 5:
+              return [2];
+          }
+        });
+      });
+    }, ContainerClient2.prototype.listBlobHierarchySegment = function(delimiter2, marker, options) {
+      return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
+        var _a, span, spanOptions, response, wrappedResponse, e_62;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -46649,10 +46431,10 @@ var require_dist9 = __commonJS((exports2) => {
                 return blobItem;
               })})}), [2, wrappedResponse];
             case 3:
-              throw e_61 = _b.sent(), span.setStatus({
+              throw e_62 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
-                message: e_61.message
-              }), e_61;
+                message: e_62.message
+              }), e_62;
             case 4:
               return span.end(), [7];
             case 5:
@@ -46690,7 +46472,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.listItems = function(options) {
       return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
-        var marker, _a, _b, listBlobsFlatSegmentResponse, e_62_1, e_62, _c;
+        var marker, _a, _b, listBlobsFlatSegmentResponse, e_63_1, e_63, _c;
         return tslib.__generator(this, function(_d) {
           switch (_d.label) {
             case 0:
@@ -46708,7 +46490,7 @@ var require_dist9 = __commonJS((exports2) => {
             case 6:
               return [3, 13];
             case 7:
-              return e_62_1 = _d.sent(), e_62 = {error: e_62_1}, [3, 13];
+              return e_63_1 = _d.sent(), e_63 = {error: e_63_1}, [3, 13];
             case 8:
               return _d.trys.push([8, , 11, 12]), _b && !_b.done && (_c = _a.return) ? [4, tslib.__await(_c.call(_a))] : [3, 10];
             case 9:
@@ -46716,8 +46498,8 @@ var require_dist9 = __commonJS((exports2) => {
             case 10:
               return [3, 12];
             case 11:
-              if (e_62)
-                throw e_62.error;
+              if (e_63)
+                throw e_63.error;
               return [7];
             case 12:
               return [7];
@@ -46771,7 +46553,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, ContainerClient2.prototype.listItemsByHierarchy = function(delimiter2, options) {
       return options === void 0 && (options = {}), tslib.__asyncGenerator(this, arguments, function() {
-        var marker, _a, _b, listBlobsHierarchySegmentResponse, segment, _i, _c, prefix2, _d, _e, blob, e_63_1, e_63, _f;
+        var marker, _a, _b, listBlobsHierarchySegmentResponse, segment, _i, _c, prefix2, _d, _e, blob, e_64_1, e_64, _f;
         return tslib.__generator(this, function(_g) {
           switch (_g.label) {
             case 0:
@@ -46807,7 +46589,7 @@ var require_dist9 = __commonJS((exports2) => {
             case 13:
               return [3, 20];
             case 14:
-              return e_63_1 = _g.sent(), e_63 = {error: e_63_1}, [3, 20];
+              return e_64_1 = _g.sent(), e_64 = {error: e_64_1}, [3, 20];
             case 15:
               return _g.trys.push([15, , 18, 19]), _b && !_b.done && (_f = _a.return) ? [4, tslib.__await(_f.call(_a))] : [3, 17];
             case 16:
@@ -46815,8 +46597,8 @@ var require_dist9 = __commonJS((exports2) => {
             case 17:
               return [3, 19];
             case 18:
-              if (e_63)
-                throw e_63.error;
+              if (e_64)
+                throw e_64.error;
               return [7];
             case 19:
               return [7];
@@ -46855,6 +46637,14 @@ var require_dist9 = __commonJS((exports2) => {
       } catch (error) {
         throw new Error("Unable to extract containerName with provided information.");
       }
+    }, ContainerClient2.prototype.generateSasUrl = function(options) {
+      var _this = this;
+      return new Promise(function(resolve) {
+        if (!(_this.credential instanceof StorageSharedKeyCredential))
+          throw new RangeError("Can only generate the SAS when the client is initialized with a shared key credential");
+        var sas = generateBlobSASQueryParameters(tslib.__assign({containerName: _this._containerName}, options), _this.credential).toString();
+        resolve(appendToURLQuery(_this.url, sas));
+      });
     }, ContainerClient2;
   }(StorageClient);
   function getBodyAsText(batchResponse) {
@@ -46894,7 +46684,7 @@ var require_dist9 = __commonJS((exports2) => {
               if (responseBodyAsText = _a.sent(), subResponses = responseBodyAsText.split(this.batchResponseEnding)[0].split(this.perResponsePrefix).slice(1), subResponseCount = subResponses.length, subResponseCount != this.subRequests.size && subResponseCount != 1)
                 throw new Error("Invalid state: sub responses' count is not equal to sub requests' count.");
               for (deserializedSubResponses = new Array(subResponseCount), subResponsesSucceededCount = 0, subResponsesFailedCount = 0, index = 0; index < subResponseCount; index++) {
-                for (subResponse = subResponses[index], deserializedSubResponses[index] = {}, deserializedSubResponse = deserializedSubResponses[index], deserializedSubResponse.headers = new coreHttp.HttpHeaders(), responseLines = subResponse.split("" + HTTP_LINE_ENDING), subRespHeaderStartFound = !1, subRespHeaderEndFound = !1, subRespFailed = !1, contentId = NOT_FOUND, _i = 0, responseLines_1 = responseLines; _i < responseLines_1.length; _i++) {
+                for (subResponse = subResponses[index], deserializedSubResponse = {}, deserializedSubResponse.headers = new coreHttp.HttpHeaders(), responseLines = subResponse.split("" + HTTP_LINE_ENDING), subRespHeaderStartFound = !1, subRespHeaderEndFound = !1, subRespFailed = !1, contentId = NOT_FOUND, _i = 0, responseLines_1 = responseLines; _i < responseLines_1.length; _i++) {
                   if (responseLine = responseLines_1[_i], !subRespHeaderStartFound) {
                     responseLine.startsWith(HeaderConstants.CONTENT_ID) && (contentId = parseInt(responseLine.split(HTTP_HEADER_DELIMITER)[1])), responseLine.startsWith(HTTP_VERSION_1_1) && (subRespHeaderStartFound = !0, tokens = responseLine.split(SPACE_DELIMITER), deserializedSubResponse.status = parseInt(tokens[1]), deserializedSubResponse.statusMessage = tokens.slice(2).join(SPACE_DELIMITER));
                     continue;
@@ -46911,7 +46701,7 @@ var require_dist9 = __commonJS((exports2) => {
                     tokens = responseLine.split(HTTP_HEADER_DELIMITER), deserializedSubResponse.headers.set(tokens[0], tokens[1]), tokens[0] === HeaderConstants.X_MS_ERROR_CODE && (deserializedSubResponse.errorCode = tokens[1], subRespFailed = !0);
                   }
                 }
-                contentId != NOT_FOUND && (deserializedSubResponse._request = this.subRequests.get(contentId)), subRespFailed ? subResponsesFailedCount++ : subResponsesSucceededCount++;
+                contentId != NOT_FOUND && Number.isInteger(contentId) && contentId >= 0 && contentId < this.subRequests.size && deserializedSubResponses[contentId] === void 0 ? (deserializedSubResponse._request = this.subRequests.get(contentId), deserializedSubResponses[contentId] = deserializedSubResponse) : logger.error("subResponses[" + index + "] is dropped as the Content-ID is not found or invalid, Content-ID: " + contentId), subRespFailed ? subResponsesFailedCount++ : subResponsesSucceededCount++;
               }
               return [2, {
                 subResponses: deserializedSubResponses,
@@ -47089,7 +46879,7 @@ var require_dist9 = __commonJS((exports2) => {
     }
     return InnerBatchRequest2.prototype.createPipeline = function(credential) {
       var isAnonymousCreds = credential instanceof AnonymousCredential, policyFactoryLength = 3 + (isAnonymousCreds ? 0 : 1), factories = new Array(policyFactoryLength);
-      return factories[0] = coreHttp.deserializationPolicy(), factories[1] = new BatchHeaderFilterPolicyFactory(), isAnonymousCreds || (factories[2] = coreHttp.isTokenCredential(credential) ? coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes) : credential), factories[policyFactoryLength - 1] = new BatchRequestAssemblePolicyFactory(this), new Pipeline(factories, {});
+      return factories[0] = coreHttp.deserializationPolicy(), factories[1] = new BatchHeaderFilterPolicyFactory(), isAnonymousCreds || (factories[2] = coreHttp.isTokenCredential(credential) ? attachCredential(coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes), credential) : credential), factories[policyFactoryLength - 1] = new BatchRequestAssemblePolicyFactory(this), new Pipeline(factories, {});
     }, InnerBatchRequest2.prototype.appendSubRequestToBody = function(request) {
       this.body += [
         this.subRequestPrefix,
@@ -47258,7 +47048,139 @@ var require_dist9 = __commonJS((exports2) => {
         });
       });
     }, BlobBatchClient2;
-  }(), BlobServiceClient = function(_super) {
+  }(), AccountSASPermissions = function() {
+    function AccountSASPermissions2() {
+      this.read = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.add = !1, this.create = !1, this.update = !1, this.process = !1, this.tag = !1, this.filter = !1;
+    }
+    return AccountSASPermissions2.parse = function(permissions) {
+      for (var accountSASPermissions = new AccountSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
+        var c = permissions_1[_i];
+        switch (c) {
+          case "r":
+            accountSASPermissions.read = !0;
+            break;
+          case "w":
+            accountSASPermissions.write = !0;
+            break;
+          case "d":
+            accountSASPermissions.delete = !0;
+            break;
+          case "x":
+            accountSASPermissions.deleteVersion = !0;
+            break;
+          case "l":
+            accountSASPermissions.list = !0;
+            break;
+          case "a":
+            accountSASPermissions.add = !0;
+            break;
+          case "c":
+            accountSASPermissions.create = !0;
+            break;
+          case "u":
+            accountSASPermissions.update = !0;
+            break;
+          case "p":
+            accountSASPermissions.process = !0;
+            break;
+          case "t":
+            accountSASPermissions.tag = !0;
+            break;
+          case "f":
+            accountSASPermissions.filter = !0;
+            break;
+          default:
+            throw new RangeError("Invalid permission character: " + c);
+        }
+      }
+      return accountSASPermissions;
+    }, AccountSASPermissions2.from = function(permissionLike) {
+      var accountSASPermissions = new AccountSASPermissions2();
+      return permissionLike.read && (accountSASPermissions.read = !0), permissionLike.write && (accountSASPermissions.write = !0), permissionLike.delete && (accountSASPermissions.delete = !0), permissionLike.deleteVersion && (accountSASPermissions.deleteVersion = !0), permissionLike.filter && (accountSASPermissions.filter = !0), permissionLike.tag && (accountSASPermissions.tag = !0), permissionLike.list && (accountSASPermissions.list = !0), permissionLike.add && (accountSASPermissions.add = !0), permissionLike.create && (accountSASPermissions.create = !0), permissionLike.update && (accountSASPermissions.update = !0), permissionLike.process && (accountSASPermissions.process = !0), accountSASPermissions;
+    }, AccountSASPermissions2.prototype.toString = function() {
+      var permissions = [];
+      return this.read && permissions.push("r"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.filter && permissions.push("f"), this.tag && permissions.push("t"), this.list && permissions.push("l"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.update && permissions.push("u"), this.process && permissions.push("p"), permissions.join("");
+    }, AccountSASPermissions2;
+  }(), AccountSASResourceTypes = function() {
+    function AccountSASResourceTypes2() {
+      this.service = !1, this.container = !1, this.object = !1;
+    }
+    return AccountSASResourceTypes2.parse = function(resourceTypes) {
+      for (var accountSASResourceTypes = new AccountSASResourceTypes2(), _i = 0, resourceTypes_1 = resourceTypes; _i < resourceTypes_1.length; _i++) {
+        var c = resourceTypes_1[_i];
+        switch (c) {
+          case "s":
+            accountSASResourceTypes.service = !0;
+            break;
+          case "c":
+            accountSASResourceTypes.container = !0;
+            break;
+          case "o":
+            accountSASResourceTypes.object = !0;
+            break;
+          default:
+            throw new RangeError("Invalid resource type: " + c);
+        }
+      }
+      return accountSASResourceTypes;
+    }, AccountSASResourceTypes2.prototype.toString = function() {
+      var resourceTypes = [];
+      return this.service && resourceTypes.push("s"), this.container && resourceTypes.push("c"), this.object && resourceTypes.push("o"), resourceTypes.join("");
+    }, AccountSASResourceTypes2;
+  }(), AccountSASServices = function() {
+    function AccountSASServices2() {
+      this.blob = !1, this.file = !1, this.queue = !1, this.table = !1;
+    }
+    return AccountSASServices2.parse = function(services) {
+      for (var accountSASServices = new AccountSASServices2(), _i = 0, services_1 = services; _i < services_1.length; _i++) {
+        var c = services_1[_i];
+        switch (c) {
+          case "b":
+            accountSASServices.blob = !0;
+            break;
+          case "f":
+            accountSASServices.file = !0;
+            break;
+          case "q":
+            accountSASServices.queue = !0;
+            break;
+          case "t":
+            accountSASServices.table = !0;
+            break;
+          default:
+            throw new RangeError("Invalid service character: " + c);
+        }
+      }
+      return accountSASServices;
+    }, AccountSASServices2.prototype.toString = function() {
+      var services = [];
+      return this.blob && services.push("b"), this.table && services.push("t"), this.queue && services.push("q"), this.file && services.push("f"), services.join("");
+    }, AccountSASServices2;
+  }();
+  function generateAccountSASQueryParameters(accountSASSignatureValues, sharedKeyCredential) {
+    var version2 = accountSASSignatureValues.version ? accountSASSignatureValues.version : SERVICE_VERSION;
+    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10")
+      throw RangeError("'version' must be >= '2019-10-10' when provided 'x' permission.");
+    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.tag && version2 < "2019-12-12")
+      throw RangeError("'version' must be >= '2019-12-12' when provided 't' permission.");
+    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.filter && version2 < "2019-12-12")
+      throw RangeError("'version' must be >= '2019-12-12' when provided 'f' permission.");
+    var parsedPermissions = AccountSASPermissions.parse(accountSASSignatureValues.permissions.toString()), parsedServices = AccountSASServices.parse(accountSASSignatureValues.services).toString(), parsedResourceTypes = AccountSASResourceTypes.parse(accountSASSignatureValues.resourceTypes).toString(), stringToSign = [
+      sharedKeyCredential.accountName,
+      parsedPermissions,
+      parsedServices,
+      parsedResourceTypes,
+      accountSASSignatureValues.startsOn ? truncatedISO8061Date(accountSASSignatureValues.startsOn, !1) : "",
+      truncatedISO8061Date(accountSASSignatureValues.expiresOn, !1),
+      accountSASSignatureValues.ipRange ? ipRangeToString(accountSASSignatureValues.ipRange) : "",
+      accountSASSignatureValues.protocol ? accountSASSignatureValues.protocol : "",
+      version2,
+      ""
+    ].join(`
+`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
+    return new SASQueryParameters(version2, signature, parsedPermissions.toString(), parsedServices, parsedResourceTypes, accountSASSignatureValues.protocol, accountSASSignatureValues.startsOn, accountSASSignatureValues.expiresOn, accountSASSignatureValues.ipRange);
+  }
+  var BlobServiceClient = function(_super) {
     tslib.__extends(BlobServiceClient2, _super);
     function BlobServiceClient2(url2, credentialOrPipeline, options) {
       var _this = this, pipeline;
@@ -47483,7 +47405,7 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlobServiceClient2.prototype.findBlobsByTagsSegment = function(tagFilterSqlExpression, marker, options) {
       return options === void 0 && (options = {}), tslib.__awaiter(this, void 0, void 0, function() {
-        var _a, span, spanOptions, e_9;
+        var _a, span, spanOptions, response, wrappedResponse, e_9;
         return tslib.__generator(this, function(_b) {
           switch (_b.label) {
             case 0:
@@ -47497,7 +47419,10 @@ var require_dist9 = __commonJS((exports2) => {
                 spanOptions
               })];
             case 2:
-              return [2, _b.sent()];
+              return response = _b.sent(), wrappedResponse = tslib.__assign(tslib.__assign({}, response), {_response: response._response, blobs: response.blobs.map(function(blob) {
+                var _a2, tagValue = "";
+                return ((_a2 = blob.tags) === null || _a2 === void 0 ? void 0 : _a2.blobTagSet.length) === 1 && (tagValue = blob.tags.blobTagSet[0].value), tslib.__assign(tslib.__assign({}, blob), {tags: toTags(blob.tags), tagValue});
+              })}), [2, wrappedResponse];
             case 3:
               throw e_9 = _b.sent(), span.setStatus({
                 code: api.CanonicalCode.UNKNOWN,
@@ -47707,519 +47632,22 @@ var require_dist9 = __commonJS((exports2) => {
       });
     }, BlobServiceClient2.prototype.getBlobBatchClient = function() {
       return new BlobBatchClient(this.url, this.pipeline);
+    }, BlobServiceClient2.prototype.generateAccountSasUrl = function(expiresOn2, permissions, resourceTypes, options) {
+      if (permissions === void 0 && (permissions = AccountSASPermissions.parse("r")), resourceTypes === void 0 && (resourceTypes = "sco"), options === void 0 && (options = {}), !(this.credential instanceof StorageSharedKeyCredential))
+        throw RangeError("Can only generate the account SAS when the client is initialized with a shared key credential");
+      if (expiresOn2 === void 0) {
+        var now = new Date();
+        expiresOn2 = new Date(now.getTime() + 3600 * 1e3);
+      }
+      var sas = generateAccountSASQueryParameters(tslib.__assign({
+        permissions,
+        expiresOn: expiresOn2,
+        resourceTypes,
+        services: AccountSASServices.parse("b").toString()
+      }, options), this.credential).toString();
+      return appendToURLQuery(this.url, sas);
     }, BlobServiceClient2;
-  }(StorageClient), AccountSASPermissions = function() {
-    function AccountSASPermissions2() {
-      this.read = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.add = !1, this.create = !1, this.update = !1, this.process = !1, this.tag = !1, this.filter = !1;
-    }
-    return AccountSASPermissions2.parse = function(permissions) {
-      for (var accountSASPermissions = new AccountSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
-        var c = permissions_1[_i];
-        switch (c) {
-          case "r":
-            accountSASPermissions.read = !0;
-            break;
-          case "w":
-            accountSASPermissions.write = !0;
-            break;
-          case "d":
-            accountSASPermissions.delete = !0;
-            break;
-          case "x":
-            accountSASPermissions.deleteVersion = !0;
-            break;
-          case "l":
-            accountSASPermissions.list = !0;
-            break;
-          case "a":
-            accountSASPermissions.add = !0;
-            break;
-          case "c":
-            accountSASPermissions.create = !0;
-            break;
-          case "u":
-            accountSASPermissions.update = !0;
-            break;
-          case "p":
-            accountSASPermissions.process = !0;
-            break;
-          case "t":
-            accountSASPermissions.tag = !0;
-            break;
-          case "f":
-            accountSASPermissions.filter = !0;
-            break;
-          default:
-            throw new RangeError("Invalid permission character: " + c);
-        }
-      }
-      return accountSASPermissions;
-    }, AccountSASPermissions2.prototype.toString = function() {
-      var permissions = [];
-      return this.read && permissions.push("r"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.filter && permissions.push("f"), this.tag && permissions.push("t"), this.list && permissions.push("l"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.update && permissions.push("u"), this.process && permissions.push("p"), permissions.join("");
-    }, AccountSASPermissions2;
-  }(), AccountSASResourceTypes = function() {
-    function AccountSASResourceTypes2() {
-      this.service = !1, this.container = !1, this.object = !1;
-    }
-    return AccountSASResourceTypes2.parse = function(resourceTypes) {
-      for (var accountSASResourceTypes = new AccountSASResourceTypes2(), _i = 0, resourceTypes_1 = resourceTypes; _i < resourceTypes_1.length; _i++) {
-        var c = resourceTypes_1[_i];
-        switch (c) {
-          case "s":
-            accountSASResourceTypes.service = !0;
-            break;
-          case "c":
-            accountSASResourceTypes.container = !0;
-            break;
-          case "o":
-            accountSASResourceTypes.object = !0;
-            break;
-          default:
-            throw new RangeError("Invalid resource type: " + c);
-        }
-      }
-      return accountSASResourceTypes;
-    }, AccountSASResourceTypes2.prototype.toString = function() {
-      var resourceTypes = [];
-      return this.service && resourceTypes.push("s"), this.container && resourceTypes.push("c"), this.object && resourceTypes.push("o"), resourceTypes.join("");
-    }, AccountSASResourceTypes2;
-  }(), AccountSASServices = function() {
-    function AccountSASServices2() {
-      this.blob = !1, this.file = !1, this.queue = !1, this.table = !1;
-    }
-    return AccountSASServices2.parse = function(services) {
-      for (var accountSASServices = new AccountSASServices2(), _i = 0, services_1 = services; _i < services_1.length; _i++) {
-        var c = services_1[_i];
-        switch (c) {
-          case "b":
-            accountSASServices.blob = !0;
-            break;
-          case "f":
-            accountSASServices.file = !0;
-            break;
-          case "q":
-            accountSASServices.queue = !0;
-            break;
-          case "t":
-            accountSASServices.table = !0;
-            break;
-          default:
-            throw new RangeError("Invalid service character: " + c);
-        }
-      }
-      return accountSASServices;
-    }, AccountSASServices2.prototype.toString = function() {
-      var services = [];
-      return this.blob && services.push("b"), this.table && services.push("t"), this.queue && services.push("q"), this.file && services.push("f"), services.join("");
-    }, AccountSASServices2;
-  }();
-  function ipRangeToString(ipRange) {
-    return ipRange.end ? ipRange.start + "-" + ipRange.end : ipRange.start;
-  }
-  (function(SASProtocol) {
-    SASProtocol.Https = "https", SASProtocol.HttpsAndHttp = "https,http";
-  })(exports2.SASProtocol || (exports2.SASProtocol = {}));
-  var SASQueryParameters = function() {
-    function SASQueryParameters2(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl2, contentDisposition2, contentEncoding2, contentLanguage2, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
-      this.version = version2, this.signature = signature, permissionsOrOptions !== void 0 && typeof permissionsOrOptions != "string" ? (this.permissions = permissionsOrOptions.permissions, this.services = permissionsOrOptions.services, this.resourceTypes = permissionsOrOptions.resourceTypes, this.protocol = permissionsOrOptions.protocol, this.startsOn = permissionsOrOptions.startsOn, this.expiresOn = permissionsOrOptions.expiresOn, this.ipRangeInner = permissionsOrOptions.ipRange, this.identifier = permissionsOrOptions.identifier, this.resource = permissionsOrOptions.resource, this.cacheControl = permissionsOrOptions.cacheControl, this.contentDisposition = permissionsOrOptions.contentDisposition, this.contentEncoding = permissionsOrOptions.contentEncoding, this.contentLanguage = permissionsOrOptions.contentLanguage, this.contentType = permissionsOrOptions.contentType, permissionsOrOptions.userDelegationKey && (this.signedOid = permissionsOrOptions.userDelegationKey.signedObjectId, this.signedTenantId = permissionsOrOptions.userDelegationKey.signedTenantId, this.signedStartsOn = permissionsOrOptions.userDelegationKey.signedStartsOn, this.signedExpiresOn = permissionsOrOptions.userDelegationKey.signedExpiresOn, this.signedService = permissionsOrOptions.userDelegationKey.signedService, this.signedVersion = permissionsOrOptions.userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = permissionsOrOptions.preauthorizedAgentObjectId, this.correlationId = permissionsOrOptions.correlationId)) : (this.services = services, this.resourceTypes = resourceTypes, this.expiresOn = expiresOn2, this.permissions = permissionsOrOptions, this.protocol = protocol, this.startsOn = startsOn, this.ipRangeInner = ipRange, this.identifier = identifier, this.resource = resource, this.cacheControl = cacheControl2, this.contentDisposition = contentDisposition2, this.contentEncoding = contentEncoding2, this.contentLanguage = contentLanguage2, this.contentType = contentType2, userDelegationKey && (this.signedOid = userDelegationKey.signedObjectId, this.signedTenantId = userDelegationKey.signedTenantId, this.signedStartsOn = userDelegationKey.signedStartsOn, this.signedExpiresOn = userDelegationKey.signedExpiresOn, this.signedService = userDelegationKey.signedService, this.signedVersion = userDelegationKey.signedVersion, this.preauthorizedAgentObjectId = preauthorizedAgentObjectId, this.correlationId = correlationId));
-    }
-    return Object.defineProperty(SASQueryParameters2.prototype, "ipRange", {
-      get: function() {
-        if (this.ipRangeInner)
-          return {
-            end: this.ipRangeInner.end,
-            start: this.ipRangeInner.start
-          };
-      },
-      enumerable: !1,
-      configurable: !0
-    }), SASQueryParameters2.prototype.toString = function() {
-      for (var params = [
-        "sv",
-        "ss",
-        "srt",
-        "spr",
-        "st",
-        "se",
-        "sip",
-        "si",
-        "skoid",
-        "sktid",
-        "skt",
-        "ske",
-        "sks",
-        "skv",
-        "sr",
-        "sp",
-        "sig",
-        "rscc",
-        "rscd",
-        "rsce",
-        "rscl",
-        "rsct",
-        "saoid",
-        "scid"
-      ], queries = [], _i = 0, params_1 = params; _i < params_1.length; _i++) {
-        var param = params_1[_i];
-        switch (param) {
-          case "sv":
-            this.tryAppendQueryParameter(queries, param, this.version);
-            break;
-          case "ss":
-            this.tryAppendQueryParameter(queries, param, this.services);
-            break;
-          case "srt":
-            this.tryAppendQueryParameter(queries, param, this.resourceTypes);
-            break;
-          case "spr":
-            this.tryAppendQueryParameter(queries, param, this.protocol);
-            break;
-          case "st":
-            this.tryAppendQueryParameter(queries, param, this.startsOn ? truncatedISO8061Date(this.startsOn, !1) : void 0);
-            break;
-          case "se":
-            this.tryAppendQueryParameter(queries, param, this.expiresOn ? truncatedISO8061Date(this.expiresOn, !1) : void 0);
-            break;
-          case "sip":
-            this.tryAppendQueryParameter(queries, param, this.ipRange ? ipRangeToString(this.ipRange) : void 0);
-            break;
-          case "si":
-            this.tryAppendQueryParameter(queries, param, this.identifier);
-            break;
-          case "skoid":
-            this.tryAppendQueryParameter(queries, param, this.signedOid);
-            break;
-          case "sktid":
-            this.tryAppendQueryParameter(queries, param, this.signedTenantId);
-            break;
-          case "skt":
-            this.tryAppendQueryParameter(queries, param, this.signedStartsOn ? truncatedISO8061Date(this.signedStartsOn, !1) : void 0);
-            break;
-          case "ske":
-            this.tryAppendQueryParameter(queries, param, this.signedExpiresOn ? truncatedISO8061Date(this.signedExpiresOn, !1) : void 0);
-            break;
-          case "sks":
-            this.tryAppendQueryParameter(queries, param, this.signedService);
-            break;
-          case "skv":
-            this.tryAppendQueryParameter(queries, param, this.signedVersion);
-            break;
-          case "sr":
-            this.tryAppendQueryParameter(queries, param, this.resource);
-            break;
-          case "sp":
-            this.tryAppendQueryParameter(queries, param, this.permissions);
-            break;
-          case "sig":
-            this.tryAppendQueryParameter(queries, param, this.signature);
-            break;
-          case "rscc":
-            this.tryAppendQueryParameter(queries, param, this.cacheControl);
-            break;
-          case "rscd":
-            this.tryAppendQueryParameter(queries, param, this.contentDisposition);
-            break;
-          case "rsce":
-            this.tryAppendQueryParameter(queries, param, this.contentEncoding);
-            break;
-          case "rscl":
-            this.tryAppendQueryParameter(queries, param, this.contentLanguage);
-            break;
-          case "rsct":
-            this.tryAppendQueryParameter(queries, param, this.contentType);
-            break;
-          case "saoid":
-            this.tryAppendQueryParameter(queries, param, this.preauthorizedAgentObjectId);
-            break;
-          case "scid":
-            this.tryAppendQueryParameter(queries, param, this.correlationId);
-            break;
-        }
-      }
-      return queries.join("&");
-    }, SASQueryParameters2.prototype.tryAppendQueryParameter = function(queries, key, value) {
-      !value || (key = encodeURIComponent(key), value = encodeURIComponent(value), key.length > 0 && value.length > 0 && queries.push(key + "=" + value));
-    }, SASQueryParameters2;
-  }();
-  function generateAccountSASQueryParameters(accountSASSignatureValues, sharedKeyCredential) {
-    var version2 = accountSASSignatureValues.version ? accountSASSignatureValues.version : SERVICE_VERSION;
-    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10")
-      throw RangeError("'version' must be >= '2019-10-10' when provided 'x' permission.");
-    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.tag && version2 < "2019-12-12")
-      throw RangeError("'version' must be >= '2019-12-12' when provided 't' permission.");
-    if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.filter && version2 < "2019-12-12")
-      throw RangeError("'version' must be >= '2019-12-12' when provided 'f' permission.");
-    var parsedPermissions = AccountSASPermissions.parse(accountSASSignatureValues.permissions.toString()), parsedServices = AccountSASServices.parse(accountSASSignatureValues.services).toString(), parsedResourceTypes = AccountSASResourceTypes.parse(accountSASSignatureValues.resourceTypes).toString(), stringToSign = [
-      sharedKeyCredential.accountName,
-      parsedPermissions,
-      parsedServices,
-      parsedResourceTypes,
-      accountSASSignatureValues.startsOn ? truncatedISO8061Date(accountSASSignatureValues.startsOn, !1) : "",
-      truncatedISO8061Date(accountSASSignatureValues.expiresOn, !1),
-      accountSASSignatureValues.ipRange ? ipRangeToString(accountSASSignatureValues.ipRange) : "",
-      accountSASSignatureValues.protocol ? accountSASSignatureValues.protocol : "",
-      version2,
-      ""
-    ].join(`
-`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
-    return new SASQueryParameters(version2, signature, parsedPermissions.toString(), parsedServices, parsedResourceTypes, accountSASSignatureValues.protocol, accountSASSignatureValues.startsOn, accountSASSignatureValues.expiresOn, accountSASSignatureValues.ipRange);
-  }
-  var BlobSASPermissions = function() {
-    function BlobSASPermissions2() {
-      this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.tag = !1, this.move = !1, this.execute = !1;
-    }
-    return BlobSASPermissions2.parse = function(permissions) {
-      for (var blobSASPermissions = new BlobSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
-        var char = permissions_1[_i];
-        switch (char) {
-          case "r":
-            blobSASPermissions.read = !0;
-            break;
-          case "a":
-            blobSASPermissions.add = !0;
-            break;
-          case "c":
-            blobSASPermissions.create = !0;
-            break;
-          case "w":
-            blobSASPermissions.write = !0;
-            break;
-          case "d":
-            blobSASPermissions.delete = !0;
-            break;
-          case "x":
-            blobSASPermissions.deleteVersion = !0;
-            break;
-          case "t":
-            blobSASPermissions.tag = !0;
-            break;
-          case "m":
-            blobSASPermissions.move = !0;
-            break;
-          case "e":
-            blobSASPermissions.execute = !0;
-            break;
-          default:
-            throw new RangeError("Invalid permission: " + char);
-        }
-      }
-      return blobSASPermissions;
-    }, BlobSASPermissions2.prototype.toString = function() {
-      var permissions = [];
-      return this.read && permissions.push("r"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.tag && permissions.push("t"), this.move && permissions.push("m"), this.execute && permissions.push("e"), permissions.join("");
-    }, BlobSASPermissions2;
-  }(), ContainerSASPermissions = function() {
-    function ContainerSASPermissions2() {
-      this.read = !1, this.add = !1, this.create = !1, this.write = !1, this.delete = !1, this.deleteVersion = !1, this.list = !1, this.tag = !1, this.move = !1, this.execute = !1;
-    }
-    return ContainerSASPermissions2.parse = function(permissions) {
-      for (var containerSASPermissions = new ContainerSASPermissions2(), _i = 0, permissions_1 = permissions; _i < permissions_1.length; _i++) {
-        var char = permissions_1[_i];
-        switch (char) {
-          case "r":
-            containerSASPermissions.read = !0;
-            break;
-          case "a":
-            containerSASPermissions.add = !0;
-            break;
-          case "c":
-            containerSASPermissions.create = !0;
-            break;
-          case "w":
-            containerSASPermissions.write = !0;
-            break;
-          case "d":
-            containerSASPermissions.delete = !0;
-            break;
-          case "l":
-            containerSASPermissions.list = !0;
-            break;
-          case "t":
-            containerSASPermissions.tag = !0;
-            break;
-          case "x":
-            containerSASPermissions.deleteVersion = !0;
-            break;
-          case "m":
-            containerSASPermissions.move = !0;
-            break;
-          case "e":
-            containerSASPermissions.execute = !0;
-            break;
-          default:
-            throw new RangeError("Invalid permission " + char);
-        }
-      }
-      return containerSASPermissions;
-    }, ContainerSASPermissions2.prototype.toString = function() {
-      var permissions = [];
-      return this.read && permissions.push("r"), this.add && permissions.push("a"), this.create && permissions.push("c"), this.write && permissions.push("w"), this.delete && permissions.push("d"), this.deleteVersion && permissions.push("x"), this.list && permissions.push("l"), this.tag && permissions.push("t"), this.move && permissions.push("m"), this.execute && permissions.push("e"), permissions.join("");
-    }, ContainerSASPermissions2;
-  }(), UserDelegationKeyCredential = function() {
-    function UserDelegationKeyCredential2(accountName, userDelegationKey) {
-      this.accountName = accountName, this.userDelegationKey = userDelegationKey, this.key = Buffer.from(userDelegationKey.value, "base64");
-    }
-    return UserDelegationKeyCredential2.prototype.computeHMACSHA256 = function(stringToSign) {
-      return crypto.createHmac("sha256", this.key).update(stringToSign, "utf8").digest("base64");
-    }, UserDelegationKeyCredential2;
-  }();
-  function generateBlobSASQueryParameters(blobSASSignatureValues, sharedKeyCredentialOrUserDelegationKey, accountName) {
-    var version2 = blobSASSignatureValues.version ? blobSASSignatureValues.version : SERVICE_VERSION, sharedKeyCredential = sharedKeyCredentialOrUserDelegationKey instanceof StorageSharedKeyCredential ? sharedKeyCredentialOrUserDelegationKey : void 0, userDelegationKeyCredential;
-    if (sharedKeyCredential === void 0 && accountName !== void 0 && (userDelegationKeyCredential = new UserDelegationKeyCredential(accountName, sharedKeyCredentialOrUserDelegationKey)), sharedKeyCredential === void 0 && userDelegationKeyCredential === void 0)
-      throw TypeError("Invalid sharedKeyCredential, userDelegationKey or accountName.");
-    if (version2 >= "2018-11-09")
-      return sharedKeyCredential !== void 0 ? generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential) : version2 >= "2020-02-10" ? generateBlobSASQueryParametersUDK20200210(blobSASSignatureValues, userDelegationKeyCredential) : generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential);
-    if (version2 >= "2015-04-05") {
-      if (sharedKeyCredential !== void 0)
-        return generateBlobSASQueryParameters20150405(blobSASSignatureValues, sharedKeyCredential);
-      throw new RangeError("'version' must be >= '2018-11-09' when generating user delegation SAS using user delegation key.");
-    }
-    throw new RangeError("'version' must be >= '2015-04-05'.");
-  }
-  function generateBlobSASQueryParameters20150405(blobSASSignatureValues, sharedKeyCredential) {
-    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !blobSASSignatureValues.permissions && !blobSASSignatureValues.expiresOn)
-      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
-    var resource = "c";
-    blobSASSignatureValues.blobName && (resource = "b");
-    var verifiedPermissions;
-    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
-    var stringToSign = [
-      verifiedPermissions || "",
-      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
-      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
-      getCanonicalName(sharedKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
-      blobSASSignatureValues.identifier,
-      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
-      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
-      blobSASSignatureValues.version,
-      blobSASSignatureValues.cacheControl ? blobSASSignatureValues.cacheControl : "",
-      blobSASSignatureValues.contentDisposition ? blobSASSignatureValues.contentDisposition : "",
-      blobSASSignatureValues.contentEncoding ? blobSASSignatureValues.contentEncoding : "",
-      blobSASSignatureValues.contentLanguage ? blobSASSignatureValues.contentLanguage : "",
-      blobSASSignatureValues.contentType ? blobSASSignatureValues.contentType : ""
-    ].join(`
-`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
-    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
-  }
-  function generateBlobSASQueryParameters20181109(blobSASSignatureValues, sharedKeyCredential) {
-    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.identifier && !blobSASSignatureValues.permissions && !blobSASSignatureValues.expiresOn)
-      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
-    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
-    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
-    var verifiedPermissions;
-    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
-    var stringToSign = [
-      verifiedPermissions || "",
-      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
-      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
-      getCanonicalName(sharedKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
-      blobSASSignatureValues.identifier,
-      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
-      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
-      blobSASSignatureValues.version,
-      resource,
-      timestamp,
-      blobSASSignatureValues.cacheControl ? blobSASSignatureValues.cacheControl : "",
-      blobSASSignatureValues.contentDisposition ? blobSASSignatureValues.contentDisposition : "",
-      blobSASSignatureValues.contentEncoding ? blobSASSignatureValues.contentEncoding : "",
-      blobSASSignatureValues.contentLanguage ? blobSASSignatureValues.contentLanguage : "",
-      blobSASSignatureValues.contentType ? blobSASSignatureValues.contentType : ""
-    ].join(`
-`), signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
-    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
-  }
-  function generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential) {
-    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
-      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
-    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
-    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
-    var verifiedPermissions;
-    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
-    var stringToSign = [
-      verifiedPermissions || "",
-      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
-      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
-      getCanonicalName(userDelegationKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
-      userDelegationKeyCredential.userDelegationKey.signedObjectId,
-      userDelegationKeyCredential.userDelegationKey.signedTenantId,
-      userDelegationKeyCredential.userDelegationKey.signedStartsOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedStartsOn, !1) : "",
-      userDelegationKeyCredential.userDelegationKey.signedExpiresOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedExpiresOn, !1) : "",
-      userDelegationKeyCredential.userDelegationKey.signedService,
-      userDelegationKeyCredential.userDelegationKey.signedVersion,
-      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
-      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
-      blobSASSignatureValues.version,
-      resource,
-      timestamp,
-      blobSASSignatureValues.cacheControl,
-      blobSASSignatureValues.contentDisposition,
-      blobSASSignatureValues.contentEncoding,
-      blobSASSignatureValues.contentLanguage,
-      blobSASSignatureValues.contentType
-    ].join(`
-`), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
-    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey);
-  }
-  function generateBlobSASQueryParametersUDK20200210(blobSASSignatureValues, userDelegationKeyCredential) {
-    if (blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues), !blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn)
-      throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
-    var resource = "c", timestamp = blobSASSignatureValues.snapshotTime;
-    blobSASSignatureValues.blobName && (resource = "b", blobSASSignatureValues.snapshotTime ? resource = "bs" : blobSASSignatureValues.versionId && (resource = "bv", timestamp = blobSASSignatureValues.versionId));
-    var verifiedPermissions;
-    blobSASSignatureValues.permissions && (blobSASSignatureValues.blobName ? verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString() : verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString());
-    var stringToSign = [
-      verifiedPermissions || "",
-      blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, !1) : "",
-      blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, !1) : "",
-      getCanonicalName(userDelegationKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
-      userDelegationKeyCredential.userDelegationKey.signedObjectId,
-      userDelegationKeyCredential.userDelegationKey.signedTenantId,
-      userDelegationKeyCredential.userDelegationKey.signedStartsOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedStartsOn, !1) : "",
-      userDelegationKeyCredential.userDelegationKey.signedExpiresOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedExpiresOn, !1) : "",
-      userDelegationKeyCredential.userDelegationKey.signedService,
-      userDelegationKeyCredential.userDelegationKey.signedVersion,
-      blobSASSignatureValues.preauthorizedAgentObjectId,
-      void 0,
-      blobSASSignatureValues.correlationId,
-      blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
-      blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
-      blobSASSignatureValues.version,
-      resource,
-      timestamp,
-      blobSASSignatureValues.cacheControl,
-      blobSASSignatureValues.contentDisposition,
-      blobSASSignatureValues.contentEncoding,
-      blobSASSignatureValues.contentLanguage,
-      blobSASSignatureValues.contentType
-    ].join(`
-`), signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
-    return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey, blobSASSignatureValues.preauthorizedAgentObjectId, blobSASSignatureValues.correlationId);
-  }
-  function getCanonicalName(accountName, containerName, blobName) {
-    var elements = ["/blob/" + accountName + "/" + containerName];
-    return blobName && elements.push("/" + blobName), elements.join("");
-  }
-  function SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues) {
-    var version2 = blobSASSignatureValues.version ? blobSASSignatureValues.version : SERVICE_VERSION;
-    if (blobSASSignatureValues.snapshotTime && version2 < "2018-11-09")
-      throw RangeError("'version' must be >= '2018-11-09' when providing 'snapshotTime'.");
-    if (blobSASSignatureValues.blobName === void 0 && blobSASSignatureValues.snapshotTime)
-      throw RangeError("Must provide 'blobName' when providing 'snapshotTime'.");
-    if (blobSASSignatureValues.versionId && version2 < "2019-10-10")
-      throw RangeError("'version' must be >= '2019-10-10' when providing 'versionId'.");
-    if (blobSASSignatureValues.blobName === void 0 && blobSASSignatureValues.versionId)
-      throw RangeError("Must provide 'blobName' when providing 'versionId'.");
-    if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10")
-      throw RangeError("'version' must be >= '2019-10-10' when providing 'x' permission.");
-    if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.tag && version2 < "2019-12-12")
-      throw RangeError("'version' must be >= '2019-12-12' when providing 't' permission.");
-    if (version2 < "2020-02-10" && blobSASSignatureValues.permissions && (blobSASSignatureValues.permissions.move || blobSASSignatureValues.permissions.execute))
-      throw RangeError("'version' must be >= '2020-02-10' when providing the 'm' or 'e' permission.");
-    if (version2 < "2020-02-10" && (blobSASSignatureValues.preauthorizedAgentObjectId || blobSASSignatureValues.correlationId))
-      throw RangeError("'version' must be >= '2020-02-10' when providing 'preauthorizedAgentObjectId' or 'correlationId'.");
-    return blobSASSignatureValues.version = version2, blobSASSignatureValues;
-  }
+  }(StorageClient);
   Object.defineProperty(exports2, "BaseRequestPolicy", {
     enumerable: !0,
     get: function() {
@@ -49312,7 +48740,7 @@ var require_dist_node2 = __commonJS((exports2) => {
       parse
     });
   }
-  var VERSION = "6.0.10", userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`, DEFAULTS = {
+  var VERSION = "6.0.11", userAgent = `octokit-endpoint.js/${VERSION} ${universalUserAgent.getUserAgent()}`, DEFAULTS = {
     method: "GET",
     baseUrl: "https://api.github.com",
     headers: {
@@ -49447,7 +48875,7 @@ var require_dist_node5 = __commonJS((exports2) => {
   function _interopDefault(ex) {
     return ex && typeof ex == "object" && "default" in ex ? ex.default : ex;
   }
-  var endpoint = require_dist_node2(), universalUserAgent = require_dist_node(), isPlainObject = require_is_plain_object2(), nodeFetch = _interopDefault(require_lib()), requestError = require_dist_node4(), VERSION = "5.4.12";
+  var endpoint = require_dist_node2(), universalUserAgent = require_dist_node(), isPlainObject = require_is_plain_object2(), nodeFetch = _interopDefault(require_lib()), requestError = require_dist_node4(), VERSION = "5.4.13";
   function getBufferResponse(response) {
     return response.arrayBuffer();
   }
@@ -49535,7 +48963,7 @@ var require_dist_node5 = __commonJS((exports2) => {
 var require_dist_node6 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var request = require_dist_node5(), universalUserAgent = require_dist_node(), VERSION = "4.5.8", GraphqlError = class extends Error {
+  var request = require_dist_node5(), universalUserAgent = require_dist_node(), VERSION = "4.5.9", GraphqlError = class extends Error {
     constructor(request2, response) {
       let message = response.data.errors[0].message;
       super(message);
@@ -49642,7 +49070,7 @@ var require_dist_node8 = __commonJS((exports2) => {
     }
     return target;
   }
-  var VERSION = "3.2.4", Octokit = class {
+  var VERSION = "3.2.5", Octokit = class {
     constructor(options = {}) {
       let hook = new beforeAfterHook.Collection(), requestDefaults = {
         baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
@@ -49849,6 +49277,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
       resetToken: ["PATCH /applications/{client_id}/token"],
       revokeInstallationAccessToken: ["DELETE /installation/token"],
+      scopeToken: ["POST /applications/{client_id}/token/scoped"],
       suspendInstallation: ["PUT /app/installations/{installation_id}/suspended"],
       unsuspendInstallation: ["DELETE /app/installations/{installation_id}/suspended"],
       updateWebhookConfigForApp: ["PATCH /app/hook/config"]
@@ -50105,6 +49534,7 @@ var require_dist_node9 = __commonJS((exports2) => {
     },
     orgs: {
       blockUser: ["PUT /orgs/{org}/blocks/{username}"],
+      cancelInvitation: ["DELETE /orgs/{org}/invitations/{invitation_id}"],
       checkBlockedUser: ["GET /orgs/{org}/blocks/{username}"],
       checkMembershipForUser: ["GET /orgs/{org}/members/{username}"],
       checkPublicMembershipForUser: ["GET /orgs/{org}/public_members/{username}"],
@@ -50120,6 +49550,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       list: ["GET /organizations"],
       listAppInstallations: ["GET /orgs/{org}/installations"],
       listBlockedUsers: ["GET /orgs/{org}/blocks"],
+      listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
       listForAuthenticatedUser: ["GET /user/orgs"],
       listForUser: ["GET /users/{username}/orgs"],
       listInvitationTeams: ["GET /orgs/{org}/invitations/{invitation_id}/teams"],
@@ -50601,6 +50032,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       removeUserAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users", {}, {
         mapToData: "users"
       }],
+      renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
       replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
         mediaType: {
           previews: ["mercy"]
@@ -50740,7 +50172,7 @@ var require_dist_node9 = __commonJS((exports2) => {
       unfollow: ["DELETE /user/following/{username}"],
       updateAuthenticated: ["PATCH /user"]
     }
-  }, VERSION = "4.4.1";
+  }, VERSION = "4.9.0";
   function endpointsToMethods(octokit, endpointsMap) {
     let newMethods = {};
     for (let [scope, endpoints] of Object.entries(endpointsMap))
@@ -50793,7 +50225,7 @@ var require_dist_node9 = __commonJS((exports2) => {
 var require_dist_node10 = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
-  var VERSION = "2.6.2";
+  var VERSION = "2.9.0";
   function normalizePaginatedListResponse(response) {
     if (!("total_count" in response.data && !("url" in response.data)))
       return response;
@@ -50969,7 +50401,7 @@ var require_pretty_bytes = __commonJS((exports2, module2) => {
     "Yibit"
   ], toLocaleString = (number, locale) => {
     let result = number;
-    return typeof locale == "string" ? result = number.toLocaleString(locale) : locale === !0 && (result = number.toLocaleString()), result;
+    return typeof locale == "string" || Array.isArray(locale) ? result = number.toLocaleString(locale) : locale === !0 && (result = number.toLocaleString()), result;
   };
   module2.exports = (number, options) => {
     if (!Number.isFinite(number))
@@ -50977,7 +50409,7 @@ var require_pretty_bytes = __commonJS((exports2, module2) => {
     options = Object.assign({bits: !1, binary: !1}, options);
     let UNITS = options.bits ? options.binary ? BIBIT_UNITS : BIT_UNITS : options.binary ? BIBYTE_UNITS : BYTE_UNITS;
     if (options.signed && number === 0)
-      return " 0 " + UNITS[0];
+      return ` 0 ${UNITS[0]}`;
     let isNegative = number < 0, prefix = isNegative ? "-" : options.signed ? "+" : "";
     if (isNegative && (number = -number), number < 1) {
       let numberString2 = toLocaleString(number, options.locale);
