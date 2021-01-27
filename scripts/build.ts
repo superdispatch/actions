@@ -19,6 +19,7 @@ async function main() {
     target: 'node12',
     platform: 'node',
     minifySyntax: true,
+    external: ['encoding'],
   });
 }
 
