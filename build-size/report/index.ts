@@ -3,7 +3,6 @@ import { getInput, info, setFailed, warning } from '@actions/core';
 import { sendReport } from '@sd/utils/sendReport';
 import { promises as fs } from 'fs';
 import { format } from 'util';
-
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 import { getBuildSizes } from '../utils/BuildSizes';
 import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';

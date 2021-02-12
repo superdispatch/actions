@@ -1,15 +1,14 @@
 var __create = Object.create, __defProp = Object.defineProperty, __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty, __getOwnPropNames = Object.getOwnPropertyNames, __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __markAsModule = (target) => __defProp(target, "__esModule", {value: !0}), __name = (target, value) => __defProp(target, "name", {value, configurable: !0});
 var __commonJS = (callback, module2) => () => (module2 || (module2 = {exports: {}}, callback(module2.exports, module2)), module2.exports), __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, {get: all[name], enumerable: !0});
 }, __exportStar = (target, module2, desc) => {
-  if (__markAsModule(target), module2 && typeof module2 == "object" || typeof module2 == "function")
+  if (module2 && typeof module2 == "object" || typeof module2 == "function")
     for (let key of __getOwnPropNames(module2))
       !__hasOwnProp.call(target, key) && key !== "default" && __defProp(target, key, {get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable});
   return target;
-}, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0}), module2);
+}, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0})), module2);
 
 // ../node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS((exports2) => {
@@ -26195,6 +26194,7 @@ var require_src2 = __commonJS((exports2) => {
 
 // ../node_modules/@azure/storage-blob/dist-esm/storage-blob/src/index.js
 var require_src3 = __commonJS((exports2) => {
+  __markAsModule(exports2);
   __export(exports2, {
     AccountSASPermissions: () => AccountSASPermissions,
     AccountSASResourceTypes: () => AccountSASResourceTypes,
@@ -26694,7 +26694,9 @@ var require_cacheHttpClient = __commonJS((exports2) => {
     return __awaiter2(this, void 0, void 0, function* () {
       let httpClient = createHttpClient();
       core.debug("Upload cache"), yield uploadFile(httpClient, cacheId, archivePath, options), core.debug("Commiting cache");
-      let cacheSize = utils6.getArchiveFileSizeIsBytes(archivePath), commitCacheResponse = yield commitCache(httpClient, cacheId, cacheSize);
+      let cacheSize = utils6.getArchiveFileSizeIsBytes(archivePath);
+      core.info(`Cache Size: ~${Math.round(cacheSize / (1024 * 1024))} MB (${cacheSize} B)`);
+      let commitCacheResponse = yield commitCache(httpClient, cacheId, cacheSize);
       if (!requestUtils_1.isSuccessStatusCode(commitCacheResponse.statusCode))
         throw new Error(`Cache service responded with ${commitCacheResponse.statusCode} during commit cache.`);
       core.info("Cache saved successfully");
@@ -26748,15 +26750,26 @@ var require_tar = __commonJS((exports2) => {
   var exec_1 = require_exec(), io = __importStar(require_io()), fs_1 = require("fs"), path3 = __importStar(require("path")), utils6 = __importStar(require_cacheUtils()), constants_1 = require_constants();
   function getTarPath(args, compressionMethod) {
     return __awaiter2(this, void 0, void 0, function* () {
-      if (process.platform === "win32") {
-        let systemTar = `${process.env.windir}\\System32\\tar.exe`;
-        if (compressionMethod !== constants_1.CompressionMethod.Gzip)
-          args.push("--force-local");
-        else {
-          if (fs_1.existsSync(systemTar))
-            return systemTar;
-          (yield utils6.isGnuTarInstalled()) && args.push("--force-local");
+      switch (process.platform) {
+        case "win32": {
+          let systemTar = `${process.env.windir}\\System32\\tar.exe`;
+          if (compressionMethod !== constants_1.CompressionMethod.Gzip)
+            args.push("--force-local");
+          else {
+            if (fs_1.existsSync(systemTar))
+              return systemTar;
+            (yield utils6.isGnuTarInstalled()) && args.push("--force-local");
+          }
+          break;
         }
+        case "darwin": {
+          let gnuTar = yield io.which("gtar", !1);
+          if (gnuTar)
+            return gnuTar;
+          break;
+        }
+        default:
+          break;
       }
       return yield io.which("tar", !0);
     });
@@ -26838,6 +26851,30 @@ var require_tar = __commonJS((exports2) => {
   }
   __name(createTar, "createTar");
   exports2.createTar = createTar;
+  function listTar(archivePath, compressionMethod) {
+    return __awaiter2(this, void 0, void 0, function* () {
+      function getCompressionProgram() {
+        switch (compressionMethod) {
+          case constants_1.CompressionMethod.Zstd:
+            return ["--use-compress-program", "zstd -d --long=30"];
+          case constants_1.CompressionMethod.ZstdWithoutLong:
+            return ["--use-compress-program", "zstd -d"];
+          default:
+            return ["-z"];
+        }
+      }
+      __name(getCompressionProgram, "getCompressionProgram");
+      let args = [
+        ...getCompressionProgram(),
+        "-tf",
+        archivePath.replace(new RegExp(`\\${path3.sep}`, "g"), "/"),
+        "-P"
+      ];
+      yield execTar(args, compressionMethod);
+    });
+  }
+  __name(listTar, "listTar");
+  exports2.listTar = listTar;
 });
 
 // ../node_modules/@actions/cache/lib/cache.js
@@ -26925,9 +26962,9 @@ var require_cache = __commonJS((exports2) => {
       let archivePath = path3.join(yield utils6.createTempDirectory(), utils6.getCacheFileName(compressionMethod));
       core.debug(`Archive Path: ${archivePath}`);
       try {
-        yield cacheHttpClient.downloadCache(cacheEntry.archiveLocation, archivePath, options);
+        yield cacheHttpClient.downloadCache(cacheEntry.archiveLocation, archivePath, options), core.isDebug() && (yield tar_1.listTar(archivePath, compressionMethod));
         let archiveFileSize = utils6.getArchiveFileSizeIsBytes(archivePath);
-        core.info(`Cache Size: ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B)`), yield tar_1.extractTar(archivePath, compressionMethod);
+        core.info(`Cache Size: ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B)`), yield tar_1.extractTar(archivePath, compressionMethod), core.info("Cache restored successfully");
       } finally {
         try {
           yield utils6.unlinkFile(archivePath);
@@ -26954,7 +26991,7 @@ var require_cache = __commonJS((exports2) => {
       let cachePaths = yield utils6.resolvePaths(paths);
       core.debug("Cache Paths:"), core.debug(`${JSON.stringify(cachePaths)}`);
       let archiveFolder = yield utils6.createTempDirectory(), archivePath = path3.join(archiveFolder, utils6.getCacheFileName(compressionMethod));
-      core.debug(`Archive Path: ${archivePath}`), yield tar_1.createTar(archiveFolder, cachePaths, compressionMethod);
+      core.debug(`Archive Path: ${archivePath}`), yield tar_1.createTar(archiveFolder, cachePaths, compressionMethod), core.isDebug() && (yield tar_1.listTar(archivePath, compressionMethod));
       let fileSizeLimit = 5 * 1024 * 1024 * 1024, archiveFileSize = utils6.getArchiveFileSizeIsBytes(archivePath);
       if (core.debug(`File Size: ${archiveFileSize}`), archiveFileSize > fileSizeLimit)
         throw new Error(`Cache size of ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B) is over the 5GB limit, not saving cache.`);
@@ -27348,7 +27385,7 @@ var v4_default = v4;
 
 // ../node_modules/@azure/core-http/es/src/util/constants.js
 var Constants = {
-  coreHttpVersion: "1.2.1",
+  coreHttpVersion: "1.2.3",
   HTTP: "http:",
   HTTPS: "https:",
   HTTP_PROXY: "HTTP_PROXY",
@@ -27901,8 +27938,8 @@ function isWebResourceLike(object) {
 }
 __name(isWebResourceLike, "isWebResourceLike");
 var WebResource = function() {
-  function WebResource2(url2, method, body, query, headers, streamResponseBody, withCredentials, abortSignal2, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse) {
-    this.streamResponseBody = streamResponseBody, this.url = url2 || "", this.method = method || "GET", this.headers = isHttpHeadersLike(headers) ? headers : new HttpHeaders(headers), this.body = body, this.query = query, this.formData = void 0, this.withCredentials = withCredentials || !1, this.abortSignal = abortSignal2, this.timeout = timeout || 0, this.onUploadProgress = onUploadProgress, this.onDownloadProgress = onDownloadProgress, this.proxySettings = proxySettings, this.keepAlive = keepAlive, this.decompressResponse = decompressResponse, this.requestId = this.headers.get("x-ms-client-request-id") || generateUuid();
+  function WebResource2(url2, method, body, query, headers, streamResponseBody, withCredentials, abortSignal2, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse, streamResponseStatusCodes) {
+    this.streamResponseBody = streamResponseBody, this.streamResponseStatusCodes = streamResponseStatusCodes, this.url = url2 || "", this.method = method || "GET", this.headers = isHttpHeadersLike(headers) ? headers : new HttpHeaders(headers), this.body = body, this.query = query, this.formData = void 0, this.withCredentials = withCredentials || !1, this.abortSignal = abortSignal2, this.timeout = timeout || 0, this.onUploadProgress = onUploadProgress, this.onDownloadProgress = onDownloadProgress, this.proxySettings = proxySettings, this.keepAlive = keepAlive, this.decompressResponse = decompressResponse, this.requestId = this.headers.get("x-ms-client-request-id") || generateUuid();
   }
   return __name(WebResource2, "WebResource"), WebResource2.prototype.validateRequestProperties = function() {
     if (!this.method)
@@ -27980,7 +28017,7 @@ var WebResource = function() {
       }
     return this.headers.get("accept-language") || this.headers.set("accept-language", "en-US"), !this.headers.get("x-ms-client-request-id") && !options.disableClientRequestId && this.headers.set("x-ms-client-request-id", this.requestId), this.headers.get("Content-Type") || this.headers.set("Content-Type", "application/json; charset=utf-8"), this.body = options.body, options.body !== void 0 && options.body !== null && (options.bodyIsStream ? (this.headers.get("Transfer-Encoding") || this.headers.set("Transfer-Encoding", "chunked"), this.headers.get("Content-Type") !== "application/octet-stream" && this.headers.set("Content-Type", "application/octet-stream")) : (options.serializationMapper && (this.body = new Serializer(options.mappers).serialize(options.serializationMapper, options.body, "requestBody")), options.disableJsonStringifyOnBody || (this.body = JSON.stringify(options.body)))), options.spanOptions && (this.spanOptions = options.spanOptions), this.abortSignal = options.abortSignal, this.onDownloadProgress = options.onDownloadProgress, this.onUploadProgress = options.onUploadProgress, this;
   }, WebResource2.prototype.clone = function() {
-    var result = new WebResource2(this.url, this.method, this.body, this.query, this.headers && this.headers.clone(), this.streamResponseBody, this.withCredentials, this.abortSignal, this.timeout, this.onUploadProgress, this.onDownloadProgress, this.proxySettings, this.keepAlive, this.decompressResponse);
+    var result = new WebResource2(this.url, this.method, this.body, this.query, this.headers && this.headers.clone(), this.streamResponseBody, this.withCredentials, this.abortSignal, this.timeout, this.onUploadProgress, this.onDownloadProgress, this.proxySettings, this.keepAlive, this.decompressResponse, this.streamResponseStatusCodes);
     return this.formData && (result.formData = this.formData), this.operationSpec && (result.operationSpec = this.operationSpec), this.shouldDeserialize && (result.shouldDeserialize = this.shouldDeserialize), this.operationResponseGetter && (result.operationResponseGetter = this.operationResponseGetter), result;
   }, WebResource2;
 }();
@@ -29049,6 +29086,7 @@ var RedactedString = "REDACTED", defaultAllowedHeaderNames = [
   "x-ms-correlation-request-id",
   "x-ms-request-id",
   "client-request-id",
+  "ms-cv",
   "return-client-request-id",
   "traceparent",
   "Access-Control-Allow-Credentials",
@@ -29136,235 +29174,7 @@ var errorSanitizer = new Sanitizer(), RestError = function(_super) {
 }(Error);
 
 // ../node_modules/@azure/core-http/es/src/fetchHttpClient.js
-var import_stream2 = __toModule(require("stream")), ReportTransform = function(_super) {
-  __extends(ReportTransform2, _super);
-  function ReportTransform2(progressCallback) {
-    var _this = _super.call(this) || this;
-    return _this.progressCallback = progressCallback, _this.loadedBytes = 0, _this;
-  }
-  return __name(ReportTransform2, "ReportTransform"), ReportTransform2.prototype._transform = function(chunk, _encoding, callback) {
-    this.push(chunk), this.loadedBytes += chunk.length, this.progressCallback({loadedBytes: this.loadedBytes}), callback(void 0);
-  }, ReportTransform2;
-}(import_stream2.Transform);
-var FetchHttpClient = function() {
-  function FetchHttpClient2() {
-  }
-  return __name(FetchHttpClient2, "FetchHttpClient"), FetchHttpClient2.prototype.sendRequest = function(httpRequest) {
-    return __awaiter(this, void 0, void 0, function() {
-      var abortController, abortListener, formData, requestForm_1, appendFormValue, _i, _a, formKey, formValue, j, contentType2, body, onUploadProgress, uploadReportStream, platformSpecificRequestInit, requestInit, response, headers, operationResponse, _b, onDownloadProgress, responseBody, downloadReportStream, length_1, error_1, fetchError, _c;
-      return __generator(this, function(_d) {
-        switch (_d.label) {
-          case 0:
-            if (!httpRequest && typeof httpRequest != "object")
-              throw new Error("'httpRequest' (WebResourceLike) cannot be null or undefined and must be of type object.");
-            if (abortController = new AbortController(), httpRequest.abortSignal) {
-              if (httpRequest.abortSignal.aborted)
-                throw new AbortError2("The operation was aborted.");
-              abortListener = /* @__PURE__ */ __name(function(event) {
-                event.type === "abort" && abortController.abort();
-              }, "abortListener"), httpRequest.abortSignal.addEventListener("abort", abortListener);
-            }
-            if (httpRequest.timeout && setTimeout(function() {
-              abortController.abort();
-            }, httpRequest.timeout), httpRequest.formData) {
-              for (formData = httpRequest.formData, requestForm_1 = new import_form_data.default(), appendFormValue = /* @__PURE__ */ __name(function(key, value) {
-                typeof value == "function" && (value = value()), value && Object.prototype.hasOwnProperty.call(value, "value") && Object.prototype.hasOwnProperty.call(value, "options") ? requestForm_1.append(key, value.value, value.options) : requestForm_1.append(key, value);
-              }, "appendFormValue"), _i = 0, _a = Object.keys(formData); _i < _a.length; _i++)
-                if (formKey = _a[_i], formValue = formData[formKey], Array.isArray(formValue))
-                  for (j = 0; j < formValue.length; j++)
-                    appendFormValue(formKey, formValue[j]);
-                else
-                  appendFormValue(formKey, formValue);
-              httpRequest.body = requestForm_1, httpRequest.formData = void 0, contentType2 = httpRequest.headers.get("Content-Type"), contentType2 && contentType2.indexOf("multipart/form-data") !== -1 && (typeof requestForm_1.getBoundary == "function" ? httpRequest.headers.set("Content-Type", "multipart/form-data; boundary=" + requestForm_1.getBoundary()) : httpRequest.headers.remove("Content-Type"));
-            }
-            return body = httpRequest.body ? typeof httpRequest.body == "function" ? httpRequest.body() : httpRequest.body : void 0, httpRequest.onUploadProgress && httpRequest.body && (onUploadProgress = httpRequest.onUploadProgress, uploadReportStream = new ReportTransform(onUploadProgress), isReadableStream(body) ? body.pipe(uploadReportStream) : uploadReportStream.end(body), body = uploadReportStream), [4, this.prepareRequest(httpRequest)];
-          case 1:
-            platformSpecificRequestInit = _d.sent(), requestInit = __assign({body, headers: httpRequest.headers.rawHeaders(), method: httpRequest.method, signal: abortController.signal, redirect: "manual"}, platformSpecificRequestInit), _d.label = 2;
-          case 2:
-            return _d.trys.push([2, 8, 9, 10]), [4, this.fetch(httpRequest.url, requestInit)];
-          case 3:
-            return response = _d.sent(), headers = parseHeaders(response.headers), _c = {
-              headers,
-              request: httpRequest,
-              status: response.status,
-              readableStreamBody: httpRequest.streamResponseBody ? response.body : void 0
-            }, httpRequest.streamResponseBody ? [3, 5] : [4, response.text()];
-          case 4:
-            return _b = _d.sent(), [3, 6];
-          case 5:
-            _b = void 0, _d.label = 6;
-          case 6:
-            return operationResponse = (_c.bodyAsText = _b, _c), onDownloadProgress = httpRequest.onDownloadProgress, onDownloadProgress && (responseBody = response.body || void 0, isReadableStream(responseBody) ? (downloadReportStream = new ReportTransform(onDownloadProgress), responseBody.pipe(downloadReportStream), operationResponse.readableStreamBody = downloadReportStream) : (length_1 = parseInt(headers.get("Content-Length")) || void 0, length_1 && onDownloadProgress({loadedBytes: length_1}))), [4, this.processRequest(operationResponse)];
-          case 7:
-            return _d.sent(), [2, operationResponse];
-          case 8:
-            throw error_1 = _d.sent(), fetchError = error_1, fetchError.code === "ENOTFOUND" ? new RestError(fetchError.message, RestError.REQUEST_SEND_ERROR, void 0, httpRequest) : fetchError.type === "aborted" ? new AbortError2("The operation was aborted.") : fetchError;
-          case 9:
-            return httpRequest.abortSignal && abortListener && httpRequest.abortSignal.removeEventListener("abort", abortListener), [7];
-          case 10:
-            return [2];
-        }
-      });
-    });
-  }, FetchHttpClient2;
-}();
-function isReadableStream(body) {
-  return body && typeof body.pipe == "function";
-}
-__name(isReadableStream, "isReadableStream");
-function parseHeaders(headers) {
-  var httpHeaders = new HttpHeaders();
-  return headers.forEach(function(value, key) {
-    httpHeaders.set(key, value);
-  }), httpHeaders;
-}
-__name(parseHeaders, "parseHeaders");
-
-// ../node_modules/@azure/core-http/es/src/proxyAgent.js
-var tunnel = __toModule(require_tunnel2());
-function createProxyAgent(requestUrl, proxySettings, headers) {
-  var host = URLBuilder.parse(proxySettings.host).getHost();
-  if (!host)
-    throw new Error("Expecting a non-empty host in proxy settings.");
-  if (!isValidPort(proxySettings.port))
-    throw new Error("Expecting a valid port number in the range of [0, 65535] in proxy settings.");
-  var tunnelOptions = {
-    proxy: {
-      host,
-      port: proxySettings.port,
-      headers: headers && headers.rawHeaders() || {}
-    }
-  };
-  proxySettings.username && proxySettings.password && (tunnelOptions.proxy.proxyAuth = proxySettings.username + ":" + proxySettings.password);
-  var isRequestHttps = isUrlHttps(requestUrl), isProxyHttps = isUrlHttps(proxySettings.host), proxyAgent = {
-    isHttps: isRequestHttps,
-    agent: createTunnel(isRequestHttps, isProxyHttps, tunnelOptions)
-  };
-  return proxyAgent;
-}
-__name(createProxyAgent, "createProxyAgent");
-function isUrlHttps(url2) {
-  var urlScheme = URLBuilder.parse(url2).getScheme() || "";
-  return urlScheme.toLowerCase() === "https";
-}
-__name(isUrlHttps, "isUrlHttps");
-function createTunnel(isRequestHttps, isProxyHttps, tunnelOptions) {
-  return isRequestHttps && isProxyHttps ? tunnel.httpsOverHttps(tunnelOptions) : isRequestHttps && !isProxyHttps ? tunnel.httpsOverHttp(tunnelOptions) : !isRequestHttps && isProxyHttps ? tunnel.httpOverHttps(tunnelOptions) : tunnel.httpOverHttp(tunnelOptions);
-}
-__name(createTunnel, "createTunnel");
-function isValidPort(port) {
-  return 0 <= port && port <= 65535;
-}
-__name(isValidPort, "isValidPort");
-
-// ../node_modules/@azure/core-http/es/src/nodeFetchHttpClient.js
-function getCachedAgent(isHttps, agentCache) {
-  return isHttps ? agentCache.httpsAgent : agentCache.httpAgent;
-}
-__name(getCachedAgent, "getCachedAgent");
-var NodeFetchHttpClient = function(_super) {
-  __extends(NodeFetchHttpClient2, _super);
-  function NodeFetchHttpClient2() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
-    return _this.proxyAgents = {}, _this.keepAliveAgents = {}, _this.cookieJar = new tough.CookieJar(void 0, {looseMode: !0}), _this;
-  }
-  return __name(NodeFetchHttpClient2, "NodeFetchHttpClient"), NodeFetchHttpClient2.prototype.getOrCreateAgent = function(httpRequest) {
-    var isHttps = isUrlHttps(httpRequest.url);
-    if (httpRequest.proxySettings) {
-      var agent = getCachedAgent(isHttps, this.proxyAgents);
-      if (agent)
-        return agent;
-      var tunnel2 = createProxyAgent(httpRequest.url, httpRequest.proxySettings, httpRequest.headers);
-      return agent = tunnel2.agent, tunnel2.isHttps ? this.proxyAgents.httpsAgent = tunnel2.agent : this.proxyAgents.httpAgent = tunnel2.agent, agent;
-    } else if (httpRequest.keepAlive) {
-      var agent = getCachedAgent(isHttps, this.keepAliveAgents);
-      if (agent)
-        return agent;
-      var agentOptions = {
-        keepAlive: httpRequest.keepAlive
-      };
-      return isHttps ? agent = this.keepAliveAgents.httpsAgent = new https2.Agent(agentOptions) : agent = this.keepAliveAgents.httpAgent = new http2.Agent(agentOptions), agent;
-    } else
-      return isHttps ? https2.globalAgent : http2.globalAgent;
-  }, NodeFetchHttpClient2.prototype.fetch = function(input, init) {
-    return __awaiter(this, void 0, void 0, function() {
-      return __generator(this, function(_a) {
-        return [2, lib_default(input, init)];
-      });
-    });
-  }, NodeFetchHttpClient2.prototype.prepareRequest = function(httpRequest) {
-    return __awaiter(this, void 0, void 0, function() {
-      var requestInit, cookieString, _this = this;
-      return __generator(this, function(_a) {
-        switch (_a.label) {
-          case 0:
-            return requestInit = {}, this.cookieJar && !httpRequest.headers.get("Cookie") ? [4, new Promise(function(resolve, reject) {
-              _this.cookieJar.getCookieString(httpRequest.url, function(err, cookie) {
-                err ? reject(err) : resolve(cookie);
-              });
-            })] : [3, 2];
-          case 1:
-            cookieString = _a.sent(), httpRequest.headers.set("Cookie", cookieString), _a.label = 2;
-          case 2:
-            return requestInit.agent = this.getOrCreateAgent(httpRequest), requestInit.compress = httpRequest.decompressResponse, [2, requestInit];
-        }
-      });
-    });
-  }, NodeFetchHttpClient2.prototype.processRequest = function(operationResponse) {
-    return __awaiter(this, void 0, void 0, function() {
-      var setCookieHeader_1, _this = this;
-      return __generator(this, function(_a) {
-        switch (_a.label) {
-          case 0:
-            return this.cookieJar ? (setCookieHeader_1 = operationResponse.headers.get("Set-Cookie"), setCookieHeader_1 === void 0 ? [3, 2] : [4, new Promise(function(resolve, reject) {
-              _this.cookieJar.setCookie(setCookieHeader_1, operationResponse.request.url, {ignoreError: !0}, function(err) {
-                err ? reject(err) : resolve();
-              });
-            })]) : [3, 2];
-          case 1:
-            _a.sent(), _a.label = 2;
-          case 2:
-            return [2];
-        }
-      });
-    });
-  }, NodeFetchHttpClient2;
-}(FetchHttpClient);
-
-// ../node_modules/@azure/core-http/es/src/httpPipelineLogLevel.js
-var HttpPipelineLogLevel;
-(function(HttpPipelineLogLevel2) {
-  HttpPipelineLogLevel2[HttpPipelineLogLevel2.OFF = 0] = "OFF", HttpPipelineLogLevel2[HttpPipelineLogLevel2.ERROR = 1] = "ERROR", HttpPipelineLogLevel2[HttpPipelineLogLevel2.WARNING = 2] = "WARNING", HttpPipelineLogLevel2[HttpPipelineLogLevel2.INFO = 3] = "INFO";
-})(HttpPipelineLogLevel || (HttpPipelineLogLevel = {}));
-
-// ../node_modules/@azure/core-auth/dist-esm/src/tokenCredential.js
-function isTokenCredential(credential) {
-  var castCredential = credential;
-  return castCredential && typeof castCredential.getToken == "function" && (castCredential.signRequest === void 0 || castCredential.getToken.length > 0);
-}
-__name(isTokenCredential, "isTokenCredential");
-
-// ../node_modules/@azure/core-http/es/src/policies/requestPolicy.js
-var BaseRequestPolicy = function() {
-  function BaseRequestPolicy2(_nextPolicy, _options) {
-    this._nextPolicy = _nextPolicy, this._options = _options;
-  }
-  return __name(BaseRequestPolicy2, "BaseRequestPolicy"), BaseRequestPolicy2.prototype.shouldLog = function(logLevel) {
-    return this._options.shouldLog(logLevel);
-  }, BaseRequestPolicy2.prototype.log = function(logLevel, message) {
-    this._options.log(logLevel, message);
-  }, BaseRequestPolicy2;
-}();
-var RequestPolicyOptions = function() {
-  function RequestPolicyOptions2(_logger) {
-    this._logger = _logger;
-  }
-  return __name(RequestPolicyOptions2, "RequestPolicyOptions"), RequestPolicyOptions2.prototype.shouldLog = function(logLevel) {
-    return !!this._logger && logLevel !== HttpPipelineLogLevel.OFF && logLevel <= this._logger.minimumLogLevel;
-  }, RequestPolicyOptions2.prototype.log = function(logLevel, message) {
-    this._logger && this.shouldLog(logLevel) && this._logger.log(logLevel, message);
-  }, RequestPolicyOptions2;
-}();
+var import_stream2 = __toModule(require("stream"));
 
 // ../node_modules/@azure/logger/dist-esm/src/log.js
 var import_util2 = __toModule(require("util")), import_os = __toModule(require("os"));
@@ -29576,6 +29386,249 @@ __name(isAzureLogLevel, "isAzureLogLevel");
 // ../node_modules/@azure/core-http/es/src/log.js
 var logger = createClientLogger("core-http");
 
+// ../node_modules/@azure/core-http/es/src/fetchHttpClient.js
+var ReportTransform = function(_super) {
+  __extends(ReportTransform2, _super);
+  function ReportTransform2(progressCallback) {
+    var _this = _super.call(this) || this;
+    return _this.progressCallback = progressCallback, _this.loadedBytes = 0, _this;
+  }
+  return __name(ReportTransform2, "ReportTransform"), ReportTransform2.prototype._transform = function(chunk, _encoding, callback) {
+    this.push(chunk), this.loadedBytes += chunk.length, this.progressCallback({loadedBytes: this.loadedBytes}), callback(void 0);
+  }, ReportTransform2;
+}(import_stream2.Transform);
+var FetchHttpClient = function() {
+  function FetchHttpClient2() {
+  }
+  return __name(FetchHttpClient2, "FetchHttpClient"), FetchHttpClient2.prototype.sendRequest = function(httpRequest) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function() {
+      var abortController, abortListener, formData, requestForm_1, appendFormValue, _i, _b, formKey, formValue, j, contentType2, body, onUploadProgress, uploadReportStream, platformSpecificRequestInit, requestInit, operationResponse, response, headers, streaming, _c, onDownloadProgress, responseBody, downloadReportStream, length_1, error_1, fetchError, uploadStreamDone, downloadStreamDone, _d;
+      return __generator(this, function(_e) {
+        switch (_e.label) {
+          case 0:
+            if (!httpRequest && typeof httpRequest != "object")
+              throw new Error("'httpRequest' (WebResourceLike) cannot be null or undefined and must be of type object.");
+            if (abortController = new AbortController(), httpRequest.abortSignal) {
+              if (httpRequest.abortSignal.aborted)
+                throw new AbortError2("The operation was aborted.");
+              abortListener = /* @__PURE__ */ __name(function(event) {
+                event.type === "abort" && abortController.abort();
+              }, "abortListener"), httpRequest.abortSignal.addEventListener("abort", abortListener);
+            }
+            if (httpRequest.timeout && setTimeout(function() {
+              abortController.abort();
+            }, httpRequest.timeout), httpRequest.formData) {
+              for (formData = httpRequest.formData, requestForm_1 = new import_form_data.default(), appendFormValue = /* @__PURE__ */ __name(function(key, value) {
+                typeof value == "function" && (value = value()), value && Object.prototype.hasOwnProperty.call(value, "value") && Object.prototype.hasOwnProperty.call(value, "options") ? requestForm_1.append(key, value.value, value.options) : requestForm_1.append(key, value);
+              }, "appendFormValue"), _i = 0, _b = Object.keys(formData); _i < _b.length; _i++)
+                if (formKey = _b[_i], formValue = formData[formKey], Array.isArray(formValue))
+                  for (j = 0; j < formValue.length; j++)
+                    appendFormValue(formKey, formValue[j]);
+                else
+                  appendFormValue(formKey, formValue);
+              httpRequest.body = requestForm_1, httpRequest.formData = void 0, contentType2 = httpRequest.headers.get("Content-Type"), contentType2 && contentType2.indexOf("multipart/form-data") !== -1 && (typeof requestForm_1.getBoundary == "function" ? httpRequest.headers.set("Content-Type", "multipart/form-data; boundary=" + requestForm_1.getBoundary()) : httpRequest.headers.remove("Content-Type"));
+            }
+            return body = httpRequest.body ? typeof httpRequest.body == "function" ? httpRequest.body() : httpRequest.body : void 0, httpRequest.onUploadProgress && httpRequest.body && (onUploadProgress = httpRequest.onUploadProgress, uploadReportStream = new ReportTransform(onUploadProgress), isReadableStream(body) ? body.pipe(uploadReportStream) : uploadReportStream.end(body), body = uploadReportStream), [4, this.prepareRequest(httpRequest)];
+          case 1:
+            platformSpecificRequestInit = _e.sent(), requestInit = __assign({body, headers: httpRequest.headers.rawHeaders(), method: httpRequest.method, signal: abortController.signal, redirect: "manual"}, platformSpecificRequestInit), _e.label = 2;
+          case 2:
+            return _e.trys.push([2, 8, 9, 10]), [4, this.fetch(httpRequest.url, requestInit)];
+          case 3:
+            return response = _e.sent(), headers = parseHeaders(response.headers), streaming = ((_a = httpRequest.streamResponseStatusCodes) === null || _a === void 0 ? void 0 : _a.has(response.status)) || httpRequest.streamResponseBody, _d = {
+              headers,
+              request: httpRequest,
+              status: response.status,
+              readableStreamBody: streaming ? response.body : void 0
+            }, streaming ? [3, 5] : [4, response.text()];
+          case 4:
+            return _c = _e.sent(), [3, 6];
+          case 5:
+            _c = void 0, _e.label = 6;
+          case 6:
+            return operationResponse = (_d.bodyAsText = _c, _d), onDownloadProgress = httpRequest.onDownloadProgress, onDownloadProgress && (responseBody = response.body || void 0, isReadableStream(responseBody) ? (downloadReportStream = new ReportTransform(onDownloadProgress), responseBody.pipe(downloadReportStream), operationResponse.readableStreamBody = downloadReportStream) : (length_1 = parseInt(headers.get("Content-Length")) || void 0, length_1 && onDownloadProgress({loadedBytes: length_1}))), [4, this.processRequest(operationResponse)];
+          case 7:
+            return _e.sent(), [2, operationResponse];
+          case 8:
+            throw error_1 = _e.sent(), fetchError = error_1, fetchError.code === "ENOTFOUND" ? new RestError(fetchError.message, RestError.REQUEST_SEND_ERROR, void 0, httpRequest) : fetchError.type === "aborted" ? new AbortError2("The operation was aborted.") : fetchError;
+          case 9:
+            return httpRequest.abortSignal && abortListener && (uploadStreamDone = Promise.resolve(), isReadableStream(body) && (uploadStreamDone = isStreamComplete(body)), downloadStreamDone = Promise.resolve(), isReadableStream(operationResponse == null ? void 0 : operationResponse.readableStreamBody) && (downloadStreamDone = isStreamComplete(operationResponse.readableStreamBody)), Promise.all([uploadStreamDone, downloadStreamDone]).then(function() {
+              var _a2;
+              (_a2 = httpRequest.abortSignal) === null || _a2 === void 0 || _a2.removeEventListener("abort", abortListener);
+            }).catch(function(e) {
+              logger.warning("Error when cleaning up abortListener on httpRequest", e);
+            })), [7];
+          case 10:
+            return [2];
+        }
+      });
+    });
+  }, FetchHttpClient2;
+}();
+function isReadableStream(body) {
+  return body && typeof body.pipe == "function";
+}
+__name(isReadableStream, "isReadableStream");
+function isStreamComplete(stream) {
+  return new Promise(function(resolve) {
+    stream.on("close", resolve), stream.on("end", resolve), stream.on("error", resolve);
+  });
+}
+__name(isStreamComplete, "isStreamComplete");
+function parseHeaders(headers) {
+  var httpHeaders = new HttpHeaders();
+  return headers.forEach(function(value, key) {
+    httpHeaders.set(key, value);
+  }), httpHeaders;
+}
+__name(parseHeaders, "parseHeaders");
+
+// ../node_modules/@azure/core-http/es/src/proxyAgent.js
+var tunnel = __toModule(require_tunnel2());
+function createProxyAgent(requestUrl, proxySettings, headers) {
+  var host = URLBuilder.parse(proxySettings.host).getHost();
+  if (!host)
+    throw new Error("Expecting a non-empty host in proxy settings.");
+  if (!isValidPort(proxySettings.port))
+    throw new Error("Expecting a valid port number in the range of [0, 65535] in proxy settings.");
+  var tunnelOptions = {
+    proxy: {
+      host,
+      port: proxySettings.port,
+      headers: headers && headers.rawHeaders() || {}
+    }
+  };
+  proxySettings.username && proxySettings.password && (tunnelOptions.proxy.proxyAuth = proxySettings.username + ":" + proxySettings.password);
+  var isRequestHttps = isUrlHttps(requestUrl), isProxyHttps = isUrlHttps(proxySettings.host), proxyAgent = {
+    isHttps: isRequestHttps,
+    agent: createTunnel(isRequestHttps, isProxyHttps, tunnelOptions)
+  };
+  return proxyAgent;
+}
+__name(createProxyAgent, "createProxyAgent");
+function isUrlHttps(url2) {
+  var urlScheme = URLBuilder.parse(url2).getScheme() || "";
+  return urlScheme.toLowerCase() === "https";
+}
+__name(isUrlHttps, "isUrlHttps");
+function createTunnel(isRequestHttps, isProxyHttps, tunnelOptions) {
+  return isRequestHttps && isProxyHttps ? tunnel.httpsOverHttps(tunnelOptions) : isRequestHttps && !isProxyHttps ? tunnel.httpsOverHttp(tunnelOptions) : !isRequestHttps && isProxyHttps ? tunnel.httpOverHttps(tunnelOptions) : tunnel.httpOverHttp(tunnelOptions);
+}
+__name(createTunnel, "createTunnel");
+function isValidPort(port) {
+  return 0 <= port && port <= 65535;
+}
+__name(isValidPort, "isValidPort");
+
+// ../node_modules/@azure/core-http/es/src/nodeFetchHttpClient.js
+function getCachedAgent(isHttps, agentCache) {
+  return isHttps ? agentCache.httpsAgent : agentCache.httpAgent;
+}
+__name(getCachedAgent, "getCachedAgent");
+var NodeFetchHttpClient = function(_super) {
+  __extends(NodeFetchHttpClient2, _super);
+  function NodeFetchHttpClient2() {
+    var _this = _super !== null && _super.apply(this, arguments) || this;
+    return _this.proxyAgents = {}, _this.keepAliveAgents = {}, _this.cookieJar = new tough.CookieJar(void 0, {looseMode: !0}), _this;
+  }
+  return __name(NodeFetchHttpClient2, "NodeFetchHttpClient"), NodeFetchHttpClient2.prototype.getOrCreateAgent = function(httpRequest) {
+    var isHttps = isUrlHttps(httpRequest.url);
+    if (httpRequest.proxySettings) {
+      var agent = getCachedAgent(isHttps, this.proxyAgents);
+      if (agent)
+        return agent;
+      var tunnel2 = createProxyAgent(httpRequest.url, httpRequest.proxySettings, httpRequest.headers);
+      return agent = tunnel2.agent, tunnel2.isHttps ? this.proxyAgents.httpsAgent = tunnel2.agent : this.proxyAgents.httpAgent = tunnel2.agent, agent;
+    } else if (httpRequest.keepAlive) {
+      var agent = getCachedAgent(isHttps, this.keepAliveAgents);
+      if (agent)
+        return agent;
+      var agentOptions = {
+        keepAlive: httpRequest.keepAlive
+      };
+      return isHttps ? agent = this.keepAliveAgents.httpsAgent = new https2.Agent(agentOptions) : agent = this.keepAliveAgents.httpAgent = new http2.Agent(agentOptions), agent;
+    } else
+      return isHttps ? https2.globalAgent : http2.globalAgent;
+  }, NodeFetchHttpClient2.prototype.fetch = function(input, init) {
+    return __awaiter(this, void 0, void 0, function() {
+      return __generator(this, function(_a) {
+        return [2, lib_default(input, init)];
+      });
+    });
+  }, NodeFetchHttpClient2.prototype.prepareRequest = function(httpRequest) {
+    return __awaiter(this, void 0, void 0, function() {
+      var requestInit, cookieString, _this = this;
+      return __generator(this, function(_a) {
+        switch (_a.label) {
+          case 0:
+            return requestInit = {}, this.cookieJar && !httpRequest.headers.get("Cookie") ? [4, new Promise(function(resolve, reject) {
+              _this.cookieJar.getCookieString(httpRequest.url, function(err, cookie) {
+                err ? reject(err) : resolve(cookie);
+              });
+            })] : [3, 2];
+          case 1:
+            cookieString = _a.sent(), httpRequest.headers.set("Cookie", cookieString), _a.label = 2;
+          case 2:
+            return requestInit.agent = this.getOrCreateAgent(httpRequest), requestInit.compress = httpRequest.decompressResponse, [2, requestInit];
+        }
+      });
+    });
+  }, NodeFetchHttpClient2.prototype.processRequest = function(operationResponse) {
+    return __awaiter(this, void 0, void 0, function() {
+      var setCookieHeader_1, _this = this;
+      return __generator(this, function(_a) {
+        switch (_a.label) {
+          case 0:
+            return this.cookieJar ? (setCookieHeader_1 = operationResponse.headers.get("Set-Cookie"), setCookieHeader_1 === void 0 ? [3, 2] : [4, new Promise(function(resolve, reject) {
+              _this.cookieJar.setCookie(setCookieHeader_1, operationResponse.request.url, {ignoreError: !0}, function(err) {
+                err ? reject(err) : resolve();
+              });
+            })]) : [3, 2];
+          case 1:
+            _a.sent(), _a.label = 2;
+          case 2:
+            return [2];
+        }
+      });
+    });
+  }, NodeFetchHttpClient2;
+}(FetchHttpClient);
+
+// ../node_modules/@azure/core-http/es/src/httpPipelineLogLevel.js
+var HttpPipelineLogLevel;
+(function(HttpPipelineLogLevel2) {
+  HttpPipelineLogLevel2[HttpPipelineLogLevel2.OFF = 0] = "OFF", HttpPipelineLogLevel2[HttpPipelineLogLevel2.ERROR = 1] = "ERROR", HttpPipelineLogLevel2[HttpPipelineLogLevel2.WARNING = 2] = "WARNING", HttpPipelineLogLevel2[HttpPipelineLogLevel2.INFO = 3] = "INFO";
+})(HttpPipelineLogLevel || (HttpPipelineLogLevel = {}));
+
+// ../node_modules/@azure/core-auth/dist-esm/src/tokenCredential.js
+function isTokenCredential(credential) {
+  var castCredential = credential;
+  return castCredential && typeof castCredential.getToken == "function" && (castCredential.signRequest === void 0 || castCredential.getToken.length > 0);
+}
+__name(isTokenCredential, "isTokenCredential");
+
+// ../node_modules/@azure/core-http/es/src/policies/requestPolicy.js
+var BaseRequestPolicy = function() {
+  function BaseRequestPolicy2(_nextPolicy, _options) {
+    this._nextPolicy = _nextPolicy, this._options = _options;
+  }
+  return __name(BaseRequestPolicy2, "BaseRequestPolicy"), BaseRequestPolicy2.prototype.shouldLog = function(logLevel) {
+    return this._options.shouldLog(logLevel);
+  }, BaseRequestPolicy2.prototype.log = function(logLevel, message) {
+    this._options.log(logLevel, message);
+  }, BaseRequestPolicy2;
+}();
+var RequestPolicyOptions = function() {
+  function RequestPolicyOptions2(_logger) {
+    this._logger = _logger;
+  }
+  return __name(RequestPolicyOptions2, "RequestPolicyOptions"), RequestPolicyOptions2.prototype.shouldLog = function(logLevel) {
+    return !!this._logger && logLevel !== HttpPipelineLogLevel.OFF && logLevel <= this._logger.minimumLogLevel;
+  }, RequestPolicyOptions2.prototype.log = function(logLevel, message) {
+    this._logger && this.shouldLog(logLevel) && this._logger.log(logLevel, message);
+  }, RequestPolicyOptions2;
+}();
+
 // ../node_modules/@azure/core-http/es/src/policies/logPolicy.js
 function logPolicy(loggingOptions) {
   return loggingOptions === void 0 && (loggingOptions = {}), {
@@ -29633,18 +29686,15 @@ function getPathStringFromParameterPath(parameterPath, mapper) {
 __name(getPathStringFromParameterPath, "getPathStringFromParameterPath");
 
 // ../node_modules/@azure/core-http/es/src/operationSpec.js
-function isStreamOperation(operationSpec) {
-  var result = !1;
+function getStreamResponseStatusCodes(operationSpec) {
+  var result = new Set();
   for (var statusCode in operationSpec.responses) {
     var operationResponse = operationSpec.responses[statusCode];
-    if (operationResponse.bodyMapper && operationResponse.bodyMapper.type.name === MapperType.Stream) {
-      result = !0;
-      break;
-    }
+    operationResponse.bodyMapper && operationResponse.bodyMapper.type.name === MapperType.Stream && result.add(Number(statusCode));
   }
   return result;
 }
-__name(isStreamOperation, "isStreamOperation");
+__name(getStreamResponseStatusCodes, "getStreamResponseStatusCodes");
 
 // ../node_modules/@azure/core-http/es/src/util/xml.js
 var xml2js = __toModule(require_xml2js());
@@ -29801,14 +29851,14 @@ function isOperationSpecEmpty(operationSpec) {
 }
 __name(isOperationSpecEmpty, "isOperationSpecEmpty");
 function handleErrorResponse(parsedResponse, operationSpec, responseSpec) {
-  var isSuccessByStatus = 200 <= parsedResponse.status && parsedResponse.status < 300, isExpectedStatusCode = isOperationSpecEmpty(operationSpec) ? isSuccessByStatus : !!responseSpec;
+  var _a, isSuccessByStatus = 200 <= parsedResponse.status && parsedResponse.status < 300, isExpectedStatusCode = isOperationSpecEmpty(operationSpec) ? isSuccessByStatus : !!responseSpec;
   if (isExpectedStatusCode)
     if (responseSpec) {
       if (!responseSpec.isError)
         return {error: null, shouldReturnResponse: !1};
     } else
       return {error: null, shouldReturnResponse: !1};
-  var errorResponseSpec = responseSpec != null ? responseSpec : operationSpec.responses.default, initialErrorMessage = isStreamOperation(operationSpec) ? "Unexpected status code: " + parsedResponse.status : parsedResponse.bodyAsText, error = new RestError(initialErrorMessage, void 0, parsedResponse.status, parsedResponse.request, parsedResponse);
+  var errorResponseSpec = responseSpec != null ? responseSpec : operationSpec.responses.default, streaming = ((_a = parsedResponse.request.streamResponseStatusCodes) === null || _a === void 0 ? void 0 : _a.has(parsedResponse.status)) || parsedResponse.request.streamResponseBody, initialErrorMessage = streaming ? "Unexpected status code: " + parsedResponse.status : parsedResponse.bodyAsText, error = new RestError(initialErrorMessage, void 0, parsedResponse.status, parsedResponse.request, parsedResponse);
   if (!errorResponseSpec)
     throw error;
   var defaultBodyMapper = errorResponseSpec.bodyMapper, defaultHeadersMapper = errorResponseSpec.headersMapper;
@@ -29830,11 +29880,11 @@ function handleErrorResponse(parsedResponse, operationSpec, responseSpec) {
 }
 __name(handleErrorResponse, "handleErrorResponse");
 function parse(jsonContentTypes, xmlContentTypes, operationResponse, opts) {
-  var errorHandler = /* @__PURE__ */ __name(function(err) {
+  var _a, errorHandler = /* @__PURE__ */ __name(function(err) {
     var msg = 'Error "' + err + '" occurred while parsing the response body - ' + operationResponse.bodyAsText + ".", errCode = err.code || RestError.PARSE_ERROR, e = new RestError(msg, errCode, operationResponse.status, operationResponse.request, operationResponse);
     return Promise.reject(e);
-  }, "errorHandler");
-  if (!operationResponse.request.streamResponseBody && operationResponse.bodyAsText) {
+  }, "errorHandler"), streaming = ((_a = operationResponse.request.streamResponseStatusCodes) === null || _a === void 0 ? void 0 : _a.has(operationResponse.status)) || operationResponse.request.streamResponseBody;
+  if (!streaming && operationResponse.bodyAsText) {
     var text_1 = operationResponse.bodyAsText, contentType2 = operationResponse.headers.get("Content-Type") || "", contentComponents = contentType2 ? contentType2.split(";").map(function(component) {
       return component.toLowerCase();
     }) : [];
@@ -30310,7 +30360,7 @@ var QueryCollectionFormat;
 })(QueryCollectionFormat || (QueryCollectionFormat = {}));
 
 // ../node_modules/@azure/core-http/es/src/policies/proxyPolicy.js
-var noProxyList = [], isNoProxyInitalized = !1, byPassedList = new Map();
+var noProxyList = loadNoProxy(), byPassedList = new Map();
 function loadEnvironmentProxyValue() {
   if (!!process) {
     var httpsProxy = getEnvironmentValue(Constants.HTTPS_PROXY), allProxy = getEnvironmentValue(Constants.ALL_PROXY), httpProxy = getEnvironmentValue(Constants.HTTP_PROXY);
@@ -30319,29 +30369,25 @@ function loadEnvironmentProxyValue() {
 }
 __name(loadEnvironmentProxyValue, "loadEnvironmentProxyValue");
 function isBypassed(uri) {
-  if (byPassedList.has(uri))
-    return byPassedList.get(uri);
-  loadNoProxy();
-  for (var isBypassedFlag = !1, host = URLBuilder.parse(uri).getHost(), _i = 0, noProxyList_1 = noProxyList; _i < noProxyList_1.length; _i++) {
-    var proxyString = noProxyList_1[_i];
-    proxyString[0] === "." ? (uri.endsWith(proxyString) || host === proxyString.slice(1) && host.length === proxyString.length - 1) && (isBypassedFlag = !0) : host === proxyString && (isBypassedFlag = !0);
+  if (noProxyList.length === 0)
+    return !1;
+  var host = URLBuilder.parse(uri).getHost();
+  if (byPassedList.has(host))
+    return byPassedList.get(host);
+  for (var isBypassedFlag = !1, _i = 0, noProxyList_1 = noProxyList; _i < noProxyList_1.length; _i++) {
+    var pattern = noProxyList_1[_i];
+    pattern[0] === "." ? (host.endsWith(pattern) || host.length === pattern.length - 1 && host === pattern.slice(1)) && (isBypassedFlag = !0) : host === pattern && (isBypassedFlag = !0);
   }
-  return byPassedList.set(uri, isBypassedFlag), isBypassedFlag;
+  return byPassedList.set(host, isBypassedFlag), isBypassedFlag;
 }
 __name(isBypassed, "isBypassed");
 function loadNoProxy() {
-  if (!isNoProxyInitalized) {
-    var noProxy = getEnvironmentValue(Constants.NO_PROXY);
-    if (noProxy) {
-      var list = noProxy.split(",");
-      noProxyList = list.map(function(item) {
-        return item.trim();
-      }).filter(function(item) {
-        return item.length;
-      });
-    }
-    isNoProxyInitalized = !0;
-  }
+  var noProxy = getEnvironmentValue(Constants.NO_PROXY);
+  return noProxy ? noProxy.split(",").map(function(item) {
+    return item.trim();
+  }).filter(function(item) {
+    return item.length;
+  }) : [];
 }
 __name(loadNoProxy, "loadNoProxy");
 function getDefaultProxySettings(proxyUrl) {
@@ -30734,7 +30780,7 @@ var ServiceClient = function() {
                   queryParameter.collectionFormat !== void 0 && queryParameter.collectionFormat !== null && queryParameter.collectionFormat !== QueryCollectionFormat.Multi && queryParameter.collectionFormat !== QueryCollectionFormat.Ssv && queryParameter.collectionFormat !== QueryCollectionFormat.Tsv && (queryParameterValue = queryParameterValue.join(queryParameter.collectionFormat)), requestUrl.setQueryParameter(queryParameter.mapper.serializedName || getPathStringFromParameter(queryParameter), queryParameterValue);
                 }
             }
-            if (httpRequest.url = requestUrl.toString(), contentType2 = operationSpec.contentType || this.requestContentType, contentType2 && httpRequest.headers.set("Content-Type", contentType2), operationSpec.headerParameters) {
+            if (httpRequest.url = requestUrl.toString(), contentType2 = operationSpec.contentType || this.requestContentType, contentType2 && operationSpec.requestBody && httpRequest.headers.set("Content-Type", contentType2), operationSpec.headerParameters) {
               for (_e = 0, _f = operationSpec.headerParameters; _e < _f.length; _e++)
                 if (headerParameter = _f[_e], headerValue = getOperationArgumentValueFromParameter(this, operationArguments, headerParameter, operationSpec.serializer), headerValue != null)
                   if (headerValue = operationSpec.serializer.serialize(headerParameter.mapper, headerValue, getPathStringFromParameter(headerParameter), serializerOptions), headerCollectionPrefix = headerParameter.mapper.headerCollectionPrefix, headerCollectionPrefix)
@@ -30749,7 +30795,7 @@ var ServiceClient = function() {
                   httpRequest.headers.set(customHeaderName, options.customHeaders[customHeaderName]);
               options.abortSignal && (httpRequest.abortSignal = options.abortSignal), options.timeout && (httpRequest.timeout = options.timeout), options.onUploadProgress && (httpRequest.onUploadProgress = options.onUploadProgress), options.onDownloadProgress && (httpRequest.onDownloadProgress = options.onDownloadProgress), options.spanOptions && (httpRequest.spanOptions = options.spanOptions), options.shouldDeserialize !== void 0 && options.shouldDeserialize !== null && (httpRequest.shouldDeserialize = options.shouldDeserialize);
             }
-            httpRequest.withCredentials = this._withCredentials, serializeRequestBody(this, httpRequest, operationArguments, operationSpec), (httpRequest.streamResponseBody === void 0 || httpRequest.streamResponseBody === null) && (httpRequest.streamResponseBody = isStreamOperation(operationSpec)), rawResponse = void 0, sendRequestError = void 0, _j.label = 2;
+            httpRequest.withCredentials = this._withCredentials, serializeRequestBody(this, httpRequest, operationArguments, operationSpec), httpRequest.streamResponseStatusCodes === void 0 && (httpRequest.streamResponseStatusCodes = getStreamResponseStatusCodes(operationSpec)), rawResponse = void 0, sendRequestError = void 0, _j.label = 2;
           case 2:
             return _j.trys.push([2, 4, , 5]), [4, this.sendRequest(httpRequest)];
           case 3:
@@ -41775,7 +41821,7 @@ var serializer6 = new Serializer(blockBlobMappers_exports, !0), uploadOperationS
 var logger2 = createClientLogger("storage-blob");
 
 // ../node_modules/@azure/storage-blob/dist-esm/storage-blob/src/utils/constants.js
-var SDK_VERSION = "12.4.0", SERVICE_VERSION = "2020-04-08", BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024, BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024, BLOCK_BLOB_MAX_BLOCKS = 5e4, DEFAULT_BLOCK_BUFFER_SIZE_BYTES = 8 * 1024 * 1024, DEFAULT_BLOB_DOWNLOAD_BLOCK_BYTES = 4 * 1024 * 1024, DEFAULT_MAX_DOWNLOAD_RETRY_REQUESTS = 5, StorageOAuthScopes = "https://storage.azure.com/.default", URLConstants = {
+var SDK_VERSION = "12.4.1", SERVICE_VERSION = "2020-04-08", BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024, BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024, BLOCK_BLOB_MAX_BLOCKS = 5e4, DEFAULT_BLOCK_BUFFER_SIZE_BYTES = 8 * 1024 * 1024, DEFAULT_BLOB_DOWNLOAD_BLOCK_BYTES = 4 * 1024 * 1024, DEFAULT_MAX_DOWNLOAD_RETRY_REQUESTS = 5, StorageOAuthScopes = "https://storage.azure.com/.default", URLConstants = {
   Parameters: {
     FORCE_BROWSER_NO_CACHE: "_",
     SIGNATURE: "sig",
@@ -42330,7 +42376,7 @@ var DEFAULT_RETRY_OPTIONS = {
     if (err)
       for (var _i = 0, retriableErrors_1 = retriableErrors; _i < retriableErrors_1.length; _i++) {
         var retriableError = retriableErrors_1[_i];
-        if (err.name.toUpperCase().includes(retriableError) || err.message.toUpperCase().includes(retriableError) || err.code && err.code.toString().toUpperCase().includes(retriableError))
+        if (err.name.toUpperCase().includes(retriableError) || err.message.toUpperCase().includes(retriableError) || err.code && err.code.toString().toUpperCase() === retriableError)
           return logger2.info("RetryPolicy: Network error " + retriableError + " found, will retry."), !0;
       }
     if (response || err) {
@@ -42340,7 +42386,7 @@ var DEFAULT_RETRY_OPTIONS = {
       if (statusCode === 503 || statusCode === 500)
         return logger2.info("RetryPolicy: Will retry for status code " + statusCode + "."), !0;
     }
-    return !1;
+    return (err == null ? void 0 : err.code) === "PARSE_ERROR" && (err == null ? void 0 : err.message.startsWith('Error "Error: Unclosed root tag')) ? (logger2.info("RetryPolicy: Incomplete XML response likely due to service timeout, will retry."), !0) : !1;
   }, StorageRetryPolicy2.prototype.delay = function(isPrimaryRetry, attempt, abortSignal2) {
     return __awaiter(this, void 0, void 0, function() {
       var delayTimeInMs;
@@ -42481,8 +42527,8 @@ function newPipeline(credential, pipelineOptions) {
     telemetryPolicy,
     generateClientRequestIdPolicy(),
     new StorageBrowserPolicyFactory(),
-    deserializationPolicy(),
     new StorageRetryPolicyFactory(pipelineOptions.retryOptions),
+    deserializationPolicy(void 0, {xmlCharKey: "#"}),
     logPolicy({
       logger: logger2.info,
       allowedHeaderNames: StorageBlobLoggingAllowedHeaderNames,
@@ -42497,41 +42543,37 @@ __name(newPipeline, "newPipeline");
 var import_api4 = __toModule(require_src2());
 
 // ../node_modules/@azure/storage-blob/dist-esm/storage-blob/src/utils/RetriableReadableStream.js
-var import_stream3 = __toModule(require("stream"));
-var ABORT_ERROR = new AbortError2("The operation was aborted."), RetriableReadableStream = function(_super) {
+var import_stream3 = __toModule(require("stream")), RetriableReadableStream = function(_super) {
   __extends(RetriableReadableStream2, _super);
   function RetriableReadableStream2(source, getter, offset, count, options) {
     options === void 0 && (options = {});
-    var _this = _super.call(this) || this;
-    return _this.retries = 0, _this.abortHandler = function() {
-      _this.source.pause(), _this.emit("error", ABORT_ERROR);
-    }, _this.aborter = options.abortSignal || AbortSignal.none, _this.getter = getter, _this.source = source, _this.start = offset, _this.offset = offset, _this.end = offset + count - 1, _this.maxRetryRequests = options.maxRetryRequests && options.maxRetryRequests >= 0 ? options.maxRetryRequests : 0, _this.onProgress = options.onProgress, _this.options = options, _this.aborter.addEventListener("abort", _this.abortHandler), _this.setSourceDataHandler(), _this.setSourceEndHandler(), _this.setSourceErrorHandler(), _this;
-  }
-  return __name(RetriableReadableStream2, "RetriableReadableStream"), RetriableReadableStream2.prototype._read = function() {
-    this.aborter.aborted || this.source.resume();
-  }, RetriableReadableStream2.prototype.setSourceDataHandler = function() {
-    var _this = this;
-    this.source.on("data", function(data) {
+    var _this = _super.call(this, {highWaterMark: options.highWaterMark}) || this;
+    return _this.retries = 0, _this.sourceDataHandler = function(data) {
       if (_this.options.doInjectErrorOnce) {
         _this.options.doInjectErrorOnce = void 0, _this.source.pause(), _this.source.removeAllListeners("data"), _this.source.emit("end");
         return;
       }
       _this.offset += data.length, _this.onProgress && _this.onProgress({loadedBytes: _this.offset - _this.start}), _this.push(data) || _this.source.pause();
-    });
-  }, RetriableReadableStream2.prototype.setSourceEndHandler = function() {
-    var _this = this;
-    this.source.on("end", function() {
-      _this.offset - 1 === _this.end ? (_this.aborter.removeEventListener("abort", _this.abortHandler), _this.push(null)) : _this.offset <= _this.end ? _this.retries < _this.maxRetryRequests ? (_this.retries += 1, _this.getter(_this.offset).then(function(newSource) {
-        _this.source = newSource, _this.setSourceDataHandler(), _this.setSourceEndHandler(), _this.setSourceErrorHandler();
+    }, _this.sourceErrorOrEndHandler = function(err) {
+      if (err && err.name === "AbortError") {
+        _this.destroy(err);
+        return;
+      }
+      _this.removeSourceEventHandlers(), _this.offset - 1 === _this.end ? _this.push(null) : _this.offset <= _this.end ? _this.retries < _this.maxRetryRequests ? (_this.retries += 1, _this.getter(_this.offset).then(function(newSource) {
+        _this.source = newSource, _this.setSourceEventHandlers();
       }).catch(function(error) {
-        _this.emit("error", error);
-      })) : _this.emit("error", new Error("Data corruption failure: received less data than required and reached maxRetires limitation. Received data offset: " + (_this.offset - 1) + ", data needed offset: " + _this.end + ", retries: " + _this.retries + ", max retries: " + _this.maxRetryRequests)) : _this.emit("error", new Error("Data corruption failure: Received more data than original request, data needed offset is " + _this.end + ", received offset: " + (_this.offset - 1)));
-    });
-  }, RetriableReadableStream2.prototype.setSourceErrorHandler = function() {
-    var _this = this;
-    this.source.on("error", function(error) {
-      _this.emit("error", error);
-    });
+        _this.destroy(error);
+      })) : _this.destroy(new Error("Data corruption failure: received less data than required and reached maxRetires limitation. Received data offset: " + (_this.offset - 1) + ", data needed offset: " + _this.end + ", retries: " + _this.retries + ", max retries: " + _this.maxRetryRequests)) : _this.destroy(new Error("Data corruption failure: Received more data than original request, data needed offset is " + _this.end + ", received offset: " + (_this.offset - 1)));
+    }, _this.getter = getter, _this.source = source, _this.start = offset, _this.offset = offset, _this.end = offset + count - 1, _this.maxRetryRequests = options.maxRetryRequests && options.maxRetryRequests >= 0 ? options.maxRetryRequests : 0, _this.onProgress = options.onProgress, _this.options = options, _this.setSourceEventHandlers(), _this;
+  }
+  return __name(RetriableReadableStream2, "RetriableReadableStream"), RetriableReadableStream2.prototype._read = function() {
+    this.source.resume();
+  }, RetriableReadableStream2.prototype.setSourceEventHandlers = function() {
+    this.source.on("data", this.sourceDataHandler), this.source.on("end", this.sourceErrorOrEndHandler), this.source.on("error", this.sourceErrorOrEndHandler);
+  }, RetriableReadableStream2.prototype.removeSourceEventHandlers = function() {
+    this.source.removeListener("data", this.sourceDataHandler), this.source.removeListener("end", this.sourceErrorOrEndHandler), this.source.removeListener("error", this.sourceErrorOrEndHandler);
+  }, RetriableReadableStream2.prototype._destroy = function(error, callback) {
+    this.removeSourceEventHandlers(), this.source.destroy(), callback(error === null ? void 0 : error);
   }, RetriableReadableStream2;
 }(import_stream3.Readable);
 
@@ -42963,7 +43005,7 @@ var AvroParser = function() {
           case 0:
             return [4, AvroParser2.readBytes(stream, options)];
           case 1:
-            return u8arr = _a.sent(), typeof TextDecoder == "undefined" && !0 && (global.TextDecoder = require("util").TextDecoder), utf8decoder = new TextDecoder(), [2, utf8decoder.decode(u8arr)];
+            return u8arr = _a.sent(), typeof TextDecoder == "undefined" && (global.TextDecoder = require("util").TextDecoder), utf8decoder = new TextDecoder(), [2, utf8decoder.decode(u8arr)];
         }
       });
     });
@@ -43389,7 +43431,7 @@ var AvroReadable = function() {
 }();
 
 // ../node_modules/@azure/storage-blob/dist-esm/storage-internal-avro/src/AvroReadableFromStream.js
-var ABORT_ERROR2 = new AbortError2("Reading from the avro stream was aborted."), AvroReadableFromStream = function(_super) {
+var ABORT_ERROR = new AbortError2("Reading from the avro stream was aborted."), AvroReadableFromStream = function(_super) {
   __extends(AvroReadableFromStream2, _super);
   function AvroReadableFromStream2(readable) {
     var _this = _super.call(this) || this;
@@ -43409,7 +43451,7 @@ var ABORT_ERROR2 = new AbortError2("Reading from the avro stream was aborted."),
       var chunk, _this = this;
       return __generator(this, function(_b) {
         if ((_a = options.abortSignal) === null || _a === void 0 ? void 0 : _a.aborted)
-          throw ABORT_ERROR2;
+          throw ABORT_ERROR;
         if (size < 0)
           throw new Error("size parameter should be positive: " + size);
         if (size === 0)
@@ -43427,7 +43469,7 @@ var ABORT_ERROR2 = new AbortError2("Reading from the avro stream was aborted."),
           }, "readableCallback"), rejectCallback = /* @__PURE__ */ __name(function() {
             cleanUp(), reject();
           }, "rejectCallback"), abortHandler = /* @__PURE__ */ __name(function() {
-            cleanUp(), reject(ABORT_ERROR2);
+            cleanUp(), reject(ABORT_ERROR);
           }, "abortHandler");
           _this._readable.on("readable", readableCallback), _this._readable.once("error", rejectCallback), _this._readable.once("end", rejectCallback), _this._readable.once("close", rejectCallback), options.abortSignal && options.abortSignal.addEventListener("abort", abortHandler);
         })];
@@ -43822,7 +43864,7 @@ var StorageSharedKeyCredential = function(_super) {
 }(Credential);
 
 // ../node_modules/@azure/storage-blob/dist-esm/storage-blob/src/generated/src/storageClientContext.js
-var packageName = "azure-storage-blob", packageVersion = "12.4.0", StorageClientContext = function(_super) {
+var packageName = "azure-storage-blob", packageVersion = "12.4.1", StorageClientContext = function(_super) {
   __extends(StorageClientContext2, _super);
   function StorageClientContext2(url2, options) {
     var _this = this;
@@ -44924,7 +44966,6 @@ var BlobClient = function(_super) {
                 });
               });
             }, offset, res_1.contentLength, {
-              abortSignal: options.abortSignal,
               maxRetryRequests: options.maxRetryRequests,
               onProgress: options.onProgress
             })];

@@ -1,15 +1,14 @@
 var __create = Object.create, __defProp = Object.defineProperty, __getProtoOf = Object.getPrototypeOf, __hasOwnProp = Object.prototype.hasOwnProperty, __getOwnPropNames = Object.getOwnPropertyNames, __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __markAsModule = (target) => __defProp(target, "__esModule", {value: !0}), __name = (target, value) => __defProp(target, "name", {value, configurable: !0});
 var __commonJS = (callback, module2) => () => (module2 || (module2 = {exports: {}}, callback(module2.exports, module2)), module2.exports), __export = (target, all) => {
-  __markAsModule(target);
   for (var name in all)
     __defProp(target, name, {get: all[name], enumerable: !0});
 }, __exportStar = (target, module2, desc) => {
-  if (__markAsModule(target), module2 && typeof module2 == "object" || typeof module2 == "function")
+  if (module2 && typeof module2 == "object" || typeof module2 == "function")
     for (let key of __getOwnPropNames(module2))
       !__hasOwnProp.call(target, key) && key !== "default" && __defProp(target, key, {get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable});
   return target;
-}, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0}), module2);
+}, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0})), module2);
 
 // ../node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS((exports2) => {
@@ -953,6 +952,7 @@ var require_once = __commonJS((exports2, module2) => {
 
 // ../node_modules/@octokit/core/dist-web/index.js
 var require_dist_web = __commonJS((exports2) => {
+  __markAsModule(exports2);
   __export(exports2, {
     Octokit: () => Octokit
   });
@@ -1027,6 +1027,7 @@ var require_dist_web = __commonJS((exports2) => {
 
 // ../node_modules/@octokit/plugin-rest-endpoint-methods/dist-web/index.js
 var require_dist_web2 = __commonJS((exports2) => {
+  __markAsModule(exports2);
   __export(exports2, {
     restEndpointMethods: () => restEndpointMethods
   });
@@ -1412,17 +1413,32 @@ var require_dist_web2 = __commonJS((exports2) => {
       getTemplate: ["GET /gitignore/templates/{name}"]
     },
     interactions: {
+      getRestrictionsForAuthenticatedUser: ["GET /user/interaction-limits"],
       getRestrictionsForOrg: ["GET /orgs/{org}/interaction-limits"],
       getRestrictionsForRepo: ["GET /repos/{owner}/{repo}/interaction-limits"],
-      getRestrictionsForYourPublicRepos: ["GET /user/interaction-limits"],
+      getRestrictionsForYourPublicRepos: [
+        "GET /user/interaction-limits",
+        {},
+        {renamed: ["interactions", "getRestrictionsForAuthenticatedUser"]}
+      ],
+      removeRestrictionsForAuthenticatedUser: ["DELETE /user/interaction-limits"],
       removeRestrictionsForOrg: ["DELETE /orgs/{org}/interaction-limits"],
       removeRestrictionsForRepo: [
         "DELETE /repos/{owner}/{repo}/interaction-limits"
       ],
-      removeRestrictionsForYourPublicRepos: ["DELETE /user/interaction-limits"],
+      removeRestrictionsForYourPublicRepos: [
+        "DELETE /user/interaction-limits",
+        {},
+        {renamed: ["interactions", "removeRestrictionsForAuthenticatedUser"]}
+      ],
+      setRestrictionsForAuthenticatedUser: ["PUT /user/interaction-limits"],
       setRestrictionsForOrg: ["PUT /orgs/{org}/interaction-limits"],
       setRestrictionsForRepo: ["PUT /repos/{owner}/{repo}/interaction-limits"],
-      setRestrictionsForYourPublicRepos: ["PUT /user/interaction-limits"]
+      setRestrictionsForYourPublicRepos: [
+        "PUT /user/interaction-limits",
+        {},
+        {renamed: ["interactions", "setRestrictionsForAuthenticatedUser"]}
+      ]
     },
     issues: {
       addAssignees: [
@@ -2305,7 +2321,7 @@ var require_dist_web2 = __commonJS((exports2) => {
       unfollow: ["DELETE /user/following/{username}"],
       updateAuthenticated: ["PATCH /user"]
     }
-  }, VERSION4 = "4.9.0";
+  }, VERSION4 = "4.10.2";
   function endpointsToMethods(octokit, endpointsMap) {
     let newMethods = {};
     for (let [scope, endpoints] of Object.entries(endpointsMap))
@@ -2355,11 +2371,12 @@ var require_dist_web2 = __commonJS((exports2) => {
 
 // ../node_modules/@octokit/plugin-paginate-rest/dist-web/index.js
 var require_dist_web3 = __commonJS((exports2) => {
+  __markAsModule(exports2);
   __export(exports2, {
     composePaginateRest: () => composePaginateRest,
     paginateRest: () => paginateRest
   });
-  var VERSION4 = "2.9.0";
+  var VERSION4 = "2.9.1";
   function normalizePaginatedListResponse(response) {
     if (!("total_count" in response.data && !("url" in response.data)))
       return response;
@@ -3404,7 +3421,7 @@ var import_once = __toModule(require_once()), logOnce = import_once.default((dep
 __name(RequestError, "RequestError");
 
 // ../node_modules/@octokit/request/dist-web/index.js
-var VERSION2 = "5.4.13";
+var VERSION2 = "5.4.14";
 function getBufferResponse(response) {
   return response.arrayBuffer();
 }
@@ -3490,7 +3507,7 @@ var request = withDefaults2(endpoint, {
 });
 
 // ../node_modules/@octokit/graphql/dist-web/index.js
-var VERSION3 = "4.5.9", GraphqlError = class extends Error {
+var VERSION3 = "4.6.0", GraphqlError = class extends Error {
   constructor(request2, response) {
     let message = response.data.errors[0].message;
     super(message);

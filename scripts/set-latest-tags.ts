@@ -1,5 +1,4 @@
 import { exec } from '@actions/exec';
-
 import { version } from '../lerna.json';
 
 async function main() {

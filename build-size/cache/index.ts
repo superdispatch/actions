@@ -2,7 +2,6 @@ import { ReserveCacheError, restoreCache, saveCache } from '@actions/cache';
 import { getInput, info, setFailed, warning } from '@actions/core';
 import { promises as fs } from 'fs';
 import { format } from 'util';
-
 import { getBuildSizes } from '../utils/BuildSizes';
 import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';
 

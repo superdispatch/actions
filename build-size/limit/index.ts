@@ -3,7 +3,6 @@ import { getInput, setFailed, warning } from '@actions/core';
 import { exec } from '@actions/exec';
 import { sendReport } from '@sd/utils/sendReport';
 import { promises as fs } from 'fs';
-
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 
 const pr = getInput('pr', { required: true });
