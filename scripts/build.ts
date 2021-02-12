@@ -1,42 +1,48 @@
-import { exec } from '@actions/exec';
+import { create as createGlob } from '@actions/glob';
 import { build } from 'esbuild';
-import path from 'path';
+import * as path from 'path';
 
-async function main() {
-  const cwd = process.cwd();
-  const [dir] = process.argv.slice(2);
-  const rootDir = !dir ? cwd : path.join(cwd, dir);
-  const entry = path.join(rootDir, 'index.ts');
-  const out = path.join(rootDir, 'dist');
+const ROOT_DIR = path.join(__dirname, '..');
 
-  await exec('rm', ['-rf', out]);
+async function main(): Promise<void> {
+  const glob = await createGlob(`
+    ${ROOT_DIR}/**/action.yml
+    !${ROOT_DIR}/node_modules
+  `);
 
-  await build({
-    bundle: true,
-    entryPoints: [entry],
-    outdir: out,
+  for await (const actionPath of glob.globGenerator()) {
+    const actionDir = path.dirname(actionPath);
+    const entryPath = path.join(actionDir, 'index.ts');
+    const outPath = path.join(actionDir, 'dist', 'index.js');
 
-    target: 'node12',
-    platform: 'node',
+    console.log('Installing %s…', path.relative(ROOT_DIR, actionDir));
 
-    // Only perform syntax optimization
-    minifySyntax: true,
+    await build({
+      bundle: true,
+      entryPoints: [entryPath],
+      outfile: outPath,
 
-    // Prefer ESM versions
-    mainFields: ['module', 'main'],
+      target: 'node12',
+      platform: 'node',
 
-    external: [
-      // Optional dependency of the `node-fetch`.
-      'encoding',
-    ],
+      // Only perform syntax optimization
+      minifySyntax: true,
 
-    // Fix for the https://github.com/node-fetch/node-fetch/issues/784
-    keepNames: true,
-  });
+      // Prefer ESM versions
+      mainFields: ['module', 'main'],
+
+      external: [
+        // Optional dependency of the `node-fetch`.
+        'encoding',
+      ],
+
+      // Fix for the https://github.com/node-fetch/node-fetch/issues/784
+      keepNames: true,
+    });
+  }
 }
 
-main().catch((error) => {
+main().catch((error: unknown) => {
   console.error(error);
-
-  process.exit(1);
+  process.exitCode = 1;
 });

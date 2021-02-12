@@ -1,20 +1,15 @@
 {
   "name": "@superdispatch/actions",
-  "version": "0.0.0",
+  "version": "1.0.14",
   "private": true,
   "license": "MIT",
-  "workspaces": {
-    "packages": [
-      "*"
-    ]
-  },
   "scripts": {
-    "build": "lerna run version --parallel",
+    "build": "ts-node scripts/build.ts",
     "postinstall": "husky install",
     "lint": "js-tools lint",
-    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint",
-    "release": "yarn lerna version",
-    "postrelease": "yarn ts-node scripts/set-latest-tags.ts"
+    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
+    "release": "np --no-publish --no-release-draft",
+    "postrelease": "yarn ts-node scripts/post-release.ts"
   },
   "husky": {
     "hooks": {
@@ -39,9 +34,8 @@
     "esbuild": "^0.8.44",
     "eslint": "^7.19.0",
     "husky": "^5.0.9",
-    "lerna": "^3.22.1",
     "lint-staged": "^10.5.4",
-    "npm-run-all": "^4.1.5",
+    "np": "^7.4.0",
     "prettier": "^2.2.1",
     "pretty-bytes": "^5.5.0",
     "ts-node": "^9.1.1",

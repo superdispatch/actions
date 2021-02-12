@@ -1,8 +1,8 @@
 import { getInput, info, setFailed } from '@actions/core';
 import { exec } from '@actions/exec';
 import { context } from '@actions/github';
-import { sendReport } from '@sd/utils/sendReport';
 import { format } from 'util';
+import { sendReport } from 'utils/sendReport';
 
 async function main() {
   const pr = getInput('pr', { required: true });

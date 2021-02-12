@@ -1,5 +1,5 @@
 {
-  "include": ["@types", "**/*.ts", "@types/vercel__ncc.d.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules"],
   "extends": "@superdispatch/tsconfig",
   "ts-node": {
@@ -10,6 +10,10 @@
   },
   "compilerOptions": {
     "target": "ES2019",
-    "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo"
+    "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "utils/*": ["utils/*"]
+    }
   }
 }

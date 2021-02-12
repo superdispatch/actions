@@ -1,7 +1,7 @@
 import { exec } from '@actions/exec';
-import { version } from '../lerna.json';
+import { version } from '../package.json';
 
-async function main() {
+async function replaceLatestReleaseTags() {
   const [major, minor] = version.split('.');
   const tag = `v${version}`;
   const latestTags = [`v${major}`, `v${major}.${minor}`];
@@ -17,6 +17,11 @@ async function main() {
 
     await exec('git', ['push', 'origin', '--tags']);
   }
+}
+
+async function main() {
+  await replaceLatestReleaseTags();
+  await exec('np', ['--release-draft-only']);
 }
 
 main().catch((error) => {

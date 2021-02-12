@@ -10,7 +10,7 @@ var __commonJS = (callback, module2) => () => (module2 || (module2 = {exports: {
   return target;
 }, __toModule = (module2) => module2 && module2.__esModule ? module2 : __exportStar(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", {value: module2, enumerable: !0})), module2);
 
-// ../node_modules/@actions/core/lib/utils.js
+// node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -21,7 +21,7 @@ var require_utils = __commonJS((exports2) => {
   exports2.toCommandValue = toCommandValue;
 });
 
-// ../node_modules/@actions/core/lib/command.js
+// node_modules/@actions/core/lib/command.js
 var require_command = __commonJS((exports2) => {
   "use strict";
   var __importStar = exports2 && exports2.__importStar || function(mod) {
@@ -75,7 +75,7 @@ var require_command = __commonJS((exports2) => {
   __name(escapeProperty, "escapeProperty");
 });
 
-// ../node_modules/@actions/core/lib/file-command.js
+// node_modules/@actions/core/lib/file-command.js
 var require_file_command = __commonJS((exports2) => {
   "use strict";
   var __importStar = exports2 && exports2.__importStar || function(mod) {
@@ -103,7 +103,7 @@ var require_file_command = __commonJS((exports2) => {
   exports2.issueCommand = issueCommand;
 });
 
-// ../node_modules/@actions/core/lib/core.js
+// node_modules/@actions/core/lib/core.js
 var require_core = __commonJS((exports2) => {
   "use strict";
   var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -252,7 +252,7 @@ var require_core = __commonJS((exports2) => {
   exports2.getState = getState;
 });
 
-// ../node_modules/@actions/github/lib/context.js
+// node_modules/@actions/github/lib/context.js
 var require_context = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -289,7 +289,7 @@ var require_context = __commonJS((exports2) => {
   exports2.Context = Context;
 });
 
-// ../node_modules/@actions/http-client/proxy.js
+// node_modules/@actions/http-client/proxy.js
 var require_proxy = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -321,7 +321,7 @@ var require_proxy = __commonJS((exports2) => {
   exports2.checkBypass = checkBypass;
 });
 
-// ../node_modules/tunnel/lib/tunnel.js
+// node_modules/tunnel/lib/tunnel.js
 var require_tunnel = __commonJS((exports2) => {
   "use strict";
   var net = require("net"), tls = require("tls"), http2 = require("http"), https2 = require("https"), events = require("events"), assert = require("assert"), util = require("util");
@@ -480,12 +480,12 @@ var require_tunnel = __commonJS((exports2) => {
   exports2.debug = debug;
 });
 
-// ../node_modules/tunnel/index.js
+// node_modules/tunnel/index.js
 var require_tunnel2 = __commonJS((exports2, module2) => {
   module2.exports = require_tunnel();
 });
 
-// ../node_modules/@actions/http-client/index.js
+// node_modules/@actions/http-client/index.js
 var require_http_client = __commonJS((exports2) => {
   "use strict";
   Object.defineProperty(exports2, "__esModule", {value: !0});
@@ -749,7 +749,7 @@ var require_http_client = __commonJS((exports2) => {
   exports2.HttpClient = HttpClient;
 });
 
-// ../node_modules/@actions/github/lib/internal/utils.js
+// node_modules/@actions/github/lib/internal/utils.js
 var require_utils2 = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -795,7 +795,7 @@ var require_utils2 = __commonJS((exports2) => {
   exports2.getApiBaseUrl = getApiBaseUrl;
 });
 
-// ../node_modules/before-after-hook/lib/register.js
+// node_modules/before-after-hook/lib/register.js
 var require_register = __commonJS((exports2, module2) => {
   module2.exports = register;
   function register(state, name, method, options) {
@@ -812,7 +812,7 @@ var require_register = __commonJS((exports2, module2) => {
   __name(register, "register");
 });
 
-// ../node_modules/before-after-hook/lib/add.js
+// node_modules/before-after-hook/lib/add.js
 var require_add = __commonJS((exports2, module2) => {
   module2.exports = addHook;
   function addHook(state, kind, name, hook2) {
@@ -838,7 +838,7 @@ var require_add = __commonJS((exports2, module2) => {
   __name(addHook, "addHook");
 });
 
-// ../node_modules/before-after-hook/lib/remove.js
+// node_modules/before-after-hook/lib/remove.js
 var require_remove = __commonJS((exports2, module2) => {
   module2.exports = removeHook;
   function removeHook(state, name, method) {
@@ -852,7 +852,7 @@ var require_remove = __commonJS((exports2, module2) => {
   __name(removeHook, "removeHook");
 });
 
-// ../node_modules/before-after-hook/index.js
+// node_modules/before-after-hook/index.js
 var require_before_after_hook = __commonJS((exports2, module2) => {
   var register = require_register(), addHook = require_add(), removeHook = require_remove(), bind = Function.bind, bindable = bind.bind(bind);
   function bindApi(hook2, state, name) {
@@ -890,7 +890,7 @@ var require_before_after_hook = __commonJS((exports2, module2) => {
   module2.exports.Collection = Hook.Collection;
 });
 
-// ../node_modules/wrappy/wrappy.js
+// node_modules/wrappy/wrappy.js
 var require_wrappy = __commonJS((exports2, module2) => {
   module2.exports = wrappy;
   function wrappy(fn, cb) {
@@ -914,7 +914,7 @@ var require_wrappy = __commonJS((exports2, module2) => {
   __name(wrappy, "wrappy");
 });
 
-// ../node_modules/once/once.js
+// node_modules/once/once.js
 var require_once = __commonJS((exports2, module2) => {
   var wrappy = require_wrappy();
   module2.exports = wrappy(once2);
@@ -950,7 +950,7 @@ var require_once = __commonJS((exports2, module2) => {
   __name(onceStrict, "onceStrict");
 });
 
-// ../node_modules/@octokit/core/dist-web/index.js
+// node_modules/@octokit/core/dist-web/index.js
 var require_dist_web = __commonJS((exports2) => {
   __markAsModule(exports2);
   __export(exports2, {
@@ -1025,7 +1025,7 @@ var require_dist_web = __commonJS((exports2) => {
   Octokit.plugins = [];
 });
 
-// ../node_modules/@octokit/plugin-rest-endpoint-methods/dist-web/index.js
+// node_modules/@octokit/plugin-rest-endpoint-methods/dist-web/index.js
 var require_dist_web2 = __commonJS((exports2) => {
   __markAsModule(exports2);
   __export(exports2, {
@@ -2369,7 +2369,7 @@ var require_dist_web2 = __commonJS((exports2) => {
   restEndpointMethods.VERSION = VERSION4;
 });
 
-// ../node_modules/@octokit/plugin-paginate-rest/dist-web/index.js
+// node_modules/@octokit/plugin-paginate-rest/dist-web/index.js
 var require_dist_web3 = __commonJS((exports2) => {
   __markAsModule(exports2);
   __export(exports2, {
@@ -2430,7 +2430,7 @@ var require_dist_web3 = __commonJS((exports2) => {
   paginateRest.VERSION = VERSION4;
 });
 
-// ../node_modules/@actions/github/lib/utils.js
+// node_modules/@actions/github/lib/utils.js
 var require_utils3 = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -2471,7 +2471,7 @@ var require_utils3 = __commonJS((exports2) => {
   exports2.getOctokitOptions = getOctokitOptions;
 });
 
-// ../node_modules/@actions/github/lib/github.js
+// node_modules/@actions/github/lib/github.js
 var require_github = __commonJS((exports2) => {
   "use strict";
   var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -2504,16 +2504,16 @@ var require_github = __commonJS((exports2) => {
   exports2.getOctokit = getOctokit2;
 });
 
-// index.ts
+// prune-artifacts/index.ts
 var import_core = __toModule(require_core());
 
-// ../node_modules/universal-user-agent/dist-web/index.js
+// node_modules/universal-user-agent/dist-web/index.js
 function getUserAgent() {
   return typeof navigator == "object" && "userAgent" in navigator ? navigator.userAgent : typeof process == "object" && "version" in process ? `Node.js/${process.version.substr(1)} (${process.platform}; ${process.arch})` : "<environment undetectable>";
 }
 __name(getUserAgent, "getUserAgent");
 
-// ../node_modules/@octokit/endpoint/node_modules/is-plain-object/dist/is-plain-object.mjs
+// node_modules/is-plain-object/dist/is-plain-object.mjs
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
@@ -2530,7 +2530,7 @@ function isPlainObject(o) {
 }
 __name(isPlainObject, "isPlainObject");
 
-// ../node_modules/@octokit/endpoint/dist-web/index.js
+// node_modules/@octokit/endpoint/dist-web/index.js
 function lowercaseKeys(object) {
   return object ? Object.keys(object).reduce((newObj, key) => (newObj[key.toLowerCase()] = object[key], newObj), {}) : {};
 }
@@ -2698,24 +2698,7 @@ var VERSION = "6.0.11", userAgent = `octokit-endpoint.js/${VERSION} ${getUserAge
   }
 }, endpoint = withDefaults(null, DEFAULTS);
 
-// ../node_modules/@octokit/request/node_modules/is-plain-object/dist/is-plain-object.mjs
-/*!
- * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
- *
- * Copyright (c) 2014-2017, Jon Schlinkert.
- * Released under the MIT License.
- */
-function isObject2(o) {
-  return Object.prototype.toString.call(o) === "[object Object]";
-}
-__name(isObject2, "isObject");
-function isPlainObject2(o) {
-  var ctor, prot;
-  return isObject2(o) === !1 ? !1 : (ctor = o.constructor, ctor === void 0 ? !0 : (prot = ctor.prototype, !(isObject2(prot) === !1 || prot.hasOwnProperty("isPrototypeOf") === !1)));
-}
-__name(isPlainObject2, "isPlainObject");
-
-// ../node_modules/node-fetch/lib/index.mjs
+// node_modules/node-fetch/lib/index.mjs
 var import_stream = __toModule(require("stream")), import_http = __toModule(require("http")), import_url = __toModule(require("url")), import_https = __toModule(require("https")), import_zlib = __toModule(require("zlib")), Readable = import_stream.default.Readable, BUFFER = Symbol("buffer"), TYPE = Symbol("type"), Blob = class {
   constructor() {
     this[TYPE] = "";
@@ -3394,7 +3377,7 @@ fetch.isRedirect = function(code) {
 fetch.Promise = global.Promise;
 var lib_default = fetch;
 
-// ../node_modules/deprecation/dist-web/index.js
+// node_modules/deprecation/dist-web/index.js
 var Deprecation = class extends Error {
   constructor(message) {
     super(message);
@@ -3403,7 +3386,7 @@ var Deprecation = class extends Error {
 };
 __name(Deprecation, "Deprecation");
 
-// ../node_modules/@octokit/request-error/dist-web/index.js
+// node_modules/@octokit/request-error/dist-web/index.js
 var import_once = __toModule(require_once()), logOnce = import_once.default((deprecation) => console.warn(deprecation)), RequestError = class extends Error {
   constructor(message, statusCode, options) {
     super(message);
@@ -3420,14 +3403,14 @@ var import_once = __toModule(require_once()), logOnce = import_once.default((dep
 };
 __name(RequestError, "RequestError");
 
-// ../node_modules/@octokit/request/dist-web/index.js
+// node_modules/@octokit/request/dist-web/index.js
 var VERSION2 = "5.4.14";
 function getBufferResponse(response) {
   return response.arrayBuffer();
 }
 __name(getBufferResponse, "getBufferResponse");
 function fetchWrapper(requestOptions) {
-  (isPlainObject2(requestOptions.body) || Array.isArray(requestOptions.body)) && (requestOptions.body = JSON.stringify(requestOptions.body));
+  (isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) && (requestOptions.body = JSON.stringify(requestOptions.body));
   let headers = {}, status, url;
   return (requestOptions.request && requestOptions.request.fetch || lib_default)(requestOptions.url, Object.assign({
     method: requestOptions.method,
@@ -3506,7 +3489,7 @@ var request = withDefaults2(endpoint, {
   }
 });
 
-// ../node_modules/@octokit/graphql/dist-web/index.js
+// node_modules/@octokit/graphql/dist-web/index.js
 var VERSION3 = "4.6.0", GraphqlError = class extends Error {
   constructor(request2, response) {
     let message = response.data.errors[0].message;
@@ -3565,7 +3548,7 @@ function withCustomRequest(customRequest) {
 }
 __name(withCustomRequest, "withCustomRequest");
 
-// ../node_modules/@octokit/auth-token/dist-web/index.js
+// node_modules/@octokit/auth-token/dist-web/index.js
 async function auth(token) {
   let tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
   return {
@@ -3594,7 +3577,7 @@ var createTokenAuth = /* @__PURE__ */ __name(function(token) {
   });
 }, "createTokenAuth");
 
-// index.ts
+// prune-artifacts/index.ts
 var import_github = __toModule(require_github()), import_util = __toModule(require("util"));
 async function main() {
   let token = import_core.getInput("token", {required: !0}), pattern = import_core.getInput("pattern", {required: !0}), skipRecent = parseInt(import_core.getInput("skip-recent"), 10) || 0, octokit = import_github.getOctokit(token), matcher = new RegExp(pattern);

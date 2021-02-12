@@ -1,8 +1,8 @@
 import { restoreCache } from '@actions/cache';
 import { getInput, info, setFailed, warning } from '@actions/core';
-import { sendReport } from '@sd/utils/sendReport';
 import { promises as fs } from 'fs';
 import { format } from 'util';
+import { sendReport } from 'utils/sendReport';
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 import { getBuildSizes } from '../utils/BuildSizes';
 import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';
