@@ -1,11 +1,14 @@
 {
-  "version": "1.0.13",
+  "version": "1.0.14",
   "npmClient": "yarn",
   "useWorkspaces": true,
   "command": {
     "version": {
       "message": "%s",
-      "ignoreChanges": ["**/__tests__/*.*", "**/__testutils__/*.*"]
+      "ignoreChanges": [
+        "**/__tests__/*.*",
+        "**/__testutils__/*.*"
+      ]
     }
   }
 }

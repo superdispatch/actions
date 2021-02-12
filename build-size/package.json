@@ -1,6 +1,6 @@
 {
   "name": "@sd/build-size",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "license": "MIT",
   "scripts": {
     "build:cache": "ts-node-script ../scripts/build.ts cache",
