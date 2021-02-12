@@ -14,3 +14,6 @@ jobs:
       - uses: umidbekk/actions/npm/install@v1
       - run: yarn tsc
       - run: yarn lint
+      - run: yarn build
+      - run: git add .
+      - run: git diff --quiet || exit 1
