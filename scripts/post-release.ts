@@ -1,7 +1,7 @@
 import { exec } from '@actions/exec';
 import { version } from '../package.json';
 
-async function replaceLatestReleaseTags() {
+async function main() {
   const [major, minor] = version.split('.');
   const tag = `v${version}`;
   const latestTags = [`v${major}`, `v${major}.${minor}`];
@@ -17,11 +17,6 @@ async function replaceLatestReleaseTags() {
 
     await exec('git', ['push', 'origin', '--tags']);
   }
-}
-
-async function main() {
-  await replaceLatestReleaseTags();
-  await exec('np', ['--release-draft-only']);
 }
 
 main().catch((error) => {
