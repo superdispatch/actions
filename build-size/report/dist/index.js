@@ -66146,7 +66146,7 @@ async function getReportContent(dir, sha, label) {
     return [
       "> Failed to restore previous report cache.",
       "",
-      createBuildSizeDiffReport(currentSizes, {})
+      createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 })
     ].join("\n");
   }
   if (restoredKey !== meta.key) {
