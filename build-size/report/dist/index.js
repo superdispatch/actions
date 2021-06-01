@@ -66144,7 +66144,8 @@ async function getReportContent(dir, sha, label) {
   if (!restoredKey) {
     (0, import_core2.warning)((0, import_util2.format)("Failed to restore cache from [%s, %s] keys", meta.key, meta.restoreKey));
     return [
-      "> Failed Failed to restore previous report cache.",
+      "> Failed to restore previous report cache.",
+      "",
       createBuildSizeDiffReport(currentSizes, {})
     ].join("\n");
   }

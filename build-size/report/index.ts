@@ -32,7 +32,8 @@ async function getReportContent(
     );
 
     return [
-      '> Failed Failed to restore previous report cache.',
+      '> Failed to restore previous report cache.',
+      '',
       createBuildSizeDiffReport(currentSizes, {}),
     ].join('\n');
   }
