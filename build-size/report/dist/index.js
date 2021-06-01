@@ -66140,16 +66140,19 @@ async function getReportContent(dir, sha, label) {
   const restoredKey = await (0, import_cache.restoreCache)([meta.filename], meta.key, [
     meta.restoreKey
   ]);
+  const currentSizes = await getBuildSizes(dir);
   if (!restoredKey) {
     (0, import_core2.warning)((0, import_util2.format)("Failed to restore cache from [%s, %s] keys", meta.key, meta.restoreKey));
-    return "Failed to restore previous report cache.";
+    return [
+      "> Failed Failed to restore previous report cache.",
+      createBuildSizeDiffReport(currentSizes, {})
+    ].join("\n");
   }
   if (restoredKey !== meta.key) {
     (0, import_core2.warning)((0, import_util2.format)('Failed to find latest key for sha "%s", using "%s" instead.', sha, restoredKey));
   }
   const previousSizesJSON = await import_fs2.promises.readFile(meta.filename, "utf-8");
   const previousSizes = JSON.parse(previousSizesJSON);
-  const currentSizes = await getBuildSizes(dir);
   return createBuildSizeDiffReport(currentSizes, previousSizes);
 }
 __name(getReportContent, "getReportContent");

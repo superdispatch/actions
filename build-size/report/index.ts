@@ -20,6 +20,8 @@ async function getReportContent(
     meta.restoreKey,
   ]);
 
+  const currentSizes = await getBuildSizes(dir);
+
   if (!restoredKey) {
     warning(
       format(
@@ -29,7 +31,10 @@ async function getReportContent(
       ),
     );
 
-    return 'Failed to restore previous report cache.';
+    return [
+      '> Failed Failed to restore previous report cache.',
+      createBuildSizeDiffReport(currentSizes, {}),
+    ].join('\n');
   }
 
   if (restoredKey !== meta.key) {
@@ -44,7 +49,6 @@ async function getReportContent(
 
   const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
   const previousSizes = JSON.parse(previousSizesJSON) as Record<string, number>;
-  const currentSizes = await getBuildSizes(dir);
 
   return createBuildSizeDiffReport(currentSizes, previousSizes);
 }
