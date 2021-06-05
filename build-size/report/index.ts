@@ -32,7 +32,7 @@ async function getReportContent(
     );
 
     return [
-      '> Failed to restore previous report cache.',
+      '> ⚠️ Failed to restore previous report from cache.',
       '',
       createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
     ].join('\n');
