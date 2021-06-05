@@ -7,9 +7,7 @@ function toFinite(value: unknown): number {
 
 function normalizeDelta(delta: number, deltaThreshold = 256): number {
   const absoluteDelta = Math.abs(delta);
-
   if (absoluteDelta < deltaThreshold) return 0;
-
   return Math.sign(delta) * (Math.ceil(absoluteDelta * 100) / 100);
 }
 
@@ -70,17 +68,19 @@ export function createBuildSizeDiffReport(
   }).sort((a, b) => a.localeCompare(b));
 
   for (const file of files) {
-    const size = toFinite(currentSizes[file]);
+    const currentSize = toFinite(currentSizes[file]);
+    const previousSize = toFinite(previousSizes[file]);
     const delta = normalizeDelta(
-      size - toFinite(previousSizes[file]),
-      deltaThreshold,
+      currentSize - previousSize,
+      // Ignore threshold if file was created or removed.
+      currentSize === 0 || previousSize === 0 ? 0 : deltaThreshold,
     );
 
-    totalSize += size;
+    totalSize += currentSize;
     totalDelta += delta;
 
     const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(
-      size,
+      currentSize,
       delta,
     );
 

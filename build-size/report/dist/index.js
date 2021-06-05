@@ -66120,11 +66120,12 @@ function createBuildSizeDiffReport(currentSizes, previousSizes, { deltaThreshold
   const unChangedRows = [];
   const files = Object.keys(__spreadValues(__spreadValues({}, currentSizes), previousSizes)).sort((a, b) => a.localeCompare(b));
   for (const file of files) {
-    const size = toFinite(currentSizes[file]);
-    const delta = normalizeDelta(size - toFinite(previousSizes[file]), deltaThreshold);
-    totalSize += size;
+    const currentSize = toFinite(currentSizes[file]);
+    const previousSize = toFinite(previousSizes[file]);
+    const delta = normalizeDelta(currentSize - previousSize, currentSize === 0 || previousSize === 0 ? 0 : deltaThreshold);
+    totalSize += currentSize;
     totalDelta += delta;
-    const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(size, delta);
+    const [formattedSize, formattedDelta, formattedDiff, diffIcon] = formatRow(currentSize, delta);
     if (delta === 0) {
       unChangedRows.push((0, import_util.format)("| `%s` | %s |", file, formattedSize));
     } else {
