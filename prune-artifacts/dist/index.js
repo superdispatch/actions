@@ -3034,12 +3034,13 @@ var require_dist_node5 = __commonJS({
     var isPlainObject = require_is_plain_object();
     var nodeFetch = _interopDefault(require_lib());
     var requestError = require_dist_node4();
-    var VERSION = "5.4.15";
+    var VERSION = "5.5.0";
     function getBufferResponse(response) {
       return response.arrayBuffer();
     }
     __name(getBufferResponse, "getBufferResponse");
     function fetchWrapper(requestOptions) {
+      const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
       if (isPlainObject.isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
         requestOptions.body = JSON.stringify(requestOptions.body);
       }
@@ -3057,6 +3058,11 @@ var require_dist_node5 = __commonJS({
         status = response.status;
         for (const keyAndValue of response.headers) {
           headers[keyAndValue[0]] = keyAndValue[1];
+        }
+        if ("deprecation" in headers) {
+          const matches = headers.link && headers.link.match(/<([^>]+)>; rel="deprecation"/);
+          const deprecationLink = matches && matches.pop();
+          log.warn(`[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`);
         }
         if (status === 204 || status === 205) {
           return;

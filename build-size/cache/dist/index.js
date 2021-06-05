@@ -18377,6 +18377,14 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/3gpphal+json": {
+        source: "iana",
+        compressible: true
+      },
+      "application/3gpphalforms+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/a2l": {
         source: "iana"
       },
@@ -19365,6 +19373,9 @@ var require_db = __commonJS({
       "application/nss": {
         source: "iana"
       },
+      "application/oauth-authz-req+jwt": {
+        source: "iana"
+      },
       "application/ocsp-request": {
         source: "iana"
       },
@@ -19705,6 +19716,10 @@ var require_db = __commonJS({
         compressible: true
       },
       "application/sarif+json": {
+        source: "iana",
+        compressible: true
+      },
+      "application/sarif-external-properties+json": {
         source: "iana",
         compressible: true
       },
@@ -20062,6 +20077,9 @@ var require_db = __commonJS({
       "application/vnd.3gpp-v2x-local-service-information": {
         source: "iana"
       },
+      "application/vnd.3gpp.5gnas": {
+        source: "iana"
+      },
       "application/vnd.3gpp.access-transfer-events+xml": {
         source: "iana",
         compressible: true
@@ -20074,7 +20092,13 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.3gpp.gtpc": {
+        source: "iana"
+      },
       "application/vnd.3gpp.interworking-data": {
+        source: "iana"
+      },
+      "application/vnd.3gpp.lpp": {
         source: "iana"
       },
       "application/vnd.3gpp.mc-signalling-ear": {
@@ -20186,6 +20210,12 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.3gpp.ngap": {
+        source: "iana"
+      },
+      "application/vnd.3gpp.pfcp": {
+        source: "iana"
+      },
       "application/vnd.3gpp.pic-bw-large": {
         source: "iana",
         extensions: ["plb"]
@@ -20197,6 +20227,9 @@ var require_db = __commonJS({
       "application/vnd.3gpp.pic-bw-var": {
         source: "iana",
         extensions: ["pvb"]
+      },
+      "application/vnd.3gpp.s1ap": {
+        source: "iana"
       },
       "application/vnd.3gpp.sms": {
         source: "iana"
@@ -20686,6 +20719,9 @@ var require_db = __commonJS({
         source: "iana"
       },
       "application/vnd.cryptomator.encrypted": {
+        source: "iana"
+      },
+      "application/vnd.cryptomator.vault": {
         source: "iana"
       },
       "application/vnd.ctc-posml": {
@@ -21182,6 +21218,19 @@ var require_db = __commonJS({
       "application/vnd.fsc.weblaunch": {
         source: "iana",
         extensions: ["fsc"]
+      },
+      "application/vnd.fujifilm.fb.docuworks": {
+        source: "iana"
+      },
+      "application/vnd.fujifilm.fb.docuworks.binder": {
+        source: "iana"
+      },
+      "application/vnd.fujifilm.fb.docuworks.container": {
+        source: "iana"
+      },
+      "application/vnd.fujifilm.fb.jfi+xml": {
+        source: "iana",
+        compressible: true
       },
       "application/vnd.fujitsu.oasys": {
         source: "iana",
@@ -21793,7 +21842,8 @@ var require_db = __commonJS({
         extensions: ["portpkg"]
       },
       "application/vnd.mapbox-vector-tile": {
-        source: "iana"
+        source: "iana",
+        extensions: ["mvt"]
       },
       "application/vnd.marlin.drm.actiontoken+xml": {
         source: "iana",
@@ -23804,6 +23854,7 @@ var require_db = __commonJS({
         source: "iana"
       },
       "application/wasm": {
+        source: "iana",
         compressible: true,
         extensions: ["wasm"]
       },
@@ -25766,6 +25817,9 @@ var require_db = __commonJS({
         source: "iana",
         extensions: ["x_t"]
       },
+      "model/vnd.pytha.pyox": {
+        source: "iana"
+      },
       "model/vnd.rosette.annotated-data-model": {
         source: "iana"
       },
@@ -26048,6 +26102,7 @@ var require_db = __commonJS({
         source: "iana"
       },
       "text/shex": {
+        source: "iana",
         extensions: ["shex"]
       },
       "text/slim": {
@@ -26319,6 +26374,7 @@ var require_db = __commonJS({
         source: "iana"
       },
       "text/yaml": {
+        compressible: true,
         extensions: ["yaml", "yml"]
       },
       "video/1d-interleaved-parityfec": {
@@ -35633,7 +35689,7 @@ var require_dist6 = __commonJS({
     }
     __name(decodeString, "decodeString");
     var Constants = {
-      coreHttpVersion: "1.2.4",
+      coreHttpVersion: "1.2.5",
       HTTP: "http:",
       HTTPS: "https:",
       HTTP_PROXY: "HTTP_PROXY",
@@ -35779,6 +35835,10 @@ var require_dist6 = __commonJS({
       return void 0;
     }
     __name(getEnvironmentValue, "getEnvironmentValue");
+    function isObject(input) {
+      return typeof input === "object" && input !== null && !Array.isArray(input) && !(input instanceof RegExp) && !(input instanceof Date);
+    }
+    __name(isObject, "isObject");
     var Serializer = function() {
       function Serializer2(modelMappers, isXML) {
         if (modelMappers === void 0) {
@@ -37214,6 +37274,7 @@ var require_dist6 = __commonJS({
       "Access-Control-Request-Method",
       "Origin",
       "Accept",
+      "Accept-Encoding",
       "Cache-Control",
       "Connection",
       "Content-Length",
@@ -37248,28 +37309,34 @@ var require_dist6 = __commonJS({
       }
       __name(Sanitizer2, "Sanitizer");
       Sanitizer2.prototype.sanitize = function(obj) {
-        return JSON.stringify(obj, this.replacer.bind(this), 2);
+        var _this = this;
+        var seen = new Set();
+        return JSON.stringify(obj, function(key, value) {
+          if (value instanceof Error) {
+            return tslib.__assign(tslib.__assign({}, value), { name: value.name, message: value.message });
+          }
+          if (key === "_headersMap") {
+            return _this.sanitizeHeaders(value);
+          } else if (key === "url") {
+            return _this.sanitizeUrl(value);
+          } else if (key === "query") {
+            return _this.sanitizeQuery(value);
+          } else if (key === "body") {
+            return void 0;
+          } else if (key === "response") {
+            return void 0;
+          } else if (key === "operationSpec") {
+            return void 0;
+          } else if (Array.isArray(value) || isObject(value)) {
+            if (seen.has(value)) {
+              return "[Circular]";
+            }
+            seen.add(value);
+          }
+          return value;
+        }, 2);
       };
-      Sanitizer2.prototype.replacer = function(key, value) {
-        if (value instanceof Error) {
-          return tslib.__assign(tslib.__assign({}, value), { name: value.name, message: value.message });
-        }
-        if (key === "_headersMap") {
-          return this.sanitizeHeaders(key, value);
-        } else if (key === "url") {
-          return this.sanitizeUrl(value);
-        } else if (key === "query") {
-          return this.sanitizeQuery(value);
-        } else if (key === "body") {
-          return void 0;
-        } else if (key === "response") {
-          return void 0;
-        } else if (key === "operationSpec") {
-          return void 0;
-        }
-        return value;
-      };
-      Sanitizer2.prototype.sanitizeHeaders = function(_, value) {
+      Sanitizer2.prototype.sanitizeHeaders = function(value) {
         return this.sanitizeObject(value, this.allowedHeaderNames, function(v, k) {
           return v[k].value;
         });
@@ -38755,7 +38822,8 @@ var require_dist6 = __commonJS({
       QueryCollectionFormat["Pipes"] = "|";
       QueryCollectionFormat["Multi"] = "Multi";
     })(exports2.QueryCollectionFormat || (exports2.QueryCollectionFormat = {}));
-    var noProxyList = loadNoProxy();
+    var noProxyList = [];
+    var noProxyListLoaded = false;
     var byPassedList = new Map();
     function loadEnvironmentProxyValue() {
       if (!process) {
@@ -38798,6 +38866,7 @@ var require_dist6 = __commonJS({
     __name(isBypassed, "isBypassed");
     function loadNoProxy() {
       var noProxy = getEnvironmentValue(Constants.NO_PROXY);
+      noProxyListLoaded = true;
       if (noProxy) {
         return noProxy.split(",").map(function(item) {
           return item.trim();
@@ -38829,6 +38898,9 @@ var require_dist6 = __commonJS({
     function proxyPolicy(proxySettings) {
       if (!proxySettings) {
         proxySettings = getDefaultProxySettings();
+      }
+      if (!noProxyListLoaded) {
+        noProxyList.push.apply(noProxyList, loadNoProxy());
       }
       return {
         create: function(nextPolicy, options) {
@@ -39047,7 +39119,7 @@ var require_dist6 = __commonJS({
                 }
                 _a.label = 1;
               case 1:
-                _a.trys.push([1, 3, , 4]);
+                _a.trys.push([1, 3, 4, 5]);
                 spanContext = span.context();
                 traceParentHeader = coreTracing.getTraceParentHeader(spanContext);
                 if (traceParentHeader) {
@@ -39065,13 +39137,22 @@ var require_dist6 = __commonJS({
                 if (serviceRequestId) {
                   span.setAttribute("serviceRequestId", serviceRequestId);
                 }
-                span.end();
+                span.setStatus({
+                  code: coreTracing.SpanStatusCode.OK
+                });
                 return [2, response];
               case 3:
                 err_1 = _a.sent();
-                span.end();
+                span.setStatus({
+                  code: coreTracing.SpanStatusCode.ERROR,
+                  message: err_1.message
+                });
+                span.setAttribute("http.status_code", err_1.statusCode);
                 throw err_1;
               case 4:
+                span.end();
+                return [7];
+              case 5:
                 return [2];
             }
           });
