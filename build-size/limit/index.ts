@@ -1,5 +1,5 @@
 import { ReserveCacheError, restoreCache, saveCache } from '@actions/cache';
-import { getInput, setFailed, warning } from '@actions/core';
+import { getInput, group, info, setFailed, warning } from '@actions/core';
 import { exec } from '@actions/exec';
 import { promises as fs } from 'fs';
 import { sendReport } from 'utils/sendReport';
@@ -17,23 +17,21 @@ main().catch(setFailed);
 
 async function setup() {
   if (installCommand) {
+    info('Running: install_command');
     await exec(installCommand);
   }
 
   if (buildCommand) {
+    info('Running: build_command');
     await exec(buildCommand);
   }
 }
 
 async function computeSizes(): Promise<Record<string, number>> {
   const args = ['size-limit', '--json'];
-
-  if (target) {
-    args.push(target);
-  }
+  if (target) args.push(target);
 
   let json = '';
-
   await exec('npx', args, {
     listeners: {
       stdout: (data) => {
@@ -51,64 +49,94 @@ async function computeSizes(): Promise<Record<string, number>> {
     sizes[name] = size;
   }
 
-  return sizes;
-}
-
-async function computePreviousSizes(): Promise<Record<string, number>> {
-  const restoreKey = await restoreCache([snapshotName], snapshotName);
-
-  if (restoreKey) {
-    const json = await fs.readFile(snapshotName, 'utf-8');
-
-    return JSON.parse(json) as Record<string, number>;
-  }
-
-  let currentRef = '';
-
-  await exec('git ', ['rev-parse', 'HEAD'], {
-    listeners: {
-      stdout: (data) => {
-        currentRef += data.toString();
-      },
-    },
-  });
-
-  await exec('git', ['fetch', 'origin', base, '--depth', '1']);
-  await exec('git', ['checkout', '--force', base]);
-
-  await setup();
-
-  const sizes = await computeSizes();
-
-  await fs.writeFile(snapshotName, JSON.stringify(sizes), 'utf-8');
-
-  try {
-    await saveCache([snapshotName], snapshotName);
-  } catch (error: unknown) {
-    if (error instanceof ReserveCacheError) {
-      warning(error);
-    } else {
-      throw error;
-    }
-  }
-
-  await exec('git', ['checkout', '--force', currentRef.trim()]);
+  info(`Computed build file sizes:\n${JSON.stringify(sizes, null, 2)}`);
 
   return sizes;
 }
 
 async function main() {
-  await setup();
-
-  const currentSizes = await computeSizes();
-  const previousSizes = await computePreviousSizes();
-
-  await sendReport({
-    pr,
-    token,
-    title: 'Size Limit Report',
-    content: createBuildSizeDiffReport(currentSizes, previousSizes, {
-      deltaThreshold: 0,
-    }),
+  const currentSizes = await group('Computing current build size', async () => {
+    await setup();
+    return computeSizes();
   });
+
+  let previousSizes = await group(
+    'Restoring previous build size from cache',
+    async () => {
+      info(`Restoring previous from the: ${snapshotName}`);
+
+      const restoreKey = await restoreCache([snapshotName], snapshotName);
+      if (restoreKey) {
+        const json = await fs.readFile(snapshotName, 'utf-8');
+        const sizes = JSON.parse(json) as Record<string, number>;
+        info(
+          `Restored build file sizes from cache:\n${JSON.stringify(
+            sizes,
+            null,
+            2,
+          )}`,
+        );
+        return sizes;
+      }
+
+      info('Failed restore build size from cache');
+
+      return null;
+    },
+  );
+
+  if (!previousSizes) {
+    previousSizes = await group('Computing previous build size', async () => {
+      info('Getting current revision');
+      let currentRev = '';
+      await exec('git ', ['rev-parse', 'HEAD'], {
+        listeners: {
+          stdout: (data) => {
+            currentRev += data.toString();
+          },
+        },
+      });
+
+      info(`Checking out base revision: ${base}`);
+      await exec('git', ['fetch', 'origin', base, '--depth', '1']);
+      await exec('git', ['checkout', '--force', base]);
+
+      await setup();
+
+      const sizes = await computeSizes();
+      info(`Saving report to: ${snapshotName}`);
+      await fs.writeFile(snapshotName, JSON.stringify(sizes), 'utf-8');
+
+      info(`Caching report: ${snapshotName}`);
+      try {
+        await saveCache([snapshotName], snapshotName);
+      } catch (error: unknown) {
+        if (error instanceof ReserveCacheError) {
+          warning(error);
+        } else {
+          throw error;
+        }
+      }
+
+      info(`Checking out to current revision: ${currentRev}`);
+      await exec('git', ['checkout', '--force', currentRev.trim()]);
+
+      return sizes;
+    });
+  }
+
+  const buildSizeReport = createBuildSizeDiffReport(
+    currentSizes,
+    previousSizes,
+    { deltaThreshold: 0 },
+  );
+
+  await group('Sending build size report', () =>
+    sendReport({
+      pr,
+      token,
+      title: 'Size Limit Report',
+      content: buildSizeReport,
+    }),
+  );
 }

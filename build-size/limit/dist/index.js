@@ -370,11 +370,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(warning2, "warning");
     exports2.warning = warning2;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os.EOL);
     }
-    __name(info2, "info");
-    exports2.info = info2;
+    __name(info3, "info");
+    exports2.info = info3;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -385,7 +385,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -397,8 +397,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -5250,12 +5250,12 @@ var require_http_client = __commonJS({
           throw new Error("Client has already been disposed.");
         }
         let parsedUrl = new URL(requestUrl);
-        let info2 = this._prepareRequest(verb, parsedUrl, headers);
+        let info3 = this._prepareRequest(verb, parsedUrl, headers);
         let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
         let numTries = 0;
         let response;
         while (numTries < maxTries) {
-          response = await this.requestRaw(info2, data);
+          response = await this.requestRaw(info3, data);
           if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
             let authenticationHandler;
             for (let i = 0; i < this.handlers.length; i++) {
@@ -5265,7 +5265,7 @@ var require_http_client = __commonJS({
               }
             }
             if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info2, data);
+              return authenticationHandler.handleAuthentication(this, info3, data);
             } else {
               return response;
             }
@@ -5288,8 +5288,8 @@ var require_http_client = __commonJS({
                 }
               }
             }
-            info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info2, data);
+            info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+            response = await this.requestRaw(info3, data);
             redirectsRemaining--;
           }
           if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
@@ -5309,7 +5309,7 @@ var require_http_client = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info2, data) {
+      requestRaw(info3, data) {
         return new Promise((resolve, reject) => {
           let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
             if (err) {
@@ -5317,13 +5317,13 @@ var require_http_client = __commonJS({
             }
             resolve(res);
           }, "callbackForResult");
-          this.requestRawWithCallback(info2, data, callbackForResult);
+          this.requestRawWithCallback(info3, data, callbackForResult);
         });
       }
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         let socket;
         if (typeof data === "string") {
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         let handleResult = /* @__PURE__ */ __name((err, res) => {
@@ -5332,7 +5332,7 @@ var require_http_client = __commonJS({
             onResult(err, res);
           }
         }, "handleResult");
-        let req = info2.httpModule.request(info2.options, (msg) => {
+        let req = info3.httpModule.request(info3.options, (msg) => {
           let res = new HttpClientResponse(msg);
           handleResult(null, res);
         });
@@ -5343,7 +5343,7 @@ var require_http_client = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error("Request timeout: " + info2.options.path), null);
+          handleResult(new Error("Request timeout: " + info3.options.path), null);
         });
         req.on("error", function(err) {
           handleResult(err, null);
@@ -5365,27 +5365,27 @@ var require_http_client = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           this.handlers.forEach((handler) => {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info3.options);
           });
         }
-        return info2;
+        return info3;
       }
       _mergeHeaders(headers) {
         const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
@@ -38391,9 +38391,9 @@ var require_dist6 = __commonJS({
       if (valueSeparator === void 0) {
         valueSeparator = "/";
       }
-      return telemetryInfo.map(function(info2) {
-        var value = info2.value ? "" + valueSeparator + info2.value : "";
-        return "" + info2.key + value;
+      return telemetryInfo.map(function(info3) {
+        var value = info3.value ? "" + valueSeparator + info3.value : "";
+        return "" + info3.key + value;
       }).join(keySeparator);
     }
     __name(getUserAgentString, "getUserAgentString");
@@ -49223,7 +49223,7 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var group = {
+    var group2 = {
       parameterPath: [
         "options",
         "group"
@@ -51390,7 +51390,7 @@ var require_dist10 = __commonJS({
       ],
       headerParameters: [
         owner,
-        group,
+        group2,
         posixPermissions,
         posixAcl,
         requestId,
@@ -63647,11 +63647,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(warning2, "warning");
     exports2.warning = warning2;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os.EOL);
     }
-    __name(info2, "info");
-    exports2.info = info2;
+    __name(info3, "info");
+    exports2.info = info3;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -63662,7 +63662,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -63674,8 +63674,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -67177,18 +67177,19 @@ var snapshotName = `size-limit-snapshot-${base}.json`;
 main().catch(import_core2.setFailed);
 async function setup() {
   if (installCommand) {
+    (0, import_core2.info)("Running: install_command");
     await (0, import_exec.exec)(installCommand);
   }
   if (buildCommand) {
+    (0, import_core2.info)("Running: build_command");
     await (0, import_exec.exec)(buildCommand);
   }
 }
 __name(setup, "setup");
 async function computeSizes() {
   const args = ["size-limit", "--json"];
-  if (target) {
+  if (target)
     args.push(target);
-  }
   let json = "";
   await (0, import_exec.exec)("npx", args, {
     listeners: {
@@ -67201,53 +67202,69 @@ async function computeSizes() {
   for (const { name, size } of JSON.parse(json)) {
     sizes[name] = size;
   }
+  (0, import_core2.info)(`Computed build file sizes:
+${JSON.stringify(sizes, null, 2)}`);
   return sizes;
 }
 __name(computeSizes, "computeSizes");
-async function computePreviousSizes() {
-  const restoreKey = await (0, import_cache.restoreCache)([snapshotName], snapshotName);
-  if (restoreKey) {
-    const json = await import_fs.promises.readFile(snapshotName, "utf-8");
-    return JSON.parse(json);
-  }
-  let currentRef = "";
-  await (0, import_exec.exec)("git ", ["rev-parse", "HEAD"], {
-    listeners: {
-      stdout: (data) => {
-        currentRef += data.toString();
-      }
-    }
-  });
-  await (0, import_exec.exec)("git", ["fetch", "origin", base, "--depth", "1"]);
-  await (0, import_exec.exec)("git", ["checkout", "--force", base]);
-  await setup();
-  const sizes = await computeSizes();
-  await import_fs.promises.writeFile(snapshotName, JSON.stringify(sizes), "utf-8");
-  try {
-    await (0, import_cache.saveCache)([snapshotName], snapshotName);
-  } catch (error) {
-    if (error instanceof import_cache.ReserveCacheError) {
-      (0, import_core2.warning)(error);
-    } else {
-      throw error;
-    }
-  }
-  await (0, import_exec.exec)("git", ["checkout", "--force", currentRef.trim()]);
-  return sizes;
-}
-__name(computePreviousSizes, "computePreviousSizes");
 async function main() {
-  await setup();
-  const currentSizes = await computeSizes();
-  const previousSizes = await computePreviousSizes();
-  await sendReport({
+  const currentSizes = await (0, import_core2.group)("Computing current build size", async () => {
+    await setup();
+    return computeSizes();
+  });
+  let previousSizes = await (0, import_core2.group)("Restoring previous build size from cache", async () => {
+    (0, import_core2.info)(`Restoring previous from the: ${snapshotName}`);
+    const restoreKey = await (0, import_cache.restoreCache)([snapshotName], snapshotName);
+    if (restoreKey) {
+      const json = await import_fs.promises.readFile(snapshotName, "utf-8");
+      const sizes = JSON.parse(json);
+      (0, import_core2.info)(`Restored build file sizes from cache:
+${JSON.stringify(sizes, null, 2)}`);
+      return sizes;
+    }
+    (0, import_core2.info)("Failed restore build size from cache");
+    return null;
+  });
+  if (!previousSizes) {
+    previousSizes = await (0, import_core2.group)("Computing previous build size", async () => {
+      (0, import_core2.info)("Getting current revision");
+      let currentRev = "";
+      await (0, import_exec.exec)("git ", ["rev-parse", "HEAD"], {
+        listeners: {
+          stdout: (data) => {
+            currentRev += data.toString();
+          }
+        }
+      });
+      (0, import_core2.info)(`Checking out base revision: ${base}`);
+      await (0, import_exec.exec)("git", ["fetch", "origin", base, "--depth", "1"]);
+      await (0, import_exec.exec)("git", ["checkout", "--force", base]);
+      await setup();
+      const sizes = await computeSizes();
+      (0, import_core2.info)(`Saving report to: ${snapshotName}`);
+      await import_fs.promises.writeFile(snapshotName, JSON.stringify(sizes), "utf-8");
+      (0, import_core2.info)(`Caching report: ${snapshotName}`);
+      try {
+        await (0, import_cache.saveCache)([snapshotName], snapshotName);
+      } catch (error) {
+        if (error instanceof import_cache.ReserveCacheError) {
+          (0, import_core2.warning)(error);
+        } else {
+          throw error;
+        }
+      }
+      (0, import_core2.info)(`Checking out to current revision: ${currentRev}`);
+      await (0, import_exec.exec)("git", ["checkout", "--force", currentRev.trim()]);
+      return sizes;
+    });
+  }
+  const buildSizeReport = createBuildSizeDiffReport(currentSizes, previousSizes, { deltaThreshold: 0 });
+  await (0, import_core2.group)("Sending build size report", () => sendReport({
     pr,
     token,
     title: "Size Limit Report",
-    content: createBuildSizeDiffReport(currentSizes, previousSizes, {
-      deltaThreshold: 0
-    })
-  });
+    content: buildSizeReport
+  }));
 }
 __name(main, "main");
 /*!
