@@ -1,9 +1,11 @@
-import { exec } from '@actions/exec';
-import { version } from '../package.json';
+'use strict';
+
+const { exec } = require('@actions/exec');
+const pkg = require('../package.json');
 
 async function main() {
-  const [major, minor] = version.split('.');
-  const tag = `v${version}`;
+  const [major, minor] = pkg.version.split('.');
+  const tag = `v${pkg.version}`;
   const latestTags = [`v${major}`, `v${major}.${minor}`];
 
   try {

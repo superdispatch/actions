@@ -9,7 +9,7 @@
     "lint": "js-tools lint",
     "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
     "release": "np --no-publish --no-release-draft",
-    "postrelease": "yarn ts-node scripts/post-release.ts"
+    "postrelease": "node scripts/post-release.js"
   },
   "husky": {
     "hooks": {
