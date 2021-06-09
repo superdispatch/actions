@@ -5,7 +5,7 @@ import { promises as fs } from 'fs';
 import { sendReport } from 'utils/sendReport';
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 
-const pr = getInput('pr', { required: true });
+const pr = Number(getInput('pr', { required: true }));
 const base = getInput('base_ref', { required: true });
 const token = getInput('token', { required: true });
 const target = getInput('target', { required: false });

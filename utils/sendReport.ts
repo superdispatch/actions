@@ -4,7 +4,7 @@ import { context, getOctokit } from '@actions/github';
 const GITHUB_ACTIONS_BOT_LOGIN = 'github-actions[bot]';
 
 interface SendReportOptions {
-  pr: string;
+  pr: number;
   token: string;
   label?: string;
   title: string;
@@ -23,14 +23,14 @@ export async function sendReport({
 
   let previousCommentID: number | undefined = undefined;
 
-  info('Looking for the previous report…');
+  info(`Looking for the previous reports in: ${pr}`);
 
   for await (const { data: comments } of octokit.paginate.iterator(
     'GET /repos/{owner}/{repo}/issues/{issue_number}/comments',
     {
       ...context.repo,
       per_page: 100,
-      issue_number: Number(pr),
+      issue_number: pr,
     },
   )) {
     for (const { id, body, user } of comments) {
@@ -39,10 +39,8 @@ export async function sendReport({
         body?.startsWith(reportTitle)
       ) {
         if (previousCommentID == null) {
-          info(`Found previous report with ID "${id}"`);
-
+          info(`Found previous report: ${id}`);
           previousCommentID = id;
-
           break;
         }
       }
@@ -52,18 +50,18 @@ export async function sendReport({
   const body = reportTitle + content;
 
   if (previousCommentID != null) {
-    info(`Updating previous report with ID "${previousCommentID}"…`);
+    info(`Updating previous report: ${previousCommentID}`);
 
     await octokit.request(
       'PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}',
       { ...context.repo, body, comment_id: previousCommentID },
     );
   } else {
-    info('Sending new report…');
+    info('Sending new report');
 
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-      { ...context.repo, body, issue_number: Number(pr) },
+      { ...context.repo, body, issue_number: pr },
     );
   }
 }

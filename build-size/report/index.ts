@@ -1,75 +1,71 @@
 import { restoreCache } from '@actions/cache';
-import { getInput, info, setFailed, warning } from '@actions/core';
+import { getInput, group, info, setFailed, warning } from '@actions/core';
 import { promises as fs } from 'fs';
-import { format } from 'util';
 import { sendReport } from 'utils/sendReport';
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 import { getBuildSizes } from '../utils/BuildSizes';
 import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';
 
-async function getReportContent(
-  dir: string,
-  sha: string,
-  label: string,
-): Promise<string> {
-  const meta = getBuildSnapshotMeta({ sha, label });
-
-  info(format('Restoring cache from [%s, %s] keys', meta.key, meta.restoreKey));
-
-  const restoredKey = await restoreCache([meta.filename], meta.key, [
-    meta.restoreKey,
-  ]);
-
-  const currentSizes = await getBuildSizes(dir);
-
-  if (!restoredKey) {
-    warning(
-      format(
-        'Failed to restore cache from [%s, %s] keys',
-        meta.key,
-        meta.restoreKey,
-      ),
-    );
-
-    return [
-      '> ⚠️ Failed to restore previous report from cache.',
-      '',
-      createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
-    ].join('\n');
-  }
-
-  if (restoredKey !== meta.key) {
-    warning(
-      format(
-        'Failed to find latest key for sha "%s", using "%s" instead.',
-        sha,
-        restoredKey,
-      ),
-    );
-  }
-
-  const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
-  const previousSizes = JSON.parse(previousSizesJSON) as Record<string, number>;
-
-  return createBuildSizeDiffReport(currentSizes, previousSizes);
-}
+const pr = Number(getInput('pr', { required: true }));
+const dir = getInput('dir', { required: true });
+const sha = getInput('sha', { required: true });
+const label = getInput('label', { required: true });
+const token = getInput('token', { required: true });
 
 async function main() {
-  const pr = getInput('pr', { required: true });
-  const dir = getInput('dir', { required: true });
-  const sha = getInput('sha', { required: true });
-  const label = getInput('label', { required: true });
-  const token = getInput('token', { required: true });
+  const content = await group('Generating report', async () => {
+    info(`Computing build size for the: ${dir}`);
+    const currentSizes = await getBuildSizes(dir);
+    info(`Computed file sizes:\n${JSON.stringify(currentSizes, null, 2)}`);
 
-  const content = await getReportContent(dir, sha, label);
+    const meta = getBuildSnapshotMeta({ sha, label });
+    info(`Restoring previous build size from: ${meta.key}, ${meta.restoreKey}`);
+    const restoredKey = await restoreCache([meta.filename], meta.key, [
+      meta.restoreKey,
+    ]);
 
-  await sendReport({
-    pr,
-    label,
-    token,
-    content,
-    title: 'Build Size Report',
+    if (!restoredKey) {
+      warning(
+        `Failed to restore previous build size from: ${meta.key}, ${meta.restoreKey}`,
+      );
+
+      return [
+        '> ⚠️ Failed to restore previous build size from cache.',
+        '',
+        createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
+      ].join('\n');
+    }
+
+    if (restoredKey !== meta.key) {
+      warning(`Failed to restore previous build size from: ${meta.key}`);
+    }
+
+    const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
+    const previousSizes = JSON.parse(previousSizesJSON) as Record<
+      string,
+      number
+    >;
+
+    info(
+      `Restored previous build file sizes:\n${JSON.stringify(
+        previousSizes,
+        null,
+        2,
+      )}`,
+    );
+
+    return createBuildSizeDiffReport(currentSizes, previousSizes);
   });
+
+  await group('Sending build size report', () =>
+    sendReport({
+      pr,
+      label,
+      token,
+      content,
+      title: 'Build Size Report',
+    }),
+  );
 }
 
 main().catch(setFailed);

@@ -67043,15 +67043,15 @@ async function sendReport({
   const reportTitle = `### ${!label ? title : `${title} (${label})`}
 `;
   let previousCommentID = void 0;
-  (0, import_core.info)("Looking for the previous report\u2026");
+  (0, import_core.info)(`Looking for the previous reports in: ${pr2}`);
   for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
     per_page: 100,
-    issue_number: Number(pr2)
+    issue_number: pr2
   }))) {
     for (const { id, body: body2, user } of comments) {
       if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
         if (previousCommentID == null) {
-          (0, import_core.info)(`Found previous report with ID "${id}"`);
+          (0, import_core.info)(`Found previous report: ${id}`);
           previousCommentID = id;
           break;
         }
@@ -67060,11 +67060,11 @@ async function sendReport({
   }
   const body = reportTitle + content;
   if (previousCommentID != null) {
-    (0, import_core.info)(`Updating previous report with ID "${previousCommentID}"\u2026`);
+    (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
     await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
   } else {
-    (0, import_core.info)("Sending new report\u2026");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: Number(pr2) }));
+    (0, import_core.info)("Sending new report");
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
   }
 }
 __name(sendReport, "sendReport");
@@ -67167,7 +67167,7 @@ function createBuildSizeDiffReport(currentSizes, previousSizes, { deltaThreshold
 __name(createBuildSizeDiffReport, "createBuildSizeDiffReport");
 
 // build-size/limit/index.ts
-var pr = (0, import_core2.getInput)("pr", { required: true });
+var pr = Number((0, import_core2.getInput)("pr", { required: true }));
 var base = (0, import_core2.getInput)("base_ref", { required: true });
 var token = (0, import_core2.getInput)("token", { required: true });
 var target = (0, import_core2.getInput)("target", { required: false });

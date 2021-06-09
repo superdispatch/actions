@@ -385,7 +385,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -397,8 +397,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -2490,8 +2490,8 @@ var require_minimatch = __commonJS({
         if (p === GLOBSTAR) {
           this.debug("GLOBSTAR", [pattern, p, f]);
           var fr = fi;
-          var pr = pi + 1;
-          if (pr === pl) {
+          var pr2 = pi + 1;
+          if (pr2 === pl) {
             this.debug("** at the end");
             for (; fi < fl; fi++) {
               if (file[fi] === "." || file[fi] === ".." || !options.dot && file[fi].charAt(0) === ".")
@@ -2501,13 +2501,13 @@ var require_minimatch = __commonJS({
           }
           while (fr < fl) {
             var swallowee = file[fr];
-            this.debug("\nglobstar while", file, fr, pattern, pr, swallowee);
-            if (this.matchOne(file.slice(fr), pattern.slice(pr), partial)) {
+            this.debug("\nglobstar while", file, fr, pattern, pr2, swallowee);
+            if (this.matchOne(file.slice(fr), pattern.slice(pr2), partial)) {
               this.debug("globstar found match!", fr, fl, swallowee);
               return true;
             } else {
               if (swallowee === "." || swallowee === ".." || !options.dot && swallowee.charAt(0) === ".") {
-                this.debug("dot detected!", file, fr, pattern, pr);
+                this.debug("dot detected!", file, fr, pattern, pr2);
                 break;
               }
               this.debug("globstar swallow a segment, and continue");
@@ -2515,7 +2515,7 @@ var require_minimatch = __commonJS({
             }
           }
           if (partial) {
-            this.debug("\n>>> no match, partial?", file, fr, pattern, pr);
+            this.debug("\n>>> no match, partial?", file, fr, pattern, pr2);
             if (fr === fl)
               return true;
           }
@@ -2608,12 +2608,12 @@ var require_internal_path = __commonJS({
             this.segments = itemPath.split(path3.sep);
           } else {
             let remaining = itemPath;
-            let dir = pathHelper.dirname(remaining);
-            while (dir !== remaining) {
+            let dir2 = pathHelper.dirname(remaining);
+            while (dir2 !== remaining) {
               const basename = path3.basename(remaining);
               this.segments.unshift(basename);
-              remaining = dir;
-              dir = pathHelper.dirname(remaining);
+              remaining = dir2;
+              dir2 = pathHelper.dirname(remaining);
             }
             this.segments.unshift(remaining);
           }
@@ -3949,8 +3949,8 @@ var require_semver = __commonJS({
     __name(replaceTildes, "replaceTildes");
     function replaceTilde(comp, options) {
       var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE];
-      return comp.replace(r, function(_, M, m, p, pr) {
-        debug("tilde", comp, _, M, m, p, pr);
+      return comp.replace(r, function(_, M, m, p, pr2) {
+        debug("tilde", comp, _, M, m, p, pr2);
         var ret;
         if (isX(M)) {
           ret = "";
@@ -3958,9 +3958,9 @@ var require_semver = __commonJS({
           ret = ">=" + M + ".0.0 <" + (+M + 1) + ".0.0";
         } else if (isX(p)) {
           ret = ">=" + M + "." + m + ".0 <" + M + "." + (+m + 1) + ".0";
-        } else if (pr) {
-          debug("replaceTilde pr", pr);
-          ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + (+m + 1) + ".0";
+        } else if (pr2) {
+          debug("replaceTilde pr", pr2);
+          ret = ">=" + M + "." + m + "." + p + "-" + pr2 + " <" + M + "." + (+m + 1) + ".0";
         } else {
           ret = ">=" + M + "." + m + "." + p + " <" + M + "." + (+m + 1) + ".0";
         }
@@ -3978,8 +3978,8 @@ var require_semver = __commonJS({
     function replaceCaret(comp, options) {
       debug("caret", comp, options);
       var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET];
-      return comp.replace(r, function(_, M, m, p, pr) {
-        debug("caret", comp, _, M, m, p, pr);
+      return comp.replace(r, function(_, M, m, p, pr2) {
+        debug("caret", comp, _, M, m, p, pr2);
         var ret;
         if (isX(M)) {
           ret = "";
@@ -3991,16 +3991,16 @@ var require_semver = __commonJS({
           } else {
             ret = ">=" + M + "." + m + ".0 <" + (+M + 1) + ".0.0";
           }
-        } else if (pr) {
-          debug("replaceCaret pr", pr);
+        } else if (pr2) {
+          debug("replaceCaret pr", pr2);
           if (M === "0") {
             if (m === "0") {
-              ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + m + "." + (+p + 1);
+              ret = ">=" + M + "." + m + "." + p + "-" + pr2 + " <" + M + "." + m + "." + (+p + 1);
             } else {
-              ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + M + "." + (+m + 1) + ".0";
+              ret = ">=" + M + "." + m + "." + p + "-" + pr2 + " <" + M + "." + (+m + 1) + ".0";
             }
           } else {
-            ret = ">=" + M + "." + m + "." + p + "-" + pr + " <" + (+M + 1) + ".0.0";
+            ret = ">=" + M + "." + m + "." + p + "-" + pr2 + " <" + (+M + 1) + ".0.0";
           }
         } else {
           debug("no pr");
@@ -4029,8 +4029,8 @@ var require_semver = __commonJS({
     function replaceXRange(comp, options) {
       comp = comp.trim();
       var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE];
-      return comp.replace(r, function(ret, gtlt, M, m, p, pr) {
-        debug("xRange", comp, ret, gtlt, M, m, p, pr);
+      return comp.replace(r, function(ret, gtlt, M, m, p, pr2) {
+        debug("xRange", comp, ret, gtlt, M, m, p, pr2);
         var xM = isX(M);
         var xm = xM || isX(m);
         var xp = xm || isX(p);
@@ -4038,7 +4038,7 @@ var require_semver = __commonJS({
         if (gtlt === "=" && anyX) {
           gtlt = "";
         }
-        pr = options.includePrerelease ? "-0" : "";
+        pr2 = options.includePrerelease ? "-0" : "";
         if (xM) {
           if (gtlt === ">" || gtlt === "<") {
             ret = "<0.0.0-0";
@@ -4068,11 +4068,11 @@ var require_semver = __commonJS({
               m = +m + 1;
             }
           }
-          ret = gtlt + M + "." + m + "." + p + pr;
+          ret = gtlt + M + "." + m + "." + p + pr2;
         } else if (xm) {
-          ret = ">=" + M + ".0.0" + pr + " <" + (+M + 1) + ".0.0" + pr;
+          ret = ">=" + M + ".0.0" + pr2 + " <" + (+M + 1) + ".0.0" + pr2;
         } else if (xp) {
-          ret = ">=" + M + "." + m + ".0" + pr + " <" + M + "." + (+m + 1) + ".0" + pr;
+          ret = ">=" + M + "." + m + ".0" + pr2 + " <" + M + "." + (+m + 1) + ".0" + pr2;
         }
         debug("xRange return", ret);
         return ret;
@@ -5545,8 +5545,8 @@ var require_auth = __commonJS({
     __name(BasicCredentialHandler, "BasicCredentialHandler");
     exports2.BasicCredentialHandler = BasicCredentialHandler;
     var BearerCredentialHandler = class {
-      constructor(token) {
-        this.token = token;
+      constructor(token2) {
+        this.token = token2;
       }
       prepareRequest(options) {
         options.headers["Authorization"] = "Bearer " + this.token;
@@ -5561,8 +5561,8 @@ var require_auth = __commonJS({
     __name(BearerCredentialHandler, "BearerCredentialHandler");
     exports2.BearerCredentialHandler = BearerCredentialHandler;
     var PersonalAccessTokenCredentialHandler = class {
-      constructor(token) {
-        this.token = token;
+      constructor(token2) {
+        this.token = token2;
       }
       prepareRequest(options) {
         options.headers["Authorization"] = "Basic " + Buffer.from("PAT:" + this.token).toString("base64");
@@ -15423,22 +15423,22 @@ var require_psl = __commonJS({
         return "DOMAIN_TOO_LONG";
       }
       var labels = ascii.split(".");
-      var label;
+      var label2;
       for (var i = 0; i < labels.length; ++i) {
-        label = labels[i];
-        if (!label.length) {
+        label2 = labels[i];
+        if (!label2.length) {
           return "LABEL_TOO_SHORT";
         }
-        if (label.length > 63) {
+        if (label2.length > 63) {
           return "LABEL_TOO_LONG";
         }
-        if (label.charAt(0) === "-") {
+        if (label2.charAt(0) === "-") {
           return "LABEL_STARTS_WITH_DASH";
         }
-        if (label.charAt(label.length - 1) === "-") {
+        if (label2.charAt(label2.length - 1) === "-") {
           return "LABEL_ENDS_WITH_DASH";
         }
-        if (!/^[a-z0-9\-]+$/.test(label)) {
+        if (!/^[a-z0-9\-]+$/.test(label2)) {
           return "LABEL_INVALID_CHARS";
         }
       }
@@ -15882,10 +15882,10 @@ var require_cookie = __commonJS({
       DISABLED: "unsafe-disabled"
     });
     var IP_REGEX_LOWERCASE = /(?:^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$)|(?:^(?:(?:[a-f\d]{1,4}:){7}(?:[a-f\d]{1,4}|:)|(?:[a-f\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|:[a-f\d]{1,4}|:)|(?:[a-f\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,2}|:)|(?:[a-f\d]{1,4}:){4}(?:(?::[a-f\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,3}|:)|(?:[a-f\d]{1,4}:){3}(?:(?::[a-f\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,4}|:)|(?:[a-f\d]{1,4}:){2}(?:(?::[a-f\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,5}|:)|(?:[a-f\d]{1,4}:){1}(?:(?::[a-f\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,6}|:)|(?::(?:(?::[a-f\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,7}|:)))$)/;
-    function parseDigits(token, minDigits, maxDigits, trailingOK) {
+    function parseDigits(token2, minDigits, maxDigits, trailingOK) {
       let count = 0;
-      while (count < token.length) {
-        const c = token.charCodeAt(count);
+      while (count < token2.length) {
+        const c = token2.charCodeAt(count);
         if (c <= 47 || c >= 58) {
           break;
         }
@@ -15894,14 +15894,14 @@ var require_cookie = __commonJS({
       if (count < minDigits || count > maxDigits) {
         return null;
       }
-      if (!trailingOK && count != token.length) {
+      if (!trailingOK && count != token2.length) {
         return null;
       }
-      return parseInt(token.substr(0, count), 10);
+      return parseInt(token2.substr(0, count), 10);
     }
     __name(parseDigits, "parseDigits");
-    function parseTime(token) {
-      const parts = token.split(":");
+    function parseTime(token2) {
+      const parts = token2.split(":");
       const result = [0, 0, 0];
       if (parts.length !== 3) {
         return null;
@@ -15917,9 +15917,9 @@ var require_cookie = __commonJS({
       return result;
     }
     __name(parseTime, "parseTime");
-    function parseMonth(token) {
-      token = String(token).substr(0, 3).toLowerCase();
-      const num = MONTH_TO_NUM[token];
+    function parseMonth(token2) {
+      token2 = String(token2).substr(0, 3).toLowerCase();
+      const num = MONTH_TO_NUM[token2];
       return num >= 0 ? num : null;
     }
     __name(parseMonth, "parseMonth");
@@ -15938,13 +15938,13 @@ var require_cookie = __commonJS({
       let month = null;
       let year = null;
       for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i].trim();
-        if (!token.length) {
+        const token2 = tokens[i].trim();
+        if (!token2.length) {
           continue;
         }
         let result;
         if (second === null) {
-          result = parseTime(token);
+          result = parseTime(token2);
           if (result) {
             hour = result[0];
             minute = result[1];
@@ -15953,21 +15953,21 @@ var require_cookie = __commonJS({
           }
         }
         if (dayOfMonth === null) {
-          result = parseDigits(token, 1, 2, true);
+          result = parseDigits(token2, 1, 2, true);
           if (result !== null) {
             dayOfMonth = result;
             continue;
           }
         }
         if (month === null) {
-          result = parseMonth(token);
+          result = parseMonth(token2);
           if (result !== null) {
             month = result;
             continue;
           }
         }
         if (year === null) {
-          result = parseDigits(token, 2, 4, true);
+          result = parseDigits(token2, 2, 4, true);
           if (result !== null) {
             year = result;
             if (year >= 70 && year <= 99) {
@@ -36988,30 +36988,30 @@ var require_dist6 = __commonJS({
       URLBuilder2.prototype.set = function(text, startState) {
         var tokenizer = new URLTokenizer(text, startState);
         while (tokenizer.next()) {
-          var token = tokenizer.current();
+          var token2 = tokenizer.current();
           var tokenPath = void 0;
-          if (token) {
-            switch (token.type) {
+          if (token2) {
+            switch (token2.type) {
               case "SCHEME":
-                this._scheme = token.text || void 0;
+                this._scheme = token2.text || void 0;
                 break;
               case "HOST":
-                this._host = token.text || void 0;
+                this._host = token2.text || void 0;
                 break;
               case "PORT":
-                this._port = token.text || void 0;
+                this._port = token2.text || void 0;
                 break;
               case "PATH":
-                tokenPath = token.text || void 0;
+                tokenPath = token2.text || void 0;
                 if (!this._path || this._path === "/" || tokenPath !== "/") {
                   this._path = tokenPath;
                 }
                 break;
               case "QUERY":
-                this._query = URLQuery.parse(token.text);
+                this._query = URLQuery.parse(token2.text);
                 break;
               default:
-                throw new Error("Unrecognized URLTokenType: " + token.type);
+                throw new Error("Unrecognized URLTokenType: " + token2.type);
             }
           }
         }
@@ -38654,26 +38654,26 @@ var require_dist6 = __commonJS({
           });
         }
         __name(tryGetAccessToken, "tryGetAccessToken");
-        var token;
+        var token2;
         return tslib.__generator(this, function(_a) {
           switch (_a.label) {
             case 0:
               return [4, tryGetAccessToken()];
             case 1:
-              token = _a.sent();
+              token2 = _a.sent();
               _a.label = 2;
             case 2:
-              if (!(token === null))
+              if (!(token2 === null))
                 return [3, 5];
               return [4, delay(retryIntervalInMs)];
             case 3:
               _a.sent();
               return [4, tryGetAccessToken()];
             case 4:
-              token = _a.sent();
+              token2 = _a.sent();
               return [3, 2];
             case 5:
-              return [2, token];
+              return [2, token2];
           }
         });
       });
@@ -38682,7 +38682,7 @@ var require_dist6 = __commonJS({
     function createTokenCycler(credential, scopes, tokenCyclerOptions) {
       var _this = this;
       var refreshWorker = null;
-      var token = null;
+      var token2 = null;
       var options = tslib.__assign(tslib.__assign({}, DEFAULT_CYCLER_OPTIONS), tokenCyclerOptions);
       var cycler = {
         get isRefreshing() {
@@ -38690,10 +38690,10 @@ var require_dist6 = __commonJS({
         },
         get shouldRefresh() {
           var _a;
-          return !cycler.isRefreshing && ((_a = token === null || token === void 0 ? void 0 : token.expiresOnTimestamp) !== null && _a !== void 0 ? _a : 0) - options.refreshWindowInMs < Date.now();
+          return !cycler.isRefreshing && ((_a = token2 === null || token2 === void 0 ? void 0 : token2.expiresOnTimestamp) !== null && _a !== void 0 ? _a : 0) - options.refreshWindowInMs < Date.now();
         },
         get mustRefresh() {
-          return token === null || token.expiresOnTimestamp - options.forcedRefreshWindowInMs < Date.now();
+          return token2 === null || token2.expiresOnTimestamp - options.forcedRefreshWindowInMs < Date.now();
         }
       };
       function refresh(getTokenOptions) {
@@ -38702,13 +38702,13 @@ var require_dist6 = __commonJS({
           var tryGetAccessToken = /* @__PURE__ */ __name(function() {
             return credential.getToken(scopes, getTokenOptions);
           }, "tryGetAccessToken");
-          refreshWorker = beginRefresh(tryGetAccessToken, options.retryIntervalInMs, (_a = token === null || token === void 0 ? void 0 : token.expiresOnTimestamp) !== null && _a !== void 0 ? _a : Date.now()).then(function(_token) {
+          refreshWorker = beginRefresh(tryGetAccessToken, options.retryIntervalInMs, (_a = token2 === null || token2 === void 0 ? void 0 : token2.expiresOnTimestamp) !== null && _a !== void 0 ? _a : Date.now()).then(function(_token) {
             refreshWorker = null;
-            token = _token;
-            return token;
+            token2 = _token;
+            return token2;
           }).catch(function(reason) {
             refreshWorker = null;
-            token = null;
+            token2 = null;
             throw reason;
           });
         }
@@ -38723,7 +38723,7 @@ var require_dist6 = __commonJS({
             if (cycler.shouldRefresh) {
               refresh(tokenOptions);
             }
-            return [2, token];
+            return [2, token2];
           });
         });
       };
@@ -38739,7 +38739,7 @@ var require_dist6 = __commonJS({
         __name(BearerTokenAuthenticationPolicy2, "BearerTokenAuthenticationPolicy");
         BearerTokenAuthenticationPolicy2.prototype.sendRequest = function(webResource) {
           return tslib.__awaiter(this, void 0, void 0, function() {
-            var token;
+            var token2;
             return tslib.__generator(this, function(_a) {
               switch (_a.label) {
                 case 0:
@@ -38751,8 +38751,8 @@ var require_dist6 = __commonJS({
                     }
                   })];
                 case 1:
-                  token = _a.sent().token;
-                  webResource.headers.set(Constants.HeaderConstants.AUTHORIZATION, "Bearer " + token);
+                  token2 = _a.sent().token;
+                  webResource.headers.set(Constants.HeaderConstants.AUTHORIZATION, "Bearer " + token2);
                   return [2, this._nextPolicy.sendRequest(webResource)];
               }
             });
@@ -39808,16 +39808,16 @@ var require_dist6 = __commonJS({
       };
       AccessTokenRefresher2.prototype.getToken = function(options) {
         return tslib.__awaiter(this, void 0, void 0, function() {
-          var token;
+          var token2;
           return tslib.__generator(this, function(_a) {
             switch (_a.label) {
               case 0:
                 this.lastCalled = Date.now();
                 return [4, this.credential.getToken(this.scopes, options)];
               case 1:
-                token = _a.sent();
+                token2 = _a.sent();
                 this.promise = void 0;
-                return [2, token || void 0];
+                return [2, token2 || void 0];
             }
           });
         });
@@ -49223,7 +49223,7 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var group = {
+    var group2 = {
       parameterPath: [
         "options",
         "group"
@@ -51390,7 +51390,7 @@ var require_dist10 = __commonJS({
       ],
       headerParameters: [
         owner,
-        group,
+        group2,
         posixPermissions,
         posixAcl,
         requestId,
@@ -62801,8 +62801,8 @@ var require_cacheHttpClient = __commonJS({
     }
     __name(getRequestOptions, "getRequestOptions");
     function createHttpClient() {
-      const token = process.env["ACTIONS_RUNTIME_TOKEN"] || "";
-      const bearerCredentialHandler = new auth_1.BearerCredentialHandler(token);
+      const token2 = process.env["ACTIONS_RUNTIME_TOKEN"] || "";
+      const bearerCredentialHandler = new auth_1.BearerCredentialHandler(token2);
       return new http_client_1.HttpClient("actions/cache", [bearerCredentialHandler], getRequestOptions());
     }
     __name(createHttpClient, "createHttpClient");
@@ -63662,7 +63662,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -63674,8 +63674,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -63780,13 +63780,13 @@ var require_utils3 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
     var httpClient = __importStar(require_http_client());
-    function getAuthString(token, options) {
-      if (!token && !options.auth) {
+    function getAuthString(token2, options) {
+      if (!token2 && !options.auth) {
         throw new Error("Parameter token or opts.auth is required");
-      } else if (token && options.auth) {
+      } else if (token2 && options.auth) {
         throw new Error("Parameters token and opts.auth may not both be specified");
       }
-      return typeof options.auth === "string" ? options.auth : `token ${token}`;
+      return typeof options.auth === "string" ? options.auth : `token ${token2}`;
     }
     __name(getAuthString, "getAuthString");
     exports2.getAuthString = getAuthString;
@@ -64246,8 +64246,8 @@ var require_dist_node2 = __commonJS({
         if (options.mediaType.previews.length) {
           const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
           headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-            const format3 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-            return `application/vnd.github.${preview}-preview${format3}`;
+            const format2 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+            return `application/vnd.github.${preview}-preview${format2}`;
           }).join(",");
         }
       }
@@ -64697,38 +64697,38 @@ var require_dist_node7 = __commonJS({
   "node_modules/@octokit/auth-token/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    async function auth(token) {
-      const tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
+    async function auth(token2) {
+      const tokenType = token2.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token2) ? "installation" : "oauth";
       return {
         type: "token",
-        token,
+        token: token2,
         tokenType
       };
     }
     __name(auth, "auth");
-    function withAuthorizationPrefix(token) {
-      if (token.split(/\./).length === 3) {
-        return `bearer ${token}`;
+    function withAuthorizationPrefix(token2) {
+      if (token2.split(/\./).length === 3) {
+        return `bearer ${token2}`;
       }
-      return `token ${token}`;
+      return `token ${token2}`;
     }
     __name(withAuthorizationPrefix, "withAuthorizationPrefix");
-    async function hook(token, request, route, parameters) {
+    async function hook(token2, request, route, parameters) {
       const endpoint = request.endpoint.merge(route, parameters);
-      endpoint.headers.authorization = withAuthorizationPrefix(token);
+      endpoint.headers.authorization = withAuthorizationPrefix(token2);
       return request(endpoint);
     }
     __name(hook, "hook");
-    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token) {
-      if (!token) {
+    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token2) {
+      if (!token2) {
         throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
       }
-      if (typeof token !== "string") {
+      if (typeof token2 !== "string") {
         throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
       }
-      token = token.replace(/^(token|bearer) +/i, "");
-      return Object.assign(auth.bind(null, token), {
-        hook: hook.bind(null, token)
+      token2 = token2.replace(/^(token|bearer) +/i, "");
+      return Object.assign(auth.bind(null, token2), {
+        hook: hook.bind(null, token2)
       });
     }, "createTokenAuth");
     exports2.createTokenAuth = createTokenAuth;
@@ -66264,9 +66264,9 @@ var require_utils4 = __commonJS({
       }
     };
     exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
-    function getOctokitOptions(token, options) {
+    function getOctokitOptions(token2, options) {
       const opts = Object.assign({}, options || {});
-      const auth = Utils.getAuthString(token, opts);
+      const auth = Utils.getAuthString(token2, opts);
       if (auth) {
         opts.auth = auth;
       }
@@ -66314,8 +66314,8 @@ var require_github = __commonJS({
     var Context = __importStar(require_context5());
     var utils_1 = require_utils4();
     exports2.context = new Context.Context();
-    function getOctokit2(token, options) {
-      return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+    function getOctokit2(token2, options) {
+      return new utils_1.GitHub(utils_1.getOctokitOptions(token2, options));
     }
     __name(getOctokit2, "getOctokit");
     exports2.getOctokit = getOctokit2;
@@ -66783,12 +66783,12 @@ var require_internal_path2 = __commonJS({
             this.segments = itemPath.split(path3.sep);
           } else {
             let remaining = itemPath;
-            let dir = pathHelper.dirname(remaining);
-            while (dir !== remaining) {
+            let dir2 = pathHelper.dirname(remaining);
+            while (dir2 !== remaining) {
               const basename = path3.basename(remaining);
               this.segments.unshift(basename);
-              remaining = dir;
-              dir = pathHelper.dirname(remaining);
+              remaining = dir2;
+              dir2 = pathHelper.dirname(remaining);
             }
             this.segments.unshift(remaining);
           }
@@ -67526,32 +67526,31 @@ var require_glob2 = __commonJS({
 var import_cache = __toModule(require_cache());
 var import_core2 = __toModule(require_core2());
 var import_fs2 = __toModule(require("fs"));
-var import_util2 = __toModule(require("util"));
 
 // utils/sendReport.ts
 var import_core = __toModule(require_core2());
 var import_github = __toModule(require_github());
 var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
 async function sendReport({
-  pr,
-  token,
-  label,
+  pr: pr2,
+  token: token2,
+  label: label2,
   title,
   content
 }) {
-  const octokit = (0, import_github.getOctokit)(token);
-  const reportTitle = `### ${!label ? title : `${title} (${label})`}
+  const octokit = (0, import_github.getOctokit)(token2);
+  const reportTitle = `### ${!label2 ? title : `${title} (${label2})`}
 `;
   let previousCommentID = void 0;
-  (0, import_core.info)("Looking for the previous report\u2026");
+  (0, import_core.info)(`Looking for the previous reports in: ${pr2}`);
   for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
     per_page: 100,
-    issue_number: Number(pr)
+    issue_number: pr2
   }))) {
     for (const { id, body: body2, user } of comments) {
       if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
         if (previousCommentID == null) {
-          (0, import_core.info)(`Found previous report with ID "${id}"`);
+          (0, import_core.info)(`Found previous report: ${id}`);
           previousCommentID = id;
           break;
         }
@@ -67560,11 +67559,11 @@ async function sendReport({
   }
   const body = reportTitle + content;
   if (previousCommentID != null) {
-    (0, import_core.info)(`Updating previous report with ID "${previousCommentID}"\u2026`);
+    (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
     await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
   } else {
-    (0, import_core.info)("Sending new report\u2026");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: Number(pr) }));
+    (0, import_core.info)("Sending new report");
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
   }
 }
 __name(sendReport, "sendReport");
@@ -67693,8 +67692,8 @@ function getFileNameKey(filename, buildPath) {
   return key.replace(/\.([a-f0-9])+\./, ".[hash].");
 }
 __name(getFileNameKey, "getFileNameKey");
-async function getBuildSizes(dir) {
-  const globber = await (0, import_glob.create)(dir);
+async function getBuildSizes(dir2) {
+  const globber = await (0, import_glob.create)(dir2);
   const [buildPath] = globber.getSearchPaths();
   const sizes = {};
   for await (const filename of globber.globGenerator()) {
@@ -67712,12 +67711,12 @@ __name(getBuildSizes, "getBuildSizes");
 var import_os = __toModule(require("os"));
 var import_path2 = __toModule(require("path"));
 function getBuildSnapshotMeta({
-  sha,
-  label
+  sha: sha2,
+  label: label2
 }) {
-  const name = `build-size-v1-${label}`;
+  const name = `build-size-v1-${label2}`;
   const restoreKey = `${name}-`;
-  const key = restoreKey + sha;
+  const key = restoreKey + sha2;
   return {
     key,
     restoreKey,
@@ -67727,43 +67726,46 @@ function getBuildSnapshotMeta({
 __name(getBuildSnapshotMeta, "getBuildSnapshotMeta");
 
 // build-size/report/index.ts
-async function getReportContent(dir, sha, label) {
-  const meta = getBuildSnapshotMeta({ sha, label });
-  (0, import_core2.info)((0, import_util2.format)("Restoring cache from [%s, %s] keys", meta.key, meta.restoreKey));
-  const restoredKey = await (0, import_cache.restoreCache)([meta.filename], meta.key, [
-    meta.restoreKey
-  ]);
-  const currentSizes = await getBuildSizes(dir);
-  if (!restoredKey) {
-    (0, import_core2.warning)((0, import_util2.format)("Failed to restore cache from [%s, %s] keys", meta.key, meta.restoreKey));
-    return [
-      "> \u26A0\uFE0F Failed to restore previous report from cache.",
-      "",
-      createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 })
-    ].join("\n");
-  }
-  if (restoredKey !== meta.key) {
-    (0, import_core2.warning)((0, import_util2.format)('Failed to find latest key for sha "%s", using "%s" instead.', sha, restoredKey));
-  }
-  const previousSizesJSON = await import_fs2.promises.readFile(meta.filename, "utf-8");
-  const previousSizes = JSON.parse(previousSizesJSON);
-  return createBuildSizeDiffReport(currentSizes, previousSizes);
-}
-__name(getReportContent, "getReportContent");
+var pr = Number((0, import_core2.getInput)("pr", { required: true }));
+var dir = (0, import_core2.getInput)("dir", { required: true });
+var sha = (0, import_core2.getInput)("sha", { required: true });
+var label = (0, import_core2.getInput)("label", { required: true });
+var token = (0, import_core2.getInput)("token", { required: true });
 async function main() {
-  const pr = (0, import_core2.getInput)("pr", { required: true });
-  const dir = (0, import_core2.getInput)("dir", { required: true });
-  const sha = (0, import_core2.getInput)("sha", { required: true });
-  const label = (0, import_core2.getInput)("label", { required: true });
-  const token = (0, import_core2.getInput)("token", { required: true });
-  const content = await getReportContent(dir, sha, label);
-  await sendReport({
+  const content = await (0, import_core2.group)("Generating report", async () => {
+    (0, import_core2.info)(`Computing build size for the: ${dir}`);
+    const currentSizes = await getBuildSizes(dir);
+    (0, import_core2.info)(`Computed file sizes:
+${JSON.stringify(currentSizes, null, 2)}`);
+    const meta = getBuildSnapshotMeta({ sha, label });
+    (0, import_core2.info)(`Restoring previous build size from: ${meta.key}, ${meta.restoreKey}`);
+    const restoredKey = await (0, import_cache.restoreCache)([meta.filename], meta.key, [
+      meta.restoreKey
+    ]);
+    if (!restoredKey) {
+      (0, import_core2.warning)(`Failed to restore previous build size from: ${meta.key}, ${meta.restoreKey}`);
+      return [
+        "> \u26A0\uFE0F Failed to restore previous build size from cache.",
+        "",
+        createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 })
+      ].join("\n");
+    }
+    if (restoredKey !== meta.key) {
+      (0, import_core2.warning)(`Failed to restore previous build size from: ${meta.key}`);
+    }
+    const previousSizesJSON = await import_fs2.promises.readFile(meta.filename, "utf-8");
+    const previousSizes = JSON.parse(previousSizesJSON);
+    (0, import_core2.info)(`Restored previous build file sizes:
+${JSON.stringify(previousSizes, null, 2)}`);
+    return createBuildSizeDiffReport(currentSizes, previousSizes);
+  });
+  await (0, import_core2.group)("Sending build size report", () => sendReport({
     pr,
     label,
     token,
     content,
     title: "Build Size Report"
-  });
+  }));
 }
 __name(main, "main");
 main().catch(import_core2.setFailed);

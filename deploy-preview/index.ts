@@ -5,7 +5,7 @@ import { format } from 'util';
 import { sendReport } from 'utils/sendReport';
 
 async function main() {
-  const pr = getInput('pr', { required: true });
+  const pr = Number(getInput('pr', { required: true }));
   const defaultAlias = `preview-${pr}`;
   const dir = getInput('dir', { required: true });
   const alias = getInput('alias') || defaultAlias;

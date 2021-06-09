@@ -6001,15 +6001,15 @@ async function sendReport({
   const reportTitle = `### ${!label ? title : `${title} (${label})`}
 `;
   let previousCommentID = void 0;
-  (0, import_core.info)("Looking for the previous report\u2026");
+  (0, import_core.info)(`Looking for the previous reports in: ${pr}`);
   for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
     per_page: 100,
-    issue_number: Number(pr)
+    issue_number: pr
   }))) {
     for (const { id, body: body2, user } of comments) {
       if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
         if (previousCommentID == null) {
-          (0, import_core.info)(`Found previous report with ID "${id}"`);
+          (0, import_core.info)(`Found previous report: ${id}`);
           previousCommentID = id;
           break;
         }
@@ -6018,18 +6018,18 @@ async function sendReport({
   }
   const body = reportTitle + content;
   if (previousCommentID != null) {
-    (0, import_core.info)(`Updating previous report with ID "${previousCommentID}"\u2026`);
+    (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
     await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
   } else {
-    (0, import_core.info)("Sending new report\u2026");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: Number(pr) }));
+    (0, import_core.info)("Sending new report");
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr }));
   }
 }
 __name(sendReport, "sendReport");
 
 // deploy-preview/index.ts
 async function main() {
-  const pr = (0, import_core2.getInput)("pr", { required: true });
+  const pr = Number((0, import_core2.getInput)("pr", { required: true }));
   const defaultAlias = `preview-${pr}`;
   const dir = (0, import_core2.getInput)("dir", { required: true });
   const alias = (0, import_core2.getInput)("alias") || defaultAlias;
