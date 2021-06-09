@@ -54,25 +54,17 @@ async function main() {
   let previousSizes = await group(
     'Restoring previous build size from cache',
     async () => {
-      info(`Restoring previous from the: ${snapshotName}`);
-
+      info(`Restoring: ${snapshotName}`);
       const restoreKey = await restoreCache([snapshotName], snapshotName);
-      if (restoreKey) {
-        const json = await fs.readFile(snapshotName, 'utf-8');
-        const sizes = JSON.parse(json) as Record<string, number>;
-        info(
-          `Restored build file sizes from cache:\n${JSON.stringify(
-            sizes,
-            null,
-            2,
-          )}`,
-        );
-        return sizes;
+      if (!restoreKey) {
+        info('Failed to from cache');
+        return null;
       }
 
-      info('Failed restore build size from cache');
-
-      return null;
+      const json = await fs.readFile(snapshotName, 'utf-8');
+      const sizes = JSON.parse(json) as Record<string, number>;
+      info(`Restored build file sizes:\n${JSON.stringify(sizes, null, 2)}`);
+      return sizes;
     },
   );
 
@@ -95,11 +87,8 @@ async function main() {
       try {
         await saveCache([snapshotName], snapshotName);
       } catch (error: unknown) {
-        if (error instanceof ReserveCacheError) {
-          warning(error);
-        } else {
-          throw error;
-        }
+        if (error instanceof ReserveCacheError) warning(error);
+        else throw error;
       }
 
       info(`Checking out to current revision: ${currentRev}`);

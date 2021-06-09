@@ -371,11 +371,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(error, "error");
     exports2.error = error;
-    function warning(message) {
+    function warning2(message) {
       command_1.issue("warning", message instanceof Error ? message.toString() : message);
     }
-    __name(warning, "warning");
-    exports2.warning = warning;
+    __name(warning2, "warning");
+    exports2.warning = warning2;
     function info2(message) {
       process.stdout.write(message + os.EOL);
     }
@@ -1277,13 +1277,13 @@ var require_utils2 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
     var httpClient = __importStar(require_http_client());
-    function getAuthString(token, options) {
-      if (!token && !options.auth) {
+    function getAuthString(token2, options) {
+      if (!token2 && !options.auth) {
         throw new Error("Parameter token or opts.auth is required");
-      } else if (token && options.auth) {
+      } else if (token2 && options.auth) {
         throw new Error("Parameters token and opts.auth may not both be specified");
       }
-      return typeof options.auth === "string" ? options.auth : `token ${token}`;
+      return typeof options.auth === "string" ? options.auth : `token ${token2}`;
     }
     __name(getAuthString, "getAuthString");
     exports2.getAuthString = getAuthString;
@@ -1743,8 +1743,8 @@ var require_dist_node2 = __commonJS({
         if (options.mediaType.previews.length) {
           const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
           headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-            const format2 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-            return `application/vnd.github.${preview}-preview${format2}`;
+            const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+            return `application/vnd.github.${preview}-preview${format}`;
           }).join(",");
         }
       }
@@ -2996,7 +2996,7 @@ var require_dist_node4 = __commonJS({
     var deprecation = require_dist_node3();
     var once = _interopDefault(require_once());
     var logOnce = once((deprecation2) => console.warn(deprecation2));
-    var RequestError = class extends Error {
+    var RequestError2 = class extends Error {
       constructor(message, statusCode, options) {
         super(message);
         if (Error.captureStackTrace) {
@@ -3021,8 +3021,8 @@ var require_dist_node4 = __commonJS({
         this.request = requestCopy;
       }
     };
-    __name(RequestError, "RequestError");
-    exports2.RequestError = RequestError;
+    __name(RequestError2, "RequestError");
+    exports2.RequestError = RequestError2;
   }
 });
 
@@ -3267,38 +3267,38 @@ var require_dist_node7 = __commonJS({
   "node_modules/@octokit/auth-token/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    async function auth(token) {
-      const tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
+    async function auth(token2) {
+      const tokenType = token2.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token2) ? "installation" : "oauth";
       return {
         type: "token",
-        token,
+        token: token2,
         tokenType
       };
     }
     __name(auth, "auth");
-    function withAuthorizationPrefix(token) {
-      if (token.split(/\./).length === 3) {
-        return `bearer ${token}`;
+    function withAuthorizationPrefix(token2) {
+      if (token2.split(/\./).length === 3) {
+        return `bearer ${token2}`;
       }
-      return `token ${token}`;
+      return `token ${token2}`;
     }
     __name(withAuthorizationPrefix, "withAuthorizationPrefix");
-    async function hook(token, request, route, parameters) {
+    async function hook(token2, request, route, parameters) {
       const endpoint = request.endpoint.merge(route, parameters);
-      endpoint.headers.authorization = withAuthorizationPrefix(token);
+      endpoint.headers.authorization = withAuthorizationPrefix(token2);
       return request(endpoint);
     }
     __name(hook, "hook");
-    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token) {
-      if (!token) {
+    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token2) {
+      if (!token2) {
         throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
       }
-      if (typeof token !== "string") {
+      if (typeof token2 !== "string") {
         throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
       }
-      token = token.replace(/^(token|bearer) +/i, "");
-      return Object.assign(auth.bind(null, token), {
-        hook: hook.bind(null, token)
+      token2 = token2.replace(/^(token|bearer) +/i, "");
+      return Object.assign(auth.bind(null, token2), {
+        hook: hook.bind(null, token2)
       });
     }, "createTokenAuth");
     exports2.createTokenAuth = createTokenAuth;
@@ -4834,9 +4834,9 @@ var require_utils3 = __commonJS({
       }
     };
     exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
-    function getOctokitOptions(token, options) {
+    function getOctokitOptions(token2, options) {
       const opts = Object.assign({}, options || {});
-      const auth = Utils.getAuthString(token, opts);
+      const auth = Utils.getAuthString(token2, opts);
       if (auth) {
         opts.auth = auth;
       }
@@ -4884,8 +4884,8 @@ var require_github = __commonJS({
     var Context = __importStar(require_context());
     var utils_1 = require_utils3();
     exports2.context = new Context.Context();
-    function getOctokit2(token, options) {
-      return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+    function getOctokit2(token2, options) {
+      return new utils_1.GitHub(utils_1.getOctokitOptions(token2, options));
     }
     __name(getOctokit2, "getOctokit");
     exports2.getOctokit = getOctokit2;
@@ -4895,35 +4895,42 @@ var require_github = __commonJS({
 // prune-artifacts/index.ts
 var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
-var import_util = __toModule(require("util"));
+var import_request_error = __toModule(require_dist_node4());
+var token = (0, import_core.getInput)("token", { required: true });
+var pattern = (0, import_core.getInput)("pattern", { required: true });
+var skipRecent = parseInt((0, import_core.getInput)("skip-recent"), 10) || 0;
 async function main() {
-  const token = (0, import_core.getInput)("token", { required: true });
-  const pattern = (0, import_core.getInput)("pattern", { required: true });
-  const skipRecent = parseInt((0, import_core.getInput)("skip-recent"), 10) || 0;
   const octokit = (0, import_github.getOctokit)(token);
   const matcher = new RegExp(pattern);
-  (0, import_core.info)((0, import_util.format)("Iterating through the %s/%s\u2026", import_github.context.repo.owner, import_github.context.repo.repo));
-  for await (const { data: artifacts } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/actions/artifacts", __spreadProps(__spreadValues({}, import_github.context.repo), {
-    per_page: 50
-  }))) {
+  (0, import_core.info)(`Fetching artifacts for the: ${import_github.context.repo.owner}/${import_github.context.repo.repo}`);
+  for await (const { data: artifacts } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/actions/artifacts", __spreadProps(__spreadValues({}, import_github.context.repo), { per_page: 50 }))) {
     if (artifacts.length === 0) {
-      (0, import_core.info)("There are no artifacts left.");
+      (0, import_core.info)("There are no artifacts.");
       return;
     }
-    (0, import_core.info)((0, import_util.format)("Found %s artifacts\u2026", artifacts.length));
+    (0, import_core.info)(`Found artifacts: ${artifacts.length}`);
     let skipped = 0;
     for (const { id, name } of artifacts) {
+      (0, import_core.info)(`Checking artifact: ${name}`);
       if (!matcher.exec(name)) {
-        (0, import_core.info)((0, import_util.format)('Skipping "%s" (not matching pattern "%s")', name, pattern));
+        (0, import_core.info)(`Skipping: not matching pattern (/${pattern}/)`);
         continue;
       }
       if (skipRecent > skipped) {
         skipped += 1;
-        (0, import_core.info)((0, import_util.format)('Skipping "%s" (belongs to recent "%s")', name, skipRecent));
+        (0, import_core.info)(`Skipping: belongs to recent ${skipRecent} artifacts`);
         continue;
       }
-      (0, import_core.info)((0, import_util.format)('Removing "%s" artifact with the id "%s"\u2026', name, id));
-      await octokit.request("DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { artifact_id: id }));
+      (0, import_core.info)(`Removing: ${id}`);
+      try {
+        await octokit.request("DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { artifact_id: id }));
+      } catch (error) {
+        if (error instanceof import_request_error.RequestError && error.status === 404) {
+          (0, import_core.warning)(error);
+        } else {
+          throw error;
+        }
+      }
     }
   }
 }

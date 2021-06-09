@@ -19,11 +19,11 @@ export async function execOutput(
   await exec(commandLine, args, {
     ...options,
     listeners: {
-      stdline(line) {
-        output.stdout += line;
+      stdout(data) {
+        output.stdout += data.toString('utf8');
       },
-      errline(line) {
-        output.stderr += line;
+      stderr(data) {
+        output.stderr += data.toString('utf8');
       },
       debug(data) {
         output.debug.push(data);
@@ -49,5 +49,9 @@ export async function execJSON<T>(
   options?: Omit<ExecOptions, 'listeners'>,
 ): Promise<T> {
   const json = await execString(commandLine, args, options);
-  return JSON.parse(json) as T;
+  try {
+    return JSON.parse(json) as T;
+  } catch {
+    throw new Error(`Failed to parse output: ${JSON.stringify(json)}`);
+  }
 }

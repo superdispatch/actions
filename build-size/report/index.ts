@@ -13,56 +13,58 @@ const label = getInput('label', { required: true });
 const token = getInput('token', { required: true });
 
 async function main() {
-  const content = await group('Generating report', async () => {
-    info(`Computing build size for the: ${dir}`);
-    const currentSizes = await getBuildSizes(dir);
-    info(`Computed file sizes:\n${JSON.stringify(currentSizes, null, 2)}`);
+  const currentSizes = await group('Computing current build size', () =>
+    getBuildSizes(dir),
+  );
 
-    const meta = getBuildSnapshotMeta({ sha, label });
-    info(`Restoring previous build size from: ${meta.key}, ${meta.restoreKey}`);
-    const restoredKey = await restoreCache([meta.filename], meta.key, [
-      meta.restoreKey,
-    ]);
+  const report = await group(
+    'Restoring previous build size from cache',
+    async () => {
+      const meta = getBuildSnapshotMeta({ sha, label });
+      info(`Restoring from: ${meta.key}, ${meta.restoreKey}`);
+      const restoredKey = await restoreCache([meta.filename], meta.key, [
+        meta.restoreKey,
+      ]);
 
-    if (!restoredKey) {
-      warning(
-        `Failed to restore previous build size from: ${meta.key}, ${meta.restoreKey}`,
+      if (!restoredKey) {
+        warning(
+          `Failed to restore previous build size from: ${meta.key}, ${meta.restoreKey}`,
+        );
+
+        return [
+          '> ⚠️ Failed to restore previous build size from cache.',
+          '',
+          createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
+        ].join('\n');
+      }
+
+      if (restoredKey !== meta.key) {
+        warning(`Failed to restore previous build size from: ${meta.key}`);
+      }
+
+      const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
+      const previousSizes = JSON.parse(previousSizesJSON) as Record<
+        string,
+        number
+      >;
+      info(
+        `Restored previous build file sizes:\n${JSON.stringify(
+          previousSizes,
+          null,
+          2,
+        )}`,
       );
 
-      return [
-        '> ⚠️ Failed to restore previous build size from cache.',
-        '',
-        createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
-      ].join('\n');
-    }
-
-    if (restoredKey !== meta.key) {
-      warning(`Failed to restore previous build size from: ${meta.key}`);
-    }
-
-    const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
-    const previousSizes = JSON.parse(previousSizesJSON) as Record<
-      string,
-      number
-    >;
-
-    info(
-      `Restored previous build file sizes:\n${JSON.stringify(
-        previousSizes,
-        null,
-        2,
-      )}`,
-    );
-
-    return createBuildSizeDiffReport(currentSizes, previousSizes);
-  });
+      return createBuildSizeDiffReport(currentSizes, previousSizes);
+    },
+  );
 
   await group('Sending build size report', () =>
     sendReport({
       pr,
       label,
       token,
-      content,
+      content: report,
       title: 'Build Size Report',
     }),
   );

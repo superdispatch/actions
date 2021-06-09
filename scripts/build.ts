@@ -1,3 +1,4 @@
+import { exec } from '@actions/exec';
 import { create as createGlob } from '@actions/glob';
 import { build } from 'esbuild';
 import * as path from 'path';
@@ -13,9 +14,10 @@ async function main(): Promise<void> {
   for await (const actionPath of glob.globGenerator()) {
     const actionDir = path.dirname(actionPath);
     const entryPath = path.join(actionDir, 'index.ts');
-    const outPath = path.join(actionDir, 'dist', 'index.js');
+    const outDir = path.join(actionDir, 'dist');
+    const outPath = path.join(outDir, 'index.js');
 
-    console.log('Installing %s…', path.relative(ROOT_DIR, actionDir));
+    console.log('Installing: %s', path.relative(ROOT_DIR, actionDir));
 
     await build({
       bundle: true,
@@ -33,6 +35,22 @@ async function main(): Promise<void> {
       // Fix for the https://github.com/node-fetch/node-fetch/issues/784
       keepNames: true,
     });
+
+    if (process.env.CI) {
+      let output = '';
+      await exec('git', ['status', '--porcelain', outDir], {
+        listeners: {
+          stdline(line) {
+            output += line;
+          },
+        },
+      });
+
+      if (output) {
+        await exec('git', ['diff']);
+        throw new Error('Build result do not matches with committed.');
+      }
+    }
   }
 }
 
