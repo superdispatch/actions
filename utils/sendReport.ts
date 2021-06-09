@@ -23,7 +23,7 @@ export async function sendReport({
 
   let previousCommentID: number | undefined = undefined;
 
-  info(`Looking for the previous reports in: ${pr}`);
+  info(`Looking for the previous reports in: #${pr}`);
 
   for await (const { data: comments } of octokit.paginate.iterator(
     'GET /repos/{owner}/{repo}/issues/{issue_number}/comments',

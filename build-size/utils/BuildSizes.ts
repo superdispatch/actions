@@ -1,3 +1,4 @@
+import { info } from '@actions/core';
 import { create as createGlob } from '@actions/glob';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -38,20 +39,19 @@ function getFileNameKey(filename: string, buildPath: string): string {
 export async function getBuildSizes(
   dir: string,
 ): Promise<Record<string, number>> {
+  info(`Computing build size for the: ${dir}`);
   const globber = await createGlob(dir);
   const [buildPath] = globber.getSearchPaths();
 
   const sizes: Record<string, number> = {};
 
   for await (const filename of globber.globGenerator()) {
-    if (!isValidFile(filename)) {
-      continue;
-    }
-
+    if (!isValidFile(filename)) continue;
     const key = getFileNameKey(filename, buildPath);
-
     sizes[key] = await computeFileSize(filename);
   }
+
+  info(`Computed file sizes:\n${JSON.stringify(sizes, null, 2)}`);
 
   return sizes;
 }

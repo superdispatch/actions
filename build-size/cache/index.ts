@@ -13,18 +13,18 @@ main().catch(setFailed);
 async function main() {
   const meta = getBuildSnapshotMeta({ sha, label });
 
-  info(`Checking cache for the: ${meta.key}`);
-
-  const restoredKey = await restoreCache([meta.filename], meta.key);
+  const restoredKey = await group('Checking cache', () => {
+    info(`Restoring cache for the: ${meta.key}`);
+    return restoreCache([meta.filename], meta.key);
+  });
 
   if (restoredKey) {
-    info('Cache hit, finishing the job…');
+    info('Cache hit, skipping further computations');
     return;
   }
 
   await group(`Computing build size for the: ${dir}`, async () => {
     const sizes = await getBuildSizes(dir);
-    info(`Computed file sizes:\n${JSON.stringify(sizes, null, 2)}`);
 
     info(`Writing build size report to: ${meta.filename}`);
     await fs.writeFile(meta.filename, JSON.stringify(sizes), 'utf-8');

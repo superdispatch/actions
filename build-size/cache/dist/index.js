@@ -38,9 +38,9 @@ var __toModule = (module2) => {
   return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
 
-// node_modules/@actions/cache/node_modules/@actions/core/lib/utils.js
+// node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/core/lib/utils.js"(exports2) {
+  "node_modules/@actions/core/lib/utils.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.toCommandValue = void 0;
@@ -57,9 +57,9 @@ var require_utils = __commonJS({
   }
 });
 
-// node_modules/@actions/cache/node_modules/@actions/core/lib/command.js
+// node_modules/@actions/core/lib/command.js
 var require_command = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/core/lib/command.js"(exports2) {
+  "node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -149,9 +149,9 @@ var require_command = __commonJS({
   }
 });
 
-// node_modules/@actions/cache/node_modules/@actions/core/lib/file-command.js
+// node_modules/@actions/core/lib/file-command.js
 var require_file_command = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/core/lib/file-command.js"(exports2) {
+  "node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -203,9 +203,9 @@ var require_file_command = __commonJS({
   }
 });
 
-// node_modules/@actions/cache/node_modules/@actions/core/lib/core.js
+// node_modules/@actions/core/lib/core.js
 var require_core = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/core/lib/core.js"(exports2) {
+  "node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -267,7 +267,7 @@ var require_core = __commonJS({
       });
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getState = exports2.saveState = exports2.group = exports2.endGroup = exports2.startGroup = exports2.info = exports2.warning = exports2.error = exports2.debug = exports2.isDebug = exports2.setFailed = exports2.setCommandEcho = exports2.setOutput = exports2.getBooleanInput = exports2.getInput = exports2.addPath = exports2.setSecret = exports2.exportVariable = exports2.ExitCode = void 0;
+    exports2.getState = exports2.saveState = exports2.group = exports2.endGroup = exports2.startGroup = exports2.info = exports2.warning = exports2.error = exports2.debug = exports2.isDebug = exports2.setFailed = exports2.setCommandEcho = exports2.setOutput = exports2.getBooleanInput = exports2.getMultilineInput = exports2.getInput = exports2.addPath = exports2.setSecret = exports2.exportVariable = exports2.ExitCode = void 0;
     var command_1 = require_command();
     var file_command_1 = require_file_command();
     var utils_1 = require_utils();
@@ -320,6 +320,12 @@ var require_core = __commonJS({
     }
     __name(getInput2, "getInput");
     exports2.getInput = getInput2;
+    function getMultilineInput(name, options) {
+      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
+      return inputs;
+    }
+    __name(getMultilineInput, "getMultilineInput");
+    exports2.getMultilineInput = getMultilineInput;
     function getBooleanInput(name, options) {
       const trueValue = ["true", "True", "TRUE"];
       const falseValue = ["false", "False", "FALSE"];
@@ -370,11 +376,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(warning2, "warning");
     exports2.warning = warning2;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os2.EOL);
     }
-    __name(info2, "info");
-    exports2.info = info2;
+    __name(info3, "info");
+    exports2.info = info3;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -894,10 +900,38 @@ var require_io = __commonJS({
   }
 });
 
-// node_modules/@actions/cache/node_modules/@actions/exec/lib/toolrunner.js
+// node_modules/@actions/exec/lib/toolrunner.js
 var require_toolrunner = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
+  "node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
     "use strict";
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
         return value instanceof P ? value : new P(function(resolve) {
@@ -929,25 +963,15 @@ var require_toolrunner = __commonJS({
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
     };
-    var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null) {
-        for (var k in mod)
-          if (Object.hasOwnProperty.call(mod, k))
-            result[k] = mod[k];
-      }
-      result["default"] = mod;
-      return result;
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.argStringToArray = exports2.ToolRunner = void 0;
     var os2 = __importStar(require("os"));
     var events = __importStar(require("events"));
     var child = __importStar(require("child_process"));
     var path3 = __importStar(require("path"));
     var io = __importStar(require_io());
     var ioUtil = __importStar(require_io_util());
+    var timers_1 = require("timers");
     var IS_WINDOWS = process.platform === "win32";
     var ToolRunner = class extends events.EventEmitter {
       constructor(toolPath, args, options) {
@@ -1003,9 +1027,10 @@ var require_toolrunner = __commonJS({
             s = s.substring(n + os2.EOL.length);
             n = s.indexOf(os2.EOL);
           }
-          strBuffer = s;
+          return s;
         } catch (err) {
           this._debug(`error processing line. Failed with error ${err}`);
+          return "";
         }
       }
       _getSpawnFileName() {
@@ -1152,7 +1177,7 @@ var require_toolrunner = __commonJS({
             this.toolPath = path3.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
           }
           this.toolPath = yield io.which(this.toolPath, true);
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             this._debug(`exec tool: ${this.toolPath}`);
             this._debug("arguments:");
             for (const arg of this.args) {
@@ -1166,9 +1191,12 @@ var require_toolrunner = __commonJS({
             state.on("debug", (message) => {
               this._debug(message);
             });
+            if (this.options.cwd && !(yield ioUtil.exists(this.options.cwd))) {
+              return reject(new Error(`The cwd: ${this.options.cwd} does not exist!`));
+            }
             const fileName = this._getSpawnFileName();
             const cp = child.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
-            const stdbuffer = "";
+            let stdbuffer = "";
             if (cp.stdout) {
               cp.stdout.on("data", (data) => {
                 if (this.options.listeners && this.options.listeners.stdout) {
@@ -1177,14 +1205,14 @@ var require_toolrunner = __commonJS({
                 if (!optionsNonNull.silent && optionsNonNull.outStream) {
                   optionsNonNull.outStream.write(data);
                 }
-                this._processLineBuffer(data, stdbuffer, (line) => {
+                stdbuffer = this._processLineBuffer(data, stdbuffer, (line) => {
                   if (this.options.listeners && this.options.listeners.stdline) {
                     this.options.listeners.stdline(line);
                   }
                 });
               });
             }
-            const errbuffer = "";
+            let errbuffer = "";
             if (cp.stderr) {
               cp.stderr.on("data", (data) => {
                 state.processStderr = true;
@@ -1195,7 +1223,7 @@ var require_toolrunner = __commonJS({
                   const s = optionsNonNull.failOnStdErr ? optionsNonNull.errStream : optionsNonNull.outStream;
                   s.write(data);
                 }
-                this._processLineBuffer(data, errbuffer, (line) => {
+                errbuffer = this._processLineBuffer(data, errbuffer, (line) => {
                   if (this.options.listeners && this.options.listeners.errline) {
                     this.options.listeners.errline(line);
                   }
@@ -1241,7 +1269,7 @@ var require_toolrunner = __commonJS({
               }
               cp.stdin.end(this.options.input);
             }
-          });
+          }));
         });
       }
     };
@@ -1321,7 +1349,7 @@ var require_toolrunner = __commonJS({
         if (this.processClosed) {
           this._setResult();
         } else if (this.processExited) {
-          this.timeout = setTimeout(ExecState.HandleTimeout, this.delay, this);
+          this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
       }
       _debug(message) {
@@ -1360,10 +1388,38 @@ var require_toolrunner = __commonJS({
   }
 });
 
-// node_modules/@actions/cache/node_modules/@actions/exec/lib/exec.js
+// node_modules/@actions/exec/lib/exec.js
 var require_exec = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/exec/lib/exec.js"(exports2) {
+  "node_modules/@actions/exec/lib/exec.js"(exports2) {
     "use strict";
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
         return value instanceof P ? value : new P(function(resolve) {
@@ -1395,19 +1451,9 @@ var require_exec = __commonJS({
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
     };
-    var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null) {
-        for (var k in mod)
-          if (Object.hasOwnProperty.call(mod, k))
-            result[k] = mod[k];
-      }
-      result["default"] = mod;
-      return result;
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.getExecOutput = exports2.exec = void 0;
+    var string_decoder_1 = require("string_decoder");
     var tr = __importStar(require_toolrunner());
     function exec(commandLine, args, options) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -1423,6 +1469,40 @@ var require_exec = __commonJS({
     }
     __name(exec, "exec");
     exports2.exec = exec;
+    function getExecOutput(commandLine, args, options) {
+      var _a, _b;
+      return __awaiter(this, void 0, void 0, function* () {
+        let stdout = "";
+        let stderr = "";
+        const stdoutDecoder = new string_decoder_1.StringDecoder("utf8");
+        const stderrDecoder = new string_decoder_1.StringDecoder("utf8");
+        const originalStdoutListener = (_a = options === null || options === void 0 ? void 0 : options.listeners) === null || _a === void 0 ? void 0 : _a.stdout;
+        const originalStdErrListener = (_b = options === null || options === void 0 ? void 0 : options.listeners) === null || _b === void 0 ? void 0 : _b.stderr;
+        const stdErrListener = /* @__PURE__ */ __name((data) => {
+          stderr += stderrDecoder.write(data);
+          if (originalStdErrListener) {
+            originalStdErrListener(data);
+          }
+        }, "stdErrListener");
+        const stdOutListener = /* @__PURE__ */ __name((data) => {
+          stdout += stdoutDecoder.write(data);
+          if (originalStdoutListener) {
+            originalStdoutListener(data);
+          }
+        }, "stdOutListener");
+        const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
+        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        stdout += stdoutDecoder.end();
+        stderr += stderrDecoder.end();
+        return {
+          exitCode,
+          stdout,
+          stderr
+        };
+      });
+    }
+    __name(getExecOutput, "getExecOutput");
+    exports2.getExecOutput = getExecOutput;
   }
 });
 
@@ -5250,12 +5330,12 @@ var require_http_client = __commonJS({
           throw new Error("Client has already been disposed.");
         }
         let parsedUrl = new URL(requestUrl);
-        let info2 = this._prepareRequest(verb, parsedUrl, headers);
+        let info3 = this._prepareRequest(verb, parsedUrl, headers);
         let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
         let numTries = 0;
         let response;
         while (numTries < maxTries) {
-          response = await this.requestRaw(info2, data);
+          response = await this.requestRaw(info3, data);
           if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
             let authenticationHandler;
             for (let i = 0; i < this.handlers.length; i++) {
@@ -5265,7 +5345,7 @@ var require_http_client = __commonJS({
               }
             }
             if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info2, data);
+              return authenticationHandler.handleAuthentication(this, info3, data);
             } else {
               return response;
             }
@@ -5288,8 +5368,8 @@ var require_http_client = __commonJS({
                 }
               }
             }
-            info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info2, data);
+            info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+            response = await this.requestRaw(info3, data);
             redirectsRemaining--;
           }
           if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
@@ -5309,7 +5389,7 @@ var require_http_client = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info2, data) {
+      requestRaw(info3, data) {
         return new Promise((resolve, reject) => {
           let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
             if (err) {
@@ -5317,13 +5397,13 @@ var require_http_client = __commonJS({
             }
             resolve(res);
           }, "callbackForResult");
-          this.requestRawWithCallback(info2, data, callbackForResult);
+          this.requestRawWithCallback(info3, data, callbackForResult);
         });
       }
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         let socket;
         if (typeof data === "string") {
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         let handleResult = /* @__PURE__ */ __name((err, res) => {
@@ -5332,7 +5412,7 @@ var require_http_client = __commonJS({
             onResult(err, res);
           }
         }, "handleResult");
-        let req = info2.httpModule.request(info2.options, (msg) => {
+        let req = info3.httpModule.request(info3.options, (msg) => {
           let res = new HttpClientResponse(msg);
           handleResult(null, res);
         });
@@ -5343,7 +5423,7 @@ var require_http_client = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error("Request timeout: " + info2.options.path), null);
+          handleResult(new Error("Request timeout: " + info3.options.path), null);
         });
         req.on("error", function(err) {
           handleResult(err, null);
@@ -5365,27 +5445,27 @@ var require_http_client = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           this.handlers.forEach((handler) => {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info3.options);
           });
         }
-        return info2;
+        return info3;
       }
       _mergeHeaders(headers) {
         const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
@@ -33760,9 +33840,9 @@ var require_xml2js = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/internal/baggage.js
+// node_modules/@opentelemetry/api/build/src/baggage/internal/baggage.js
 var require_baggage = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/internal/baggage.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/baggage/internal/baggage.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.BaggageImpl = void 0;
@@ -33815,9 +33895,9 @@ var require_baggage = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/internal/symbol.js
+// node_modules/@opentelemetry/api/build/src/baggage/internal/symbol.js
 var require_symbol = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/internal/symbol.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/baggage/internal/symbol.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.baggageEntryMetadataSymbol = void 0;
@@ -33825,25 +33905,25 @@ var require_symbol = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/Baggage.js
+// node_modules/@opentelemetry/api/build/src/baggage/Baggage.js
 var require_Baggage = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/Baggage.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/baggage/Baggage.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/Entry.js
+// node_modules/@opentelemetry/api/build/src/baggage/Entry.js
 var require_Entry = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/Entry.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/baggage/Entry.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/index.js
+// node_modules/@opentelemetry/api/build/src/baggage/index.js
 var require_baggage2 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/baggage/index.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/baggage/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -33891,25 +33971,25 @@ var require_baggage2 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/common/Exception.js
+// node_modules/@opentelemetry/api/build/src/common/Exception.js
 var require_Exception = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/common/Exception.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/common/Exception.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/common/Time.js
+// node_modules/@opentelemetry/api/build/src/common/Time.js
 var require_Time = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/common/Time.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/common/Time.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/consoleLogger.js
+// node_modules/@opentelemetry/api/build/src/diag/consoleLogger.js
 var require_consoleLogger = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/consoleLogger.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/diag/consoleLogger.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DiagConsoleLogger = void 0;
@@ -33948,9 +34028,9 @@ var require_consoleLogger = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/types.js
+// node_modules/@opentelemetry/api/build/src/diag/types.js
 var require_types = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/types.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/diag/types.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DiagLogLevel = void 0;
@@ -33967,9 +34047,9 @@ var require_types = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/index.js
+// node_modules/@opentelemetry/api/build/src/diag/index.js
 var require_diag = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/index.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/diag/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -33993,9 +34073,9 @@ var require_diag = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/propagation/NoopTextMapPropagator.js
+// node_modules/@opentelemetry/api/build/src/propagation/NoopTextMapPropagator.js
 var require_NoopTextMapPropagator = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/propagation/NoopTextMapPropagator.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/propagation/NoopTextMapPropagator.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NOOP_TEXT_MAP_PROPAGATOR = exports2.NoopTextMapPropagator = void 0;
@@ -34018,9 +34098,9 @@ var require_NoopTextMapPropagator = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/propagation/TextMapPropagator.js
+// node_modules/@opentelemetry/api/build/src/propagation/TextMapPropagator.js
 var require_TextMapPropagator = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/propagation/TextMapPropagator.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/propagation/TextMapPropagator.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.defaultTextMapSetter = exports2.defaultTextMapGetter = void 0;
@@ -34049,41 +34129,41 @@ var require_TextMapPropagator = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/attributes.js
+// node_modules/@opentelemetry/api/build/src/trace/attributes.js
 var require_attributes = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/attributes.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/attributes.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/Event.js
+// node_modules/@opentelemetry/api/build/src/trace/Event.js
 var require_Event = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/Event.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/Event.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/link_context.js
+// node_modules/@opentelemetry/api/build/src/trace/link_context.js
 var require_link_context = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/link_context.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/link_context.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/link.js
+// node_modules/@opentelemetry/api/build/src/trace/link.js
 var require_link = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/link.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/link.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/trace_flags.js
+// node_modules/@opentelemetry/api/build/src/trace/trace_flags.js
 var require_trace_flags = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/trace_flags.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/trace_flags.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.TraceFlags = void 0;
@@ -34095,9 +34175,9 @@ var require_trace_flags = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/spancontext-utils.js
+// node_modules/@opentelemetry/api/build/src/trace/spancontext-utils.js
 var require_spancontext_utils = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/spancontext-utils.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/spancontext-utils.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.isSpanContextValid = exports2.isValidSpanId = exports2.isValidTraceId = exports2.INVALID_SPAN_CONTEXT = exports2.INVALID_TRACEID = exports2.INVALID_SPANID = void 0;
@@ -34129,9 +34209,9 @@ var require_spancontext_utils = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js
+// node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js
 var require_NoopSpan = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NoopSpan = void 0;
@@ -34175,9 +34255,9 @@ var require_NoopSpan = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/context.js
+// node_modules/@opentelemetry/api/build/src/context/context.js
 var require_context = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/context.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/context/context.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ROOT_CONTEXT = exports2.createContextKey = exports2.setBaggage = exports2.getBaggage = exports2.isInstrumentationSuppressed = exports2.unsuppressInstrumentation = exports2.suppressInstrumentation = exports2.getSpanContext = exports2.setSpanContext = exports2.setSpan = exports2.getSpan = void 0;
@@ -34261,9 +34341,9 @@ var require_context = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js
+// node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js
 var require_NoopTracer = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NOOP_TRACER = exports2.NoopTracer = void 0;
@@ -34297,9 +34377,9 @@ var require_NoopTracer = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js
+// node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js
 var require_NoopTracerProvider = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NOOP_TRACER_PROVIDER = exports2.NoopTracerProvider = void 0;
@@ -34318,9 +34398,9 @@ var require_NoopTracerProvider = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js
+// node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js
 var require_ProxyTracer = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProxyTracer = void 0;
@@ -34352,9 +34432,9 @@ var require_ProxyTracer = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/ProxyTracerProvider.js
+// node_modules/@opentelemetry/api/build/src/trace/ProxyTracerProvider.js
 var require_ProxyTracerProvider = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/ProxyTracerProvider.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/ProxyTracerProvider.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProxyTracerProvider = void 0;
@@ -34385,17 +34465,17 @@ var require_ProxyTracerProvider = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/Sampler.js
+// node_modules/@opentelemetry/api/build/src/trace/Sampler.js
 var require_Sampler = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/Sampler.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/Sampler.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js
+// node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js
 var require_SamplingResult = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SamplingDecision = void 0;
@@ -34408,17 +34488,17 @@ var require_SamplingResult = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span_context.js
+// node_modules/@opentelemetry/api/build/src/trace/span_context.js
 var require_span_context = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span_context.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/span_context.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span_kind.js
+// node_modules/@opentelemetry/api/build/src/trace/span_kind.js
 var require_span_kind = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span_kind.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/span_kind.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SpanKind = void 0;
@@ -34433,25 +34513,25 @@ var require_span_kind = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span.js
+// node_modules/@opentelemetry/api/build/src/trace/span.js
 var require_span = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/span.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/span.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js
+// node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js
 var require_SpanOptions = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/status.js
+// node_modules/@opentelemetry/api/build/src/trace/status.js
 var require_status = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/status.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/status.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SpanStatusCode = void 0;
@@ -34464,41 +34544,41 @@ var require_status = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js
+// node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js
 var require_TimedEvent = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/trace_state.js
+// node_modules/@opentelemetry/api/build/src/trace/trace_state.js
 var require_trace_state = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/trace_state.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/trace_state.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js
+// node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js
 var require_tracer_provider = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/tracer.js
+// node_modules/@opentelemetry/api/build/src/trace/tracer.js
 var require_tracer = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/trace/tracer.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/trace/tracer.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js
+// node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js
 var require_NoopContextManager = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js"(exports2) {
     "use strict";
     var __spreadArrays = exports2 && exports2.__spreadArrays || function() {
       for (var s = 0, i = 0, il = arguments.length; i < il; i++)
@@ -34540,17 +34620,17 @@ var require_NoopContextManager = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/types.js
+// node_modules/@opentelemetry/api/build/src/context/types.js
 var require_types2 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/context/types.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/context/types.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js
+// node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js
 var require_globalThis = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2._globalThis = void 0;
@@ -34558,9 +34638,9 @@ var require_globalThis = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/node/index.js
+// node_modules/@opentelemetry/api/build/src/platform/node/index.js
 var require_node = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/node/index.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/platform/node/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -34583,9 +34663,9 @@ var require_node = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/index.js
+// node_modules/@opentelemetry/api/build/src/platform/index.js
 var require_platform = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/platform/index.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/platform/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -34608,9 +34688,9 @@ var require_platform = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/version.js
+// node_modules/@opentelemetry/api/build/src/version.js
 var require_version3 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/version.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/version.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.VERSION = void 0;
@@ -34618,9 +34698,9 @@ var require_version3 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/internal/semver.js
+// node_modules/@opentelemetry/api/build/src/internal/semver.js
 var require_semver2 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/internal/semver.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/internal/semver.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.isCompatible = exports2._makeCompatibilityCheck = void 0;
@@ -34687,9 +34767,9 @@ var require_semver2 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/internal/global-utils.js
+// node_modules/@opentelemetry/api/build/src/internal/global-utils.js
 var require_global_utils = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/internal/global-utils.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/internal/global-utils.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.unregisterGlobal = exports2.getGlobal = exports2.registerGlobal = void 0;
@@ -34744,9 +34824,9 @@ var require_global_utils = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/context.js
+// node_modules/@opentelemetry/api/build/src/api/context.js
 var require_context2 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/context.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/api/context.js"(exports2) {
     "use strict";
     var __spreadArrays = exports2 && exports2.__spreadArrays || function() {
       for (var s = 0, i = 0, il = arguments.length; i < il; i++)
@@ -34806,9 +34886,9 @@ var require_context2 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/trace.js
+// node_modules/@opentelemetry/api/build/src/api/trace.js
 var require_trace = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/trace.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/api/trace.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.TraceAPI = void 0;
@@ -34849,9 +34929,9 @@ var require_trace = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/propagation.js
+// node_modules/@opentelemetry/api/build/src/api/propagation.js
 var require_propagation = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/propagation.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/api/propagation.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.PropagationAPI = void 0;
@@ -34900,9 +34980,9 @@ var require_propagation = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/internal/logLevelLogger.js
+// node_modules/@opentelemetry/api/build/src/diag/internal/logLevelLogger.js
 var require_logLevelLogger = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/diag/internal/logLevelLogger.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/diag/internal/logLevelLogger.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.createLogLevelDiagLogger = void 0;
@@ -34936,9 +35016,9 @@ var require_logLevelLogger = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/diag.js
+// node_modules/@opentelemetry/api/build/src/api/diag.js
 var require_diag2 = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/api/diag.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/api/diag.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DiagAPI = void 0;
@@ -34992,9 +35072,9 @@ var require_diag2 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/index.js
+// node_modules/@opentelemetry/api/build/src/index.js
 var require_src = __commonJS({
-  "node_modules/@azure/core-tracing/node_modules/@opentelemetry/api/build/src/index.js"(exports2) {
+  "node_modules/@opentelemetry/api/build/src/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -38391,9 +38471,9 @@ var require_dist6 = __commonJS({
       if (valueSeparator === void 0) {
         valueSeparator = "/";
       }
-      return telemetryInfo.map(function(info2) {
-        var value = info2.value ? "" + valueSeparator + info2.value : "";
-        return "" + info2.key + value;
+      return telemetryInfo.map(function(info3) {
+        var value = info3.value ? "" + valueSeparator + info3.value : "";
+        return "" + info3.key + value;
       }).join(keySeparator);
     }
     __name(getUserAgentString, "getUserAgentString");
@@ -39980,1541 +40060,8 @@ var require_dist6 = __commonJS({
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/common/Logger.js
-var require_Logger = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/common/Logger.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/common/Time.js
-var require_Time2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/common/Time.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/propagation/getter.js
-var require_getter = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/propagation/getter.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.defaultGetter = void 0;
-    function defaultGetter(carrier, key) {
-      return carrier[key];
-    }
-    __name(defaultGetter, "defaultGetter");
-    exports2.defaultGetter = defaultGetter;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/propagation/HttpTextPropagator.js
-var require_HttpTextPropagator = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/propagation/HttpTextPropagator.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/propagation/NoopHttpTextPropagator.js
-var require_NoopHttpTextPropagator = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/propagation/NoopHttpTextPropagator.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_HTTP_TEXT_PROPAGATOR = exports2.NoopHttpTextPropagator = void 0;
-    var NoopHttpTextPropagator = function() {
-      function NoopHttpTextPropagator2() {
-      }
-      __name(NoopHttpTextPropagator2, "NoopHttpTextPropagator");
-      NoopHttpTextPropagator2.prototype.inject = function(context, carrier, setter) {
-      };
-      NoopHttpTextPropagator2.prototype.extract = function(context, carrier, getter) {
-        return context;
-      };
-      return NoopHttpTextPropagator2;
-    }();
-    exports2.NoopHttpTextPropagator = NoopHttpTextPropagator;
-    exports2.NOOP_HTTP_TEXT_PROPAGATOR = new NoopHttpTextPropagator();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/propagation/setter.js
-var require_setter = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/propagation/setter.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.defaultSetter = void 0;
-    function defaultSetter(carrier, key, value) {
-      carrier[key] = value;
-    }
-    __name(defaultSetter, "defaultSetter");
-    exports2.defaultSetter = defaultSetter;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/correlation_context/CorrelationContext.js
-var require_CorrelationContext = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/correlation_context/CorrelationContext.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/correlation_context/EntryValue.js
-var require_EntryValue = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/correlation_context/EntryValue.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.EntryTtl = void 0;
-    var EntryTtl;
-    (function(EntryTtl2) {
-      EntryTtl2[EntryTtl2["NO_PROPAGATION"] = 0] = "NO_PROPAGATION";
-      EntryTtl2[EntryTtl2["UNLIMITED_PROPAGATION"] = -1] = "UNLIMITED_PROPAGATION";
-    })(EntryTtl = exports2.EntryTtl || (exports2.EntryTtl = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/BatchObserverResult.js
-var require_BatchObserverResult = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/BatchObserverResult.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/BoundInstrument.js
-var require_BoundInstrument = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/BoundInstrument.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/Meter.js
-var require_Meter = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/Meter.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/MeterProvider.js
-var require_MeterProvider = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/MeterProvider.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/Metric.js
-var require_Metric = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/Metric.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ValueType = void 0;
-    var ValueType;
-    (function(ValueType2) {
-      ValueType2[ValueType2["INT"] = 0] = "INT";
-      ValueType2[ValueType2["DOUBLE"] = 1] = "DOUBLE";
-    })(ValueType = exports2.ValueType || (exports2.ValueType = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/NoopMeter.js
-var require_NoopMeter = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/NoopMeter.js"(exports2) {
-    "use strict";
-    var __extends = exports2 && exports2.__extends || function() {
-      var extendStatics = /* @__PURE__ */ __name(function(d, b) {
-        extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
-          d2.__proto__ = b2;
-        } || function(d2, b2) {
-          for (var p in b2)
-            if (b2.hasOwnProperty(p))
-              d2[p] = b2[p];
-        };
-        return extendStatics(d, b);
-      }, "extendStatics");
-      return function(d, b) {
-        extendStatics(d, b);
-        function __() {
-          this.constructor = d;
-        }
-        __name(__, "__");
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-      };
-    }();
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_BATCH_OBSERVER_METRIC = exports2.NOOP_SUM_OBSERVER_METRIC = exports2.NOOP_UP_DOWN_SUM_OBSERVER_METRIC = exports2.NOOP_VALUE_OBSERVER_METRIC = exports2.NOOP_BOUND_BASE_OBSERVER = exports2.NOOP_VALUE_RECORDER_METRIC = exports2.NOOP_BOUND_VALUE_RECORDER = exports2.NOOP_COUNTER_METRIC = exports2.NOOP_BOUND_COUNTER = exports2.NOOP_METER = exports2.NoopBoundBaseObserver = exports2.NoopBoundValueRecorder = exports2.NoopBoundCounter = exports2.NoopBatchObserverMetric = exports2.NoopBaseObserverMetric = exports2.NoopValueRecorderMetric = exports2.NoopCounterMetric = exports2.NoopMetric = exports2.NoopMeter = void 0;
-    var NoopMeter = function() {
-      function NoopMeter2() {
-      }
-      __name(NoopMeter2, "NoopMeter");
-      NoopMeter2.prototype.createValueRecorder = function(name, options) {
-        return exports2.NOOP_VALUE_RECORDER_METRIC;
-      };
-      NoopMeter2.prototype.createCounter = function(name, options) {
-        return exports2.NOOP_COUNTER_METRIC;
-      };
-      NoopMeter2.prototype.createUpDownCounter = function(name, options) {
-        return exports2.NOOP_COUNTER_METRIC;
-      };
-      NoopMeter2.prototype.createValueObserver = function(name, options, callback) {
-        return exports2.NOOP_VALUE_OBSERVER_METRIC;
-      };
-      NoopMeter2.prototype.createBatchObserver = function(name, callback) {
-        return exports2.NOOP_BATCH_OBSERVER_METRIC;
-      };
-      return NoopMeter2;
-    }();
-    exports2.NoopMeter = NoopMeter;
-    var NoopMetric = function() {
-      function NoopMetric2(instrument) {
-        this._instrument = instrument;
-      }
-      __name(NoopMetric2, "NoopMetric");
-      NoopMetric2.prototype.bind = function(labels) {
-        return this._instrument;
-      };
-      NoopMetric2.prototype.unbind = function(labels) {
-        return;
-      };
-      NoopMetric2.prototype.clear = function() {
-        return;
-      };
-      return NoopMetric2;
-    }();
-    exports2.NoopMetric = NoopMetric;
-    var NoopCounterMetric = function(_super) {
-      __extends(NoopCounterMetric2, _super);
-      function NoopCounterMetric2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-      }
-      __name(NoopCounterMetric2, "NoopCounterMetric");
-      NoopCounterMetric2.prototype.add = function(value, labels) {
-        this.bind(labels).add(value);
-      };
-      return NoopCounterMetric2;
-    }(NoopMetric);
-    exports2.NoopCounterMetric = NoopCounterMetric;
-    var NoopValueRecorderMetric = function(_super) {
-      __extends(NoopValueRecorderMetric2, _super);
-      function NoopValueRecorderMetric2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-      }
-      __name(NoopValueRecorderMetric2, "NoopValueRecorderMetric");
-      NoopValueRecorderMetric2.prototype.record = function(value, labels, correlationContext, spanContext) {
-        if (typeof correlationContext === "undefined") {
-          this.bind(labels).record(value);
-        } else if (typeof spanContext === "undefined") {
-          this.bind(labels).record(value, correlationContext);
-        } else {
-          this.bind(labels).record(value, correlationContext, spanContext);
-        }
-      };
-      return NoopValueRecorderMetric2;
-    }(NoopMetric);
-    exports2.NoopValueRecorderMetric = NoopValueRecorderMetric;
-    var NoopBaseObserverMetric = function(_super) {
-      __extends(NoopBaseObserverMetric2, _super);
-      function NoopBaseObserverMetric2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-      }
-      __name(NoopBaseObserverMetric2, "NoopBaseObserverMetric");
-      NoopBaseObserverMetric2.prototype.observation = function() {
-        return {
-          observer: this,
-          value: 0
-        };
-      };
-      return NoopBaseObserverMetric2;
-    }(NoopMetric);
-    exports2.NoopBaseObserverMetric = NoopBaseObserverMetric;
-    var NoopBatchObserverMetric = function(_super) {
-      __extends(NoopBatchObserverMetric2, _super);
-      function NoopBatchObserverMetric2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-      }
-      __name(NoopBatchObserverMetric2, "NoopBatchObserverMetric");
-      return NoopBatchObserverMetric2;
-    }(NoopMetric);
-    exports2.NoopBatchObserverMetric = NoopBatchObserverMetric;
-    var NoopBoundCounter = function() {
-      function NoopBoundCounter2() {
-      }
-      __name(NoopBoundCounter2, "NoopBoundCounter");
-      NoopBoundCounter2.prototype.add = function(value) {
-        return;
-      };
-      return NoopBoundCounter2;
-    }();
-    exports2.NoopBoundCounter = NoopBoundCounter;
-    var NoopBoundValueRecorder = function() {
-      function NoopBoundValueRecorder2() {
-      }
-      __name(NoopBoundValueRecorder2, "NoopBoundValueRecorder");
-      NoopBoundValueRecorder2.prototype.record = function(value, correlationContext, spanContext) {
-        return;
-      };
-      return NoopBoundValueRecorder2;
-    }();
-    exports2.NoopBoundValueRecorder = NoopBoundValueRecorder;
-    var NoopBoundBaseObserver = function() {
-      function NoopBoundBaseObserver2() {
-      }
-      __name(NoopBoundBaseObserver2, "NoopBoundBaseObserver");
-      NoopBoundBaseObserver2.prototype.update = function(value) {
-      };
-      return NoopBoundBaseObserver2;
-    }();
-    exports2.NoopBoundBaseObserver = NoopBoundBaseObserver;
-    exports2.NOOP_METER = new NoopMeter();
-    exports2.NOOP_BOUND_COUNTER = new NoopBoundCounter();
-    exports2.NOOP_COUNTER_METRIC = new NoopCounterMetric(exports2.NOOP_BOUND_COUNTER);
-    exports2.NOOP_BOUND_VALUE_RECORDER = new NoopBoundValueRecorder();
-    exports2.NOOP_VALUE_RECORDER_METRIC = new NoopValueRecorderMetric(exports2.NOOP_BOUND_VALUE_RECORDER);
-    exports2.NOOP_BOUND_BASE_OBSERVER = new NoopBoundBaseObserver();
-    exports2.NOOP_VALUE_OBSERVER_METRIC = new NoopBaseObserverMetric(exports2.NOOP_BOUND_BASE_OBSERVER);
-    exports2.NOOP_UP_DOWN_SUM_OBSERVER_METRIC = new NoopBaseObserverMetric(exports2.NOOP_BOUND_BASE_OBSERVER);
-    exports2.NOOP_SUM_OBSERVER_METRIC = new NoopBaseObserverMetric(exports2.NOOP_BOUND_BASE_OBSERVER);
-    exports2.NOOP_BATCH_OBSERVER_METRIC = new NoopBatchObserverMetric();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/NoopMeterProvider.js
-var require_NoopMeterProvider = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/NoopMeterProvider.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_METER_PROVIDER = exports2.NoopMeterProvider = void 0;
-    var NoopMeter_1 = require_NoopMeter();
-    var NoopMeterProvider = function() {
-      function NoopMeterProvider2() {
-      }
-      __name(NoopMeterProvider2, "NoopMeterProvider");
-      NoopMeterProvider2.prototype.getMeter = function(_name, _version) {
-        return NoopMeter_1.NOOP_METER;
-      };
-      return NoopMeterProvider2;
-    }();
-    exports2.NoopMeterProvider = NoopMeterProvider;
-    exports2.NOOP_METER_PROVIDER = new NoopMeterProvider();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/Observation.js
-var require_Observation = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/Observation.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/metrics/ObserverResult.js
-var require_ObserverResult = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/metrics/ObserverResult.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/attributes.js
-var require_attributes2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/attributes.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/Event.js
-var require_Event2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/Event.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/instrumentation/Plugin.js
-var require_Plugin = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/instrumentation/Plugin.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/link_context.js
-var require_link_context2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/link_context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/link.js
-var require_link2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/link.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/trace_flags.js
-var require_trace_flags2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/trace_flags.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.TraceFlags = void 0;
-    var TraceFlags;
-    (function(TraceFlags2) {
-      TraceFlags2[TraceFlags2["NONE"] = 0] = "NONE";
-      TraceFlags2[TraceFlags2["SAMPLED"] = 1] = "SAMPLED";
-    })(TraceFlags = exports2.TraceFlags || (exports2.TraceFlags = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js
-var require_NoopSpan2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/NoopSpan.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_SPAN = exports2.NoopSpan = exports2.INVALID_SPAN_ID = exports2.INVALID_TRACE_ID = void 0;
-    var trace_flags_1 = require_trace_flags2();
-    exports2.INVALID_TRACE_ID = "0";
-    exports2.INVALID_SPAN_ID = "0";
-    var INVALID_SPAN_CONTEXT = {
-      traceId: exports2.INVALID_TRACE_ID,
-      spanId: exports2.INVALID_SPAN_ID,
-      traceFlags: trace_flags_1.TraceFlags.NONE
-    };
-    var NoopSpan = function() {
-      function NoopSpan2(_spanContext) {
-        if (_spanContext === void 0) {
-          _spanContext = INVALID_SPAN_CONTEXT;
-        }
-        this._spanContext = _spanContext;
-      }
-      __name(NoopSpan2, "NoopSpan");
-      NoopSpan2.prototype.context = function() {
-        return this._spanContext;
-      };
-      NoopSpan2.prototype.setAttribute = function(key, value) {
-        return this;
-      };
-      NoopSpan2.prototype.setAttributes = function(attributes) {
-        return this;
-      };
-      NoopSpan2.prototype.addEvent = function(name, attributes) {
-        return this;
-      };
-      NoopSpan2.prototype.setStatus = function(status) {
-        return this;
-      };
-      NoopSpan2.prototype.updateName = function(name) {
-        return this;
-      };
-      NoopSpan2.prototype.end = function(endTime) {
-      };
-      NoopSpan2.prototype.isRecording = function() {
-        return false;
-      };
-      return NoopSpan2;
-    }();
-    exports2.NoopSpan = NoopSpan;
-    exports2.NOOP_SPAN = new NoopSpan();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js
-var require_NoopTracer2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_TRACER = exports2.NoopTracer = void 0;
-    var NoopSpan_1 = require_NoopSpan2();
-    var NoopTracer = function() {
-      function NoopTracer2() {
-      }
-      __name(NoopTracer2, "NoopTracer");
-      NoopTracer2.prototype.getCurrentSpan = function() {
-        return NoopSpan_1.NOOP_SPAN;
-      };
-      NoopTracer2.prototype.startSpan = function(name, options) {
-        return NoopSpan_1.NOOP_SPAN;
-      };
-      NoopTracer2.prototype.withSpan = function(span, fn) {
-        return fn();
-      };
-      NoopTracer2.prototype.bind = function(target, span) {
-        return target;
-      };
-      return NoopTracer2;
-    }();
-    exports2.NoopTracer = NoopTracer;
-    exports2.NOOP_TRACER = new NoopTracer();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js
-var require_NoopTracerProvider2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/NoopTracerProvider.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NOOP_TRACER_PROVIDER = exports2.NoopTracerProvider = void 0;
-    var NoopTracer_1 = require_NoopTracer2();
-    var NoopTracerProvider = function() {
-      function NoopTracerProvider2() {
-      }
-      __name(NoopTracerProvider2, "NoopTracerProvider");
-      NoopTracerProvider2.prototype.getTracer = function(_name, _version) {
-        return NoopTracer_1.NOOP_TRACER;
-      };
-      return NoopTracerProvider2;
-    }();
-    exports2.NoopTracerProvider = NoopTracerProvider;
-    exports2.NOOP_TRACER_PROVIDER = new NoopTracerProvider();
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/Sampler.js
-var require_Sampler2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/Sampler.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js
-var require_SamplingResult2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/SamplingResult.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.SamplingDecision = void 0;
-    var SamplingDecision;
-    (function(SamplingDecision2) {
-      SamplingDecision2[SamplingDecision2["NOT_RECORD"] = 0] = "NOT_RECORD";
-      SamplingDecision2[SamplingDecision2["RECORD"] = 1] = "RECORD";
-      SamplingDecision2[SamplingDecision2["RECORD_AND_SAMPLED"] = 2] = "RECORD_AND_SAMPLED";
-    })(SamplingDecision = exports2.SamplingDecision || (exports2.SamplingDecision = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/span_context.js
-var require_span_context2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/span_context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/span_kind.js
-var require_span_kind2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/span_kind.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.SpanKind = void 0;
-    var SpanKind;
-    (function(SpanKind2) {
-      SpanKind2[SpanKind2["INTERNAL"] = 0] = "INTERNAL";
-      SpanKind2[SpanKind2["SERVER"] = 1] = "SERVER";
-      SpanKind2[SpanKind2["CLIENT"] = 2] = "CLIENT";
-      SpanKind2[SpanKind2["PRODUCER"] = 3] = "PRODUCER";
-      SpanKind2[SpanKind2["CONSUMER"] = 4] = "CONSUMER";
-    })(SpanKind = exports2.SpanKind || (exports2.SpanKind = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/span.js
-var require_span2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/span.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js
-var require_SpanOptions2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/status.js
-var require_status2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/status.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.CanonicalCode = void 0;
-    var CanonicalCode;
-    (function(CanonicalCode2) {
-      CanonicalCode2[CanonicalCode2["OK"] = 0] = "OK";
-      CanonicalCode2[CanonicalCode2["CANCELLED"] = 1] = "CANCELLED";
-      CanonicalCode2[CanonicalCode2["UNKNOWN"] = 2] = "UNKNOWN";
-      CanonicalCode2[CanonicalCode2["INVALID_ARGUMENT"] = 3] = "INVALID_ARGUMENT";
-      CanonicalCode2[CanonicalCode2["DEADLINE_EXCEEDED"] = 4] = "DEADLINE_EXCEEDED";
-      CanonicalCode2[CanonicalCode2["NOT_FOUND"] = 5] = "NOT_FOUND";
-      CanonicalCode2[CanonicalCode2["ALREADY_EXISTS"] = 6] = "ALREADY_EXISTS";
-      CanonicalCode2[CanonicalCode2["PERMISSION_DENIED"] = 7] = "PERMISSION_DENIED";
-      CanonicalCode2[CanonicalCode2["RESOURCE_EXHAUSTED"] = 8] = "RESOURCE_EXHAUSTED";
-      CanonicalCode2[CanonicalCode2["FAILED_PRECONDITION"] = 9] = "FAILED_PRECONDITION";
-      CanonicalCode2[CanonicalCode2["ABORTED"] = 10] = "ABORTED";
-      CanonicalCode2[CanonicalCode2["OUT_OF_RANGE"] = 11] = "OUT_OF_RANGE";
-      CanonicalCode2[CanonicalCode2["UNIMPLEMENTED"] = 12] = "UNIMPLEMENTED";
-      CanonicalCode2[CanonicalCode2["INTERNAL"] = 13] = "INTERNAL";
-      CanonicalCode2[CanonicalCode2["UNAVAILABLE"] = 14] = "UNAVAILABLE";
-      CanonicalCode2[CanonicalCode2["DATA_LOSS"] = 15] = "DATA_LOSS";
-      CanonicalCode2[CanonicalCode2["UNAUTHENTICATED"] = 16] = "UNAUTHENTICATED";
-    })(CanonicalCode = exports2.CanonicalCode || (exports2.CanonicalCode = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js
-var require_TimedEvent2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/TimedEvent.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/trace_state.js
-var require_trace_state2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/trace_state.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js
-var require_tracer_provider2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/tracer.js
-var require_tracer2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/tracer.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/context-base/build/src/types.js
-var require_types3 = __commonJS({
-  "node_modules/@opentelemetry/context-base/build/src/types.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/context-base/build/src/context.js
-var require_context3 = __commonJS({
-  "node_modules/@opentelemetry/context-base/build/src/context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.Context = void 0;
-    var Context = function() {
-      function Context2(parentContext) {
-        this._currentContext = parentContext ? new Map(parentContext) : new Map();
-      }
-      __name(Context2, "Context");
-      Context2.createKey = function(description) {
-        return Symbol(description);
-      };
-      Context2.prototype.getValue = function(key) {
-        return this._currentContext.get(key);
-      };
-      Context2.prototype.setValue = function(key, value) {
-        var context = new Context2(this._currentContext);
-        context._currentContext.set(key, value);
-        return context;
-      };
-      Context2.prototype.deleteValue = function(key) {
-        var context = new Context2(this._currentContext);
-        context._currentContext.delete(key);
-        return context;
-      };
-      Context2.ROOT_CONTEXT = new Context2();
-      Context2.TODO = Context2.ROOT_CONTEXT;
-      return Context2;
-    }();
-    exports2.Context = Context;
-  }
-});
-
-// node_modules/@opentelemetry/context-base/build/src/NoopContextManager.js
-var require_NoopContextManager2 = __commonJS({
-  "node_modules/@opentelemetry/context-base/build/src/NoopContextManager.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.NoopContextManager = void 0;
-    var context_1 = require_context3();
-    var NoopContextManager = function() {
-      function NoopContextManager2() {
-      }
-      __name(NoopContextManager2, "NoopContextManager");
-      NoopContextManager2.prototype.active = function() {
-        return context_1.Context.ROOT_CONTEXT;
-      };
-      NoopContextManager2.prototype.with = function(context, fn) {
-        return fn();
-      };
-      NoopContextManager2.prototype.bind = function(target, context) {
-        return target;
-      };
-      NoopContextManager2.prototype.enable = function() {
-        return this;
-      };
-      NoopContextManager2.prototype.disable = function() {
-        return this;
-      };
-      return NoopContextManager2;
-    }();
-    exports2.NoopContextManager = NoopContextManager;
-  }
-});
-
-// node_modules/@opentelemetry/context-base/build/src/index.js
-var require_src2 = __commonJS({
-  "node_modules/@opentelemetry/context-base/build/src/index.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !exports3.hasOwnProperty(p))
-          __createBinding(exports3, m, p);
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar(require_types3(), exports2);
-    __exportStar(require_context3(), exports2);
-    __exportStar(require_NoopContextManager2(), exports2);
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js
-var require_globalThis2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/platform/node/globalThis.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2._globalThis = void 0;
-    exports2._globalThis = typeof globalThis === "object" ? globalThis : global;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/platform/node/index.js
-var require_node2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/platform/node/index.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !exports3.hasOwnProperty(p))
-          __createBinding(exports3, m, p);
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar(require_globalThis2(), exports2);
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/platform/index.js
-var require_platform2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/platform/index.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !exports3.hasOwnProperty(p))
-          __createBinding(exports3, m, p);
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar(require_node2(), exports2);
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/global-utils.js
-var require_global_utils2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/global-utils.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.API_BACKWARDS_COMPATIBILITY_VERSION = exports2.makeGetter = exports2._global = exports2.GLOBAL_TRACE_API_KEY = exports2.GLOBAL_PROPAGATION_API_KEY = exports2.GLOBAL_METRICS_API_KEY = exports2.GLOBAL_CONTEXT_MANAGER_API_KEY = void 0;
-    var platform_1 = require_platform2();
-    exports2.GLOBAL_CONTEXT_MANAGER_API_KEY = Symbol.for("io.opentelemetry.js.api.context");
-    exports2.GLOBAL_METRICS_API_KEY = Symbol.for("io.opentelemetry.js.api.metrics");
-    exports2.GLOBAL_PROPAGATION_API_KEY = Symbol.for("io.opentelemetry.js.api.propagation");
-    exports2.GLOBAL_TRACE_API_KEY = Symbol.for("io.opentelemetry.js.api.trace");
-    exports2._global = platform_1._globalThis;
-    function makeGetter(requiredVersion, instance, fallback) {
-      return function(version) {
-        return version === requiredVersion ? instance : fallback;
-      };
-    }
-    __name(makeGetter, "makeGetter");
-    exports2.makeGetter = makeGetter;
-    exports2.API_BACKWARDS_COMPATIBILITY_VERSION = 0;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/context.js
-var require_context4 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ContextAPI = void 0;
-    var context_base_1 = require_src2();
-    var global_utils_1 = require_global_utils2();
-    var NOOP_CONTEXT_MANAGER = new context_base_1.NoopContextManager();
-    var ContextAPI = function() {
-      function ContextAPI2() {
-      }
-      __name(ContextAPI2, "ContextAPI");
-      ContextAPI2.getInstance = function() {
-        if (!this._instance) {
-          this._instance = new ContextAPI2();
-        }
-        return this._instance;
-      };
-      ContextAPI2.prototype.setGlobalContextManager = function(contextManager) {
-        if (global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY]) {
-          return this._getContextManager();
-        }
-        global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, contextManager, NOOP_CONTEXT_MANAGER);
-        return contextManager;
-      };
-      ContextAPI2.prototype.active = function() {
-        return this._getContextManager().active();
-      };
-      ContextAPI2.prototype.with = function(context, fn) {
-        return this._getContextManager().with(context, fn);
-      };
-      ContextAPI2.prototype.bind = function(target, context) {
-        if (context === void 0) {
-          context = this.active();
-        }
-        return this._getContextManager().bind(target, context);
-      };
-      ContextAPI2.prototype._getContextManager = function() {
-        var _a, _b;
-        return (_b = (_a = global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY]) === null || _a === void 0 ? void 0 : _a.call(global_utils_1._global, global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION)) !== null && _b !== void 0 ? _b : NOOP_CONTEXT_MANAGER;
-      };
-      ContextAPI2.prototype.disable = function() {
-        this._getContextManager().disable();
-        delete global_utils_1._global[global_utils_1.GLOBAL_CONTEXT_MANAGER_API_KEY];
-      };
-      return ContextAPI2;
-    }();
-    exports2.ContextAPI = ContextAPI;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/trace.js
-var require_trace2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/trace.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.TraceAPI = void 0;
-    var NoopTracerProvider_1 = require_NoopTracerProvider2();
-    var global_utils_1 = require_global_utils2();
-    var TraceAPI = function() {
-      function TraceAPI2() {
-      }
-      __name(TraceAPI2, "TraceAPI");
-      TraceAPI2.getInstance = function() {
-        if (!this._instance) {
-          this._instance = new TraceAPI2();
-        }
-        return this._instance;
-      };
-      TraceAPI2.prototype.setGlobalTracerProvider = function(provider) {
-        if (global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY]) {
-          return this.getTracerProvider();
-        }
-        global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, provider, NoopTracerProvider_1.NOOP_TRACER_PROVIDER);
-        return this.getTracerProvider();
-      };
-      TraceAPI2.prototype.getTracerProvider = function() {
-        var _a, _b;
-        return (_b = (_a = global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY]) === null || _a === void 0 ? void 0 : _a.call(global_utils_1._global, global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION)) !== null && _b !== void 0 ? _b : NoopTracerProvider_1.NOOP_TRACER_PROVIDER;
-      };
-      TraceAPI2.prototype.getTracer = function(name, version) {
-        return this.getTracerProvider().getTracer(name, version);
-      };
-      TraceAPI2.prototype.disable = function() {
-        delete global_utils_1._global[global_utils_1.GLOBAL_TRACE_API_KEY];
-      };
-      return TraceAPI2;
-    }();
-    exports2.TraceAPI = TraceAPI;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/metrics.js
-var require_metrics = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/metrics.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.MetricsAPI = void 0;
-    var NoopMeterProvider_1 = require_NoopMeterProvider();
-    var global_utils_1 = require_global_utils2();
-    var MetricsAPI = function() {
-      function MetricsAPI2() {
-      }
-      __name(MetricsAPI2, "MetricsAPI");
-      MetricsAPI2.getInstance = function() {
-        if (!this._instance) {
-          this._instance = new MetricsAPI2();
-        }
-        return this._instance;
-      };
-      MetricsAPI2.prototype.setGlobalMeterProvider = function(provider) {
-        if (global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY]) {
-          return this.getMeterProvider();
-        }
-        global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, provider, NoopMeterProvider_1.NOOP_METER_PROVIDER);
-        return provider;
-      };
-      MetricsAPI2.prototype.getMeterProvider = function() {
-        var _a, _b;
-        return (_b = (_a = global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY]) === null || _a === void 0 ? void 0 : _a.call(global_utils_1._global, global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION)) !== null && _b !== void 0 ? _b : NoopMeterProvider_1.NOOP_METER_PROVIDER;
-      };
-      MetricsAPI2.prototype.getMeter = function(name, version) {
-        return this.getMeterProvider().getMeter(name, version);
-      };
-      MetricsAPI2.prototype.disable = function() {
-        delete global_utils_1._global[global_utils_1.GLOBAL_METRICS_API_KEY];
-      };
-      return MetricsAPI2;
-    }();
-    exports2.MetricsAPI = MetricsAPI;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/propagation.js
-var require_propagation2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/propagation.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.PropagationAPI = void 0;
-    var getter_1 = require_getter();
-    var NoopHttpTextPropagator_1 = require_NoopHttpTextPropagator();
-    var setter_1 = require_setter();
-    var context_1 = require_context4();
-    var global_utils_1 = require_global_utils2();
-    var contextApi = context_1.ContextAPI.getInstance();
-    var PropagationAPI = function() {
-      function PropagationAPI2() {
-      }
-      __name(PropagationAPI2, "PropagationAPI");
-      PropagationAPI2.getInstance = function() {
-        if (!this._instance) {
-          this._instance = new PropagationAPI2();
-        }
-        return this._instance;
-      };
-      PropagationAPI2.prototype.setGlobalPropagator = function(propagator) {
-        if (global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY]) {
-          return this._getGlobalPropagator();
-        }
-        global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY] = global_utils_1.makeGetter(global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION, propagator, NoopHttpTextPropagator_1.NOOP_HTTP_TEXT_PROPAGATOR);
-        return propagator;
-      };
-      PropagationAPI2.prototype.inject = function(carrier, setter, context) {
-        if (setter === void 0) {
-          setter = setter_1.defaultSetter;
-        }
-        if (context === void 0) {
-          context = contextApi.active();
-        }
-        return this._getGlobalPropagator().inject(context, carrier, setter);
-      };
-      PropagationAPI2.prototype.extract = function(carrier, getter, context) {
-        if (getter === void 0) {
-          getter = getter_1.defaultGetter;
-        }
-        if (context === void 0) {
-          context = contextApi.active();
-        }
-        return this._getGlobalPropagator().extract(context, carrier, getter);
-      };
-      PropagationAPI2.prototype.disable = function() {
-        delete global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY];
-      };
-      PropagationAPI2.prototype._getGlobalPropagator = function() {
-        var _a, _b;
-        return (_b = (_a = global_utils_1._global[global_utils_1.GLOBAL_PROPAGATION_API_KEY]) === null || _a === void 0 ? void 0 : _a.call(global_utils_1._global, global_utils_1.API_BACKWARDS_COMPATIBILITY_VERSION)) !== null && _b !== void 0 ? _b : NoopHttpTextPropagator_1.NOOP_HTTP_TEXT_PROPAGATOR;
-      };
-      return PropagationAPI2;
-    }();
-    exports2.PropagationAPI = PropagationAPI;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/index.js
-var require_src3 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/index.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !exports3.hasOwnProperty(p))
-          __createBinding(exports3, m, p);
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.propagation = exports2.metrics = exports2.trace = exports2.context = void 0;
-    __exportStar(require_Logger(), exports2);
-    __exportStar(require_Time2(), exports2);
-    __exportStar(require_getter(), exports2);
-    __exportStar(require_HttpTextPropagator(), exports2);
-    __exportStar(require_NoopHttpTextPropagator(), exports2);
-    __exportStar(require_setter(), exports2);
-    __exportStar(require_CorrelationContext(), exports2);
-    __exportStar(require_EntryValue(), exports2);
-    __exportStar(require_BatchObserverResult(), exports2);
-    __exportStar(require_BoundInstrument(), exports2);
-    __exportStar(require_Meter(), exports2);
-    __exportStar(require_MeterProvider(), exports2);
-    __exportStar(require_Metric(), exports2);
-    __exportStar(require_NoopMeter(), exports2);
-    __exportStar(require_NoopMeterProvider(), exports2);
-    __exportStar(require_Observation(), exports2);
-    __exportStar(require_ObserverResult(), exports2);
-    __exportStar(require_attributes2(), exports2);
-    __exportStar(require_Event2(), exports2);
-    __exportStar(require_Plugin(), exports2);
-    __exportStar(require_link_context2(), exports2);
-    __exportStar(require_link2(), exports2);
-    __exportStar(require_NoopSpan2(), exports2);
-    __exportStar(require_NoopTracer2(), exports2);
-    __exportStar(require_NoopTracerProvider2(), exports2);
-    __exportStar(require_Sampler2(), exports2);
-    __exportStar(require_SamplingResult2(), exports2);
-    __exportStar(require_span_context2(), exports2);
-    __exportStar(require_span_kind2(), exports2);
-    __exportStar(require_span2(), exports2);
-    __exportStar(require_SpanOptions2(), exports2);
-    __exportStar(require_status2(), exports2);
-    __exportStar(require_TimedEvent2(), exports2);
-    __exportStar(require_trace_flags2(), exports2);
-    __exportStar(require_trace_state2(), exports2);
-    __exportStar(require_tracer_provider2(), exports2);
-    __exportStar(require_tracer2(), exports2);
-    var context_base_1 = require_src2();
-    Object.defineProperty(exports2, "Context", { enumerable: true, get: function() {
-      return context_base_1.Context;
-    } });
-    var context_1 = require_context4();
-    exports2.context = context_1.ContextAPI.getInstance();
-    var trace_1 = require_trace2();
-    exports2.trace = trace_1.TraceAPI.getInstance();
-    var metrics_1 = require_metrics();
-    exports2.metrics = metrics_1.MetricsAPI.getInstance();
-    var propagation_1 = require_propagation2();
-    exports2.propagation = propagation_1.PropagationAPI.getInstance();
-    exports2.default = {
-      trace: exports2.trace,
-      metrics: exports2.metrics,
-      context: exports2.context,
-      propagation: exports2.propagation
-    };
-  }
-});
-
-// node_modules/@azure/storage-blob/node_modules/@azure/core-tracing/dist/index.js
-var require_dist7 = __commonJS({
-  "node_modules/@azure/storage-blob/node_modules/@azure/core-tracing/dist/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var api = require_src3();
-    var tslib = require_tslib();
-    var NoOpSpan = function() {
-      function NoOpSpan2() {
-      }
-      __name(NoOpSpan2, "NoOpSpan");
-      NoOpSpan2.prototype.context = function() {
-        return {
-          spanId: "",
-          traceId: "",
-          traceFlags: api.TraceFlags.NONE
-        };
-      };
-      NoOpSpan2.prototype.end = function(_endTime) {
-      };
-      NoOpSpan2.prototype.setAttribute = function(_key, _value) {
-        return this;
-      };
-      NoOpSpan2.prototype.setAttributes = function(_attributes) {
-        return this;
-      };
-      NoOpSpan2.prototype.addEvent = function(_name, _attributes) {
-        return this;
-      };
-      NoOpSpan2.prototype.setStatus = function(_status) {
-        return this;
-      };
-      NoOpSpan2.prototype.updateName = function(_name) {
-        return this;
-      };
-      NoOpSpan2.prototype.isRecording = function() {
-        return false;
-      };
-      return NoOpSpan2;
-    }();
-    var NoOpTracer = function() {
-      function NoOpTracer2() {
-      }
-      __name(NoOpTracer2, "NoOpTracer");
-      NoOpTracer2.prototype.startSpan = function(_name, _options) {
-        return new NoOpSpan();
-      };
-      NoOpTracer2.prototype.getCurrentSpan = function() {
-        return new NoOpSpan();
-      };
-      NoOpTracer2.prototype.withSpan = function(_span, fn) {
-        return fn();
-      };
-      NoOpTracer2.prototype.bind = function(target, _span) {
-        return target;
-      };
-      return NoOpTracer2;
-    }();
-    function getGlobalObject() {
-      return global;
-    }
-    __name(getGlobalObject, "getGlobalObject");
-    var GLOBAL_TRACER_VERSION = 3;
-    var GLOBAL_TRACER_SYMBOL = Symbol.for("@azure/core-tracing.tracerCache2");
-    var cache;
-    function loadTracerCache() {
-      var globalObj = getGlobalObject();
-      var existingCache = globalObj[GLOBAL_TRACER_SYMBOL];
-      var setGlobalCache = true;
-      if (existingCache) {
-        if (existingCache.version === GLOBAL_TRACER_VERSION) {
-          cache = existingCache;
-        } else {
-          setGlobalCache = false;
-          if (existingCache.tracer) {
-            throw new Error("Two incompatible versions of @azure/core-tracing have been loaded.\n          This library is " + GLOBAL_TRACER_VERSION + ", existing is " + existingCache.version + ".");
-          }
-        }
-      }
-      if (!cache) {
-        cache = {
-          tracer: void 0,
-          version: GLOBAL_TRACER_VERSION
-        };
-      }
-      if (setGlobalCache) {
-        globalObj[GLOBAL_TRACER_SYMBOL] = cache;
-      }
-    }
-    __name(loadTracerCache, "loadTracerCache");
-    function getCache() {
-      if (!cache) {
-        loadTracerCache();
-      }
-      return cache;
-    }
-    __name(getCache, "getCache");
-    var defaultTracer;
-    function getDefaultTracer() {
-      if (!defaultTracer) {
-        defaultTracer = new NoOpTracer();
-      }
-      return defaultTracer;
-    }
-    __name(getDefaultTracer, "getDefaultTracer");
-    function setTracer(tracer) {
-      var cache2 = getCache();
-      cache2.tracer = tracer;
-    }
-    __name(setTracer, "setTracer");
-    function getTracer() {
-      var cache2 = getCache();
-      if (!cache2.tracer) {
-        return getDefaultTracer();
-      }
-      return cache2.tracer;
-    }
-    __name(getTracer, "getTracer");
-    var OpenCensusTraceStateWrapper = function() {
-      function OpenCensusTraceStateWrapper2(state) {
-        this._state = state;
-      }
-      __name(OpenCensusTraceStateWrapper2, "OpenCensusTraceStateWrapper");
-      OpenCensusTraceStateWrapper2.prototype.get = function(_key) {
-        throw new Error("Method not implemented.");
-      };
-      OpenCensusTraceStateWrapper2.prototype.set = function(_key, _value) {
-        throw new Error("Method not implemented.");
-      };
-      OpenCensusTraceStateWrapper2.prototype.unset = function(_key) {
-        throw new Error("Method not implemented");
-      };
-      OpenCensusTraceStateWrapper2.prototype.serialize = function() {
-        return this._state || "";
-      };
-      return OpenCensusTraceStateWrapper2;
-    }();
-    function isWrappedSpan(span) {
-      return !!span && span.getWrappedSpan !== void 0;
-    }
-    __name(isWrappedSpan, "isWrappedSpan");
-    function isTracer(tracerOrSpan) {
-      return tracerOrSpan.getWrappedTracer !== void 0;
-    }
-    __name(isTracer, "isTracer");
-    var OpenCensusSpanWrapper = function() {
-      function OpenCensusSpanWrapper2(tracerOrSpan, name, options) {
-        if (name === void 0) {
-          name = "";
-        }
-        if (options === void 0) {
-          options = {};
-        }
-        if (isTracer(tracerOrSpan)) {
-          var parent = isWrappedSpan(options.parent) ? options.parent.getWrappedSpan() : void 0;
-          this._span = tracerOrSpan.getWrappedTracer().startChildSpan({
-            name,
-            childOf: parent
-          });
-          this._span.start();
-          if (options.links) {
-            for (var _i = 0, _a = options.links; _i < _a.length; _i++) {
-              var link = _a[_i];
-              this._span.addLink(link.context.traceId, link.context.spanId, 0, link.attributes);
-            }
-          }
-        } else {
-          this._span = tracerOrSpan;
-        }
-      }
-      __name(OpenCensusSpanWrapper2, "OpenCensusSpanWrapper");
-      OpenCensusSpanWrapper2.prototype.getWrappedSpan = function() {
-        return this._span;
-      };
-      OpenCensusSpanWrapper2.prototype.end = function(_endTime) {
-        this._span.end();
-      };
-      OpenCensusSpanWrapper2.prototype.context = function() {
-        var openCensusSpanContext = this._span.spanContext;
-        return {
-          spanId: openCensusSpanContext.spanId,
-          traceId: openCensusSpanContext.traceId,
-          traceFlags: openCensusSpanContext.options,
-          traceState: new OpenCensusTraceStateWrapper(openCensusSpanContext.traceState)
-        };
-      };
-      OpenCensusSpanWrapper2.prototype.setAttribute = function(key, value) {
-        this._span.addAttribute(key, value);
-        return this;
-      };
-      OpenCensusSpanWrapper2.prototype.setAttributes = function(attributes) {
-        this._span.attributes = attributes;
-        return this;
-      };
-      OpenCensusSpanWrapper2.prototype.addEvent = function(_name, _attributes) {
-        throw new Error("Method not implemented.");
-      };
-      OpenCensusSpanWrapper2.prototype.setStatus = function(status) {
-        this._span.setStatus(status.code, status.message);
-        return this;
-      };
-      OpenCensusSpanWrapper2.prototype.updateName = function(name) {
-        this._span.name = name;
-        return this;
-      };
-      OpenCensusSpanWrapper2.prototype.isRecording = function() {
-        return !!this._span.traceId;
-      };
-      return OpenCensusSpanWrapper2;
-    }();
-    var OpenCensusTracerWrapper = function() {
-      function OpenCensusTracerWrapper2(tracer) {
-        this._tracer = tracer;
-      }
-      __name(OpenCensusTracerWrapper2, "OpenCensusTracerWrapper");
-      OpenCensusTracerWrapper2.prototype.getWrappedTracer = function() {
-        return this._tracer;
-      };
-      OpenCensusTracerWrapper2.prototype.startSpan = function(name, options) {
-        return new OpenCensusSpanWrapper(this, name, options);
-      };
-      OpenCensusTracerWrapper2.prototype.getCurrentSpan = function() {
-        return void 0;
-      };
-      OpenCensusTracerWrapper2.prototype.withSpan = function(_span, _fn) {
-        throw new Error("Method not implemented.");
-      };
-      OpenCensusTracerWrapper2.prototype.bind = function(_target, _span) {
-        throw new Error("Method not implemented.");
-      };
-      return OpenCensusTracerWrapper2;
-    }();
-    var TestSpan = function(_super) {
-      tslib.__extends(TestSpan2, _super);
-      function TestSpan2(parentTracer, name, context, kind, parentSpanId, startTime) {
-        if (startTime === void 0) {
-          startTime = Date.now();
-        }
-        var _this = _super.call(this) || this;
-        _this._tracer = parentTracer;
-        _this.name = name;
-        _this.kind = kind;
-        _this.startTime = startTime;
-        _this.parentSpanId = parentSpanId;
-        _this.status = {
-          code: api.CanonicalCode.OK
-        };
-        _this.endCalled = false;
-        _this._context = context;
-        _this.attributes = {};
-        return _this;
-      }
-      __name(TestSpan2, "TestSpan");
-      TestSpan2.prototype.tracer = function() {
-        return this._tracer;
-      };
-      TestSpan2.prototype.context = function() {
-        return this._context;
-      };
-      TestSpan2.prototype.end = function(_endTime) {
-        this.endCalled = true;
-      };
-      TestSpan2.prototype.setStatus = function(status) {
-        this.status = status;
-        return this;
-      };
-      TestSpan2.prototype.isRecording = function() {
-        return true;
-      };
-      TestSpan2.prototype.setAttribute = function(key, value) {
-        this.attributes[key] = value;
-        return this;
-      };
-      TestSpan2.prototype.setAttributes = function(attributes) {
-        for (var _i = 0, _a = Object.keys(attributes); _i < _a.length; _i++) {
-          var key = _a[_i];
-          this.attributes[key] = attributes[key];
-        }
-        return this;
-      };
-      return TestSpan2;
-    }(NoOpSpan);
-    var TestTracer = function(_super) {
-      tslib.__extends(TestTracer2, _super);
-      function TestTracer2() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.traceIdCounter = 0;
-        _this.spanIdCounter = 0;
-        _this.rootSpans = [];
-        _this.knownSpans = [];
-        return _this;
-      }
-      __name(TestTracer2, "TestTracer");
-      TestTracer2.prototype.getNextTraceId = function() {
-        this.traceIdCounter++;
-        return String(this.traceIdCounter);
-      };
-      TestTracer2.prototype.getNextSpanId = function() {
-        this.spanIdCounter++;
-        return String(this.spanIdCounter);
-      };
-      TestTracer2.prototype.getRootSpans = function() {
-        return this.rootSpans;
-      };
-      TestTracer2.prototype.getKnownSpans = function() {
-        return this.knownSpans;
-      };
-      TestTracer2.prototype.getActiveSpans = function() {
-        return this.knownSpans.filter(function(span) {
-          return !span.endCalled;
-        });
-      };
-      TestTracer2.prototype.getSpanGraph = function(traceId) {
-        var traceSpans = this.knownSpans.filter(function(span2) {
-          return span2.context().traceId === traceId;
-        });
-        var roots = [];
-        var nodeMap = new Map();
-        for (var _i = 0, traceSpans_1 = traceSpans; _i < traceSpans_1.length; _i++) {
-          var span = traceSpans_1[_i];
-          var spanId = span.context().spanId;
-          var node = {
-            name: span.name,
-            children: []
-          };
-          nodeMap.set(spanId, node);
-          if (span.parentSpanId) {
-            var parent = nodeMap.get(span.parentSpanId);
-            if (!parent) {
-              throw new Error("Span with name " + node.name + " has an unknown parentSpan with id " + span.parentSpanId);
-            }
-            parent.children.push(node);
-          } else {
-            roots.push(node);
-          }
-        }
-        return {
-          roots
-        };
-      };
-      TestTracer2.prototype.startSpan = function(name, options) {
-        if (options === void 0) {
-          options = {};
-        }
-        var parentContext = this._getParentContext(options);
-        var traceId;
-        var isRootSpan = false;
-        if (parentContext && parentContext.traceId) {
-          traceId = parentContext.traceId;
-        } else {
-          traceId = this.getNextTraceId();
-          isRootSpan = true;
-        }
-        var context = {
-          traceId,
-          spanId: this.getNextSpanId(),
-          traceFlags: api.TraceFlags.NONE
-        };
-        var span = new TestSpan(this, name, context, options.kind || api.SpanKind.INTERNAL, parentContext ? parentContext.spanId : void 0, options.startTime);
-        this.knownSpans.push(span);
-        if (isRootSpan) {
-          this.rootSpans.push(span);
-        }
-        return span;
-      };
-      TestTracer2.prototype._getParentContext = function(options) {
-        var parent = options.parent;
-        var result;
-        if (parent) {
-          if ("traceId" in parent) {
-            result = parent;
-          } else {
-            result = parent.context();
-          }
-        }
-        return result;
-      };
-      return TestTracer2;
-    }(NoOpTracer);
-    function createSpanFunction(args) {
-      return function(operationName, operationOptions) {
-        var tracer = getTracer();
-        var tracingOptions = (operationOptions === null || operationOptions === void 0 ? void 0 : operationOptions.tracingOptions) || {};
-        var spanOptions = tslib.__assign({ kind: api.SpanKind.INTERNAL }, tracingOptions.spanOptions);
-        var spanName = args.packagePrefix ? args.packagePrefix + "." + operationName : operationName;
-        var span = tracer.startSpan(spanName, spanOptions);
-        if (args.namespace) {
-          span.setAttribute("az.namespace", args.namespace);
-        }
-        var newSpanOptions = tracingOptions.spanOptions || {};
-        if (span.isRecording() && args.namespace) {
-          newSpanOptions = tslib.__assign(tslib.__assign({}, tracingOptions.spanOptions), { parent: span.context(), attributes: tslib.__assign(tslib.__assign({}, spanOptions.attributes), { "az.namespace": args.namespace }) });
-        }
-        var newTracingOptions = tslib.__assign(tslib.__assign({}, tracingOptions), { spanOptions: newSpanOptions });
-        var newOperationOptions = tslib.__assign(tslib.__assign({}, operationOptions), { tracingOptions: newTracingOptions });
-        return {
-          span,
-          updatedOptions: newOperationOptions
-        };
-      };
-    }
-    __name(createSpanFunction, "createSpanFunction");
-    var VERSION = "00";
-    function extractSpanContextFromTraceParentHeader(traceParentHeader) {
-      var parts = traceParentHeader.split("-");
-      if (parts.length !== 4) {
-        return;
-      }
-      var version = parts[0], traceId = parts[1], spanId = parts[2], traceOptions = parts[3];
-      if (version !== VERSION) {
-        return;
-      }
-      var traceFlags = parseInt(traceOptions, 16);
-      var spanContext = {
-        spanId,
-        traceId,
-        traceFlags
-      };
-      return spanContext;
-    }
-    __name(extractSpanContextFromTraceParentHeader, "extractSpanContextFromTraceParentHeader");
-    function getTraceParentHeader(spanContext) {
-      var missingFields = [];
-      if (!spanContext.traceId) {
-        missingFields.push("traceId");
-      }
-      if (!spanContext.spanId) {
-        missingFields.push("spanId");
-      }
-      if (missingFields.length) {
-        return;
-      }
-      var flags = spanContext.traceFlags || 0;
-      var hexFlags = flags.toString(16);
-      var traceFlags = hexFlags.length === 1 ? "0" + hexFlags : hexFlags;
-      return VERSION + "-" + spanContext.traceId + "-" + spanContext.spanId + "-" + traceFlags;
-    }
-    __name(getTraceParentHeader, "getTraceParentHeader");
-    exports2.NoOpSpan = NoOpSpan;
-    exports2.NoOpTracer = NoOpTracer;
-    exports2.OpenCensusSpanWrapper = OpenCensusSpanWrapper;
-    exports2.OpenCensusTracerWrapper = OpenCensusTracerWrapper;
-    exports2.TestSpan = TestSpan;
-    exports2.TestTracer = TestTracer;
-    exports2.createSpanFunction = createSpanFunction;
-    exports2.extractSpanContextFromTraceParentHeader = extractSpanContextFromTraceParentHeader;
-    exports2.getTraceParentHeader = getTraceParentHeader;
-    exports2.getTracer = getTracer;
-    exports2.setTracer = setTracer;
-  }
-});
-
 // node_modules/@azure/core-paging/dist/index.js
-var require_dist8 = __commonJS({
+var require_dist7 = __commonJS({
   "node_modules/@azure/core-paging/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -41523,7 +40070,7 @@ var require_dist8 = __commonJS({
 });
 
 // node_modules/@azure/core-lro/dist/index.js
-var require_dist9 = __commonJS({
+var require_dist8 = __commonJS({
   "node_modules/@azure/core-lro/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -41735,107 +40282,293 @@ var require_dist9 = __commonJS({
 });
 
 // node_modules/@azure/storage-blob/dist/index.js
-var require_dist10 = __commonJS({
+var require_dist9 = __commonJS({
   "node_modules/@azure/storage-blob/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     var coreHttp = require_dist6();
     var tslib = require_tslib();
-    var api = require_src3();
+    var coreTracing = require_dist5();
     var logger$1 = require_dist3();
     var abortController = require_dist2();
     var os2 = require("os");
     var crypto = require("crypto");
-    var coreTracing = require_dist7();
     var stream = require("stream");
-    require_dist8();
-    var coreLro = require_dist9();
+    require_dist7();
+    var coreLro = require_dist8();
     var events = require("events");
     var fs3 = require("fs");
     var util = require("util");
-    var KeyInfo = {
-      serializedName: "KeyInfo",
+    var BlobServiceProperties = {
+      serializedName: "BlobServiceProperties",
+      xmlName: "StorageServiceProperties",
       type: {
         name: "Composite",
-        className: "KeyInfo",
+        className: "BlobServiceProperties",
         modelProperties: {
-          startsOn: {
-            xmlName: "Start",
-            required: true,
-            serializedName: "Start",
+          blobAnalyticsLogging: {
+            serializedName: "Logging",
+            xmlName: "Logging",
+            type: {
+              name: "Composite",
+              className: "Logging"
+            }
+          },
+          hourMetrics: {
+            serializedName: "HourMetrics",
+            xmlName: "HourMetrics",
+            type: {
+              name: "Composite",
+              className: "Metrics"
+            }
+          },
+          minuteMetrics: {
+            serializedName: "MinuteMetrics",
+            xmlName: "MinuteMetrics",
+            type: {
+              name: "Composite",
+              className: "Metrics"
+            }
+          },
+          cors: {
+            serializedName: "Cors",
+            xmlName: "Cors",
+            xmlIsWrapped: true,
+            xmlElementName: "CorsRule",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "CorsRule"
+                }
+              }
+            }
+          },
+          defaultServiceVersion: {
+            serializedName: "DefaultServiceVersion",
+            xmlName: "DefaultServiceVersion",
             type: {
               name: "String"
             }
           },
-          expiresOn: {
-            xmlName: "Expiry",
-            required: true,
-            serializedName: "Expiry",
+          deleteRetentionPolicy: {
+            serializedName: "DeleteRetentionPolicy",
+            xmlName: "DeleteRetentionPolicy",
             type: {
-              name: "String"
+              name: "Composite",
+              className: "RetentionPolicy"
+            }
+          },
+          staticWebsite: {
+            serializedName: "StaticWebsite",
+            xmlName: "StaticWebsite",
+            type: {
+              name: "Composite",
+              className: "StaticWebsite"
             }
           }
         }
       }
     };
-    var UserDelegationKey = {
-      serializedName: "UserDelegationKey",
+    var Logging = {
+      serializedName: "Logging",
       type: {
         name: "Composite",
-        className: "UserDelegationKey",
+        className: "Logging",
         modelProperties: {
-          signedObjectId: {
-            xmlName: "SignedOid",
+          version: {
+            serializedName: "Version",
             required: true,
-            serializedName: "SignedOid",
+            xmlName: "Version",
             type: {
               name: "String"
             }
           },
-          signedTenantId: {
-            xmlName: "SignedTid",
+          deleteProperty: {
+            serializedName: "Delete",
             required: true,
-            serializedName: "SignedTid",
+            xmlName: "Delete",
+            type: {
+              name: "Boolean"
+            }
+          },
+          read: {
+            serializedName: "Read",
+            required: true,
+            xmlName: "Read",
+            type: {
+              name: "Boolean"
+            }
+          },
+          write: {
+            serializedName: "Write",
+            required: true,
+            xmlName: "Write",
+            type: {
+              name: "Boolean"
+            }
+          },
+          retentionPolicy: {
+            serializedName: "RetentionPolicy",
+            xmlName: "RetentionPolicy",
+            type: {
+              name: "Composite",
+              className: "RetentionPolicy"
+            }
+          }
+        }
+      }
+    };
+    var RetentionPolicy = {
+      serializedName: "RetentionPolicy",
+      type: {
+        name: "Composite",
+        className: "RetentionPolicy",
+        modelProperties: {
+          enabled: {
+            serializedName: "Enabled",
+            required: true,
+            xmlName: "Enabled",
+            type: {
+              name: "Boolean"
+            }
+          },
+          days: {
+            constraints: {
+              InclusiveMinimum: 1
+            },
+            serializedName: "Days",
+            xmlName: "Days",
+            type: {
+              name: "Number"
+            }
+          }
+        }
+      }
+    };
+    var Metrics = {
+      serializedName: "Metrics",
+      type: {
+        name: "Composite",
+        className: "Metrics",
+        modelProperties: {
+          version: {
+            serializedName: "Version",
+            xmlName: "Version",
             type: {
               name: "String"
             }
           },
-          signedStartsOn: {
-            xmlName: "SignedStart",
+          enabled: {
+            serializedName: "Enabled",
             required: true,
-            serializedName: "SignedStart",
+            xmlName: "Enabled",
+            type: {
+              name: "Boolean"
+            }
+          },
+          includeAPIs: {
+            serializedName: "IncludeAPIs",
+            xmlName: "IncludeAPIs",
+            type: {
+              name: "Boolean"
+            }
+          },
+          retentionPolicy: {
+            serializedName: "RetentionPolicy",
+            xmlName: "RetentionPolicy",
+            type: {
+              name: "Composite",
+              className: "RetentionPolicy"
+            }
+          }
+        }
+      }
+    };
+    var CorsRule = {
+      serializedName: "CorsRule",
+      type: {
+        name: "Composite",
+        className: "CorsRule",
+        modelProperties: {
+          allowedOrigins: {
+            serializedName: "AllowedOrigins",
+            required: true,
+            xmlName: "AllowedOrigins",
             type: {
               name: "String"
             }
           },
-          signedExpiresOn: {
-            xmlName: "SignedExpiry",
+          allowedMethods: {
+            serializedName: "AllowedMethods",
             required: true,
-            serializedName: "SignedExpiry",
+            xmlName: "AllowedMethods",
             type: {
               name: "String"
             }
           },
-          signedService: {
-            xmlName: "SignedService",
+          allowedHeaders: {
+            serializedName: "AllowedHeaders",
             required: true,
-            serializedName: "SignedService",
+            xmlName: "AllowedHeaders",
             type: {
               name: "String"
             }
           },
-          signedVersion: {
-            xmlName: "SignedVersion",
+          exposedHeaders: {
+            serializedName: "ExposedHeaders",
             required: true,
-            serializedName: "SignedVersion",
+            xmlName: "ExposedHeaders",
             type: {
               name: "String"
             }
           },
-          value: {
-            xmlName: "Value",
+          maxAgeInSeconds: {
+            constraints: {
+              InclusiveMinimum: 0
+            },
+            serializedName: "MaxAgeInSeconds",
             required: true,
-            serializedName: "Value",
+            xmlName: "MaxAgeInSeconds",
+            type: {
+              name: "Number"
+            }
+          }
+        }
+      }
+    };
+    var StaticWebsite = {
+      serializedName: "StaticWebsite",
+      type: {
+        name: "Composite",
+        className: "StaticWebsite",
+        modelProperties: {
+          enabled: {
+            serializedName: "Enabled",
+            required: true,
+            xmlName: "Enabled",
+            type: {
+              name: "Boolean"
+            }
+          },
+          indexDocument: {
+            serializedName: "IndexDocument",
+            xmlName: "IndexDocument",
+            type: {
+              name: "String"
+            }
+          },
+          errorDocument404Path: {
+            serializedName: "ErrorDocument404Path",
+            xmlName: "ErrorDocument404Path",
+            type: {
+              name: "String"
+            }
+          },
+          defaultIndexDocumentPath: {
+            serializedName: "DefaultIndexDocumentPath",
+            xmlName: "DefaultIndexDocumentPath",
             type: {
               name: "String"
             }
@@ -41850,15 +40583,15 @@ var require_dist10 = __commonJS({
         className: "StorageError",
         modelProperties: {
           message: {
-            xmlName: "Message",
             serializedName: "Message",
+            xmlName: "Message",
             type: {
               name: "String"
             }
           },
           code: {
-            xmlName: "Code",
             serializedName: "Code",
+            xmlName: "Code",
             type: {
               name: "String"
             }
@@ -41866,22 +40599,1140 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var DataLakeStorageErrorError = {
-      serializedName: "DataLakeStorageError_error",
+    var BlobServiceStatistics = {
+      serializedName: "BlobServiceStatistics",
+      xmlName: "StorageServiceStats",
       type: {
         name: "Composite",
-        className: "DataLakeStorageErrorError",
+        className: "BlobServiceStatistics",
         modelProperties: {
-          code: {
-            xmlName: "Code",
-            serializedName: "Code",
+          geoReplication: {
+            serializedName: "GeoReplication",
+            xmlName: "GeoReplication",
+            type: {
+              name: "Composite",
+              className: "GeoReplication"
+            }
+          }
+        }
+      }
+    };
+    var GeoReplication = {
+      serializedName: "GeoReplication",
+      type: {
+        name: "Composite",
+        className: "GeoReplication",
+        modelProperties: {
+          status: {
+            serializedName: "Status",
+            required: true,
+            xmlName: "Status",
+            type: {
+              name: "Enum",
+              allowedValues: ["live", "bootstrap", "unavailable"]
+            }
+          },
+          lastSyncOn: {
+            serializedName: "LastSyncTime",
+            required: true,
+            xmlName: "LastSyncTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var ListContainersSegmentResponse = {
+      serializedName: "ListContainersSegmentResponse",
+      xmlName: "EnumerationResults",
+      type: {
+        name: "Composite",
+        className: "ListContainersSegmentResponse",
+        modelProperties: {
+          serviceEndpoint: {
+            serializedName: "ServiceEndpoint",
+            required: true,
+            xmlName: "ServiceEndpoint",
+            xmlIsAttribute: true,
             type: {
               name: "String"
             }
           },
-          message: {
-            xmlName: "Message",
-            serializedName: "Message",
+          prefix: {
+            serializedName: "Prefix",
+            xmlName: "Prefix",
+            type: {
+              name: "String"
+            }
+          },
+          marker: {
+            serializedName: "Marker",
+            xmlName: "Marker",
+            type: {
+              name: "String"
+            }
+          },
+          maxPageSize: {
+            serializedName: "MaxResults",
+            xmlName: "MaxResults",
+            type: {
+              name: "Number"
+            }
+          },
+          containerItems: {
+            serializedName: "ContainerItems",
+            required: true,
+            xmlName: "Containers",
+            xmlIsWrapped: true,
+            xmlElementName: "Container",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "ContainerItem"
+                }
+              }
+            }
+          },
+          continuationToken: {
+            serializedName: "NextMarker",
+            xmlName: "NextMarker",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerItem = {
+      serializedName: "ContainerItem",
+      xmlName: "Container",
+      type: {
+        name: "Composite",
+        className: "ContainerItem",
+        modelProperties: {
+          name: {
+            serializedName: "Name",
+            required: true,
+            xmlName: "Name",
+            type: {
+              name: "String"
+            }
+          },
+          deleted: {
+            serializedName: "Deleted",
+            xmlName: "Deleted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          version: {
+            serializedName: "Version",
+            xmlName: "Version",
+            type: {
+              name: "String"
+            }
+          },
+          properties: {
+            serializedName: "Properties",
+            xmlName: "Properties",
+            type: {
+              name: "Composite",
+              className: "ContainerProperties"
+            }
+          },
+          metadata: {
+            serializedName: "Metadata",
+            xmlName: "Metadata",
+            type: {
+              name: "Dictionary",
+              value: { type: { name: "String" } }
+            }
+          }
+        }
+      }
+    };
+    var ContainerProperties = {
+      serializedName: "ContainerProperties",
+      type: {
+        name: "Composite",
+        className: "ContainerProperties",
+        modelProperties: {
+          lastModified: {
+            serializedName: "Last-Modified",
+            required: true,
+            xmlName: "Last-Modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "Etag",
+            required: true,
+            xmlName: "Etag",
+            type: {
+              name: "String"
+            }
+          },
+          leaseStatus: {
+            serializedName: "LeaseStatus",
+            xmlName: "LeaseStatus",
+            type: {
+              name: "Enum",
+              allowedValues: ["locked", "unlocked"]
+            }
+          },
+          leaseState: {
+            serializedName: "LeaseState",
+            xmlName: "LeaseState",
+            type: {
+              name: "Enum",
+              allowedValues: [
+                "available",
+                "leased",
+                "expired",
+                "breaking",
+                "broken"
+              ]
+            }
+          },
+          leaseDuration: {
+            serializedName: "LeaseDuration",
+            xmlName: "LeaseDuration",
+            type: {
+              name: "Enum",
+              allowedValues: ["infinite", "fixed"]
+            }
+          },
+          publicAccess: {
+            serializedName: "PublicAccess",
+            xmlName: "PublicAccess",
+            type: {
+              name: "Enum",
+              allowedValues: ["container", "blob"]
+            }
+          },
+          hasImmutabilityPolicy: {
+            serializedName: "HasImmutabilityPolicy",
+            xmlName: "HasImmutabilityPolicy",
+            type: {
+              name: "Boolean"
+            }
+          },
+          hasLegalHold: {
+            serializedName: "HasLegalHold",
+            xmlName: "HasLegalHold",
+            type: {
+              name: "Boolean"
+            }
+          },
+          defaultEncryptionScope: {
+            serializedName: "DefaultEncryptionScope",
+            xmlName: "DefaultEncryptionScope",
+            type: {
+              name: "String"
+            }
+          },
+          preventEncryptionScopeOverride: {
+            serializedName: "DenyEncryptionScopeOverride",
+            xmlName: "DenyEncryptionScopeOverride",
+            type: {
+              name: "Boolean"
+            }
+          },
+          deletedOn: {
+            serializedName: "DeletedTime",
+            xmlName: "DeletedTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          remainingRetentionDays: {
+            serializedName: "RemainingRetentionDays",
+            xmlName: "RemainingRetentionDays",
+            type: {
+              name: "Number"
+            }
+          }
+        }
+      }
+    };
+    var KeyInfo = {
+      serializedName: "KeyInfo",
+      type: {
+        name: "Composite",
+        className: "KeyInfo",
+        modelProperties: {
+          startsOn: {
+            serializedName: "Start",
+            required: true,
+            xmlName: "Start",
+            type: {
+              name: "String"
+            }
+          },
+          expiresOn: {
+            serializedName: "Expiry",
+            required: true,
+            xmlName: "Expiry",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var UserDelegationKey = {
+      serializedName: "UserDelegationKey",
+      type: {
+        name: "Composite",
+        className: "UserDelegationKey",
+        modelProperties: {
+          signedObjectId: {
+            serializedName: "SignedOid",
+            required: true,
+            xmlName: "SignedOid",
+            type: {
+              name: "String"
+            }
+          },
+          signedTenantId: {
+            serializedName: "SignedTid",
+            required: true,
+            xmlName: "SignedTid",
+            type: {
+              name: "String"
+            }
+          },
+          signedStartsOn: {
+            serializedName: "SignedStart",
+            required: true,
+            xmlName: "SignedStart",
+            type: {
+              name: "String"
+            }
+          },
+          signedExpiresOn: {
+            serializedName: "SignedExpiry",
+            required: true,
+            xmlName: "SignedExpiry",
+            type: {
+              name: "String"
+            }
+          },
+          signedService: {
+            serializedName: "SignedService",
+            required: true,
+            xmlName: "SignedService",
+            type: {
+              name: "String"
+            }
+          },
+          signedVersion: {
+            serializedName: "SignedVersion",
+            required: true,
+            xmlName: "SignedVersion",
+            type: {
+              name: "String"
+            }
+          },
+          value: {
+            serializedName: "Value",
+            required: true,
+            xmlName: "Value",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var FilterBlobSegment = {
+      serializedName: "FilterBlobSegment",
+      xmlName: "EnumerationResults",
+      type: {
+        name: "Composite",
+        className: "FilterBlobSegment",
+        modelProperties: {
+          serviceEndpoint: {
+            serializedName: "ServiceEndpoint",
+            required: true,
+            xmlName: "ServiceEndpoint",
+            xmlIsAttribute: true,
+            type: {
+              name: "String"
+            }
+          },
+          where: {
+            serializedName: "Where",
+            required: true,
+            xmlName: "Where",
+            type: {
+              name: "String"
+            }
+          },
+          blobs: {
+            serializedName: "Blobs",
+            required: true,
+            xmlName: "Blobs",
+            xmlIsWrapped: true,
+            xmlElementName: "Blob",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "FilterBlobItem"
+                }
+              }
+            }
+          },
+          continuationToken: {
+            serializedName: "NextMarker",
+            xmlName: "NextMarker",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var FilterBlobItem = {
+      serializedName: "FilterBlobItem",
+      xmlName: "Blob",
+      type: {
+        name: "Composite",
+        className: "FilterBlobItem",
+        modelProperties: {
+          name: {
+            serializedName: "Name",
+            required: true,
+            xmlName: "Name",
+            type: {
+              name: "String"
+            }
+          },
+          containerName: {
+            serializedName: "ContainerName",
+            required: true,
+            xmlName: "ContainerName",
+            type: {
+              name: "String"
+            }
+          },
+          tags: {
+            serializedName: "Tags",
+            xmlName: "Tags",
+            type: {
+              name: "Composite",
+              className: "BlobTags"
+            }
+          }
+        }
+      }
+    };
+    var BlobTags = {
+      serializedName: "BlobTags",
+      xmlName: "Tags",
+      type: {
+        name: "Composite",
+        className: "BlobTags",
+        modelProperties: {
+          blobTagSet: {
+            serializedName: "BlobTagSet",
+            required: true,
+            xmlName: "TagSet",
+            xmlIsWrapped: true,
+            xmlElementName: "Tag",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "BlobTag"
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    var BlobTag = {
+      serializedName: "BlobTag",
+      xmlName: "Tag",
+      type: {
+        name: "Composite",
+        className: "BlobTag",
+        modelProperties: {
+          key: {
+            serializedName: "Key",
+            required: true,
+            xmlName: "Key",
+            type: {
+              name: "String"
+            }
+          },
+          value: {
+            serializedName: "Value",
+            required: true,
+            xmlName: "Value",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var SignedIdentifier = {
+      serializedName: "SignedIdentifier",
+      xmlName: "SignedIdentifier",
+      type: {
+        name: "Composite",
+        className: "SignedIdentifier",
+        modelProperties: {
+          id: {
+            serializedName: "Id",
+            required: true,
+            xmlName: "Id",
+            type: {
+              name: "String"
+            }
+          },
+          accessPolicy: {
+            serializedName: "AccessPolicy",
+            xmlName: "AccessPolicy",
+            type: {
+              name: "Composite",
+              className: "AccessPolicy"
+            }
+          }
+        }
+      }
+    };
+    var AccessPolicy = {
+      serializedName: "AccessPolicy",
+      type: {
+        name: "Composite",
+        className: "AccessPolicy",
+        modelProperties: {
+          startsOn: {
+            serializedName: "Start",
+            xmlName: "Start",
+            type: {
+              name: "String"
+            }
+          },
+          expiresOn: {
+            serializedName: "Expiry",
+            xmlName: "Expiry",
+            type: {
+              name: "String"
+            }
+          },
+          permissions: {
+            serializedName: "Permission",
+            xmlName: "Permission",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ListBlobsFlatSegmentResponse = {
+      serializedName: "ListBlobsFlatSegmentResponse",
+      xmlName: "EnumerationResults",
+      type: {
+        name: "Composite",
+        className: "ListBlobsFlatSegmentResponse",
+        modelProperties: {
+          serviceEndpoint: {
+            serializedName: "ServiceEndpoint",
+            required: true,
+            xmlName: "ServiceEndpoint",
+            xmlIsAttribute: true,
+            type: {
+              name: "String"
+            }
+          },
+          containerName: {
+            serializedName: "ContainerName",
+            required: true,
+            xmlName: "ContainerName",
+            xmlIsAttribute: true,
+            type: {
+              name: "String"
+            }
+          },
+          prefix: {
+            serializedName: "Prefix",
+            xmlName: "Prefix",
+            type: {
+              name: "String"
+            }
+          },
+          marker: {
+            serializedName: "Marker",
+            xmlName: "Marker",
+            type: {
+              name: "String"
+            }
+          },
+          maxPageSize: {
+            serializedName: "MaxResults",
+            xmlName: "MaxResults",
+            type: {
+              name: "Number"
+            }
+          },
+          segment: {
+            serializedName: "Segment",
+            xmlName: "Blobs",
+            type: {
+              name: "Composite",
+              className: "BlobFlatListSegment"
+            }
+          },
+          continuationToken: {
+            serializedName: "NextMarker",
+            xmlName: "NextMarker",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobFlatListSegment = {
+      serializedName: "BlobFlatListSegment",
+      xmlName: "Blobs",
+      type: {
+        name: "Composite",
+        className: "BlobFlatListSegment",
+        modelProperties: {
+          blobItems: {
+            serializedName: "BlobItems",
+            required: true,
+            xmlName: "BlobItems",
+            xmlElementName: "Blob",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "BlobItemInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    var BlobItemInternal = {
+      serializedName: "BlobItemInternal",
+      xmlName: "Blob",
+      type: {
+        name: "Composite",
+        className: "BlobItemInternal",
+        modelProperties: {
+          name: {
+            serializedName: "Name",
+            required: true,
+            xmlName: "Name",
+            type: {
+              name: "String"
+            }
+          },
+          deleted: {
+            serializedName: "Deleted",
+            required: true,
+            xmlName: "Deleted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          snapshot: {
+            serializedName: "Snapshot",
+            required: true,
+            xmlName: "Snapshot",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "VersionId",
+            xmlName: "VersionId",
+            type: {
+              name: "String"
+            }
+          },
+          isCurrentVersion: {
+            serializedName: "IsCurrentVersion",
+            xmlName: "IsCurrentVersion",
+            type: {
+              name: "Boolean"
+            }
+          },
+          properties: {
+            serializedName: "Properties",
+            xmlName: "Properties",
+            type: {
+              name: "Composite",
+              className: "BlobPropertiesInternal"
+            }
+          },
+          metadata: {
+            serializedName: "Metadata",
+            xmlName: "Metadata",
+            type: {
+              name: "Dictionary",
+              value: { type: { name: "String" } }
+            }
+          },
+          blobTags: {
+            serializedName: "BlobTags",
+            xmlName: "Tags",
+            type: {
+              name: "Composite",
+              className: "BlobTags"
+            }
+          },
+          objectReplicationMetadata: {
+            serializedName: "ObjectReplicationMetadata",
+            xmlName: "OrMetadata",
+            type: {
+              name: "Dictionary",
+              value: { type: { name: "String" } }
+            }
+          }
+        }
+      }
+    };
+    var BlobPropertiesInternal = {
+      serializedName: "BlobPropertiesInternal",
+      xmlName: "Properties",
+      type: {
+        name: "Composite",
+        className: "BlobPropertiesInternal",
+        modelProperties: {
+          createdOn: {
+            serializedName: "Creation-Time",
+            xmlName: "Creation-Time",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          lastModified: {
+            serializedName: "Last-Modified",
+            required: true,
+            xmlName: "Last-Modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "Etag",
+            required: true,
+            xmlName: "Etag",
+            type: {
+              name: "String"
+            }
+          },
+          contentLength: {
+            serializedName: "Content-Length",
+            xmlName: "Content-Length",
+            type: {
+              name: "Number"
+            }
+          },
+          contentType: {
+            serializedName: "Content-Type",
+            xmlName: "Content-Type",
+            type: {
+              name: "String"
+            }
+          },
+          contentEncoding: {
+            serializedName: "Content-Encoding",
+            xmlName: "Content-Encoding",
+            type: {
+              name: "String"
+            }
+          },
+          contentLanguage: {
+            serializedName: "Content-Language",
+            xmlName: "Content-Language",
+            type: {
+              name: "String"
+            }
+          },
+          contentMD5: {
+            serializedName: "Content-MD5",
+            xmlName: "Content-MD5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          contentDisposition: {
+            serializedName: "Content-Disposition",
+            xmlName: "Content-Disposition",
+            type: {
+              name: "String"
+            }
+          },
+          cacheControl: {
+            serializedName: "Cache-Control",
+            xmlName: "Cache-Control",
+            type: {
+              name: "String"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          blobType: {
+            serializedName: "BlobType",
+            xmlName: "BlobType",
+            type: {
+              name: "Enum",
+              allowedValues: ["BlockBlob", "PageBlob", "AppendBlob"]
+            }
+          },
+          leaseStatus: {
+            serializedName: "LeaseStatus",
+            xmlName: "LeaseStatus",
+            type: {
+              name: "Enum",
+              allowedValues: ["locked", "unlocked"]
+            }
+          },
+          leaseState: {
+            serializedName: "LeaseState",
+            xmlName: "LeaseState",
+            type: {
+              name: "Enum",
+              allowedValues: [
+                "available",
+                "leased",
+                "expired",
+                "breaking",
+                "broken"
+              ]
+            }
+          },
+          leaseDuration: {
+            serializedName: "LeaseDuration",
+            xmlName: "LeaseDuration",
+            type: {
+              name: "Enum",
+              allowedValues: ["infinite", "fixed"]
+            }
+          },
+          copyId: {
+            serializedName: "CopyId",
+            xmlName: "CopyId",
+            type: {
+              name: "String"
+            }
+          },
+          copyStatus: {
+            serializedName: "CopyStatus",
+            xmlName: "CopyStatus",
+            type: {
+              name: "Enum",
+              allowedValues: ["pending", "success", "aborted", "failed"]
+            }
+          },
+          copySource: {
+            serializedName: "CopySource",
+            xmlName: "CopySource",
+            type: {
+              name: "String"
+            }
+          },
+          copyProgress: {
+            serializedName: "CopyProgress",
+            xmlName: "CopyProgress",
+            type: {
+              name: "String"
+            }
+          },
+          copyCompletedOn: {
+            serializedName: "CopyCompletionTime",
+            xmlName: "CopyCompletionTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          copyStatusDescription: {
+            serializedName: "CopyStatusDescription",
+            xmlName: "CopyStatusDescription",
+            type: {
+              name: "String"
+            }
+          },
+          serverEncrypted: {
+            serializedName: "ServerEncrypted",
+            xmlName: "ServerEncrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          incrementalCopy: {
+            serializedName: "IncrementalCopy",
+            xmlName: "IncrementalCopy",
+            type: {
+              name: "Boolean"
+            }
+          },
+          destinationSnapshot: {
+            serializedName: "DestinationSnapshot",
+            xmlName: "DestinationSnapshot",
+            type: {
+              name: "String"
+            }
+          },
+          deletedOn: {
+            serializedName: "DeletedTime",
+            xmlName: "DeletedTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          remainingRetentionDays: {
+            serializedName: "RemainingRetentionDays",
+            xmlName: "RemainingRetentionDays",
+            type: {
+              name: "Number"
+            }
+          },
+          accessTier: {
+            serializedName: "AccessTier",
+            xmlName: "AccessTier",
+            type: {
+              name: "Enum",
+              allowedValues: [
+                "P4",
+                "P6",
+                "P10",
+                "P15",
+                "P20",
+                "P30",
+                "P40",
+                "P50",
+                "P60",
+                "P70",
+                "P80",
+                "Hot",
+                "Cool",
+                "Archive"
+              ]
+            }
+          },
+          accessTierInferred: {
+            serializedName: "AccessTierInferred",
+            xmlName: "AccessTierInferred",
+            type: {
+              name: "Boolean"
+            }
+          },
+          archiveStatus: {
+            serializedName: "ArchiveStatus",
+            xmlName: "ArchiveStatus",
+            type: {
+              name: "Enum",
+              allowedValues: [
+                "rehydrate-pending-to-hot",
+                "rehydrate-pending-to-cool"
+              ]
+            }
+          },
+          customerProvidedKeySha256: {
+            serializedName: "CustomerProvidedKeySha256",
+            xmlName: "CustomerProvidedKeySha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "EncryptionScope",
+            xmlName: "EncryptionScope",
+            type: {
+              name: "String"
+            }
+          },
+          accessTierChangedOn: {
+            serializedName: "AccessTierChangeTime",
+            xmlName: "AccessTierChangeTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          tagCount: {
+            serializedName: "TagCount",
+            xmlName: "TagCount",
+            type: {
+              name: "Number"
+            }
+          },
+          expiresOn: {
+            serializedName: "Expiry-Time",
+            xmlName: "Expiry-Time",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isSealed: {
+            serializedName: "Sealed",
+            xmlName: "Sealed",
+            type: {
+              name: "Boolean"
+            }
+          },
+          rehydratePriority: {
+            serializedName: "RehydratePriority",
+            xmlName: "RehydratePriority",
+            type: {
+              name: "Enum",
+              allowedValues: ["High", "Standard"]
+            }
+          },
+          lastAccessedOn: {
+            serializedName: "LastAccessTime",
+            xmlName: "LastAccessTime",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var ListBlobsHierarchySegmentResponse = {
+      serializedName: "ListBlobsHierarchySegmentResponse",
+      xmlName: "EnumerationResults",
+      type: {
+        name: "Composite",
+        className: "ListBlobsHierarchySegmentResponse",
+        modelProperties: {
+          serviceEndpoint: {
+            serializedName: "ServiceEndpoint",
+            required: true,
+            xmlName: "ServiceEndpoint",
+            xmlIsAttribute: true,
+            type: {
+              name: "String"
+            }
+          },
+          containerName: {
+            serializedName: "ContainerName",
+            required: true,
+            xmlName: "ContainerName",
+            xmlIsAttribute: true,
+            type: {
+              name: "String"
+            }
+          },
+          prefix: {
+            serializedName: "Prefix",
+            xmlName: "Prefix",
+            type: {
+              name: "String"
+            }
+          },
+          marker: {
+            serializedName: "Marker",
+            xmlName: "Marker",
+            type: {
+              name: "String"
+            }
+          },
+          maxPageSize: {
+            serializedName: "MaxResults",
+            xmlName: "MaxResults",
+            type: {
+              name: "Number"
+            }
+          },
+          delimiter: {
+            serializedName: "Delimiter",
+            xmlName: "Delimiter",
+            type: {
+              name: "String"
+            }
+          },
+          segment: {
+            serializedName: "Segment",
+            xmlName: "Blobs",
+            type: {
+              name: "Composite",
+              className: "BlobHierarchyListSegment"
+            }
+          },
+          continuationToken: {
+            serializedName: "NextMarker",
+            xmlName: "NextMarker",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobHierarchyListSegment = {
+      serializedName: "BlobHierarchyListSegment",
+      xmlName: "Blobs",
+      type: {
+        name: "Composite",
+        className: "BlobHierarchyListSegment",
+        modelProperties: {
+          blobPrefixes: {
+            serializedName: "BlobPrefixes",
+            xmlName: "BlobPrefixes",
+            xmlElementName: "BlobPrefix",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "BlobPrefix"
+                }
+              }
+            }
+          },
+          blobItems: {
+            serializedName: "BlobItems",
+            required: true,
+            xmlName: "BlobItems",
+            xmlElementName: "Blob",
+            type: {
+              name: "Sequence",
+              element: {
+                type: {
+                  name: "Composite",
+                  className: "BlobItemInternal"
+                }
+              }
+            }
+          }
+        }
+      }
+    };
+    var BlobPrefix = {
+      serializedName: "BlobPrefix",
+      type: {
+        name: "Composite",
+        className: "BlobPrefix",
+        modelProperties: {
+          name: {
+            serializedName: "Name",
+            required: true,
+            xmlName: "Name",
             type: {
               name: "String"
             }
@@ -41896,8 +41747,8 @@ var require_dist10 = __commonJS({
         className: "DataLakeStorageError",
         modelProperties: {
           dataLakeStorageErrorDetails: {
-            xmlName: "error",
             serializedName: "error",
+            xmlName: "error",
             type: {
               name: "Composite",
               className: "DataLakeStorageErrorError"
@@ -41906,29 +41757,22 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var AccessPolicy = {
-      serializedName: "AccessPolicy",
+    var DataLakeStorageErrorError = {
+      serializedName: "DataLakeStorageErrorError",
       type: {
         name: "Composite",
-        className: "AccessPolicy",
+        className: "DataLakeStorageErrorError",
         modelProperties: {
-          startsOn: {
-            xmlName: "Start",
-            serializedName: "Start",
+          code: {
+            serializedName: "Code",
+            xmlName: "Code",
             type: {
               name: "String"
             }
           },
-          expiresOn: {
-            xmlName: "Expiry",
-            serializedName: "Expiry",
-            type: {
-              name: "String"
-            }
-          },
-          permissions: {
-            xmlName: "Permission",
-            serializedName: "Permission",
+          message: {
+            serializedName: "Message",
+            xmlName: "Message",
             type: {
               name: "String"
             }
@@ -41936,682 +41780,50 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var BlobPropertiesInternal = {
-      xmlName: "Properties",
-      serializedName: "BlobPropertiesInternal",
+    var BlockLookupList = {
+      serializedName: "BlockLookupList",
+      xmlName: "BlockList",
       type: {
         name: "Composite",
-        className: "BlobPropertiesInternal",
+        className: "BlockLookupList",
         modelProperties: {
-          createdOn: {
-            xmlName: "Creation-Time",
-            serializedName: "Creation-Time",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          lastModified: {
-            xmlName: "Last-Modified",
-            required: true,
-            serializedName: "Last-Modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          etag: {
-            xmlName: "Etag",
-            required: true,
-            serializedName: "Etag",
-            type: {
-              name: "String"
-            }
-          },
-          contentLength: {
-            xmlName: "Content-Length",
-            serializedName: "Content-Length",
-            type: {
-              name: "Number"
-            }
-          },
-          contentType: {
-            xmlName: "Content-Type",
-            serializedName: "Content-Type",
-            type: {
-              name: "String"
-            }
-          },
-          contentEncoding: {
-            xmlName: "Content-Encoding",
-            serializedName: "Content-Encoding",
-            type: {
-              name: "String"
-            }
-          },
-          contentLanguage: {
-            xmlName: "Content-Language",
-            serializedName: "Content-Language",
-            type: {
-              name: "String"
-            }
-          },
-          contentMD5: {
-            xmlName: "Content-MD5",
-            serializedName: "Content-MD5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          contentDisposition: {
-            xmlName: "Content-Disposition",
-            serializedName: "Content-Disposition",
-            type: {
-              name: "String"
-            }
-          },
-          cacheControl: {
-            xmlName: "Cache-Control",
-            serializedName: "Cache-Control",
-            type: {
-              name: "String"
-            }
-          },
-          blobSequenceNumber: {
-            xmlName: "x-ms-blob-sequence-number",
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          blobType: {
-            xmlName: "BlobType",
-            serializedName: "BlobType",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "BlockBlob",
-                "PageBlob",
-                "AppendBlob"
-              ]
-            }
-          },
-          leaseStatus: {
-            xmlName: "LeaseStatus",
-            serializedName: "LeaseStatus",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
-            }
-          },
-          leaseState: {
-            xmlName: "LeaseState",
-            serializedName: "LeaseState",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "available",
-                "leased",
-                "expired",
-                "breaking",
-                "broken"
-              ]
-            }
-          },
-          leaseDuration: {
-            xmlName: "LeaseDuration",
-            serializedName: "LeaseDuration",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
-            }
-          },
-          copyId: {
-            xmlName: "CopyId",
-            serializedName: "CopyId",
-            type: {
-              name: "String"
-            }
-          },
-          copyStatus: {
-            xmlName: "CopyStatus",
-            serializedName: "CopyStatus",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
-            }
-          },
-          copySource: {
-            xmlName: "CopySource",
-            serializedName: "CopySource",
-            type: {
-              name: "String"
-            }
-          },
-          copyProgress: {
-            xmlName: "CopyProgress",
-            serializedName: "CopyProgress",
-            type: {
-              name: "String"
-            }
-          },
-          copyCompletedOn: {
-            xmlName: "CopyCompletionTime",
-            serializedName: "CopyCompletionTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          copyStatusDescription: {
-            xmlName: "CopyStatusDescription",
-            serializedName: "CopyStatusDescription",
-            type: {
-              name: "String"
-            }
-          },
-          serverEncrypted: {
-            xmlName: "ServerEncrypted",
-            serializedName: "ServerEncrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          incrementalCopy: {
-            xmlName: "IncrementalCopy",
-            serializedName: "IncrementalCopy",
-            type: {
-              name: "Boolean"
-            }
-          },
-          destinationSnapshot: {
-            xmlName: "DestinationSnapshot",
-            serializedName: "DestinationSnapshot",
-            type: {
-              name: "String"
-            }
-          },
-          deletedOn: {
-            xmlName: "DeletedTime",
-            serializedName: "DeletedTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          remainingRetentionDays: {
-            xmlName: "RemainingRetentionDays",
-            serializedName: "RemainingRetentionDays",
-            type: {
-              name: "Number"
-            }
-          },
-          accessTier: {
-            xmlName: "AccessTier",
-            serializedName: "AccessTier",
-            type: {
-              name: "String"
-            }
-          },
-          accessTierInferred: {
-            xmlName: "AccessTierInferred",
-            serializedName: "AccessTierInferred",
-            type: {
-              name: "Boolean"
-            }
-          },
-          archiveStatus: {
-            xmlName: "ArchiveStatus",
-            serializedName: "ArchiveStatus",
-            type: {
-              name: "String"
-            }
-          },
-          customerProvidedKeySha256: {
-            xmlName: "CustomerProvidedKeySha256",
-            serializedName: "CustomerProvidedKeySha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            xmlName: "EncryptionScope",
-            serializedName: "EncryptionScope",
-            type: {
-              name: "String"
-            }
-          },
-          accessTierChangedOn: {
-            xmlName: "AccessTierChangeTime",
-            serializedName: "AccessTierChangeTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          tagCount: {
-            xmlName: "TagCount",
-            serializedName: "TagCount",
-            type: {
-              name: "Number"
-            }
-          },
-          expiresOn: {
-            xmlName: "Expiry-Time",
-            serializedName: "Expiry-Time",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isSealed: {
-            xmlName: "Sealed",
-            serializedName: "Sealed",
-            type: {
-              name: "Boolean"
-            }
-          },
-          rehydratePriority: {
-            xmlName: "RehydratePriority",
-            serializedName: "RehydratePriority",
-            type: {
-              name: "String"
-            }
-          },
-          lastAccessedOn: {
-            xmlName: "LastAccessTime",
-            serializedName: "LastAccessTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          }
-        }
-      }
-    };
-    var BlobTag = {
-      xmlName: "Tag",
-      serializedName: "BlobTag",
-      type: {
-        name: "Composite",
-        className: "BlobTag",
-        modelProperties: {
-          key: {
-            xmlName: "Key",
-            required: true,
-            serializedName: "Key",
-            type: {
-              name: "String"
-            }
-          },
-          value: {
-            xmlName: "Value",
-            required: true,
-            serializedName: "Value",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlobTags = {
-      xmlName: "Tags",
-      serializedName: "BlobTags",
-      type: {
-        name: "Composite",
-        className: "BlobTags",
-        modelProperties: {
-          blobTagSet: {
-            xmlIsWrapped: true,
-            xmlName: "TagSet",
-            xmlElementName: "Tag",
-            required: true,
-            serializedName: "BlobTagSet",
+          committed: {
+            serializedName: "Committed",
+            xmlName: "Committed",
+            xmlElementName: "Committed",
             type: {
               name: "Sequence",
               element: {
-                type: {
-                  name: "Composite",
-                  className: "BlobTag"
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    var BlobItemInternal = {
-      xmlName: "Blob",
-      serializedName: "BlobItemInternal",
-      type: {
-        name: "Composite",
-        className: "BlobItemInternal",
-        modelProperties: {
-          name: {
-            xmlName: "Name",
-            required: true,
-            serializedName: "Name",
-            type: {
-              name: "String"
-            }
-          },
-          deleted: {
-            xmlName: "Deleted",
-            required: true,
-            serializedName: "Deleted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          snapshot: {
-            xmlName: "Snapshot",
-            required: true,
-            serializedName: "Snapshot",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            xmlName: "VersionId",
-            serializedName: "VersionId",
-            type: {
-              name: "String"
-            }
-          },
-          isCurrentVersion: {
-            xmlName: "IsCurrentVersion",
-            serializedName: "IsCurrentVersion",
-            type: {
-              name: "Boolean"
-            }
-          },
-          properties: {
-            xmlName: "Properties",
-            required: true,
-            serializedName: "Properties",
-            type: {
-              name: "Composite",
-              className: "BlobPropertiesInternal"
-            }
-          },
-          metadata: {
-            xmlName: "Metadata",
-            serializedName: "Metadata",
-            type: {
-              name: "Dictionary",
-              value: {
                 type: {
                   name: "String"
                 }
               }
             }
           },
-          blobTags: {
-            xmlName: "Tags",
-            serializedName: "BlobTags",
+          uncommitted: {
+            serializedName: "Uncommitted",
+            xmlName: "Uncommitted",
+            xmlElementName: "Uncommitted",
             type: {
-              name: "Composite",
-              className: "BlobTags"
-            }
-          },
-          objectReplicationMetadata: {
-            xmlName: "OrMetadata",
-            serializedName: "ObjectReplicationMetadata",
-            type: {
-              name: "Dictionary",
-              value: {
+              name: "Sequence",
+              element: {
                 type: {
                   name: "String"
                 }
               }
             }
-          }
-        }
-      }
-    };
-    var BlobFlatListSegment = {
-      xmlName: "Blobs",
-      serializedName: "BlobFlatListSegment",
-      type: {
-        name: "Composite",
-        className: "BlobFlatListSegment",
-        modelProperties: {
-          blobItems: {
-            xmlName: "BlobItems",
-            xmlElementName: "Blob",
-            required: true,
-            serializedName: "BlobItems",
+          },
+          latest: {
+            serializedName: "Latest",
+            xmlName: "Latest",
+            xmlElementName: "Latest",
             type: {
               name: "Sequence",
               element: {
                 type: {
-                  name: "Composite",
-                  className: "BlobItemInternal"
+                  name: "String"
                 }
               }
-            }
-          }
-        }
-      }
-    };
-    var ListBlobsFlatSegmentResponse = {
-      xmlName: "EnumerationResults",
-      serializedName: "ListBlobsFlatSegmentResponse",
-      type: {
-        name: "Composite",
-        className: "ListBlobsFlatSegmentResponse",
-        modelProperties: {
-          serviceEndpoint: {
-            xmlIsAttribute: true,
-            xmlName: "ServiceEndpoint",
-            required: true,
-            serializedName: "ServiceEndpoint",
-            type: {
-              name: "String"
-            }
-          },
-          containerName: {
-            xmlIsAttribute: true,
-            xmlName: "ContainerName",
-            required: true,
-            serializedName: "ContainerName",
-            type: {
-              name: "String"
-            }
-          },
-          prefix: {
-            xmlName: "Prefix",
-            serializedName: "Prefix",
-            type: {
-              name: "String"
-            }
-          },
-          marker: {
-            xmlName: "Marker",
-            serializedName: "Marker",
-            type: {
-              name: "String"
-            }
-          },
-          maxPageSize: {
-            xmlName: "MaxResults",
-            serializedName: "MaxResults",
-            type: {
-              name: "Number"
-            }
-          },
-          segment: {
-            xmlName: "Blobs",
-            required: true,
-            serializedName: "Segment",
-            type: {
-              name: "Composite",
-              className: "BlobFlatListSegment"
-            }
-          },
-          continuationToken: {
-            xmlName: "NextMarker",
-            serializedName: "NextMarker",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlobPrefix = {
-      serializedName: "BlobPrefix",
-      type: {
-        name: "Composite",
-        className: "BlobPrefix",
-        modelProperties: {
-          name: {
-            xmlName: "Name",
-            required: true,
-            serializedName: "Name",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlobHierarchyListSegment = {
-      xmlName: "Blobs",
-      serializedName: "BlobHierarchyListSegment",
-      type: {
-        name: "Composite",
-        className: "BlobHierarchyListSegment",
-        modelProperties: {
-          blobPrefixes: {
-            xmlName: "BlobPrefixes",
-            xmlElementName: "BlobPrefix",
-            serializedName: "BlobPrefixes",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "BlobPrefix"
-                }
-              }
-            }
-          },
-          blobItems: {
-            xmlName: "BlobItems",
-            xmlElementName: "Blob",
-            required: true,
-            serializedName: "BlobItems",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "BlobItemInternal"
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    var ListBlobsHierarchySegmentResponse = {
-      xmlName: "EnumerationResults",
-      serializedName: "ListBlobsHierarchySegmentResponse",
-      type: {
-        name: "Composite",
-        className: "ListBlobsHierarchySegmentResponse",
-        modelProperties: {
-          serviceEndpoint: {
-            xmlIsAttribute: true,
-            xmlName: "ServiceEndpoint",
-            required: true,
-            serializedName: "ServiceEndpoint",
-            type: {
-              name: "String"
-            }
-          },
-          containerName: {
-            xmlIsAttribute: true,
-            xmlName: "ContainerName",
-            required: true,
-            serializedName: "ContainerName",
-            type: {
-              name: "String"
-            }
-          },
-          prefix: {
-            xmlName: "Prefix",
-            serializedName: "Prefix",
-            type: {
-              name: "String"
-            }
-          },
-          marker: {
-            xmlName: "Marker",
-            serializedName: "Marker",
-            type: {
-              name: "String"
-            }
-          },
-          maxPageSize: {
-            xmlName: "MaxResults",
-            serializedName: "MaxResults",
-            type: {
-              name: "Number"
-            }
-          },
-          delimiter: {
-            xmlName: "Delimiter",
-            serializedName: "Delimiter",
-            type: {
-              name: "String"
-            }
-          },
-          segment: {
-            xmlName: "Blobs",
-            required: true,
-            serializedName: "Segment",
-            type: {
-              name: "Composite",
-              className: "BlobHierarchyListSegment"
-            }
-          },
-          continuationToken: {
-            xmlName: "NextMarker",
-            serializedName: "NextMarker",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var Block = {
-      serializedName: "Block",
-      type: {
-        name: "Composite",
-        className: "Block",
-        modelProperties: {
-          name: {
-            xmlName: "Name",
-            required: true,
-            serializedName: "Name",
-            type: {
-              name: "String"
-            }
-          },
-          size: {
-            xmlName: "Size",
-            required: true,
-            serializedName: "Size",
-            type: {
-              name: "Number"
             }
           }
         }
@@ -42624,10 +41836,10 @@ var require_dist10 = __commonJS({
         className: "BlockList",
         modelProperties: {
           committedBlocks: {
-            xmlIsWrapped: true,
-            xmlName: "CommittedBlocks",
-            xmlElementName: "Block",
             serializedName: "CommittedBlocks",
+            xmlName: "CommittedBlocks",
+            xmlIsWrapped: true,
+            xmlElementName: "Block",
             type: {
               name: "Sequence",
               element: {
@@ -42639,10 +41851,10 @@ var require_dist10 = __commonJS({
             }
           },
           uncommittedBlocks: {
-            xmlIsWrapped: true,
-            xmlName: "UncommittedBlocks",
-            xmlElementName: "Block",
             serializedName: "UncommittedBlocks",
+            xmlName: "UncommittedBlocks",
+            xmlIsWrapped: true,
+            xmlElementName: "Block",
             type: {
               name: "Sequence",
               element: {
@@ -42656,731 +41868,24 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var BlockLookupList = {
-      xmlName: "BlockList",
-      serializedName: "BlockLookupList",
+    var Block = {
+      serializedName: "Block",
       type: {
         name: "Composite",
-        className: "BlockLookupList",
-        modelProperties: {
-          committed: {
-            xmlName: "Committed",
-            xmlElementName: "Committed",
-            serializedName: "Committed",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "String"
-                }
-              }
-            }
-          },
-          uncommitted: {
-            xmlName: "Uncommitted",
-            xmlElementName: "Uncommitted",
-            serializedName: "Uncommitted",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "String"
-                }
-              }
-            }
-          },
-          latest: {
-            xmlName: "Latest",
-            xmlElementName: "Latest",
-            serializedName: "Latest",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "String"
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    var ContainerProperties = {
-      serializedName: "ContainerProperties",
-      type: {
-        name: "Composite",
-        className: "ContainerProperties",
-        modelProperties: {
-          lastModified: {
-            xmlName: "Last-Modified",
-            required: true,
-            serializedName: "Last-Modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          etag: {
-            xmlName: "Etag",
-            required: true,
-            serializedName: "Etag",
-            type: {
-              name: "String"
-            }
-          },
-          leaseStatus: {
-            xmlName: "LeaseStatus",
-            serializedName: "LeaseStatus",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
-            }
-          },
-          leaseState: {
-            xmlName: "LeaseState",
-            serializedName: "LeaseState",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "available",
-                "leased",
-                "expired",
-                "breaking",
-                "broken"
-              ]
-            }
-          },
-          leaseDuration: {
-            xmlName: "LeaseDuration",
-            serializedName: "LeaseDuration",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
-            }
-          },
-          publicAccess: {
-            xmlName: "PublicAccess",
-            serializedName: "PublicAccess",
-            type: {
-              name: "String"
-            }
-          },
-          hasImmutabilityPolicy: {
-            xmlName: "HasImmutabilityPolicy",
-            serializedName: "HasImmutabilityPolicy",
-            type: {
-              name: "Boolean"
-            }
-          },
-          hasLegalHold: {
-            xmlName: "HasLegalHold",
-            serializedName: "HasLegalHold",
-            type: {
-              name: "Boolean"
-            }
-          },
-          defaultEncryptionScope: {
-            xmlName: "DefaultEncryptionScope",
-            serializedName: "DefaultEncryptionScope",
-            type: {
-              name: "String"
-            }
-          },
-          preventEncryptionScopeOverride: {
-            xmlName: "DenyEncryptionScopeOverride",
-            serializedName: "DenyEncryptionScopeOverride",
-            type: {
-              name: "Boolean"
-            }
-          },
-          deletedOn: {
-            xmlName: "DeletedTime",
-            serializedName: "DeletedTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          remainingRetentionDays: {
-            xmlName: "RemainingRetentionDays",
-            serializedName: "RemainingRetentionDays",
-            type: {
-              name: "Number"
-            }
-          }
-        }
-      }
-    };
-    var ContainerItem = {
-      xmlName: "Container",
-      serializedName: "ContainerItem",
-      type: {
-        name: "Composite",
-        className: "ContainerItem",
+        className: "Block",
         modelProperties: {
           name: {
-            xmlName: "Name",
-            required: true,
             serializedName: "Name",
-            type: {
-              name: "String"
-            }
-          },
-          deleted: {
-            xmlName: "Deleted",
-            serializedName: "Deleted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          version: {
-            xmlName: "Version",
-            serializedName: "Version",
-            type: {
-              name: "String"
-            }
-          },
-          properties: {
-            xmlName: "Properties",
             required: true,
-            serializedName: "Properties",
-            type: {
-              name: "Composite",
-              className: "ContainerProperties"
-            }
-          },
-          metadata: {
-            xmlName: "Metadata",
-            serializedName: "Metadata",
-            type: {
-              name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    var DelimitedTextConfiguration = {
-      serializedName: "DelimitedTextConfiguration",
-      type: {
-        name: "Composite",
-        className: "DelimitedTextConfiguration",
-        modelProperties: {
-          columnSeparator: {
-            xmlName: "ColumnSeparator",
-            required: true,
-            serializedName: "ColumnSeparator",
-            type: {
-              name: "String"
-            }
-          },
-          fieldQuote: {
-            xmlName: "FieldQuote",
-            required: true,
-            serializedName: "FieldQuote",
-            type: {
-              name: "String"
-            }
-          },
-          recordSeparator: {
-            xmlName: "RecordSeparator",
-            required: true,
-            serializedName: "RecordSeparator",
-            type: {
-              name: "String"
-            }
-          },
-          escapeChar: {
-            xmlName: "EscapeChar",
-            required: true,
-            serializedName: "EscapeChar",
-            type: {
-              name: "String"
-            }
-          },
-          headersPresent: {
-            xmlName: "HasHeaders",
-            required: true,
-            serializedName: "HeadersPresent",
-            type: {
-              name: "Boolean"
-            }
-          }
-        }
-      }
-    };
-    var JsonTextConfiguration = {
-      serializedName: "JsonTextConfiguration",
-      type: {
-        name: "Composite",
-        className: "JsonTextConfiguration",
-        modelProperties: {
-          recordSeparator: {
-            xmlName: "RecordSeparator",
-            required: true,
-            serializedName: "RecordSeparator",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var ArrowField = {
-      xmlName: "Field",
-      serializedName: "ArrowField",
-      type: {
-        name: "Composite",
-        className: "ArrowField",
-        modelProperties: {
-          type: {
-            xmlName: "Type",
-            required: true,
-            serializedName: "Type",
-            type: {
-              name: "String"
-            }
-          },
-          name: {
             xmlName: "Name",
-            serializedName: "Name",
             type: {
               name: "String"
             }
           },
-          precision: {
-            xmlName: "Precision",
-            serializedName: "Precision",
-            type: {
-              name: "Number"
-            }
-          },
-          scale: {
-            xmlName: "Scale",
-            serializedName: "Scale",
-            type: {
-              name: "Number"
-            }
-          }
-        }
-      }
-    };
-    var ArrowConfiguration = {
-      serializedName: "ArrowConfiguration",
-      type: {
-        name: "Composite",
-        className: "ArrowConfiguration",
-        modelProperties: {
-          schema: {
-            xmlIsWrapped: true,
-            xmlName: "Schema",
-            xmlElementName: "Field",
+          size: {
+            serializedName: "Size",
             required: true,
-            serializedName: "Schema",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "ArrowField"
-                }
-              }
-            }
-          }
-        }
-      }
-    };
-    var ListContainersSegmentResponse = {
-      xmlName: "EnumerationResults",
-      serializedName: "ListContainersSegmentResponse",
-      type: {
-        name: "Composite",
-        className: "ListContainersSegmentResponse",
-        modelProperties: {
-          serviceEndpoint: {
-            xmlIsAttribute: true,
-            xmlName: "ServiceEndpoint",
-            required: true,
-            serializedName: "ServiceEndpoint",
-            type: {
-              name: "String"
-            }
-          },
-          prefix: {
-            xmlName: "Prefix",
-            serializedName: "Prefix",
-            type: {
-              name: "String"
-            }
-          },
-          marker: {
-            xmlName: "Marker",
-            serializedName: "Marker",
-            type: {
-              name: "String"
-            }
-          },
-          maxPageSize: {
-            xmlName: "MaxResults",
-            serializedName: "MaxResults",
-            type: {
-              name: "Number"
-            }
-          },
-          containerItems: {
-            xmlIsWrapped: true,
-            xmlName: "Containers",
-            xmlElementName: "Container",
-            required: true,
-            serializedName: "ContainerItems",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "ContainerItem"
-                }
-              }
-            }
-          },
-          continuationToken: {
-            xmlName: "NextMarker",
-            serializedName: "NextMarker",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var CorsRule = {
-      serializedName: "CorsRule",
-      type: {
-        name: "Composite",
-        className: "CorsRule",
-        modelProperties: {
-          allowedOrigins: {
-            xmlName: "AllowedOrigins",
-            required: true,
-            serializedName: "AllowedOrigins",
-            type: {
-              name: "String"
-            }
-          },
-          allowedMethods: {
-            xmlName: "AllowedMethods",
-            required: true,
-            serializedName: "AllowedMethods",
-            type: {
-              name: "String"
-            }
-          },
-          allowedHeaders: {
-            xmlName: "AllowedHeaders",
-            required: true,
-            serializedName: "AllowedHeaders",
-            type: {
-              name: "String"
-            }
-          },
-          exposedHeaders: {
-            xmlName: "ExposedHeaders",
-            required: true,
-            serializedName: "ExposedHeaders",
-            type: {
-              name: "String"
-            }
-          },
-          maxAgeInSeconds: {
-            xmlName: "MaxAgeInSeconds",
-            required: true,
-            serializedName: "MaxAgeInSeconds",
-            constraints: {
-              InclusiveMinimum: 0
-            },
-            type: {
-              name: "Number"
-            }
-          }
-        }
-      }
-    };
-    var FilterBlobItem = {
-      xmlName: "Blob",
-      serializedName: "FilterBlobItem",
-      type: {
-        name: "Composite",
-        className: "FilterBlobItem",
-        modelProperties: {
-          name: {
-            xmlName: "Name",
-            required: true,
-            serializedName: "Name",
-            type: {
-              name: "String"
-            }
-          },
-          containerName: {
-            xmlName: "ContainerName",
-            required: true,
-            serializedName: "ContainerName",
-            type: {
-              name: "String"
-            }
-          },
-          tags: {
-            xmlName: "Tags",
-            serializedName: "Tags",
-            type: {
-              name: "Composite",
-              className: "BlobTags"
-            }
-          }
-        }
-      }
-    };
-    var FilterBlobSegment = {
-      xmlName: "EnumerationResults",
-      serializedName: "FilterBlobSegment",
-      type: {
-        name: "Composite",
-        className: "FilterBlobSegment",
-        modelProperties: {
-          serviceEndpoint: {
-            xmlIsAttribute: true,
-            xmlName: "ServiceEndpoint",
-            required: true,
-            serializedName: "ServiceEndpoint",
-            type: {
-              name: "String"
-            }
-          },
-          where: {
-            xmlName: "Where",
-            required: true,
-            serializedName: "Where",
-            type: {
-              name: "String"
-            }
-          },
-          blobs: {
-            xmlIsWrapped: true,
-            xmlName: "Blobs",
-            xmlElementName: "Blob",
-            required: true,
-            serializedName: "Blobs",
-            type: {
-              name: "Sequence",
-              element: {
-                type: {
-                  name: "Composite",
-                  className: "FilterBlobItem"
-                }
-              }
-            }
-          },
-          continuationToken: {
-            xmlName: "NextMarker",
-            serializedName: "NextMarker",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var GeoReplication = {
-      serializedName: "GeoReplication",
-      type: {
-        name: "Composite",
-        className: "GeoReplication",
-        modelProperties: {
-          status: {
-            xmlName: "Status",
-            required: true,
-            serializedName: "Status",
-            type: {
-              name: "String"
-            }
-          },
-          lastSyncOn: {
-            xmlName: "LastSyncTime",
-            required: true,
-            serializedName: "LastSyncTime",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          }
-        }
-      }
-    };
-    var RetentionPolicy = {
-      serializedName: "RetentionPolicy",
-      type: {
-        name: "Composite",
-        className: "RetentionPolicy",
-        modelProperties: {
-          enabled: {
-            xmlName: "Enabled",
-            required: true,
-            serializedName: "Enabled",
-            type: {
-              name: "Boolean"
-            }
-          },
-          days: {
-            xmlName: "Days",
-            serializedName: "Days",
-            constraints: {
-              InclusiveMinimum: 1
-            },
-            type: {
-              name: "Number"
-            }
-          }
-        }
-      }
-    };
-    var Logging = {
-      serializedName: "Logging",
-      type: {
-        name: "Composite",
-        className: "Logging",
-        modelProperties: {
-          version: {
-            xmlName: "Version",
-            required: true,
-            serializedName: "Version",
-            type: {
-              name: "String"
-            }
-          },
-          deleteProperty: {
-            xmlName: "Delete",
-            required: true,
-            serializedName: "Delete",
-            type: {
-              name: "Boolean"
-            }
-          },
-          read: {
-            xmlName: "Read",
-            required: true,
-            serializedName: "Read",
-            type: {
-              name: "Boolean"
-            }
-          },
-          write: {
-            xmlName: "Write",
-            required: true,
-            serializedName: "Write",
-            type: {
-              name: "Boolean"
-            }
-          },
-          retentionPolicy: {
-            xmlName: "RetentionPolicy",
-            required: true,
-            serializedName: "RetentionPolicy",
-            type: {
-              name: "Composite",
-              className: "RetentionPolicy"
-            }
-          }
-        }
-      }
-    };
-    var Metrics = {
-      serializedName: "Metrics",
-      type: {
-        name: "Composite",
-        className: "Metrics",
-        modelProperties: {
-          version: {
-            xmlName: "Version",
-            serializedName: "Version",
-            type: {
-              name: "String"
-            }
-          },
-          enabled: {
-            xmlName: "Enabled",
-            required: true,
-            serializedName: "Enabled",
-            type: {
-              name: "Boolean"
-            }
-          },
-          includeAPIs: {
-            xmlName: "IncludeAPIs",
-            serializedName: "IncludeAPIs",
-            type: {
-              name: "Boolean"
-            }
-          },
-          retentionPolicy: {
-            xmlName: "RetentionPolicy",
-            serializedName: "RetentionPolicy",
-            type: {
-              name: "Composite",
-              className: "RetentionPolicy"
-            }
-          }
-        }
-      }
-    };
-    var PageRange = {
-      serializedName: "PageRange",
-      type: {
-        name: "Composite",
-        className: "PageRange",
-        modelProperties: {
-          start: {
-            xmlName: "Start",
-            required: true,
-            serializedName: "Start",
-            type: {
-              name: "Number"
-            }
-          },
-          end: {
-            xmlName: "End",
-            required: true,
-            serializedName: "End",
-            type: {
-              name: "Number"
-            }
-          }
-        }
-      }
-    };
-    var ClearRange = {
-      serializedName: "ClearRange",
-      type: {
-        name: "Composite",
-        className: "ClearRange",
-        modelProperties: {
-          start: {
-            xmlName: "Start",
-            required: true,
-            serializedName: "Start",
-            type: {
-              name: "Number"
-            }
-          },
-          end: {
-            xmlName: "End",
-            required: true,
-            serializedName: "End",
+            xmlName: "Size",
             type: {
               name: "Number"
             }
@@ -43395,9 +41900,9 @@ var require_dist10 = __commonJS({
         className: "PageList",
         modelProperties: {
           pageRange: {
+            serializedName: "PageRange",
             xmlName: "PageRange",
             xmlElementName: "PageRange",
-            serializedName: "PageRange",
             type: {
               name: "Sequence",
               element: {
@@ -43409,9 +41914,9 @@ var require_dist10 = __commonJS({
             }
           },
           clearRange: {
+            serializedName: "ClearRange",
             xmlName: "ClearRange",
             xmlElementName: "ClearRange",
-            serializedName: "ClearRange",
             type: {
               name: "Sequence",
               element: {
@@ -43425,46 +41930,95 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var QueryFormat = {
-      serializedName: "QueryFormat",
+    var PageRange = {
+      serializedName: "PageRange",
+      xmlName: "PageRange",
       type: {
         name: "Composite",
-        className: "QueryFormat",
+        className: "PageRange",
         modelProperties: {
-          type: {
-            xmlName: "Type",
-            serializedName: "Type",
+          start: {
+            serializedName: "Start",
+            required: true,
+            xmlName: "Start",
             type: {
-              name: "Enum",
-              allowedValues: [
-                "delimited",
-                "json",
-                "arrow"
-              ]
+              name: "Number"
             }
           },
-          delimitedTextConfiguration: {
-            xmlName: "DelimitedTextConfiguration",
-            serializedName: "DelimitedTextConfiguration",
+          end: {
+            serializedName: "End",
+            required: true,
+            xmlName: "End",
             type: {
-              name: "Composite",
-              className: "DelimitedTextConfiguration"
+              name: "Number"
+            }
+          }
+        }
+      }
+    };
+    var ClearRange = {
+      serializedName: "ClearRange",
+      xmlName: "ClearRange",
+      type: {
+        name: "Composite",
+        className: "ClearRange",
+        modelProperties: {
+          start: {
+            serializedName: "Start",
+            required: true,
+            xmlName: "Start",
+            type: {
+              name: "Number"
             }
           },
-          jsonTextConfiguration: {
-            xmlName: "JsonTextConfiguration",
-            serializedName: "JsonTextConfiguration",
+          end: {
+            serializedName: "End",
+            required: true,
+            xmlName: "End",
             type: {
-              name: "Composite",
-              className: "JsonTextConfiguration"
+              name: "Number"
+            }
+          }
+        }
+      }
+    };
+    var QueryRequest = {
+      serializedName: "QueryRequest",
+      xmlName: "QueryRequest",
+      type: {
+        name: "Composite",
+        className: "QueryRequest",
+        modelProperties: {
+          queryType: {
+            serializedName: "QueryType",
+            required: true,
+            xmlName: "QueryType",
+            type: {
+              name: "String"
             }
           },
-          arrowConfiguration: {
-            xmlName: "ArrowConfiguration",
-            serializedName: "ArrowConfiguration",
+          expression: {
+            serializedName: "Expression",
+            required: true,
+            xmlName: "Expression",
+            type: {
+              name: "String"
+            }
+          },
+          inputSerialization: {
+            serializedName: "InputSerialization",
+            xmlName: "InputSerialization",
             type: {
               name: "Composite",
-              className: "ArrowConfiguration"
+              className: "QuerySerialization"
+            }
+          },
+          outputSerialization: {
+            serializedName: "OutputSerialization",
+            xmlName: "OutputSerialization",
+            type: {
+              name: "Composite",
+              className: "QuerySerialization"
             }
           }
         }
@@ -43477,9 +42031,8 @@ var require_dist10 = __commonJS({
         className: "QuerySerialization",
         modelProperties: {
           format: {
-            xmlName: "Format",
-            required: true,
             serializedName: "Format",
+            xmlName: "Format",
             type: {
               name: "Composite",
               className: "QueryFormat"
@@ -43488,106 +42041,108 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var QueryRequest = {
-      serializedName: "QueryRequest",
+    var QueryFormat = {
+      serializedName: "QueryFormat",
       type: {
         name: "Composite",
-        className: "QueryRequest",
+        className: "QueryFormat",
         modelProperties: {
-          queryType: {
-            xmlName: "QueryType",
-            required: true,
-            isConstant: true,
-            serializedName: "QueryType",
-            defaultValue: "SQL",
+          type: {
+            serializedName: "Type",
+            xmlName: "Type",
             type: {
-              name: "String"
+              name: "Enum",
+              allowedValues: ["delimited", "json", "arrow"]
             }
           },
-          expression: {
-            xmlName: "Expression",
-            required: true,
-            serializedName: "Expression",
-            type: {
-              name: "String"
-            }
-          },
-          inputSerialization: {
-            xmlName: "InputSerialization",
-            serializedName: "InputSerialization",
+          delimitedTextConfiguration: {
+            serializedName: "DelimitedTextConfiguration",
+            xmlName: "DelimitedTextConfiguration",
             type: {
               name: "Composite",
-              className: "QuerySerialization"
+              className: "DelimitedTextConfiguration"
             }
           },
-          outputSerialization: {
-            xmlName: "OutputSerialization",
-            serializedName: "OutputSerialization",
+          jsonTextConfiguration: {
+            serializedName: "JsonTextConfiguration",
+            xmlName: "JsonTextConfiguration",
             type: {
               name: "Composite",
-              className: "QuerySerialization"
+              className: "JsonTextConfiguration"
+            }
+          },
+          arrowConfiguration: {
+            serializedName: "ArrowConfiguration",
+            xmlName: "ArrowConfiguration",
+            type: {
+              name: "Composite",
+              className: "ArrowConfiguration"
             }
           }
         }
       }
     };
-    var SignedIdentifier = {
-      serializedName: "SignedIdentifier",
+    var DelimitedTextConfiguration = {
+      serializedName: "DelimitedTextConfiguration",
+      xmlName: "DelimitedTextConfiguration",
       type: {
         name: "Composite",
-        className: "SignedIdentifier",
+        className: "DelimitedTextConfiguration",
         modelProperties: {
-          id: {
-            xmlName: "Id",
+          columnSeparator: {
+            serializedName: "ColumnSeparator",
             required: true,
-            serializedName: "Id",
+            xmlName: "ColumnSeparator",
             type: {
               name: "String"
             }
           },
-          accessPolicy: {
-            xmlName: "AccessPolicy",
+          fieldQuote: {
+            serializedName: "FieldQuote",
             required: true,
-            serializedName: "AccessPolicy",
+            xmlName: "FieldQuote",
             type: {
-              name: "Composite",
-              className: "AccessPolicy"
+              name: "String"
             }
-          }
-        }
-      }
-    };
-    var StaticWebsite = {
-      serializedName: "StaticWebsite",
-      type: {
-        name: "Composite",
-        className: "StaticWebsite",
-        modelProperties: {
-          enabled: {
-            xmlName: "Enabled",
+          },
+          recordSeparator: {
+            serializedName: "RecordSeparator",
             required: true,
-            serializedName: "Enabled",
+            xmlName: "RecordSeparator",
+            type: {
+              name: "String"
+            }
+          },
+          escapeChar: {
+            serializedName: "EscapeChar",
+            required: true,
+            xmlName: "EscapeChar",
+            type: {
+              name: "String"
+            }
+          },
+          headersPresent: {
+            serializedName: "HeadersPresent",
+            required: true,
+            xmlName: "HasHeaders",
             type: {
               name: "Boolean"
             }
-          },
-          indexDocument: {
-            xmlName: "IndexDocument",
-            serializedName: "IndexDocument",
-            type: {
-              name: "String"
-            }
-          },
-          errorDocument404Path: {
-            xmlName: "ErrorDocument404Path",
-            serializedName: "ErrorDocument404Path",
-            type: {
-              name: "String"
-            }
-          },
-          defaultIndexDocumentPath: {
-            xmlName: "DefaultIndexDocumentPath",
-            serializedName: "DefaultIndexDocumentPath",
+          }
+        }
+      }
+    };
+    var JsonTextConfiguration = {
+      serializedName: "JsonTextConfiguration",
+      xmlName: "JsonTextConfiguration",
+      type: {
+        name: "Composite",
+        className: "JsonTextConfiguration",
+        modelProperties: {
+          recordSeparator: {
+            serializedName: "RecordSeparator",
+            required: true,
+            xmlName: "RecordSeparator",
             type: {
               name: "String"
             }
@@ -43595,122 +42150,117 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var BlobServiceProperties = {
-      xmlName: "StorageServiceProperties",
-      serializedName: "BlobServiceProperties",
+    var ArrowConfiguration = {
+      serializedName: "ArrowConfiguration",
+      xmlName: "ArrowConfiguration",
       type: {
         name: "Composite",
-        className: "BlobServiceProperties",
+        className: "ArrowConfiguration",
         modelProperties: {
-          blobAnalyticsLogging: {
-            xmlName: "Logging",
-            serializedName: "Logging",
-            type: {
-              name: "Composite",
-              className: "Logging"
-            }
-          },
-          hourMetrics: {
-            xmlName: "HourMetrics",
-            serializedName: "HourMetrics",
-            type: {
-              name: "Composite",
-              className: "Metrics"
-            }
-          },
-          minuteMetrics: {
-            xmlName: "MinuteMetrics",
-            serializedName: "MinuteMetrics",
-            type: {
-              name: "Composite",
-              className: "Metrics"
-            }
-          },
-          cors: {
+          schema: {
+            serializedName: "Schema",
+            required: true,
+            xmlName: "Schema",
             xmlIsWrapped: true,
-            xmlName: "Cors",
-            xmlElementName: "CorsRule",
-            serializedName: "Cors",
+            xmlElementName: "Field",
             type: {
               name: "Sequence",
               element: {
                 type: {
                   name: "Composite",
-                  className: "CorsRule"
+                  className: "ArrowField"
                 }
               }
-            }
-          },
-          defaultServiceVersion: {
-            xmlName: "DefaultServiceVersion",
-            serializedName: "DefaultServiceVersion",
-            type: {
-              name: "String"
-            }
-          },
-          deleteRetentionPolicy: {
-            xmlName: "DeleteRetentionPolicy",
-            serializedName: "DeleteRetentionPolicy",
-            type: {
-              name: "Composite",
-              className: "RetentionPolicy"
-            }
-          },
-          staticWebsite: {
-            xmlName: "StaticWebsite",
-            serializedName: "StaticWebsite",
-            type: {
-              name: "Composite",
-              className: "StaticWebsite"
             }
           }
         }
       }
     };
-    var BlobServiceStatistics = {
-      xmlName: "StorageServiceStats",
-      serializedName: "BlobServiceStatistics",
+    var ArrowField = {
+      serializedName: "ArrowField",
+      xmlName: "Field",
       type: {
         name: "Composite",
-        className: "BlobServiceStatistics",
+        className: "ArrowField",
         modelProperties: {
-          geoReplication: {
-            xmlName: "GeoReplication",
-            serializedName: "GeoReplication",
+          type: {
+            serializedName: "Type",
+            required: true,
+            xmlName: "Type",
             type: {
-              name: "Composite",
-              className: "GeoReplication"
+              name: "String"
+            }
+          },
+          name: {
+            serializedName: "Name",
+            xmlName: "Name",
+            type: {
+              name: "String"
+            }
+          },
+          precision: {
+            serializedName: "Precision",
+            xmlName: "Precision",
+            type: {
+              name: "Number"
+            }
+          },
+          scale: {
+            serializedName: "Scale",
+            xmlName: "Scale",
+            type: {
+              name: "Number"
             }
           }
         }
       }
     };
     var ServiceSetPropertiesHeaders = {
-      serializedName: "service-setproperties-headers",
+      serializedName: "Service_setPropertiesHeaders",
       type: {
         name: "Composite",
         className: "ServiceSetPropertiesHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceSetPropertiesExceptionHeaders = {
+      serializedName: "Service_setPropertiesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceSetPropertiesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43719,31 +42269,51 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceGetPropertiesHeaders = {
-      serializedName: "service-getproperties-headers",
+      serializedName: "Service_getPropertiesHeaders",
       type: {
         name: "Composite",
         className: "ServiceGetPropertiesHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceGetPropertiesExceptionHeaders = {
+      serializedName: "Service_getPropertiesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceGetPropertiesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43752,37 +42322,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceGetStatisticsHeaders = {
-      serializedName: "service-getstatistics-headers",
+      serializedName: "Service_getStatisticsHeaders",
       type: {
         name: "Composite",
         className: "ServiceGetStatisticsHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceGetStatisticsExceptionHeaders = {
+      serializedName: "Service_getStatisticsExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceGetStatisticsExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43791,31 +42382,51 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceListContainersSegmentHeaders = {
-      serializedName: "service-listcontainerssegment-headers",
+      serializedName: "Service_listContainersSegmentHeaders",
       type: {
         name: "Composite",
         className: "ServiceListContainersSegmentHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceListContainersSegmentExceptionHeaders = {
+      serializedName: "Service_listContainersSegmentExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceListContainersSegmentExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43824,37 +42435,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceGetUserDelegationKeyHeaders = {
-      serializedName: "service-getuserdelegationkey-headers",
+      serializedName: "Service_getUserDelegationKeyHeaders",
       type: {
         name: "Composite",
         className: "ServiceGetUserDelegationKeyHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceGetUserDelegationKeyExceptionHeaders = {
+      serializedName: "Service_getUserDelegationKeyExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceGetUserDelegationKeyExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43863,37 +42495,42 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceGetAccountInfoHeaders = {
-      serializedName: "service-getaccountinfo-headers",
+      serializedName: "Service_getAccountInfoHeaders",
       type: {
         name: "Composite",
         className: "ServiceGetAccountInfoHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           skuName: {
             serializedName: "x-ms-sku-name",
+            xmlName: "x-ms-sku-name",
             type: {
               name: "Enum",
               allowedValues: [
@@ -43907,6 +42544,7 @@ var require_dist10 = __commonJS({
           },
           accountKind: {
             serializedName: "x-ms-account-kind",
+            xmlName: "x-ms-account-kind",
             type: {
               name: "Enum",
               allowedValues: [
@@ -43920,12 +42558,30 @@ var require_dist10 = __commonJS({
           },
           isHierarchicalNamespaceEnabled: {
             serializedName: "x-ms-is-hns-enabled",
+            xmlName: "x-ms-is-hns-enabled",
             type: {
               name: "Boolean"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceGetAccountInfoExceptionHeaders = {
+      serializedName: "Service_getAccountInfoExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceGetAccountInfoExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43934,37 +42590,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceSubmitBatchHeaders = {
-      serializedName: "service-submitbatch-headers",
+      serializedName: "Service_submitBatchHeaders",
       type: {
         name: "Composite",
         className: "ServiceSubmitBatchHeaders",
         modelProperties: {
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceSubmitBatchExceptionHeaders = {
+      serializedName: "Service_submitBatchExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceSubmitBatchExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -43973,37 +42650,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ServiceFilterBlobsHeaders = {
-      serializedName: "service-filterblobs-headers",
+      serializedName: "Service_filterBlobsHeaders",
       type: {
         name: "Composite",
         className: "ServiceFilterBlobsHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ServiceFilterBlobsExceptionHeaders = {
+      serializedName: "Service_filterBlobsExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ServiceFilterBlobsExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44012,49 +42710,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerCreateHeaders = {
-      serializedName: "container-create-headers",
+      serializedName: "Container_createHeaders",
       type: {
         name: "Composite",
         className: "ContainerCreateHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerCreateExceptionHeaders = {
+      serializedName: "Container_createExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerCreateExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44063,47 +42784,45 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerGetPropertiesHeaders = {
-      serializedName: "container-getproperties-headers",
+      serializedName: "Container_getPropertiesHeaders",
       type: {
         name: "Composite",
         className: "ContainerGetPropertiesHeaders",
         modelProperties: {
           metadata: {
             serializedName: "x-ms-meta",
+            xmlName: "x-ms-meta",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
+              value: { type: { name: "String" } }
             },
             headerCollectionPrefix: "x-ms-meta-"
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseDuration: {
             serializedName: "x-ms-lease-duration",
+            xmlName: "x-ms-lease-duration",
             type: {
               name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
+              allowedValues: ["infinite", "fixed"]
             }
           },
           leaseState: {
             serializedName: "x-ms-lease-state",
+            xmlName: "x-ms-lease-state",
             type: {
               name: "Enum",
               allowedValues: [
@@ -44117,70 +42836,95 @@ var require_dist10 = __commonJS({
           },
           leaseStatus: {
             serializedName: "x-ms-lease-status",
+            xmlName: "x-ms-lease-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
+              allowedValues: ["locked", "unlocked"]
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           blobPublicAccess: {
             serializedName: "x-ms-blob-public-access",
+            xmlName: "x-ms-blob-public-access",
             type: {
-              name: "String"
+              name: "Enum",
+              allowedValues: ["container", "blob"]
             }
           },
           hasImmutabilityPolicy: {
             serializedName: "x-ms-has-immutability-policy",
+            xmlName: "x-ms-has-immutability-policy",
             type: {
               name: "Boolean"
             }
           },
           hasLegalHold: {
             serializedName: "x-ms-has-legal-hold",
+            xmlName: "x-ms-has-legal-hold",
             type: {
               name: "Boolean"
             }
           },
           defaultEncryptionScope: {
             serializedName: "x-ms-default-encryption-scope",
+            xmlName: "x-ms-default-encryption-scope",
             type: {
               name: "String"
             }
           },
           denyEncryptionScopeOverride: {
             serializedName: "x-ms-deny-encryption-scope-override",
+            xmlName: "x-ms-deny-encryption-scope-override",
             type: {
               name: "Boolean"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerGetPropertiesExceptionHeaders = {
+      serializedName: "Container_getPropertiesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerGetPropertiesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44189,37 +42933,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerDeleteHeaders = {
-      serializedName: "container-delete-headers",
+      serializedName: "Container_deleteHeaders",
       type: {
         name: "Composite",
         className: "ContainerDeleteHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerDeleteExceptionHeaders = {
+      serializedName: "Container_deleteExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerDeleteExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44228,49 +42993,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerSetMetadataHeaders = {
-      serializedName: "container-setmetadata-headers",
+      serializedName: "Container_setMetadataHeaders",
       type: {
         name: "Composite",
         className: "ContainerSetMetadataHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerSetMetadataExceptionHeaders = {
+      serializedName: "Container_setMetadataExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerSetMetadataExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44279,55 +43067,80 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerGetAccessPolicyHeaders = {
-      serializedName: "container-getaccesspolicy-headers",
+      serializedName: "Container_getAccessPolicyHeaders",
       type: {
         name: "Composite",
         className: "ContainerGetAccessPolicyHeaders",
         modelProperties: {
           blobPublicAccess: {
             serializedName: "x-ms-blob-public-access",
+            xmlName: "x-ms-blob-public-access",
             type: {
-              name: "String"
+              name: "Enum",
+              allowedValues: ["container", "blob"]
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerGetAccessPolicyExceptionHeaders = {
+      serializedName: "Container_getAccessPolicyExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerGetAccessPolicyExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44336,49 +43149,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerSetAccessPolicyHeaders = {
-      serializedName: "container-setaccesspolicy-headers",
+      serializedName: "Container_setAccessPolicyHeaders",
       type: {
         name: "Composite",
         className: "ContainerSetAccessPolicyHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerSetAccessPolicyExceptionHeaders = {
+      serializedName: "Container_setAccessPolicyExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerSetAccessPolicyExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44387,37 +43223,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerRestoreHeaders = {
-      serializedName: "container-restore-headers",
+      serializedName: "Container_restoreHeaders",
       type: {
         name: "Composite",
         className: "ContainerRestoreHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerRestoreExceptionHeaders = {
+      serializedName: "Container_restoreExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerRestoreExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44426,37 +43283,58 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerRenameHeaders = {
-      serializedName: "container-rename-headers",
+      serializedName: "Container_renameHeaders",
       type: {
         name: "Composite",
         className: "ContainerRenameHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerRenameExceptionHeaders = {
+      serializedName: "Container_renameExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerRenameExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44465,31 +43343,44 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerSubmitBatchHeaders = {
-      serializedName: "container-submitbatch-headers",
+      serializedName: "Container_submitBatchHeaders",
       type: {
         name: "Composite",
         className: "ContainerSubmitBatchHeaders",
         modelProperties: {
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerSubmitBatchExceptionHeaders = {
+      serializedName: "Container_submitBatchExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerSubmitBatchExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44498,55 +43389,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerAcquireLeaseHeaders = {
-      serializedName: "container-acquirelease-headers",
+      serializedName: "Container_acquireLeaseHeaders",
       type: {
         name: "Composite",
         className: "ContainerAcquireLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerAcquireLeaseExceptionHeaders = {
+      serializedName: "Container_acquireLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerAcquireLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44555,49 +43463,65 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerReleaseLeaseHeaders = {
-      serializedName: "container-releaselease-headers",
+      serializedName: "Container_releaseLeaseHeaders",
       type: {
         name: "Composite",
         className: "ContainerReleaseLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerReleaseLeaseExceptionHeaders = {
+      serializedName: "Container_releaseLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerReleaseLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44606,55 +43530,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerRenewLeaseHeaders = {
-      serializedName: "container-renewlease-headers",
+      serializedName: "Container_renewLeaseHeaders",
       type: {
         name: "Composite",
         className: "ContainerRenewLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerRenewLeaseExceptionHeaders = {
+      serializedName: "Container_renewLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerRenewLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44663,55 +43604,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerBreakLeaseHeaders = {
-      serializedName: "container-breaklease-headers",
+      serializedName: "Container_breakLeaseHeaders",
       type: {
         name: "Composite",
         className: "ContainerBreakLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseTime: {
             serializedName: "x-ms-lease-time",
+            xmlName: "x-ms-lease-time",
             type: {
               name: "Number"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerBreakLeaseExceptionHeaders = {
+      serializedName: "Container_breakLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerBreakLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44720,55 +43678,72 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerChangeLeaseHeaders = {
-      serializedName: "container-changelease-headers",
+      serializedName: "Container_changeLeaseHeaders",
       type: {
         name: "Composite",
         className: "ContainerChangeLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerChangeLeaseExceptionHeaders = {
+      serializedName: "Container_changeLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerChangeLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44777,43 +43752,65 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerListBlobFlatSegmentHeaders = {
-      serializedName: "container-listblobflatsegment-headers",
+      serializedName: "Container_listBlobFlatSegmentHeaders",
       type: {
         name: "Composite",
         className: "ContainerListBlobFlatSegmentHeaders",
         modelProperties: {
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerListBlobFlatSegmentExceptionHeaders = {
+      serializedName: "Container_listBlobFlatSegmentExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerListBlobFlatSegmentExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44822,43 +43819,65 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerListBlobHierarchySegmentHeaders = {
-      serializedName: "container-listblobhierarchysegment-headers",
+      serializedName: "Container_listBlobHierarchySegmentHeaders",
       type: {
         name: "Composite",
         className: "ContainerListBlobHierarchySegmentHeaders",
         modelProperties: {
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var ContainerListBlobHierarchySegmentExceptionHeaders = {
+      serializedName: "Container_listBlobHierarchySegmentExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerListBlobHierarchySegmentExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -44867,37 +43886,42 @@ var require_dist10 = __commonJS({
       }
     };
     var ContainerGetAccountInfoHeaders = {
-      serializedName: "container-getaccountinfo-headers",
+      serializedName: "Container_getAccountInfoHeaders",
       type: {
         name: "Composite",
         className: "ContainerGetAccountInfoHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           skuName: {
             serializedName: "x-ms-sku-name",
+            xmlName: "x-ms-sku-name",
             type: {
               name: "Enum",
               allowedValues: [
@@ -44911,6 +43935,7 @@ var require_dist10 = __commonJS({
           },
           accountKind: {
             serializedName: "x-ms-account-kind",
+            xmlName: "x-ms-account-kind",
             type: {
               name: "Enum",
               allowedValues: [
@@ -44921,9 +43946,452 @@ var require_dist10 = __commonJS({
                 "BlockBlobStorage"
               ]
             }
-          },
+          }
+        }
+      }
+    };
+    var ContainerGetAccountInfoExceptionHeaders = {
+      serializedName: "Container_getAccountInfoExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerGetAccountInfoExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryCreateHeaders = {
+      serializedName: "Directory_createHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryCreateHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          contentLength: {
+            serializedName: "content-length",
+            xmlName: "content-length",
+            type: {
+              name: "Number"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryCreateExceptionHeaders = {
+      serializedName: "Directory_createExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryCreateExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryRenameHeaders = {
+      serializedName: "Directory_renameHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryRenameHeaders",
+        modelProperties: {
+          marker: {
+            serializedName: "x-ms-continuation",
+            xmlName: "x-ms-continuation",
+            type: {
+              name: "String"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          contentLength: {
+            serializedName: "content-length",
+            xmlName: "content-length",
+            type: {
+              name: "Number"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryRenameExceptionHeaders = {
+      serializedName: "Directory_renameExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryRenameExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryDeleteHeaders = {
+      serializedName: "Directory_deleteHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryDeleteHeaders",
+        modelProperties: {
+          marker: {
+            serializedName: "x-ms-continuation",
+            xmlName: "x-ms-continuation",
+            type: {
+              name: "String"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryDeleteExceptionHeaders = {
+      serializedName: "Directory_deleteExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryDeleteExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectorySetAccessControlHeaders = {
+      serializedName: "Directory_setAccessControlHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectorySetAccessControlHeaders",
+        modelProperties: {
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectorySetAccessControlExceptionHeaders = {
+      serializedName: "Directory_setAccessControlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectorySetAccessControlExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryGetAccessControlHeaders = {
+      serializedName: "Directory_getAccessControlHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryGetAccessControlHeaders",
+        modelProperties: {
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          xMsOwner: {
+            serializedName: "x-ms-owner",
+            xmlName: "x-ms-owner",
+            type: {
+              name: "String"
+            }
+          },
+          xMsGroup: {
+            serializedName: "x-ms-group",
+            xmlName: "x-ms-group",
+            type: {
+              name: "String"
+            }
+          },
+          xMsPermissions: {
+            serializedName: "x-ms-permissions",
+            xmlName: "x-ms-permissions",
+            type: {
+              name: "String"
+            }
+          },
+          xMsAcl: {
+            serializedName: "x-ms-acl",
+            xmlName: "x-ms-acl",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var DirectoryGetAccessControlExceptionHeaders = {
+      serializedName: "Directory_getAccessControlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "DirectoryGetAccessControlExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
@@ -44932,172 +44400,175 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobDownloadHeaders = {
-      serializedName: "blob-download-headers",
+      serializedName: "Blob_downloadHeaders",
       type: {
         name: "Composite",
         className: "BlobDownloadHeaders",
         modelProperties: {
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           metadata: {
             serializedName: "x-ms-meta",
+            xmlName: "x-ms-meta",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
+              value: { type: { name: "String" } }
             },
             headerCollectionPrefix: "x-ms-meta-"
           },
           objectReplicationPolicyId: {
             serializedName: "x-ms-or-policy-id",
+            xmlName: "x-ms-or-policy-id",
             type: {
               name: "String"
             }
           },
           objectReplicationRules: {
             serializedName: "x-ms-or",
+            xmlName: "x-ms-or",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
+              value: { type: { name: "String" } }
             },
             headerCollectionPrefix: "x-ms-or-"
           },
           contentLength: {
             serializedName: "content-length",
+            xmlName: "content-length",
             type: {
               name: "Number"
             }
           },
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           contentRange: {
             serializedName: "content-range",
+            xmlName: "content-range",
             type: {
               name: "String"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           contentMD5: {
             serializedName: "content-md5",
+            xmlName: "content-md5",
             type: {
               name: "ByteArray"
             }
           },
           contentEncoding: {
             serializedName: "content-encoding",
+            xmlName: "content-encoding",
             type: {
               name: "String"
             }
           },
           cacheControl: {
             serializedName: "cache-control",
+            xmlName: "cache-control",
             type: {
               name: "String"
             }
           },
           contentDisposition: {
             serializedName: "content-disposition",
+            xmlName: "content-disposition",
             type: {
               name: "String"
             }
           },
           contentLanguage: {
             serializedName: "content-language",
+            xmlName: "content-language",
             type: {
               name: "String"
             }
           },
           blobSequenceNumber: {
             serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
             type: {
               name: "Number"
             }
           },
           blobType: {
             serializedName: "x-ms-blob-type",
+            xmlName: "x-ms-blob-type",
             type: {
               name: "Enum",
-              allowedValues: [
-                "BlockBlob",
-                "PageBlob",
-                "AppendBlob"
-              ]
+              allowedValues: ["BlockBlob", "PageBlob", "AppendBlob"]
             }
           },
           copyCompletedOn: {
             serializedName: "x-ms-copy-completion-time",
+            xmlName: "x-ms-copy-completion-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           copyStatusDescription: {
             serializedName: "x-ms-copy-status-description",
+            xmlName: "x-ms-copy-status-description",
             type: {
               name: "String"
             }
           },
           copyId: {
             serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
             type: {
               name: "String"
             }
           },
           copyProgress: {
             serializedName: "x-ms-copy-progress",
+            xmlName: "x-ms-copy-progress",
             type: {
               name: "String"
             }
           },
           copySource: {
             serializedName: "x-ms-copy-source",
+            xmlName: "x-ms-copy-source",
             type: {
               name: "String"
             }
           },
           copyStatus: {
             serializedName: "x-ms-copy-status",
+            xmlName: "x-ms-copy-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
+              allowedValues: ["pending", "success", "aborted", "failed"]
             }
           },
           leaseDuration: {
             serializedName: "x-ms-lease-duration",
+            xmlName: "x-ms-lease-duration",
             type: {
               name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
+              allowedValues: ["infinite", "fixed"]
             }
           },
           leaseState: {
             serializedName: "x-ms-lease-state",
+            xmlName: "x-ms-lease-state",
             type: {
               name: "Enum",
               allowedValues: [
@@ -45111,112 +44582,143 @@ var require_dist10 = __commonJS({
           },
           leaseStatus: {
             serializedName: "x-ms-lease-status",
+            xmlName: "x-ms-lease-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
+              allowedValues: ["locked", "unlocked"]
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           isCurrentVersion: {
             serializedName: "x-ms-is-current-version",
+            xmlName: "x-ms-is-current-version",
             type: {
               name: "Boolean"
             }
           },
           acceptRanges: {
             serializedName: "accept-ranges",
+            xmlName: "accept-ranges",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           blobCommittedBlockCount: {
             serializedName: "x-ms-blob-committed-block-count",
+            xmlName: "x-ms-blob-committed-block-count",
             type: {
               name: "Number"
             }
           },
           isServerEncrypted: {
             serializedName: "x-ms-server-encrypted",
+            xmlName: "x-ms-server-encrypted",
             type: {
               name: "Boolean"
             }
           },
           encryptionKeySha256: {
             serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
             type: {
               name: "String"
             }
           },
           encryptionScope: {
             serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
             type: {
               name: "String"
             }
           },
           blobContentMD5: {
             serializedName: "x-ms-blob-content-md5",
+            xmlName: "x-ms-blob-content-md5",
             type: {
               name: "ByteArray"
             }
           },
           tagCount: {
             serializedName: "x-ms-tag-count",
+            xmlName: "x-ms-tag-count",
             type: {
               name: "Number"
             }
           },
           isSealed: {
             serializedName: "x-ms-blob-sealed",
+            xmlName: "x-ms-blob-sealed",
             type: {
               name: "Boolean"
             }
           },
           lastAccessed: {
             serializedName: "x-ms-last-access-time",
+            xmlName: "x-ms-last-access-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           contentCrc64: {
             serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
             type: {
               name: "ByteArray"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobDownloadExceptionHeaders = {
+      serializedName: "Blob_downloadExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobDownloadExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -45225,130 +44727,126 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobGetPropertiesHeaders = {
-      serializedName: "blob-getproperties-headers",
+      serializedName: "Blob_getPropertiesHeaders",
       type: {
         name: "Composite",
         className: "BlobGetPropertiesHeaders",
         modelProperties: {
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           createdOn: {
             serializedName: "x-ms-creation-time",
+            xmlName: "x-ms-creation-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           metadata: {
             serializedName: "x-ms-meta",
+            xmlName: "x-ms-meta",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
+              value: { type: { name: "String" } }
             },
             headerCollectionPrefix: "x-ms-meta-"
           },
           objectReplicationPolicyId: {
             serializedName: "x-ms-or-policy-id",
+            xmlName: "x-ms-or-policy-id",
             type: {
               name: "String"
             }
           },
           objectReplicationRules: {
             serializedName: "x-ms-or",
+            xmlName: "x-ms-or",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
+              value: { type: { name: "String" } }
             },
             headerCollectionPrefix: "x-ms-or-"
           },
           blobType: {
             serializedName: "x-ms-blob-type",
+            xmlName: "x-ms-blob-type",
             type: {
               name: "Enum",
-              allowedValues: [
-                "BlockBlob",
-                "PageBlob",
-                "AppendBlob"
-              ]
+              allowedValues: ["BlockBlob", "PageBlob", "AppendBlob"]
             }
           },
           copyCompletedOn: {
             serializedName: "x-ms-copy-completion-time",
+            xmlName: "x-ms-copy-completion-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           copyStatusDescription: {
             serializedName: "x-ms-copy-status-description",
+            xmlName: "x-ms-copy-status-description",
             type: {
               name: "String"
             }
           },
           copyId: {
             serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
             type: {
               name: "String"
             }
           },
           copyProgress: {
             serializedName: "x-ms-copy-progress",
+            xmlName: "x-ms-copy-progress",
             type: {
               name: "String"
             }
           },
           copySource: {
             serializedName: "x-ms-copy-source",
+            xmlName: "x-ms-copy-source",
             type: {
               name: "String"
             }
           },
           copyStatus: {
             serializedName: "x-ms-copy-status",
+            xmlName: "x-ms-copy-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
+              allowedValues: ["pending", "success", "aborted", "failed"]
             }
           },
           isIncrementalCopy: {
             serializedName: "x-ms-incremental-copy",
+            xmlName: "x-ms-incremental-copy",
             type: {
               name: "Boolean"
             }
           },
           destinationSnapshot: {
             serializedName: "x-ms-copy-destination-snapshot",
+            xmlName: "x-ms-copy-destination-snapshot",
             type: {
               name: "String"
             }
           },
           leaseDuration: {
             serializedName: "x-ms-lease-duration",
+            xmlName: "x-ms-lease-duration",
             type: {
               name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
+              allowedValues: ["infinite", "fixed"]
             }
           },
           leaseState: {
             serializedName: "x-ms-lease-state",
+            xmlName: "x-ms-lease-state",
             type: {
               name: "Enum",
               allowedValues: [
@@ -45362,190 +44860,235 @@ var require_dist10 = __commonJS({
           },
           leaseStatus: {
             serializedName: "x-ms-lease-status",
+            xmlName: "x-ms-lease-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
+              allowedValues: ["locked", "unlocked"]
             }
           },
           contentLength: {
             serializedName: "content-length",
+            xmlName: "content-length",
             type: {
               name: "Number"
             }
           },
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           contentMD5: {
             serializedName: "content-md5",
+            xmlName: "content-md5",
             type: {
               name: "ByteArray"
             }
           },
           contentEncoding: {
             serializedName: "content-encoding",
+            xmlName: "content-encoding",
             type: {
               name: "String"
             }
           },
           contentDisposition: {
             serializedName: "content-disposition",
+            xmlName: "content-disposition",
             type: {
               name: "String"
             }
           },
           contentLanguage: {
             serializedName: "content-language",
+            xmlName: "content-language",
             type: {
               name: "String"
             }
           },
           cacheControl: {
             serializedName: "cache-control",
+            xmlName: "cache-control",
             type: {
               name: "String"
             }
           },
           blobSequenceNumber: {
             serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
             type: {
               name: "Number"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           acceptRanges: {
             serializedName: "accept-ranges",
+            xmlName: "accept-ranges",
             type: {
               name: "String"
             }
           },
           blobCommittedBlockCount: {
             serializedName: "x-ms-blob-committed-block-count",
+            xmlName: "x-ms-blob-committed-block-count",
             type: {
               name: "Number"
             }
           },
           isServerEncrypted: {
             serializedName: "x-ms-server-encrypted",
+            xmlName: "x-ms-server-encrypted",
             type: {
               name: "Boolean"
             }
           },
           encryptionKeySha256: {
             serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
             type: {
               name: "String"
             }
           },
           encryptionScope: {
             serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
             type: {
               name: "String"
             }
           },
           accessTier: {
             serializedName: "x-ms-access-tier",
+            xmlName: "x-ms-access-tier",
             type: {
               name: "String"
             }
           },
           accessTierInferred: {
             serializedName: "x-ms-access-tier-inferred",
+            xmlName: "x-ms-access-tier-inferred",
             type: {
               name: "Boolean"
             }
           },
           archiveStatus: {
             serializedName: "x-ms-archive-status",
+            xmlName: "x-ms-archive-status",
             type: {
               name: "String"
             }
           },
           accessTierChangedOn: {
             serializedName: "x-ms-access-tier-change-time",
+            xmlName: "x-ms-access-tier-change-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           isCurrentVersion: {
             serializedName: "x-ms-is-current-version",
+            xmlName: "x-ms-is-current-version",
             type: {
               name: "Boolean"
             }
           },
           tagCount: {
             serializedName: "x-ms-tag-count",
+            xmlName: "x-ms-tag-count",
             type: {
               name: "Number"
             }
           },
           expiresOn: {
             serializedName: "x-ms-expiry-time",
+            xmlName: "x-ms-expiry-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           isSealed: {
             serializedName: "x-ms-blob-sealed",
+            xmlName: "x-ms-blob-sealed",
             type: {
               name: "Boolean"
             }
           },
           rehydratePriority: {
             serializedName: "x-ms-rehydrate-priority",
+            xmlName: "x-ms-rehydrate-priority",
             type: {
-              name: "String"
+              name: "Enum",
+              allowedValues: ["High", "Standard"]
             }
           },
           lastAccessed: {
             serializedName: "x-ms-last-access-time",
+            xmlName: "x-ms-last-access-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobGetPropertiesExceptionHeaders = {
+      serializedName: "Blob_getPropertiesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobGetPropertiesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -45554,37 +45097,58 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobDeleteHeaders = {
-      serializedName: "blob-delete-headers",
+      serializedName: "Blob_deleteHeaders",
       type: {
         name: "Composite",
         className: "BlobDeleteHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobDeleteExceptionHeaders = {
+      serializedName: "Blob_deleteExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobDeleteExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -45593,43 +45157,72 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobSetAccessControlHeaders = {
-      serializedName: "blob-setaccesscontrol-headers",
+      serializedName: "Blob_setAccessControlHeaders",
       type: {
         name: "Composite",
         className: "BlobSetAccessControlHeaders",
         modelProperties: {
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobSetAccessControlExceptionHeaders = {
+      serializedName: "Blob_setAccessControlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetAccessControlExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
@@ -45638,67 +45231,100 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobGetAccessControlHeaders = {
-      serializedName: "blob-getaccesscontrol-headers",
+      serializedName: "Blob_getAccessControlHeaders",
       type: {
         name: "Composite",
         className: "BlobGetAccessControlHeaders",
         modelProperties: {
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           xMsOwner: {
             serializedName: "x-ms-owner",
+            xmlName: "x-ms-owner",
             type: {
               name: "String"
             }
           },
           xMsGroup: {
             serializedName: "x-ms-group",
+            xmlName: "x-ms-group",
             type: {
               name: "String"
             }
           },
           xMsPermissions: {
             serializedName: "x-ms-permissions",
+            xmlName: "x-ms-permissions",
             type: {
               name: "String"
             }
           },
           xMsAcl: {
             serializedName: "x-ms-acl",
+            xmlName: "x-ms-acl",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobGetAccessControlExceptionHeaders = {
+      serializedName: "Blob_getAccessControlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobGetAccessControlExceptionHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
@@ -45707,49 +45333,56 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobRenameHeaders = {
-      serializedName: "blob-rename-headers",
+      serializedName: "Blob_renameHeaders",
       type: {
         name: "Composite",
         className: "BlobRenameHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           contentLength: {
             serializedName: "content-length",
+            xmlName: "content-length",
             type: {
               name: "Number"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
@@ -45757,323 +45390,29 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var PageBlobCreateHeaders = {
-      serializedName: "pageblob-create-headers",
+    var BlobRenameExceptionHeaders = {
+      serializedName: "Blob_renameExceptionHeaders",
       type: {
         name: "Composite",
-        className: "PageBlobCreateHeaders",
+        className: "BlobRenameExceptionHeaders",
         modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            serializedName: "x-ms-version-id",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var AppendBlobCreateHeaders = {
-      serializedName: "appendblob-create-headers",
-      type: {
-        name: "Composite",
-        className: "AppendBlobCreateHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            serializedName: "x-ms-version-id",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlockBlobUploadHeaders = {
-      serializedName: "blockblob-upload-headers",
-      type: {
-        name: "Composite",
-        className: "BlockBlobUploadHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            serializedName: "x-ms-version-id",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlockBlobPutBlobFromUrlHeaders = {
-      serializedName: "blockblob-putblobfromurl-headers",
-      type: {
-        name: "Composite",
-        className: "BlockBlobPutBlobFromUrlHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            serializedName: "x-ms-version-id",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
@@ -46082,37 +45421,58 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobUndeleteHeaders = {
-      serializedName: "blob-undelete-headers",
+      serializedName: "Blob_undeleteHeaders",
       type: {
         name: "Composite",
         className: "BlobUndeleteHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobUndeleteExceptionHeaders = {
+      serializedName: "Blob_undeleteExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobUndeleteExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46121,49 +45481,65 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobSetExpiryHeaders = {
-      serializedName: "blob-setexpiry-headers",
+      serializedName: "Blob_setExpiryHeaders",
       type: {
         name: "Composite",
         className: "BlobSetExpiryHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobSetExpiryExceptionHeaders = {
+      serializedName: "Blob_setExpiryExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetExpiryExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46171,56 +45547,80 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var BlobSetHTTPHeadersHeaders = {
-      serializedName: "blob-sethttpheaders-headers",
+    var BlobSetHttpHeadersHeaders = {
+      serializedName: "Blob_setHttpHeadersHeaders",
       type: {
         name: "Composite",
-        className: "BlobSetHTTPHeadersHeaders",
+        className: "BlobSetHttpHeadersHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           blobSequenceNumber: {
             serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
             type: {
               name: "Number"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobSetHttpHeadersExceptionHeaders = {
+      serializedName: "Blob_setHttpHeadersExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetHttpHeadersExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46229,73 +45629,100 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobSetMetadataHeaders = {
-      serializedName: "blob-setmetadata-headers",
+      serializedName: "Blob_setMetadataHeaders",
       type: {
         name: "Composite",
         className: "BlobSetMetadataHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           isServerEncrypted: {
             serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
             type: {
               name: "Boolean"
             }
           },
           encryptionKeySha256: {
             serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
             type: {
               name: "String"
             }
           },
           encryptionScope: {
             serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobSetMetadataExceptionHeaders = {
+      serializedName: "Blob_setMetadataExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetMetadataExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46304,55 +45731,72 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobAcquireLeaseHeaders = {
-      serializedName: "blob-acquirelease-headers",
+      serializedName: "Blob_acquireLeaseHeaders",
       type: {
         name: "Composite",
         className: "BlobAcquireLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobAcquireLeaseExceptionHeaders = {
+      serializedName: "Blob_acquireLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobAcquireLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46361,49 +45805,65 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobReleaseLeaseHeaders = {
-      serializedName: "blob-releaselease-headers",
+      serializedName: "Blob_releaseLeaseHeaders",
       type: {
         name: "Composite",
         className: "BlobReleaseLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobReleaseLeaseExceptionHeaders = {
+      serializedName: "Blob_releaseLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobReleaseLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46412,55 +45872,72 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobRenewLeaseHeaders = {
-      serializedName: "blob-renewlease-headers",
+      serializedName: "Blob_renewLeaseHeaders",
       type: {
         name: "Composite",
         className: "BlobRenewLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobRenewLeaseExceptionHeaders = {
+      serializedName: "Blob_renewLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobRenewLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46469,55 +45946,72 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobChangeLeaseHeaders = {
-      serializedName: "blob-changelease-headers",
+      serializedName: "Blob_changeLeaseHeaders",
       type: {
         name: "Composite",
         className: "BlobChangeLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           leaseId: {
             serializedName: "x-ms-lease-id",
+            xmlName: "x-ms-lease-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobChangeLeaseExceptionHeaders = {
+      serializedName: "Blob_changeLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobChangeLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46526,55 +46020,72 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobBreakLeaseHeaders = {
-      serializedName: "blob-breaklease-headers",
+      serializedName: "Blob_breakLeaseHeaders",
       type: {
         name: "Composite",
         className: "BlobBreakLeaseHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           leaseTime: {
             serializedName: "x-ms-lease-time",
+            xmlName: "x-ms-lease-time",
             type: {
               name: "Number"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
-          },
+          }
+        }
+      }
+    };
+    var BlobBreakLeaseExceptionHeaders = {
+      serializedName: "Blob_breakLeaseExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobBreakLeaseExceptionHeaders",
+        modelProperties: {
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46583,67 +46094,93 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobCreateSnapshotHeaders = {
-      serializedName: "blob-createsnapshot-headers",
+      serializedName: "Blob_createSnapshotHeaders",
       type: {
         name: "Composite",
         className: "BlobCreateSnapshotHeaders",
         modelProperties: {
           snapshot: {
             serializedName: "x-ms-snapshot",
+            xmlName: "x-ms-snapshot",
             type: {
               name: "String"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           isServerEncrypted: {
             serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
             type: {
               name: "Boolean"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobCreateSnapshotExceptionHeaders = {
+      serializedName: "Blob_createSnapshotExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobCreateSnapshotExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46652,73 +46189,94 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobStartCopyFromURLHeaders = {
-      serializedName: "blob-startcopyfromurl-headers",
+      serializedName: "Blob_startCopyFromURLHeaders",
       type: {
         name: "Composite",
         className: "BlobStartCopyFromURLHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           copyId: {
             serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
             type: {
               name: "String"
             }
           },
           copyStatus: {
             serializedName: "x-ms-copy-status",
+            xmlName: "x-ms-copy-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
+              allowedValues: ["pending", "success", "aborted", "failed"]
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobStartCopyFromURLExceptionHeaders = {
+      serializedName: "Blob_startCopyFromURLExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobStartCopyFromURLExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46727,82 +46285,108 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobCopyFromURLHeaders = {
-      serializedName: "blob-copyfromurl-headers",
+      serializedName: "Blob_copyFromURLHeaders",
       type: {
         name: "Composite",
         className: "BlobCopyFromURLHeaders",
         modelProperties: {
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           versionId: {
             serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           copyId: {
             serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
             type: {
               name: "String"
             }
           },
           copyStatus: {
+            defaultValue: "success",
+            isConstant: true,
             serializedName: "x-ms-copy-status",
             type: {
-              name: "Enum",
-              allowedValues: [
-                "success"
-              ]
+              name: "String"
             }
           },
           contentMD5: {
             serializedName: "content-md5",
+            xmlName: "content-md5",
             type: {
               name: "ByteArray"
             }
           },
           xMsContentCrc64: {
             serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
             type: {
               name: "ByteArray"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobCopyFromURLExceptionHeaders = {
+      serializedName: "Blob_copyFromURLExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobCopyFromURLExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46811,37 +46395,58 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobAbortCopyFromURLHeaders = {
-      serializedName: "blob-abortcopyfromurl-headers",
+      serializedName: "Blob_abortCopyFromURLHeaders",
       type: {
         name: "Composite",
         className: "BlobAbortCopyFromURLHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobAbortCopyFromURLExceptionHeaders = {
+      serializedName: "Blob_abortCopyFromURLExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobAbortCopyFromURLExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46850,31 +46455,51 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobSetTierHeaders = {
-      serializedName: "blob-settier-headers",
+      serializedName: "Blob_setTierHeaders",
       type: {
         name: "Composite",
         className: "BlobSetTierHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobSetTierExceptionHeaders = {
+      serializedName: "Blob_setTierExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetTierExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -46883,37 +46508,42 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobGetAccountInfoHeaders = {
-      serializedName: "blob-getaccountinfo-headers",
+      serializedName: "Blob_getAccountInfoHeaders",
       type: {
         name: "Composite",
         className: "BlobGetAccountInfoHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           skuName: {
             serializedName: "x-ms-sku-name",
+            xmlName: "x-ms-sku-name",
             type: {
               name: "Enum",
               allowedValues: [
@@ -46927,6 +46557,7 @@ var require_dist10 = __commonJS({
           },
           accountKind: {
             serializedName: "x-ms-account-kind",
+            xmlName: "x-ms-account-kind",
             type: {
               name: "Enum",
               allowedValues: [
@@ -46937,1068 +46568,19 @@ var require_dist10 = __commonJS({
                 "BlockBlobStorage"
               ]
             }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
           }
         }
       }
     };
-    var BlockBlobStageBlockHeaders = {
-      serializedName: "blockblob-stageblock-headers",
+    var BlobGetAccountInfoExceptionHeaders = {
+      serializedName: "Blob_getAccountInfoExceptionHeaders",
       type: {
         name: "Composite",
-        className: "BlockBlobStageBlockHeaders",
+        className: "BlobGetAccountInfoExceptionHeaders",
         modelProperties: {
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
           errorCode: {
             serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlockBlobStageBlockFromURLHeaders = {
-      serializedName: "blockblob-stageblockfromurl-headers",
-      type: {
-        name: "Composite",
-        className: "BlockBlobStageBlockFromURLHeaders",
-        modelProperties: {
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlockBlobCommitBlockListHeaders = {
-      serializedName: "blockblob-commitblocklist-headers",
-      type: {
-        name: "Composite",
-        className: "BlockBlobCommitBlockListHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          versionId: {
-            serializedName: "x-ms-version-id",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var BlockBlobGetBlockListHeaders = {
-      serializedName: "blockblob-getblocklist-headers",
-      type: {
-        name: "Composite",
-        className: "BlockBlobGetBlockListHeaders",
-        modelProperties: {
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          contentType: {
-            serializedName: "content-type",
-            type: {
-              name: "String"
-            }
-          },
-          blobContentLength: {
-            serializedName: "x-ms-blob-content-length",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobUploadPagesHeaders = {
-      serializedName: "pageblob-uploadpages-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobUploadPagesHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          blobSequenceNumber: {
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobClearPagesHeaders = {
-      serializedName: "pageblob-clearpages-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobClearPagesHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          blobSequenceNumber: {
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobUploadPagesFromURLHeaders = {
-      serializedName: "pageblob-uploadpagesfromurl-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobUploadPagesFromURLHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          blobSequenceNumber: {
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobGetPageRangesHeaders = {
-      serializedName: "pageblob-getpageranges-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobGetPageRangesHeaders",
-        modelProperties: {
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          blobContentLength: {
-            serializedName: "x-ms-blob-content-length",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobGetPageRangesDiffHeaders = {
-      serializedName: "pageblob-getpagerangesdiff-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobGetPageRangesDiffHeaders",
-        modelProperties: {
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          blobContentLength: {
-            serializedName: "x-ms-blob-content-length",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobResizeHeaders = {
-      serializedName: "pageblob-resize-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobResizeHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          blobSequenceNumber: {
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobUpdateSequenceNumberHeaders = {
-      serializedName: "pageblob-updatesequencenumber-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobUpdateSequenceNumberHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          blobSequenceNumber: {
-            serializedName: "x-ms-blob-sequence-number",
-            type: {
-              name: "Number"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var PageBlobCopyIncrementalHeaders = {
-      serializedName: "pageblob-copyincremental-headers",
-      type: {
-        name: "Composite",
-        className: "PageBlobCopyIncrementalHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          copyId: {
-            serializedName: "x-ms-copy-id",
-            type: {
-              name: "String"
-            }
-          },
-          copyStatus: {
-            serializedName: "x-ms-copy-status",
-            type: {
-              name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var AppendBlobAppendBlockHeaders = {
-      serializedName: "appendblob-appendblock-headers",
-      type: {
-        name: "Composite",
-        className: "AppendBlobAppendBlockHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          blobAppendOffset: {
-            serializedName: "x-ms-blob-append-offset",
-            type: {
-              name: "String"
-            }
-          },
-          blobCommittedBlockCount: {
-            serializedName: "x-ms-blob-committed-block-count",
-            type: {
-              name: "Number"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var AppendBlobAppendBlockFromUrlHeaders = {
-      serializedName: "appendblob-appendblockfromurl-headers",
-      type: {
-        name: "Composite",
-        className: "AppendBlobAppendBlockFromUrlHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          contentMD5: {
-            serializedName: "content-md5",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          xMsContentCrc64: {
-            serializedName: "x-ms-content-crc64",
-            type: {
-              name: "ByteArray"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          blobAppendOffset: {
-            serializedName: "x-ms-blob-append-offset",
-            type: {
-              name: "String"
-            }
-          },
-          blobCommittedBlockCount: {
-            serializedName: "x-ms-blob-committed-block-count",
-            type: {
-              name: "Number"
-            }
-          },
-          encryptionKeySha256: {
-            serializedName: "x-ms-encryption-key-sha256",
-            type: {
-              name: "String"
-            }
-          },
-          encryptionScope: {
-            serializedName: "x-ms-encryption-scope",
-            type: {
-              name: "String"
-            }
-          },
-          isServerEncrypted: {
-            serializedName: "x-ms-request-server-encrypted",
-            type: {
-              name: "Boolean"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
-            type: {
-              name: "String"
-            }
-          }
-        }
-      }
-    };
-    var AppendBlobSealHeaders = {
-      serializedName: "appendblob-seal-headers",
-      type: {
-        name: "Composite",
-        className: "AppendBlobSealHeaders",
-        modelProperties: {
-          etag: {
-            serializedName: "etag",
-            type: {
-              name: "String"
-            }
-          },
-          lastModified: {
-            serializedName: "last-modified",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          clientRequestId: {
-            serializedName: "x-ms-client-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          requestId: {
-            serializedName: "x-ms-request-id",
-            type: {
-              name: "String"
-            }
-          },
-          version: {
-            serializedName: "x-ms-version",
-            type: {
-              name: "String"
-            }
-          },
-          date: {
-            serializedName: "date",
-            type: {
-              name: "DateTimeRfc1123"
-            }
-          },
-          isSealed: {
-            serializedName: "x-ms-blob-sealed",
-            type: {
-              name: "Boolean"
-            }
-          },
-          errorCode: {
-            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -48007,154 +46589,158 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobQueryHeaders = {
-      serializedName: "blob-query-headers",
+      serializedName: "Blob_queryHeaders",
       type: {
         name: "Composite",
         className: "BlobQueryHeaders",
         modelProperties: {
           lastModified: {
             serializedName: "last-modified",
+            xmlName: "last-modified",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           metadata: {
             serializedName: "x-ms-meta",
+            xmlName: "x-ms-meta",
             type: {
               name: "Dictionary",
-              value: {
-                type: {
-                  name: "String"
-                }
-              }
-            },
-            headerCollectionPrefix: "x-ms-meta-"
+              value: { type: { name: "String" } }
+            }
           },
           contentLength: {
             serializedName: "content-length",
+            xmlName: "content-length",
             type: {
               name: "Number"
             }
           },
           contentType: {
             serializedName: "content-type",
+            xmlName: "content-type",
             type: {
               name: "String"
             }
           },
           contentRange: {
             serializedName: "content-range",
+            xmlName: "content-range",
             type: {
               name: "String"
             }
           },
           etag: {
             serializedName: "etag",
+            xmlName: "etag",
             type: {
               name: "String"
             }
           },
           contentMD5: {
             serializedName: "content-md5",
+            xmlName: "content-md5",
             type: {
               name: "ByteArray"
             }
           },
           contentEncoding: {
             serializedName: "content-encoding",
+            xmlName: "content-encoding",
             type: {
               name: "String"
             }
           },
           cacheControl: {
             serializedName: "cache-control",
+            xmlName: "cache-control",
             type: {
               name: "String"
             }
           },
           contentDisposition: {
             serializedName: "content-disposition",
+            xmlName: "content-disposition",
             type: {
               name: "String"
             }
           },
           contentLanguage: {
             serializedName: "content-language",
+            xmlName: "content-language",
             type: {
               name: "String"
             }
           },
           blobSequenceNumber: {
             serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
             type: {
               name: "Number"
             }
           },
           blobType: {
             serializedName: "x-ms-blob-type",
+            xmlName: "x-ms-blob-type",
             type: {
               name: "Enum",
-              allowedValues: [
-                "BlockBlob",
-                "PageBlob",
-                "AppendBlob"
-              ]
+              allowedValues: ["BlockBlob", "PageBlob", "AppendBlob"]
             }
           },
           copyCompletionTime: {
             serializedName: "x-ms-copy-completion-time",
+            xmlName: "x-ms-copy-completion-time",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           copyStatusDescription: {
             serializedName: "x-ms-copy-status-description",
+            xmlName: "x-ms-copy-status-description",
             type: {
               name: "String"
             }
           },
           copyId: {
             serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
             type: {
               name: "String"
             }
           },
           copyProgress: {
             serializedName: "x-ms-copy-progress",
+            xmlName: "x-ms-copy-progress",
             type: {
               name: "String"
             }
           },
           copySource: {
             serializedName: "x-ms-copy-source",
+            xmlName: "x-ms-copy-source",
             type: {
               name: "String"
             }
           },
           copyStatus: {
             serializedName: "x-ms-copy-status",
+            xmlName: "x-ms-copy-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "pending",
-                "success",
-                "aborted",
-                "failed"
-              ]
+              allowedValues: ["pending", "success", "aborted", "failed"]
             }
           },
           leaseDuration: {
             serializedName: "x-ms-lease-duration",
+            xmlName: "x-ms-lease-duration",
             type: {
               name: "Enum",
-              allowedValues: [
-                "infinite",
-                "fixed"
-              ]
+              allowedValues: ["infinite", "fixed"]
             }
           },
           leaseState: {
             serializedName: "x-ms-lease-state",
+            xmlName: "x-ms-lease-state",
             type: {
               name: "Enum",
               allowedValues: [
@@ -48168,82 +46754,108 @@ var require_dist10 = __commonJS({
           },
           leaseStatus: {
             serializedName: "x-ms-lease-status",
+            xmlName: "x-ms-lease-status",
             type: {
               name: "Enum",
-              allowedValues: [
-                "locked",
-                "unlocked"
-              ]
+              allowedValues: ["locked", "unlocked"]
             }
           },
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           acceptRanges: {
             serializedName: "accept-ranges",
+            xmlName: "accept-ranges",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           blobCommittedBlockCount: {
             serializedName: "x-ms-blob-committed-block-count",
+            xmlName: "x-ms-blob-committed-block-count",
             type: {
               name: "Number"
             }
           },
           isServerEncrypted: {
             serializedName: "x-ms-server-encrypted",
+            xmlName: "x-ms-server-encrypted",
             type: {
               name: "Boolean"
             }
           },
           encryptionKeySha256: {
             serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
             type: {
               name: "String"
             }
           },
           encryptionScope: {
             serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
             type: {
               name: "String"
             }
           },
           blobContentMD5: {
             serializedName: "x-ms-blob-content-md5",
+            xmlName: "x-ms-blob-content-md5",
             type: {
               name: "ByteArray"
             }
           },
           contentCrc64: {
             serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
             type: {
               name: "ByteArray"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobQueryExceptionHeaders = {
+      serializedName: "Blob_queryExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobQueryExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -48252,37 +46864,58 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobGetTagsHeaders = {
-      serializedName: "blob-gettags-headers",
+      serializedName: "Blob_getTagsHeaders",
       type: {
         name: "Composite",
         className: "BlobGetTagsHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobGetTagsExceptionHeaders = {
+      serializedName: "Blob_getTagsExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobGetTagsExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -48291,37 +46924,1934 @@ var require_dist10 = __commonJS({
       }
     };
     var BlobSetTagsHeaders = {
-      serializedName: "blob-settags-headers",
+      serializedName: "Blob_setTagsHeaders",
       type: {
         name: "Composite",
         className: "BlobSetTagsHeaders",
         modelProperties: {
           clientRequestId: {
             serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
             type: {
               name: "String"
             }
           },
           requestId: {
             serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
             type: {
               name: "String"
             }
           },
           version: {
             serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
             type: {
               name: "String"
             }
           },
           date: {
             serializedName: "date",
+            xmlName: "date",
             type: {
               name: "DateTimeRfc1123"
             }
           },
           errorCode: {
             serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlobSetTagsExceptionHeaders = {
+      serializedName: "Blob_setTagsExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlobSetTagsExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobCreateHeaders = {
+      serializedName: "PageBlob_createHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobCreateHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobCreateExceptionHeaders = {
+      serializedName: "PageBlob_createExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobCreateExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUploadPagesHeaders = {
+      serializedName: "PageBlob_uploadPagesHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUploadPagesHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUploadPagesExceptionHeaders = {
+      serializedName: "PageBlob_uploadPagesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUploadPagesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobClearPagesHeaders = {
+      serializedName: "PageBlob_clearPagesHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobClearPagesHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobClearPagesExceptionHeaders = {
+      serializedName: "PageBlob_clearPagesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobClearPagesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUploadPagesFromURLHeaders = {
+      serializedName: "PageBlob_uploadPagesFromURLHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUploadPagesFromURLHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUploadPagesFromURLExceptionHeaders = {
+      serializedName: "PageBlob_uploadPagesFromURLExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUploadPagesFromURLExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobGetPageRangesHeaders = {
+      serializedName: "PageBlob_getPageRangesHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobGetPageRangesHeaders",
+        modelProperties: {
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          blobContentLength: {
+            serializedName: "x-ms-blob-content-length",
+            xmlName: "x-ms-blob-content-length",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobGetPageRangesExceptionHeaders = {
+      serializedName: "PageBlob_getPageRangesExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobGetPageRangesExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobGetPageRangesDiffHeaders = {
+      serializedName: "PageBlob_getPageRangesDiffHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobGetPageRangesDiffHeaders",
+        modelProperties: {
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          blobContentLength: {
+            serializedName: "x-ms-blob-content-length",
+            xmlName: "x-ms-blob-content-length",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobGetPageRangesDiffExceptionHeaders = {
+      serializedName: "PageBlob_getPageRangesDiffExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobGetPageRangesDiffExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobResizeHeaders = {
+      serializedName: "PageBlob_resizeHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobResizeHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobResizeExceptionHeaders = {
+      serializedName: "PageBlob_resizeExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobResizeExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUpdateSequenceNumberHeaders = {
+      serializedName: "PageBlob_updateSequenceNumberHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUpdateSequenceNumberHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          blobSequenceNumber: {
+            serializedName: "x-ms-blob-sequence-number",
+            xmlName: "x-ms-blob-sequence-number",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobUpdateSequenceNumberExceptionHeaders = {
+      serializedName: "PageBlob_updateSequenceNumberExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobUpdateSequenceNumberExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobCopyIncrementalHeaders = {
+      serializedName: "PageBlob_copyIncrementalHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobCopyIncrementalHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          copyId: {
+            serializedName: "x-ms-copy-id",
+            xmlName: "x-ms-copy-id",
+            type: {
+              name: "String"
+            }
+          },
+          copyStatus: {
+            serializedName: "x-ms-copy-status",
+            xmlName: "x-ms-copy-status",
+            type: {
+              name: "Enum",
+              allowedValues: ["pending", "success", "aborted", "failed"]
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var PageBlobCopyIncrementalExceptionHeaders = {
+      serializedName: "PageBlob_copyIncrementalExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "PageBlobCopyIncrementalExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobCreateHeaders = {
+      serializedName: "AppendBlob_createHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobCreateHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobCreateExceptionHeaders = {
+      serializedName: "AppendBlob_createExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobCreateExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobAppendBlockHeaders = {
+      serializedName: "AppendBlob_appendBlockHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobAppendBlockHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          blobAppendOffset: {
+            serializedName: "x-ms-blob-append-offset",
+            xmlName: "x-ms-blob-append-offset",
+            type: {
+              name: "String"
+            }
+          },
+          blobCommittedBlockCount: {
+            serializedName: "x-ms-blob-committed-block-count",
+            xmlName: "x-ms-blob-committed-block-count",
+            type: {
+              name: "Number"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobAppendBlockExceptionHeaders = {
+      serializedName: "AppendBlob_appendBlockExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobAppendBlockExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobAppendBlockFromUrlHeaders = {
+      serializedName: "AppendBlob_appendBlockFromUrlHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobAppendBlockFromUrlHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          blobAppendOffset: {
+            serializedName: "x-ms-blob-append-offset",
+            xmlName: "x-ms-blob-append-offset",
+            type: {
+              name: "String"
+            }
+          },
+          blobCommittedBlockCount: {
+            serializedName: "x-ms-blob-committed-block-count",
+            xmlName: "x-ms-blob-committed-block-count",
+            type: {
+              name: "Number"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobAppendBlockFromUrlExceptionHeaders = {
+      serializedName: "AppendBlob_appendBlockFromUrlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobAppendBlockFromUrlExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobSealHeaders = {
+      serializedName: "AppendBlob_sealHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobSealHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isSealed: {
+            serializedName: "x-ms-blob-sealed",
+            xmlName: "x-ms-blob-sealed",
+            type: {
+              name: "Boolean"
+            }
+          }
+        }
+      }
+    };
+    var AppendBlobSealExceptionHeaders = {
+      serializedName: "AppendBlob_sealExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "AppendBlobSealExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobUploadHeaders = {
+      serializedName: "BlockBlob_uploadHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobUploadHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobUploadExceptionHeaders = {
+      serializedName: "BlockBlob_uploadExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobUploadExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobPutBlobFromUrlHeaders = {
+      serializedName: "BlockBlob_putBlobFromUrlHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobPutBlobFromUrlHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobPutBlobFromUrlExceptionHeaders = {
+      serializedName: "BlockBlob_putBlobFromUrlExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobPutBlobFromUrlExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobStageBlockHeaders = {
+      serializedName: "BlockBlob_stageBlockHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobStageBlockHeaders",
+        modelProperties: {
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobStageBlockExceptionHeaders = {
+      serializedName: "BlockBlob_stageBlockExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobStageBlockExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobStageBlockFromURLHeaders = {
+      serializedName: "BlockBlob_stageBlockFromURLHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobStageBlockFromURLHeaders",
+        modelProperties: {
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobStageBlockFromURLExceptionHeaders = {
+      serializedName: "BlockBlob_stageBlockFromURLExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobStageBlockFromURLExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobCommitBlockListHeaders = {
+      serializedName: "BlockBlob_commitBlockListHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobCommitBlockListHeaders",
+        modelProperties: {
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          contentMD5: {
+            serializedName: "content-md5",
+            xmlName: "content-md5",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          xMsContentCrc64: {
+            serializedName: "x-ms-content-crc64",
+            xmlName: "x-ms-content-crc64",
+            type: {
+              name: "ByteArray"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          versionId: {
+            serializedName: "x-ms-version-id",
+            xmlName: "x-ms-version-id",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          isServerEncrypted: {
+            serializedName: "x-ms-request-server-encrypted",
+            xmlName: "x-ms-request-server-encrypted",
+            type: {
+              name: "Boolean"
+            }
+          },
+          encryptionKeySha256: {
+            serializedName: "x-ms-encryption-key-sha256",
+            xmlName: "x-ms-encryption-key-sha256",
+            type: {
+              name: "String"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobCommitBlockListExceptionHeaders = {
+      serializedName: "BlockBlob_commitBlockListExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobCommitBlockListExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobGetBlockListHeaders = {
+      serializedName: "BlockBlob_getBlockListHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobGetBlockListHeaders",
+        modelProperties: {
+          lastModified: {
+            serializedName: "last-modified",
+            xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          etag: {
+            serializedName: "etag",
+            xmlName: "etag",
+            type: {
+              name: "String"
+            }
+          },
+          contentType: {
+            serializedName: "content-type",
+            xmlName: "content-type",
+            type: {
+              name: "String"
+            }
+          },
+          blobContentLength: {
+            serializedName: "x-ms-blob-content-length",
+            xmlName: "x-ms-blob-content-length",
+            type: {
+              name: "Number"
+            }
+          },
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
+    var BlockBlobGetBlockListExceptionHeaders = {
+      serializedName: "BlockBlob_getBlockListExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "BlockBlobGetBlockListExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
             type: {
               name: "String"
             }
@@ -48332,347 +48862,294 @@ var require_dist10 = __commonJS({
     var Mappers = /* @__PURE__ */ Object.freeze({
       __proto__: null,
       BlobServiceProperties,
-      BlobServiceStatistics,
-      BlobTag,
-      BlobTags,
-      ContainerItem,
-      ContainerProperties,
-      CorsRule,
-      FilterBlobItem,
-      FilterBlobSegment,
-      GeoReplication,
-      KeyInfo,
-      ListContainersSegmentResponse,
       Logging,
-      Metrics,
       RetentionPolicy,
-      ServiceFilterBlobsHeaders,
-      ServiceGetAccountInfoHeaders,
-      ServiceGetPropertiesHeaders,
-      ServiceGetStatisticsHeaders,
-      ServiceGetUserDelegationKeyHeaders,
-      ServiceListContainersSegmentHeaders,
-      ServiceSetPropertiesHeaders,
-      ServiceSubmitBatchHeaders,
+      Metrics,
+      CorsRule,
       StaticWebsite,
       StorageError,
-      UserDelegationKey
+      BlobServiceStatistics,
+      GeoReplication,
+      ListContainersSegmentResponse,
+      ContainerItem,
+      ContainerProperties,
+      KeyInfo,
+      UserDelegationKey,
+      FilterBlobSegment,
+      FilterBlobItem,
+      BlobTags,
+      BlobTag,
+      SignedIdentifier,
+      AccessPolicy,
+      ListBlobsFlatSegmentResponse,
+      BlobFlatListSegment,
+      BlobItemInternal,
+      BlobPropertiesInternal,
+      ListBlobsHierarchySegmentResponse,
+      BlobHierarchyListSegment,
+      BlobPrefix,
+      DataLakeStorageError,
+      DataLakeStorageErrorError,
+      BlockLookupList,
+      BlockList,
+      Block,
+      PageList,
+      PageRange,
+      ClearRange,
+      QueryRequest,
+      QuerySerialization,
+      QueryFormat,
+      DelimitedTextConfiguration,
+      JsonTextConfiguration,
+      ArrowConfiguration,
+      ArrowField,
+      ServiceSetPropertiesHeaders,
+      ServiceSetPropertiesExceptionHeaders,
+      ServiceGetPropertiesHeaders,
+      ServiceGetPropertiesExceptionHeaders,
+      ServiceGetStatisticsHeaders,
+      ServiceGetStatisticsExceptionHeaders,
+      ServiceListContainersSegmentHeaders,
+      ServiceListContainersSegmentExceptionHeaders,
+      ServiceGetUserDelegationKeyHeaders,
+      ServiceGetUserDelegationKeyExceptionHeaders,
+      ServiceGetAccountInfoHeaders,
+      ServiceGetAccountInfoExceptionHeaders,
+      ServiceSubmitBatchHeaders,
+      ServiceSubmitBatchExceptionHeaders,
+      ServiceFilterBlobsHeaders,
+      ServiceFilterBlobsExceptionHeaders,
+      ContainerCreateHeaders,
+      ContainerCreateExceptionHeaders,
+      ContainerGetPropertiesHeaders,
+      ContainerGetPropertiesExceptionHeaders,
+      ContainerDeleteHeaders,
+      ContainerDeleteExceptionHeaders,
+      ContainerSetMetadataHeaders,
+      ContainerSetMetadataExceptionHeaders,
+      ContainerGetAccessPolicyHeaders,
+      ContainerGetAccessPolicyExceptionHeaders,
+      ContainerSetAccessPolicyHeaders,
+      ContainerSetAccessPolicyExceptionHeaders,
+      ContainerRestoreHeaders,
+      ContainerRestoreExceptionHeaders,
+      ContainerRenameHeaders,
+      ContainerRenameExceptionHeaders,
+      ContainerSubmitBatchHeaders,
+      ContainerSubmitBatchExceptionHeaders,
+      ContainerAcquireLeaseHeaders,
+      ContainerAcquireLeaseExceptionHeaders,
+      ContainerReleaseLeaseHeaders,
+      ContainerReleaseLeaseExceptionHeaders,
+      ContainerRenewLeaseHeaders,
+      ContainerRenewLeaseExceptionHeaders,
+      ContainerBreakLeaseHeaders,
+      ContainerBreakLeaseExceptionHeaders,
+      ContainerChangeLeaseHeaders,
+      ContainerChangeLeaseExceptionHeaders,
+      ContainerListBlobFlatSegmentHeaders,
+      ContainerListBlobFlatSegmentExceptionHeaders,
+      ContainerListBlobHierarchySegmentHeaders,
+      ContainerListBlobHierarchySegmentExceptionHeaders,
+      ContainerGetAccountInfoHeaders,
+      ContainerGetAccountInfoExceptionHeaders,
+      DirectoryCreateHeaders,
+      DirectoryCreateExceptionHeaders,
+      DirectoryRenameHeaders,
+      DirectoryRenameExceptionHeaders,
+      DirectoryDeleteHeaders,
+      DirectoryDeleteExceptionHeaders,
+      DirectorySetAccessControlHeaders,
+      DirectorySetAccessControlExceptionHeaders,
+      DirectoryGetAccessControlHeaders,
+      DirectoryGetAccessControlExceptionHeaders,
+      BlobDownloadHeaders,
+      BlobDownloadExceptionHeaders,
+      BlobGetPropertiesHeaders,
+      BlobGetPropertiesExceptionHeaders,
+      BlobDeleteHeaders,
+      BlobDeleteExceptionHeaders,
+      BlobSetAccessControlHeaders,
+      BlobSetAccessControlExceptionHeaders,
+      BlobGetAccessControlHeaders,
+      BlobGetAccessControlExceptionHeaders,
+      BlobRenameHeaders,
+      BlobRenameExceptionHeaders,
+      BlobUndeleteHeaders,
+      BlobUndeleteExceptionHeaders,
+      BlobSetExpiryHeaders,
+      BlobSetExpiryExceptionHeaders,
+      BlobSetHttpHeadersHeaders,
+      BlobSetHttpHeadersExceptionHeaders,
+      BlobSetMetadataHeaders,
+      BlobSetMetadataExceptionHeaders,
+      BlobAcquireLeaseHeaders,
+      BlobAcquireLeaseExceptionHeaders,
+      BlobReleaseLeaseHeaders,
+      BlobReleaseLeaseExceptionHeaders,
+      BlobRenewLeaseHeaders,
+      BlobRenewLeaseExceptionHeaders,
+      BlobChangeLeaseHeaders,
+      BlobChangeLeaseExceptionHeaders,
+      BlobBreakLeaseHeaders,
+      BlobBreakLeaseExceptionHeaders,
+      BlobCreateSnapshotHeaders,
+      BlobCreateSnapshotExceptionHeaders,
+      BlobStartCopyFromURLHeaders,
+      BlobStartCopyFromURLExceptionHeaders,
+      BlobCopyFromURLHeaders,
+      BlobCopyFromURLExceptionHeaders,
+      BlobAbortCopyFromURLHeaders,
+      BlobAbortCopyFromURLExceptionHeaders,
+      BlobSetTierHeaders,
+      BlobSetTierExceptionHeaders,
+      BlobGetAccountInfoHeaders,
+      BlobGetAccountInfoExceptionHeaders,
+      BlobQueryHeaders,
+      BlobQueryExceptionHeaders,
+      BlobGetTagsHeaders,
+      BlobGetTagsExceptionHeaders,
+      BlobSetTagsHeaders,
+      BlobSetTagsExceptionHeaders,
+      PageBlobCreateHeaders,
+      PageBlobCreateExceptionHeaders,
+      PageBlobUploadPagesHeaders,
+      PageBlobUploadPagesExceptionHeaders,
+      PageBlobClearPagesHeaders,
+      PageBlobClearPagesExceptionHeaders,
+      PageBlobUploadPagesFromURLHeaders,
+      PageBlobUploadPagesFromURLExceptionHeaders,
+      PageBlobGetPageRangesHeaders,
+      PageBlobGetPageRangesExceptionHeaders,
+      PageBlobGetPageRangesDiffHeaders,
+      PageBlobGetPageRangesDiffExceptionHeaders,
+      PageBlobResizeHeaders,
+      PageBlobResizeExceptionHeaders,
+      PageBlobUpdateSequenceNumberHeaders,
+      PageBlobUpdateSequenceNumberExceptionHeaders,
+      PageBlobCopyIncrementalHeaders,
+      PageBlobCopyIncrementalExceptionHeaders,
+      AppendBlobCreateHeaders,
+      AppendBlobCreateExceptionHeaders,
+      AppendBlobAppendBlockHeaders,
+      AppendBlobAppendBlockExceptionHeaders,
+      AppendBlobAppendBlockFromUrlHeaders,
+      AppendBlobAppendBlockFromUrlExceptionHeaders,
+      AppendBlobSealHeaders,
+      AppendBlobSealExceptionHeaders,
+      BlockBlobUploadHeaders,
+      BlockBlobUploadExceptionHeaders,
+      BlockBlobPutBlobFromUrlHeaders,
+      BlockBlobPutBlobFromUrlExceptionHeaders,
+      BlockBlobStageBlockHeaders,
+      BlockBlobStageBlockExceptionHeaders,
+      BlockBlobStageBlockFromURLHeaders,
+      BlockBlobStageBlockFromURLExceptionHeaders,
+      BlockBlobCommitBlockListHeaders,
+      BlockBlobCommitBlockListExceptionHeaders,
+      BlockBlobGetBlockListHeaders,
+      BlockBlobGetBlockListExceptionHeaders
     });
-    var access = {
-      parameterPath: [
-        "options",
-        "access"
-      ],
+    var contentType = {
+      parameterPath: ["options", "contentType"],
       mapper: {
-        serializedName: "x-ms-blob-public-access",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var action0 = {
-      parameterPath: "action",
-      mapper: {
-        required: true,
+        defaultValue: "application/xml",
         isConstant: true,
-        serializedName: "x-ms-lease-action",
-        defaultValue: "acquire",
+        serializedName: "Content-Type",
         type: {
           name: "String"
         }
       }
     };
-    var action1 = {
-      parameterPath: "action",
+    var blobServiceProperties = {
+      parameterPath: "blobServiceProperties",
+      mapper: BlobServiceProperties
+    };
+    var accept = {
+      parameterPath: "accept",
       mapper: {
-        required: true,
+        defaultValue: "application/xml",
         isConstant: true,
-        serializedName: "x-ms-lease-action",
-        defaultValue: "release",
+        serializedName: "Accept",
         type: {
           name: "String"
         }
       }
     };
-    var action2 = {
-      parameterPath: "action",
+    var url = {
+      parameterPath: "url",
       mapper: {
+        serializedName: "url",
         required: true,
+        xmlName: "url",
+        type: {
+          name: "String"
+        }
+      },
+      skipEncoding: true
+    };
+    var restype = {
+      parameterPath: "restype",
+      mapper: {
+        defaultValue: "service",
         isConstant: true,
-        serializedName: "x-ms-lease-action",
-        defaultValue: "renew",
+        serializedName: "restype",
         type: {
           name: "String"
         }
       }
     };
-    var action3 = {
-      parameterPath: "action",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-lease-action",
-        defaultValue: "break",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var action4 = {
-      parameterPath: "action",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-lease-action",
-        defaultValue: "change",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var action5 = {
-      parameterPath: "action",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "action",
-        defaultValue: "setAccessControl",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var action6 = {
-      parameterPath: "action",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "action",
-        defaultValue: "getAccessControl",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var appendPosition = {
-      parameterPath: [
-        "options",
-        "appendPositionAccessConditions",
-        "appendPosition"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-condition-appendpos",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var blobCacheControl = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobCacheControl"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-cache-control",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobContentDisposition = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobContentDisposition"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-content-disposition",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobContentEncoding = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobContentEncoding"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-content-encoding",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobContentLanguage = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobContentLanguage"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-content-language",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobContentLength = {
-      parameterPath: "blobContentLength",
-      mapper: {
-        required: true,
-        serializedName: "x-ms-blob-content-length",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var blobContentMD5 = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobContentMD5"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-content-md5",
-        type: {
-          name: "ByteArray"
-        }
-      }
-    };
-    var blobContentType = {
-      parameterPath: [
-        "options",
-        "blobHTTPHeaders",
-        "blobContentType"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-content-type",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobDeleteType = {
-      parameterPath: [
-        "options",
-        "blobDeleteType"
-      ],
-      mapper: {
-        serializedName: "deletetype",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "Permanent"
-          ]
-        }
-      }
-    };
-    var blobSequenceNumber = {
-      parameterPath: [
-        "options",
-        "blobSequenceNumber"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-sequence-number",
-        defaultValue: 0,
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var blobTagsString = {
-      parameterPath: [
-        "options",
-        "blobTagsString"
-      ],
-      mapper: {
-        serializedName: "x-ms-tags",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobType0 = {
-      parameterPath: "blobType",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-blob-type",
-        defaultValue: "PageBlob",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobType1 = {
-      parameterPath: "blobType",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-blob-type",
-        defaultValue: "AppendBlob",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blobType2 = {
-      parameterPath: "blobType",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-blob-type",
-        defaultValue: "BlockBlob",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var blockId = {
-      parameterPath: "blockId",
-      mapper: {
-        required: true,
-        serializedName: "blockid",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var breakPeriod = {
-      parameterPath: [
-        "options",
-        "breakPeriod"
-      ],
-      mapper: {
-        serializedName: "x-ms-lease-break-period",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var cacheControl = {
-      parameterPath: [
-        "options",
-        "directoryHttpHeaders",
-        "cacheControl"
-      ],
-      mapper: {
-        serializedName: "x-ms-cache-control",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp0 = {
+    var comp = {
       parameterPath: "comp",
       mapper: {
-        required: true,
+        defaultValue: "properties",
         isConstant: true,
         serializedName: "comp",
-        defaultValue: "properties",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var timeoutInSeconds = {
+      parameterPath: ["options", "timeoutInSeconds"],
+      mapper: {
+        constraints: {
+          InclusiveMinimum: 0
+        },
+        serializedName: "timeout",
+        xmlName: "timeout",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var version = {
+      parameterPath: "version",
+      mapper: {
+        defaultValue: "2020-08-04",
+        isConstant: true,
+        serializedName: "x-ms-version",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var requestId = {
+      parameterPath: ["options", "requestId"],
+      mapper: {
+        serializedName: "x-ms-client-request-id",
+        xmlName: "x-ms-client-request-id",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var accept1 = {
+      parameterPath: "accept",
+      mapper: {
+        defaultValue: "application/xml",
+        isConstant: true,
+        serializedName: "Accept",
         type: {
           name: "String"
         }
@@ -48681,130 +49158,9 @@ var require_dist10 = __commonJS({
     var comp1 = {
       parameterPath: "comp",
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
         defaultValue: "stats",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp10 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
         isConstant: true,
         serializedName: "comp",
-        defaultValue: "lease",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp11 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "expiry",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp12 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "snapshot",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp13 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "copy",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp14 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "tier",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp15 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "query",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp16 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "tags",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp17 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "page",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp18 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "pagelist",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp19 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "incrementalcopy",
         type: {
           name: "String"
         }
@@ -48813,181 +49169,108 @@ var require_dist10 = __commonJS({
     var comp2 = {
       parameterPath: "comp",
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
         defaultValue: "list",
+        isConstant: true,
+        serializedName: "comp",
         type: {
           name: "String"
         }
       }
     };
-    var comp20 = {
-      parameterPath: "comp",
+    var prefix = {
+      parameterPath: ["options", "prefix"],
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "appendblock",
+        serializedName: "prefix",
+        xmlName: "prefix",
         type: {
           name: "String"
         }
       }
     };
-    var comp21 = {
-      parameterPath: "comp",
+    var marker = {
+      parameterPath: ["options", "marker"],
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "seal",
+        serializedName: "marker",
+        xmlName: "marker",
         type: {
           name: "String"
         }
       }
     };
-    var comp22 = {
-      parameterPath: "comp",
+    var maxPageSize = {
+      parameterPath: ["options", "maxPageSize"],
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "block",
+        constraints: {
+          InclusiveMinimum: 1
+        },
+        serializedName: "maxresults",
+        xmlName: "maxresults",
         type: {
-          name: "String"
+          name: "Number"
         }
       }
     };
-    var comp23 = {
-      parameterPath: "comp",
+    var include = {
+      parameterPath: ["options", "include"],
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "blocklist",
+        serializedName: "include",
+        xmlName: "include",
+        xmlElementName: "ListContainersIncludeType",
         type: {
-          name: "String"
+          name: "Sequence",
+          element: {
+            type: {
+              name: "Enum",
+              allowedValues: ["metadata", "deleted"]
+            }
+          }
         }
-      }
+      },
+      collectionFormat: coreHttp.QueryCollectionFormat.Csv
+    };
+    var keyInfo = {
+      parameterPath: "keyInfo",
+      mapper: KeyInfo
     };
     var comp3 = {
       parameterPath: "comp",
       mapper: {
-        required: true,
+        defaultValue: "userdelegationkey",
         isConstant: true,
         serializedName: "comp",
-        defaultValue: "userdelegationkey",
         type: {
           name: "String"
+        }
+      }
+    };
+    var restype1 = {
+      parameterPath: "restype",
+      mapper: {
+        defaultValue: "account",
+        isConstant: true,
+        serializedName: "restype",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var body = {
+      parameterPath: "body",
+      mapper: {
+        serializedName: "body",
+        required: true,
+        xmlName: "body",
+        type: {
+          name: "Stream"
         }
       }
     };
     var comp4 = {
       parameterPath: "comp",
       mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
         defaultValue: "batch",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp5 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
         isConstant: true,
         serializedName: "comp",
-        defaultValue: "blobs",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp6 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "metadata",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp7 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "acl",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp8 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "undelete",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var comp9 = {
-      parameterPath: "comp",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "comp",
-        defaultValue: "rename",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var contentDisposition = {
-      parameterPath: [
-        "options",
-        "directoryHttpHeaders",
-        "contentDisposition"
-      ],
-      mapper: {
-        serializedName: "x-ms-content-disposition",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var contentEncoding = {
-      parameterPath: [
-        "options",
-        "directoryHttpHeaders",
-        "contentEncoding"
-      ],
-      mapper: {
-        serializedName: "x-ms-content-encoding",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var contentLanguage = {
-      parameterPath: [
-        "options",
-        "directoryHttpHeaders",
-        "contentLanguage"
-      ],
-      mapper: {
-        serializedName: "x-ms-content-language",
         type: {
           name: "String"
         }
@@ -48996,67 +49279,77 @@ var require_dist10 = __commonJS({
     var contentLength = {
       parameterPath: "contentLength",
       mapper: {
-        required: true,
         serializedName: "Content-Length",
+        required: true,
+        xmlName: "Content-Length",
         type: {
           name: "Number"
         }
       }
     };
-    var contentType = {
-      parameterPath: [
-        "options",
-        "directoryHttpHeaders",
-        "contentType"
-      ],
+    var multipartContentType = {
+      parameterPath: "multipartContentType",
       mapper: {
-        serializedName: "x-ms-content-type",
+        serializedName: "Content-Type",
+        required: true,
+        xmlName: "Content-Type",
         type: {
           name: "String"
         }
       }
     };
-    var copyActionAbortConstant = {
-      parameterPath: "copyActionAbortConstant",
+    var comp5 = {
+      parameterPath: "comp",
       mapper: {
-        required: true,
+        defaultValue: "blobs",
         isConstant: true,
-        serializedName: "x-ms-copy-action",
-        defaultValue: "abort",
+        serializedName: "comp",
         type: {
           name: "String"
         }
       }
     };
-    var copyId = {
-      parameterPath: "copyId",
+    var where = {
+      parameterPath: ["options", "where"],
       mapper: {
-        required: true,
-        serializedName: "copyid",
+        serializedName: "where",
+        xmlName: "where",
         type: {
           name: "String"
         }
       }
     };
-    var copySource = {
-      parameterPath: "copySource",
+    var restype2 = {
+      parameterPath: "restype",
       mapper: {
-        required: true,
-        serializedName: "x-ms-copy-source",
+        defaultValue: "container",
+        isConstant: true,
+        serializedName: "restype",
         type: {
           name: "String"
         }
       }
     };
-    var copySourceBlobProperties = {
-      parameterPath: [
-        "options",
-        "copySourceBlobProperties"
-      ],
+    var metadata = {
+      parameterPath: ["options", "metadata"],
       mapper: {
-        serializedName: "x-ms-copy-source-blob-properties",
+        serializedName: "x-ms-meta",
+        xmlName: "x-ms-meta",
         type: {
-          name: "Boolean"
+          name: "Dictionary",
+          value: { type: { name: "String" } }
+        },
+        headerCollectionPrefix: "x-ms-meta-"
+      }
+    };
+    var access = {
+      parameterPath: ["options", "access"],
+      mapper: {
+        serializedName: "x-ms-blob-public-access",
+        xmlName: "x-ms-blob-public-access",
+        type: {
+          name: "Enum",
+          allowedValues: ["container", "blob"]
         }
       }
     };
@@ -49068,306 +49361,283 @@ var require_dist10 = __commonJS({
       ],
       mapper: {
         serializedName: "x-ms-default-encryption-scope",
+        xmlName: "x-ms-default-encryption-scope",
         type: {
           name: "String"
         }
       }
     };
-    var deletedContainerName = {
+    var preventEncryptionScopeOverride = {
       parameterPath: [
         "options",
-        "deletedContainerName"
+        "containerEncryptionScope",
+        "preventEncryptionScopeOverride"
       ],
       mapper: {
-        serializedName: "x-ms-deleted-container-name",
+        serializedName: "x-ms-deny-encryption-scope-override",
+        xmlName: "x-ms-deny-encryption-scope-override",
         type: {
-          name: "String"
+          name: "Boolean"
         }
       }
     };
-    var deletedContainerVersion = {
-      parameterPath: [
-        "options",
-        "deletedContainerVersion"
-      ],
+    var leaseId = {
+      parameterPath: ["options", "leaseAccessConditions", "leaseId"],
       mapper: {
-        serializedName: "x-ms-deleted-container-version",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var deleteSnapshots = {
-      parameterPath: [
-        "options",
-        "deleteSnapshots"
-      ],
-      mapper: {
-        serializedName: "x-ms-delete-snapshots",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "include",
-            "only"
-          ]
-        }
-      }
-    };
-    var delimiter = {
-      parameterPath: "delimiter",
-      mapper: {
-        required: true,
-        serializedName: "delimiter",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var directoryProperties = {
-      parameterPath: [
-        "options",
-        "directoryProperties"
-      ],
-      mapper: {
-        serializedName: "x-ms-properties",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var duration = {
-      parameterPath: [
-        "options",
-        "duration"
-      ],
-      mapper: {
-        serializedName: "x-ms-lease-duration",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var encryptionAlgorithm = {
-      parameterPath: [
-        "options",
-        "cpkInfo",
-        "encryptionAlgorithm"
-      ],
-      mapper: {
-        serializedName: "x-ms-encryption-algorithm",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "AES256"
-          ]
-        }
-      }
-    };
-    var encryptionKey = {
-      parameterPath: [
-        "options",
-        "cpkInfo",
-        "encryptionKey"
-      ],
-      mapper: {
-        serializedName: "x-ms-encryption-key",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var encryptionKeySha256 = {
-      parameterPath: [
-        "options",
-        "cpkInfo",
-        "encryptionKeySha256"
-      ],
-      mapper: {
-        serializedName: "x-ms-encryption-key-sha256",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var encryptionScope = {
-      parameterPath: [
-        "options",
-        "encryptionScope"
-      ],
-      mapper: {
-        serializedName: "x-ms-encryption-scope",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var expiresOn = {
-      parameterPath: [
-        "options",
-        "expiresOn"
-      ],
-      mapper: {
-        serializedName: "x-ms-expiry-time",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var expiryOptions = {
-      parameterPath: "expiryOptions",
-      mapper: {
-        required: true,
-        serializedName: "x-ms-expiry-option",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var group2 = {
-      parameterPath: [
-        "options",
-        "group"
-      ],
-      mapper: {
-        serializedName: "x-ms-group",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var ifMatch = {
-      parameterPath: [
-        "options",
-        "modifiedAccessConditions",
-        "ifMatch"
-      ],
-      mapper: {
-        serializedName: "If-Match",
+        serializedName: "x-ms-lease-id",
+        xmlName: "x-ms-lease-id",
         type: {
           name: "String"
         }
       }
     };
     var ifModifiedSince = {
-      parameterPath: [
-        "options",
-        "modifiedAccessConditions",
-        "ifModifiedSince"
-      ],
+      parameterPath: ["options", "modifiedAccessConditions", "ifModifiedSince"],
       mapper: {
         serializedName: "If-Modified-Since",
+        xmlName: "If-Modified-Since",
         type: {
           name: "DateTimeRfc1123"
-        }
-      }
-    };
-    var ifNoneMatch = {
-      parameterPath: [
-        "options",
-        "modifiedAccessConditions",
-        "ifNoneMatch"
-      ],
-      mapper: {
-        serializedName: "If-None-Match",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var ifSequenceNumberEqualTo = {
-      parameterPath: [
-        "options",
-        "sequenceNumberAccessConditions",
-        "ifSequenceNumberEqualTo"
-      ],
-      mapper: {
-        serializedName: "x-ms-if-sequence-number-eq",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var ifSequenceNumberLessThan = {
-      parameterPath: [
-        "options",
-        "sequenceNumberAccessConditions",
-        "ifSequenceNumberLessThan"
-      ],
-      mapper: {
-        serializedName: "x-ms-if-sequence-number-lt",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var ifSequenceNumberLessThanOrEqualTo = {
-      parameterPath: [
-        "options",
-        "sequenceNumberAccessConditions",
-        "ifSequenceNumberLessThanOrEqualTo"
-      ],
-      mapper: {
-        serializedName: "x-ms-if-sequence-number-le",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var ifTags = {
-      parameterPath: [
-        "options",
-        "modifiedAccessConditions",
-        "ifTags"
-      ],
-      mapper: {
-        serializedName: "x-ms-if-tags",
-        type: {
-          name: "String"
         }
       }
     };
     var ifUnmodifiedSince = {
-      parameterPath: [
-        "options",
-        "modifiedAccessConditions",
-        "ifUnmodifiedSince"
-      ],
+      parameterPath: ["options", "modifiedAccessConditions", "ifUnmodifiedSince"],
       mapper: {
         serializedName: "If-Unmodified-Since",
+        xmlName: "If-Unmodified-Since",
         type: {
           name: "DateTimeRfc1123"
         }
       }
     };
-    var include0 = {
-      parameterPath: [
-        "options",
-        "include"
-      ],
+    var comp6 = {
+      parameterPath: "comp",
       mapper: {
-        serializedName: "include",
+        defaultValue: "metadata",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp7 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "acl",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var containerAcl = {
+      parameterPath: ["options", "containerAcl"],
+      mapper: {
+        serializedName: "containerAcl",
+        xmlName: "SignedIdentifiers",
+        xmlIsWrapped: true,
+        xmlElementName: "SignedIdentifier",
         type: {
           name: "Sequence",
           element: {
             type: {
-              name: "Enum",
-              allowedValues: [
-                "metadata",
-                "deleted"
-              ]
+              name: "Composite",
+              className: "SignedIdentifier"
             }
           }
         }
-      },
-      collectionFormat: coreHttp.QueryCollectionFormat.Csv
+      }
+    };
+    var comp8 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "undelete",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var deletedContainerName = {
+      parameterPath: ["options", "deletedContainerName"],
+      mapper: {
+        serializedName: "x-ms-deleted-container-name",
+        xmlName: "x-ms-deleted-container-name",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var deletedContainerVersion = {
+      parameterPath: ["options", "deletedContainerVersion"],
+      mapper: {
+        serializedName: "x-ms-deleted-container-version",
+        xmlName: "x-ms-deleted-container-version",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp9 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "rename",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceContainerName = {
+      parameterPath: "sourceContainerName",
+      mapper: {
+        serializedName: "x-ms-source-container-name",
+        required: true,
+        xmlName: "x-ms-source-container-name",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceLeaseId = {
+      parameterPath: ["options", "sourceLeaseId"],
+      mapper: {
+        serializedName: "x-ms-source-lease-id",
+        xmlName: "x-ms-source-lease-id",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp10 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "lease",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "acquire",
+        isConstant: true,
+        serializedName: "x-ms-lease-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var duration = {
+      parameterPath: ["options", "duration"],
+      mapper: {
+        serializedName: "x-ms-lease-duration",
+        xmlName: "x-ms-lease-duration",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var proposedLeaseId = {
+      parameterPath: ["options", "proposedLeaseId"],
+      mapper: {
+        serializedName: "x-ms-proposed-lease-id",
+        xmlName: "x-ms-proposed-lease-id",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action1 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "release",
+        isConstant: true,
+        serializedName: "x-ms-lease-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var leaseId1 = {
+      parameterPath: "leaseId",
+      mapper: {
+        serializedName: "x-ms-lease-id",
+        required: true,
+        xmlName: "x-ms-lease-id",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action2 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "renew",
+        isConstant: true,
+        serializedName: "x-ms-lease-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action3 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "break",
+        isConstant: true,
+        serializedName: "x-ms-lease-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var breakPeriod = {
+      parameterPath: ["options", "breakPeriod"],
+      mapper: {
+        serializedName: "x-ms-lease-break-period",
+        xmlName: "x-ms-lease-break-period",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var action4 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "change",
+        isConstant: true,
+        serializedName: "x-ms-lease-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var proposedLeaseId1 = {
+      parameterPath: "proposedLeaseId",
+      mapper: {
+        serializedName: "x-ms-proposed-lease-id",
+        required: true,
+        xmlName: "x-ms-proposed-lease-id",
+        type: {
+          name: "String"
+        }
+      }
     };
     var include1 = {
-      parameterPath: [
-        "options",
-        "include"
-      ],
+      parameterPath: ["options", "include"],
       mapper: {
         serializedName: "include",
+        xmlName: "include",
+        xmlElementName: "ListBlobsIncludeItem",
         type: {
           name: "Sequence",
           element: {
@@ -49388,469 +49658,134 @@ var require_dist10 = __commonJS({
       },
       collectionFormat: coreHttp.QueryCollectionFormat.Csv
     };
-    var leaseId0 = {
-      parameterPath: [
-        "options",
-        "leaseAccessConditions",
-        "leaseId"
-      ],
+    var delimiter = {
+      parameterPath: "delimiter",
       mapper: {
-        serializedName: "x-ms-lease-id",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var leaseId1 = {
-      parameterPath: "leaseId",
-      mapper: {
+        serializedName: "delimiter",
         required: true,
-        serializedName: "x-ms-lease-id",
+        xmlName: "delimiter",
         type: {
           name: "String"
         }
       }
     };
-    var listType = {
-      parameterPath: "listType",
+    var directoryProperties = {
+      parameterPath: ["options", "directoryProperties"],
       mapper: {
-        required: true,
-        serializedName: "blocklisttype",
-        defaultValue: "committed",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "committed",
-            "uncommitted",
-            "all"
-          ]
-        }
-      }
-    };
-    var marker0 = {
-      parameterPath: [
-        "options",
-        "marker"
-      ],
-      mapper: {
-        serializedName: "marker",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var maxPageSize = {
-      parameterPath: [
-        "options",
-        "maxPageSize"
-      ],
-      mapper: {
-        serializedName: "maxresults",
-        constraints: {
-          InclusiveMinimum: 1
-        },
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var maxSize = {
-      parameterPath: [
-        "options",
-        "appendPositionAccessConditions",
-        "maxSize"
-      ],
-      mapper: {
-        serializedName: "x-ms-blob-condition-maxsize",
-        type: {
-          name: "Number"
-        }
-      }
-    };
-    var metadata = {
-      parameterPath: [
-        "options",
-        "metadata"
-      ],
-      mapper: {
-        serializedName: "x-ms-meta",
-        type: {
-          name: "Dictionary",
-          value: {
-            type: {
-              name: "String"
-            }
-          }
-        },
-        headerCollectionPrefix: "x-ms-meta-"
-      }
-    };
-    var multipartContentType = {
-      parameterPath: "multipartContentType",
-      mapper: {
-        required: true,
-        serializedName: "Content-Type",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var owner = {
-      parameterPath: [
-        "options",
-        "owner"
-      ],
-      mapper: {
-        serializedName: "x-ms-owner",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var pageWrite0 = {
-      parameterPath: "pageWrite",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-page-write",
-        defaultValue: "update",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var pageWrite1 = {
-      parameterPath: "pageWrite",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "x-ms-page-write",
-        defaultValue: "clear",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var pathRenameMode = {
-      parameterPath: [
-        "options",
-        "pathRenameMode"
-      ],
-      mapper: {
-        serializedName: "mode",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "legacy",
-            "posix"
-          ]
-        }
-      }
-    };
-    var posixAcl = {
-      parameterPath: [
-        "options",
-        "posixAcl"
-      ],
-      mapper: {
-        serializedName: "x-ms-acl",
+        serializedName: "x-ms-properties",
+        xmlName: "x-ms-properties",
         type: {
           name: "String"
         }
       }
     };
     var posixPermissions = {
-      parameterPath: [
-        "options",
-        "posixPermissions"
-      ],
+      parameterPath: ["options", "posixPermissions"],
       mapper: {
         serializedName: "x-ms-permissions",
+        xmlName: "x-ms-permissions",
         type: {
           name: "String"
         }
       }
     };
     var posixUmask = {
-      parameterPath: [
-        "options",
-        "posixUmask"
-      ],
+      parameterPath: ["options", "posixUmask"],
       mapper: {
         serializedName: "x-ms-umask",
+        xmlName: "x-ms-umask",
         type: {
           name: "String"
         }
       }
     };
-    var prefix = {
-      parameterPath: [
-        "options",
-        "prefix"
-      ],
+    var cacheControl = {
+      parameterPath: ["options", "directoryHttpHeaders", "cacheControl"],
       mapper: {
-        serializedName: "prefix",
+        serializedName: "x-ms-cache-control",
+        xmlName: "x-ms-cache-control",
         type: {
           name: "String"
         }
       }
     };
-    var preventEncryptionScopeOverride = {
-      parameterPath: [
-        "options",
-        "containerEncryptionScope",
-        "preventEncryptionScopeOverride"
-      ],
+    var contentType1 = {
+      parameterPath: ["options", "directoryHttpHeaders", "contentType"],
       mapper: {
-        serializedName: "x-ms-deny-encryption-scope-override",
-        type: {
-          name: "Boolean"
-        }
-      }
-    };
-    var prevsnapshot = {
-      parameterPath: [
-        "options",
-        "prevsnapshot"
-      ],
-      mapper: {
-        serializedName: "prevsnapshot",
+        serializedName: "x-ms-content-type",
+        xmlName: "x-ms-content-type",
         type: {
           name: "String"
         }
       }
     };
-    var prevSnapshotUrl = {
-      parameterPath: [
-        "options",
-        "prevSnapshotUrl"
-      ],
+    var contentEncoding = {
+      parameterPath: ["options", "directoryHttpHeaders", "contentEncoding"],
       mapper: {
-        serializedName: "x-ms-previous-snapshot-url",
+        serializedName: "x-ms-content-encoding",
+        xmlName: "x-ms-content-encoding",
         type: {
           name: "String"
         }
       }
     };
-    var proposedLeaseId0 = {
-      parameterPath: [
-        "options",
-        "proposedLeaseId"
-      ],
+    var contentLanguage = {
+      parameterPath: ["options", "directoryHttpHeaders", "contentLanguage"],
       mapper: {
-        serializedName: "x-ms-proposed-lease-id",
+        serializedName: "x-ms-content-language",
+        xmlName: "x-ms-content-language",
         type: {
           name: "String"
         }
       }
     };
-    var proposedLeaseId1 = {
-      parameterPath: "proposedLeaseId",
+    var contentDisposition = {
+      parameterPath: ["options", "directoryHttpHeaders", "contentDisposition"],
       mapper: {
-        required: true,
-        serializedName: "x-ms-proposed-lease-id",
+        serializedName: "x-ms-content-disposition",
+        xmlName: "x-ms-content-disposition",
         type: {
           name: "String"
         }
       }
     };
-    var range0 = {
-      parameterPath: [
-        "options",
-        "range"
-      ],
+    var ifMatch = {
+      parameterPath: ["options", "modifiedAccessConditions", "ifMatch"],
       mapper: {
-        serializedName: "x-ms-range",
+        serializedName: "If-Match",
+        xmlName: "If-Match",
         type: {
           name: "String"
         }
       }
     };
-    var range1 = {
-      parameterPath: "range",
+    var ifNoneMatch = {
+      parameterPath: ["options", "modifiedAccessConditions", "ifNoneMatch"],
       mapper: {
-        required: true,
-        serializedName: "x-ms-range",
+        serializedName: "If-None-Match",
+        xmlName: "If-None-Match",
         type: {
           name: "String"
         }
       }
     };
-    var rangeGetContentCRC64 = {
-      parameterPath: [
-        "options",
-        "rangeGetContentCRC64"
-      ],
+    var pathRenameMode = {
+      parameterPath: ["options", "pathRenameMode"],
       mapper: {
-        serializedName: "x-ms-range-get-content-crc64",
+        serializedName: "mode",
+        xmlName: "mode",
         type: {
-          name: "Boolean"
-        }
-      }
-    };
-    var rangeGetContentMD5 = {
-      parameterPath: [
-        "options",
-        "rangeGetContentMD5"
-      ],
-      mapper: {
-        serializedName: "x-ms-range-get-content-md5",
-        type: {
-          name: "Boolean"
-        }
-      }
-    };
-    var rehydratePriority = {
-      parameterPath: [
-        "options",
-        "rehydratePriority"
-      ],
-      mapper: {
-        serializedName: "x-ms-rehydrate-priority",
-        type: {
-          name: "String"
+          name: "Enum",
+          allowedValues: ["legacy", "posix"]
         }
       }
     };
     var renameSource = {
       parameterPath: "renameSource",
       mapper: {
-        required: true,
         serializedName: "x-ms-rename-source",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var requestId = {
-      parameterPath: [
-        "options",
-        "requestId"
-      ],
-      mapper: {
-        serializedName: "x-ms-client-request-id",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var restype0 = {
-      parameterPath: "restype",
-      mapper: {
         required: true,
-        isConstant: true,
-        serializedName: "restype",
-        defaultValue: "service",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var restype1 = {
-      parameterPath: "restype",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "restype",
-        defaultValue: "account",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var restype2 = {
-      parameterPath: "restype",
-      mapper: {
-        required: true,
-        isConstant: true,
-        serializedName: "restype",
-        defaultValue: "container",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var sealBlob = {
-      parameterPath: [
-        "options",
-        "sealBlob"
-      ],
-      mapper: {
-        serializedName: "x-ms-seal-blob",
-        type: {
-          name: "Boolean"
-        }
-      }
-    };
-    var sequenceNumberAction = {
-      parameterPath: "sequenceNumberAction",
-      mapper: {
-        required: true,
-        serializedName: "x-ms-sequence-number-action",
-        type: {
-          name: "Enum",
-          allowedValues: [
-            "max",
-            "update",
-            "increment"
-          ]
-        }
-      }
-    };
-    var snapshot = {
-      parameterPath: [
-        "options",
-        "snapshot"
-      ],
-      mapper: {
-        serializedName: "snapshot",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var sourceContainerName = {
-      parameterPath: "sourceContainerName",
-      mapper: {
-        required: true,
-        serializedName: "x-ms-source-container-name",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var sourceContentCrc64 = {
-      parameterPath: [
-        "options",
-        "sourceContentCrc64"
-      ],
-      mapper: {
-        serializedName: "x-ms-source-content-crc64",
-        type: {
-          name: "ByteArray"
-        }
-      }
-    };
-    var sourceContentMD5 = {
-      parameterPath: [
-        "options",
-        "sourceContentMD5"
-      ],
-      mapper: {
-        serializedName: "x-ms-source-content-md5",
-        type: {
-          name: "ByteArray"
-        }
-      }
-    };
-    var sourceIfMatch = {
-      parameterPath: [
-        "options",
-        "sourceModifiedAccessConditions",
-        "sourceIfMatch"
-      ],
-      mapper: {
-        serializedName: "x-ms-source-if-match",
+        xmlName: "x-ms-rename-source",
         type: {
           name: "String"
         }
@@ -49864,34 +49799,9 @@ var require_dist10 = __commonJS({
       ],
       mapper: {
         serializedName: "x-ms-source-if-modified-since",
+        xmlName: "x-ms-source-if-modified-since",
         type: {
           name: "DateTimeRfc1123"
-        }
-      }
-    };
-    var sourceIfNoneMatch = {
-      parameterPath: [
-        "options",
-        "sourceModifiedAccessConditions",
-        "sourceIfNoneMatch"
-      ],
-      mapper: {
-        serializedName: "x-ms-source-if-none-match",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var sourceIfTags = {
-      parameterPath: [
-        "options",
-        "sourceModifiedAccessConditions",
-        "sourceIfTags"
-      ],
-      mapper: {
-        serializedName: "x-ms-source-if-tags",
-        type: {
-          name: "String"
         }
       }
     };
@@ -49903,62 +49813,461 @@ var require_dist10 = __commonJS({
       ],
       mapper: {
         serializedName: "x-ms-source-if-unmodified-since",
+        xmlName: "x-ms-source-if-unmodified-since",
         type: {
           name: "DateTimeRfc1123"
         }
       }
     };
-    var sourceLeaseId = {
-      parameterPath: [
-        "options",
-        "sourceLeaseId"
-      ],
+    var sourceIfMatch = {
+      parameterPath: ["options", "sourceModifiedAccessConditions", "sourceIfMatch"],
       mapper: {
-        serializedName: "x-ms-source-lease-id",
+        serializedName: "x-ms-source-if-match",
+        xmlName: "x-ms-source-if-match",
         type: {
           name: "String"
         }
       }
     };
-    var sourceRange0 = {
-      parameterPath: "sourceRange",
+    var sourceIfNoneMatch = {
+      parameterPath: [
+        "options",
+        "sourceModifiedAccessConditions",
+        "sourceIfNoneMatch"
+      ],
       mapper: {
+        serializedName: "x-ms-source-if-none-match",
+        xmlName: "x-ms-source-if-none-match",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action5 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "setAccessControl",
+        isConstant: true,
+        serializedName: "action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var owner = {
+      parameterPath: ["options", "owner"],
+      mapper: {
+        serializedName: "x-ms-owner",
+        xmlName: "x-ms-owner",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var group2 = {
+      parameterPath: ["options", "group"],
+      mapper: {
+        serializedName: "x-ms-group",
+        xmlName: "x-ms-group",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var posixAcl = {
+      parameterPath: ["options", "posixAcl"],
+      mapper: {
+        serializedName: "x-ms-acl",
+        xmlName: "x-ms-acl",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var action6 = {
+      parameterPath: "action",
+      mapper: {
+        defaultValue: "getAccessControl",
+        isConstant: true,
+        serializedName: "action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var upn = {
+      parameterPath: ["options", "upn"],
+      mapper: {
+        serializedName: "upn",
+        xmlName: "upn",
+        type: {
+          name: "Boolean"
+        }
+      }
+    };
+    var snapshot = {
+      parameterPath: ["options", "snapshot"],
+      mapper: {
+        serializedName: "snapshot",
+        xmlName: "snapshot",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var versionId = {
+      parameterPath: ["options", "versionId"],
+      mapper: {
+        serializedName: "versionid",
+        xmlName: "versionid",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var range = {
+      parameterPath: ["options", "range"],
+      mapper: {
+        serializedName: "x-ms-range",
+        xmlName: "x-ms-range",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var rangeGetContentMD5 = {
+      parameterPath: ["options", "rangeGetContentMD5"],
+      mapper: {
+        serializedName: "x-ms-range-get-content-md5",
+        xmlName: "x-ms-range-get-content-md5",
+        type: {
+          name: "Boolean"
+        }
+      }
+    };
+    var rangeGetContentCRC64 = {
+      parameterPath: ["options", "rangeGetContentCRC64"],
+      mapper: {
+        serializedName: "x-ms-range-get-content-crc64",
+        xmlName: "x-ms-range-get-content-crc64",
+        type: {
+          name: "Boolean"
+        }
+      }
+    };
+    var encryptionKey = {
+      parameterPath: ["options", "cpkInfo", "encryptionKey"],
+      mapper: {
+        serializedName: "x-ms-encryption-key",
+        xmlName: "x-ms-encryption-key",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var encryptionKeySha256 = {
+      parameterPath: ["options", "cpkInfo", "encryptionKeySha256"],
+      mapper: {
+        serializedName: "x-ms-encryption-key-sha256",
+        xmlName: "x-ms-encryption-key-sha256",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var encryptionAlgorithm = {
+      parameterPath: ["options", "encryptionAlgorithm"],
+      mapper: {
+        defaultValue: "AES256",
+        isConstant: true,
+        serializedName: "x-ms-encryption-algorithm",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var ifTags = {
+      parameterPath: ["options", "modifiedAccessConditions", "ifTags"],
+      mapper: {
+        serializedName: "x-ms-if-tags",
+        xmlName: "x-ms-if-tags",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var deleteSnapshots = {
+      parameterPath: ["options", "deleteSnapshots"],
+      mapper: {
+        serializedName: "x-ms-delete-snapshots",
+        xmlName: "x-ms-delete-snapshots",
+        type: {
+          name: "Enum",
+          allowedValues: ["include", "only"]
+        }
+      }
+    };
+    var blobDeleteType = {
+      parameterPath: ["options", "blobDeleteType"],
+      mapper: {
+        serializedName: "deletetype",
+        xmlName: "deletetype",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp11 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "expiry",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var expiryOptions = {
+      parameterPath: "expiryOptions",
+      mapper: {
+        serializedName: "x-ms-expiry-option",
         required: true,
-        serializedName: "x-ms-source-range",
+        xmlName: "x-ms-expiry-option",
         type: {
           name: "String"
         }
       }
     };
-    var sourceRange1 = {
-      parameterPath: [
-        "options",
-        "sourceRange"
-      ],
+    var expiresOn = {
+      parameterPath: ["options", "expiresOn"],
       mapper: {
-        serializedName: "x-ms-source-range",
+        serializedName: "x-ms-expiry-time",
+        xmlName: "x-ms-expiry-time",
         type: {
           name: "String"
         }
       }
     };
-    var sourceUrl = {
-      parameterPath: "sourceUrl",
+    var blobCacheControl = {
+      parameterPath: ["options", "blobHttpHeaders", "blobCacheControl"],
       mapper: {
-        required: true,
-        serializedName: "x-ms-copy-source",
+        serializedName: "x-ms-blob-cache-control",
+        xmlName: "x-ms-blob-cache-control",
         type: {
           name: "String"
         }
       }
     };
-    var tier0 = {
-      parameterPath: [
-        "options",
-        "tier"
-      ],
+    var blobContentType = {
+      parameterPath: ["options", "blobHttpHeaders", "blobContentType"],
+      mapper: {
+        serializedName: "x-ms-blob-content-type",
+        xmlName: "x-ms-blob-content-type",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobContentMD5 = {
+      parameterPath: ["options", "blobHttpHeaders", "blobContentMD5"],
+      mapper: {
+        serializedName: "x-ms-blob-content-md5",
+        xmlName: "x-ms-blob-content-md5",
+        type: {
+          name: "ByteArray"
+        }
+      }
+    };
+    var blobContentEncoding = {
+      parameterPath: ["options", "blobHttpHeaders", "blobContentEncoding"],
+      mapper: {
+        serializedName: "x-ms-blob-content-encoding",
+        xmlName: "x-ms-blob-content-encoding",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobContentLanguage = {
+      parameterPath: ["options", "blobHttpHeaders", "blobContentLanguage"],
+      mapper: {
+        serializedName: "x-ms-blob-content-language",
+        xmlName: "x-ms-blob-content-language",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobContentDisposition = {
+      parameterPath: ["options", "blobHttpHeaders", "blobContentDisposition"],
+      mapper: {
+        serializedName: "x-ms-blob-content-disposition",
+        xmlName: "x-ms-blob-content-disposition",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var encryptionScope = {
+      parameterPath: ["options", "encryptionScope"],
+      mapper: {
+        serializedName: "x-ms-encryption-scope",
+        xmlName: "x-ms-encryption-scope",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp12 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "snapshot",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var tier = {
+      parameterPath: ["options", "tier"],
       mapper: {
         serializedName: "x-ms-access-tier",
+        xmlName: "x-ms-access-tier",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "P4",
+            "P6",
+            "P10",
+            "P15",
+            "P20",
+            "P30",
+            "P40",
+            "P50",
+            "P60",
+            "P70",
+            "P80",
+            "Hot",
+            "Cool",
+            "Archive"
+          ]
+        }
+      }
+    };
+    var rehydratePriority = {
+      parameterPath: ["options", "rehydratePriority"],
+      mapper: {
+        serializedName: "x-ms-rehydrate-priority",
+        xmlName: "x-ms-rehydrate-priority",
+        type: {
+          name: "Enum",
+          allowedValues: ["High", "Standard"]
+        }
+      }
+    };
+    var sourceIfTags = {
+      parameterPath: ["options", "sourceModifiedAccessConditions", "sourceIfTags"],
+      mapper: {
+        serializedName: "x-ms-source-if-tags",
+        xmlName: "x-ms-source-if-tags",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var copySource = {
+      parameterPath: "copySource",
+      mapper: {
+        serializedName: "x-ms-copy-source",
+        required: true,
+        xmlName: "x-ms-copy-source",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobTagsString = {
+      parameterPath: ["options", "blobTagsString"],
+      mapper: {
+        serializedName: "x-ms-tags",
+        xmlName: "x-ms-tags",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sealBlob = {
+      parameterPath: ["options", "sealBlob"],
+      mapper: {
+        serializedName: "x-ms-seal-blob",
+        xmlName: "x-ms-seal-blob",
+        type: {
+          name: "Boolean"
+        }
+      }
+    };
+    var xMsRequiresSync = {
+      parameterPath: "xMsRequiresSync",
+      mapper: {
+        defaultValue: "true",
+        isConstant: true,
+        serializedName: "x-ms-requires-sync",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceContentMD5 = {
+      parameterPath: ["options", "sourceContentMD5"],
+      mapper: {
+        serializedName: "x-ms-source-content-md5",
+        xmlName: "x-ms-source-content-md5",
+        type: {
+          name: "ByteArray"
+        }
+      }
+    };
+    var comp13 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "copy",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var copyActionAbortConstant = {
+      parameterPath: "copyActionAbortConstant",
+      mapper: {
+        defaultValue: "abort",
+        isConstant: true,
+        serializedName: "x-ms-copy-action",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var copyId = {
+      parameterPath: "copyId",
+      mapper: {
+        serializedName: "copyid",
+        required: true,
+        xmlName: "copyid",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp14 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "tier",
+        isConstant: true,
+        serializedName: "comp",
         type: {
           name: "String"
         }
@@ -49967,121 +50276,452 @@ var require_dist10 = __commonJS({
     var tier1 = {
       parameterPath: "tier",
       mapper: {
-        required: true,
         serializedName: "x-ms-access-tier",
+        required: true,
+        xmlName: "x-ms-access-tier",
+        type: {
+          name: "Enum",
+          allowedValues: [
+            "P4",
+            "P6",
+            "P10",
+            "P15",
+            "P20",
+            "P30",
+            "P40",
+            "P50",
+            "P60",
+            "P70",
+            "P80",
+            "Hot",
+            "Cool",
+            "Archive"
+          ]
+        }
+      }
+    };
+    var queryRequest = {
+      parameterPath: ["options", "queryRequest"],
+      mapper: QueryRequest
+    };
+    var comp15 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "query",
+        isConstant: true,
+        serializedName: "comp",
         type: {
           name: "String"
         }
       }
     };
-    var timeoutInSeconds = {
-      parameterPath: [
-        "options",
-        "timeoutInSeconds"
-      ],
+    var comp16 = {
+      parameterPath: "comp",
       mapper: {
-        serializedName: "timeout",
-        constraints: {
-          InclusiveMinimum: 0
-        },
+        defaultValue: "tags",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var tags = {
+      parameterPath: ["options", "tags"],
+      mapper: BlobTags
+    };
+    var transactionalContentMD5 = {
+      parameterPath: ["options", "transactionalContentMD5"],
+      mapper: {
+        serializedName: "Content-MD5",
+        xmlName: "Content-MD5",
+        type: {
+          name: "ByteArray"
+        }
+      }
+    };
+    var transactionalContentCrc64 = {
+      parameterPath: ["options", "transactionalContentCrc64"],
+      mapper: {
+        serializedName: "x-ms-content-crc64",
+        xmlName: "x-ms-content-crc64",
+        type: {
+          name: "ByteArray"
+        }
+      }
+    };
+    var blobType = {
+      parameterPath: "blobType",
+      mapper: {
+        defaultValue: "PageBlob",
+        isConstant: true,
+        serializedName: "x-ms-blob-type",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobContentLength = {
+      parameterPath: "blobContentLength",
+      mapper: {
+        serializedName: "x-ms-blob-content-length",
+        required: true,
+        xmlName: "x-ms-blob-content-length",
         type: {
           name: "Number"
         }
       }
     };
-    var transactionalContentCrc64 = {
+    var blobSequenceNumber = {
+      parameterPath: ["options", "blobSequenceNumber"],
+      mapper: {
+        serializedName: "x-ms-blob-sequence-number",
+        xmlName: "x-ms-blob-sequence-number",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var contentType2 = {
+      parameterPath: ["options", "contentType"],
+      mapper: {
+        defaultValue: "application/octet-stream",
+        isConstant: true,
+        serializedName: "Content-Type",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var body1 = {
+      parameterPath: "body",
+      mapper: {
+        serializedName: "body",
+        required: true,
+        xmlName: "body",
+        type: {
+          name: "Stream"
+        }
+      }
+    };
+    var accept2 = {
+      parameterPath: "accept",
+      mapper: {
+        defaultValue: "application/xml",
+        isConstant: true,
+        serializedName: "Accept",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp17 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "page",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var pageWrite = {
+      parameterPath: "pageWrite",
+      mapper: {
+        defaultValue: "update",
+        isConstant: true,
+        serializedName: "x-ms-page-write",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var ifSequenceNumberLessThanOrEqualTo = {
       parameterPath: [
         "options",
-        "transactionalContentCrc64"
+        "sequenceNumberAccessConditions",
+        "ifSequenceNumberLessThanOrEqualTo"
       ],
       mapper: {
-        serializedName: "x-ms-content-crc64",
+        serializedName: "x-ms-if-sequence-number-le",
+        xmlName: "x-ms-if-sequence-number-le",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var ifSequenceNumberLessThan = {
+      parameterPath: [
+        "options",
+        "sequenceNumberAccessConditions",
+        "ifSequenceNumberLessThan"
+      ],
+      mapper: {
+        serializedName: "x-ms-if-sequence-number-lt",
+        xmlName: "x-ms-if-sequence-number-lt",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var ifSequenceNumberEqualTo = {
+      parameterPath: [
+        "options",
+        "sequenceNumberAccessConditions",
+        "ifSequenceNumberEqualTo"
+      ],
+      mapper: {
+        serializedName: "x-ms-if-sequence-number-eq",
+        xmlName: "x-ms-if-sequence-number-eq",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var pageWrite1 = {
+      parameterPath: "pageWrite",
+      mapper: {
+        defaultValue: "clear",
+        isConstant: true,
+        serializedName: "x-ms-page-write",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceUrl = {
+      parameterPath: "sourceUrl",
+      mapper: {
+        serializedName: "x-ms-copy-source",
+        required: true,
+        xmlName: "x-ms-copy-source",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceRange = {
+      parameterPath: "sourceRange",
+      mapper: {
+        serializedName: "x-ms-source-range",
+        required: true,
+        xmlName: "x-ms-source-range",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sourceContentCrc64 = {
+      parameterPath: ["options", "sourceContentCrc64"],
+      mapper: {
+        serializedName: "x-ms-source-content-crc64",
+        xmlName: "x-ms-source-content-crc64",
         type: {
           name: "ByteArray"
         }
       }
     };
-    var transactionalContentMD5 = {
-      parameterPath: [
-        "options",
-        "transactionalContentMD5"
-      ],
+    var range1 = {
+      parameterPath: "range",
       mapper: {
-        serializedName: "Content-MD5",
+        serializedName: "x-ms-range",
+        required: true,
+        xmlName: "x-ms-range",
         type: {
-          name: "ByteArray"
+          name: "String"
         }
       }
     };
-    var upn = {
+    var comp18 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "pagelist",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var prevsnapshot = {
+      parameterPath: ["options", "prevsnapshot"],
+      mapper: {
+        serializedName: "prevsnapshot",
+        xmlName: "prevsnapshot",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var prevSnapshotUrl = {
+      parameterPath: ["options", "prevSnapshotUrl"],
+      mapper: {
+        serializedName: "x-ms-previous-snapshot-url",
+        xmlName: "x-ms-previous-snapshot-url",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var sequenceNumberAction = {
+      parameterPath: "sequenceNumberAction",
+      mapper: {
+        serializedName: "x-ms-sequence-number-action",
+        required: true,
+        xmlName: "x-ms-sequence-number-action",
+        type: {
+          name: "Enum",
+          allowedValues: ["max", "update", "increment"]
+        }
+      }
+    };
+    var comp19 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "incrementalcopy",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobType1 = {
+      parameterPath: "blobType",
+      mapper: {
+        defaultValue: "AppendBlob",
+        isConstant: true,
+        serializedName: "x-ms-blob-type",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp20 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "appendblock",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var maxSize = {
+      parameterPath: ["options", "appendPositionAccessConditions", "maxSize"],
+      mapper: {
+        serializedName: "x-ms-blob-condition-maxsize",
+        xmlName: "x-ms-blob-condition-maxsize",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var appendPosition = {
       parameterPath: [
         "options",
-        "upn"
+        "appendPositionAccessConditions",
+        "appendPosition"
       ],
       mapper: {
-        serializedName: "upn",
+        serializedName: "x-ms-blob-condition-appendpos",
+        xmlName: "x-ms-blob-condition-appendpos",
+        type: {
+          name: "Number"
+        }
+      }
+    };
+    var sourceRange1 = {
+      parameterPath: ["options", "sourceRange"],
+      mapper: {
+        serializedName: "x-ms-source-range",
+        xmlName: "x-ms-source-range",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var comp21 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "seal",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var blobType2 = {
+      parameterPath: "blobType",
+      mapper: {
+        defaultValue: "BlockBlob",
+        isConstant: true,
+        serializedName: "x-ms-blob-type",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var copySourceBlobProperties = {
+      parameterPath: ["options", "copySourceBlobProperties"],
+      mapper: {
+        serializedName: "x-ms-copy-source-blob-properties",
+        xmlName: "x-ms-copy-source-blob-properties",
         type: {
           name: "Boolean"
         }
       }
     };
-    var url = {
-      parameterPath: "url",
+    var comp22 = {
+      parameterPath: "comp",
       mapper: {
-        required: true,
-        serializedName: "url",
-        defaultValue: "",
-        type: {
-          name: "String"
-        }
-      },
-      skipEncoding: true
-    };
-    var version = {
-      parameterPath: "version",
-      mapper: {
-        required: true,
+        defaultValue: "block",
         isConstant: true,
-        serializedName: "x-ms-version",
-        defaultValue: "2020-06-12",
+        serializedName: "comp",
         type: {
           name: "String"
         }
       }
     };
-    var versionId = {
-      parameterPath: [
-        "options",
-        "versionId"
-      ],
+    var blockId = {
+      parameterPath: "blockId",
       mapper: {
-        serializedName: "versionid",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var where = {
-      parameterPath: [
-        "options",
-        "where"
-      ],
-      mapper: {
-        serializedName: "where",
-        type: {
-          name: "String"
-        }
-      }
-    };
-    var xMsRequiresSync = {
-      parameterPath: "xMsRequiresSync",
-      mapper: {
+        serializedName: "blockid",
         required: true,
-        isConstant: true,
-        serializedName: "x-ms-requires-sync",
-        defaultValue: "true",
+        xmlName: "blockid",
         type: {
           name: "String"
+        }
+      }
+    };
+    var blocks = {
+      parameterPath: "blocks",
+      mapper: BlockLookupList
+    };
+    var comp23 = {
+      parameterPath: "comp",
+      mapper: {
+        defaultValue: "blocklist",
+        isConstant: true,
+        serializedName: "comp",
+        type: {
+          name: "String"
+        }
+      }
+    };
+    var listType = {
+      parameterPath: "listType",
+      mapper: {
+        defaultValue: "committed",
+        serializedName: "blocklisttype",
+        required: true,
+        xmlName: "blocklisttype",
+        type: {
+          name: "Enum",
+          allowedValues: ["committed", "uncommitted", "all"]
         }
       }
     };
@@ -50090,99 +50730,95 @@ var require_dist10 = __commonJS({
         this.client = client;
       }
       __name(Service2, "Service");
-      Service2.prototype.setProperties = function(blobServiceProperties, options, callback) {
-        return this.client.sendOperationRequest({
-          blobServiceProperties,
-          options
-        }, setPropertiesOperationSpec, callback);
+      Service2.prototype.setProperties = function(blobServiceProperties2, options) {
+        var operationArguments = {
+          blobServiceProperties: blobServiceProperties2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setPropertiesOperationSpec);
       };
-      Service2.prototype.getProperties = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getPropertiesOperationSpec, callback);
+      Service2.prototype.getProperties = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec);
       };
-      Service2.prototype.getStatistics = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getStatisticsOperationSpec, callback);
+      Service2.prototype.getStatistics = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getStatisticsOperationSpec);
       };
-      Service2.prototype.listContainersSegment = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, listContainersSegmentOperationSpec, callback);
+      Service2.prototype.listContainersSegment = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, listContainersSegmentOperationSpec);
       };
-      Service2.prototype.getUserDelegationKey = function(keyInfo, options, callback) {
-        return this.client.sendOperationRequest({
-          keyInfo,
-          options
-        }, getUserDelegationKeyOperationSpec, callback);
+      Service2.prototype.getUserDelegationKey = function(keyInfo2, options) {
+        var operationArguments = {
+          keyInfo: keyInfo2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getUserDelegationKeyOperationSpec);
       };
-      Service2.prototype.getAccountInfo = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getAccountInfoOperationSpec, callback);
+      Service2.prototype.getAccountInfo = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec);
       };
-      Service2.prototype.submitBatch = function(body, contentLength2, multipartContentType2, options, callback) {
-        return this.client.sendOperationRequest({
-          body,
+      Service2.prototype.submitBatch = function(contentLength2, multipartContentType2, body2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
           multipartContentType: multipartContentType2,
-          options
-        }, submitBatchOperationSpec, callback);
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec);
       };
-      Service2.prototype.filterBlobs = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, filterBlobsOperationSpec, callback);
+      Service2.prototype.filterBlobs = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, filterBlobsOperationSpec);
       };
       return Service2;
     }();
-    var serializer = new coreHttp.Serializer(Mappers, true);
+    var xmlSerializer = new coreHttp.Serializer(Mappers, true);
     var setPropertiesOperationSpec = {
+      path: "/",
       httpMethod: "PUT",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype0,
-        comp0
-      ],
-      headerParameters: [
-        version,
-        requestId
-      ],
-      requestBody: {
-        parameterPath: "blobServiceProperties",
-        mapper: tslib.__assign(tslib.__assign({}, BlobServiceProperties), { required: true })
-      },
-      contentType: "application/xml; charset=utf-8",
       responses: {
         202: {
           headersMapper: ServiceSetPropertiesHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceSetPropertiesHeaders
+          headersMapper: ServiceSetPropertiesExceptionHeaders
         }
       },
-      isXML: true,
-      serializer
-    };
-    var getPropertiesOperationSpec = {
-      httpMethod: "GET",
-      urlParameters: [
-        url
-      ],
+      requestBody: blobServiceProperties,
       queryParameters: [
-        timeoutInSeconds,
-        restype0,
-        comp0
+        restype,
+        comp,
+        timeoutInSeconds
       ],
+      urlParameters: [url],
       headerParameters: [
+        contentType,
+        accept,
         version,
         requestId
       ],
+      isXML: true,
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer
+    };
+    var getPropertiesOperationSpec = {
+      path: "/",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: BlobServiceProperties,
@@ -50190,26 +50826,26 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceGetPropertiesHeaders
+          headersMapper: ServiceGetPropertiesExceptionHeaders
         }
       },
-      isXML: true,
-      serializer
-    };
-    var getStatisticsOperationSpec = {
-      httpMethod: "GET",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        timeoutInSeconds,
-        restype0,
-        comp1
+        restype,
+        comp,
+        timeoutInSeconds
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        requestId
+        requestId,
+        accept1
       ],
+      isXML: true,
+      serializer: xmlSerializer
+    };
+    var getStatisticsOperationSpec = {
+      path: "/",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: BlobServiceStatistics,
@@ -50217,29 +50853,26 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceGetStatisticsHeaders
+          headersMapper: ServiceGetStatisticsExceptionHeaders
         }
       },
-      isXML: true,
-      serializer
-    };
-    var listContainersSegmentOperationSpec = {
-      httpMethod: "GET",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        prefix,
-        marker0,
-        maxPageSize,
-        include0,
+        restype,
         timeoutInSeconds,
-        comp2
+        comp1
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        requestId
+        requestId,
+        accept1
       ],
+      isXML: true,
+      serializer: xmlSerializer
+    };
+    var listContainersSegmentOperationSpec = {
+      path: "/",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: ListContainersSegmentResponse,
@@ -50247,31 +50880,29 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceListContainersSegmentHeaders
+          headersMapper: ServiceListContainersSegmentExceptionHeaders
         }
       },
-      isXML: true,
-      serializer
-    };
-    var getUserDelegationKeyOperationSpec = {
-      httpMethod: "POST",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
-        restype0,
-        comp3
+        comp2,
+        prefix,
+        marker,
+        maxPageSize,
+        include
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        requestId
+        requestId,
+        accept1
       ],
-      requestBody: {
-        parameterPath: "keyInfo",
-        mapper: tslib.__assign(tslib.__assign({}, KeyInfo), { required: true })
-      },
-      contentType: "application/xml; charset=utf-8",
+      isXML: true,
+      serializer: xmlSerializer
+    };
+    var getUserDelegationKeyOperationSpec = {
+      path: "/",
+      httpMethod: "POST",
       responses: {
         200: {
           bodyMapper: UserDelegationKey,
@@ -50279,96 +50910,80 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceGetUserDelegationKeyHeaders
+          headersMapper: ServiceGetUserDelegationKeyExceptionHeaders
         }
       },
+      requestBody: keyInfo,
+      queryParameters: [
+        restype,
+        timeoutInSeconds,
+        comp3
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        contentType,
+        accept,
+        version,
+        requestId
+      ],
       isXML: true,
-      serializer
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer
     };
     var getAccountInfoOperationSpec = {
+      path: "/",
       httpMethod: "GET",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        restype1,
-        comp0
-      ],
-      headerParameters: [
-        version
-      ],
       responses: {
         200: {
           headersMapper: ServiceGetAccountInfoHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceGetAccountInfoHeaders
+          headersMapper: ServiceGetAccountInfoExceptionHeaders
         }
       },
+      queryParameters: [comp, restype1],
+      urlParameters: [url],
+      headerParameters: [version, accept1],
       isXML: true,
-      serializer
+      serializer: xmlSerializer
     };
     var submitBatchOperationSpec = {
+      path: "/",
       httpMethod: "POST",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp4
-      ],
-      headerParameters: [
-        contentLength,
-        multipartContentType,
-        version,
-        requestId
-      ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/xml; charset=utf-8",
       responses: {
         202: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: ServiceSubmitBatchHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceSubmitBatchHeaders
+          headersMapper: ServiceSubmitBatchExceptionHeaders
         }
       },
+      requestBody: body,
+      queryParameters: [timeoutInSeconds, comp4],
+      urlParameters: [url],
+      headerParameters: [
+        contentType,
+        accept,
+        version,
+        requestId,
+        contentLength,
+        multipartContentType
+      ],
       isXML: true,
-      serializer
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer
     };
     var filterBlobsOperationSpec = {
+      path: "/",
       httpMethod: "GET",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        where,
-        marker0,
-        maxPageSize,
-        comp5
-      ],
-      headerParameters: [
-        version,
-        requestId
-      ],
       responses: {
         200: {
           bodyMapper: FilterBlobSegment,
@@ -50376,635 +50991,567 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ServiceFilterBlobsHeaders
+          headersMapper: ServiceFilterBlobsExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        marker,
+        maxPageSize,
+        comp5,
+        where
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1
+      ],
       isXML: true,
-      serializer
+      serializer: xmlSerializer
     };
-    var Mappers$1 = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      AccessPolicy,
-      BlobFlatListSegment,
-      BlobHierarchyListSegment,
-      BlobItemInternal,
-      BlobPrefix,
-      BlobPropertiesInternal,
-      BlobTag,
-      BlobTags,
-      ContainerAcquireLeaseHeaders,
-      ContainerBreakLeaseHeaders,
-      ContainerChangeLeaseHeaders,
-      ContainerCreateHeaders,
-      ContainerDeleteHeaders,
-      ContainerGetAccessPolicyHeaders,
-      ContainerGetAccountInfoHeaders,
-      ContainerGetPropertiesHeaders,
-      ContainerListBlobFlatSegmentHeaders,
-      ContainerListBlobHierarchySegmentHeaders,
-      ContainerReleaseLeaseHeaders,
-      ContainerRenameHeaders,
-      ContainerRenewLeaseHeaders,
-      ContainerRestoreHeaders,
-      ContainerSetAccessPolicyHeaders,
-      ContainerSetMetadataHeaders,
-      ContainerSubmitBatchHeaders,
-      ListBlobsFlatSegmentResponse,
-      ListBlobsHierarchySegmentResponse,
-      SignedIdentifier,
-      StorageError
-    });
     var Container = function() {
       function Container2(client) {
         this.client = client;
       }
       __name(Container2, "Container");
-      Container2.prototype.create = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, createOperationSpec, callback);
+      Container2.prototype.create = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, createOperationSpec);
       };
-      Container2.prototype.getProperties = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getPropertiesOperationSpec$1, callback);
+      Container2.prototype.getProperties = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec$1);
       };
-      Container2.prototype.deleteMethod = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, deleteMethodOperationSpec, callback);
+      Container2.prototype.delete = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec);
       };
-      Container2.prototype.setMetadata = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setMetadataOperationSpec, callback);
+      Container2.prototype.setMetadata = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec);
       };
-      Container2.prototype.getAccessPolicy = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getAccessPolicyOperationSpec, callback);
+      Container2.prototype.getAccessPolicy = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getAccessPolicyOperationSpec);
       };
-      Container2.prototype.setAccessPolicy = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setAccessPolicyOperationSpec, callback);
+      Container2.prototype.setAccessPolicy = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setAccessPolicyOperationSpec);
       };
-      Container2.prototype.restore = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, restoreOperationSpec, callback);
+      Container2.prototype.restore = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, restoreOperationSpec);
       };
-      Container2.prototype.rename = function(sourceContainerName2, options, callback) {
-        return this.client.sendOperationRequest({
+      Container2.prototype.rename = function(sourceContainerName2, options) {
+        var operationArguments = {
           sourceContainerName: sourceContainerName2,
-          options
-        }, renameOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, renameOperationSpec);
       };
-      Container2.prototype.submitBatch = function(body, contentLength2, multipartContentType2, options, callback) {
-        return this.client.sendOperationRequest({
-          body,
+      Container2.prototype.submitBatch = function(contentLength2, multipartContentType2, body2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
           multipartContentType: multipartContentType2,
-          options
-        }, submitBatchOperationSpec$1, callback);
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec$1);
       };
-      Container2.prototype.acquireLease = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, acquireLeaseOperationSpec, callback);
+      Container2.prototype.acquireLease = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec);
       };
-      Container2.prototype.releaseLease = function(leaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          options
-        }, releaseLeaseOperationSpec, callback);
+      Container2.prototype.releaseLease = function(leaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec);
       };
-      Container2.prototype.renewLease = function(leaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          options
-        }, renewLeaseOperationSpec, callback);
+      Container2.prototype.renewLease = function(leaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec);
       };
-      Container2.prototype.breakLease = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, breakLeaseOperationSpec, callback);
+      Container2.prototype.breakLease = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec);
       };
-      Container2.prototype.changeLease = function(leaseId, proposedLeaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          proposedLeaseId,
-          options
-        }, changeLeaseOperationSpec, callback);
+      Container2.prototype.changeLease = function(leaseId2, proposedLeaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          proposedLeaseId: proposedLeaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec);
       };
-      Container2.prototype.listBlobFlatSegment = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, listBlobFlatSegmentOperationSpec, callback);
+      Container2.prototype.listBlobFlatSegment = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, listBlobFlatSegmentOperationSpec);
       };
-      Container2.prototype.listBlobHierarchySegment = function(delimiter2, options, callback) {
-        return this.client.sendOperationRequest({
+      Container2.prototype.listBlobHierarchySegment = function(delimiter2, options) {
+        var operationArguments = {
           delimiter: delimiter2,
-          options
-        }, listBlobHierarchySegmentOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, listBlobHierarchySegmentOperationSpec);
       };
-      Container2.prototype.getAccountInfo = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getAccountInfoOperationSpec$1, callback);
+      Container2.prototype.getAccountInfo = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec$1);
       };
       return Container2;
     }();
-    var serializer$1 = new coreHttp.Serializer(Mappers$1, true);
+    var xmlSerializer$1 = new coreHttp.Serializer(Mappers, true);
     var createOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype2
-      ],
-      headerParameters: [
-        metadata,
-        access,
-        version,
-        requestId,
-        defaultEncryptionScope,
-        preventEncryptionScopeOverride
-      ],
       responses: {
         201: {
           headersMapper: ContainerCreateHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerCreateHeaders
+          headersMapper: ContainerCreateExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var getPropertiesOperationSpec$1 = {
-      httpMethod: "GET",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype2
-      ],
+      queryParameters: [timeoutInSeconds, restype2],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
-        leaseId0
+        accept1,
+        metadata,
+        access,
+        defaultEncryptionScope,
+        preventEncryptionScopeOverride
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var getPropertiesOperationSpec$1 = {
+      path: "/{containerName}",
+      httpMethod: "GET",
       responses: {
         200: {
           headersMapper: ContainerGetPropertiesHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerGetPropertiesHeaders
+          headersMapper: ContainerGetPropertiesExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var deleteMethodOperationSpec = {
-      httpMethod: "DELETE",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype2
-      ],
+      queryParameters: [timeoutInSeconds, restype2],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince
+        accept1,
+        leaseId
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var deleteOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "DELETE",
       responses: {
         202: {
           headersMapper: ContainerDeleteHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerDeleteHeaders
+          headersMapper: ContainerDeleteExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, restype2],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince
+      ],
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var setMetadataOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
+      responses: {
+        200: {
+          headersMapper: ContainerSetMetadataHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: ContainerSetMetadataExceptionHeaders
+        }
+      },
       queryParameters: [
         timeoutInSeconds,
         restype2,
         comp6
       ],
+      urlParameters: [url],
       headerParameters: [
-        metadata,
         version,
         requestId,
-        leaseId0,
+        accept1,
+        metadata,
+        leaseId,
         ifModifiedSince
       ],
-      responses: {
-        200: {
-          headersMapper: ContainerSetMetadataHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: ContainerSetMetadataHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var getAccessPolicyOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "GET",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype2,
-        comp7
-      ],
-      headerParameters: [
-        version,
-        requestId,
-        leaseId0
-      ],
       responses: {
         200: {
           bodyMapper: {
-            xmlElementName: "SignedIdentifier",
-            serializedName: "parsedResponse",
             type: {
               name: "Sequence",
               element: {
-                type: {
-                  name: "Composite",
-                  className: "SignedIdentifier"
-                }
+                type: { name: "Composite", className: "SignedIdentifier" }
               }
-            }
+            },
+            serializedName: "SignedIdentifiers",
+            xmlName: "SignedIdentifiers",
+            xmlIsWrapped: true,
+            xmlElementName: "SignedIdentifier"
           },
           headersMapper: ContainerGetAccessPolicyHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerGetAccessPolicyHeaders
+          headersMapper: ContainerGetAccessPolicyExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var setAccessPolicyOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
         restype2,
         comp7
       ],
+      urlParameters: [url],
       headerParameters: [
-        access,
         version,
         requestId,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince
+        accept1,
+        leaseId
       ],
-      requestBody: {
-        parameterPath: [
-          "options",
-          "containerAcl"
-        ],
-        mapper: {
-          xmlName: "SignedIdentifiers",
-          xmlElementName: "SignedIdentifier",
-          serializedName: "containerAcl",
-          type: {
-            name: "Sequence",
-            element: {
-              type: {
-                name: "Composite",
-                className: "SignedIdentifier"
-              }
-            }
-          }
-        }
-      },
-      contentType: "application/xml; charset=utf-8",
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var setAccessPolicyOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "PUT",
       responses: {
         200: {
           headersMapper: ContainerSetAccessPolicyHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerSetAccessPolicyHeaders
+          headersMapper: ContainerSetAccessPolicyExceptionHeaders
         }
       },
+      requestBody: containerAcl,
+      queryParameters: [
+        timeoutInSeconds,
+        restype2,
+        comp7
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        contentType,
+        accept,
+        version,
+        requestId,
+        access,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince
+      ],
       isXML: true,
-      serializer: serializer$1
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer$1
     };
     var restoreOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
+      responses: {
+        201: {
+          headersMapper: ContainerRestoreHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: ContainerRestoreExceptionHeaders
+        }
+      },
       queryParameters: [
         timeoutInSeconds,
         restype2,
         comp8
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
+        accept1,
         deletedContainerName,
         deletedContainerVersion
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var renameOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "PUT",
       responses: {
-        201: {
-          headersMapper: ContainerRestoreHeaders
+        200: {
+          headersMapper: ContainerRenameHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerRestoreHeaders
+          headersMapper: ContainerRenameExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var renameOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
         restype2,
         comp9
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
+        accept1,
         sourceContainerName,
         sourceLeaseId
       ],
-      responses: {
-        200: {
-          headersMapper: ContainerRenameHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: ContainerRenameHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var submitBatchOperationSpec$1 = {
+      path: "/{containerName}",
       httpMethod: "POST",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        restype2,
-        comp4
-      ],
-      headerParameters: [
-        contentLength,
-        multipartContentType,
-        version,
-        requestId
-      ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/xml; charset=utf-8",
       responses: {
         202: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: ContainerSubmitBatchHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerSubmitBatchHeaders
+          headersMapper: ContainerSubmitBatchExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var acquireLeaseOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
+      requestBody: body,
       queryParameters: [
         timeoutInSeconds,
-        comp10,
+        comp4,
         restype2
       ],
+      urlParameters: [url],
       headerParameters: [
-        duration,
-        proposedLeaseId0,
+        contentType,
+        accept,
         version,
         requestId,
-        action0,
-        ifModifiedSince,
-        ifUnmodifiedSince
+        contentLength,
+        multipartContentType
       ],
+      isXML: true,
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer$1
+    };
+    var acquireLeaseOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "PUT",
       responses: {
         201: {
           headersMapper: ContainerAcquireLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerAcquireLeaseHeaders
+          headersMapper: ContainerAcquireLeaseExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        restype2,
+        comp10
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        action,
+        duration,
+        proposedLeaseId
+      ],
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var releaseLeaseOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10,
-        restype2
-      ],
-      headerParameters: [
-        leaseId1,
-        version,
-        requestId,
-        action1,
-        ifModifiedSince,
-        ifUnmodifiedSince
-      ],
       responses: {
         200: {
           headersMapper: ContainerReleaseLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerReleaseLeaseHeaders
+          headersMapper: ContainerReleaseLeaseExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        restype2,
+        comp10
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        action1,
+        leaseId1
+      ],
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var renewLeaseOperationSpec = {
+      path: "/{containerName}",
       httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10,
-        restype2
-      ],
-      headerParameters: [
-        leaseId1,
-        version,
-        requestId,
-        action2,
-        ifModifiedSince,
-        ifUnmodifiedSince
-      ],
       responses: {
         200: {
           headersMapper: ContainerRenewLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerRenewLeaseHeaders
+          headersMapper: ContainerRenewLeaseExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var breakLeaseOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
-        comp10,
-        restype2
+        restype2,
+        comp10
       ],
+      urlParameters: [url],
       headerParameters: [
-        breakPeriod,
         version,
         requestId,
-        action3,
+        accept1,
         ifModifiedSince,
-        ifUnmodifiedSince
+        ifUnmodifiedSince,
+        leaseId1,
+        action2
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var breakLeaseOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "PUT",
       responses: {
         202: {
           headersMapper: ContainerBreakLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerBreakLeaseHeaders
+          headersMapper: ContainerBreakLeaseExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var changeLeaseOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
-        comp10,
-        restype2
+        restype2,
+        comp10
       ],
+      urlParameters: [url],
       headerParameters: [
-        leaseId1,
-        proposedLeaseId1,
         version,
         requestId,
-        action4,
+        accept1,
         ifModifiedSince,
-        ifUnmodifiedSince
+        ifUnmodifiedSince,
+        action3,
+        breakPeriod
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var changeLeaseOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "PUT",
       responses: {
         200: {
           headersMapper: ContainerChangeLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerChangeLeaseHeaders
+          headersMapper: ContainerChangeLeaseExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var listBlobFlatSegmentOperationSpec = {
-      httpMethod: "GET",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        prefix,
-        marker0,
-        maxPageSize,
-        include1,
         timeoutInSeconds,
         restype2,
-        comp2
+        comp10
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        requestId
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        leaseId1,
+        action4,
+        proposedLeaseId1
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var listBlobFlatSegmentOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: ListBlobsFlatSegmentResponse,
@@ -51012,32 +51559,30 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerListBlobFlatSegmentHeaders
+          headersMapper: ContainerListBlobFlatSegmentExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$1
-    };
-    var listBlobHierarchySegmentOperationSpec = {
-      httpMethod: "GET",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        prefix,
-        delimiter,
-        marker0,
-        maxPageSize,
-        include1,
         timeoutInSeconds,
+        comp2,
+        prefix,
+        marker,
+        maxPageSize,
         restype2,
-        comp2
+        include1
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        requestId
+        requestId,
+        accept1
       ],
+      isXML: true,
+      serializer: xmlSerializer$1
+    };
+    var listBlobHierarchySegmentOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: ListBlobsHierarchySegmentResponse,
@@ -51045,916 +51590,830 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerListBlobHierarchySegmentHeaders
+          headersMapper: ContainerListBlobHierarchySegmentExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        comp2,
+        prefix,
+        marker,
+        maxPageSize,
+        restype2,
+        include1,
+        delimiter
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1
+      ],
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
     var getAccountInfoOperationSpec$1 = {
+      path: "/{containerName}",
       httpMethod: "GET",
-      path: "{containerName}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        restype1,
-        comp0
-      ],
-      headerParameters: [
-        version
-      ],
       responses: {
         200: {
           headersMapper: ContainerGetAccountInfoHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: ContainerGetAccountInfoHeaders
+          headersMapper: ContainerGetAccountInfoExceptionHeaders
         }
       },
+      queryParameters: [comp, restype1],
+      urlParameters: [url],
+      headerParameters: [version, accept1],
       isXML: true,
-      serializer: serializer$1
+      serializer: xmlSerializer$1
     };
-    var Mappers$2 = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      ArrowConfiguration,
-      ArrowField,
-      BlobAbortCopyFromURLHeaders,
-      BlobAcquireLeaseHeaders,
-      BlobBreakLeaseHeaders,
-      BlobChangeLeaseHeaders,
-      BlobCopyFromURLHeaders,
-      BlobCreateSnapshotHeaders,
-      BlobDeleteHeaders,
-      BlobDownloadHeaders,
-      BlobGetAccessControlHeaders,
-      BlobGetAccountInfoHeaders,
-      BlobGetPropertiesHeaders,
-      BlobGetTagsHeaders,
-      BlobQueryHeaders,
-      BlobReleaseLeaseHeaders,
-      BlobRenameHeaders,
-      BlobRenewLeaseHeaders,
-      BlobSetAccessControlHeaders,
-      BlobSetExpiryHeaders,
-      BlobSetHTTPHeadersHeaders,
-      BlobSetMetadataHeaders,
-      BlobSetTagsHeaders,
-      BlobSetTierHeaders,
-      BlobStartCopyFromURLHeaders,
-      BlobTag,
-      BlobTags,
-      BlobUndeleteHeaders,
-      DataLakeStorageError,
-      DataLakeStorageErrorError,
-      DelimitedTextConfiguration,
-      JsonTextConfiguration,
-      QueryFormat,
-      QueryRequest,
-      QuerySerialization,
-      StorageError
-    });
     var Blob$1 = function() {
       function Blob2(client) {
         this.client = client;
       }
       __name(Blob2, "Blob");
-      Blob2.prototype.download = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, downloadOperationSpec, callback);
+      Blob2.prototype.download = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, downloadOperationSpec);
       };
-      Blob2.prototype.getProperties = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getPropertiesOperationSpec$2, callback);
+      Blob2.prototype.getProperties = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec$2);
       };
-      Blob2.prototype.deleteMethod = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, deleteMethodOperationSpec$1, callback);
+      Blob2.prototype.delete = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec$1);
       };
-      Blob2.prototype.setAccessControl = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setAccessControlOperationSpec, callback);
+      Blob2.prototype.setAccessControl = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setAccessControlOperationSpec);
       };
-      Blob2.prototype.getAccessControl = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getAccessControlOperationSpec, callback);
+      Blob2.prototype.getAccessControl = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getAccessControlOperationSpec);
       };
-      Blob2.prototype.rename = function(renameSource2, options, callback) {
-        return this.client.sendOperationRequest({
+      Blob2.prototype.rename = function(renameSource2, options) {
+        var operationArguments = {
           renameSource: renameSource2,
-          options
-        }, renameOperationSpec$1, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, renameOperationSpec$1);
       };
-      Blob2.prototype.undelete = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, undeleteOperationSpec, callback);
+      Blob2.prototype.undelete = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, undeleteOperationSpec);
       };
-      Blob2.prototype.setExpiry = function(expiryOptions2, options, callback) {
-        return this.client.sendOperationRequest({
+      Blob2.prototype.setExpiry = function(expiryOptions2, options) {
+        var operationArguments = {
           expiryOptions: expiryOptions2,
-          options
-        }, setExpiryOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setExpiryOperationSpec);
       };
-      Blob2.prototype.setHTTPHeaders = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setHTTPHeadersOperationSpec, callback);
+      Blob2.prototype.setHttpHeaders = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setHttpHeadersOperationSpec);
       };
-      Blob2.prototype.setMetadata = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setMetadataOperationSpec$1, callback);
+      Blob2.prototype.setMetadata = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec$1);
       };
-      Blob2.prototype.acquireLease = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, acquireLeaseOperationSpec$1, callback);
+      Blob2.prototype.acquireLease = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec$1);
       };
-      Blob2.prototype.releaseLease = function(leaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          options
-        }, releaseLeaseOperationSpec$1, callback);
+      Blob2.prototype.releaseLease = function(leaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec$1);
       };
-      Blob2.prototype.renewLease = function(leaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          options
-        }, renewLeaseOperationSpec$1, callback);
+      Blob2.prototype.renewLease = function(leaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec$1);
       };
-      Blob2.prototype.changeLease = function(leaseId, proposedLeaseId, options, callback) {
-        return this.client.sendOperationRequest({
-          leaseId,
-          proposedLeaseId,
-          options
-        }, changeLeaseOperationSpec$1, callback);
+      Blob2.prototype.changeLease = function(leaseId2, proposedLeaseId2, options) {
+        var operationArguments = {
+          leaseId: leaseId2,
+          proposedLeaseId: proposedLeaseId2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec$1);
       };
-      Blob2.prototype.breakLease = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, breakLeaseOperationSpec$1, callback);
+      Blob2.prototype.breakLease = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec$1);
       };
-      Blob2.prototype.createSnapshot = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, createSnapshotOperationSpec, callback);
+      Blob2.prototype.createSnapshot = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, createSnapshotOperationSpec);
       };
-      Blob2.prototype.startCopyFromURL = function(copySource2, options, callback) {
-        return this.client.sendOperationRequest({
+      Blob2.prototype.startCopyFromURL = function(copySource2, options) {
+        var operationArguments = {
           copySource: copySource2,
-          options
-        }, startCopyFromURLOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, startCopyFromURLOperationSpec);
       };
-      Blob2.prototype.copyFromURL = function(copySource2, options, callback) {
-        return this.client.sendOperationRequest({
+      Blob2.prototype.copyFromURL = function(copySource2, options) {
+        var operationArguments = {
           copySource: copySource2,
-          options
-        }, copyFromURLOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, copyFromURLOperationSpec);
       };
-      Blob2.prototype.abortCopyFromURL = function(copyId2, options, callback) {
-        return this.client.sendOperationRequest({
+      Blob2.prototype.abortCopyFromURL = function(copyId2, options) {
+        var operationArguments = {
           copyId: copyId2,
-          options
-        }, abortCopyFromURLOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, abortCopyFromURLOperationSpec);
       };
-      Blob2.prototype.setTier = function(tier, options, callback) {
-        return this.client.sendOperationRequest({
-          tier,
-          options
-        }, setTierOperationSpec, callback);
+      Blob2.prototype.setTier = function(tier2, options) {
+        var operationArguments = {
+          tier: tier2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setTierOperationSpec);
       };
-      Blob2.prototype.getAccountInfo = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getAccountInfoOperationSpec$2, callback);
+      Blob2.prototype.getAccountInfo = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec$2);
       };
-      Blob2.prototype.query = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, queryOperationSpec, callback);
+      Blob2.prototype.query = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, queryOperationSpec);
       };
-      Blob2.prototype.getTags = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getTagsOperationSpec, callback);
+      Blob2.prototype.getTags = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getTagsOperationSpec);
       };
-      Blob2.prototype.setTags = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, setTagsOperationSpec, callback);
+      Blob2.prototype.setTags = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, setTagsOperationSpec);
       };
       return Blob2;
     }();
-    var serializer$2 = new coreHttp.Serializer(Mappers$2, true);
+    var xmlSerializer$2 = new coreHttp.Serializer(Mappers, true);
     var downloadOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        snapshot,
-        versionId,
-        timeoutInSeconds
-      ],
-      headerParameters: [
-        range0,
-        rangeGetContentMD5,
-        rangeGetContentCRC64,
-        version,
-        requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         200: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: BlobDownloadHeaders
         },
         206: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: BlobDownloadHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobDownloadHeaders
+          headersMapper: BlobDownloadExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var getPropertiesOperationSpec$2 = {
-      httpMethod: "HEAD",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
+        timeoutInSeconds,
         snapshot,
-        versionId,
-        timeoutInSeconds
+        versionId
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
+        accept1,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
+        range,
+        rangeGetContentMD5,
+        rangeGetContentCRC64,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
         ifTags
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var getPropertiesOperationSpec$2 = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "HEAD",
       responses: {
         200: {
           headersMapper: BlobGetPropertiesHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobGetPropertiesHeaders
+          headersMapper: BlobGetPropertiesExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var deleteMethodOperationSpec$1 = {
-      httpMethod: "DELETE",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        snapshot,
-        versionId,
         timeoutInSeconds,
-        blobDeleteType
+        snapshot,
+        versionId
       ],
+      urlParameters: [url],
       headerParameters: [
-        deleteSnapshots,
         version,
         requestId,
-        leaseId0,
+        accept1,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
         ifTags
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var deleteOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "DELETE",
       responses: {
         202: {
           headersMapper: BlobDeleteHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobDeleteHeaders
+          headersMapper: BlobDeleteExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var setAccessControlOperationSpec = {
-      httpMethod: "PATCH",
-      path: "{filesystem}/{path}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
-        action5
+        snapshot,
+        versionId,
+        blobDeleteType
       ],
+      urlParameters: [url],
       headerParameters: [
-        owner,
-        group2,
-        posixPermissions,
-        posixAcl,
-        requestId,
-        version,
-        leaseId0,
-        ifMatch,
-        ifNoneMatch,
-        ifModifiedSince,
-        ifUnmodifiedSince
-      ],
-      responses: {
-        200: {
-          headersMapper: BlobSetAccessControlHeaders
-        },
-        default: {
-          bodyMapper: DataLakeStorageError,
-          headersMapper: BlobSetAccessControlHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var getAccessControlOperationSpec = {
-      httpMethod: "HEAD",
-      path: "{filesystem}/{path}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        upn,
-        action6
-      ],
-      headerParameters: [
-        requestId,
-        version,
-        leaseId0,
-        ifMatch,
-        ifNoneMatch,
-        ifModifiedSince,
-        ifUnmodifiedSince
-      ],
-      responses: {
-        200: {
-          headersMapper: BlobGetAccessControlHeaders
-        },
-        default: {
-          bodyMapper: DataLakeStorageError,
-          headersMapper: BlobGetAccessControlHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var renameOperationSpec$1 = {
-      httpMethod: "PUT",
-      path: "{filesystem}/{path}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        pathRenameMode
-      ],
-      headerParameters: [
-        renameSource,
-        directoryProperties,
-        posixPermissions,
-        posixUmask,
-        sourceLeaseId,
         version,
         requestId,
-        cacheControl,
-        contentType,
-        contentEncoding,
-        contentLanguage,
-        contentDisposition,
-        leaseId0,
+        accept1,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
+        ifTags,
+        deleteSnapshots
+      ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var setAccessControlOperationSpec = {
+      path: "/{filesystem}/{path}",
+      httpMethod: "PATCH",
+      responses: {
+        200: {
+          headersMapper: BlobSetAccessControlHeaders
+        },
+        default: {
+          bodyMapper: DataLakeStorageError,
+          headersMapper: BlobSetAccessControlExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds, action5],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        posixPermissions,
+        ifMatch,
+        ifNoneMatch,
+        owner,
+        group2,
+        posixAcl
+      ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var getAccessControlOperationSpec = {
+      path: "/{filesystem}/{path}",
+      httpMethod: "HEAD",
+      responses: {
+        200: {
+          headersMapper: BlobGetAccessControlHeaders
+        },
+        default: {
+          bodyMapper: DataLakeStorageError,
+          headersMapper: BlobGetAccessControlExceptionHeaders
+        }
+      },
+      queryParameters: [
+        timeoutInSeconds,
+        action6,
+        upn
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch
+      ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var renameOperationSpec$1 = {
+      path: "/{filesystem}/{path}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlobRenameHeaders
+        },
+        default: {
+          bodyMapper: DataLakeStorageError,
+          headersMapper: BlobRenameExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds, pathRenameMode],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        sourceLeaseId,
+        directoryProperties,
+        posixPermissions,
+        posixUmask,
+        cacheControl,
+        contentType1,
+        contentEncoding,
+        contentLanguage,
+        contentDisposition,
+        ifMatch,
+        ifNoneMatch,
+        renameSource,
         sourceIfModifiedSince,
         sourceIfUnmodifiedSince,
         sourceIfMatch,
         sourceIfNoneMatch
       ],
-      responses: {
-        201: {
-          headersMapper: BlobRenameHeaders
-        },
-        default: {
-          bodyMapper: DataLakeStorageError,
-          headersMapper: BlobRenameHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var undeleteOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp8
-      ],
-      headerParameters: [
-        version,
-        requestId
-      ],
       responses: {
         200: {
           headersMapper: BlobUndeleteHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobUndeleteHeaders
+          headersMapper: BlobUndeleteExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var setExpiryOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp11
-      ],
+      queryParameters: [timeoutInSeconds, comp8],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
+        accept1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var setExpiryOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        200: {
+          headersMapper: BlobSetExpiryHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlobSetExpiryExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds, comp11],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
         expiryOptions,
         expiresOn
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var setHttpHeadersOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         200: {
-          headersMapper: BlobSetExpiryHeaders
+          headersMapper: BlobSetHttpHeadersHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobSetExpiryHeaders
+          headersMapper: BlobSetHttpHeadersExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var setHTTPHeadersOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp0
-      ],
+      queryParameters: [comp, timeoutInSeconds],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        ifTags,
         blobCacheControl,
         blobContentType,
         blobContentMD5,
         blobContentEncoding,
         blobContentLanguage,
-        blobContentDisposition,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
+        blobContentDisposition
       ],
-      responses: {
-        200: {
-          headersMapper: BlobSetHTTPHeadersHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlobSetHTTPHeadersHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var setMetadataOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp6
-      ],
-      headerParameters: [
-        metadata,
-        encryptionScope,
-        version,
-        requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         200: {
           headersMapper: BlobSetMetadataHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobSetMetadataHeaders
+          headersMapper: BlobSetMetadataExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, comp6],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var acquireLeaseOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10
-      ],
-      headerParameters: [
-        duration,
-        proposedLeaseId0,
-        version,
-        requestId,
-        action0,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         201: {
           headersMapper: BlobAcquireLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobAcquireLeaseHeaders
+          headersMapper: BlobAcquireLeaseExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, comp10],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        action,
+        duration,
+        proposedLeaseId,
+        ifMatch,
+        ifNoneMatch,
+        ifTags
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var releaseLeaseOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10
-      ],
-      headerParameters: [
-        leaseId1,
-        version,
-        requestId,
-        action1,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         200: {
           headersMapper: BlobReleaseLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobReleaseLeaseHeaders
+          headersMapper: BlobReleaseLeaseExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, comp10],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        action1,
+        leaseId1,
+        ifMatch,
+        ifNoneMatch,
+        ifTags
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var renewLeaseOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10
-      ],
-      headerParameters: [
-        leaseId1,
-        version,
-        requestId,
-        action2,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         200: {
           headersMapper: BlobRenewLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobRenewLeaseHeaders
+          headersMapper: BlobRenewLeaseExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, comp10],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        leaseId1,
+        action2,
+        ifMatch,
+        ifNoneMatch,
+        ifTags
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var changeLeaseOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10
-      ],
-      headerParameters: [
-        leaseId1,
-        proposedLeaseId1,
-        version,
-        requestId,
-        action4,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         200: {
           headersMapper: BlobChangeLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobChangeLeaseHeaders
+          headersMapper: BlobChangeLeaseExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var breakLeaseOperationSpec$1 = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp10
-      ],
+      queryParameters: [timeoutInSeconds, comp10],
+      urlParameters: [url],
       headerParameters: [
-        breakPeriod,
         version,
         requestId,
-        action3,
+        accept1,
         ifModifiedSince,
         ifUnmodifiedSince,
+        leaseId1,
+        action4,
+        proposedLeaseId1,
         ifMatch,
         ifNoneMatch,
         ifTags
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var breakLeaseOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         202: {
           headersMapper: BlobBreakLeaseHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobBreakLeaseHeaders
+          headersMapper: BlobBreakLeaseExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var createSnapshotOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp12
-      ],
+      queryParameters: [timeoutInSeconds, comp10],
+      urlParameters: [url],
       headerParameters: [
-        metadata,
-        encryptionScope,
         version,
         requestId,
+        accept1,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        action3,
+        breakPeriod,
+        ifMatch,
+        ifNoneMatch,
+        ifTags
+      ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var createSnapshotOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlobCreateSnapshotHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlobCreateSnapshotExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds, comp12],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
         encryptionKey,
         encryptionKeySha256,
         encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
         ifTags,
-        leaseId0
+        encryptionScope
       ],
-      responses: {
-        201: {
-          headersMapper: BlobCreateSnapshotHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlobCreateSnapshotHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var startCopyFromURLOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
-      headerParameters: [
-        metadata,
-        tier0,
-        rehydratePriority,
-        copySource,
-        version,
-        requestId,
-        blobTagsString,
-        sealBlob,
-        sourceIfModifiedSince,
-        sourceIfUnmodifiedSince,
-        sourceIfMatch,
-        sourceIfNoneMatch,
-        sourceIfTags,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags,
-        leaseId0
-      ],
       responses: {
         202: {
           headersMapper: BlobStartCopyFromURLHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobStartCopyFromURLHeaders
+          headersMapper: BlobStartCopyFromURLExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        sourceIfModifiedSince,
+        sourceIfUnmodifiedSince,
+        sourceIfMatch,
+        sourceIfNoneMatch,
+        ifTags,
+        tier,
+        rehydratePriority,
+        sourceIfTags,
+        copySource,
+        blobTagsString,
+        sealBlob
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var copyFromURLOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
-      headerParameters: [
-        metadata,
-        tier0,
-        copySource,
-        version,
-        requestId,
-        sourceContentMD5,
-        blobTagsString,
-        xMsRequiresSync,
-        sourceIfModifiedSince,
-        sourceIfUnmodifiedSince,
-        sourceIfMatch,
-        sourceIfNoneMatch,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags,
-        leaseId0
-      ],
       responses: {
         202: {
           headersMapper: BlobCopyFromURLHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobCopyFromURLHeaders
+          headersMapper: BlobCopyFromURLExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var abortCopyFromURLOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        copyId,
-        timeoutInSeconds,
-        comp13
-      ],
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
-        copyActionAbortConstant,
-        leaseId0
+        accept1,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        sourceIfModifiedSince,
+        sourceIfUnmodifiedSince,
+        sourceIfMatch,
+        sourceIfNoneMatch,
+        ifTags,
+        tier,
+        copySource,
+        blobTagsString,
+        xMsRequiresSync,
+        sourceContentMD5
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var abortCopyFromURLOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         204: {
           headersMapper: BlobAbortCopyFromURLHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobAbortCopyFromURLHeaders
+          headersMapper: BlobAbortCopyFromURLExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var setTierOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
-        snapshot,
-        versionId,
         timeoutInSeconds,
-        comp14
+        comp13,
+        copyId
       ],
+      urlParameters: [url],
       headerParameters: [
-        tier1,
-        rehydratePriority,
         version,
         requestId,
-        leaseId0,
-        ifTags
+        accept1,
+        leaseId,
+        copyActionAbortConstant
       ],
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var setTierOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         200: {
           headersMapper: BlobSetTierHeaders
@@ -51964,114 +52423,99 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobSetTierHeaders
+          headersMapper: BlobSetTierExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        snapshot,
+        versionId,
+        comp14
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifTags,
+        rehydratePriority,
+        tier1
+      ],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var getAccountInfoOperationSpec$2 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        restype1,
-        comp0
-      ],
-      headerParameters: [
-        version
-      ],
       responses: {
         200: {
           headersMapper: BlobGetAccountInfoHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobGetAccountInfoHeaders
+          headersMapper: BlobGetAccountInfoExceptionHeaders
         }
       },
+      queryParameters: [comp, restype1],
+      urlParameters: [url],
+      headerParameters: [version, accept1],
       isXML: true,
-      serializer: serializer$2
+      serializer: xmlSerializer$2
     };
     var queryOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "POST",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        snapshot,
-        timeoutInSeconds,
-        comp15
-      ],
-      headerParameters: [
-        version,
-        requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      requestBody: {
-        parameterPath: [
-          "options",
-          "queryRequest"
-        ],
-        mapper: QueryRequest
-      },
-      contentType: "application/xml; charset=utf-8",
       responses: {
         200: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: BlobQueryHeaders
         },
         206: {
           bodyMapper: {
-            serializedName: "parsedResponse",
-            type: {
-              name: "Stream"
-            }
+            type: { name: "Stream" },
+            serializedName: "parsedResponse"
           },
           headersMapper: BlobQueryHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobQueryHeaders
+          headersMapper: BlobQueryExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var getTagsOperationSpec = {
-      httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
+      requestBody: queryRequest,
       queryParameters: [
         timeoutInSeconds,
         snapshot,
-        versionId,
-        comp16
+        comp15
       ],
+      urlParameters: [url],
       headerParameters: [
+        contentType,
+        accept,
         version,
         requestId,
-        ifTags,
-        leaseId0
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags
       ],
+      isXML: true,
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer$2
+    };
+    var getTagsOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "GET",
       responses: {
         200: {
           bodyMapper: BlobTags,
@@ -52079,1053 +52523,939 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobGetTagsHeaders
+          headersMapper: BlobGetTagsExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$2
-    };
-    var setTagsOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
       queryParameters: [
         timeoutInSeconds,
+        snapshot,
         versionId,
         comp16
       ],
+      urlParameters: [url],
       headerParameters: [
         version,
-        transactionalContentMD5,
-        transactionalContentCrc64,
         requestId,
-        ifTags,
-        leaseId0
+        accept1,
+        leaseId,
+        ifTags
       ],
-      requestBody: {
-        parameterPath: [
-          "options",
-          "tags"
-        ],
-        mapper: BlobTags
-      },
-      contentType: "application/xml; charset=utf-8",
+      isXML: true,
+      serializer: xmlSerializer$2
+    };
+    var setTagsOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         204: {
           headersMapper: BlobSetTagsHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlobSetTagsHeaders
+          headersMapper: BlobSetTagsExceptionHeaders
         }
       },
+      requestBody: tags,
+      queryParameters: [
+        timeoutInSeconds,
+        versionId,
+        comp16
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        contentType,
+        accept,
+        version,
+        requestId,
+        leaseId,
+        ifTags,
+        transactionalContentMD5,
+        transactionalContentCrc64
+      ],
       isXML: true,
-      serializer: serializer$2
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer$2
     };
-    var Mappers$3 = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      ClearRange,
-      PageBlobClearPagesHeaders,
-      PageBlobCopyIncrementalHeaders,
-      PageBlobCreateHeaders,
-      PageBlobGetPageRangesDiffHeaders,
-      PageBlobGetPageRangesHeaders,
-      PageBlobResizeHeaders,
-      PageBlobUpdateSequenceNumberHeaders,
-      PageBlobUploadPagesFromURLHeaders,
-      PageBlobUploadPagesHeaders,
-      PageList,
-      PageRange,
-      StorageError
-    });
     var PageBlob = function() {
       function PageBlob2(client) {
         this.client = client;
       }
       __name(PageBlob2, "PageBlob");
-      PageBlob2.prototype.create = function(contentLength2, blobContentLength2, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.create = function(contentLength2, blobContentLength2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
           blobContentLength: blobContentLength2,
-          options
-        }, createOperationSpec$1, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, createOperationSpec$1);
       };
-      PageBlob2.prototype.uploadPages = function(body, contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
-          body,
+      PageBlob2.prototype.uploadPages = function(contentLength2, body2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
-          options
-        }, uploadPagesOperationSpec, callback);
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, uploadPagesOperationSpec);
       };
-      PageBlob2.prototype.clearPages = function(contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.clearPages = function(contentLength2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
-          options
-        }, clearPagesOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, clearPagesOperationSpec);
       };
-      PageBlob2.prototype.uploadPagesFromURL = function(sourceUrl2, sourceRange, contentLength2, range, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.uploadPagesFromURL = function(sourceUrl2, sourceRange2, contentLength2, range2, options) {
+        var operationArguments = {
           sourceUrl: sourceUrl2,
-          sourceRange,
+          sourceRange: sourceRange2,
           contentLength: contentLength2,
-          range,
-          options
-        }, uploadPagesFromURLOperationSpec, callback);
+          range: range2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, uploadPagesFromURLOperationSpec);
       };
-      PageBlob2.prototype.getPageRanges = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getPageRangesOperationSpec, callback);
+      PageBlob2.prototype.getPageRanges = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getPageRangesOperationSpec);
       };
-      PageBlob2.prototype.getPageRangesDiff = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, getPageRangesDiffOperationSpec, callback);
+      PageBlob2.prototype.getPageRangesDiff = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getPageRangesDiffOperationSpec);
       };
-      PageBlob2.prototype.resize = function(blobContentLength2, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.resize = function(blobContentLength2, options) {
+        var operationArguments = {
           blobContentLength: blobContentLength2,
-          options
-        }, resizeOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, resizeOperationSpec);
       };
-      PageBlob2.prototype.updateSequenceNumber = function(sequenceNumberAction2, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.updateSequenceNumber = function(sequenceNumberAction2, options) {
+        var operationArguments = {
           sequenceNumberAction: sequenceNumberAction2,
-          options
-        }, updateSequenceNumberOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, updateSequenceNumberOperationSpec);
       };
-      PageBlob2.prototype.copyIncremental = function(copySource2, options, callback) {
-        return this.client.sendOperationRequest({
+      PageBlob2.prototype.copyIncremental = function(copySource2, options) {
+        var operationArguments = {
           copySource: copySource2,
-          options
-        }, copyIncrementalOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, copyIncrementalOperationSpec);
       };
       return PageBlob2;
     }();
-    var serializer$3 = new coreHttp.Serializer(Mappers$3, true);
+    var xmlSerializer$3 = new coreHttp.Serializer(Mappers, true);
+    var serializer = new coreHttp.Serializer(Mappers, false);
     var createOperationSpec$1 = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
+      responses: {
+        201: {
+          headersMapper: PageBlobCreateHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobCreateExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
       headerParameters: [
-        contentLength,
-        tier0,
-        metadata,
-        encryptionScope,
-        blobContentLength,
-        blobSequenceNumber,
         version,
         requestId,
-        blobTagsString,
-        blobType0,
+        accept1,
+        contentLength,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        blobCacheControl,
         blobContentType,
+        blobContentMD5,
         blobContentEncoding,
         blobContentLanguage,
-        blobContentMD5,
-        blobCacheControl,
         blobContentDisposition,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
+        encryptionScope,
+        tier,
+        blobTagsString,
+        blobType,
+        blobContentLength,
+        blobSequenceNumber
       ],
-      responses: {
-        201: {
-          headersMapper: PageBlobCreateHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobCreateHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$3
+      serializer: xmlSerializer$3
     };
     var uploadPagesOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp17
-      ],
+      responses: {
+        201: {
+          headersMapper: PageBlobUploadPagesHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobUploadPagesExceptionHeaders
+        }
+      },
+      requestBody: body1,
+      queryParameters: [timeoutInSeconds, comp17],
+      urlParameters: [url],
       headerParameters: [
+        version,
+        requestId,
         contentLength,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        range,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope,
         transactionalContentMD5,
         transactionalContentCrc64,
-        range0,
-        encryptionScope,
-        version,
-        requestId,
-        pageWrite0,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
+        contentType2,
+        accept2,
+        pageWrite,
         ifSequenceNumberLessThanOrEqualTo,
         ifSequenceNumberLessThan,
-        ifSequenceNumberEqualTo,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
+        ifSequenceNumberEqualTo
       ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/octet-stream",
-      responses: {
-        201: {
-          headersMapper: PageBlobUploadPagesHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobUploadPagesHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$3
+      mediaType: "binary",
+      serializer
     };
     var clearPagesOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp17
-      ],
-      headerParameters: [
-        contentLength,
-        range0,
-        encryptionScope,
-        version,
-        requestId,
-        pageWrite1,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifSequenceNumberLessThanOrEqualTo,
-        ifSequenceNumberLessThan,
-        ifSequenceNumberEqualTo,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         201: {
           headersMapper: PageBlobClearPagesHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: PageBlobClearPagesHeaders
+          headersMapper: PageBlobClearPagesExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var uploadPagesFromURLOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp17
-      ],
+      queryParameters: [timeoutInSeconds, comp17],
+      urlParameters: [url],
       headerParameters: [
-        sourceUrl,
-        sourceRange0,
-        sourceContentMD5,
-        sourceContentCrc64,
-        contentLength,
-        range1,
-        encryptionScope,
         version,
         requestId,
-        pageWrite0,
+        accept1,
+        contentLength,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        range,
         encryptionKey,
         encryptionKeySha256,
         encryptionAlgorithm,
-        leaseId0,
+        ifTags,
+        encryptionScope,
         ifSequenceNumberLessThanOrEqualTo,
         ifSequenceNumberLessThan,
         ifSequenceNumberEqualTo,
+        pageWrite1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var uploadPagesFromURLOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: PageBlobUploadPagesFromURLHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobUploadPagesFromURLExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds, comp17],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        contentLength,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        sourceIfModifiedSince,
+        sourceIfUnmodifiedSince,
+        sourceIfMatch,
+        sourceIfNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope,
+        sourceContentMD5,
+        pageWrite,
+        ifSequenceNumberLessThanOrEqualTo,
+        ifSequenceNumberLessThan,
+        ifSequenceNumberEqualTo,
+        sourceUrl,
+        sourceRange,
+        sourceContentCrc64,
+        range1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var getPageRangesOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "GET",
+      responses: {
+        200: {
+          bodyMapper: PageList,
+          headersMapper: PageBlobGetPageRangesHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobGetPageRangesExceptionHeaders
+        }
+      },
+      queryParameters: [
+        timeoutInSeconds,
+        snapshot,
+        comp18
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        range,
+        ifTags
+      ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var getPageRangesDiffOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "GET",
+      responses: {
+        200: {
+          bodyMapper: PageList,
+          headersMapper: PageBlobGetPageRangesDiffHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobGetPageRangesDiffExceptionHeaders
+        }
+      },
+      queryParameters: [
+        timeoutInSeconds,
+        snapshot,
+        comp18,
+        prevsnapshot
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        range,
+        ifTags,
+        prevSnapshotUrl
+      ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var resizeOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        200: {
+          headersMapper: PageBlobResizeHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobResizeExceptionHeaders
+        }
+      },
+      queryParameters: [comp, timeoutInSeconds],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope,
+        blobContentLength
+      ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var updateSequenceNumberOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        200: {
+          headersMapper: PageBlobUpdateSequenceNumberHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: PageBlobUpdateSequenceNumberExceptionHeaders
+        }
+      },
+      queryParameters: [comp, timeoutInSeconds],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
         ifTags,
-        sourceIfModifiedSince,
-        sourceIfUnmodifiedSince,
-        sourceIfMatch,
-        sourceIfNoneMatch
-      ],
-      responses: {
-        201: {
-          headersMapper: PageBlobUploadPagesFromURLHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobUploadPagesFromURLHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var getPageRangesOperationSpec = {
-      httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        snapshot,
-        timeoutInSeconds,
-        comp18
-      ],
-      headerParameters: [
-        range0,
-        version,
-        requestId,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      responses: {
-        200: {
-          bodyMapper: PageList,
-          headersMapper: PageBlobGetPageRangesHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobGetPageRangesHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var getPageRangesDiffOperationSpec = {
-      httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        snapshot,
-        timeoutInSeconds,
-        prevsnapshot,
-        comp18
-      ],
-      headerParameters: [
-        prevSnapshotUrl,
-        range0,
-        version,
-        requestId,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      responses: {
-        200: {
-          bodyMapper: PageList,
-          headersMapper: PageBlobGetPageRangesDiffHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobGetPageRangesDiffHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var resizeOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp0
-      ],
-      headerParameters: [
-        encryptionScope,
-        blobContentLength,
-        version,
-        requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      responses: {
-        200: {
-          headersMapper: PageBlobResizeHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobResizeHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var updateSequenceNumberOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp0
-      ],
-      headerParameters: [
-        sequenceNumberAction,
         blobSequenceNumber,
-        version,
-        requestId,
-        leaseId0,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
+        sequenceNumberAction
       ],
-      responses: {
-        200: {
-          headersMapper: PageBlobUpdateSequenceNumberHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: PageBlobUpdateSequenceNumberHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$3
+      serializer: xmlSerializer$3
     };
     var copyIncrementalOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp19
-      ],
-      headerParameters: [
-        copySource,
-        version,
-        requestId,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
       responses: {
         202: {
           headersMapper: PageBlobCopyIncrementalHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: PageBlobCopyIncrementalHeaders
+          headersMapper: PageBlobCopyIncrementalExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$3
-    };
-    var Mappers$4 = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      AppendBlobAppendBlockFromUrlHeaders,
-      AppendBlobAppendBlockHeaders,
-      AppendBlobCreateHeaders,
-      AppendBlobSealHeaders,
-      StorageError
-    });
-    var AppendBlob = function() {
-      function AppendBlob2(client) {
-        this.client = client;
-      }
-      __name(AppendBlob2, "AppendBlob");
-      AppendBlob2.prototype.create = function(contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
-          contentLength: contentLength2,
-          options
-        }, createOperationSpec$2, callback);
-      };
-      AppendBlob2.prototype.appendBlock = function(body, contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
-          body,
-          contentLength: contentLength2,
-          options
-        }, appendBlockOperationSpec, callback);
-      };
-      AppendBlob2.prototype.appendBlockFromUrl = function(sourceUrl2, contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
-          sourceUrl: sourceUrl2,
-          contentLength: contentLength2,
-          options
-        }, appendBlockFromUrlOperationSpec, callback);
-      };
-      AppendBlob2.prototype.seal = function(options, callback) {
-        return this.client.sendOperationRequest({
-          options
-        }, sealOperationSpec, callback);
-      };
-      return AppendBlob2;
-    }();
-    var serializer$4 = new coreHttp.Serializer(Mappers$4, true);
-    var createOperationSpec$2 = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
+      queryParameters: [timeoutInSeconds, comp19],
+      urlParameters: [url],
       headerParameters: [
-        contentLength,
-        metadata,
-        encryptionScope,
         version,
         requestId,
-        blobTagsString,
-        blobType1,
-        blobContentType,
-        blobContentEncoding,
-        blobContentLanguage,
-        blobContentMD5,
-        blobCacheControl,
-        blobContentDisposition,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      responses: {
-        201: {
-          headersMapper: AppendBlobCreateHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: AppendBlobCreateHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$4
-    };
-    var appendBlockOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp20
-      ],
-      headerParameters: [
-        contentLength,
-        transactionalContentMD5,
-        transactionalContentCrc64,
-        encryptionScope,
-        version,
-        requestId,
-        leaseId0,
-        maxSize,
-        appendPosition,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/octet-stream",
-      responses: {
-        201: {
-          headersMapper: AppendBlobAppendBlockHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: AppendBlobAppendBlockHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$4
-    };
-    var appendBlockFromUrlOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp20
-      ],
-      headerParameters: [
-        sourceUrl,
-        sourceRange1,
-        sourceContentMD5,
-        sourceContentCrc64,
-        contentLength,
-        transactionalContentMD5,
-        encryptionScope,
-        version,
-        requestId,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        leaseId0,
-        maxSize,
-        appendPosition,
+        accept1,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
         ifTags,
-        sourceIfModifiedSince,
-        sourceIfUnmodifiedSince,
-        sourceIfMatch,
-        sourceIfNoneMatch
+        copySource
       ],
+      isXML: true,
+      serializer: xmlSerializer$3
+    };
+    var AppendBlob = function() {
+      function AppendBlob2(client) {
+        this.client = client;
+      }
+      __name(AppendBlob2, "AppendBlob");
+      AppendBlob2.prototype.create = function(contentLength2, options) {
+        var operationArguments = {
+          contentLength: contentLength2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, createOperationSpec$2);
+      };
+      AppendBlob2.prototype.appendBlock = function(contentLength2, body2, options) {
+        var operationArguments = {
+          contentLength: contentLength2,
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, appendBlockOperationSpec);
+      };
+      AppendBlob2.prototype.appendBlockFromUrl = function(sourceUrl2, contentLength2, options) {
+        var operationArguments = {
+          sourceUrl: sourceUrl2,
+          contentLength: contentLength2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, appendBlockFromUrlOperationSpec);
+      };
+      AppendBlob2.prototype.seal = function(options) {
+        var operationArguments = {
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, sealOperationSpec);
+      };
+      return AppendBlob2;
+    }();
+    var xmlSerializer$4 = new coreHttp.Serializer(Mappers, true);
+    var serializer$1 = new coreHttp.Serializer(Mappers, false);
+    var createOperationSpec$2 = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: AppendBlobCreateHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: AppendBlobCreateExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        contentLength,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        blobCacheControl,
+        blobContentType,
+        blobContentMD5,
+        blobContentEncoding,
+        blobContentLanguage,
+        blobContentDisposition,
+        encryptionScope,
+        blobTagsString,
+        blobType1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$4
+    };
+    var appendBlockOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: AppendBlobAppendBlockHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: AppendBlobAppendBlockExceptionHeaders
+        }
+      },
+      requestBody: body1,
+      queryParameters: [timeoutInSeconds, comp20],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        contentLength,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope,
+        transactionalContentMD5,
+        transactionalContentCrc64,
+        contentType2,
+        accept2,
+        maxSize,
+        appendPosition
+      ],
+      mediaType: "binary",
+      serializer: serializer$1
+    };
+    var appendBlockFromUrlOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         201: {
           headersMapper: AppendBlobAppendBlockFromUrlHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: AppendBlobAppendBlockFromUrlHeaders
+          headersMapper: AppendBlobAppendBlockFromUrlExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$4
-    };
-    var sealOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp21
-      ],
+      queryParameters: [timeoutInSeconds, comp20],
+      urlParameters: [url],
       headerParameters: [
         version,
         requestId,
-        leaseId0,
+        accept1,
+        contentLength,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
-        appendPosition
+        sourceIfModifiedSince,
+        sourceIfUnmodifiedSince,
+        sourceIfMatch,
+        sourceIfNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        encryptionScope,
+        sourceContentMD5,
+        transactionalContentMD5,
+        sourceUrl,
+        sourceContentCrc64,
+        maxSize,
+        appendPosition,
+        sourceRange1
       ],
+      isXML: true,
+      serializer: xmlSerializer$4
+    };
+    var sealOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
       responses: {
         200: {
           headersMapper: AppendBlobSealHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: AppendBlobSealHeaders
+          headersMapper: AppendBlobSealExceptionHeaders
         }
       },
+      queryParameters: [timeoutInSeconds, comp21],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
+        appendPosition
+      ],
       isXML: true,
-      serializer: serializer$4
+      serializer: xmlSerializer$4
     };
-    var Mappers$5 = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      Block,
-      BlockBlobCommitBlockListHeaders,
-      BlockBlobGetBlockListHeaders,
-      BlockBlobPutBlobFromUrlHeaders,
-      BlockBlobStageBlockFromURLHeaders,
-      BlockBlobStageBlockHeaders,
-      BlockBlobUploadHeaders,
-      BlockList,
-      BlockLookupList,
-      StorageError
-    });
     var BlockBlob = function() {
       function BlockBlob2(client) {
         this.client = client;
       }
       __name(BlockBlob2, "BlockBlob");
-      BlockBlob2.prototype.upload = function(body, contentLength2, options, callback) {
-        return this.client.sendOperationRequest({
-          body,
+      BlockBlob2.prototype.upload = function(contentLength2, body2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
-          options
-        }, uploadOperationSpec, callback);
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, uploadOperationSpec);
       };
-      BlockBlob2.prototype.putBlobFromUrl = function(contentLength2, copySource2, options, callback) {
-        return this.client.sendOperationRequest({
+      BlockBlob2.prototype.putBlobFromUrl = function(contentLength2, copySource2, options) {
+        var operationArguments = {
           contentLength: contentLength2,
           copySource: copySource2,
-          options
-        }, putBlobFromUrlOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, putBlobFromUrlOperationSpec);
       };
-      BlockBlob2.prototype.stageBlock = function(blockId2, contentLength2, body, options, callback) {
-        return this.client.sendOperationRequest({
+      BlockBlob2.prototype.stageBlock = function(blockId2, contentLength2, body2, options) {
+        var operationArguments = {
           blockId: blockId2,
           contentLength: contentLength2,
-          body,
-          options
-        }, stageBlockOperationSpec, callback);
+          body: body2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, stageBlockOperationSpec);
       };
-      BlockBlob2.prototype.stageBlockFromURL = function(blockId2, contentLength2, sourceUrl2, options, callback) {
-        return this.client.sendOperationRequest({
+      BlockBlob2.prototype.stageBlockFromURL = function(blockId2, contentLength2, sourceUrl2, options) {
+        var operationArguments = {
           blockId: blockId2,
           contentLength: contentLength2,
           sourceUrl: sourceUrl2,
-          options
-        }, stageBlockFromURLOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, stageBlockFromURLOperationSpec);
       };
-      BlockBlob2.prototype.commitBlockList = function(blocks, options, callback) {
-        return this.client.sendOperationRequest({
-          blocks,
-          options
-        }, commitBlockListOperationSpec, callback);
+      BlockBlob2.prototype.commitBlockList = function(blocks2, options) {
+        var operationArguments = {
+          blocks: blocks2,
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, commitBlockListOperationSpec);
       };
-      BlockBlob2.prototype.getBlockList = function(listType2, options, callback) {
-        return this.client.sendOperationRequest({
+      BlockBlob2.prototype.getBlockList = function(listType2, options) {
+        var operationArguments = {
           listType: listType2,
-          options
-        }, getBlockListOperationSpec, callback);
+          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, getBlockListOperationSpec);
       };
       return BlockBlob2;
     }();
-    var serializer$5 = new coreHttp.Serializer(Mappers$5, true);
+    var xmlSerializer$5 = new coreHttp.Serializer(Mappers, true);
+    var serializer$2 = new coreHttp.Serializer(Mappers, false);
     var uploadOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
-      headerParameters: [
-        transactionalContentMD5,
-        contentLength,
-        metadata,
-        encryptionScope,
-        tier0,
-        version,
-        requestId,
-        blobTagsString,
-        blobType2,
-        blobContentType,
-        blobContentEncoding,
-        blobContentLanguage,
-        blobContentMD5,
-        blobCacheControl,
-        blobContentDisposition,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
-        ifModifiedSince,
-        ifUnmodifiedSince,
-        ifMatch,
-        ifNoneMatch,
-        ifTags
-      ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/octet-stream",
       responses: {
         201: {
           headersMapper: BlockBlobUploadHeaders
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlockBlobUploadHeaders
+          headersMapper: BlockBlobUploadExceptionHeaders
         }
       },
-      isXML: true,
-      serializer: serializer$5
-    };
-    var putBlobFromUrlOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds
-      ],
+      requestBody: body1,
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
       headerParameters: [
-        transactionalContentMD5,
-        contentLength,
-        metadata,
-        encryptionScope,
-        tier0,
         version,
         requestId,
-        sourceContentMD5,
-        blobTagsString,
-        copySource,
-        copySourceBlobProperties,
-        blobType2,
-        blobContentType,
-        blobContentEncoding,
-        blobContentLanguage,
-        blobContentMD5,
-        blobCacheControl,
-        blobContentDisposition,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm,
+        contentLength,
+        metadata,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
         ifTags,
+        blobCacheControl,
+        blobContentType,
+        blobContentMD5,
+        blobContentEncoding,
+        blobContentLanguage,
+        blobContentDisposition,
+        encryptionScope,
+        tier,
+        blobTagsString,
+        transactionalContentMD5,
+        contentType2,
+        accept2,
+        blobType2
+      ],
+      mediaType: "binary",
+      serializer: serializer$2
+    };
+    var putBlobFromUrlOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlockBlobPutBlobFromUrlHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlockBlobPutBlobFromUrlExceptionHeaders
+        }
+      },
+      queryParameters: [timeoutInSeconds],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        contentLength,
+        metadata,
+        leaseId,
+        ifModifiedSince,
+        ifUnmodifiedSince,
+        ifMatch,
+        ifNoneMatch,
         sourceIfModifiedSince,
         sourceIfUnmodifiedSince,
         sourceIfMatch,
         sourceIfNoneMatch,
-        sourceIfTags
-      ],
-      responses: {
-        201: {
-          headersMapper: BlockBlobPutBlobFromUrlHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlockBlobPutBlobFromUrlHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$5
-    };
-    var stageBlockOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        blockId,
-        timeoutInSeconds,
-        comp22
-      ],
-      headerParameters: [
-        contentLength,
-        transactionalContentMD5,
-        transactionalContentCrc64,
-        encryptionScope,
-        version,
-        requestId,
-        leaseId0,
-        encryptionKey,
-        encryptionKeySha256,
-        encryptionAlgorithm
-      ],
-      requestBody: {
-        parameterPath: "body",
-        mapper: {
-          required: true,
-          serializedName: "body",
-          type: {
-            name: "Stream"
-          }
-        }
-      },
-      contentType: "application/octet-stream",
-      responses: {
-        201: {
-          headersMapper: BlockBlobStageBlockHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlockBlobStageBlockHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$5
-    };
-    var stageBlockFromURLOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        blockId,
-        timeoutInSeconds,
-        comp22
-      ],
-      headerParameters: [
-        contentLength,
-        sourceUrl,
-        sourceRange1,
-        sourceContentMD5,
-        sourceContentCrc64,
-        encryptionScope,
-        version,
-        requestId,
         encryptionKey,
         encryptionKeySha256,
         encryptionAlgorithm,
-        leaseId0,
+        ifTags,
+        blobCacheControl,
+        blobContentType,
+        blobContentMD5,
+        blobContentEncoding,
+        blobContentLanguage,
+        blobContentDisposition,
+        encryptionScope,
+        tier,
+        sourceIfTags,
+        copySource,
+        blobTagsString,
+        sourceContentMD5,
+        transactionalContentMD5,
+        blobType2,
+        copySourceBlobProperties
+      ],
+      isXML: true,
+      serializer: xmlSerializer$5
+    };
+    var stageBlockOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlockBlobStageBlockHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlockBlobStageBlockExceptionHeaders
+        }
+      },
+      requestBody: body1,
+      queryParameters: [
+        timeoutInSeconds,
+        comp22,
+        blockId
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        contentLength,
+        leaseId,
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        encryptionScope,
+        transactionalContentMD5,
+        transactionalContentCrc64,
+        contentType2,
+        accept2
+      ],
+      mediaType: "binary",
+      serializer: serializer$2
+    };
+    var stageBlockFromURLOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlockBlobStageBlockFromURLHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlockBlobStageBlockFromURLExceptionHeaders
+        }
+      },
+      queryParameters: [
+        timeoutInSeconds,
+        comp22,
+        blockId
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        contentLength,
+        leaseId,
         sourceIfModifiedSince,
         sourceIfUnmodifiedSince,
         sourceIfMatch,
-        sourceIfNoneMatch
-      ],
-      responses: {
-        201: {
-          headersMapper: BlockBlobStageBlockFromURLHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlockBlobStageBlockFromURLHeaders
-        }
-      },
-      isXML: true,
-      serializer: serializer$5
-    };
-    var commitBlockListOperationSpec = {
-      httpMethod: "PUT",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        timeoutInSeconds,
-        comp23
-      ],
-      headerParameters: [
-        transactionalContentMD5,
-        transactionalContentCrc64,
-        metadata,
-        encryptionScope,
-        tier0,
-        version,
-        requestId,
-        blobTagsString,
-        blobCacheControl,
-        blobContentType,
-        blobContentEncoding,
-        blobContentLanguage,
-        blobContentMD5,
-        blobContentDisposition,
-        leaseId0,
+        sourceIfNoneMatch,
         encryptionKey,
         encryptionKeySha256,
         encryptionAlgorithm,
+        encryptionScope,
+        sourceContentMD5,
+        sourceUrl,
+        sourceContentCrc64,
+        sourceRange1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$5
+    };
+    var commitBlockListOperationSpec = {
+      path: "/{containerName}/{blob}",
+      httpMethod: "PUT",
+      responses: {
+        201: {
+          headersMapper: BlockBlobCommitBlockListHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: BlockBlobCommitBlockListExceptionHeaders
+        }
+      },
+      requestBody: blocks,
+      queryParameters: [timeoutInSeconds, comp23],
+      urlParameters: [url],
+      headerParameters: [
+        contentType,
+        accept,
+        version,
+        requestId,
+        metadata,
+        leaseId,
         ifModifiedSince,
         ifUnmodifiedSince,
         ifMatch,
         ifNoneMatch,
-        ifTags
+        encryptionKey,
+        encryptionKeySha256,
+        encryptionAlgorithm,
+        ifTags,
+        blobCacheControl,
+        blobContentType,
+        blobContentMD5,
+        blobContentEncoding,
+        blobContentLanguage,
+        blobContentDisposition,
+        encryptionScope,
+        tier,
+        blobTagsString,
+        transactionalContentMD5,
+        transactionalContentCrc64
       ],
-      requestBody: {
-        parameterPath: "blocks",
-        mapper: tslib.__assign(tslib.__assign({}, BlockLookupList), { required: true })
-      },
-      contentType: "application/xml; charset=utf-8",
-      responses: {
-        201: {
-          headersMapper: BlockBlobCommitBlockListHeaders
-        },
-        default: {
-          bodyMapper: StorageError,
-          headersMapper: BlockBlobCommitBlockListHeaders
-        }
-      },
       isXML: true,
-      serializer: serializer$5
+      contentType: "application/xml; charset=utf-8",
+      mediaType: "xml",
+      serializer: xmlSerializer$5
     };
     var getBlockListOperationSpec = {
+      path: "/{containerName}/{blob}",
       httpMethod: "GET",
-      path: "{containerName}/{blob}",
-      urlParameters: [
-        url
-      ],
-      queryParameters: [
-        snapshot,
-        listType,
-        timeoutInSeconds,
-        comp23
-      ],
-      headerParameters: [
-        version,
-        requestId,
-        leaseId0,
-        ifTags
-      ],
       responses: {
         200: {
           bodyMapper: BlockList,
@@ -53133,15 +53463,29 @@ var require_dist10 = __commonJS({
         },
         default: {
           bodyMapper: StorageError,
-          headersMapper: BlockBlobGetBlockListHeaders
+          headersMapper: BlockBlobGetBlockListExceptionHeaders
         }
       },
+      queryParameters: [
+        timeoutInSeconds,
+        snapshot,
+        comp23,
+        listType
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1,
+        leaseId,
+        ifTags
+      ],
       isXML: true,
-      serializer: serializer$5
+      serializer: xmlSerializer$5
     };
     var logger = logger$1.createClientLogger("storage-blob");
-    var SDK_VERSION = "12.5.0";
-    var SERVICE_VERSION = "2020-06-12";
+    var SDK_VERSION = "12.6.0";
+    var SERVICE_VERSION = "2020-08-04";
     var BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024;
     var BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024;
     var BLOCK_BLOB_MAX_BLOCKS = 5e4;
@@ -53601,30 +53945,30 @@ var require_dist10 = __commonJS({
       return /^.*:.*:.*$|^localhost(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(host);
     }
     __name(isIpEndpointStyle, "isIpEndpointStyle");
-    function toBlobTagsString(tags) {
-      if (tags === void 0) {
+    function toBlobTagsString(tags2) {
+      if (tags2 === void 0) {
         return void 0;
       }
       var tagPairs = [];
-      for (var key in tags) {
-        if (tags.hasOwnProperty(key)) {
-          var value = tags[key];
+      for (var key in tags2) {
+        if (tags2.hasOwnProperty(key)) {
+          var value = tags2[key];
           tagPairs.push(encodeURIComponent(key) + "=" + encodeURIComponent(value));
         }
       }
       return tagPairs.join("&");
     }
     __name(toBlobTagsString, "toBlobTagsString");
-    function toBlobTags(tags) {
-      if (tags === void 0) {
+    function toBlobTags(tags2) {
+      if (tags2 === void 0) {
         return void 0;
       }
       var res = {
         blobTagSet: []
       };
-      for (var key in tags) {
-        if (tags.hasOwnProperty(key)) {
-          var value = tags[key];
+      for (var key in tags2) {
+        if (tags2.hasOwnProperty(key)) {
+          var value = tags2[key];
           res.blobTagSet.push({
             key,
             value
@@ -53634,12 +53978,12 @@ var require_dist10 = __commonJS({
       return res;
     }
     __name(toBlobTags, "toBlobTags");
-    function toTags(tags) {
-      if (tags === void 0) {
+    function toTags(tags2) {
+      if (tags2 === void 0) {
         return void 0;
       }
       var res = {};
-      for (var _i = 0, _a = tags.blobTagSet; _i < _a.length; _i++) {
+      for (var _i = 0, _a = tags2.blobTagSet; _i < _a.length; _i++) {
         var blobTag = _a[_i];
         res[blobTag.key] = blobTag.value;
       }
@@ -54161,13 +54505,13 @@ var require_dist10 = __commonJS({
       return StorageSharedKeyCredential2;
     }(Credential);
     var packageName = "azure-storage-blob";
-    var packageVersion = "12.5.0";
+    var packageVersion = "12.6.0-beta.1";
     var StorageClientContext = function(_super) {
       tslib.__extends(StorageClientContext2, _super);
       function StorageClientContext2(url2, options) {
         var _this = this;
-        if (url2 == void 0) {
-          throw new Error("'url' cannot be null.");
+        if (url2 === void 0) {
+          throw new Error("'url' cannot be null");
         }
         if (!options) {
           options = {};
@@ -54177,10 +54521,10 @@ var require_dist10 = __commonJS({
           options.userAgent = packageName + "/" + packageVersion + " " + defaultUserAgent;
         }
         _this = _super.call(this, void 0, options) || this;
-        _this.version = "2020-06-12";
-        _this.baseUri = "{url}";
         _this.requestContentType = "application/json; charset=utf-8";
+        _this.baseUri = options.endpoint || "{url}";
         _this.url = url2;
+        _this.version = options.version || "2020-08-04";
         return _this;
       }
       __name(StorageClientContext2, "StorageClientContext");
@@ -54213,9 +54557,10 @@ var require_dist10 = __commonJS({
       namespace: "Microsoft.Storage"
     });
     function convertTracingToRequestOptionsBase(options) {
-      var _a;
+      var _a, _b;
       return {
-        spanOptions: (_a = options === null || options === void 0 ? void 0 : options.tracingOptions) === null || _a === void 0 ? void 0 : _a.spanOptions
+        spanOptions: (_a = options === null || options === void 0 ? void 0 : options.tracingOptions) === null || _a === void 0 ? void 0 : _a.spanOptions,
+        tracingContext: (_b = options === null || options === void 0 ? void 0 : options.tracingOptions) === null || _b === void 0 ? void 0 : _b.tracingContext
       };
     }
     __name(convertTracingToRequestOptionsBase, "convertTracingToRequestOptionsBase");
@@ -54480,7 +54825,7 @@ var require_dist10 = __commonJS({
       SASProtocol["HttpsAndHttp"] = "https,http";
     })(exports2.SASProtocol || (exports2.SASProtocol = {}));
     var SASQueryParameters = function() {
-      function SASQueryParameters2(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl2, contentDisposition2, contentEncoding2, contentLanguage2, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
+      function SASQueryParameters2(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl2, contentDisposition2, contentEncoding2, contentLanguage2, contentType3, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
         this.version = version2;
         this.signature = signature;
         if (permissionsOrOptions !== void 0 && typeof permissionsOrOptions !== "string") {
@@ -54522,7 +54867,7 @@ var require_dist10 = __commonJS({
           this.contentDisposition = contentDisposition2;
           this.contentEncoding = contentEncoding2;
           this.contentLanguage = contentLanguage2;
-          this.contentType = contentType2;
+          this.contentType = contentType3;
           if (userDelegationKey) {
             this.signedOid = userDelegationKey.signedObjectId;
             this.signedTenantId = userDelegationKey.signedTenantId;
@@ -54922,7 +55267,7 @@ var require_dist10 = __commonJS({
     }
     __name(SASSignatureValuesSanityCheckAndAutofill, "SASSignatureValuesSanityCheckAndAutofill");
     var BlobLeaseClient = function() {
-      function BlobLeaseClient2(client, leaseId) {
+      function BlobLeaseClient2(client, leaseId2) {
         var clientContext = new StorageClientContext(client.url, client.pipeline.toServiceClientOptions());
         this._url = client.url;
         if (client.name === void 0) {
@@ -54932,10 +55277,10 @@ var require_dist10 = __commonJS({
           this._isContainer = false;
           this._containerOrBlobOperation = new Blob$1(clientContext);
         }
-        if (!leaseId) {
-          leaseId = coreHttp.generateUuid();
+        if (!leaseId2) {
+          leaseId2 = coreHttp.generateUuid();
         }
-        this._leaseId = leaseId;
+        this._leaseId = leaseId2;
       }
       __name(BlobLeaseClient2, "BlobLeaseClient");
       Object.defineProperty(BlobLeaseClient2.prototype, "leaseId", {
@@ -54975,7 +55320,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_1 = _h.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -54988,7 +55333,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobLeaseClient2.prototype.changeLease = function(proposedLeaseId, options) {
+      BlobLeaseClient2.prototype.changeLease = function(proposedLeaseId2, options) {
         var _a, _b, _c, _d, _e, _f;
         if (options === void 0) {
           options = {};
@@ -55005,15 +55350,15 @@ var require_dist10 = __commonJS({
                 _h.label = 1;
               case 1:
                 _h.trys.push([1, 3, 4, 5]);
-                return [4, this._containerOrBlobOperation.changeLease(this._leaseId, proposedLeaseId, tslib.__assign({ abortSignal: options.abortSignal, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_f = options.conditions) === null || _f === void 0 ? void 0 : _f.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this._containerOrBlobOperation.changeLease(this._leaseId, proposedLeaseId2, tslib.__assign({ abortSignal: options.abortSignal, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_f = options.conditions) === null || _f === void 0 ? void 0 : _f.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 response = _h.sent();
-                this._leaseId = proposedLeaseId;
+                this._leaseId = proposedLeaseId2;
                 return [2, response];
               case 3:
                 e_2 = _h.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_2.message
                 });
                 throw e_2;
@@ -55049,7 +55394,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_3 = _h.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_3.message
                 });
                 throw e_3;
@@ -55085,7 +55430,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_4 = _h.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_4.message
                 });
                 throw e_4;
@@ -55122,7 +55467,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_5 = _h.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_5.message
                 });
                 throw e_5;
@@ -56289,7 +56634,7 @@ var require_dist10 = __commonJS({
           options = {};
         }
         return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function parseObjects_1() {
-          var result, marker, _a, err_1;
+          var result, marker2, _a, err_1;
           return tslib.__generator(this, function(_b) {
             switch (_b.label) {
               case 0:
@@ -56315,10 +56660,10 @@ var require_dist10 = __commonJS({
                   abortSignal: options.abortSignal
                 }))];
               case 4:
-                marker = _b.sent();
+                marker2 = _b.sent();
                 this._blockOffset = this._initialBlockOffset + this._dataStream.position;
                 this._objectIndex = 0;
-                if (!arraysEqual(this._syncMarker, marker)) {
+                if (!arraysEqual(this._syncMarker, marker2)) {
                   throw new Error("Stream is not a valid Avro file.");
                 }
                 _b.label = 5;
@@ -56848,11 +57193,11 @@ var require_dist10 = __commonJS({
       PremiumPageBlobTier["P70"] = "P70";
       PremiumPageBlobTier["P80"] = "P80";
     })(exports2.PremiumPageBlobTier || (exports2.PremiumPageBlobTier = {}));
-    function toAccessTier(tier) {
-      if (tier == void 0) {
+    function toAccessTier(tier2) {
+      if (tier2 == void 0) {
         return void 0;
       }
-      return tier;
+      return tier2;
     }
     __name(toAccessTier, "toAccessTier");
     function ensureCpkIfSpecified(cpk, isHttps) {
@@ -57582,7 +57927,9 @@ var require_dist10 = __commonJS({
                 _c.label = 1;
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
-                return [4, this.blobContext.download(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), onDownloadProgress: coreHttp.isNode ? void 0 : options.onProgress, range: offset === 0 && !count ? void 0 : rangeToString({ offset, count }), rangeGetContentMD5: options.rangeGetContentMD5, rangeGetContentCRC64: options.rangeGetContentCrc64, snapshot: options.snapshot, cpkInfo: options.customerProvidedKey }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blobContext.download(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), requestOptions: {
+                  onDownloadProgress: coreHttp.isNode ? void 0 : options.onProgress
+                }, range: offset === 0 && !count ? void 0 : rangeToString({ offset, count }), rangeGetContentMD5: options.rangeGetContentMD5, rangeGetContentCRC64: options.rangeGetContentCrc64, snapshot: options.snapshot, cpkInfo: options.customerProvidedKey }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 res_1 = _c.sent();
                 wrappedRes = tslib.__assign(tslib.__assign({}, res_1), { _response: res_1._response, objectReplicationDestinationPolicyId: res_1.objectReplicationPolicyId, objectReplicationSourceProperties: parseObjectReplicationRecord(res_1.objectReplicationRules) });
@@ -57633,7 +57980,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_1 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -57673,13 +58020,13 @@ var require_dist10 = __commonJS({
                 e_2 = _b.sent();
                 if (e_2.statusCode === 404) {
                   span.setStatus({
-                    code: api.CanonicalCode.NOT_FOUND,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when checking blob existence"
                   });
                   return [2, false];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_2.message
                 });
                 throw e_2;
@@ -57715,7 +58062,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_3 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_3.message
                 });
                 throw e_3;
@@ -57743,13 +58090,13 @@ var require_dist10 = __commonJS({
                 _c.label = 1;
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
-                return [4, this.blobContext.deleteMethod(tslib.__assign({ abortSignal: options.abortSignal, deleteSnapshots: options.deleteSnapshots, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blobContext.delete(tslib.__assign({ abortSignal: options.abortSignal, deleteSnapshots: options.deleteSnapshots, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_4 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_4.message
                 });
                 throw e_4;
@@ -57786,13 +58133,13 @@ var require_dist10 = __commonJS({
                 e_5 = _d.sent();
                 if (((_a = e_5.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobNotFound") {
                   span.setStatus({
-                    code: api.CanonicalCode.NOT_FOUND,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when deleting a blob or snapshot only if it exists."
                   });
                   return [2, tslib.__assign(tslib.__assign({ succeeded: false }, (_b = e_5.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), { _response: e_5.response })];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_5.message
                 });
                 throw e_5;
@@ -57824,7 +58171,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_6 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_6.message
                 });
                 throw e_6;
@@ -57853,13 +58200,13 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.blobContext.setHTTPHeaders(tslib.__assign({ abortSignal: options.abortSignal, blobHTTPHeaders, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blobContext.setHttpHeaders(tslib.__assign({ abortSignal: options.abortSignal, blobHttpHeaders: blobHTTPHeaders, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_7 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_7.message
                 });
                 throw e_7;
@@ -57894,7 +58241,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_8 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_8.message
                 });
                 throw e_8;
@@ -57907,7 +58254,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobClient2.prototype.setTags = function(tags, options) {
+      BlobClient2.prototype.setTags = function(tags2, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -57921,13 +58268,13 @@ var require_dist10 = __commonJS({
                 _c.label = 1;
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
-                return [4, this.blobContext.setTags(tslib.__assign(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)), { tags: toBlobTags(tags) }))];
+                return [4, this.blobContext.setTags(tslib.__assign(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)), { tags: toBlobTags(tags2) }))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_9 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_9.message
                 });
                 throw e_9;
@@ -57962,7 +58309,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_10 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_10.message
                 });
                 throw e_10;
@@ -58000,7 +58347,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_11 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_11.message
                 });
                 throw e_11;
@@ -58081,7 +58428,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_12 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_12.message
                 });
                 throw e_12;
@@ -58121,7 +58468,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_13 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_13.message
                 });
                 throw e_13;
@@ -58134,7 +58481,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobClient2.prototype.setAccessTier = function(tier, options) {
+      BlobClient2.prototype.setAccessTier = function(tier2, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -58148,13 +58495,13 @@ var require_dist10 = __commonJS({
                 _c.label = 1;
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
-                return [4, this.blobContext.setTier(toAccessTier(tier), tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), rehydratePriority: options.rehydratePriority }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blobContext.setTier(toAccessTier(tier2), tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), rehydratePriority: options.rehydratePriority }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_14 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_14.message
                 });
                 throw e_14;
@@ -58278,7 +58625,7 @@ var require_dist10 = __commonJS({
               case 5:
                 e_15 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_15.message
                 });
                 throw e_15;
@@ -58322,7 +58669,7 @@ var require_dist10 = __commonJS({
               case 5:
                 e_16 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_16.message
                 });
                 throw e_16;
@@ -58392,7 +58739,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_17 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_17.message
                 });
                 throw e_17;
@@ -58478,13 +58825,13 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.appendBlobContext.create(0, tslib.__assign({ abortSignal: options.abortSignal, blobHTTPHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.appendBlobContext.create(0, tslib.__assign({ abortSignal: options.abortSignal, blobHttpHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_18 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_18.message
                 });
                 throw e_18;
@@ -58522,13 +58869,13 @@ var require_dist10 = __commonJS({
                 e_19 = _d.sent();
                 if (((_a = e_19.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists") {
                   span.setStatus({
-                    code: api.CanonicalCode.ALREADY_EXISTS,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when creating a blob only if it does not already exist."
                   });
                   return [2, tslib.__assign(tslib.__assign({ succeeded: false }, (_b = e_19.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), { _response: e_19.response })];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_19.message
                 });
                 throw e_19;
@@ -58562,7 +58909,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_20 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_20.message
                 });
                 throw e_20;
@@ -58575,7 +58922,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      AppendBlobClient2.prototype.appendBlock = function(body, contentLength2, options) {
+      AppendBlobClient2.prototype.appendBlock = function(body2, contentLength2, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -58591,13 +58938,15 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.appendBlobContext.appendBlock(body, contentLength2, tslib.__assign({ abortSignal: options.abortSignal, appendPositionAccessConditions: options.conditions, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), onUploadProgress: options.onProgress, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.appendBlobContext.appendBlock(contentLength2, body2, tslib.__assign({ abortSignal: options.abortSignal, appendPositionAccessConditions: options.conditions, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), requestOptions: {
+                  onUploadProgress: options.onProgress
+                }, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_21 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_21.message
                 });
                 throw e_21;
@@ -58638,7 +58987,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_22 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_22.message
                 });
                 throw e_22;
@@ -58715,6 +59064,7 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 return [4, this._blobContext.query(tslib.__assign({ abortSignal: options.abortSignal, queryRequest: {
+                  queryType: "SQL",
                   expression: query,
                   inputSerialization: toQuerySerialization(options.inputTextConfiguration),
                   outputSerialization: toQuerySerialization(options.outputTextConfiguration)
@@ -58729,7 +59079,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_23 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_23.message
                 });
                 throw e_23;
@@ -58742,7 +59092,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlockBlobClient2.prototype.upload = function(body, contentLength2, options) {
+      BlockBlobClient2.prototype.upload = function(body2, contentLength2, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -58758,13 +59108,15 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.blockBlobContext.upload(body, contentLength2, tslib.__assign({ abortSignal: options.abortSignal, blobHTTPHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), onUploadProgress: options.onProgress, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blockBlobContext.upload(contentLength2, body2, tslib.__assign({ abortSignal: options.abortSignal, blobHttpHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), requestOptions: {
+                  onUploadProgress: options.onProgress
+                }, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_24 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_24.message
                 });
                 throw e_24;
@@ -58793,7 +59145,7 @@ var require_dist10 = __commonJS({
               case 1:
                 _g.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.blockBlobContext.putBlobFromUrl(0, sourceURL, tslib.__assign(tslib.__assign(tslib.__assign({}, options), { leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: options.conditions.tagConditions }), sourceModifiedAccessConditions: {
+                return [4, this.blockBlobContext.putBlobFromUrl(0, sourceURL, tslib.__assign(tslib.__assign(tslib.__assign({}, options), { blobHttpHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: options.conditions.tagConditions }), sourceModifiedAccessConditions: {
                   sourceIfMatch: (_a = options.sourceConditions) === null || _a === void 0 ? void 0 : _a.ifMatch,
                   sourceIfModifiedSince: (_b = options.sourceConditions) === null || _b === void 0 ? void 0 : _b.ifModifiedSince,
                   sourceIfNoneMatch: (_c = options.sourceConditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch,
@@ -58805,7 +59157,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_25 = _g.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_25.message
                 });
                 throw e_25;
@@ -58818,7 +59170,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlockBlobClient2.prototype.stageBlock = function(blockId2, body, contentLength2, options) {
+      BlockBlobClient2.prototype.stageBlock = function(blockId2, body2, contentLength2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -58832,13 +59184,15 @@ var require_dist10 = __commonJS({
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.blockBlobContext.stageBlock(blockId2, contentLength2, body, tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, onUploadProgress: options.onProgress, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blockBlobContext.stageBlock(blockId2, contentLength2, body2, tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, requestOptions: {
+                  onUploadProgress: options.onProgress
+                }, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _b.sent()];
               case 3:
                 e_26 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_26.message
                 });
                 throw e_26;
@@ -58874,7 +59228,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_27 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_27.message
                 });
                 throw e_27;
@@ -58887,7 +59241,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlockBlobClient2.prototype.commitBlockList = function(blocks, options) {
+      BlockBlobClient2.prototype.commitBlockList = function(blocks2, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -58903,13 +59257,13 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.blockBlobContext.commitBlockList({ latest: blocks }, tslib.__assign({ abortSignal: options.abortSignal, blobHTTPHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.blockBlobContext.commitBlockList({ latest: blocks2 }, tslib.__assign({ abortSignal: options.abortSignal, blobHttpHeaders: options.blobHTTPHeaders, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_28 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_28.message
                 });
                 throw e_28;
@@ -58949,7 +59303,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_29 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_29.message
                 });
                 throw e_29;
@@ -58991,7 +59345,7 @@ var require_dist10 = __commonJS({
               }
             } catch (e) {
               span.setStatus({
-                code: api.CanonicalCode.UNKNOWN,
+                code: coreTracing.SpanStatusCode.ERROR,
                 message: e.message
               });
               throw e;
@@ -59024,7 +59378,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_30 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_30.message
                 });
                 throw e_30;
@@ -59136,7 +59490,7 @@ var require_dist10 = __commonJS({
               case 5:
                 e_31 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_31.message
                 });
                 throw e_31;
@@ -59179,7 +59533,7 @@ var require_dist10 = __commonJS({
               case 4:
                 e_32 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_32.message
                 });
                 throw e_32;
@@ -59222,7 +59576,7 @@ var require_dist10 = __commonJS({
                 blockIDPrefix_2 = coreHttp.generateUuid();
                 transferProgress_3 = 0;
                 blockList_2 = [];
-                scheduler = new BufferScheduler(stream2, bufferSize, maxConcurrency, function(body, length) {
+                scheduler = new BufferScheduler(stream2, bufferSize, maxConcurrency, function(body2, length) {
                   return tslib.__awaiter(_this, void 0, void 0, function() {
                     var blockID;
                     return tslib.__generator(this, function(_a2) {
@@ -59231,7 +59585,7 @@ var require_dist10 = __commonJS({
                           blockID = generateBlockID(blockIDPrefix_2, blockNum_1);
                           blockList_2.push(blockID);
                           blockNum_1++;
-                          return [4, this.stageBlock(blockID, body, length, {
+                          return [4, this.stageBlock(blockID, body2, length, {
                             conditions: options.conditions,
                             encryptionScope: options.encryptionScope,
                             tracingOptions: updatedOptions.tracingOptions
@@ -59256,7 +59610,7 @@ var require_dist10 = __commonJS({
               case 4:
                 e_33 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_33.message
                 });
                 throw e_33;
@@ -59332,13 +59686,13 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.pageBlobContext.create(0, size, tslib.__assign({ abortSignal: options.abortSignal, blobHTTPHeaders: options.blobHTTPHeaders, blobSequenceNumber: options.blobSequenceNumber, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.pageBlobContext.create(0, size, tslib.__assign({ abortSignal: options.abortSignal, blobHttpHeaders: options.blobHTTPHeaders, blobSequenceNumber: options.blobSequenceNumber, leaseAccessConditions: options.conditions, metadata: options.metadata, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope, tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_34 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_34.message
                 });
                 throw e_34;
@@ -59376,13 +59730,13 @@ var require_dist10 = __commonJS({
                 e_35 = _d.sent();
                 if (((_a = e_35.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists") {
                   span.setStatus({
-                    code: api.CanonicalCode.ALREADY_EXISTS,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when creating a blob only if it does not already exist."
                   });
                   return [2, tslib.__assign(tslib.__assign({ succeeded: false }, (_b = e_35.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), { _response: e_35.response })];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_35.message
                 });
                 throw e_35;
@@ -59395,7 +59749,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      PageBlobClient2.prototype.uploadPages = function(body, offset, count, options) {
+      PageBlobClient2.prototype.uploadPages = function(body2, offset, count, options) {
         var _a;
         if (options === void 0) {
           options = {};
@@ -59411,13 +59765,15 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
-                return [4, this.pageBlobContext.uploadPages(body, count, tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), onUploadProgress: options.onProgress, range: rangeToString({ offset, count }), sequenceNumberAccessConditions: options.conditions, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.pageBlobContext.uploadPages(count, body2, tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: tslib.__assign(tslib.__assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), requestOptions: {
+                  onUploadProgress: options.onProgress
+                }, range: rangeToString({ offset, count }), sequenceNumberAccessConditions: options.conditions, transactionalContentMD5: options.transactionalContentMD5, transactionalContentCrc64: options.transactionalContentCrc64, cpkInfo: options.customerProvidedKey, encryptionScope: options.encryptionScope }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _c.sent()];
               case 3:
                 e_36 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_36.message
                 });
                 throw e_36;
@@ -59458,7 +59814,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_37 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_37.message
                 });
                 throw e_37;
@@ -59495,7 +59851,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_38 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_38.message
                 });
                 throw e_38;
@@ -59532,7 +59888,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_39 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_39.message
                 });
                 throw e_39;
@@ -59566,7 +59922,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_40 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_40.message
                 });
                 throw e_40;
@@ -59600,7 +59956,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_41 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_41.message
                 });
                 throw e_41;
@@ -59634,7 +59990,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_42 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_42.message
                 });
                 throw e_42;
@@ -59668,7 +60024,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_43 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_43.message
                 });
                 throw e_43;
@@ -59701,7 +60057,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_44 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_44.message
                 });
                 throw e_44;
@@ -60003,7 +60359,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_1 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -60018,7 +60374,7 @@ var require_dist10 = __commonJS({
       };
       BlobBatch2.prototype.setBlobAccessTier = function(urlOrBlobClient, credentialOrTier, tierOrOptions, options) {
         return tslib.__awaiter(this, void 0, void 0, function() {
-          var url2, credential, tier, _a, span, updatedOptions, e_2;
+          var url2, credential, tier2, _a, span, updatedOptions, e_2;
           var _this = this;
           return tslib.__generator(this, function(_b) {
             switch (_b.label) {
@@ -60026,11 +60382,11 @@ var require_dist10 = __commonJS({
                 if (typeof urlOrBlobClient === "string" && (coreHttp.isNode && credentialOrTier instanceof StorageSharedKeyCredential || credentialOrTier instanceof AnonymousCredential || coreHttp.isTokenCredential(credentialOrTier))) {
                   url2 = urlOrBlobClient;
                   credential = credentialOrTier;
-                  tier = tierOrOptions;
+                  tier2 = tierOrOptions;
                 } else if (urlOrBlobClient instanceof BlobClient) {
                   url2 = urlOrBlobClient.url;
                   credential = urlOrBlobClient.credential;
-                  tier = credentialOrTier;
+                  tier2 = credentialOrTier;
                   options = tierOrOptions;
                 } else {
                   throw new RangeError("Invalid arguments. Either url and credential, or BlobClient need be provided.");
@@ -60051,7 +60407,7 @@ var require_dist10 = __commonJS({
                     return tslib.__generator(this, function(_a2) {
                       switch (_a2.label) {
                         case 0:
-                          return [4, new BlobClient(url2, this.batchRequest.createPipeline(credential)).setAccessTier(tier, updatedOptions)];
+                          return [4, new BlobClient(url2, this.batchRequest.createPipeline(credential)).setAccessTier(tier2, updatedOptions)];
                         case 1:
                           _a2.sent();
                           return [2];
@@ -60065,7 +60421,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_2 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_2.message
                 });
                 throw e_2;
@@ -60319,7 +60675,7 @@ var require_dist10 = __commonJS({
               case 1:
                 _b.trys.push([1, 4, 5, 6]);
                 batchRequestBody = batchRequest.getHttpRequestBody();
-                return [4, this.serviceOrContainerContext.submitBatch(batchRequestBody, utf8ByteLength(batchRequestBody), batchRequest.getMultiPartContentType(), tslib.__assign(tslib.__assign({}, options), convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.serviceOrContainerContext.submitBatch(utf8ByteLength(batchRequestBody), batchRequest.getMultiPartContentType(), batchRequestBody, tslib.__assign(tslib.__assign({}, options), convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 rawBatchResponse = _b.sent();
                 batchResponseParser = new BatchResponseParser(rawBatchResponse, batchRequest.getSubRequests());
@@ -60341,7 +60697,7 @@ var require_dist10 = __commonJS({
               case 4:
                 e_1 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -60423,7 +60779,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_1 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -60460,13 +60816,13 @@ var require_dist10 = __commonJS({
                 e_2 = _d.sent();
                 if (((_a = e_2.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerAlreadyExists") {
                   span.setStatus({
-                    code: api.CanonicalCode.ALREADY_EXISTS,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when creating a container only if it does not already exist."
                   });
                   return [2, tslib.__assign(tslib.__assign({ succeeded: false }, (_b = e_2.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), { _response: e_2.response })];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_2.message
                 });
                 throw e_2;
@@ -60503,13 +60859,13 @@ var require_dist10 = __commonJS({
                 e_3 = _b.sent();
                 if (e_3.statusCode === 404) {
                   span.setStatus({
-                    code: api.CanonicalCode.NOT_FOUND,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when checking container existence"
                   });
                   return [2, false];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_3.message
                 });
                 throw e_3;
@@ -60556,7 +60912,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_4 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_4.message
                 });
                 throw e_4;
@@ -60585,13 +60941,13 @@ var require_dist10 = __commonJS({
                 _b.label = 1;
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
-                return [4, this.containerContext.deleteMethod(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: options.conditions }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.containerContext.delete(tslib.__assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: options.conditions }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _b.sent()];
               case 3:
                 e_5 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_5.message
                 });
                 throw e_5;
@@ -60628,13 +60984,13 @@ var require_dist10 = __commonJS({
                 e_6 = _d.sent();
                 if (((_a = e_6.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerNotFound") {
                   span.setStatus({
-                    code: api.CanonicalCode.NOT_FOUND,
+                    code: coreTracing.SpanStatusCode.ERROR,
                     message: "Expected exception when deleting a container only if it exists."
                   });
                   return [2, tslib.__assign(tslib.__assign({ succeeded: false }, (_b = e_6.response) === null || _b === void 0 ? void 0 : _b.parsedHeaders), { _response: e_6.response })];
                 }
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_6.message
                 });
                 throw e_6;
@@ -60672,7 +61028,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_7 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_7.message
                 });
                 throw e_7;
@@ -60739,7 +61095,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_8 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_8.message
                 });
                 throw e_8;
@@ -60752,7 +61108,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      ContainerClient2.prototype.setAccessPolicy = function(access2, containerAcl, options) {
+      ContainerClient2.prototype.setAccessPolicy = function(access2, containerAcl2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -60767,7 +61123,7 @@ var require_dist10 = __commonJS({
               case 1:
                 _c.trys.push([1, 3, 4, 5]);
                 acl = [];
-                for (_i = 0, _b = containerAcl || []; _i < _b.length; _i++) {
+                for (_i = 0, _b = containerAcl2 || []; _i < _b.length; _i++) {
                   identifier = _b[_i];
                   acl.push({
                     accessPolicy: {
@@ -60784,7 +61140,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_9 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_9.message
                 });
                 throw e_9;
@@ -60800,7 +61156,7 @@ var require_dist10 = __commonJS({
       ContainerClient2.prototype.getBlobLeaseClient = function(proposeLeaseId) {
         return new BlobLeaseClient(this, proposeLeaseId);
       };
-      ContainerClient2.prototype.uploadBlockBlob = function(blobName, body, contentLength2, options) {
+      ContainerClient2.prototype.uploadBlockBlob = function(blobName, body2, contentLength2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -60814,7 +61170,7 @@ var require_dist10 = __commonJS({
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
                 blockBlobClient = this.getBlockBlobClient(blobName);
-                return [4, blockBlobClient.upload(body, contentLength2, updatedOptions)];
+                return [4, blockBlobClient.upload(body2, contentLength2, updatedOptions)];
               case 2:
                 response = _b.sent();
                 return [2, {
@@ -60824,7 +61180,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_10 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_10.message
                 });
                 throw e_10;
@@ -60860,7 +61216,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_11 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_11.message
                 });
                 throw e_11;
@@ -60873,7 +61229,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      ContainerClient2.prototype.listBlobFlatSegment = function(marker, options) {
+      ContainerClient2.prototype.listBlobFlatSegment = function(marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -60886,7 +61242,7 @@ var require_dist10 = __commonJS({
                 _b.label = 1;
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
-                return [4, this.containerContext.listBlobFlatSegment(tslib.__assign(tslib.__assign({ marker }, options), convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.containerContext.listBlobFlatSegment(tslib.__assign(tslib.__assign({ marker: marker2 }, options), convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 response = _b.sent();
                 wrappedResponse = tslib.__assign(tslib.__assign({}, response), { _response: response._response, segment: tslib.__assign(tslib.__assign({}, response.segment), { blobItems: response.segment.blobItems.map(function(blobItemInteral) {
@@ -60897,7 +61253,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_12 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_12.message
                 });
                 throw e_12;
@@ -60910,7 +61266,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      ContainerClient2.prototype.listBlobHierarchySegment = function(delimiter2, marker, options) {
+      ContainerClient2.prototype.listBlobHierarchySegment = function(delimiter2, marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -60923,7 +61279,7 @@ var require_dist10 = __commonJS({
                 _b.label = 1;
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
-                return [4, this.containerContext.listBlobHierarchySegment(delimiter2, tslib.__assign(tslib.__assign({ marker }, options), convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.containerContext.listBlobHierarchySegment(delimiter2, tslib.__assign(tslib.__assign({ marker: marker2 }, options), convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 response = _b.sent();
                 wrappedResponse = tslib.__assign(tslib.__assign({}, response), { _response: response._response, segment: tslib.__assign(tslib.__assign({}, response.segment), { blobItems: response.segment.blobItems.map(function(blobItemInteral) {
@@ -60934,7 +61290,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_13 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_13.message
                 });
                 throw e_13;
@@ -60947,7 +61303,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      ContainerClient2.prototype.listSegments = function(marker, options) {
+      ContainerClient2.prototype.listSegments = function(marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -60956,14 +61312,14 @@ var require_dist10 = __commonJS({
           return tslib.__generator(this, function(_a) {
             switch (_a.label) {
               case 0:
-                if (!(!!marker || marker === void 0))
+                if (!(!!marker2 || marker2 === void 0))
                   return [3, 7];
                 _a.label = 1;
               case 1:
-                return [4, tslib.__await(this.listBlobFlatSegment(marker, options))];
+                return [4, tslib.__await(this.listBlobFlatSegment(marker2, options))];
               case 2:
                 listBlobsFlatSegmentResponse = _a.sent();
-                marker = listBlobsFlatSegmentResponse.continuationToken;
+                marker2 = listBlobsFlatSegmentResponse.continuationToken;
                 return [4, tslib.__await(listBlobsFlatSegmentResponse)];
               case 3:
                 return [4, tslib.__await.apply(void 0, [_a.sent()])];
@@ -60973,7 +61329,7 @@ var require_dist10 = __commonJS({
                 _a.sent();
                 _a.label = 6;
               case 6:
-                if (marker)
+                if (marker2)
                   return [3, 1];
                 _a.label = 7;
               case 7:
@@ -60987,13 +61343,13 @@ var require_dist10 = __commonJS({
           options = {};
         }
         return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function listItems_1() {
-          var marker, _a, _b, listBlobsFlatSegmentResponse, e_14_1;
+          var marker2, _a, _b, listBlobsFlatSegmentResponse, e_14_1;
           var e_14, _c;
           return tslib.__generator(this, function(_d) {
             switch (_d.label) {
               case 0:
                 _d.trys.push([0, 7, 8, 13]);
-                _a = tslib.__asyncValues(this.listSegments(marker, options));
+                _a = tslib.__asyncValues(this.listSegments(marker2, options));
                 _d.label = 1;
               case 1:
                 return [4, tslib.__await(_a.next())];
@@ -61043,32 +61399,32 @@ var require_dist10 = __commonJS({
         if (options === void 0) {
           options = {};
         }
-        var include = [];
+        var include2 = [];
         if (options.includeCopy) {
-          include.push("copy");
+          include2.push("copy");
         }
         if (options.includeDeleted) {
-          include.push("deleted");
+          include2.push("deleted");
         }
         if (options.includeMetadata) {
-          include.push("metadata");
+          include2.push("metadata");
         }
         if (options.includeSnapshots) {
-          include.push("snapshots");
+          include2.push("snapshots");
         }
         if (options.includeVersions) {
-          include.push("versions");
+          include2.push("versions");
         }
         if (options.includeUncommitedBlobs) {
-          include.push("uncommittedblobs");
+          include2.push("uncommittedblobs");
         }
         if (options.includeTags) {
-          include.push("tags");
+          include2.push("tags");
         }
         if (options.prefix === "") {
           options.prefix = void 0;
         }
-        var updatedOptions = tslib.__assign(tslib.__assign({}, options), include.length > 0 ? { include } : {});
+        var updatedOptions = tslib.__assign(tslib.__assign({}, options), include2.length > 0 ? { include: include2 } : {});
         var iter = this.listItems(updatedOptions);
         return _a = {
           next: function() {
@@ -61083,7 +61439,7 @@ var require_dist10 = __commonJS({
           return _this.listSegments(settings.continuationToken, tslib.__assign({ maxPageSize: settings.maxPageSize }, updatedOptions));
         }, _a;
       };
-      ContainerClient2.prototype.listHierarchySegments = function(delimiter2, marker, options) {
+      ContainerClient2.prototype.listHierarchySegments = function(delimiter2, marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -61092,14 +61448,14 @@ var require_dist10 = __commonJS({
           return tslib.__generator(this, function(_a) {
             switch (_a.label) {
               case 0:
-                if (!(!!marker || marker === void 0))
+                if (!(!!marker2 || marker2 === void 0))
                   return [3, 7];
                 _a.label = 1;
               case 1:
-                return [4, tslib.__await(this.listBlobHierarchySegment(delimiter2, marker, options))];
+                return [4, tslib.__await(this.listBlobHierarchySegment(delimiter2, marker2, options))];
               case 2:
                 listBlobsHierarchySegmentResponse = _a.sent();
-                marker = listBlobsHierarchySegmentResponse.continuationToken;
+                marker2 = listBlobsHierarchySegmentResponse.continuationToken;
                 return [4, tslib.__await(listBlobsHierarchySegmentResponse)];
               case 3:
                 return [4, tslib.__await.apply(void 0, [_a.sent()])];
@@ -61109,7 +61465,7 @@ var require_dist10 = __commonJS({
                 _a.sent();
                 _a.label = 6;
               case 6:
-                if (marker)
+                if (marker2)
                   return [3, 1];
                 _a.label = 7;
               case 7:
@@ -61123,13 +61479,13 @@ var require_dist10 = __commonJS({
           options = {};
         }
         return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function listItemsByHierarchy_1() {
-          var marker, _a, _b, listBlobsHierarchySegmentResponse, segment, _i, _c, prefix2, _d, _e, blob, e_15_1;
+          var marker2, _a, _b, listBlobsHierarchySegmentResponse, segment, _i, _c, prefix2, _d, _e, blob, e_15_1;
           var e_15, _f;
           return tslib.__generator(this, function(_g) {
             switch (_g.label) {
               case 0:
                 _g.trys.push([0, 14, 15, 20]);
-                _a = tslib.__asyncValues(this.listHierarchySegments(delimiter2, marker, options));
+                _a = tslib.__asyncValues(this.listHierarchySegments(delimiter2, marker2, options));
                 _g.label = 1;
               case 1:
                 return [4, tslib.__await(_a.next())];
@@ -61210,32 +61566,32 @@ var require_dist10 = __commonJS({
         if (delimiter2 === "") {
           throw new RangeError("delimiter should contain one or more characters");
         }
-        var include = [];
+        var include2 = [];
         if (options.includeCopy) {
-          include.push("copy");
+          include2.push("copy");
         }
         if (options.includeDeleted) {
-          include.push("deleted");
+          include2.push("deleted");
         }
         if (options.includeMetadata) {
-          include.push("metadata");
+          include2.push("metadata");
         }
         if (options.includeSnapshots) {
-          include.push("snapshots");
+          include2.push("snapshots");
         }
         if (options.includeVersions) {
-          include.push("versions");
+          include2.push("versions");
         }
         if (options.includeUncommitedBlobs) {
-          include.push("uncommittedblobs");
+          include2.push("uncommittedblobs");
         }
         if (options.includeTags) {
-          include.push("tags");
+          include2.push("tags");
         }
         if (options.prefix === "") {
           options.prefix = void 0;
         }
-        var updatedOptions = tslib.__assign(tslib.__assign({}, options), include.length > 0 ? { include } : {});
+        var updatedOptions = tslib.__assign(tslib.__assign({}, options), include2.length > 0 ? { include: include2 } : {});
         var iter = this.listItemsByHierarchy(delimiter2, updatedOptions);
         return _a = {
           next: function() {
@@ -61606,7 +61962,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_1 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_1.message
                 });
                 throw e_1;
@@ -61639,7 +61995,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_2 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_2.message
                 });
                 throw e_2;
@@ -61677,7 +62033,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_3 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_3.message
                 });
                 throw e_3;
@@ -61713,7 +62069,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_4 = _c.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_4.message
                 });
                 throw e_4;
@@ -61745,7 +62101,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_5 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_5.message
                 });
                 throw e_5;
@@ -61777,7 +62133,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_6 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_6.message
                 });
                 throw e_6;
@@ -61809,7 +62165,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_7 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_7.message
                 });
                 throw e_7;
@@ -61841,7 +62197,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_8 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_8.message
                 });
                 throw e_8;
@@ -61854,7 +62210,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobServiceClient2.prototype.listContainersSegment = function(marker, options) {
+      BlobServiceClient2.prototype.listContainersSegment = function(marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -61867,13 +62223,13 @@ var require_dist10 = __commonJS({
                 _b.label = 1;
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
-                return [4, this.serviceContext.listContainersSegment(tslib.__assign(tslib.__assign(tslib.__assign({ abortSignal: options.abortSignal, marker }, options), { include: typeof options.include === "string" ? [options.include] : options.include }), convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.serviceContext.listContainersSegment(tslib.__assign(tslib.__assign(tslib.__assign({ abortSignal: options.abortSignal, marker: marker2 }, options), { include: typeof options.include === "string" ? [options.include] : options.include }), convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 return [2, _b.sent()];
               case 3:
                 e_9 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_9.message
                 });
                 throw e_9;
@@ -61886,7 +62242,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobServiceClient2.prototype.findBlobsByTagsSegment = function(tagFilterSqlExpression, marker, options) {
+      BlobServiceClient2.prototype.findBlobsByTagsSegment = function(tagFilterSqlExpression, marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -61899,7 +62255,7 @@ var require_dist10 = __commonJS({
                 _b.label = 1;
               case 1:
                 _b.trys.push([1, 3, 4, 5]);
-                return [4, this.serviceContext.filterBlobs(tslib.__assign({ abortSignal: options.abortSignal, where: tagFilterSqlExpression, marker, maxPageSize: options.maxPageSize }, convertTracingToRequestOptionsBase(updatedOptions)))];
+                return [4, this.serviceContext.filterBlobs(tslib.__assign({ abortSignal: options.abortSignal, where: tagFilterSqlExpression, marker: marker2, maxPageSize: options.maxPageSize }, convertTracingToRequestOptionsBase(updatedOptions)))];
               case 2:
                 response = _b.sent();
                 wrappedResponse = tslib.__assign(tslib.__assign({}, response), { _response: response._response, blobs: response.blobs.map(function(blob) {
@@ -61914,7 +62270,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_10 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_10.message
                 });
                 throw e_10;
@@ -61927,7 +62283,7 @@ var require_dist10 = __commonJS({
           });
         });
       };
-      BlobServiceClient2.prototype.findBlobsByTagsSegments = function(tagFilterSqlExpression, marker, options) {
+      BlobServiceClient2.prototype.findBlobsByTagsSegments = function(tagFilterSqlExpression, marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -61936,15 +62292,15 @@ var require_dist10 = __commonJS({
           return tslib.__generator(this, function(_a) {
             switch (_a.label) {
               case 0:
-                if (!(!!marker || marker === void 0))
+                if (!(!!marker2 || marker2 === void 0))
                   return [3, 6];
                 _a.label = 1;
               case 1:
-                return [4, tslib.__await(this.findBlobsByTagsSegment(tagFilterSqlExpression, marker, options))];
+                return [4, tslib.__await(this.findBlobsByTagsSegment(tagFilterSqlExpression, marker2, options))];
               case 2:
                 response = _a.sent();
                 response.blobs = response.blobs || [];
-                marker = response.continuationToken;
+                marker2 = response.continuationToken;
                 return [4, tslib.__await(response)];
               case 3:
                 return [4, _a.sent()];
@@ -61952,7 +62308,7 @@ var require_dist10 = __commonJS({
                 _a.sent();
                 _a.label = 5;
               case 5:
-                if (marker)
+                if (marker2)
                   return [3, 1];
                 _a.label = 6;
               case 6:
@@ -61966,13 +62322,13 @@ var require_dist10 = __commonJS({
           options = {};
         }
         return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function findBlobsByTagsItems_1() {
-          var marker, _a, _b, segment, e_11_1;
+          var marker2, _a, _b, segment, e_11_1;
           var e_11, _c;
           return tslib.__generator(this, function(_d) {
             switch (_d.label) {
               case 0:
                 _d.trys.push([0, 7, 8, 13]);
-                _a = tslib.__asyncValues(this.findBlobsByTagsSegments(tagFilterSqlExpression, marker, options));
+                _a = tslib.__asyncValues(this.findBlobsByTagsSegments(tagFilterSqlExpression, marker2, options));
                 _d.label = 1;
               case 1:
                 return [4, tslib.__await(_a.next())];
@@ -62037,7 +62393,7 @@ var require_dist10 = __commonJS({
           return _this.findBlobsByTagsSegments(tagFilterSqlExpression, settings.continuationToken, tslib.__assign({ maxPageSize: settings.maxPageSize }, listSegmentOptions));
         }, _a;
       };
-      BlobServiceClient2.prototype.listSegments = function(marker, options) {
+      BlobServiceClient2.prototype.listSegments = function(marker2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -62046,15 +62402,15 @@ var require_dist10 = __commonJS({
           return tslib.__generator(this, function(_a) {
             switch (_a.label) {
               case 0:
-                if (!(!!marker || marker === void 0))
+                if (!(!!marker2 || marker2 === void 0))
                   return [3, 7];
                 _a.label = 1;
               case 1:
-                return [4, tslib.__await(this.listContainersSegment(marker, options))];
+                return [4, tslib.__await(this.listContainersSegment(marker2, options))];
               case 2:
                 listContainersSegmentResponse = _a.sent();
                 listContainersSegmentResponse.containerItems = listContainersSegmentResponse.containerItems || [];
-                marker = listContainersSegmentResponse.continuationToken;
+                marker2 = listContainersSegmentResponse.continuationToken;
                 return [4, tslib.__await(listContainersSegmentResponse)];
               case 3:
                 return [4, tslib.__await.apply(void 0, [_a.sent()])];
@@ -62064,7 +62420,7 @@ var require_dist10 = __commonJS({
                 _a.sent();
                 _a.label = 6;
               case 6:
-                if (marker)
+                if (marker2)
                   return [3, 1];
                 _a.label = 7;
               case 7:
@@ -62078,13 +62434,13 @@ var require_dist10 = __commonJS({
           options = {};
         }
         return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function listItems_1() {
-          var marker, _a, _b, segment, e_12_1;
+          var marker2, _a, _b, segment, e_12_1;
           var e_12, _c;
           return tslib.__generator(this, function(_d) {
             switch (_d.label) {
               case 0:
                 _d.trys.push([0, 7, 8, 13]);
-                _a = tslib.__asyncValues(this.listSegments(marker, options));
+                _a = tslib.__asyncValues(this.listSegments(marker2, options));
                 _d.label = 1;
               case 1:
                 return [4, tslib.__await(_a.next())];
@@ -62137,14 +62493,14 @@ var require_dist10 = __commonJS({
         if (options.prefix === "") {
           options.prefix = void 0;
         }
-        var include = [];
+        var include2 = [];
         if (options.includeDeleted) {
-          include.push("deleted");
+          include2.push("deleted");
         }
         if (options.includeMetadata) {
-          include.push("metadata");
+          include2.push("metadata");
         }
-        var listSegmentOptions = tslib.__assign(tslib.__assign({}, options), include.length > 0 ? { include } : {});
+        var listSegmentOptions = tslib.__assign(tslib.__assign({}, options), include2.length > 0 ? { include: include2 } : {});
         var iter = this.listItems(listSegmentOptions);
         return _a = {
           next: function() {
@@ -62192,7 +62548,7 @@ var require_dist10 = __commonJS({
               case 3:
                 e_13 = _b.sent();
                 span.setStatus({
-                  code: api.CanonicalCode.UNKNOWN,
+                  code: coreTracing.SpanStatusCode.ERROR,
                   message: e_13.message
                 });
                 throw e_13;
@@ -62508,7 +62864,7 @@ var require_downloadUtils = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
     var http_client_1 = require_http_client();
-    var storage_blob_1 = require_dist10();
+    var storage_blob_1 = require_dist9();
     var buffer = __importStar(require("buffer"));
     var fs3 = __importStar(require("fs"));
     var stream = __importStar(require("stream"));
@@ -63309,386 +63665,6 @@ var require_cache = __commonJS({
   }
 });
 
-// node_modules/@actions/core/lib/utils.js
-var require_utils2 = __commonJS({
-  "node_modules/@actions/core/lib/utils.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.toCommandValue = void 0;
-    function toCommandValue(input) {
-      if (input === null || input === void 0) {
-        return "";
-      } else if (typeof input === "string" || input instanceof String) {
-        return input;
-      }
-      return JSON.stringify(input);
-    }
-    __name(toCommandValue, "toCommandValue");
-    exports2.toCommandValue = toCommandValue;
-  }
-});
-
-// node_modules/@actions/core/lib/command.js
-var require_command2 = __commonJS({
-  "node_modules/@actions/core/lib/command.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-      Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
-      o["default"] = v;
-    });
-    var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
-      }
-      __setModuleDefault(result, mod);
-      return result;
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.issue = exports2.issueCommand = void 0;
-    var os2 = __importStar(require("os"));
-    var utils_1 = require_utils2();
-    function issueCommand(command, properties, message) {
-      const cmd = new Command(command, properties, message);
-      process.stdout.write(cmd.toString() + os2.EOL);
-    }
-    __name(issueCommand, "issueCommand");
-    exports2.issueCommand = issueCommand;
-    function issue(name, message = "") {
-      issueCommand(name, {}, message);
-    }
-    __name(issue, "issue");
-    exports2.issue = issue;
-    var CMD_STRING = "::";
-    var Command = class {
-      constructor(command, properties, message) {
-        if (!command) {
-          command = "missing.command";
-        }
-        this.command = command;
-        this.properties = properties;
-        this.message = message;
-      }
-      toString() {
-        let cmdStr = CMD_STRING + this.command;
-        if (this.properties && Object.keys(this.properties).length > 0) {
-          cmdStr += " ";
-          let first = true;
-          for (const key in this.properties) {
-            if (this.properties.hasOwnProperty(key)) {
-              const val = this.properties[key];
-              if (val) {
-                if (first) {
-                  first = false;
-                } else {
-                  cmdStr += ",";
-                }
-                cmdStr += `${key}=${escapeProperty(val)}`;
-              }
-            }
-          }
-        }
-        cmdStr += `${CMD_STRING}${escapeData(this.message)}`;
-        return cmdStr;
-      }
-    };
-    __name(Command, "Command");
-    function escapeData(s) {
-      return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
-    }
-    __name(escapeData, "escapeData");
-    function escapeProperty(s) {
-      return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/:/g, "%3A").replace(/,/g, "%2C");
-    }
-    __name(escapeProperty, "escapeProperty");
-  }
-});
-
-// node_modules/@actions/core/lib/file-command.js
-var require_file_command2 = __commonJS({
-  "node_modules/@actions/core/lib/file-command.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-      Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
-      o["default"] = v;
-    });
-    var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
-      }
-      __setModuleDefault(result, mod);
-      return result;
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.issueCommand = void 0;
-    var fs3 = __importStar(require("fs"));
-    var os2 = __importStar(require("os"));
-    var utils_1 = require_utils2();
-    function issueCommand(command, message) {
-      const filePath = process.env[`GITHUB_${command}`];
-      if (!filePath) {
-        throw new Error(`Unable to find environment variable for file command ${command}`);
-      }
-      if (!fs3.existsSync(filePath)) {
-        throw new Error(`Missing file at path: ${filePath}`);
-      }
-      fs3.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os2.EOL}`, {
-        encoding: "utf8"
-      });
-    }
-    __name(issueCommand, "issueCommand");
-    exports2.issueCommand = issueCommand;
-  }
-});
-
-// node_modules/@actions/core/lib/core.js
-var require_core2 = __commonJS({
-  "node_modules/@actions/core/lib/core.js"(exports2) {
-    "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
-      Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
-      o["default"] = v;
-    });
-    var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule)
-        return mod;
-      var result = {};
-      if (mod != null) {
-        for (var k in mod)
-          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
-            __createBinding(result, mod, k);
-      }
-      __setModuleDefault(result, mod);
-      return result;
-    };
-    var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      __name(adopt, "adopt");
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        __name(fulfilled, "fulfilled");
-        function rejected(value) {
-          try {
-            step(generator["throw"](value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        __name(rejected, "rejected");
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        __name(step, "step");
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getState = exports2.saveState = exports2.group = exports2.endGroup = exports2.startGroup = exports2.info = exports2.warning = exports2.error = exports2.debug = exports2.isDebug = exports2.setFailed = exports2.setCommandEcho = exports2.setOutput = exports2.getBooleanInput = exports2.getMultilineInput = exports2.getInput = exports2.addPath = exports2.setSecret = exports2.exportVariable = exports2.ExitCode = void 0;
-    var command_1 = require_command2();
-    var file_command_1 = require_file_command2();
-    var utils_1 = require_utils2();
-    var os2 = __importStar(require("os"));
-    var path3 = __importStar(require("path"));
-    var ExitCode;
-    (function(ExitCode2) {
-      ExitCode2[ExitCode2["Success"] = 0] = "Success";
-      ExitCode2[ExitCode2["Failure"] = 1] = "Failure";
-    })(ExitCode = exports2.ExitCode || (exports2.ExitCode = {}));
-    function exportVariable(name, val) {
-      const convertedVal = utils_1.toCommandValue(val);
-      process.env[name] = convertedVal;
-      const filePath = process.env["GITHUB_ENV"] || "";
-      if (filePath) {
-        const delimiter = "_GitHubActionsFileCommandDelimeter_";
-        const commandValue = `${name}<<${delimiter}${os2.EOL}${convertedVal}${os2.EOL}${delimiter}`;
-        file_command_1.issueCommand("ENV", commandValue);
-      } else {
-        command_1.issueCommand("set-env", { name }, convertedVal);
-      }
-    }
-    __name(exportVariable, "exportVariable");
-    exports2.exportVariable = exportVariable;
-    function setSecret(secret) {
-      command_1.issueCommand("add-mask", {}, secret);
-    }
-    __name(setSecret, "setSecret");
-    exports2.setSecret = setSecret;
-    function addPath(inputPath) {
-      const filePath = process.env["GITHUB_PATH"] || "";
-      if (filePath) {
-        file_command_1.issueCommand("PATH", inputPath);
-      } else {
-        command_1.issueCommand("add-path", {}, inputPath);
-      }
-      process.env["PATH"] = `${inputPath}${path3.delimiter}${process.env["PATH"]}`;
-    }
-    __name(addPath, "addPath");
-    exports2.addPath = addPath;
-    function getInput2(name, options) {
-      const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
-      if (options && options.required && !val) {
-        throw new Error(`Input required and not supplied: ${name}`);
-      }
-      if (options && options.trimWhitespace === false) {
-        return val;
-      }
-      return val.trim();
-    }
-    __name(getInput2, "getInput");
-    exports2.getInput = getInput2;
-    function getMultilineInput(name, options) {
-      const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
-      return inputs;
-    }
-    __name(getMultilineInput, "getMultilineInput");
-    exports2.getMultilineInput = getMultilineInput;
-    function getBooleanInput(name, options) {
-      const trueValue = ["true", "True", "TRUE"];
-      const falseValue = ["false", "False", "FALSE"];
-      const val = getInput2(name, options);
-      if (trueValue.includes(val))
-        return true;
-      if (falseValue.includes(val))
-        return false;
-      throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}
-Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
-    }
-    __name(getBooleanInput, "getBooleanInput");
-    exports2.getBooleanInput = getBooleanInput;
-    function setOutput(name, value) {
-      process.stdout.write(os2.EOL);
-      command_1.issueCommand("set-output", { name }, value);
-    }
-    __name(setOutput, "setOutput");
-    exports2.setOutput = setOutput;
-    function setCommandEcho(enabled) {
-      command_1.issue("echo", enabled ? "on" : "off");
-    }
-    __name(setCommandEcho, "setCommandEcho");
-    exports2.setCommandEcho = setCommandEcho;
-    function setFailed2(message) {
-      process.exitCode = ExitCode.Failure;
-      error(message);
-    }
-    __name(setFailed2, "setFailed");
-    exports2.setFailed = setFailed2;
-    function isDebug() {
-      return process.env["RUNNER_DEBUG"] === "1";
-    }
-    __name(isDebug, "isDebug");
-    exports2.isDebug = isDebug;
-    function debug(message) {
-      command_1.issueCommand("debug", {}, message);
-    }
-    __name(debug, "debug");
-    exports2.debug = debug;
-    function error(message) {
-      command_1.issue("error", message instanceof Error ? message.toString() : message);
-    }
-    __name(error, "error");
-    exports2.error = error;
-    function warning2(message) {
-      command_1.issue("warning", message instanceof Error ? message.toString() : message);
-    }
-    __name(warning2, "warning");
-    exports2.warning = warning2;
-    function info2(message) {
-      process.stdout.write(message + os2.EOL);
-    }
-    __name(info2, "info");
-    exports2.info = info2;
-    function startGroup(name) {
-      command_1.issue("group", name);
-    }
-    __name(startGroup, "startGroup");
-    exports2.startGroup = startGroup;
-    function endGroup() {
-      command_1.issue("endgroup");
-    }
-    __name(endGroup, "endGroup");
-    exports2.endGroup = endGroup;
-    function group2(name, fn) {
-      return __awaiter(this, void 0, void 0, function* () {
-        startGroup(name);
-        let result;
-        try {
-          result = yield fn();
-        } finally {
-          endGroup();
-        }
-        return result;
-      });
-    }
-    __name(group2, "group");
-    exports2.group = group2;
-    function saveState(name, value) {
-      command_1.issueCommand("save-state", { name }, value);
-    }
-    __name(saveState, "saveState");
-    exports2.saveState = saveState;
-    function getState(name) {
-      return process.env[`STATE_${name}`] || "";
-    }
-    __name(getState, "getState");
-    exports2.getState = getState;
-  }
-});
-
 // node_modules/@actions/glob/lib/internal-glob-options-helper.js
 var require_internal_glob_options_helper2 = __commonJS({
   "node_modules/@actions/glob/lib/internal-glob-options-helper.js"(exports2) {
@@ -63723,7 +63699,7 @@ var require_internal_glob_options_helper2 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getOptions = void 0;
-    var core = __importStar(require_core2());
+    var core = __importStar(require_core());
     function getOptions(copy) {
       const result = {
         followSymbolicLinks: true,
@@ -64437,7 +64413,7 @@ var require_internal_globber2 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DefaultGlobber = void 0;
-    var core = __importStar(require_core2());
+    var core = __importStar(require_core());
     var fs3 = __importStar(require("fs"));
     var globOptionsHelper = __importStar(require_internal_glob_options_helper2());
     var path3 = __importStar(require("path"));
@@ -64674,7 +64650,7 @@ var require_internal_hash_files = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.hashFiles = void 0;
     var crypto = __importStar(require("crypto"));
-    var core = __importStar(require_core2());
+    var core = __importStar(require_core());
     var fs3 = __importStar(require("fs"));
     var stream = __importStar(require("stream"));
     var util = __importStar(require("util"));
@@ -64797,10 +64773,11 @@ var require_glob2 = __commonJS({
 
 // build-size/cache/index.ts
 var import_cache = __toModule(require_cache());
-var import_core = __toModule(require_core2());
+var import_core2 = __toModule(require_core());
 var import_fs2 = __toModule(require("fs"));
 
 // build-size/utils/BuildSizes.ts
+var import_core = __toModule(require_core());
 var import_glob = __toModule(require_glob2());
 var import_fs = __toModule(require("fs"));
 var import_path = __toModule(require("path"));
@@ -64828,16 +64805,18 @@ function getFileNameKey(filename, buildPath) {
 }
 __name(getFileNameKey, "getFileNameKey");
 async function getBuildSizes(dir2) {
+  (0, import_core.info)(`Computing build size for the: ${dir2}`);
   const globber = await (0, import_glob.create)(dir2);
   const [buildPath] = globber.getSearchPaths();
   const sizes = {};
   for await (const filename of globber.globGenerator()) {
-    if (!isValidFile(filename)) {
+    if (!isValidFile(filename))
       continue;
-    }
     const key = getFileNameKey(filename, buildPath);
     sizes[key] = await computeFileSize(filename);
   }
+  (0, import_core.info)(`Computed file sizes:
+${JSON.stringify(sizes, null, 2)}`);
   return sizes;
 }
 __name(getBuildSizes, "getBuildSizes");
@@ -64861,30 +64840,30 @@ function getBuildSnapshotMeta({
 __name(getBuildSnapshotMeta, "getBuildSnapshotMeta");
 
 // build-size/cache/index.ts
-var dir = (0, import_core.getInput)("dir", { required: true });
-var sha = (0, import_core.getInput)("sha", { required: true });
-var label = (0, import_core.getInput)("label", { required: true });
-main().catch(import_core.setFailed);
+var dir = (0, import_core2.getInput)("dir", { required: true });
+var sha = (0, import_core2.getInput)("sha", { required: true });
+var label = (0, import_core2.getInput)("label", { required: true });
+main().catch(import_core2.setFailed);
 async function main() {
   const meta = getBuildSnapshotMeta({ sha, label });
-  (0, import_core.info)(`Checking cache for the: ${meta.key}`);
-  const restoredKey = await (0, import_cache.restoreCache)([meta.filename], meta.key);
+  const restoredKey = await (0, import_core2.group)("Checking cache", () => {
+    (0, import_core2.info)(`Restoring cache for the: ${meta.key}`);
+    return (0, import_cache.restoreCache)([meta.filename], meta.key);
+  });
   if (restoredKey) {
-    (0, import_core.info)("Cache hit, finishing the job\u2026");
+    (0, import_core2.info)("Cache hit, skipping further computations");
     return;
   }
-  await (0, import_core.group)(`Computing build size for the: ${dir}`, async () => {
+  await (0, import_core2.group)(`Computing build size for the: ${dir}`, async () => {
     const sizes = await getBuildSizes(dir);
-    (0, import_core.info)(`Computed file sizes:
-${JSON.stringify(sizes, null, 2)}`);
-    (0, import_core.info)(`Writing build size report to: ${meta.filename}`);
+    (0, import_core2.info)(`Writing build size report to: ${meta.filename}`);
     await import_fs2.promises.writeFile(meta.filename, JSON.stringify(sizes), "utf-8");
     try {
-      (0, import_core.info)(`Caching report to: ${meta.key}`);
+      (0, import_core2.info)(`Caching report to: ${meta.key}`);
       await (0, import_cache.saveCache)([meta.filename], meta.key);
     } catch (error) {
       if (error instanceof import_cache.ReserveCacheError) {
-        (0, import_core.warning)(error);
+        (0, import_core2.warning)(error);
       } else {
         throw error;
       }
