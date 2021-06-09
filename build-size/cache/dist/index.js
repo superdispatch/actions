@@ -385,7 +385,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -397,8 +397,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -2608,12 +2608,12 @@ var require_internal_path = __commonJS({
             this.segments = itemPath.split(path3.sep);
           } else {
             let remaining = itemPath;
-            let dir = pathHelper.dirname(remaining);
-            while (dir !== remaining) {
+            let dir2 = pathHelper.dirname(remaining);
+            while (dir2 !== remaining) {
               const basename = path3.basename(remaining);
               this.segments.unshift(basename);
-              remaining = dir;
-              dir = pathHelper.dirname(remaining);
+              remaining = dir2;
+              dir2 = pathHelper.dirname(remaining);
             }
             this.segments.unshift(remaining);
           }
@@ -15423,22 +15423,22 @@ var require_psl = __commonJS({
         return "DOMAIN_TOO_LONG";
       }
       var labels = ascii.split(".");
-      var label;
+      var label2;
       for (var i = 0; i < labels.length; ++i) {
-        label = labels[i];
-        if (!label.length) {
+        label2 = labels[i];
+        if (!label2.length) {
           return "LABEL_TOO_SHORT";
         }
-        if (label.length > 63) {
+        if (label2.length > 63) {
           return "LABEL_TOO_LONG";
         }
-        if (label.charAt(0) === "-") {
+        if (label2.charAt(0) === "-") {
           return "LABEL_STARTS_WITH_DASH";
         }
-        if (label.charAt(label.length - 1) === "-") {
+        if (label2.charAt(label2.length - 1) === "-") {
           return "LABEL_ENDS_WITH_DASH";
         }
-        if (!/^[a-z0-9\-]+$/.test(label)) {
+        if (!/^[a-z0-9\-]+$/.test(label2)) {
           return "LABEL_INVALID_CHARS";
         }
       }
@@ -49223,7 +49223,7 @@ var require_dist10 = __commonJS({
         }
       }
     };
-    var group = {
+    var group2 = {
       parameterPath: [
         "options",
         "group"
@@ -51390,7 +51390,7 @@ var require_dist10 = __commonJS({
       ],
       headerParameters: [
         owner,
-        group,
+        group2,
         posixPermissions,
         posixAcl,
         requestId,
@@ -63662,7 +63662,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -63674,8 +63674,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -64056,12 +64056,12 @@ var require_internal_path2 = __commonJS({
             this.segments = itemPath.split(path3.sep);
           } else {
             let remaining = itemPath;
-            let dir = pathHelper.dirname(remaining);
-            while (dir !== remaining) {
+            let dir2 = pathHelper.dirname(remaining);
+            while (dir2 !== remaining) {
               const basename = path3.basename(remaining);
               this.segments.unshift(basename);
-              remaining = dir;
-              dir = pathHelper.dirname(remaining);
+              remaining = dir2;
+              dir2 = pathHelper.dirname(remaining);
             }
             this.segments.unshift(remaining);
           }
@@ -64799,7 +64799,6 @@ var require_glob2 = __commonJS({
 var import_cache = __toModule(require_cache());
 var import_core = __toModule(require_core2());
 var import_fs2 = __toModule(require("fs"));
-var import_util = __toModule(require("util"));
 
 // build-size/utils/BuildSizes.ts
 var import_glob = __toModule(require_glob2());
@@ -64828,8 +64827,8 @@ function getFileNameKey(filename, buildPath) {
   return key.replace(/\.([a-f0-9])+\./, ".[hash].");
 }
 __name(getFileNameKey, "getFileNameKey");
-async function getBuildSizes(dir) {
-  const globber = await (0, import_glob.create)(dir);
+async function getBuildSizes(dir2) {
+  const globber = await (0, import_glob.create)(dir2);
   const [buildPath] = globber.getSearchPaths();
   const sizes = {};
   for await (const filename of globber.globGenerator()) {
@@ -64847,12 +64846,12 @@ __name(getBuildSizes, "getBuildSizes");
 var import_os = __toModule(require("os"));
 var import_path2 = __toModule(require("path"));
 function getBuildSnapshotMeta({
-  sha,
-  label
+  sha: sha2,
+  label: label2
 }) {
-  const name = `build-size-v1-${label}`;
+  const name = `build-size-v1-${label2}`;
   const restoreKey = `${name}-`;
-  const key = restoreKey + sha;
+  const key = restoreKey + sha2;
   return {
     key,
     restoreKey,
@@ -64862,32 +64861,35 @@ function getBuildSnapshotMeta({
 __name(getBuildSnapshotMeta, "getBuildSnapshotMeta");
 
 // build-size/cache/index.ts
+var dir = (0, import_core.getInput)("dir", { required: true });
+var sha = (0, import_core.getInput)("sha", { required: true });
+var label = (0, import_core.getInput)("label", { required: true });
 main().catch(import_core.setFailed);
 async function main() {
-  const dir = (0, import_core.getInput)("dir", { required: true });
-  const sha = (0, import_core.getInput)("sha", { required: true });
-  const label = (0, import_core.getInput)("label", { required: true });
   const meta = getBuildSnapshotMeta({ sha, label });
-  (0, import_core.info)((0, import_util.format)('Checking cache for the key "%s"\u2026', meta.key));
+  (0, import_core.info)(`Checking cache for the: ${meta.key}`);
   const restoredKey = await (0, import_cache.restoreCache)([meta.filename], meta.key);
   if (restoredKey) {
     (0, import_core.info)("Cache hit, finishing the job\u2026");
     return;
   }
-  (0, import_core.info)((0, import_util.format)('Computing build size of the "%s"\u2026', dir));
-  const sizes = await getBuildSizes(dir);
-  (0, import_core.info)((0, import_util.format)("Computed file sizes: %j", sizes));
-  await import_fs2.promises.writeFile(meta.filename, JSON.stringify(sizes), "utf-8");
-  (0, import_core.info)((0, import_util.format)('Writing "%s" to "%s" cache.', meta.filename, meta.key));
-  try {
-    await (0, import_cache.saveCache)([meta.filename], meta.key);
-  } catch (error) {
-    if (error instanceof import_cache.ReserveCacheError) {
-      (0, import_core.warning)(error);
-    } else {
-      throw error;
+  await (0, import_core.group)(`Computing build size for the: ${dir}`, async () => {
+    const sizes = await getBuildSizes(dir);
+    (0, import_core.info)(`Computed file sizes:
+${JSON.stringify(sizes, null, 2)}`);
+    (0, import_core.info)(`Writing build size report to: ${meta.filename}`);
+    await import_fs2.promises.writeFile(meta.filename, JSON.stringify(sizes), "utf-8");
+    try {
+      (0, import_core.info)(`Caching report to: ${meta.key}`);
+      await (0, import_cache.saveCache)([meta.filename], meta.key);
+    } catch (error) {
+      if (error instanceof import_cache.ReserveCacheError) {
+        (0, import_core.warning)(error);
+      } else {
+        throw error;
+      }
     }
-  }
+  });
 }
 __name(main, "main");
 /*!
