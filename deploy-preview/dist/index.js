@@ -376,11 +376,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(warning, "warning");
     exports2.warning = warning;
-    function info3(message) {
+    function info2(message) {
       process.stdout.write(message + os.EOL);
     }
-    __name(info3, "info");
-    exports2.info = info3;
+    __name(info2, "info");
+    exports2.info = info2;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -391,7 +391,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(endGroup, "endGroup");
     exports2.endGroup = endGroup;
-    function group(name, fn) {
+    function group2(name, fn) {
       return __awaiter(this, void 0, void 0, function* () {
         startGroup(name);
         let result;
@@ -403,8 +403,8 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return result;
       });
     }
-    __name(group, "group");
-    exports2.group = group;
+    __name(group2, "group");
+    exports2.group = group2;
     function saveState(name, value) {
       command_1.issueCommand("save-state", { name }, value);
     }
@@ -2058,12 +2058,12 @@ var require_http_client = __commonJS({
           throw new Error("Client has already been disposed.");
         }
         let parsedUrl = new URL(requestUrl);
-        let info3 = this._prepareRequest(verb, parsedUrl, headers);
+        let info2 = this._prepareRequest(verb, parsedUrl, headers);
         let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
         let numTries = 0;
         let response;
         while (numTries < maxTries) {
-          response = await this.requestRaw(info3, data);
+          response = await this.requestRaw(info2, data);
           if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
             let authenticationHandler;
             for (let i = 0; i < this.handlers.length; i++) {
@@ -2073,7 +2073,7 @@ var require_http_client = __commonJS({
               }
             }
             if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info3, data);
+              return authenticationHandler.handleAuthentication(this, info2, data);
             } else {
               return response;
             }
@@ -2096,8 +2096,8 @@ var require_http_client = __commonJS({
                 }
               }
             }
-            info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info3, data);
+            info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+            response = await this.requestRaw(info2, data);
             redirectsRemaining--;
           }
           if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
@@ -2117,7 +2117,7 @@ var require_http_client = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info3, data) {
+      requestRaw(info2, data) {
         return new Promise((resolve, reject) => {
           let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
             if (err) {
@@ -2125,13 +2125,13 @@ var require_http_client = __commonJS({
             }
             resolve(res);
           }, "callbackForResult");
-          this.requestRawWithCallback(info3, data, callbackForResult);
+          this.requestRawWithCallback(info2, data, callbackForResult);
         });
       }
-      requestRawWithCallback(info3, data, onResult) {
+      requestRawWithCallback(info2, data, onResult) {
         let socket;
         if (typeof data === "string") {
-          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         let handleResult = /* @__PURE__ */ __name((err, res) => {
@@ -2140,7 +2140,7 @@ var require_http_client = __commonJS({
             onResult(err, res);
           }
         }, "handleResult");
-        let req = info3.httpModule.request(info3.options, (msg) => {
+        let req = info2.httpModule.request(info2.options, (msg) => {
           let res = new HttpClientResponse(msg);
           handleResult(null, res);
         });
@@ -2151,7 +2151,7 @@ var require_http_client = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error("Request timeout: " + info3.options.path), null);
+          handleResult(new Error("Request timeout: " + info2.options.path), null);
         });
         req.on("error", function(err) {
           handleResult(err, null);
@@ -2173,27 +2173,27 @@ var require_http_client = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info3 = {};
-        info3.parsedUrl = requestUrl;
-        const usingSsl = info3.parsedUrl.protocol === "https:";
-        info3.httpModule = usingSsl ? https : http;
+        const info2 = {};
+        info2.parsedUrl = requestUrl;
+        const usingSsl = info2.parsedUrl.protocol === "https:";
+        info2.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info3.options = {};
-        info3.options.host = info3.parsedUrl.hostname;
-        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
-        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
-        info3.options.method = method;
-        info3.options.headers = this._mergeHeaders(headers);
+        info2.options = {};
+        info2.options.host = info2.parsedUrl.hostname;
+        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
+        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
+        info2.options.method = method;
+        info2.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info3.options.headers["user-agent"] = this.userAgent;
+          info2.options.headers["user-agent"] = this.userAgent;
         }
-        info3.options.agent = this._getAgent(info3.parsedUrl);
+        info2.options.agent = this._getAgent(info2.parsedUrl);
         if (this.handlers) {
           this.handlers.forEach((handler) => {
-            handler.prepareRequest(info3.options);
+            handler.prepareRequest(info2.options);
           });
         }
-        return info3;
+        return info2;
       }
       _mergeHeaders(headers) {
         const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
@@ -2365,13 +2365,13 @@ var require_utils2 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
     var httpClient = __importStar(require_http_client());
-    function getAuthString(token, options) {
-      if (!token && !options.auth) {
+    function getAuthString(token2, options) {
+      if (!token2 && !options.auth) {
         throw new Error("Parameter token or opts.auth is required");
-      } else if (token && options.auth) {
+      } else if (token2 && options.auth) {
         throw new Error("Parameters token and opts.auth may not both be specified");
       }
-      return typeof options.auth === "string" ? options.auth : `token ${token}`;
+      return typeof options.auth === "string" ? options.auth : `token ${token2}`;
     }
     __name(getAuthString, "getAuthString");
     exports2.getAuthString = getAuthString;
@@ -2831,8 +2831,8 @@ var require_dist_node2 = __commonJS({
         if (options.mediaType.previews.length) {
           const previewsFromAcceptHeader = headers.accept.match(/[\w-]+(?=-preview)/g) || [];
           headers.accept = previewsFromAcceptHeader.concat(options.mediaType.previews).map((preview) => {
-            const format2 = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
-            return `application/vnd.github.${preview}-preview${format2}`;
+            const format = options.mediaType.format ? `.${options.mediaType.format}` : "+json";
+            return `application/vnd.github.${preview}-preview${format}`;
           }).join(",");
         }
       }
@@ -4355,38 +4355,38 @@ var require_dist_node7 = __commonJS({
   "node_modules/@octokit/auth-token/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    async function auth(token) {
-      const tokenType = token.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token) ? "installation" : "oauth";
+    async function auth(token2) {
+      const tokenType = token2.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token2) ? "installation" : "oauth";
       return {
         type: "token",
-        token,
+        token: token2,
         tokenType
       };
     }
     __name(auth, "auth");
-    function withAuthorizationPrefix(token) {
-      if (token.split(/\./).length === 3) {
-        return `bearer ${token}`;
+    function withAuthorizationPrefix(token2) {
+      if (token2.split(/\./).length === 3) {
+        return `bearer ${token2}`;
       }
-      return `token ${token}`;
+      return `token ${token2}`;
     }
     __name(withAuthorizationPrefix, "withAuthorizationPrefix");
-    async function hook(token, request, route, parameters) {
+    async function hook(token2, request, route, parameters) {
       const endpoint = request.endpoint.merge(route, parameters);
-      endpoint.headers.authorization = withAuthorizationPrefix(token);
+      endpoint.headers.authorization = withAuthorizationPrefix(token2);
       return request(endpoint);
     }
     __name(hook, "hook");
-    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token) {
-      if (!token) {
+    var createTokenAuth = /* @__PURE__ */ __name(function createTokenAuth2(token2) {
+      if (!token2) {
         throw new Error("[@octokit/auth-token] No token passed to createTokenAuth");
       }
-      if (typeof token !== "string") {
+      if (typeof token2 !== "string") {
         throw new Error("[@octokit/auth-token] Token passed to createTokenAuth is not a string");
       }
-      token = token.replace(/^(token|bearer) +/i, "");
-      return Object.assign(auth.bind(null, token), {
-        hook: hook.bind(null, token)
+      token2 = token2.replace(/^(token|bearer) +/i, "");
+      return Object.assign(auth.bind(null, token2), {
+        hook: hook.bind(null, token2)
       });
     }, "createTokenAuth");
     exports2.createTokenAuth = createTokenAuth;
@@ -5725,11 +5725,11 @@ var require_dist_node9 = __commonJS({
         }
         if (decorations.renamedParameters) {
           const options2 = requestWithDefaults.endpoint.merge(...args);
-          for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
+          for (const [name, alias2] of Object.entries(decorations.renamedParameters)) {
             if (name in options2) {
-              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
-              if (!(alias in options2)) {
-                options2[alias] = options2[name];
+              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias2}" instead`);
+              if (!(alias2 in options2)) {
+                options2[alias2] = options2[name];
               }
               delete options2[name];
             }
@@ -5922,9 +5922,9 @@ var require_utils3 = __commonJS({
       }
     };
     exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
-    function getOctokitOptions(token, options) {
+    function getOctokitOptions(token2, options) {
       const opts = Object.assign({}, options || {});
-      const auth = Utils.getAuthString(token, opts);
+      const auth = Utils.getAuthString(token2, opts);
       if (auth) {
         opts.auth = auth;
       }
@@ -5972,8 +5972,8 @@ var require_github = __commonJS({
     var Context = __importStar(require_context());
     var utils_1 = require_utils3();
     exports2.context = new Context.Context();
-    function getOctokit2(token, options) {
-      return new utils_1.GitHub(utils_1.getOctokitOptions(token, options));
+    function getOctokit2(token2, options) {
+      return new utils_1.GitHub(utils_1.getOctokitOptions(token2, options));
     }
     __name(getOctokit2, "getOctokit");
     exports2.getOctokit = getOctokit2;
@@ -5984,27 +5984,26 @@ var require_github = __commonJS({
 var import_core2 = __toModule(require_core());
 var import_exec = __toModule(require_exec());
 var import_github2 = __toModule(require_github());
-var import_util = __toModule(require("util"));
 
 // utils/sendReport.ts
 var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
 var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
 async function sendReport({
-  pr,
-  token,
-  label,
+  pr: pr2,
+  token: token2,
+  label: label2,
   title,
   content
 }) {
-  const octokit = (0, import_github.getOctokit)(token);
-  const reportTitle = `### ${!label ? title : `${title} (${label})`}
+  const octokit = (0, import_github.getOctokit)(token2);
+  const reportTitle = `### ${!label2 ? title : `${title} (${label2})`}
 `;
   let previousCommentID = void 0;
-  (0, import_core.info)(`Looking for the previous reports in: ${pr}`);
+  (0, import_core.info)(`Looking for the previous reports in: ${pr2}`);
   for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
     per_page: 100,
-    issue_number: pr
+    issue_number: pr2
   }))) {
     for (const { id, body: body2, user } of comments) {
       if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
@@ -6022,46 +6021,49 @@ async function sendReport({
     await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
   } else {
     (0, import_core.info)("Sending new report");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr }));
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
   }
 }
 __name(sendReport, "sendReport");
 
 // deploy-preview/index.ts
+var pr = Number((0, import_core2.getInput)("pr", { required: true }));
+var defaultAlias = `preview-${pr}`;
+var dir = (0, import_core2.getInput)("dir", { required: true });
+var alias = (0, import_core2.getInput)("alias") || defaultAlias;
+var token = (0, import_core2.getInput)("token", { required: true });
+var netlifyToken = (0, import_core2.getInput)("netlify-token", { required: true });
+var netlifySiteID = (0, import_core2.getInput)("netlify-site-id", { required: true });
+var label = alias === defaultAlias ? "" : alias;
 async function main() {
-  const pr = Number((0, import_core2.getInput)("pr", { required: true }));
-  const defaultAlias = `preview-${pr}`;
-  const dir = (0, import_core2.getInput)("dir", { required: true });
-  const alias = (0, import_core2.getInput)("alias") || defaultAlias;
-  const token = (0, import_core2.getInput)("token", { required: true });
-  const netlifyToken = (0, import_core2.getInput)("netlify-token", { required: true });
-  const netlifySiteID = (0, import_core2.getInput)("netlify-site-id", { required: true });
-  const label = alias === defaultAlias ? "" : alias;
-  let deployJSON = "";
-  (0, import_core2.info)((0, import_util.format)('Deploying "%s" from "%s"\u2026', alias, dir));
-  await (0, import_exec.exec)("netlify", [
-    "deploy",
-    "--json",
-    `--dir=${dir}`,
-    `--alias=${alias}`,
-    `--auth=${netlifyToken}`,
-    `--site=${netlifySiteID}`
-  ], {
-    listeners: {
-      stdout: (data) => {
-        deployJSON += data.toString();
+  const { deploy_url: previewURL } = await (0, import_core2.group)("Deploying to Netlify", async () => {
+    let deployJSON = "";
+    await (0, import_exec.exec)("netlify", [
+      "deploy",
+      "--json",
+      `--dir=${dir}`,
+      `--alias=${alias}`,
+      `--auth=${netlifyToken}`,
+      `--site=${netlifySiteID}`
+    ], {
+      listeners: {
+        stdout: (data) => {
+          deployJSON += data.toString();
+        }
       }
-    }
+    });
+    return JSON.parse(deployJSON);
   });
-  const { deploy_url: previewURL } = JSON.parse(deployJSON);
-  const content = `Built with commit ${import_github2.context.sha}
+  await (0, import_core2.group)("Sending deployment report", () => {
+    const content = `Built with commit ${import_github2.context.sha}
 ${previewURL}`;
-  await sendReport({
-    pr,
-    token,
-    label,
-    content,
-    title: "Preview is ready!"
+    return sendReport({
+      pr,
+      token,
+      label,
+      content,
+      title: "Preview is ready!"
+    });
   });
 }
 __name(main, "main");
