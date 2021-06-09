@@ -20,7 +20,7 @@ async function computeFileSize(filename: string): Promise<number> {
 
 function isValidFile(filename: string) {
   return (
-    /\.(js|css)$/.test(filename) &&
+    /\.(js|css|htm|html)$/.test(filename) &&
     !/service-worker\.js$/.test(filename) &&
     !/precache-manifest\.[0-9a-f]+\.js$/.test(filename)
   );

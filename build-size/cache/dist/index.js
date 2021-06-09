@@ -64796,7 +64796,7 @@ async function computeFileSize(filename) {
 }
 __name(computeFileSize, "computeFileSize");
 function isValidFile(filename) {
-  return /\.(js|css)$/.test(filename) && !/service-worker\.js$/.test(filename) && !/precache-manifest\.[0-9a-f]+\.js$/.test(filename);
+  return /\.(js|css|htm|html)$/.test(filename) && !/service-worker\.js$/.test(filename) && !/precache-manifest\.[0-9a-f]+\.js$/.test(filename);
 }
 __name(isValidFile, "isValidFile");
 function getFileNameKey(filename, buildPath) {
