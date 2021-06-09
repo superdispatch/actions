@@ -1,17 +1,19 @@
-import { exec } from '@actions/exec';
-import { create as createGlob } from '@actions/glob';
-import { build } from 'esbuild';
-import * as path from 'path';
+'use strict';
+
+const path = require('path');
+const esbuild = require('esbuild');
+const glob = require('@actions/glob');
+const { exec } = require('@actions/exec');
 
 const ROOT_DIR = path.join(__dirname, '..');
 
-async function main(): Promise<void> {
-  const glob = await createGlob(`
+async function main() {
+  const globber = await glob.create(`
     ${ROOT_DIR}/**/action.yml
     !${ROOT_DIR}/node_modules
   `);
 
-  for await (const actionPath of glob.globGenerator()) {
+  for await (const actionPath of globber.globGenerator()) {
     const actionDir = path.dirname(actionPath);
     const entryPath = path.join(actionDir, 'index.ts');
     const outDir = path.join(actionDir, 'dist');
@@ -19,7 +21,7 @@ async function main(): Promise<void> {
 
     console.log('Installing: %s', path.relative(ROOT_DIR, actionDir));
 
-    await build({
+    await esbuild.build({
       bundle: true,
       entryPoints: [entryPath],
       outfile: outPath,
@@ -54,7 +56,7 @@ async function main(): Promise<void> {
   }
 }
 
-main().catch((error: unknown) => {
+main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });

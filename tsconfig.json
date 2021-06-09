@@ -1,14 +1,10 @@
 {
-  "include": ["**/*.ts"],
+  "include": ["scripts", "**/*.ts"],
   "exclude": ["node_modules"],
   "extends": "@superdispatch/tsconfig",
-  "ts-node": {
-    "transpileOnly": true,
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
     "target": "ES2019",
     "tsBuildInfoFile": "node_modules/.cache/tsconfig.tsbuildinfo",
     "baseUrl": ".",
