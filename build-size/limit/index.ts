@@ -2,6 +2,7 @@ import { ReserveCacheError, restoreCache, saveCache } from '@actions/cache';
 import { getInput, group, info, setFailed, warning } from '@actions/core';
 import { exec } from '@actions/exec';
 import { promises as fs } from 'fs';
+import { execJSON, execString } from 'utils/exec';
 import { sendReport } from 'utils/sendReport';
 import { createBuildSizeDiffReport } from '../utils/BuildSizeDiffReport';
 
@@ -28,24 +29,14 @@ async function setup() {
 }
 
 async function computeSizes(): Promise<Record<string, number>> {
-  const args = ['size-limit', '--json'];
-  if (target) args.push(target);
-
-  let json = '';
-  await exec('npx', args, {
-    listeners: {
-      stdout: (data) => {
-        json += data.toString();
-      },
-    },
-  });
+  const sizeLimitResult = await execJSON<Array<{ name: string; size: number }>>(
+    'npx',
+    ['size-limit', '--json', target].filter(Boolean),
+  );
 
   const sizes: Record<string, number> = {};
 
-  for (const { name, size } of JSON.parse(json) as Array<{
-    name: string;
-    size: number;
-  }>) {
+  for (const { name, size } of sizeLimitResult) {
     sizes[name] = size;
   }
 
@@ -88,14 +79,7 @@ async function main() {
   if (!previousSizes) {
     previousSizes = await group('Computing previous build size', async () => {
       info('Getting current revision');
-      let currentRev = '';
-      await exec('git ', ['rev-parse', 'HEAD'], {
-        listeners: {
-          stdout: (data) => {
-            currentRev += data.toString();
-          },
-        },
-      });
+      const currentRev = await execString('git ', ['rev-parse', 'HEAD']);
 
       info(`Checking out base revision: ${base}`);
       await exec('git', ['fetch', 'origin', base, '--depth', '1']);
@@ -119,7 +103,7 @@ async function main() {
       }
 
       info(`Checking out to current revision: ${currentRev}`);
-      await exec('git', ['checkout', '--force', currentRev.trim()]);
+      await exec('git', ['checkout', '--force', currentRev]);
 
       return sizes;
     });
