@@ -64854,7 +64854,7 @@ async function main() {
     (0, import_core2.info)("Cache hit, skipping further computations");
     return;
   }
-  await (0, import_core2.group)(`Computing build size for the: ${dir}`, async () => {
+  await (0, import_core2.group)("Computing build size", async () => {
     const sizes = await getBuildSizes(dir);
     (0, import_core2.info)(`Writing build size report to: ${meta.filename}`);
     await import_fs2.promises.writeFile(meta.filename, JSON.stringify(sizes), "utf-8");

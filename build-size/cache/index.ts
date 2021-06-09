@@ -23,7 +23,7 @@ async function main() {
     return;
   }
 
-  await group(`Computing build size for the: ${dir}`, async () => {
+  await group('Computing build size', async () => {
     const sizes = await getBuildSizes(dir);
 
     info(`Writing build size report to: ${meta.filename}`);
