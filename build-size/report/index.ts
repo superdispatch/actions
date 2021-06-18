@@ -32,14 +32,17 @@ async function main() {
         );
 
         return [
-          '> ⚠️ Failed to restore previous build size from cache.',
+          '> ⚠️ Failed to restore build size from cache.',
           '',
           createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 }),
         ].join('\n');
       }
 
+      const lines: string[] = [];
+
       if (restoredKey !== meta.key) {
-        warning(`Failed to restore previous build size from: ${meta.key}`);
+        warning(`Failed to restore last build size from: ${meta.key}`);
+        lines.push('> ⚠️ Compared with the stale snapshot', '');
       }
 
       const previousSizesJSON = await fs.readFile(meta.filename, 'utf-8');
@@ -47,6 +50,7 @@ async function main() {
         string,
         number
       >;
+
       info(
         `Restored previous build file sizes:\n${JSON.stringify(
           previousSizes,
@@ -55,7 +59,9 @@ async function main() {
         )}`,
       );
 
-      return createBuildSizeDiffReport(currentSizes, previousSizes);
+      lines.push(createBuildSizeDiffReport(currentSizes, previousSizes));
+
+      return lines.join('\n');
     },
   );
 

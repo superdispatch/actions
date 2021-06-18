@@ -67721,19 +67721,22 @@ async function main() {
     if (!restoredKey) {
       (0, import_core3.warning)(`Failed to restore previous build size from: ${meta.key}, ${meta.restoreKey}`);
       return [
-        "> \u26A0\uFE0F Failed to restore previous build size from cache.",
+        "> \u26A0\uFE0F Failed to restore build size from cache.",
         "",
         createBuildSizeDiffReport(currentSizes, {}, { deltaThreshold: 0 })
       ].join("\n");
     }
+    const lines = [];
     if (restoredKey !== meta.key) {
-      (0, import_core3.warning)(`Failed to restore previous build size from: ${meta.key}`);
+      (0, import_core3.warning)(`Failed to restore last build size from: ${meta.key}`);
+      lines.push("> \u26A0\uFE0F Compared with the stale snapshot", "");
     }
     const previousSizesJSON = await import_fs2.promises.readFile(meta.filename, "utf-8");
     const previousSizes = JSON.parse(previousSizesJSON);
     (0, import_core3.info)(`Restored previous build file sizes:
 ${JSON.stringify(previousSizes, null, 2)}`);
-    return createBuildSizeDiffReport(currentSizes, previousSizes);
+    lines.push(createBuildSizeDiffReport(currentSizes, previousSizes));
+    return lines.join("\n");
   });
   await (0, import_core3.group)("Sending build size report", () => sendReport({
     pr,
