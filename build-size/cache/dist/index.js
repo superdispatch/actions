@@ -5941,10 +5941,16 @@ var require_tslib = __commonJS({
             r[k] = a[j];
         return r;
       }, "__spreadArrays");
-      __spreadArray = /* @__PURE__ */ __name(function(to, from) {
-        for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-          to[j] = from[i];
-        return to;
+      __spreadArray = /* @__PURE__ */ __name(function(to, from, pack) {
+        if (pack || arguments.length === 2)
+          for (var i = 0, l = from.length, ar; i < l; i++) {
+            if (ar || !(i in from)) {
+              if (!ar)
+                ar = Array.prototype.slice.call(from, 0, i);
+              ar[i] = from[i];
+            }
+          }
+        return to.concat(ar || from);
       }, "__spreadArray");
       __await = /* @__PURE__ */ __name(function(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
@@ -35788,7 +35794,7 @@ var require_dist6 = __commonJS({
     }
     __name(decodeString, "decodeString");
     var Constants = {
-      coreHttpVersion: "1.2.5",
+      coreHttpVersion: "1.2.6",
       HTTP: "http:",
       HTTPS: "https:",
       HTTP_PROXY: "HTTP_PROXY",
@@ -36536,7 +36542,14 @@ var require_dist6 = __commonJS({
           var serializedValue = void 0;
           if (Array.isArray(responseBody[key]) && modelProps[key].serializedName === "") {
             propertyInstance = responseBody[key];
-            instance = serializer.deserialize(propertyMapper, propertyInstance, propertyObjectName, options);
+            var arrayInstance = serializer.deserialize(propertyMapper, propertyInstance, propertyObjectName, options);
+            for (var _f = 0, _g = Object.entries(instance); _f < _g.length; _f++) {
+              var _h = _g[_f], k = _h[0], v = _h[1];
+              if (!Object.prototype.hasOwnProperty.call(arrayInstance, k)) {
+                arrayInstance[k] = v;
+              }
+            }
+            instance = arrayInstance;
           } else if (propertyInstance !== void 0 || propertyMapper.defaultValue !== void 0) {
             serializedValue = serializer.deserialize(propertyMapper, propertyInstance, propertyObjectName, options);
             instance[key] = serializedValue;
@@ -36560,8 +36573,8 @@ var require_dist6 = __commonJS({
           }
         }
       } else if (responseBody) {
-        for (var _f = 0, _g = Object.keys(responseBody); _f < _g.length; _f++) {
-          var key = _g[_f];
+        for (var _j = 0, _k = Object.keys(responseBody); _j < _k.length; _j++) {
+          var key = _k[_j];
           if (instance[key] === void 0 && !handledPropertyNames.includes(key) && !isSpecialXmlProperty(key, options)) {
             instance[key] = responseBody[key];
           }
