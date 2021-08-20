@@ -39,7 +39,7 @@ async function main() {
       await octokit.request('PATCH /repos/{owner}/{repo}/pulls/{pull_number}', {
         ...context.repo,
         pull_number: pr.number,
-        body: JSON.stringify({ state: 'closed ' }),
+        state: 'closed',
       });
     }
   });

@@ -5014,10 +5014,13 @@ async function main() {
       }
     }
     if (userPRCount > limit) {
-      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body: `You can create max ${limit} PRs at once. Close the PR...`, issue_number: pr.number }));
+      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
+        body: `You can create max ${limit} PRs at once. Close the PR...`,
+        issue_number: pr.number
+      }));
       await octokit.request("PATCH /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), {
         pull_number: pr.number,
-        body: JSON.stringify({ state: "closed " })
+        state: "closed"
       }));
     }
   });
