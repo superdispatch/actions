@@ -28,11 +28,13 @@ async function main() {
     }
 
     if (userPRCount > limit) {
+      info('Limit exceeded. Closing PR');
+
       await octokit.request(
         'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
         {
           ...context.repo,
-          body: `You can create max ${limit} PRs at once. Close the PR...`,
+          body: `You can create max ${limit} pull requests at once. Closing PR...`,
           issue_number: pr.number,
         },
       );

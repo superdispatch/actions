@@ -5014,8 +5014,9 @@ async function main() {
       }
     }
     if (userPRCount > limit) {
+      (0, import_core.info)("Limit exceeded. Closing PR");
       await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
-        body: `You can create max ${limit} PRs at once. Close the PR...`,
+        body: `You can create max ${limit} pull requests at once. Closing PR...`,
         issue_number: pr.number
       }));
       await octokit.request("PATCH /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), {
