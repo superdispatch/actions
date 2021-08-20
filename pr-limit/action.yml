@@ -1,0 +1,16 @@
+name: 'Limit PRs'
+description: 'Limit number of PRs per user'
+author: 'superdispatch'
+inputs:
+  limit:
+    required: true
+    description: 'number of limited PRs'
+
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
