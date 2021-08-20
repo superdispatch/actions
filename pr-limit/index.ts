@@ -1,5 +1,5 @@
-import { getInput, group, setFailed, info } from '@actions/core';
-import {getOctokit, context} from '@actions/github';
+import { getInput, group, info, setFailed } from '@actions/core';
+import { context, getOctokit } from '@actions/github';
 
 const limit = Number(getInput('limit', { required: true }));
 const token = getInput('token', { required: true });
@@ -16,7 +16,10 @@ async function main() {
       return;
     }
 
-    const pullRequests = await octokit.request('GET /repos/{owner}/{repo}/pulls', context.repo);
+    const pullRequests = await octokit.request(
+      'GET /repos/{owner}/{repo}/pulls',
+      context.repo,
+    );
 
     for (const item of pullRequests.data) {
       if (item.user?.login === context.actor) {
@@ -27,13 +30,17 @@ async function main() {
     if (userPRCount > limit) {
       await octokit.request(
         'POST /repos/{owner}/{repo}/issues/{issue_number}/comments',
-        { ...context.repo, body: `You can create max ${limit} PRs at once. Close the PR...`, issue_number: pr.number },
+        {
+          ...context.repo,
+          body: `You can create max ${limit} PRs at once. Close the PR...`,
+          issue_number: pr.number,
+        },
       );
       await octokit.request('PATCH /repos/{owner}/{repo}/pulls/{pull_number}', {
         ...context.repo,
         pull_number: pr.number,
-        body: JSON.stringify({ state: 'closed '})
-      })
+        body: JSON.stringify({ state: 'closed ' }),
+      });
     }
   });
 }
