@@ -186,3 +186,15 @@ jobs:
       - uses: ./pr-limit
         with:
           limit: 1
+
+  sync-ticket:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test sync-ticket') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./sync-ticket
+        id: ticket
+        with:
+          jira-namespace: test
+      - run: echo ${{ steps.ticket.outputs.ticket-number }}

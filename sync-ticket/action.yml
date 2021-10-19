@@ -1,0 +1,54 @@
+name: 'Sync ticket with PR'
+description: 'Updates PR details for ticket'
+author: 'superdispatch'
+inputs:
+  ticket-placeholder:
+    description: 'Ticket placeholder text in PR body'
+    required: false
+    default: '<!--TICKET_LINK-->'
+  jira-namespace:
+    description: 'JIRA namespace'
+    required: true
+outputs:
+  ticket-number:
+    description: 'JIRA Ticket number'
+    value: ${{ steps.ticket.outputs.result }}
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/github-script@v5
+      id: ticket
+      with:
+        script: |
+          function getTicket(input) {
+             const match = /([A-Z]{2,}-\d+)/.exec(input);
+             return match && match[1];
+          }
+
+          const ticketPlaceholder = core.getInput('ticket-placeholder');
+          const jiraNamespace = core.getInput('jira-namespace');
+          const ticket = getTicket(process.env.GITHUB_HEAD_REF);
+          const pr = context.payload.pull_request;
+
+          if (!ticket) {
+            console.log('Could not find ticket');
+            return '';
+          }
+
+          console.log('Found ticket:' + ticket);
+
+          if (!pr.title.includes(ticket)) {
+            console.log('Updating PR title...');
+            await github.rest.pulls.update({
+              pull_number: pr.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `${pr.title} [${ticket}]`,
+              body: pr.body.replace(ticketPlaceholder, `https://${jiraNamespace}.atlassian.net/browse/${ticket}`),
+            });
+            console.log('Updated PR title');
+          } else {
+            console.log('Skipping update. PR has already ticket number.');
+          }
+
+          return ticket;
