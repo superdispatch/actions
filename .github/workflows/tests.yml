@@ -197,4 +197,4 @@ jobs:
         id: ticket
         with:
           jira-namespace: test
-      - run: echo ${{ steps.ticket.outputs.ticket-number }}
+      - run: echo ${{ steps.ticket.outputs.ticket }}
