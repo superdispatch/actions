@@ -3,7 +3,7 @@ name: Test
 on:
   push:
     tags:
-      - *
+      - '*'
 jobs:
   checks:
     runs-on: ubuntu-latest
