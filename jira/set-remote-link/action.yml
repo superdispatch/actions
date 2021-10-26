@@ -1,0 +1,19 @@
+name: 'JIRA remove link'
+description: 'Create or update jira remote link'
+author: superdispatch
+inputs:
+  issue:
+    description: 'JIRA issue'
+    required: true
+
+  title:
+    description: 'Title of remote link'
+    required: true
+
+  url:
+    description: 'URL of remote link'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

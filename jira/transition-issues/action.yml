@@ -1,0 +1,15 @@
+name: 'Transition issues'
+description: 'Transition JIRA issues'
+author: superdispatch
+inputs:
+  transition-target:
+    description: 'JIRA transition target'
+    required: true
+
+  changelog:
+    description: 'Changelog'
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
