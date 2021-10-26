@@ -18493,6 +18493,9 @@ var require_db = __commonJS({
       "application/a2l": {
         source: "iana"
       },
+      "application/ace+cbor": {
+        source: "iana"
+      },
       "application/activemessage": {
         source: "iana"
       },
@@ -18561,6 +18564,9 @@ var require_db = __commonJS({
       "application/applixware": {
         source: "apache",
         extensions: ["aw"]
+      },
+      "application/at+jwt": {
+        source: "iana"
       },
       "application/atf": {
         source: "iana"
@@ -18962,6 +18968,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/express": {
+        source: "iana",
+        extensions: ["exp"]
+      },
       "application/fastinfoset": {
         source: "iana"
       },
@@ -19248,6 +19258,7 @@ var require_db = __commonJS({
         extensions: ["mads"]
       },
       "application/manifest+json": {
+        source: "iana",
         charset: "UTF-8",
         compressible: true,
         extensions: ["webmanifest"]
@@ -19365,6 +19376,9 @@ var require_db = __commonJS({
         source: "iana"
       },
       "application/mipc": {
+        source: "iana"
+      },
+      "application/missing-blocks+cbor-seq": {
         source: "iana"
       },
       "application/mmt-aei+xml": {
@@ -19532,6 +19546,13 @@ var require_db = __commonJS({
       "application/oxps": {
         source: "iana",
         extensions: ["oxps"]
+      },
+      "application/p21": {
+        source: "iana"
+      },
+      "application/p21+zip": {
+        source: "iana",
+        compressible: false
       },
       "application/p2p-overlay+xml": {
         source: "iana",
@@ -20103,6 +20124,9 @@ var require_db = __commonJS({
       "application/tnauthlist": {
         source: "iana"
       },
+      "application/token-introspection+jwt": {
+        source: "iana"
+      },
       "application/toml": {
         compressible: true,
         extensions: ["toml"]
@@ -20111,7 +20135,8 @@ var require_db = __commonJS({
         source: "iana"
       },
       "application/trig": {
-        source: "iana"
+        source: "iana",
+        extensions: ["trig"]
       },
       "application/ttml+xml": {
         source: "iana",
@@ -20523,6 +20548,12 @@ var require_db = __commonJS({
       "application/vnd.antix.game-component": {
         source: "iana",
         extensions: ["atx"]
+      },
+      "application/vnd.apache.arrow.file": {
+        source: "iana"
+      },
+      "application/vnd.apache.arrow.stream": {
+        source: "iana"
       },
       "application/vnd.apache.thrift.binary": {
         source: "iana"
@@ -22759,6 +22790,9 @@ var require_db = __commonJS({
         compressible: true,
         extensions: ["osm"]
       },
+      "application/vnd.opentimestamps.ots": {
+        source: "iana"
+      },
       "application/vnd.openxmlformats-officedocument.custom-properties+xml": {
         source: "iana",
         compressible: true
@@ -23290,6 +23324,9 @@ var require_db = __commonJS({
       "application/vnd.renlearn.rlprint": {
         source: "iana"
       },
+      "application/vnd.resilient.logic": {
+        source: "iana"
+      },
       "application/vnd.restful+json": {
         source: "iana",
         compressible: true
@@ -23753,6 +23790,10 @@ var require_db = __commonJS({
       },
       "application/vnd.verimatrix.vcas": {
         source: "iana"
+      },
+      "application/vnd.veritone.aion+json": {
+        source: "iana",
+        compressible: true
       },
       "application/vnd.veryant.thin": {
         source: "iana"
@@ -24240,6 +24281,15 @@ var require_db = __commonJS({
       "application/x-iso9660-image": {
         source: "apache",
         extensions: ["iso"]
+      },
+      "application/x-iwork-keynote-sffkey": {
+        extensions: ["key"]
+      },
+      "application/x-iwork-numbers-sffnumbers": {
+        extensions: ["numbers"]
+      },
+      "application/x-iwork-pages-sffpages": {
+        extensions: ["pages"]
       },
       "application/x-java-archive-diff": {
         source: "nginx",
@@ -25872,6 +25922,24 @@ var require_db = __commonJS({
         source: "iana",
         extensions: ["obj"]
       },
+      "model/step": {
+        source: "iana"
+      },
+      "model/step+xml": {
+        source: "iana",
+        compressible: true,
+        extensions: ["stpx"]
+      },
+      "model/step+zip": {
+        source: "iana",
+        compressible: false,
+        extensions: ["stpz"]
+      },
+      "model/step-xml+zip": {
+        source: "iana",
+        compressible: false,
+        extensions: ["stpxz"]
+      },
       "model/stl": {
         source: "iana",
         extensions: ["stl"]
@@ -26562,6 +26630,9 @@ var require_db = __commonJS({
         source: "apache",
         extensions: ["jpm", "jpgm"]
       },
+      "video/jxsv": {
+        source: "iana"
+      },
       "video/mj2": {
         source: "iana",
         extensions: ["mj2", "mjp2"]
@@ -26767,6 +26838,9 @@ var require_db = __commonJS({
         source: "iana"
       },
       "video/vp8": {
+        source: "iana"
+      },
+      "video/vp9": {
         source: "iana"
       },
       "video/webm": {
@@ -27176,9 +27250,9 @@ var require_asynckit = __commonJS({
   }
 });
 
-// node_modules/form-data/lib/populate.js
+// node_modules/@azure/core-http/node_modules/form-data/lib/populate.js
 var require_populate = __commonJS({
-  "node_modules/form-data/lib/populate.js"(exports2, module2) {
+  "node_modules/@azure/core-http/node_modules/form-data/lib/populate.js"(exports2, module2) {
     module2.exports = function(dst, src) {
       Object.keys(src).forEach(function(prop) {
         dst[prop] = dst[prop] || src[prop];
@@ -27188,9 +27262,9 @@ var require_populate = __commonJS({
   }
 });
 
-// node_modules/form-data/lib/form_data.js
+// node_modules/@azure/core-http/node_modules/form-data/lib/form_data.js
 var require_form_data = __commonJS({
-  "node_modules/form-data/lib/form_data.js"(exports2, module2) {
+  "node_modules/@azure/core-http/node_modules/form-data/lib/form_data.js"(exports2, module2) {
     var CombinedStream = require_combined_stream();
     var util = require("util");
     var path = require("path");

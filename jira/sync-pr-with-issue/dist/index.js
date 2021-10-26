@@ -4992,20 +4992,24 @@ var require_github = __commonJS({
   }
 });
 
-// sync-ticket/index.ts
+// jira/sync-pr-with-issue/index.ts
 var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
+
+// jira/utils/JiraIssue.ts
+function parseIssue(input) {
+  const match = /([A-Z]{2,}-\d+)/.exec(input);
+  return match == null ? void 0 : match[1];
+}
+__name(parseIssue, "parseIssue");
+
+// jira/sync-pr-with-issue/index.ts
 var token = (0, import_core.getInput)("token", { required: true });
-var ticketPlaceholder = (0, import_core.getInput)("ticket-placeholder");
+var issuePlaceholder = (0, import_core.getInput)("issue-placeholder");
 var jiraNamespace = (0, import_core.getInput)("jira-namespace");
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
 var _a;
 var PR_NUMBER = (_a = import_github.context.payload.pull_request) == null ? void 0 : _a.number;
-function parseTicket(input) {
-  const match = /([A-Z]{2,}-\d+)/.exec(input);
-  return match == null ? void 0 : match[1];
-}
-__name(parseTicket, "parseTicket");
 async function main() {
   var _a2;
   if (!PR_NUMBER || !HEAD_REF) {
@@ -5013,27 +5017,27 @@ async function main() {
     return;
   }
   const octokit = (0, import_github.getOctokit)(token);
-  const ticket = parseTicket(HEAD_REF);
-  if (!ticket) {
-    (0, import_core.info)("Skipping... Could not find ticket");
+  const issue = parseIssue(HEAD_REF);
+  if (!issue) {
+    (0, import_core.info)("Skipping... Could not find issue");
     return;
   }
-  (0, import_core.info)(`Found ticket: ${ticket}`);
+  (0, import_core.info)(`Found issue: ${issue}`);
   const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
-  if (!pr.title.includes(ticket)) {
+  if (!pr.title.includes(issue)) {
     (0, import_core.info)("Updating PR title...");
     await octokit.rest.pulls.update({
       pull_number: pr.number,
       owner: import_github.context.repo.owner,
       repo: import_github.context.repo.repo,
-      title: `${pr.title} [${ticket}]`,
-      body: (_a2 = pr.body) == null ? void 0 : _a2.replace(ticketPlaceholder, `https://${jiraNamespace}.atlassian.net/browse/${ticket}`)
+      title: `${pr.title} [${issue}]`,
+      body: (_a2 = pr.body) == null ? void 0 : _a2.replace(issuePlaceholder, `https://${jiraNamespace}.atlassian.net/browse/${issue}`)
     });
     (0, import_core.info)("Updated PR title");
   } else {
-    (0, import_core.info)("Skipping update. PR has already ticket number.");
+    (0, import_core.info)("Skipping update. PR has already issue number.");
   }
-  (0, import_core.setOutput)("ticket", ticket);
+  (0, import_core.setOutput)("issue", issue);
 }
 __name(main, "main");
 main().catch(import_core.setFailed);

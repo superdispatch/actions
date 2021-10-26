@@ -1,17 +1,13 @@
 import { getInput, info, setFailed, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
+import { parseIssue } from '../utils/JiraIssue';
 
 const token = getInput('token', { required: true });
-const ticketPlaceholder = getInput('ticket-placeholder');
+const issuePlaceholder = getInput('issue-placeholder');
 const jiraNamespace = getInput('jira-namespace');
 
 const HEAD_REF = process.env.GITHUB_HEAD_REF;
 const PR_NUMBER = context.payload.pull_request?.number;
-
-function parseTicket(input: string) {
-  const match = /([A-Z]{2,}-\d+)/.exec(input);
-  return match?.[1];
-}
 
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
@@ -20,38 +16,38 @@ async function main() {
   }
 
   const octokit = getOctokit(token);
-  const ticket = parseTicket(HEAD_REF);
+  const issue = parseIssue(HEAD_REF);
 
-  if (!ticket) {
-    info('Skipping... Could not find ticket');
+  if (!issue) {
+    info('Skipping... Could not find issue');
     return;
   }
 
-  info(`Found ticket: ${ticket}`);
+  info(`Found issue: ${issue}`);
 
   const { data: pr } = await octokit.request(
     'GET /repos/{owner}/{repo}/pulls/{pull_number}',
     { ...context.repo, pull_number: PR_NUMBER },
   );
 
-  if (!pr.title.includes(ticket)) {
+  if (!pr.title.includes(issue)) {
     info('Updating PR title...');
     await octokit.rest.pulls.update({
       pull_number: pr.number,
       owner: context.repo.owner,
       repo: context.repo.repo,
-      title: `${pr.title} [${ticket}]`,
+      title: `${pr.title} [${issue}]`,
       body: pr.body?.replace(
-        ticketPlaceholder,
-        `https://${jiraNamespace}.atlassian.net/browse/${ticket}`,
+        issuePlaceholder,
+        `https://${jiraNamespace}.atlassian.net/browse/${issue}`,
       ),
     });
     info('Updated PR title');
   } else {
-    info('Skipping update. PR has already ticket number.');
+    info('Skipping update. PR has already issue number.');
   }
 
-  setOutput('ticket', ticket);
+  setOutput('issue', issue);
 }
 
 main().catch(setFailed);
