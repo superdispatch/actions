@@ -1,4 +1,4 @@
-name: 'JIRA remove link'
+name: 'Set JIRA remote link'
 description: 'Create or update jira remote link'
 author: superdispatch
 inputs:
