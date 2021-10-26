@@ -27176,9 +27176,9 @@ var require_asynckit = __commonJS({
   }
 });
 
-// node_modules/form-data/lib/populate.js
+// node_modules/@azure/core-http/node_modules/form-data/lib/populate.js
 var require_populate = __commonJS({
-  "node_modules/form-data/lib/populate.js"(exports2, module2) {
+  "node_modules/@azure/core-http/node_modules/form-data/lib/populate.js"(exports2, module2) {
     module2.exports = function(dst, src) {
       Object.keys(src).forEach(function(prop) {
         dst[prop] = dst[prop] || src[prop];
@@ -27188,9 +27188,9 @@ var require_populate = __commonJS({
   }
 });
 
-// node_modules/form-data/lib/form_data.js
+// node_modules/@azure/core-http/node_modules/form-data/lib/form_data.js
 var require_form_data = __commonJS({
-  "node_modules/form-data/lib/form_data.js"(exports2, module2) {
+  "node_modules/@azure/core-http/node_modules/form-data/lib/form_data.js"(exports2, module2) {
     var CombinedStream = require_combined_stream();
     var util = require("util");
     var path3 = require("path");
