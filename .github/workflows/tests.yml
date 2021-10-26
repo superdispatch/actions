@@ -187,14 +187,14 @@ jobs:
         with:
           limit: 1
 
-  sync-ticket:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test sync-ticket') }}
+  sync-pr-with-issue:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test sync-pr-with-issue') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./sync-ticket
-        id: ticket
+      - uses: ./jira/sync-pr-with-issue
+        id: sync
         with:
           jira-namespace: test
-      - run: echo ${{ steps.ticket.outputs.ticket }}
+      - run: echo ${{ steps.sync.outputs.issue }}
