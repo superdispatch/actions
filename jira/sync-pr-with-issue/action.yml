@@ -1,24 +1,25 @@
-name: 'Sync ticket with PR'
-description: 'Updates PR details for ticket'
+name: 'Sync issue with PR'
+description: 'Updates PR details for JIRA issue'
 author: 'superdispatch'
+
 inputs:
   token:
     required: true
     default: '${{ github.token }}'
     description: 'github token'
 
-  ticket-placeholder:
-    description: 'Ticket placeholder text in PR body'
+  issue-placeholder:
+    description: 'Issue placeholder text in PR body'
     required: false
-    default: '<!--TICKET_LINK-->'
+    default: '<!--ISSUE_LINK-->'
 
   jira-namespace:
     description: 'JIRA namespace'
     required: true
 
 outputs:
-  ticket:
-    description: 'JIRA Ticket number'
+  issue:
+    description: 'JIRA Issue number'
 
 runs:
   using: 'node12'
