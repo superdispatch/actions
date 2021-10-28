@@ -9,10 +9,7 @@ main().catch(setFailed);
 
 async function main() {
   const jira = createClient();
-  const issues = changelog
-    .split('\n')
-    .map(parseIssue)
-    .filter((value): value is string => !!value);
+  const issues = parseIssues(changelog);
 
   if (!issues.length) {
     info('Could not find issues');
@@ -40,4 +37,13 @@ async function main() {
       }
     }
   });
+}
+
+function parseIssues(input: string): string[] {
+  const issues = input
+    .split('\n')
+    .map(parseIssue)
+    .filter((value): value is string => !!value);
+
+  return Array.from(new Set(issues));
 }
