@@ -53511,7 +53511,7 @@ var transitionTarget = (0, import_core.getInput)("transition-target", { required
 main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
-  const issues = changelog.split("\n").map(parseIssue).filter((value) => !!value);
+  const issues = parseIssues(changelog);
   if (!issues.length) {
     (0, import_core.info)("Could not find issues");
     return;
@@ -53533,6 +53533,11 @@ async function main() {
   });
 }
 __name(main, "main");
+function parseIssues(input) {
+  const issues = input.split("\n").map(parseIssue).filter((value) => !!value);
+  return Array.from(new Set(issues));
+}
+__name(parseIssues, "parseIssues");
 /*!
  *  Copyright 2010 LearnBoost <dev@learnboost.com>
  *
