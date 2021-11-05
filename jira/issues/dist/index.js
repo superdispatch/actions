@@ -26647,8 +26647,8 @@ var require_ssh_private = __commonJS({
       var ret2 = {};
       var key = rfc4253.readInternal(ret2, "private", buf.remainder());
       buf.skip(ret2.consumed);
-      var comment = buf.readString();
-      key.comment = comment;
+      var comment2 = buf.readString();
+      key.comment = comment2;
       return key;
     }
     __name(readSSHPrivate, "readSSHPrivate");
@@ -27362,7 +27362,7 @@ var require_putty = __commonJS({
       assert.equal(parts[0].toLowerCase(), "encryption");
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "comment");
-      var comment = parts[1];
+      var comment2 = parts[1];
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "public-lines");
       var publicLines = parseInt(parts[1], 10);
@@ -27375,7 +27375,7 @@ var require_putty = __commonJS({
       if (key.type !== keyType) {
         throw new Error("Outer key algorithm mismatch");
       }
-      key.comment = comment;
+      key.comment = comment2;
       return key;
     }
     __name(read, "read");
@@ -27397,11 +27397,11 @@ var require_putty = __commonJS({
         throw new Error("Must be a public key");
       var alg = rfc4253.keyTypeToAlg(key);
       var buf = rfc4253.write(key);
-      var comment = key.comment || "";
+      var comment2 = key.comment || "";
       var b64 = buf.toString("base64");
       var lines = wrap(b64, 64);
       lines.unshift("Public-Lines: " + lines.length);
-      lines.unshift("Comment: " + comment);
+      lines.unshift("Comment: " + comment2);
       lines.unshift("Encryption: none");
       lines.unshift("PuTTY-User-Key-File-2: " + alg);
       return Buffer2.from(lines.join("\n") + "\n");
@@ -29891,10 +29891,10 @@ var require_utils3 = __commonJS({
         var k = sshpk.parseKey(key, "ssh");
         return k.fingerprint("md5").toString("hex");
       }, "fingerprint"),
-      pemToRsaSSHKey: /* @__PURE__ */ __name(function pemToRsaSSHKey(pem, comment) {
+      pemToRsaSSHKey: /* @__PURE__ */ __name(function pemToRsaSSHKey(pem, comment2) {
         assert.equal("string", typeof pem, "typeof pem");
         var k = sshpk.parseKey(pem, "pem");
-        k.comment = comment;
+        k.comment = comment2;
         return k.toString("ssh");
       }, "pemToRsaSSHKey")
     };
@@ -52815,12 +52815,12 @@ var require_jira = __commonJS({
         }, "listProjects")
       }, {
         key: "addComment",
-        value: /* @__PURE__ */ __name(function addComment(issueId, comment) {
+        value: /* @__PURE__ */ __name(function addComment(issueId, comment2) {
           return this.doRequest(this.makeRequestHeader(this.makeUri({
             pathname: "/issue/".concat(issueId, "/comment")
           }), {
             body: {
-              body: comment
+              body: comment2
             },
             method: "POST",
             followAllRedirects: true
@@ -52828,24 +52828,24 @@ var require_jira = __commonJS({
         }, "addComment")
       }, {
         key: "addCommentAdvanced",
-        value: /* @__PURE__ */ __name(function addCommentAdvanced(issueId, comment) {
+        value: /* @__PURE__ */ __name(function addCommentAdvanced(issueId, comment2) {
           return this.doRequest(this.makeRequestHeader(this.makeUri({
             pathname: "/issue/".concat(issueId, "/comment")
           }), {
-            body: comment,
+            body: comment2,
             method: "POST",
             followAllRedirects: true
           }));
         }, "addCommentAdvanced")
       }, {
         key: "updateComment",
-        value: /* @__PURE__ */ __name(function updateComment(issueId, commentId, comment) {
+        value: /* @__PURE__ */ __name(function updateComment(issueId, commentId, comment2) {
           var options = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {};
           return this.doRequest(this.makeRequestHeader(this.makeUri({
             pathname: "/issue/".concat(issueId, "/comment/").concat(commentId)
           }), {
             body: _objectSpread({
-              body: comment
+              body: comment2
             }, options),
             method: "PUT",
             followAllRedirects: true
@@ -53454,7 +53454,7 @@ var require_jira = __commonJS({
   }
 });
 
-// jira/transition-issues/index.ts
+// jira/issues/index.ts
 var import_core = __toModule(require_core());
 
 // jira/utils/JiraClient.ts
@@ -53505,19 +53505,24 @@ function parseIssue(input) {
 }
 __name(parseIssue, "parseIssue");
 
-// jira/transition-issues/index.ts
-var changelog = (0, import_core.getInput)("changelog", { required: true });
-var transitionTarget = (0, import_core.getInput)("transition-target", { required: true });
+// jira/issues/index.ts
+var comment = (0, import_core.getInput)("comment");
+var transitionTarget = (0, import_core.getInput)("transition");
+var issuesInput = (0, import_core.getInput)("issues", { required: true });
 main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
-  const issues = parseIssues(changelog);
+  const issues = parseIssues(issuesInput);
   if (!issues.length) {
-    (0, import_core.info)("Could not find issues");
+    (0, import_core.info)("Could not find issues. Skipping..");
     return;
   }
   (0, import_core.info)(`Found ${issues.length} issues.`);
   await (0, import_core.group)("Transition issues", async () => {
+    if (!transitionTarget) {
+      (0, import_core.info)("No transition target specified. Skipping..");
+      return;
+    }
     for (const issue of issues) {
       const { transitions } = await jira.listTransitions(issue);
       const transition = transitions.find((item) => item.name === transitionTarget);
@@ -53527,8 +53532,18 @@ async function main() {
           transition: { id: transition.id }
         });
       } else {
-        (0, import_core.info)(`Transition called "${transitionTarget}" is not available for "${issue}" issue.`);
+        (0, import_core.info)(`Cannot transition "${issue}" to "${transitionTarget}".`);
       }
+    }
+  });
+  await (0, import_core.group)("Comment issues", async () => {
+    if (!comment) {
+      (0, import_core.info)("No comment specified. Skipping..");
+      return;
+    }
+    for (const issue of issues) {
+      (0, import_core.info)(`Commenting "${issue}" issue.`);
+      await jira.addComment(issue, comment);
     }
   });
 }

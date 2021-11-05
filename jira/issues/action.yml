@@ -2,9 +2,13 @@ name: 'Transition issues'
 description: 'Transition JIRA issues'
 author: superdispatch
 inputs:
-  transition-target:
+  transition:
     description: 'JIRA transition target'
-    required: true
+    required: false
+
+  comment:
+    description: 'JIRA card comment'
+    required: false
 
   changelog:
     description: 'Changelog'
