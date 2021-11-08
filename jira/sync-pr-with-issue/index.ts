@@ -3,8 +3,7 @@ import { context, getOctokit } from '@actions/github';
 import { parseIssue } from '../utils/JiraIssue';
 
 const token = getInput('token', { required: true });
-const issuePlaceholder = getInput('issue-placeholder');
-const jiraNamespace = getInput('jira-namespace');
+const jiraNamespace = getInput('jira-namespace', { required: true });
 
 const HEAD_REF = process.env.GITHUB_HEAD_REF;
 const PR_NUMBER = context.payload.pull_request?.number;
@@ -31,16 +30,18 @@ async function main() {
   );
 
   if (!pr.title.includes(issue)) {
-    info('Updating PR title...');
+    info('Updating PR...');
     await octokit.rest.pulls.update({
       pull_number: pr.number,
       owner: context.repo.owner,
       repo: context.repo.repo,
-      title: `${pr.title} [${issue}]`,
-      body: pr.body?.replace(
-        issuePlaceholder,
-        `https://${jiraNamespace}.atlassian.net/browse/${issue}`,
-      ),
+      title: `[${issue}] ${pr.title}`,
+      body: `${pr.body || ''}
+      
+**JIRA card:**
+
+[issue](https://${jiraNamespace}.atlassian.net/browse/${issue})
+`,
     });
     info('Updated PR title');
   } else {

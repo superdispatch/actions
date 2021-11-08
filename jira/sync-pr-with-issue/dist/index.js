@@ -4998,20 +4998,18 @@ var import_github = __toModule(require_github());
 
 // jira/utils/JiraIssue.ts
 function parseIssue(input) {
-  const match = /([A-Z]{2,}-\d+)/.exec(input);
+  const match = /([a-z]{2,}-\d+)/.exec(input);
   return match == null ? void 0 : match[1];
 }
 __name(parseIssue, "parseIssue");
 
 // jira/sync-pr-with-issue/index.ts
 var token = (0, import_core.getInput)("token", { required: true });
-var issuePlaceholder = (0, import_core.getInput)("issue-placeholder");
-var jiraNamespace = (0, import_core.getInput)("jira-namespace");
+var jiraNamespace = (0, import_core.getInput)("jira-namespace", { required: true });
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
 var _a;
 var PR_NUMBER = (_a = import_github.context.payload.pull_request) == null ? void 0 : _a.number;
 async function main() {
-  var _a2;
   if (!PR_NUMBER || !HEAD_REF) {
     (0, import_core.info)("Skipping... This action runs in PR only");
     return;
@@ -5025,13 +5023,18 @@ async function main() {
   (0, import_core.info)(`Found issue: ${issue}`);
   const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
   if (!pr.title.includes(issue)) {
-    (0, import_core.info)("Updating PR title...");
+    (0, import_core.info)("Updating PR...");
     await octokit.rest.pulls.update({
       pull_number: pr.number,
       owner: import_github.context.repo.owner,
       repo: import_github.context.repo.repo,
-      title: `${pr.title} [${issue}]`,
-      body: (_a2 = pr.body) == null ? void 0 : _a2.replace(issuePlaceholder, `https://${jiraNamespace}.atlassian.net/browse/${issue}`)
+      title: `[${issue}] ${pr.title}`,
+      body: `${pr.body || ""}
+      
+**JIRA card:**
+
+[issue](https://${jiraNamespace}.atlassian.net/browse/${issue})
+`
     });
     (0, import_core.info)("Updated PR title");
   } else {
