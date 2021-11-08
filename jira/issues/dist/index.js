@@ -53500,8 +53500,8 @@ __name(getEnv, "getEnv");
 
 // jira/utils/JiraIssue.ts
 function parseIssue(input) {
-  const match = /([A-Z]{2,}-\d+)/.exec(input);
-  return match == null ? void 0 : match[1];
+  const match = /([a-z]{2,}-\d+)/.exec(input);
+  return match == null ? void 0 : match[1].toUpperCase();
 }
 __name(parseIssue, "parseIssue");
 

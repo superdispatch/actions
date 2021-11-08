@@ -8,11 +8,6 @@ inputs:
     default: '${{ github.token }}'
     description: 'github token'
 
-  issue-placeholder:
-    description: 'Issue placeholder text in PR body'
-    required: false
-    default: '<!--ISSUE_LINK-->'
-
   jira-namespace:
     description: 'JIRA namespace'
     required: true
