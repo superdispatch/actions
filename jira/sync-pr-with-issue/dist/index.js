@@ -4999,7 +4999,7 @@ var import_github = __toModule(require_github());
 // jira/utils/JiraIssue.ts
 function parseIssue(input) {
   const match = /([a-z]{2,}-\d+)/.exec(input);
-  return match == null ? void 0 : match[1];
+  return match == null ? void 0 : match[1].toUpperCase();
 }
 __name(parseIssue, "parseIssue");
 
@@ -5022,7 +5022,7 @@ async function main() {
   }
   (0, import_core.info)(`Found issue: ${issue}`);
   const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
-  if (!pr.title.includes(issue)) {
+  if (!pr.title.toLowerCase().includes(issue.toLowerCase())) {
     (0, import_core.info)("Updating PR...");
     await octokit.rest.pulls.update({
       pull_number: pr.number,
@@ -5033,7 +5033,7 @@ async function main() {
       
 **JIRA card:**
 
-[issue](https://${jiraNamespace}.atlassian.net/browse/${issue})
+[${issue}](https://${jiraNamespace}.atlassian.net/browse/${issue})
 `
     });
     (0, import_core.info)("Updated PR title");

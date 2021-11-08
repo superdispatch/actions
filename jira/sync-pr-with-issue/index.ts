@@ -40,7 +40,7 @@ async function main() {
       
 **JIRA card:**
 
-[issue](https://${jiraNamespace}.atlassian.net/browse/${issue})
+[${issue}](https://${jiraNamespace}.atlassian.net/browse/${issue})
 `,
     });
     info('Updated PR title');
