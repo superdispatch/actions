@@ -29,7 +29,7 @@ async function main() {
     { ...context.repo, pull_number: PR_NUMBER },
   );
 
-  if (!pr.title.includes(issue)) {
+  if (!pr.title.toLowerCase().includes(issue.toLowerCase())) {
     info('Updating PR...');
     await octokit.rest.pulls.update({
       pull_number: pr.number,
