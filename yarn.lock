@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@actions/cache@^1.0.7":
+"@actions/cache@1.0.7":
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/@actions/cache/-/cache-1.0.7.tgz#d80b0f5ac1e1ad48a5e77c39685100bd49b56b1c"
   integrity sha512-MY69kxuubqUFq84pFlu8m6Poxl5sR/xyhpC4JEvno7Yg9ASYdGizEmKgt0m8ovewpYKf15UAOcSC0hzS+DuosA==
@@ -17,19 +17,19 @@
     semver "^6.1.0"
     uuid "^3.3.3"
 
-"@actions/core@^1.2.6", "@actions/core@^1.4.0":
+"@actions/core@1.4.0", "@actions/core@^1.2.6":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@actions/core/-/core-1.4.0.tgz#cf2e6ee317e314b03886adfeb20e448d50d6e524"
   integrity sha512-CGx2ilGq5i7zSLgiiGUtBCxhRRxibJYU6Fim0Q1Wg2aQL2LTnF27zbqZOrxfvFQ55eSBW0L8uVStgtKMpa0Qlg==
 
-"@actions/exec@^1.0.1", "@actions/exec@^1.1.0":
+"@actions/exec@1.1.0", "@actions/exec@^1.0.1":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@actions/exec/-/exec-1.1.0.tgz#53441d968e56d2fec69ad3f15773d4d94e01162c"
   integrity sha512-LImpN9AY0J1R1mEYJjVJfSZWU4zYOlEcwSTgPve1rFQqK5AwrEs6uWW5Rv70gbDIQIAUwI86z6B+9mPK4w9Sbg==
   dependencies:
     "@actions/io" "^1.0.1"
 
-"@actions/github@^5.0.0":
+"@actions/github@5.0.0":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/@actions/github/-/github-5.0.0.tgz#1754127976c50bd88b2e905f10d204d76d1472f8"
   integrity sha512-QvE9eAAfEsS+yOOk0cylLBIO/d6WyWIOvsxxzdrPFaud39G6BOkUwScXZn1iBzQzHyu9SBkkLSWlohDWdsasAQ==
@@ -39,18 +39,18 @@
     "@octokit/plugin-paginate-rest" "^2.13.3"
     "@octokit/plugin-rest-endpoint-methods" "^5.1.1"
 
-"@actions/glob@^0.1.0":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@actions/glob/-/glob-0.1.2.tgz#9685ed2d6583093479c8f137d067c4329d7d0974"
-  integrity sha512-SclLR7Ia5sEqjkJTPs7Sd86maMDw43p769YxBOxvPvEWuPEhpAnBsQfENOpXjFYMmhCqd127bmf+YdvJqVqR4A==
+"@actions/glob@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@actions/glob/-/glob-0.2.0.tgz#38e939ebd7c18ded5b8eee642583875f195cae63"
+  integrity sha512-mqE2a7I66kxcvsdwxs/filQwZsq25IfktMaviGfDB51v6Q3bvxnV7mFsZnvYtLhqGZbPxwBnH8AD3UYaOWb//w==
   dependencies:
     "@actions/core" "^1.2.6"
     minimatch "^3.0.4"
 
-"@actions/glob@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@actions/glob/-/glob-0.2.0.tgz#38e939ebd7c18ded5b8eee642583875f195cae63"
-  integrity sha512-mqE2a7I66kxcvsdwxs/filQwZsq25IfktMaviGfDB51v6Q3bvxnV7mFsZnvYtLhqGZbPxwBnH8AD3UYaOWb//w==
+"@actions/glob@^0.1.0":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@actions/glob/-/glob-0.1.2.tgz#9685ed2d6583093479c8f137d067c4329d7d0974"
+  integrity sha512-SclLR7Ia5sEqjkJTPs7Sd86maMDw43p769YxBOxvPvEWuPEhpAnBsQfENOpXjFYMmhCqd127bmf+YdvJqVqR4A==
   dependencies:
     "@actions/core" "^1.2.6"
     minimatch "^3.0.4"
@@ -525,7 +525,7 @@
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.0.tgz#9140779736aa2655635ee756e2467d787cfe8a2a"
   integrity sha512-c3Xy026kOF7QOTn00hbIllV1dLR9hG9NkSrLQgCVs8NF6sBU+VGWjD3wLPhmh1TYAc7ugCFsvHYMN4VcBN1U1A==
 
-"@types/jira-client@^6.21.3":
+"@types/jira-client@6.21.3":
   version "6.21.3"
   resolved "https://registry.yarnpkg.com/@types/jira-client/-/jira-client-6.21.3.tgz#a822f76354bdfaa908ad173a62e6f70bf14df7a5"
   integrity sha512-j5jVMlTI1kwkFT/Sxoi3eLUhNg6X7EqH0TRthrpwlwjdIr81ehigXVJ7FMUH8/xY4I2TNwVQL0MqlemZonbNpA==
@@ -583,7 +583,7 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/pretty-bytes@^5.2.0":
+"@types/pretty-bytes@5.2.0":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@types/pretty-bytes/-/pretty-bytes-5.2.0.tgz#857dcf4a21839e5bfb1c188dda62f986fdfa2348"
   integrity sha512-dJhMFphDp6CE+OAZVyqzha9KsmgeqRMbZN4dIbMSrfObiuzfjucwKdn6zu+ttrjMwmz+Vz71/xXgHx5pO0axhA==
@@ -1549,7 +1549,7 @@ es-to-primitive@^1.2.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
 
-esbuild@^0.12.9:
+esbuild@0.12.9:
   version "0.12.9"
   resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.9.tgz#bed4e7087c286cd81d975631f77d47feb1660070"
   integrity sha512-MWRhAbMOJ9RJygCrt778rz/qNYgA4ZVj6aXnNPxFjs7PmIpb0fuB9Gmg5uWrr6n++XKwwm/RmSz6RR5JL2Ocsw==
@@ -1742,7 +1742,7 @@ eslint-visitor-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/eslint-visitor-keys/-/eslint-visitor-keys-2.1.0.tgz#f65328259305927392c938ed44eb0a5c9b2bd303"
   integrity sha512-0rSmRBzXgDzIsD6mGdJgevzgezI534Cer5L/vyMX0kHzT/jiB43jRhd9YUlMGYLQy2zprNmoT8qasCGtY+QaKw==
 
-eslint@^7.28.0:
+eslint@7.28.0:
   version "7.28.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-7.28.0.tgz#435aa17a0b82c13bb2be9d51408b617e49c1e820"
   integrity sha512-UMfH0VSjP0G4p3EWirscJEQ/cHqnT/iuH6oNZOB94nBjWbMnhGEPxsZm1eyIW0C/9jLI0Fow4W5DXLjEI7mn1g==
@@ -2309,7 +2309,7 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-husky@^6.0.0:
+husky@6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/husky/-/husky-6.0.0.tgz#810f11869adf51604c32ea577edbc377d7f9319e"
   integrity sha512-SQS2gDTB7tBN486QSoKPKQItZw97BMOd+Kdb6ghfpBc0yXyzrddI0oDV5MkDAbuB4X2mO3/nj60TRMcYxwzZeQ==
@@ -2710,7 +2710,7 @@ issue-regex@^3.1.0:
   resolved "https://registry.yarnpkg.com/issue-regex/-/issue-regex-3.1.0.tgz#0671f094d6449c5b712fac3c9562aecb727d709e"
   integrity sha512-0RHjbtw9QXeSYnIEY5Yrp2QZrdtz21xBDV9C/GIlY2POmgoS6a7qjkYS5siRKXScnuAj5/SPv1C3YForNCHTJA==
 
-jira-client@^6.23.0:
+jira-client@6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/jira-client/-/jira-client-6.23.0.tgz#fae98fb2385868e284edd7d555da6eba1330af36"
   integrity sha512-cVa2ay++S1/GxBPJSlfV9EAEpHWo8OhF38Nuf9uR7ErN7uIzGPjsHG2iR/IZnjUX9DHNzpLrV0CBH+5FxsMBIw==
@@ -2865,7 +2865,7 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
-lint-staged@^11.0.0:
+lint-staged@11.0.0:
   version "11.0.0"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-11.0.0.tgz#24d0a95aa316ba28e257f5c4613369a75a10c712"
   integrity sha512-3rsRIoyaE8IphSUtO1RVTFl1e0SLBtxxUOPBtHxQgBHS5/i6nqvjcUfNioMa4BU9yGnPzbO+xkfLtXtxBpCzjw==
@@ -3300,7 +3300,7 @@ normalize-url@^6.0.1:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.0.1.tgz#a4f27f58cf8c7b287b440b8a8201f42d0b00d256"
   integrity sha512-VU4pzAuh7Kip71XEmO9aNREYAdMHFGTVj/i+CaTImS8x0i1d3jUZkXhqluy/PRgjPLMgsLQulYY3PJ/aSbSjpQ==
 
-np@^7.5.0:
+np@7.5.0:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/np/-/np-7.5.0.tgz#03e3f8fb77ff0b8718dfd54b76cbd3c0f383a221"
   integrity sha512-CdpgqtO6JpDKJjQ2gueY0jnbz6APWA9wFXSwPv5bXg4seSBibHqQ8JyWxYlS8YRfVbpeDtj582wcAWTlfy5qNA==
@@ -3755,12 +3755,12 @@ prettier-plugin-packagejson@^2.2.9:
   dependencies:
     sort-package-json "1.50.0"
 
-prettier@^2.3.1:
+prettier@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.1.tgz#76903c3f8c4449bc9ac597acefa24dc5ad4cbea6"
   integrity sha512-p+vNbgpLjif/+D+DwAZAbndtRrR0md0MwfmOVN9N+2RgyACMT+7tfaRnT+WDPkqnuVwleyuBIG2XBxKDme3hPA==
 
-pretty-bytes@*, pretty-bytes@^5.6.0:
+pretty-bytes@*, pretty-bytes@5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/pretty-bytes/-/pretty-bytes-5.6.0.tgz#356256f643804773c82f64723fe78c92c62beaeb"
   integrity sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==
@@ -4821,7 +4821,7 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zlib@^1.0.5:
+zlib@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/zlib/-/zlib-1.0.5.tgz#6e7c972fc371c645a6afb03ab14769def114fcc0"
   integrity sha1-bnyXL8NxxkWmr7A6sUdp3vEU/MA=
