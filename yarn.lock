@@ -434,7 +434,7 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.0.1.tgz#d26729db850fa327b7cacc5522252194404226f5"
   integrity sha512-Qm9hBEBu18wt1PO2flE7LPb30BHMQt1eQgbV76YntdNk73XZGpn3izvGTYxbGgzXKgbCjiia0uxTd3aTNQrY/g==
 
-"@superdispatch/eslint-plugin@^0.3.0":
+"@superdispatch/eslint-plugin@0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@superdispatch/eslint-plugin/-/eslint-plugin-0.3.0.tgz#51c5f09befab3fdf92c7054a12c2ff3834a2fe5d"
   integrity sha512-3CVT3RZDURUkBXZg5PQhaNmkMVl7fFxDUvW1bg0/TX/N4RwQxM0cTyJSQKvbKrMSUGtB07SXDRAhGDJ9jwA2/Q==
@@ -456,7 +456,7 @@
     eslint-plugin-testing-library "^3.10.1"
     lodash "^4.17.19"
 
-"@superdispatch/js-tools@^0.3.0":
+"@superdispatch/js-tools@0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@superdispatch/js-tools/-/js-tools-0.3.0.tgz#9de0804d7fc01daff20f472a6cfb747fa6a354cd"
   integrity sha512-ePw/knzkNjKgyEICJjjvrB1zV11SnQLbKKPkJicDdb/ntfHH11Cr/TJGimadT641pHlTFwAduNEgbqdQpzCYbQ==
@@ -470,7 +470,7 @@
     listr "^0.14.3"
     yarn-deduplicate "^3.1.0"
 
-"@superdispatch/prettier-config@^0.3.0":
+"@superdispatch/prettier-config@0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@superdispatch/prettier-config/-/prettier-config-0.3.0.tgz#78a3768dbfac5b03f1eb2648f8588d25f954d562"
   integrity sha512-qfHf39okiUliHbrJvDlp86JTVOdLCJRiHPQvty5oSqTgSXSp5YCo45RnpGEnqoen3cSj8+JOT1InplMY8yzlig==
@@ -478,7 +478,7 @@
     prettier-plugin-organize-imports "^1.1.1"
     prettier-plugin-packagejson "^2.2.9"
 
-"@superdispatch/tsconfig@^0.3.0":
+"@superdispatch/tsconfig@0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@superdispatch/tsconfig/-/tsconfig-0.3.0.tgz#82983e9d4fd596744c41fa03e9574a1e888c4429"
   integrity sha512-OzRPZHPKy6pprqc2W4PL4EiZ8ktI4/r0vQmJsZOiaF51VXQ+Z0XAG0GzWgHE/EiDTgB2G1IrNhRnKLXcA313PQ==
