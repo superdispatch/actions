@@ -404,9 +404,9 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 // node_modules/@babel/runtime/helpers/interopRequireDefault.js
 var require_interopRequireDefault = __commonJS({
   "node_modules/@babel/runtime/helpers/interopRequireDefault.js"(exports2, module2) {
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : {
-        "default": obj
+    function _interopRequireDefault(obj2) {
+      return obj2 && obj2.__esModule ? obj2 : {
+        "default": obj2
       };
     }
     __name(_interopRequireDefault, "_interopRequireDefault");
@@ -427,21 +427,21 @@ var require_runtime = __commonJS({
       var iteratorSymbol = $Symbol.iterator || "@@iterator";
       var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
       var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-      function define2(obj, key, value) {
-        Object.defineProperty(obj, key, {
+      function define2(obj2, key, value) {
+        Object.defineProperty(obj2, key, {
           value,
           enumerable: true,
           configurable: true,
           writable: true
         });
-        return obj[key];
+        return obj2[key];
       }
       __name(define2, "define");
       try {
         define2({}, "");
       } catch (err) {
-        define2 = /* @__PURE__ */ __name(function(obj, key, value) {
-          return obj[key] = value;
+        define2 = /* @__PURE__ */ __name(function(obj2, key, value) {
+          return obj2[key] = value;
         }, "define");
       }
       function wrap(innerFn, outerFn, self2, tryLocsList) {
@@ -453,9 +453,9 @@ var require_runtime = __commonJS({
       }
       __name(wrap, "wrap");
       exports3.wrap = wrap;
-      function tryCatch2(fn, obj, arg) {
+      function tryCatch2(fn, obj2, arg) {
         try {
-          return { type: "normal", arg: fn.call(obj, arg) };
+          return { type: "normal", arg: fn.call(obj2, arg) };
         } catch (err) {
           return { type: "throw", arg: err };
         }
@@ -956,18 +956,18 @@ var require_asyncToGenerator = __commonJS({
 // node_modules/@babel/runtime/helpers/defineProperty.js
 var require_defineProperty = __commonJS({
   "node_modules/@babel/runtime/helpers/defineProperty.js"(exports2, module2) {
-    function _defineProperty(obj, key, value) {
-      if (key in obj) {
-        Object.defineProperty(obj, key, {
+    function _defineProperty(obj2, key, value) {
+      if (key in obj2) {
+        Object.defineProperty(obj2, key, {
           value,
           enumerable: true,
           configurable: true,
           writable: true
         });
       } else {
-        obj[key] = value;
+        obj2[key] = value;
       }
-      return obj;
+      return obj2;
     }
     __name(_defineProperty, "_defineProperty");
     module2.exports = _defineProperty;
@@ -1033,8 +1033,8 @@ var require_es5 = __commonJS({
         getPrototypeOf: Object.getPrototypeOf,
         isArray: Array.isArray,
         isES5,
-        propertyIsWritable: function(obj, prop) {
-          var descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+        propertyIsWritable: function(obj2, prop) {
+          var descriptor = Object.getOwnPropertyDescriptor(obj2, prop);
           return !!(!descriptor || descriptor.writable || descriptor.set);
         }
       };
@@ -1058,19 +1058,19 @@ var require_es5 = __commonJS({
         o[key] = desc.value;
         return o;
       }, "ObjectDefineProperty");
-      ObjectFreeze = /* @__PURE__ */ __name(function(obj) {
-        return obj;
+      ObjectFreeze = /* @__PURE__ */ __name(function(obj2) {
+        return obj2;
       }, "ObjectFreeze");
-      ObjectGetPrototypeOf = /* @__PURE__ */ __name(function(obj) {
+      ObjectGetPrototypeOf = /* @__PURE__ */ __name(function(obj2) {
         try {
-          return Object(obj).constructor.prototype;
+          return Object(obj2).constructor.prototype;
         } catch (e) {
           return proto;
         }
       }, "ObjectGetPrototypeOf");
-      ArrayIsArray = /* @__PURE__ */ __name(function(obj) {
+      ArrayIsArray = /* @__PURE__ */ __name(function(obj2) {
         try {
-          return str.call(obj) === "[object Array]";
+          return str.call(obj2) === "[object Array]";
         } catch (e) {
           return false;
         }
@@ -1167,28 +1167,28 @@ var require_util = __commonJS({
       return ret2;
     }
     __name(withAppended, "withAppended");
-    function getDataPropertyOrDefault(obj, key, defaultValue) {
+    function getDataPropertyOrDefault(obj2, key, defaultValue) {
       if (es5.isES5) {
-        var desc = Object.getOwnPropertyDescriptor(obj, key);
+        var desc = Object.getOwnPropertyDescriptor(obj2, key);
         if (desc != null) {
           return desc.get == null && desc.set == null ? desc.value : defaultValue;
         }
       } else {
-        return {}.hasOwnProperty.call(obj, key) ? obj[key] : void 0;
+        return {}.hasOwnProperty.call(obj2, key) ? obj2[key] : void 0;
       }
     }
     __name(getDataPropertyOrDefault, "getDataPropertyOrDefault");
-    function notEnumerableProp(obj, name, value) {
-      if (isPrimitive(obj))
-        return obj;
+    function notEnumerableProp(obj2, name, value) {
+      if (isPrimitive(obj2))
+        return obj2;
       var descriptor = {
         value,
         configurable: true,
         enumerable: false,
         writable: true
       };
-      es5.defineProperty(obj, name, descriptor);
-      return obj;
+      es5.defineProperty(obj2, name, descriptor);
+      return obj2;
     }
     __name(notEnumerableProp, "notEnumerableProp");
     function thrower(r) {
@@ -1211,13 +1211,13 @@ var require_util = __commonJS({
       }, "isExcludedProto");
       if (es5.isES5) {
         var getKeys = Object.getOwnPropertyNames;
-        return function(obj) {
+        return function(obj2) {
           var ret2 = [];
           var visitedKeys = Object.create(null);
-          while (obj != null && !isExcludedProto(obj)) {
+          while (obj2 != null && !isExcludedProto(obj2)) {
             var keys;
             try {
-              keys = getKeys(obj);
+              keys = getKeys(obj2);
             } catch (e) {
               return ret2;
             }
@@ -1226,24 +1226,24 @@ var require_util = __commonJS({
               if (visitedKeys[key])
                 continue;
               visitedKeys[key] = true;
-              var desc = Object.getOwnPropertyDescriptor(obj, key);
+              var desc = Object.getOwnPropertyDescriptor(obj2, key);
               if (desc != null && desc.get == null && desc.set == null) {
                 ret2.push(key);
               }
             }
-            obj = es5.getPrototypeOf(obj);
+            obj2 = es5.getPrototypeOf(obj2);
           }
           return ret2;
         };
       } else {
         var hasProp = {}.hasOwnProperty;
-        return function(obj) {
-          if (isExcludedProto(obj))
+        return function(obj2) {
+          if (isExcludedProto(obj2))
             return [];
           var ret2 = [];
           enumeration:
-            for (var key in obj) {
-              if (hasProp.call(obj, key)) {
+            for (var key in obj2) {
+              if (hasProp.call(obj2, key)) {
                 ret2.push(key);
               } else {
                 for (var i = 0; i < excludedPrototypes.length; ++i) {
@@ -1305,16 +1305,16 @@ var require_util = __commonJS({
       return ret2;
     }
     __name(filledRange, "filledRange");
-    function safeToString(obj) {
+    function safeToString(obj2) {
       try {
-        return obj + "";
+        return obj2 + "";
       } catch (e) {
         return "[no string representation]";
       }
     }
     __name(safeToString, "safeToString");
-    function isError(obj) {
-      return obj instanceof Error || obj !== null && typeof obj === "object" && typeof obj.message === "string" && typeof obj.name === "string";
+    function isError(obj2) {
+      return obj2 instanceof Error || obj2 !== null && typeof obj2 === "object" && typeof obj2.message === "string" && typeof obj2.name === "string";
     }
     __name(isError, "isError");
     function markAsOriginatingFromRejection(e) {
@@ -1330,8 +1330,8 @@ var require_util = __commonJS({
       return e instanceof Error["__BluebirdErrorTypes__"].OperationalError || e["isOperational"] === true;
     }
     __name(originatesFromRejection, "originatesFromRejection");
-    function canAttachTrace(obj) {
-      return isError(obj) && es5.propertyIsWritable(obj, "stack");
+    function canAttachTrace(obj2) {
+      return isError(obj2) && es5.propertyIsWritable(obj2, "stack");
     }
     __name(canAttachTrace, "canAttachTrace");
     var ensureErrorObject = function() {
@@ -1353,8 +1353,8 @@ var require_util = __commonJS({
         };
       }
     }();
-    function classString(obj) {
-      return {}.toString.call(obj);
+    function classString(obj2) {
+      return {}.toString.call(obj2);
     }
     __name(classString, "classString");
     function copyDescriptors(from, to, filter) {
@@ -1604,11 +1604,11 @@ var require_queue = __commonJS({
       this[i] = arg;
       this._length = length + 1;
     };
-    Queue.prototype.push = function(fn, receiver, arg) {
+    Queue.prototype.push = function(fn, receiver2, arg) {
       var length = this.length() + 3;
       if (this._willBeOverCapacity(length)) {
         this._pushOne(fn);
-        this._pushOne(receiver);
+        this._pushOne(receiver2);
         this._pushOne(arg);
         return;
       }
@@ -1616,7 +1616,7 @@ var require_queue = __commonJS({
       this._checkCapacity(length);
       var wrapMask = this._capacity - 1;
       this[j + 0 & wrapMask] = fn;
-      this[j + 1 & wrapMask] = receiver;
+      this[j + 1 & wrapMask] = receiver2;
       this[j + 2 & wrapMask] = arg;
       this._length = length;
     };
@@ -1712,13 +1712,13 @@ var require_async = __commonJS({
           throw new Error("No async scheduler available\n\n    See http://goo.gl/MqrFmX\n");
         }
     };
-    function AsyncInvokeLater(fn, receiver, arg) {
-      this._lateQueue.push(fn, receiver, arg);
+    function AsyncInvokeLater(fn, receiver2, arg) {
+      this._lateQueue.push(fn, receiver2, arg);
       this._queueTick();
     }
     __name(AsyncInvokeLater, "AsyncInvokeLater");
-    function AsyncInvoke(fn, receiver, arg) {
-      this._normalQueue.push(fn, receiver, arg);
+    function AsyncInvoke(fn, receiver2, arg) {
+      this._normalQueue.push(fn, receiver2, arg);
       this._queueTick();
     }
     __name(AsyncInvoke, "AsyncInvoke");
@@ -1741,9 +1741,9 @@ var require_async = __commonJS({
       if (typeof fn !== "function") {
         fn._settlePromises();
       } else {
-        var receiver = queue.shift();
+        var receiver2 = queue.shift();
         var arg = queue.shift();
-        fn.call(receiver, arg);
+        fn.call(receiver2, arg);
       }
     }
     __name(_drainQueueStep, "_drainQueueStep");
@@ -1807,11 +1807,12 @@ var require_errors = __commonJS({
       _RangeError = subError("RangeError", "range error");
     }
     var methods = "join pop push shift unshift slice filter forEach some every map indexOf lastIndexOf reduce reduceRight sort reverse".split(" ");
-    for (var i = 0; i < methods.length; ++i) {
+    for (i = 0; i < methods.length; ++i) {
       if (typeof Array.prototype[methods[i]] === "function") {
         AggregateError.prototype[methods[i]] = Array.prototype[methods[i]];
       }
     }
+    var i;
     es52.defineProperty(AggregateError.prototype, "length", {
       value: 0,
       configurable: false,
@@ -1890,11 +1891,11 @@ var require_thenables = __commonJS({
       var util = require_util();
       var errorObj2 = util.errorObj;
       var isObject2 = util.isObject;
-      function tryConvertToPromise(obj, context) {
-        if (isObject2(obj)) {
-          if (obj instanceof Promise2)
-            return obj;
-          var then = getThen(obj);
+      function tryConvertToPromise(obj2, context) {
+        if (isObject2(obj2)) {
+          if (obj2 instanceof Promise2)
+            return obj2;
+          var then = getThen(obj2);
           if (then === errorObj2) {
             if (context)
               context._pushContext();
@@ -1903,24 +1904,24 @@ var require_thenables = __commonJS({
               context._popContext();
             return ret2;
           } else if (typeof then === "function") {
-            if (isAnyBluebirdPromise(obj)) {
+            if (isAnyBluebirdPromise(obj2)) {
               var ret2 = new Promise2(INTERNAL);
-              obj._then(ret2._fulfill, ret2._reject, void 0, ret2, null);
+              obj2._then(ret2._fulfill, ret2._reject, void 0, ret2, null);
               return ret2;
             }
-            return doThenable(obj, then, context);
+            return doThenable(obj2, then, context);
           }
         }
-        return obj;
+        return obj2;
       }
       __name(tryConvertToPromise, "tryConvertToPromise");
-      function doGetThen(obj) {
-        return obj.then;
+      function doGetThen(obj2) {
+        return obj2.then;
       }
       __name(doGetThen, "doGetThen");
-      function getThen(obj) {
+      function getThen(obj2) {
         try {
-          return doGetThen(obj);
+          return doGetThen(obj2);
         } catch (e) {
           errorObj2.e = e;
           return errorObj2;
@@ -1928,9 +1929,9 @@ var require_thenables = __commonJS({
       }
       __name(getThen, "getThen");
       var hasProp = {}.hasOwnProperty;
-      function isAnyBluebirdPromise(obj) {
+      function isAnyBluebirdPromise(obj2) {
         try {
-          return hasProp.call(obj, "_promise0");
+          return hasProp.call(obj2, "_promise0");
         } catch (e) {
           return false;
         }
@@ -2881,16 +2882,16 @@ var require_debuggability = __commonJS({
         }
       }
       __name(fireRejectionEvent, "fireRejectionEvent");
-      function formatNonError(obj) {
+      function formatNonError(obj2) {
         var str;
-        if (typeof obj === "function") {
-          str = "[function " + (obj.name || "anonymous") + "]";
+        if (typeof obj2 === "function") {
+          str = "[function " + (obj2.name || "anonymous") + "]";
         } else {
-          str = obj && typeof obj.toString === "function" ? obj.toString() : util.toString(obj);
+          str = obj2 && typeof obj2.toString === "function" ? obj2.toString() : util.toString(obj2);
           var ruselessToString = /\[object [a-zA-Z0-9$_]+\]/;
           if (ruselessToString.test(str)) {
             try {
-              var newStr = JSON.stringify(obj);
+              var newStr = JSON.stringify(obj2);
               str = newStr;
             } catch (e) {
             }
@@ -3060,9 +3061,9 @@ var require_debuggability = __commonJS({
           shouldIgnore = /* @__PURE__ */ __name(function(line) {
             return bluebirdFramePattern.test(line);
           }, "shouldIgnore");
-          return function(receiver, ignoreUntil) {
+          return function(receiver2, ignoreUntil) {
             Error.stackTraceLimit += 6;
-            captureStackTrace2(receiver, ignoreUntil);
+            captureStackTrace2(receiver2, ignoreUntil);
             Error.stackTraceLimit -= 6;
           };
         }
@@ -3339,29 +3340,29 @@ var require_nodeback = __commonJS({
     var errors = require_errors();
     var OperationalError = errors.OperationalError;
     var es52 = require_es5();
-    function isUntypedError(obj) {
-      return obj instanceof Error && es52.getPrototypeOf(obj) === Error.prototype;
+    function isUntypedError(obj2) {
+      return obj2 instanceof Error && es52.getPrototypeOf(obj2) === Error.prototype;
     }
     __name(isUntypedError, "isUntypedError");
     var rErrorKey = /^(?:name|message|stack|cause)$/;
-    function wrapAsOperationalError(obj) {
+    function wrapAsOperationalError(obj2) {
       var ret2;
-      if (isUntypedError(obj)) {
-        ret2 = new OperationalError(obj);
-        ret2.name = obj.name;
-        ret2.message = obj.message;
-        ret2.stack = obj.stack;
-        var keys = es52.keys(obj);
+      if (isUntypedError(obj2)) {
+        ret2 = new OperationalError(obj2);
+        ret2.name = obj2.name;
+        ret2.message = obj2.message;
+        ret2.stack = obj2.stack;
+        var keys = es52.keys(obj2);
         for (var i = 0; i < keys.length; ++i) {
           var key = keys[i];
           if (!rErrorKey.test(key)) {
-            ret2[key] = obj[key];
+            ret2[key] = obj2[key];
           }
         }
         return ret2;
       }
-      util.markAsOriginatingFromRejection(obj);
-      return obj;
+      util.markAsOriginatingFromRejection(obj2);
+      return obj2;
     }
     __name(wrapAsOperationalError, "wrapAsOperationalError");
     function nodebackForPromise(promise, multiArgs) {
@@ -3493,10 +3494,10 @@ var require_bind = __commonJS({
         }
         return ret2;
       };
-      Promise2.prototype._setBoundTo = function(obj) {
-        if (obj !== void 0) {
+      Promise2.prototype._setBoundTo = function(obj2) {
+        if (obj2 !== void 0) {
           this._bitField = this._bitField | 2097152;
-          this._boundTo = obj;
+          this._boundTo = obj2;
         } else {
           this._bitField = this._bitField & ~2097152;
         }
@@ -3926,21 +3927,21 @@ var require_call_get = __commonJS({
           return getCompiled(name, makeGetter, getterCache);
         }, "getGetter");
       }
-      function ensureMethod(obj, methodName) {
+      function ensureMethod(obj2, methodName) {
         var fn;
-        if (obj != null)
-          fn = obj[methodName];
+        if (obj2 != null)
+          fn = obj2[methodName];
         if (typeof fn !== "function") {
-          var message = "Object " + util.classString(obj) + " has no method '" + util.toString(methodName) + "'";
+          var message = "Object " + util.classString(obj2) + " has no method '" + util.toString(methodName) + "'";
           throw new Promise2.TypeError(message);
         }
         return fn;
       }
       __name(ensureMethod, "ensureMethod");
-      function caller(obj) {
+      function caller(obj2) {
         var methodName = this.pop();
-        var fn = ensureMethod(obj, methodName);
-        return fn.apply(obj, this);
+        var fn = ensureMethod(obj2, methodName);
+        return fn.apply(obj2, this);
       }
       __name(caller, "caller");
       Promise2.prototype.call = function(methodName) {
@@ -3961,15 +3962,15 @@ var require_call_get = __commonJS({
         args.push(methodName);
         return this._then(caller, void 0, void 0, args, void 0);
       };
-      function namedGetter(obj) {
-        return obj[this];
+      function namedGetter(obj2) {
+        return obj2[this];
       }
       __name(namedGetter, "namedGetter");
-      function indexedGetter(obj) {
+      function indexedGetter(obj2) {
         var index = +this;
         if (index < 0)
-          index = Math.max(0, index + obj.length);
-        return obj[index];
+          index = Math.max(0, index + obj2.length);
+        return obj2[index];
       }
       __name(indexedGetter, "indexedGetter");
       Promise2.prototype.get = function(propertyName) {
@@ -4020,7 +4021,7 @@ var require_generators = __commonJS({
         return null;
       }
       __name(promiseFromYieldHandler, "promiseFromYieldHandler");
-      function PromiseSpawn(generatorFunction, receiver, yieldHandler, stack) {
+      function PromiseSpawn(generatorFunction, receiver2, yieldHandler, stack) {
         if (debug.cancellation()) {
           var internal = new Promise2(INTERNAL);
           var _finallyPromise = this._finallyPromise = new Promise2(INTERNAL);
@@ -4035,7 +4036,7 @@ var require_generators = __commonJS({
         }
         this._stack = stack;
         this._generatorFunction = generatorFunction;
-        this._receiver = receiver;
+        this._receiver = receiver2;
         this._generator = void 0;
         this._yieldHandlers = typeof yieldHandler === "function" ? [yieldHandler].concat(yieldHandlers) : yieldHandlers;
         this._yieldedPromise = null;
@@ -4241,9 +4242,9 @@ var require_map = __commonJS({
             preservedValues[index] = value;
           var promise = this._promise;
           var callback = this._callback;
-          var receiver = promise._boundValue();
+          var receiver2 = promise._boundValue();
           promise._pushContext();
-          var ret2 = tryCatch2(callback).call(receiver, value, index, length);
+          var ret2 = tryCatch2(callback).call(receiver2, value, index, length);
           var promiseCreated = promise._popContext();
           debug.checkForgottenReturns(ret2, promiseCreated, preservedValues !== null ? "Promise.filter" : "Promise.map", promise);
           if (ret2 === errorObj2) {
@@ -4359,8 +4360,8 @@ var require_nodeify = __commonJS({
       __name(spreadAdapter, "spreadAdapter");
       function successAdapter(val, nodeback) {
         var promise = this;
-        var receiver = promise._boundValue();
-        var ret2 = val === void 0 ? tryCatch2(nodeback).call(receiver, null) : tryCatch2(nodeback).call(receiver, null, val);
+        var receiver2 = promise._boundValue();
+        var ret2 = val === void 0 ? tryCatch2(nodeback).call(receiver2, null) : tryCatch2(nodeback).call(receiver2, null, val);
         if (ret2 === errorObj2) {
           async.throwLater(ret2.e);
         }
@@ -4433,8 +4434,8 @@ var require_promisify = __commonJS({
         }
       }
       __name(isPromisified, "isPromisified");
-      function hasPromisified(obj, key, suffix) {
-        var val = util.getDataPropertyOrDefault(obj, key + suffix, defaultPromisified);
+      function hasPromisified(obj2, key, suffix) {
+        var val = util.getDataPropertyOrDefault(obj2, key + suffix, defaultPromisified);
         return val ? isPromisified(val) : false;
       }
       __name(hasPromisified, "hasPromisified");
@@ -4452,14 +4453,14 @@ var require_promisify = __commonJS({
         }
       }
       __name(checkValid, "checkValid");
-      function promisifiableMethods(obj, suffix, suffixRegexp, filter) {
-        var keys = util.inheritedDataKeys(obj);
+      function promisifiableMethods(obj2, suffix, suffixRegexp, filter) {
+        var keys = util.inheritedDataKeys(obj2);
         var ret2 = [];
         for (var i = 0; i < keys.length; ++i) {
           var key = keys[i];
-          var value = obj[key];
-          var passesDefaultFilter = filter === defaultFilter ? true : defaultFilter(key, value, obj);
-          if (typeof value === "function" && !isPromisified(value) && !hasPromisified(obj, key, suffix) && filter(key, value, obj, passesDefaultFilter)) {
+          var value = obj2[key];
+          var passesDefaultFilter = filter === defaultFilter ? true : defaultFilter(key, value, obj2);
+          if (typeof value === "function" && !isPromisified(value) && !hasPromisified(obj2, key, suffix) && filter(key, value, obj2, passesDefaultFilter)) {
             ret2.push(key, value);
           }
         }
@@ -4495,10 +4496,10 @@ var require_promisify = __commonJS({
           }
           return 0;
         }, "parameterCount");
-        makeNodePromisifiedEval = /* @__PURE__ */ __name(function(callback, receiver, originalName, fn, _, multiArgs) {
+        makeNodePromisifiedEval = /* @__PURE__ */ __name(function(callback, receiver2, originalName, fn, _, multiArgs) {
           var newParameterCount = Math.max(0, parameterCount(fn) - 1);
           var argumentOrder = switchCaseArgumentOrder(newParameterCount);
-          var shouldProxyThis = typeof callback === "string" || receiver === THIS;
+          var shouldProxyThis = typeof callback === "string" || receiver2 === THIS;
           function generateCallForArgumentCount(count) {
             var args = argumentSequence(count).join(", ");
             var comma = count > 0 ? ", " : "";
@@ -4506,7 +4507,7 @@ var require_promisify = __commonJS({
             if (shouldProxyThis) {
               ret2 = "ret = callback.call(this, {{args}}, nodeback); break;\n";
             } else {
-              ret2 = receiver === void 0 ? "ret = callback({{args}}, nodeback); break;\n" : "ret = callback.call(receiver, {{args}}, nodeback); break;\n";
+              ret2 = receiver2 === void 0 ? "ret = callback({{args}}, nodeback); break;\n" : "ret = callback.call(receiver, {{args}}, nodeback); break;\n";
             }
             return ret2.replace("{{args}}", args).replace(", ", comma);
           }
@@ -4523,10 +4524,10 @@ var require_promisify = __commonJS({
           var getFunctionCode = typeof callback === "string" ? "this != null ? this['" + callback + "'] : fn" : "fn";
           var body = "'use strict';                                                \n        var ret = function (Parameters) {                                    \n            'use strict';                                                    \n            var len = arguments.length;                                      \n            var promise = new Promise(INTERNAL);                             \n            promise._captureStackTrace();                                    \n            var nodeback = nodebackForPromise(promise, " + multiArgs + ");   \n            var ret;                                                         \n            var callback = tryCatch([GetFunctionCode]);                      \n            switch(len) {                                                    \n                [CodeForSwitchCase]                                          \n            }                                                                \n            if (ret === errorObj) {                                          \n                promise._rejectCallback(maybeWrapAsError(ret.e), true, true);\n            }                                                                \n            if (!promise._isFateSealed()) promise._setAsyncGuaranteed();     \n            return promise;                                                  \n        };                                                                   \n        notEnumerableProp(ret, '__isPromisified__', true);                   \n        return ret;                                                          \n    ".replace("[CodeForSwitchCase]", generateArgumentSwitchCase()).replace("[GetFunctionCode]", getFunctionCode);
           body = body.replace("Parameters", parameterDeclaration(newParameterCount));
-          return new Function("Promise", "fn", "receiver", "withAppended", "maybeWrapAsError", "nodebackForPromise", "tryCatch", "errorObj", "notEnumerableProp", "INTERNAL", body)(Promise2, fn, receiver, withAppended2, maybeWrapAsError2, nodebackForPromise, util.tryCatch, util.errorObj, util.notEnumerableProp, INTERNAL);
+          return new Function("Promise", "fn", "receiver", "withAppended", "maybeWrapAsError", "nodebackForPromise", "tryCatch", "errorObj", "notEnumerableProp", "INTERNAL", body)(Promise2, fn, receiver2, withAppended2, maybeWrapAsError2, nodebackForPromise, util.tryCatch, util.errorObj, util.notEnumerableProp, INTERNAL);
         }, "makeNodePromisifiedEval");
       }
-      function makeNodePromisifiedClosure(callback, receiver, _, fn, __, multiArgs) {
+      function makeNodePromisifiedClosure(callback, receiver2, _, fn, __, multiArgs) {
         var defaultThis = function() {
           return this;
         }();
@@ -4535,8 +4536,8 @@ var require_promisify = __commonJS({
           callback = fn;
         }
         function promisified() {
-          var _receiver = receiver;
-          if (receiver === THIS)
+          var _receiver = receiver2;
+          if (receiver2 === THIS)
             _receiver = this;
           var promise = new Promise2(INTERNAL);
           promise._captureStackTrace();
@@ -4557,29 +4558,29 @@ var require_promisify = __commonJS({
       }
       __name(makeNodePromisifiedClosure, "makeNodePromisifiedClosure");
       var makeNodePromisified = canEvaluate2 ? makeNodePromisifiedEval : makeNodePromisifiedClosure;
-      function promisifyAll(obj, suffix, filter, promisifier, multiArgs) {
+      function promisifyAll(obj2, suffix, filter, promisifier, multiArgs) {
         var suffixRegexp = new RegExp(escapeIdentRegex(suffix) + "$");
-        var methods = promisifiableMethods(obj, suffix, suffixRegexp, filter);
+        var methods = promisifiableMethods(obj2, suffix, suffixRegexp, filter);
         for (var i = 0, len = methods.length; i < len; i += 2) {
           var key = methods[i];
           var fn = methods[i + 1];
           var promisifiedKey = key + suffix;
           if (promisifier === makeNodePromisified) {
-            obj[promisifiedKey] = makeNodePromisified(key, THIS, key, fn, suffix, multiArgs);
+            obj2[promisifiedKey] = makeNodePromisified(key, THIS, key, fn, suffix, multiArgs);
           } else {
             var promisified = promisifier(fn, function() {
               return makeNodePromisified(key, THIS, key, fn, suffix, multiArgs);
             });
             util.notEnumerableProp(promisified, "__isPromisified__", true);
-            obj[promisifiedKey] = promisified;
+            obj2[promisifiedKey] = promisified;
           }
         }
-        util.toFastProperties(obj);
-        return obj;
+        util.toFastProperties(obj2);
+        return obj2;
       }
       __name(promisifyAll, "promisifyAll");
-      function promisify(callback, receiver, multiArgs) {
-        return makeNodePromisified(callback, receiver, void 0, callback, null, multiArgs);
+      function promisify(callback, receiver2, multiArgs) {
+        return makeNodePromisified(callback, receiver2, void 0, callback, null, multiArgs);
       }
       __name(promisify, "promisify");
       Promise2.promisify = function(fn, options) {
@@ -4590,9 +4591,9 @@ var require_promisify = __commonJS({
           return fn;
         }
         options = Object(options);
-        var receiver = options.context === void 0 ? THIS : options.context;
+        var receiver2 = options.context === void 0 ? THIS : options.context;
         var multiArgs = !!options.multiArgs;
-        var ret2 = promisify(fn, receiver, multiArgs);
+        var ret2 = promisify(fn, receiver2, multiArgs);
         util.copyDescriptors(fn, ret2, propsFilter);
         return ret2;
       };
@@ -4666,19 +4667,19 @@ var require_props = __commonJS({
         }
         return ret2;
       }, "entriesToMap");
-      function PropertiesPromiseArray(obj) {
+      function PropertiesPromiseArray(obj2) {
         var isMap = false;
         var entries;
-        if (Es6Map !== void 0 && obj instanceof Es6Map) {
-          entries = mapToEntries(obj);
+        if (Es6Map !== void 0 && obj2 instanceof Es6Map) {
+          entries = mapToEntries(obj2);
           isMap = true;
         } else {
-          var keys = es52.keys(obj);
+          var keys = es52.keys(obj2);
           var len = keys.length;
           entries = new Array(len * 2);
           for (var i = 0; i < len; ++i) {
             var key = keys[i];
-            entries[i] = obj[key];
+            entries[i] = obj2[key];
             entries[i + len] = key;
           }
         }
@@ -5685,13 +5686,13 @@ var require_promise = __commonJS({
       Promise2.all = function(promises) {
         return new PromiseArray(promises).promise();
       };
-      Promise2.cast = function(obj) {
-        var ret2 = tryConvertToPromise(obj);
+      Promise2.cast = function(obj2) {
+        var ret2 = tryConvertToPromise(obj2);
         if (!(ret2 instanceof Promise2)) {
           ret2 = new Promise2(INTERNAL);
           ret2._captureStackTrace();
           ret2._setFulfilled();
-          ret2._rejectionHandler0 = obj;
+          ret2._rejectionHandler0 = obj2;
         }
         return ret2;
       };
@@ -5708,7 +5709,7 @@ var require_promise = __commonJS({
         }
         return async.setScheduler(fn);
       };
-      Promise2.prototype._then = function(didFulfill, didReject, _, receiver, internalData) {
+      Promise2.prototype._then = function(didFulfill, didReject, _, receiver2, internalData) {
         var haveInternalData = internalData !== void 0;
         var promise = haveInternalData ? internalData : new Promise2(INTERNAL);
         var target = this._target();
@@ -5716,11 +5717,11 @@ var require_promise = __commonJS({
         if (!haveInternalData) {
           promise._propagateFrom(this, 3);
           promise._captureStackTrace();
-          if (receiver === void 0 && (this._bitField & 2097152) !== 0) {
+          if (receiver2 === void 0 && (this._bitField & 2097152) !== 0) {
             if (!((bitField & 50397184) === 0)) {
-              receiver = this._boundValue();
+              receiver2 = this._boundValue();
             } else {
-              receiver = target === this ? void 0 : this._boundTo;
+              receiver2 = target === this ? void 0 : this._boundTo;
             }
           }
           this._fireEvent("promiseChained", this, promise);
@@ -5744,11 +5745,11 @@ var require_promise = __commonJS({
           async.invoke(settler, target, {
             handler: util.contextBind(context, handler),
             promise,
-            receiver,
+            receiver: receiver2,
             value
           });
         } else {
-          target._addCallbacks(didFulfill, didReject, promise, receiver, context);
+          target._addCallbacks(didFulfill, didReject, promise, receiver2, context);
         }
         return promise;
       };
@@ -5826,21 +5827,21 @@ var require_promise = __commonJS({
         var fulfill = follower._fulfillmentHandler0;
         var reject = follower._rejectionHandler0;
         var promise = follower._promise0;
-        var receiver = follower._receiverAt(0);
-        if (receiver === void 0)
-          receiver = UNDEFINED_BINDING;
-        this._addCallbacks(fulfill, reject, promise, receiver, null);
+        var receiver2 = follower._receiverAt(0);
+        if (receiver2 === void 0)
+          receiver2 = UNDEFINED_BINDING;
+        this._addCallbacks(fulfill, reject, promise, receiver2, null);
       };
       Promise2.prototype._migrateCallbackAt = function(follower, index) {
         var fulfill = follower._fulfillmentHandlerAt(index);
         var reject = follower._rejectionHandlerAt(index);
         var promise = follower._promiseAt(index);
-        var receiver = follower._receiverAt(index);
-        if (receiver === void 0)
-          receiver = UNDEFINED_BINDING;
-        this._addCallbacks(fulfill, reject, promise, receiver, null);
+        var receiver2 = follower._receiverAt(index);
+        if (receiver2 === void 0)
+          receiver2 = UNDEFINED_BINDING;
+        this._addCallbacks(fulfill, reject, promise, receiver2, null);
       };
-      Promise2.prototype._addCallbacks = function(fulfill, reject, promise, receiver, context) {
+      Promise2.prototype._addCallbacks = function(fulfill, reject, promise, receiver2, context) {
         var index = this._length();
         if (index >= 65535 - 4) {
           index = 0;
@@ -5848,7 +5849,7 @@ var require_promise = __commonJS({
         }
         if (index === 0) {
           this._promise0 = promise;
-          this._receiver0 = receiver;
+          this._receiver0 = receiver2;
           if (typeof fulfill === "function") {
             this._fulfillmentHandler0 = util.contextBind(context, fulfill);
           }
@@ -5858,7 +5859,7 @@ var require_promise = __commonJS({
         } else {
           var base = index * 4 - 4;
           this[base + 2] = promise;
-          this[base + 3] = receiver;
+          this[base + 3] = receiver2;
           if (typeof fulfill === "function") {
             this[base + 0] = util.contextBind(context, fulfill);
           }
@@ -5936,13 +5937,13 @@ var require_promise = __commonJS({
           promise._rejectCallback(r, true);
         }
       };
-      Promise2.prototype._settlePromiseFromHandler = function(handler, receiver, value, promise) {
+      Promise2.prototype._settlePromiseFromHandler = function(handler, receiver2, value, promise) {
         var bitField = promise._bitField;
         if ((bitField & 65536) !== 0)
           return;
         promise._pushContext();
         var x;
-        if (receiver === APPLY) {
+        if (receiver2 === APPLY) {
           if (!value || typeof value.length !== "number") {
             x = errorObj2;
             x.e = new TypeError2("cannot .spread() a non-array: " + util.classString(value));
@@ -5950,7 +5951,7 @@ var require_promise = __commonJS({
             x = tryCatch2(handler).apply(this._boundValue(), value);
           }
         } else {
-          x = tryCatch2(handler).call(receiver, value);
+          x = tryCatch2(handler).call(receiver2, value);
         }
         var promiseCreated = promise._popContext();
         bitField = promise._bitField;
@@ -5977,41 +5978,41 @@ var require_promise = __commonJS({
       Promise2.prototype._setFollowee = function(promise) {
         this._rejectionHandler0 = promise;
       };
-      Promise2.prototype._settlePromise = function(promise, handler, receiver, value) {
+      Promise2.prototype._settlePromise = function(promise, handler, receiver2, value) {
         var isPromise = promise instanceof Promise2;
         var bitField = this._bitField;
         var asyncGuaranteed = (bitField & 134217728) !== 0;
         if ((bitField & 65536) !== 0) {
           if (isPromise)
             promise._invokeInternalOnCancel();
-          if (receiver instanceof PassThroughHandlerContext && receiver.isFinallyHandler()) {
-            receiver.cancelPromise = promise;
-            if (tryCatch2(handler).call(receiver, value) === errorObj2) {
+          if (receiver2 instanceof PassThroughHandlerContext && receiver2.isFinallyHandler()) {
+            receiver2.cancelPromise = promise;
+            if (tryCatch2(handler).call(receiver2, value) === errorObj2) {
               promise._reject(errorObj2.e);
             }
           } else if (handler === reflectHandler2) {
-            promise._fulfill(reflectHandler2.call(receiver));
-          } else if (receiver instanceof Proxyable) {
-            receiver._promiseCancelled(promise);
+            promise._fulfill(reflectHandler2.call(receiver2));
+          } else if (receiver2 instanceof Proxyable) {
+            receiver2._promiseCancelled(promise);
           } else if (isPromise || promise instanceof PromiseArray) {
             promise._cancel();
           } else {
-            receiver.cancel();
+            receiver2.cancel();
           }
         } else if (typeof handler === "function") {
           if (!isPromise) {
-            handler.call(receiver, value, promise);
+            handler.call(receiver2, value, promise);
           } else {
             if (asyncGuaranteed)
               promise._setAsyncGuaranteed();
-            this._settlePromiseFromHandler(handler, receiver, value, promise);
+            this._settlePromiseFromHandler(handler, receiver2, value, promise);
           }
-        } else if (receiver instanceof Proxyable) {
-          if (!receiver._isResolved()) {
+        } else if (receiver2 instanceof Proxyable) {
+          if (!receiver2._isResolved()) {
             if ((bitField & 33554432) !== 0) {
-              receiver._promiseFulfilled(value, promise);
+              receiver2._promiseFulfilled(value, promise);
             } else {
-              receiver._promiseRejected(value, promise);
+              receiver2._promiseRejected(value, promise);
             }
           }
         } else if (isPromise) {
@@ -6027,13 +6028,13 @@ var require_promise = __commonJS({
       Promise2.prototype._settlePromiseLateCancellationObserver = function(ctx) {
         var handler = ctx.handler;
         var promise = ctx.promise;
-        var receiver = ctx.receiver;
+        var receiver2 = ctx.receiver;
         var value = ctx.value;
         if (typeof handler === "function") {
           if (!(promise instanceof Promise2)) {
-            handler.call(receiver, value, promise);
+            handler.call(receiver2, value, promise);
           } else {
-            this._settlePromiseFromHandler(handler, receiver, value, promise);
+            this._settlePromiseFromHandler(handler, receiver2, value, promise);
           }
         } else if (promise instanceof Promise2) {
           promise._reject(value);
@@ -6044,10 +6045,10 @@ var require_promise = __commonJS({
       };
       Promise2.prototype._settlePromise0 = function(handler, value, bitField) {
         var promise = this._promise0;
-        var receiver = this._receiverAt(0);
+        var receiver2 = this._receiverAt(0);
         this._promise0 = void 0;
         this._receiver0 = void 0;
-        this._settlePromise(promise, handler, receiver, value);
+        this._settlePromise(promise, handler, receiver2, value);
       };
       Promise2.prototype._clearCallbackDataAtIndex = function(index) {
         var base = index * 4 - 4;
@@ -6092,18 +6093,18 @@ var require_promise = __commonJS({
         for (var i = 1; i < len; i++) {
           var handler = this._fulfillmentHandlerAt(i);
           var promise = this._promiseAt(i);
-          var receiver = this._receiverAt(i);
+          var receiver2 = this._receiverAt(i);
           this._clearCallbackDataAtIndex(i);
-          this._settlePromise(promise, handler, receiver, value);
+          this._settlePromise(promise, handler, receiver2, value);
         }
       };
       Promise2.prototype._rejectPromises = function(len, reason) {
         for (var i = 1; i < len; i++) {
           var handler = this._rejectionHandlerAt(i);
           var promise = this._promiseAt(i);
-          var receiver = this._receiverAt(i);
+          var receiver2 = this._receiverAt(i);
           this._clearCallbackDataAtIndex(i);
-          this._settlePromise(promise, handler, receiver, reason);
+          this._settlePromise(promise, handler, receiver2, reason);
         }
       };
       Promise2.prototype._settlePromises = function() {
@@ -6618,9 +6619,9 @@ var require_lib = __commonJS({
   "node_modules/stealthy-require/lib/index.js"(exports2, module2) {
     "use strict";
     var isNative = /\.node$/;
-    function forEach(obj, callback) {
-      for (var key in obj) {
-        if (!Object.prototype.hasOwnProperty.call(obj, key)) {
+    function forEach(obj2, callback) {
+      for (var key in obj2) {
+        if (!Object.prototype.hasOwnProperty.call(obj2, key)) {
           continue;
         }
         callback(key);
@@ -6692,19 +6693,19 @@ var require_extend = __commonJS({
       }
       return toStr.call(arr) === "[object Array]";
     }, "isArray");
-    var isPlainObject = /* @__PURE__ */ __name(function isPlainObject2(obj) {
-      if (!obj || toStr.call(obj) !== "[object Object]") {
+    var isPlainObject = /* @__PURE__ */ __name(function isPlainObject2(obj2) {
+      if (!obj2 || toStr.call(obj2) !== "[object Object]") {
         return false;
       }
-      var hasOwnConstructor = hasOwn.call(obj, "constructor");
-      var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, "isPrototypeOf");
-      if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+      var hasOwnConstructor = hasOwn.call(obj2, "constructor");
+      var hasIsPrototypeOf = obj2.constructor && obj2.constructor.prototype && hasOwn.call(obj2.constructor.prototype, "isPrototypeOf");
+      if (obj2.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
         return false;
       }
       var key;
-      for (key in obj) {
+      for (key in obj2) {
       }
-      return typeof key === "undefined" || hasOwn.call(obj, key);
+      return typeof key === "undefined" || hasOwn.call(obj2, key);
     }, "isPlainObject");
     var setProperty = /* @__PURE__ */ __name(function setProperty2(target, options) {
       if (defineProperty && options.name === "__proto__") {
@@ -6718,15 +6719,15 @@ var require_extend = __commonJS({
         target[options.name] = options.newValue;
       }
     }, "setProperty");
-    var getProperty = /* @__PURE__ */ __name(function getProperty2(obj, name) {
+    var getProperty = /* @__PURE__ */ __name(function getProperty2(obj2, name) {
       if (name === "__proto__") {
-        if (!hasOwn.call(obj, name)) {
+        if (!hasOwn.call(obj2, name)) {
           return void 0;
         } else if (gOPD) {
-          return gOPD(obj, name).value;
+          return gOPD(obj2, name).value;
         }
       }
-      return obj[name];
+      return obj2[name];
     }, "getProperty");
     module2.exports = /* @__PURE__ */ __name(function extend() {
       var options, name, src, copy, copyIsArray, clone;
@@ -16352,42 +16353,42 @@ var require_cookie = __commonJS({
     }
     __name(parse, "parse");
     function jsonParse(str) {
-      var obj;
+      var obj2;
       try {
-        obj = JSON.parse(str);
+        obj2 = JSON.parse(str);
       } catch (e) {
         return e;
       }
-      return obj;
+      return obj2;
     }
     __name(jsonParse, "jsonParse");
     function fromJSON(str) {
       if (!str) {
         return null;
       }
-      var obj;
+      var obj2;
       if (typeof str === "string") {
-        obj = jsonParse(str);
-        if (obj instanceof Error) {
+        obj2 = jsonParse(str);
+        if (obj2 instanceof Error) {
           return null;
         }
       } else {
-        obj = str;
+        obj2 = str;
       }
       var c = new Cookie();
       for (var i = 0; i < Cookie.serializableProperties.length; i++) {
         var prop = Cookie.serializableProperties[i];
-        if (obj[prop] === void 0 || obj[prop] === Cookie.prototype[prop]) {
+        if (obj2[prop] === void 0 || obj2[prop] === Cookie.prototype[prop]) {
           continue;
         }
         if (prop === "expires" || prop === "creation" || prop === "lastAccessed") {
-          if (obj[prop] === null) {
+          if (obj2[prop] === null) {
             c[prop] = null;
           } else {
-            c[prop] = obj[prop] == "Infinity" ? "Infinity" : new Date(obj[prop]);
+            c[prop] = obj2[prop] == "Infinity" ? "Infinity" : new Date(obj2[prop]);
           }
         } else {
-          c[prop] = obj[prop];
+          c[prop] = obj2[prop];
         }
       }
       return c;
@@ -16491,7 +16492,7 @@ var require_cookie = __commonJS({
       Cookie.prototype[util.inspect.custom] = Cookie.prototype.inspect;
     }
     Cookie.prototype.toJSON = function() {
-      var obj = {};
+      var obj2 = {};
       var props = Cookie.serializableProperties;
       for (var i = 0; i < props.length; i++) {
         var prop = props[i];
@@ -16500,21 +16501,21 @@ var require_cookie = __commonJS({
         }
         if (prop === "expires" || prop === "creation" || prop === "lastAccessed") {
           if (this[prop] === null) {
-            obj[prop] = null;
+            obj2[prop] = null;
           } else {
-            obj[prop] = this[prop] == "Infinity" ? "Infinity" : this[prop].toISOString();
+            obj2[prop] = this[prop] == "Infinity" ? "Infinity" : this[prop].toISOString();
           }
         } else if (prop === "maxAge") {
           if (this[prop] !== null) {
-            obj[prop] = this[prop] == Infinity || this[prop] == -Infinity ? this[prop].toString() : this[prop];
+            obj2[prop] = this[prop] == Infinity || this[prop] == -Infinity ? this[prop].toString() : this[prop];
           }
         } else {
           if (this[prop] !== Cookie.prototype[prop]) {
-            obj[prop] = this[prop];
+            obj2[prop] = this[prop];
           }
         }
       }
-      return obj;
+      return obj2;
     };
     Cookie.prototype.clone = function() {
       return fromJSON(this.toJSON());
@@ -17070,8 +17071,8 @@ var require_stringify = __commonJS({
   "node_modules/json-stringify-safe/stringify.js"(exports2, module2) {
     exports2 = module2.exports = stringify;
     exports2.getSerialize = serializer;
-    function stringify(obj, replacer, spaces, cycleReplacer) {
-      return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces);
+    function stringify(obj2, replacer, spaces, cycleReplacer) {
+      return JSON.stringify(obj2, serializer(replacer, cycleReplacer), spaces);
     }
     __name(stringify, "stringify");
     function serializer(replacer, cycleReplacer) {
@@ -17170,12 +17171,12 @@ var require_helpers = __commonJS({
       return params.body || params.requestBodyStream || params.json && typeof params.json !== "boolean" || params.multipart;
     }
     __name(paramsHaveRequestBody, "paramsHaveRequestBody");
-    function safeStringify(obj, replacer) {
+    function safeStringify(obj2, replacer) {
       var ret2;
       try {
-        ret2 = JSON.stringify(obj, replacer);
+        ret2 = JSON.stringify(obj2, replacer);
       } catch (e) {
-        ret2 = jsonSafeStringify(obj, replacer);
+        ret2 = jsonSafeStringify(obj2, replacer);
       }
       return ret2;
     }
@@ -17192,10 +17193,10 @@ var require_helpers = __commonJS({
       return Buffer2.from(str || "", "utf8").toString("base64");
     }
     __name(toBase64, "toBase64");
-    function copy(obj) {
+    function copy(obj2) {
       var o = {};
-      Object.keys(obj).forEach(function(i) {
-        o[i] = obj[i];
+      Object.keys(obj2).forEach(function(i) {
+        o[i] = obj2[i];
       });
       return o;
     }
@@ -17588,11 +17589,11 @@ var require_aws4 = __commonJS({
         bodyHash = headers["X-Amz-Content-Sha256"] || headers["x-amz-content-sha256"] || hash(this.request.body || "", "hex");
       }
       if (query) {
-        var reducedQuery = Object.keys(query).reduce(function(obj, key) {
+        var reducedQuery = Object.keys(query).reduce(function(obj2, key) {
           if (!key)
-            return obj;
-          obj[encodeRfc3986Full(key)] = !Array.isArray(query[key]) ? query[key] : firstValOnly ? query[key][0] : query[key];
-          return obj;
+            return obj2;
+          obj2[encodeRfc3986Full(key)] = !Array.isArray(query[key]) ? query[key] : firstValOnly ? query[key][0] : query[key];
+          return obj2;
         }, {});
         var encodedQueryPieces = [];
         Object.keys(reducedQuery).sort().forEach(function(key) {
@@ -18617,14 +18618,16 @@ var require_ber = __commonJS({
       Reader,
       Writer
     };
-    for (var t in types) {
+    for (t in types) {
       if (types.hasOwnProperty(t))
         module2.exports[t] = types[t];
     }
-    for (var e in errors) {
+    var t;
+    for (e in errors) {
       if (errors.hasOwnProperty(e))
         module2.exports[e] = errors[e];
     }
+    var e;
   }
 });
 
@@ -22993,14 +22996,14 @@ var require_utils2 = __commonJS({
     var jsbn = require_jsbn().BigInteger;
     var nacl = require_nacl_fast();
     var MAX_CLASS_DEPTH = 3;
-    function isCompatible(obj, klass, needVer) {
-      if (obj === null || typeof obj !== "object")
+    function isCompatible(obj2, klass, needVer) {
+      if (obj2 === null || typeof obj2 !== "object")
         return false;
       if (needVer === void 0)
         needVer = klass.prototype._sshpkApiVersion;
-      if (obj instanceof klass && klass.prototype._sshpkApiVersion[0] == needVer[0])
+      if (obj2 instanceof klass && klass.prototype._sshpkApiVersion[0] == needVer[0])
         return true;
-      var proto = Object.getPrototypeOf(obj);
+      var proto = Object.getPrototypeOf(obj2);
       var depth = 0;
       while (proto.constructor.name !== klass.name) {
         proto = Object.getPrototypeOf(proto);
@@ -23011,22 +23014,22 @@ var require_utils2 = __commonJS({
         return false;
       var ver = proto._sshpkApiVersion;
       if (ver === void 0)
-        ver = klass._oldVersionDetect(obj);
+        ver = klass._oldVersionDetect(obj2);
       if (ver[0] != needVer[0] || ver[1] < needVer[1])
         return false;
       return true;
     }
     __name(isCompatible, "isCompatible");
-    function assertCompatible(obj, klass, needVer, name) {
+    function assertCompatible(obj2, klass, needVer, name) {
       if (name === void 0)
         name = "object";
-      assert.ok(obj, name + " must not be null");
-      assert.object(obj, name + " must be an object");
+      assert.ok(obj2, name + " must not be null");
+      assert.object(obj2, name + " must be an object");
       if (needVer === void 0)
         needVer = klass.prototype._sshpkApiVersion;
-      if (obj instanceof klass && klass.prototype._sshpkApiVersion[0] == needVer[0])
+      if (obj2 instanceof klass && klass.prototype._sshpkApiVersion[0] == needVer[0])
         return;
-      var proto = Object.getPrototypeOf(obj);
+      var proto = Object.getPrototypeOf(obj2);
       var depth = 0;
       while (proto.constructor.name !== klass.name) {
         proto = Object.getPrototypeOf(proto);
@@ -23035,7 +23038,7 @@ var require_utils2 = __commonJS({
       assert.strictEqual(proto.constructor.name, klass.name, name + " must be a " + klass.name + " instance");
       var ver = proto._sshpkApiVersion;
       if (ver === void 0)
-        ver = klass._oldVersionDetect(obj);
+        ver = klass._oldVersionDetect(obj2);
       assert.ok(ver[0] == needVer[0] && ver[1] >= needVer[1], name + " must be compatible with " + klass.name + " klass version " + needVer[0] + "." + needVer[1]);
     }
     __name(assertCompatible, "assertCompatible");
@@ -23721,13 +23724,13 @@ var require_signature = __commonJS({
       return new Signature(opts);
     }
     __name(parseECDSA, "parseECDSA");
-    Signature.isSignature = function(obj, ver) {
-      return utils.isCompatible(obj, Signature, ver);
+    Signature.isSignature = function(obj2, ver) {
+      return utils.isCompatible(obj2, Signature, ver);
     };
     Signature.prototype._sshpkApiVersion = [2, 1];
-    Signature._oldVersionDetect = function(obj) {
-      assert.func(obj.toBuffer);
-      if (obj.hasOwnProperty("hashAlgorithm"))
+    Signature._oldVersionDetect = function(obj2) {
+      assert.func(obj2.toBuffer);
+      if (obj2.hasOwnProperty("hashAlgorithm"))
         return [2, 0];
       return [1, 0];
     };
@@ -27699,8 +27702,8 @@ var require_private_key = __commonJS({
         throw new KeyParseError(options.filename, format, e);
       }
     };
-    PrivateKey.isPrivateKey = function(obj, ver) {
-      return utils.isCompatible(obj, PrivateKey, ver);
+    PrivateKey.isPrivateKey = function(obj2, ver) {
+      return utils.isCompatible(obj2, PrivateKey, ver);
     };
     PrivateKey.generate = function(type, options) {
       if (options === void 0)
@@ -27719,14 +27722,14 @@ var require_private_key = __commonJS({
       }
     };
     PrivateKey.prototype._sshpkApiVersion = [1, 6];
-    PrivateKey._oldVersionDetect = function(obj) {
-      assert.func(obj.toPublic);
-      assert.func(obj.createSign);
-      if (obj.derive)
+    PrivateKey._oldVersionDetect = function(obj2) {
+      assert.func(obj2.toPublic);
+      assert.func(obj2.createSign);
+      if (obj2.derive)
         return [1, 3];
-      if (obj.defaultHashAlgorithm)
+      if (obj2.defaultHashAlgorithm)
         return [1, 2];
-      if (obj.formats["auto"])
+      if (obj2.formats["auto"])
         return [1, 1];
       return [1, 0];
     };
@@ -28028,11 +28031,11 @@ var require_identity = __commonJS({
         components
       });
     };
-    Identity.isIdentity = function(obj, ver) {
-      return utils.isCompatible(obj, Identity, ver);
+    Identity.isIdentity = function(obj2, ver) {
+      return utils.isCompatible(obj2, Identity, ver);
     };
     Identity.prototype._sshpkApiVersion = [1, 0];
-    Identity._oldVersionDetect = function(obj) {
+    Identity._oldVersionDetect = function(obj2) {
       return [1, 0];
     };
   }
@@ -29356,11 +29359,11 @@ var require_certificate = __commonJS({
         throw new CertificateParseError(options.filename, format, e);
       }
     };
-    Certificate.isCertificate = function(obj, ver) {
-      return utils.isCompatible(obj, Certificate, ver);
+    Certificate.isCertificate = function(obj2, ver) {
+      return utils.isCompatible(obj2, Certificate, ver);
     };
     Certificate.prototype._sshpkApiVersion = [1, 1];
-    Certificate._oldVersionDetect = function(obj) {
+    Certificate._oldVersionDetect = function(obj2) {
       return [1, 0];
     };
   }
@@ -29540,13 +29543,13 @@ var require_fingerprint = __commonJS({
       return alg.toUpperCase() + ":" + base64Strip(h);
     }
     __name(sshBase64Format, "sshBase64Format");
-    Fingerprint.isFingerprint = function(obj, ver) {
-      return utils.isCompatible(obj, Fingerprint, ver);
+    Fingerprint.isFingerprint = function(obj2, ver) {
+      return utils.isCompatible(obj2, Fingerprint, ver);
     };
     Fingerprint.prototype._sshpkApiVersion = [1, 2];
-    Fingerprint._oldVersionDetect = function(obj) {
-      assert.func(obj.toString);
-      assert.func(obj.matches);
+    Fingerprint._oldVersionDetect = function(obj2) {
+      assert.func(obj2.toString);
+      assert.func(obj2.matches);
       return [1, 0];
     };
   }
@@ -29772,20 +29775,20 @@ var require_key = __commonJS({
         throw new KeyParseError(options.filename, format, e);
       }
     };
-    Key.isKey = function(obj, ver) {
-      return utils.isCompatible(obj, Key, ver);
+    Key.isKey = function(obj2, ver) {
+      return utils.isCompatible(obj2, Key, ver);
     };
     Key.prototype._sshpkApiVersion = [1, 7];
-    Key._oldVersionDetect = function(obj) {
-      assert.func(obj.toBuffer);
-      assert.func(obj.fingerprint);
-      if (obj.createDH)
+    Key._oldVersionDetect = function(obj2) {
+      assert.func(obj2.toBuffer);
+      assert.func(obj2.fingerprint);
+      if (obj2.createDH)
         return [1, 4];
-      if (obj.defaultHashAlgorithm)
+      if (obj2.defaultHashAlgorithm)
         return [1, 3];
-      if (obj.formats["auto"])
+      if (obj2.formats["auto"])
         return [1, 2];
-      if (obj.formats["pkcs1"])
+      if (obj2.formats["pkcs1"])
         return [1, 1];
       return [1, 0];
     };
@@ -30509,12 +30512,12 @@ var require_verror = __commonJS({
     }
     __name(parseConstructorArguments, "parseConstructorArguments");
     function VError() {
-      var args, obj, parsed, cause, ctor, message, k;
+      var args, obj2, parsed, cause, ctor, message, k;
       args = Array.prototype.slice.call(arguments, 0);
       if (!(this instanceof VError)) {
-        obj = Object.create(VError.prototype);
-        VError.apply(obj, arguments);
-        return obj;
+        obj2 = Object.create(VError.prototype);
+        VError.apply(obj2, arguments);
+        return obj2;
       }
       parsed = parseConstructorArguments({
         "argv": args,
@@ -30630,12 +30633,12 @@ var require_verror = __commonJS({
       }
     };
     function SError() {
-      var args, obj, parsed, options;
+      var args, obj2, parsed, options;
       args = Array.prototype.slice.call(arguments, 0);
       if (!(this instanceof SError)) {
-        obj = Object.create(SError.prototype);
-        SError.apply(obj, arguments);
-        return obj;
+        obj2 = Object.create(SError.prototype);
+        SError.apply(obj2, arguments);
+        return obj2;
       }
       parsed = parseConstructorArguments({
         "argv": args,
@@ -30662,12 +30665,12 @@ var require_verror = __commonJS({
       return this.ase_errors.slice(0);
     }, "me_errors");
     function WError() {
-      var args, obj, parsed, options;
+      var args, obj2, parsed, options;
       args = Array.prototype.slice.call(arguments, 0);
       if (!(this instanceof WError)) {
-        obj = Object.create(WError.prototype);
-        WError.apply(obj, args);
-        return obj;
+        obj2 = Object.create(WError.prototype);
+        WError.apply(obj2, args);
+        return obj2;
       }
       parsed = parseConstructorArguments({
         "argv": args,
@@ -30959,31 +30962,31 @@ var require_jsprim = __commonJS({
     exports2.hrtimeNanosec = hrtimeNanosec;
     exports2.hrtimeMicrosec = hrtimeMicrosec;
     exports2.hrtimeMillisec = hrtimeMillisec;
-    function deepCopy(obj) {
+    function deepCopy(obj2) {
       var ret2, key;
       var marker = "__deepCopy";
-      if (obj && obj[marker])
+      if (obj2 && obj2[marker])
         throw new Error("attempted deep copy of cyclic object");
-      if (obj && obj.constructor == Object) {
+      if (obj2 && obj2.constructor == Object) {
         ret2 = {};
-        obj[marker] = true;
-        for (key in obj) {
+        obj2[marker] = true;
+        for (key in obj2) {
           if (key == marker)
             continue;
-          ret2[key] = deepCopy(obj[key]);
+          ret2[key] = deepCopy(obj2[key]);
         }
-        delete obj[marker];
+        delete obj2[marker];
         return ret2;
       }
-      if (obj && obj.constructor == Array) {
+      if (obj2 && obj2.constructor == Array) {
         ret2 = [];
-        obj[marker] = true;
-        for (key = 0; key < obj.length; key++)
-          ret2.push(deepCopy(obj[key]));
-        delete obj[marker];
+        obj2[marker] = true;
+        for (key = 0; key < obj2.length; key++)
+          ret2.push(deepCopy(obj2[key]));
+        delete obj2[marker];
         return ret2;
       }
-      return obj;
+      return obj2;
     }
     __name(deepCopy, "deepCopy");
     function deepEqual(obj1, obj2) {
@@ -31007,43 +31010,43 @@ var require_jsprim = __commonJS({
       return true;
     }
     __name(deepEqual, "deepEqual");
-    function isEmpty(obj) {
+    function isEmpty(obj2) {
       var key;
-      for (key in obj)
+      for (key in obj2)
         return false;
       return true;
     }
     __name(isEmpty, "isEmpty");
-    function hasKey(obj, key) {
+    function hasKey(obj2, key) {
       mod_assert.equal(typeof key, "string");
-      return Object.prototype.hasOwnProperty.call(obj, key);
+      return Object.prototype.hasOwnProperty.call(obj2, key);
     }
     __name(hasKey, "hasKey");
-    function forEachKey(obj, callback) {
-      for (var key in obj) {
-        if (hasKey(obj, key)) {
-          callback(key, obj[key]);
+    function forEachKey(obj2, callback) {
+      for (var key in obj2) {
+        if (hasKey(obj2, key)) {
+          callback(key, obj2[key]);
         }
       }
     }
     __name(forEachKey, "forEachKey");
-    function pluck(obj, key) {
+    function pluck(obj2, key) {
       mod_assert.equal(typeof key, "string");
-      return pluckv(obj, key);
+      return pluckv(obj2, key);
     }
     __name(pluck, "pluck");
-    function pluckv(obj, key) {
-      if (obj === null || typeof obj !== "object")
+    function pluckv(obj2, key) {
+      if (obj2 === null || typeof obj2 !== "object")
         return void 0;
-      if (obj.hasOwnProperty(key))
-        return obj[key];
+      if (obj2.hasOwnProperty(key))
+        return obj2[key];
       var i = key.indexOf(".");
       if (i == -1)
         return void 0;
       var key1 = key.substr(0, i);
-      if (!obj.hasOwnProperty(key1))
+      if (!obj2.hasOwnProperty(key1))
         return void 0;
-      return pluckv(obj[key1], key.substr(i + 1));
+      return pluckv(obj2[key1], key.substr(i + 1));
     }
     __name(pluckv, "pluckv");
     function flattenIter(data, depth, callback) {
@@ -31358,13 +31361,13 @@ var require_jsprim = __commonJS({
       return hrtimeAccum(rv, b);
     }
     __name(hrtimeAdd, "hrtimeAdd");
-    function extraProperties(obj, allowed) {
-      mod_assert.ok(typeof obj === "object" && obj !== null, "obj argument must be a non-null object");
+    function extraProperties(obj2, allowed) {
+      mod_assert.ok(typeof obj2 === "object" && obj2 !== null, "obj argument must be a non-null object");
       mod_assert.ok(Array.isArray(allowed), "allowed argument must be an array of strings");
       for (var i = 0; i < allowed.length; i++) {
         mod_assert.ok(typeof allowed[i] === "string", "allowed argument must be an array of strings");
       }
-      return Object.keys(obj).filter(function(key) {
+      return Object.keys(obj2).filter(function(key) {
         return allowed.indexOf(key) === -1;
       });
     }
@@ -31529,8 +31532,8 @@ var require_signer = __commonJS({
       }
     };
     module2.exports = {
-      isSigner: function(obj) {
-        if (typeof obj === "object" && obj instanceof RequestSigner)
+      isSigner: function(obj2) {
+        if (typeof obj2 === "object" && obj2 instanceof RequestSigner)
           return true;
         return false;
       },
@@ -41240,20 +41243,20 @@ var require_form_data = __commonJS({
 var require_isstream = __commonJS({
   "node_modules/isstream/isstream.js"(exports2, module2) {
     var stream = require("stream");
-    function isStream(obj) {
-      return obj instanceof stream.Stream;
+    function isStream(obj2) {
+      return obj2 instanceof stream.Stream;
     }
     __name(isStream, "isStream");
-    function isReadable(obj) {
-      return isStream(obj) && typeof obj._read == "function" && typeof obj._readableState == "object";
+    function isReadable(obj2) {
+      return isStream(obj2) && typeof obj2._read == "function" && typeof obj2._readableState == "object";
     }
     __name(isReadable, "isReadable");
-    function isWritable(obj) {
-      return isStream(obj) && typeof obj._write == "function" && typeof obj._writableState == "object";
+    function isWritable(obj2) {
+      return isStream(obj2) && typeof obj2._write == "function" && typeof obj2._writableState == "object";
     }
     __name(isWritable, "isWritable");
-    function isDuplex(obj) {
-      return isReadable(obj) && isWritable(obj);
+    function isDuplex(obj2) {
+      return isReadable(obj2) && isWritable(obj2);
     }
     __name(isDuplex, "isDuplex");
     module2.exports = isStream;
@@ -41361,30 +41364,30 @@ var require_utils4 = __commonJS({
       return array;
     }();
     var compactQueue = /* @__PURE__ */ __name(function compactQueue2(queue) {
-      var obj;
+      var obj2;
       while (queue.length) {
         var item = queue.pop();
-        obj = item.obj[item.prop];
-        if (Array.isArray(obj)) {
+        obj2 = item.obj[item.prop];
+        if (Array.isArray(obj2)) {
           var compacted = [];
-          for (var j = 0; j < obj.length; ++j) {
-            if (typeof obj[j] !== "undefined") {
-              compacted.push(obj[j]);
+          for (var j = 0; j < obj2.length; ++j) {
+            if (typeof obj2[j] !== "undefined") {
+              compacted.push(obj2[j]);
             }
           }
           item.obj[item.prop] = compacted;
         }
       }
-      return obj;
+      return obj2;
     }, "compactQueue");
     var arrayToObject = /* @__PURE__ */ __name(function arrayToObject2(source, options) {
-      var obj = options && options.plainObjects ? Object.create(null) : {};
+      var obj2 = options && options.plainObjects ? Object.create(null) : {};
       for (var i = 0; i < source.length; ++i) {
         if (typeof source[i] !== "undefined") {
-          obj[i] = source[i];
+          obj2[i] = source[i];
         }
       }
-      return obj;
+      return obj2;
     }, "arrayToObject");
     var merge = /* @__PURE__ */ __name(function merge2(target, source, options) {
       if (!source) {
@@ -41481,27 +41484,27 @@ var require_utils4 = __commonJS({
       var refs = [];
       for (var i = 0; i < queue.length; ++i) {
         var item = queue[i];
-        var obj = item.obj[item.prop];
-        var keys = Object.keys(obj);
+        var obj2 = item.obj[item.prop];
+        var keys = Object.keys(obj2);
         for (var j = 0; j < keys.length; ++j) {
           var key = keys[j];
-          var val = obj[key];
+          var val = obj2[key];
           if (typeof val === "object" && val !== null && refs.indexOf(val) === -1) {
-            queue.push({ obj, prop: key });
+            queue.push({ obj: obj2, prop: key });
             refs.push(val);
           }
         }
       }
       return compactQueue(queue);
     }, "compact");
-    var isRegExp = /* @__PURE__ */ __name(function isRegExp2(obj) {
-      return Object.prototype.toString.call(obj) === "[object RegExp]";
+    var isRegExp = /* @__PURE__ */ __name(function isRegExp2(obj2) {
+      return Object.prototype.toString.call(obj2) === "[object RegExp]";
     }, "isRegExp");
-    var isBuffer = /* @__PURE__ */ __name(function isBuffer2(obj) {
-      if (obj === null || typeof obj === "undefined") {
+    var isBuffer = /* @__PURE__ */ __name(function isBuffer2(obj2) {
+      if (obj2 === null || typeof obj2 === "undefined") {
         return false;
       }
-      return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+      return !!(obj2.constructor && obj2.constructor.isBuffer && obj2.constructor.isBuffer(obj2));
     }, "isBuffer");
     module2.exports = {
       arrayToObject,
@@ -41568,50 +41571,50 @@ var require_stringify2 = __commonJS({
       strictNullHandling: false
     };
     var stringify = /* @__PURE__ */ __name(function stringify2(object, prefix, generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly) {
-      var obj = object;
+      var obj2 = object;
       if (typeof filter === "function") {
-        obj = filter(prefix, obj);
-      } else if (obj instanceof Date) {
-        obj = serializeDate(obj);
-      } else if (obj === null) {
+        obj2 = filter(prefix, obj2);
+      } else if (obj2 instanceof Date) {
+        obj2 = serializeDate(obj2);
+      } else if (obj2 === null) {
         if (strictNullHandling) {
           return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder) : prefix;
         }
-        obj = "";
+        obj2 = "";
       }
-      if (typeof obj === "string" || typeof obj === "number" || typeof obj === "boolean" || utils.isBuffer(obj)) {
+      if (typeof obj2 === "string" || typeof obj2 === "number" || typeof obj2 === "boolean" || utils.isBuffer(obj2)) {
         if (encoder) {
           var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder);
-          return [formatter(keyValue) + "=" + formatter(encoder(obj, defaults.encoder))];
+          return [formatter(keyValue) + "=" + formatter(encoder(obj2, defaults.encoder))];
         }
-        return [formatter(prefix) + "=" + formatter(String(obj))];
+        return [formatter(prefix) + "=" + formatter(String(obj2))];
       }
       var values = [];
-      if (typeof obj === "undefined") {
+      if (typeof obj2 === "undefined") {
         return values;
       }
       var objKeys;
       if (Array.isArray(filter)) {
         objKeys = filter;
       } else {
-        var keys = Object.keys(obj);
+        var keys = Object.keys(obj2);
         objKeys = sort ? keys.sort(sort) : keys;
       }
       for (var i = 0; i < objKeys.length; ++i) {
         var key = objKeys[i];
-        if (skipNulls && obj[key] === null) {
+        if (skipNulls && obj2[key] === null) {
           continue;
         }
-        if (Array.isArray(obj)) {
-          values = values.concat(stringify2(obj[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        if (Array.isArray(obj2)) {
+          values = values.concat(stringify2(obj2[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         } else {
-          values = values.concat(stringify2(obj[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+          values = values.concat(stringify2(obj2[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         }
       }
       return values;
     }, "stringify");
     module2.exports = function(object, opts) {
-      var obj = object;
+      var obj2 = object;
       var options = opts ? utils.assign({}, opts) : {};
       if (options.encoder !== null && options.encoder !== void 0 && typeof options.encoder !== "function") {
         throw new TypeError("Encoder has to be a function.");
@@ -41635,13 +41638,13 @@ var require_stringify2 = __commonJS({
       var filter;
       if (typeof options.filter === "function") {
         filter = options.filter;
-        obj = filter("", obj);
+        obj2 = filter("", obj2);
       } else if (Array.isArray(options.filter)) {
         filter = options.filter;
         objKeys = filter;
       }
       var keys = [];
-      if (typeof obj !== "object" || obj === null) {
+      if (typeof obj2 !== "object" || obj2 === null) {
         return "";
       }
       var arrayFormat;
@@ -41654,17 +41657,17 @@ var require_stringify2 = __commonJS({
       }
       var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
       if (!objKeys) {
-        objKeys = Object.keys(obj);
+        objKeys = Object.keys(obj2);
       }
       if (sort) {
         objKeys.sort(sort);
       }
       for (var i = 0; i < objKeys.length; ++i) {
         var key = objKeys[i];
-        if (skipNulls && obj[key] === null) {
+        if (skipNulls && obj2[key] === null) {
           continue;
         }
-        keys = keys.concat(stringify(obj[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        keys = keys.concat(stringify(obj2[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
       }
       var joined = keys.join(delimiter);
       var prefix = options.addQueryPrefix === true ? "?" : "";
@@ -41691,7 +41694,7 @@ var require_parse = __commonJS({
       strictNullHandling: false
     };
     var parseValues = /* @__PURE__ */ __name(function parseQueryStringValues(str, options) {
-      var obj = {};
+      var obj2 = {};
       var cleanStr = options.ignoreQueryPrefix ? str.replace(/^\?/, "") : str;
       var limit = options.parameterLimit === Infinity ? void 0 : options.parameterLimit;
       var parts = cleanStr.split(options.delimiter, limit);
@@ -41707,34 +41710,34 @@ var require_parse = __commonJS({
           key = options.decoder(part.slice(0, pos), defaults.decoder);
           val = options.decoder(part.slice(pos + 1), defaults.decoder);
         }
-        if (has.call(obj, key)) {
-          obj[key] = [].concat(obj[key]).concat(val);
+        if (has.call(obj2, key)) {
+          obj2[key] = [].concat(obj2[key]).concat(val);
         } else {
-          obj[key] = val;
+          obj2[key] = val;
         }
       }
-      return obj;
+      return obj2;
     }, "parseQueryStringValues");
     var parseObject = /* @__PURE__ */ __name(function(chain, val, options) {
       var leaf = val;
       for (var i = chain.length - 1; i >= 0; --i) {
-        var obj;
+        var obj2;
         var root = chain[i];
         if (root === "[]") {
-          obj = [];
-          obj = obj.concat(leaf);
+          obj2 = [];
+          obj2 = obj2.concat(leaf);
         } else {
-          obj = options.plainObjects ? Object.create(null) : {};
+          obj2 = options.plainObjects ? Object.create(null) : {};
           var cleanRoot = root.charAt(0) === "[" && root.charAt(root.length - 1) === "]" ? root.slice(1, -1) : root;
           var index = parseInt(cleanRoot, 10);
           if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
-            obj = [];
-            obj[index] = leaf;
+            obj2 = [];
+            obj2[index] = leaf;
           } else {
-            obj[cleanRoot] = leaf;
+            obj2[cleanRoot] = leaf;
           }
         }
-        leaf = obj;
+        leaf = obj2;
       }
       return leaf;
     }, "parseObject");
@@ -41791,14 +41794,14 @@ var require_parse = __commonJS({
         return options.plainObjects ? Object.create(null) : {};
       }
       var tempObj = typeof str === "string" ? parseValues(str, options) : str;
-      var obj = options.plainObjects ? Object.create(null) : {};
+      var obj2 = options.plainObjects ? Object.create(null) : {};
       var keys = Object.keys(tempObj);
       for (var i = 0; i < keys.length; ++i) {
         var key = keys[i];
         var newObj = parseKeys(key, tempObj[key], options);
-        obj = utils.merge(obj, newObj, options);
+        obj2 = utils.merge(obj2, newObj, options);
       }
-      return utils.compact(obj);
+      return utils.compact(obj2);
     };
   }
 });
@@ -41841,8 +41844,8 @@ var require_querystring = __commonJS({
       this.parseOptions = options.qsParseOptions || {};
       this.stringifyOptions = options.qsStringifyOptions || {};
     };
-    Querystring.prototype.stringify = function(obj) {
-      return this.useQuerystring ? this.rfc3986(this.lib.stringify(obj, this.stringifyOptions.sep || null, this.stringifyOptions.eq || null, this.stringifyOptions)) : this.lib.stringify(obj, this.stringifyOptions);
+    Querystring.prototype.stringify = function(obj2) {
+      return this.useQuerystring ? this.rfc3986(this.lib.stringify(obj2, this.stringifyOptions.sep || null, this.stringifyOptions.eq || null, this.stringifyOptions)) : this.lib.stringify(obj2, this.stringifyOptions);
     };
     Querystring.prototype.parse = function(str) {
       return this.useQuerystring ? this.lib.parse(str, this.parseOptions.sep || null, this.parseOptions.eq || null, this.parseOptions) : this.lib.parse(str, this.parseOptions);
@@ -41893,18 +41896,18 @@ var require_uri_all = __commonJS({
         return str.toUpperCase();
       }
       __name(toUpperCase, "toUpperCase");
-      function toArray(obj) {
-        return obj !== void 0 && obj !== null ? obj instanceof Array ? obj : typeof obj.length !== "number" || obj.split || obj.setInterval || obj.call ? [obj] : Array.prototype.slice.call(obj) : [];
+      function toArray(obj2) {
+        return obj2 !== void 0 && obj2 !== null ? obj2 instanceof Array ? obj2 : typeof obj2.length !== "number" || obj2.split || obj2.setInterval || obj2.call ? [obj2] : Array.prototype.slice.call(obj2) : [];
       }
       __name(toArray, "toArray");
       function assign(target, source) {
-        var obj = target;
+        var obj2 = target;
         if (source) {
           for (var key in source) {
-            obj[key] = source[key];
+            obj2[key] = source[key];
           }
         }
-        return obj;
+        return obj2;
       }
       __name(assign, "assign");
       function buildExps(isIRI2) {
@@ -43194,8 +43197,8 @@ var require_schema_obj = __commonJS({
     "use strict";
     var util = require_util3();
     module2.exports = SchemaObject;
-    function SchemaObject(obj) {
-      util.copy(obj, this);
+    function SchemaObject(obj2) {
+      util.copy(obj2, this);
     }
     __name(SchemaObject, "SchemaObject");
   }
@@ -49288,17 +49291,17 @@ var require_har2 = __commonJS({
       this.request = request;
     }
     __name(Har, "Har");
-    Har.prototype.reducer = function(obj, pair) {
-      if (obj[pair.name] === void 0) {
-        obj[pair.name] = pair.value;
-        return obj;
+    Har.prototype.reducer = function(obj2, pair) {
+      if (obj2[pair.name] === void 0) {
+        obj2[pair.name] = pair.value;
+        return obj2;
       }
       var arr = [
-        obj[pair.name],
+        obj2[pair.name],
         pair.value
       ];
-      obj[pair.name] = arr;
-      return obj;
+      obj2[pair.name] = arr;
+      return obj2;
     };
     Har.prototype.prep = function(data) {
       data.queryObj = {};
@@ -49454,9 +49457,10 @@ var require_rng = __commonJS({
 var require_bytesToUuid = __commonJS({
   "node_modules/uuid/lib/bytesToUuid.js"(exports2, module2) {
     var byteToHex = [];
-    for (var i = 0; i < 256; ++i) {
+    for (i = 0; i < 256; ++i) {
       byteToHex[i] = (i + 256).toString(16).substr(1);
     }
+    var i;
     function bytesToUuid(buf, offset) {
       var i2 = offset || 0;
       var bth = byteToHex;
@@ -49666,10 +49670,10 @@ var require_oauth_sign = __commonJS({
       return encodeURIComponent(str).replace(/!/g, "%21").replace(/\*/g, "%2A").replace(/\(/g, "%28").replace(/\)/g, "%29").replace(/'/g, "%27");
     }
     __name(rfc3986, "rfc3986");
-    function map(obj) {
+    function map(obj2) {
       var key, val, arr = [];
-      for (key in obj) {
-        val = obj[key];
+      for (key in obj2) {
+        val = obj2[key];
         if (Array.isArray(val))
           for (var i = 0; i < val.length; i++)
             arr.push([key, val[i]]);

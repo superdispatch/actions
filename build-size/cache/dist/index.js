@@ -3375,12 +3375,13 @@ var require_semver = __commonJS({
     src[t.HYPHENRANGELOOSE] = "^\\s*(" + src[t.XRANGEPLAINLOOSE] + ")\\s+-\\s+(" + src[t.XRANGEPLAINLOOSE] + ")\\s*$";
     tok("STAR");
     src[t.STAR] = "(<|>)?=?\\s*\\*";
-    for (var i = 0; i < R; i++) {
+    for (i = 0; i < R; i++) {
       debug(i, src[i]);
       if (!re[i]) {
         re[i] = new RegExp(src[i]);
       }
     }
+    var i;
     exports2.parse = parse;
     function parse(version, options) {
       if (!options || typeof options !== "object") {
@@ -4458,9 +4459,10 @@ var require_rng = __commonJS({
 var require_bytesToUuid = __commonJS({
   "node_modules/uuid/lib/bytesToUuid.js"(exports2, module2) {
     var byteToHex = [];
-    for (var i = 0; i < 256; ++i) {
+    for (i = 0; i < 256; ++i) {
       byteToHex[i] = (i + 256).toString(16).substr(1);
     }
+    var i;
     function bytesToUuid(buf, offset) {
       var i2 = offset || 0;
       var bth = byteToHex;
