@@ -53472,6 +53472,9 @@ var JiraClient = class extends import_jira_client.default {
   createRemoteLink(issueNumber, remoteLink) {
     return super.createRemoteLink(issueNumber, remoteLink);
   }
+  getIssue(issueIdOrKey, fields, expand) {
+    return super.getIssue(issueIdOrKey, fields, expand);
+  }
 };
 __name(JiraClient, "JiraClient");
 
@@ -53499,8 +53502,9 @@ function getEnv(key) {
 __name(getEnv, "getEnv");
 
 // jira/utils/JiraIssue.ts
+var ISSUE_REGEX = /([a-z]{2,}-\d+)/g;
 function parseIssue(input) {
-  const match = /([a-z]{2,}-\d+)/.exec(input);
+  const match = ISSUE_REGEX.exec(input);
   return match == null ? void 0 : match[1].toUpperCase();
 }
 __name(parseIssue, "parseIssue");

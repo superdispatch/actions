@@ -53472,6 +53472,9 @@ var JiraClient = class extends import_jira_client.default {
   createRemoteLink(issueNumber, remoteLink) {
     return super.createRemoteLink(issueNumber, remoteLink);
   }
+  getIssue(issueIdOrKey, fields, expand) {
+    return super.getIssue(issueIdOrKey, fields, expand);
+  }
 };
 __name(JiraClient, "JiraClient");
 
