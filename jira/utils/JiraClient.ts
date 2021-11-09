@@ -19,6 +19,13 @@ interface RemoteLink {
   };
 }
 
+interface Issue {
+  id: string;
+  self: string; // jira link
+  key: string;
+  fields: Record<string, unknown>;
+}
+
 export class JiraClient extends JiraApi {
   listTransitions(issueId: string) {
     return super.listTransitions(issueId) as Promise<{
@@ -44,5 +51,9 @@ export class JiraClient extends JiraApi {
       issueNumber,
       remoteLink,
     ) as Promise<RemoteLink>;
+  }
+
+  getIssue(issueIdOrKey: string, fields?: string | string[], expand?: string) {
+    return super.getIssue(issueIdOrKey, fields, expand) as Promise<Issue>;
   }
 }
