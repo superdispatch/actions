@@ -38,7 +38,7 @@
     "jira-client": "6.23.0",
     "lint-staged": "11.0.0",
     "np": "7.5.0",
-    "prettier": "2.3.1",
+    "prettier": "2.5.1",
     "pretty-bytes": "5.6.0",
     "typescript": "4.3.4",
     "zlib": "1.0.5"
