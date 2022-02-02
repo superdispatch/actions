@@ -21,7 +21,7 @@
   },
   "prettier": "@superdispatch/prettier-config",
   "devDependencies": {
-    "@actions/cache": "1.0.7",
+    "@actions/cache": "1.0.8",
     "@actions/core": "1.4.0",
     "@actions/exec": "1.1.0",
     "@actions/github": "5.0.0",
