@@ -28,6 +28,7 @@ async function main() {
     await execOutput(updateCommand);
   });
 
+  await execOutput('git', ['add', '.']);
   const { stdout: changes } = await execOutput('git', [
     'status',
     '--porcelain',

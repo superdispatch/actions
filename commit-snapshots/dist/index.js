@@ -6127,6 +6127,7 @@ async function main() {
   await (0, import_core.group)("Running update command", async () => {
     await execOutput(updateCommand);
   });
+  await execOutput("git", ["add", "."]);
   const { stdout: changes } = await execOutput("git", [
     "status",
     "--porcelain"
