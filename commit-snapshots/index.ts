@@ -32,7 +32,7 @@ async function main() {
     'github-actions[bot]@users.noreply.github.com',
   ]);
 
-  await execOutput('git', ['fetch', '--unshallow', `origin/${branch}`]);
+  await execOutput('git', ['fetch', '--unshallow', 'origin', branch]);
   await execOutput('git', ['checkout', '-b', branch, `origin/${branch}`]);
 
   await group('Running update command', async () => {
