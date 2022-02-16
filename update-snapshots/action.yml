@@ -1,0 +1,31 @@
+name: 'Update Snapshots'
+description: 'Updates the snapshots if there is any changes'
+author: 'superdispatch'
+
+inputs:
+  dry-run:
+    required: false
+    default: 'false'
+    description: 'Dry run'
+
+  command:
+    required: true
+    description: 'Command to execute'
+
+  update-command:
+    required: true
+    description: 'Update snapshot command'
+
+  message:
+    required: true
+    default: 'chore: Updated snapshots changes.'
+    description: 'Commit message for snapshots'
+
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

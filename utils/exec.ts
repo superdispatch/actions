@@ -5,8 +5,10 @@ export interface ExecOutput {
   stdout: string;
   /** Concatenated lines from the stderr */
   stderr: string;
-  /** Lines from the each debug log */
+  /** Lines from each debug log */
   debug: string[];
+  /** Exit code for process*/
+  exitCode: number;
 }
 
 export async function execOutput(
@@ -14,9 +16,9 @@ export async function execOutput(
   args?: string[],
   options?: Omit<ExecOptions, 'listeners'>,
 ): Promise<ExecOutput> {
-  const output: ExecOutput = { debug: [], stdout: '', stderr: '' };
+  const output: ExecOutput = { exitCode: 0, debug: [], stdout: '', stderr: '' };
 
-  await exec(commandLine, args, {
+  output.exitCode = await exec(commandLine, args, {
     ...options,
     listeners: {
       stdout(data) {

@@ -182,7 +182,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - uses: ./pr-limit
         with:
           limit: 1
+
+  commit-snapshots:
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test commit-snapshots') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./update-snapshots
+        with:
+          dry-run: true
+          command: exit 1
+          update-command: touch test4.txt

@@ -11,11 +11,6 @@
     "release": "np --no-publish --no-release-draft",
     "postrelease": "node scripts/post-release.js"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*": "js-tools lint --fix"
   },

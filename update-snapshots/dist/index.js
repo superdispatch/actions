@@ -93,26 +93,26 @@ var require_command = __commonJS({
     exports2.issue = exports2.issueCommand = void 0;
     var os = __importStar(require("os"));
     var utils_1 = require_utils();
-    function issueCommand(command, properties, message) {
-      const cmd = new Command(command, properties, message);
+    function issueCommand(command2, properties, message2) {
+      const cmd = new Command(command2, properties, message2);
       process.stdout.write(cmd.toString() + os.EOL);
     }
     __name(issueCommand, "issueCommand");
     exports2.issueCommand = issueCommand;
-    function issue(name, message = "") {
-      issueCommand(name, {}, message);
+    function issue(name, message2 = "") {
+      issueCommand(name, {}, message2);
     }
     __name(issue, "issue");
     exports2.issue = issue;
     var CMD_STRING = "::";
     var Command = class {
-      constructor(command, properties, message) {
-        if (!command) {
-          command = "missing.command";
+      constructor(command2, properties, message2) {
+        if (!command2) {
+          command2 = "missing.command";
         }
-        this.command = command;
+        this.command = command2;
         this.properties = properties;
-        this.message = message;
+        this.message = message2;
       }
       toString() {
         let cmdStr = CMD_STRING + this.command;
@@ -186,15 +186,15 @@ var require_file_command = __commonJS({
     var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
     var utils_1 = require_utils();
-    function issueCommand(command, message) {
-      const filePath = process.env[`GITHUB_${command}`];
+    function issueCommand(command2, message2) {
+      const filePath = process.env[`GITHUB_${command2}`];
       if (!filePath) {
-        throw new Error(`Unable to find environment variable for file command ${command}`);
+        throw new Error(`Unable to find environment variable for file command ${command2}`);
       }
       if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message2)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -350,9 +350,9 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(setCommandEcho, "setCommandEcho");
     exports2.setCommandEcho = setCommandEcho;
-    function setFailed2(message) {
+    function setFailed2(message2) {
       process.exitCode = ExitCode.Failure;
-      error(message);
+      error(message2);
     }
     __name(setFailed2, "setFailed");
     exports2.setFailed = setFailed2;
@@ -361,23 +361,23 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(isDebug, "isDebug");
     exports2.isDebug = isDebug;
-    function debug(message) {
-      command_1.issueCommand("debug", {}, message);
+    function debug(message2) {
+      command_1.issueCommand("debug", {}, message2);
     }
     __name(debug, "debug");
     exports2.debug = debug;
-    function error(message) {
-      command_1.issue("error", message instanceof Error ? message.toString() : message);
+    function error(message2) {
+      command_1.issue("error", message2 instanceof Error ? message2.toString() : message2);
     }
     __name(error, "error");
     exports2.error = error;
-    function warning(message) {
-      command_1.issue("warning", message instanceof Error ? message.toString() : message);
+    function warning(message2) {
+      command_1.issue("warning", message2 instanceof Error ? message2.toString() : message2);
     }
     __name(warning, "warning");
     exports2.warning = warning;
-    function info2(message) {
-      process.stdout.write(message + os.EOL);
+    function info2(message2) {
+      process.stdout.write(message2 + os.EOL);
     }
     __name(info2, "info");
     exports2.info = info2;
@@ -844,8 +844,8 @@ var require_http_client = __commonJS({
     var ExponentialBackoffCeiling = 10;
     var ExponentialBackoffTimeSlice = 5;
     var HttpClientError = class extends Error {
-      constructor(message, statusCode) {
-        super(message);
+      constructor(message2, statusCode) {
+        super(message2);
         this.name = "HttpClientError";
         this.statusCode = statusCode;
         Object.setPrototypeOf(this, HttpClientError.prototype);
@@ -854,8 +854,8 @@ var require_http_client = __commonJS({
     __name(HttpClientError, "HttpClientError");
     exports2.HttpClientError = HttpClientError;
     var HttpClientResponse = class {
-      constructor(message) {
-        this.message = message;
+      constructor(message2) {
+        this.message = message2;
       }
       readBody() {
         return new Promise(async (resolve, reject) => {
@@ -1628,8 +1628,8 @@ var require_dist_node2 = __commonJS({
       return operator === ";" || operator === "&" || operator === "?";
     }
     __name(isKeyOperator, "isKeyOperator");
-    function getValues(context3, operator, key, modifier) {
-      var value = context3[key], result = [];
+    function getValues(context2, operator, key, modifier) {
+      var value = context2[key], result = [];
       if (isDefined(value) && value !== "") {
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
           value = value.toString();
@@ -1691,7 +1691,7 @@ var require_dist_node2 = __commonJS({
       };
     }
     __name(parseUrl, "parseUrl");
-    function expand(template, context3) {
+    function expand(template, context2) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
       return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
         if (expression) {
@@ -1703,7 +1703,7 @@ var require_dist_node2 = __commonJS({
           }
           expression.split(/,/g).forEach(function(variable) {
             var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
+            values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
           });
           if (operator && operator !== "+") {
             var separator = ",";
@@ -2088,25 +2088,25 @@ var require_tr46 = __commonJS({
     }
     __name(mapChars, "mapChars");
     var combiningMarksRegex = /[\u0300-\u036F\u0483-\u0489\u0591-\u05BD\u05BF\u05C1\u05C2\u05C4\u05C5\u05C7\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED\u0711\u0730-\u074A\u07A6-\u07B0\u07EB-\u07F3\u0816-\u0819\u081B-\u0823\u0825-\u0827\u0829-\u082D\u0859-\u085B\u08E4-\u0903\u093A-\u093C\u093E-\u094F\u0951-\u0957\u0962\u0963\u0981-\u0983\u09BC\u09BE-\u09C4\u09C7\u09C8\u09CB-\u09CD\u09D7\u09E2\u09E3\u0A01-\u0A03\u0A3C\u0A3E-\u0A42\u0A47\u0A48\u0A4B-\u0A4D\u0A51\u0A70\u0A71\u0A75\u0A81-\u0A83\u0ABC\u0ABE-\u0AC5\u0AC7-\u0AC9\u0ACB-\u0ACD\u0AE2\u0AE3\u0B01-\u0B03\u0B3C\u0B3E-\u0B44\u0B47\u0B48\u0B4B-\u0B4D\u0B56\u0B57\u0B62\u0B63\u0B82\u0BBE-\u0BC2\u0BC6-\u0BC8\u0BCA-\u0BCD\u0BD7\u0C00-\u0C03\u0C3E-\u0C44\u0C46-\u0C48\u0C4A-\u0C4D\u0C55\u0C56\u0C62\u0C63\u0C81-\u0C83\u0CBC\u0CBE-\u0CC4\u0CC6-\u0CC8\u0CCA-\u0CCD\u0CD5\u0CD6\u0CE2\u0CE3\u0D01-\u0D03\u0D3E-\u0D44\u0D46-\u0D48\u0D4A-\u0D4D\u0D57\u0D62\u0D63\u0D82\u0D83\u0DCA\u0DCF-\u0DD4\u0DD6\u0DD8-\u0DDF\u0DF2\u0DF3\u0E31\u0E34-\u0E3A\u0E47-\u0E4E\u0EB1\u0EB4-\u0EB9\u0EBB\u0EBC\u0EC8-\u0ECD\u0F18\u0F19\u0F35\u0F37\u0F39\u0F3E\u0F3F\u0F71-\u0F84\u0F86\u0F87\u0F8D-\u0F97\u0F99-\u0FBC\u0FC6\u102B-\u103E\u1056-\u1059\u105E-\u1060\u1062-\u1064\u1067-\u106D\u1071-\u1074\u1082-\u108D\u108F\u109A-\u109D\u135D-\u135F\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17B4-\u17D3\u17DD\u180B-\u180D\u18A9\u1920-\u192B\u1930-\u193B\u19B0-\u19C0\u19C8\u19C9\u1A17-\u1A1B\u1A55-\u1A5E\u1A60-\u1A7C\u1A7F\u1AB0-\u1ABE\u1B00-\u1B04\u1B34-\u1B44\u1B6B-\u1B73\u1B80-\u1B82\u1BA1-\u1BAD\u1BE6-\u1BF3\u1C24-\u1C37\u1CD0-\u1CD2\u1CD4-\u1CE8\u1CED\u1CF2-\u1CF4\u1CF8\u1CF9\u1DC0-\u1DF5\u1DFC-\u1DFF\u20D0-\u20F0\u2CEF-\u2CF1\u2D7F\u2DE0-\u2DFF\u302A-\u302F\u3099\u309A\uA66F-\uA672\uA674-\uA67D\uA69F\uA6F0\uA6F1\uA802\uA806\uA80B\uA823-\uA827\uA880\uA881\uA8B4-\uA8C4\uA8E0-\uA8F1\uA926-\uA92D\uA947-\uA953\uA980-\uA983\uA9B3-\uA9C0\uA9E5\uAA29-\uAA36\uAA43\uAA4C\uAA4D\uAA7B-\uAA7D\uAAB0\uAAB2-\uAAB4\uAAB7\uAAB8\uAABE\uAABF\uAAC1\uAAEB-\uAAEF\uAAF5\uAAF6\uABE3-\uABEA\uABEC\uABED\uFB1E\uFE00-\uFE0F\uFE20-\uFE2D]|\uD800[\uDDFD\uDEE0\uDF76-\uDF7A]|\uD802[\uDE01-\uDE03\uDE05\uDE06\uDE0C-\uDE0F\uDE38-\uDE3A\uDE3F\uDEE5\uDEE6]|\uD804[\uDC00-\uDC02\uDC38-\uDC46\uDC7F-\uDC82\uDCB0-\uDCBA\uDD00-\uDD02\uDD27-\uDD34\uDD73\uDD80-\uDD82\uDDB3-\uDDC0\uDE2C-\uDE37\uDEDF-\uDEEA\uDF01-\uDF03\uDF3C\uDF3E-\uDF44\uDF47\uDF48\uDF4B-\uDF4D\uDF57\uDF62\uDF63\uDF66-\uDF6C\uDF70-\uDF74]|\uD805[\uDCB0-\uDCC3\uDDAF-\uDDB5\uDDB8-\uDDC0\uDE30-\uDE40\uDEAB-\uDEB7]|\uD81A[\uDEF0-\uDEF4\uDF30-\uDF36]|\uD81B[\uDF51-\uDF7E\uDF8F-\uDF92]|\uD82F[\uDC9D\uDC9E]|\uD834[\uDD65-\uDD69\uDD6D-\uDD72\uDD7B-\uDD82\uDD85-\uDD8B\uDDAA-\uDDAD\uDE42-\uDE44]|\uD83A[\uDCD0-\uDCD6]|\uDB40[\uDD00-\uDDEF]/;
-    function validateLabel(label2, processing_option) {
-      if (label2.substr(0, 4) === "xn--") {
-        label2 = punycode.toUnicode(label2);
+    function validateLabel(label, processing_option) {
+      if (label.substr(0, 4) === "xn--") {
+        label = punycode.toUnicode(label);
         processing_option = PROCESSING_OPTIONS.NONTRANSITIONAL;
       }
       var error = false;
-      if (normalize(label2) !== label2 || label2[3] === "-" && label2[4] === "-" || label2[0] === "-" || label2[label2.length - 1] === "-" || label2.indexOf(".") !== -1 || label2.search(combiningMarksRegex) === 0) {
+      if (normalize(label) !== label || label[3] === "-" && label[4] === "-" || label[0] === "-" || label[label.length - 1] === "-" || label.indexOf(".") !== -1 || label.search(combiningMarksRegex) === 0) {
         error = true;
       }
-      var len = countSymbols(label2);
+      var len = countSymbols(label);
       for (var i = 0; i < len; ++i) {
-        var status = findStatus(label2.codePointAt(i));
+        var status = findStatus(label.codePointAt(i));
         if (processing === PROCESSING_OPTIONS.TRANSITIONAL && status[1] !== "valid" || processing === PROCESSING_OPTIONS.NONTRANSITIONAL && status[1] !== "valid" && status[1] !== "deviation") {
           error = true;
           break;
         }
       }
       return {
-        label: label2,
+        label,
         error
       };
     }
@@ -3752,9 +3752,9 @@ var require_lib2 = __commonJS({
       enumerable: false,
       configurable: true
     });
-    function FetchError(message, type, systemError) {
-      Error.call(this, message);
-      this.message = message;
+    function FetchError(message2, type, systemError) {
+      Error.call(this, message2);
+      this.message = message2;
       this.type = type;
       if (systemError) {
         this.code = this.errno = systemError.code;
@@ -4527,10 +4527,10 @@ var require_lib2 = __commonJS({
       });
     }
     __name(getNodeRequestOptions, "getNodeRequestOptions");
-    function AbortError(message) {
-      Error.call(this, message);
+    function AbortError(message2) {
+      Error.call(this, message2);
       this.type = "aborted";
-      this.message = message;
+      this.message = message2;
       Error.captureStackTrace(this, this.constructor);
     }
     __name(AbortError, "AbortError");
@@ -4743,8 +4743,8 @@ var require_dist_node3 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     var Deprecation = class extends Error {
-      constructor(message) {
-        super(message);
+      constructor(message2) {
+        super(message2);
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
@@ -4850,8 +4850,8 @@ var require_dist_node4 = __commonJS({
     var logOnceCode = once((deprecation2) => console.warn(deprecation2));
     var logOnceHeaders = once((deprecation2) => console.warn(deprecation2));
     var RequestError = class extends Error {
-      constructor(message, statusCode, options) {
-        super(message);
+      constructor(message2, statusCode, options) {
+        super(message2);
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
@@ -5058,8 +5058,8 @@ var require_dist_node6 = __commonJS({
     var VERSION = "4.6.4";
     var GraphqlError = class extends Error {
       constructor(request2, response) {
-        const message = response.data.errors[0].message;
-        super(message);
+        const message2 = response.data.errors[0].message;
+        super(message2);
         Object.assign(this, response.data);
         Object.assign(this, {
           headers: response.headers
@@ -6525,11 +6525,11 @@ var require_dist_node9 = __commonJS({
         }
         if (decorations.renamedParameters) {
           const options2 = requestWithDefaults.endpoint.merge(...args);
-          for (const [name, alias2] of Object.entries(decorations.renamedParameters)) {
+          for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
             if (name in options2) {
-              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias2}" instead`);
-              if (!(alias2 in options2)) {
-                options2[alias2] = options2[name];
+              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
+              if (!(alias in options2)) {
+                options2[alias] = options2[name];
               }
               delete options2[name];
             }
@@ -7409,9 +7409,9 @@ var require_toolrunner = __commonJS({
         this.args = args || [];
         this.options = options || {};
       }
-      _debug(message) {
+      _debug(message2) {
         if (this.options.listeners && this.options.listeners.debug) {
-          this.options.listeners.debug(message);
+          this.options.listeners.debug(message2);
         }
       }
       _getCommandString(options, noPrefix) {
@@ -7614,8 +7614,8 @@ var require_toolrunner = __commonJS({
               optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
             }
             const state = new ExecState(optionsNonNull, this.toolPath);
-            state.on("debug", (message) => {
-              this._debug(message);
+            state.on("debug", (message2) => {
+              this._debug(message2);
             });
             if (this.options.cwd && !(yield ioUtil.exists(this.options.cwd))) {
               return reject(new Error(`The cwd: ${this.options.cwd} does not exist!`));
@@ -7778,8 +7778,8 @@ var require_toolrunner = __commonJS({
           this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
       }
-      _debug(message) {
-        this.emit("debug", message);
+      _debug(message2) {
+        this.emit("debug", message2);
       }
       _setResult() {
         let error;
@@ -7804,8 +7804,8 @@ var require_toolrunner = __commonJS({
           return;
         }
         if (!state.processClosed && state.processExited) {
-          const message = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
-          state._debug(message);
+          const message2 = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+          state._debug(message2);
         }
         state._setResult();
       }
@@ -7932,9 +7932,9 @@ var require_exec = __commonJS({
   }
 });
 
-// deploy-preview/index.ts
-var import_core2 = __toModule(require_core());
-var import_github2 = __toModule(require_github());
+// update-snapshots/index.ts
+var import_core = __toModule(require_core());
+var import_github = __toModule(require_github());
 
 // utils/exec.ts
 var import_exec = __toModule(require_exec());
@@ -7956,94 +7956,75 @@ async function execOutput(commandLine, args, options) {
   return output;
 }
 __name(execOutput, "execOutput");
-async function execString(commandLine, args, options) {
-  const { stdout } = await execOutput(commandLine, args, options);
-  return stdout.trim();
-}
-__name(execString, "execString");
-async function execJSON(commandLine, args, options) {
-  const json = await execString(commandLine, args, options);
-  try {
-    return JSON.parse(json);
-  } catch {
-    throw new Error(`Failed to parse output: ${JSON.stringify(json)}`);
-  }
-}
-__name(execJSON, "execJSON");
 
-// utils/sendReport.ts
-var import_core = __toModule(require_core());
-var import_github = __toModule(require_github());
-var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
-async function sendReport({
-  pr: pr2,
-  token: token2,
-  label: label2,
-  title,
-  content
-}) {
-  const octokit = (0, import_github.getOctokit)(token2);
-  const reportTitle = `### ${!label2 ? title : `${title} (${label2})`}
-`;
-  let previousCommentID = void 0;
-  (0, import_core.info)(`Looking for the previous reports in: #${pr2}`);
-  for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
-    per_page: 100,
-    issue_number: pr2
-  }))) {
-    for (const { id, body: body2, user } of comments) {
-      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
-        if (previousCommentID == null) {
-          (0, import_core.info)(`Found previous report: ${id}`);
-          previousCommentID = id;
-          break;
-        }
-      }
-    }
-  }
-  const body = reportTitle + content;
-  if (previousCommentID != null) {
-    (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
-    await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
-  } else {
-    (0, import_core.info)("Sending new report");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
-  }
-}
-__name(sendReport, "sendReport");
-
-// deploy-preview/index.ts
-var pr = Number((0, import_core2.getInput)("pr", { required: true }));
-var defaultAlias = `preview-${pr}`;
-var dir = (0, import_core2.getInput)("dir", { required: true });
-var alias = (0, import_core2.getInput)("alias") || defaultAlias;
-var token = (0, import_core2.getInput)("token", { required: true });
-var netlifyToken = (0, import_core2.getInput)("netlify-token", { required: true });
-var netlifySiteID = (0, import_core2.getInput)("netlify-site-id", { required: true });
-var label = alias === defaultAlias ? "" : alias;
+// update-snapshots/index.ts
+var message = (0, import_core.getInput)("message");
+var dryRun = (0, import_core.getInput)("dry-run");
+var token = (0, import_core.getInput)("token", { required: true });
+var command = (0, import_core.getInput)("command", { required: true });
+var updateCommand = (0, import_core.getInput)("update-command", { required: true });
 async function main() {
-  const { deploy_url: previewURL } = await (0, import_core2.group)("Deploying to Netlify", () => execJSON("netlify", [
-    "deploy",
-    "--json",
-    `--dir=${dir}`,
-    `--alias=${alias}`,
-    `--auth=${netlifyToken}`,
-    `--site=${netlifySiteID}`
-  ]));
-  await (0, import_core2.group)("Sending deployment report", () => {
-    const content = `Built with commit ${import_github2.context.sha}
-${previewURL}`;
-    return sendReport({
-      pr,
-      token,
-      label,
-      content,
-      title: "Preview is ready!"
+  const octokit = (0, import_github.getOctokit)(token);
+  const branch = process.env.GITHUB_HEAD_REF;
+  if (!branch) {
+    throw new Error("GITHUB_HEAD_REF is not set");
+  }
+  try {
+    await (0, import_core.group)("Running command", async () => {
+      const { exitCode } = await execOutput(command);
+      if (exitCode !== 0) {
+        throw new Error(`Command exited with code ${exitCode}`);
+      }
     });
+  } catch (error) {
+  }
+  await execOutput("git", ["config", "user.name", "github_actions"]);
+  await execOutput("git", [
+    "config",
+    "user.email",
+    "github-actions[bot]@users.noreply.github.com"
+  ]);
+  await execOutput("git", ["fetch", "--unshallow", "origin", branch]);
+  await execOutput("git", ["checkout", "-b", branch, `origin/${branch}`]);
+  await (0, import_core.group)("Running update command", async () => {
+    await execOutput(updateCommand);
+  });
+  const { stdout: changes } = await execOutput("git", [
+    "status",
+    "--porcelain"
+  ]);
+  const changedFiles = changes.split("\n").filter(Boolean).map((file) => file.split(" ").pop());
+  if (!changedFiles.length) {
+    (0, import_core.info)("No changes detected");
+    return;
+  }
+  await (0, import_core.group)("Committing changes", async () => {
+    if (dryRun === "true") {
+      (0, import_core.info)("Dry run enabled, skipping commit");
+      return;
+    }
+    await execOutput("git", ["add", "."]);
+    await execOutput("git", ["commit", "-m", message]);
+    await execOutput("git", ["push", "origin", branch]);
+  });
+  if (dryRun === "true") {
+    (0, import_core.info)("Dry run enabled, skipping PR comment");
+    return;
+  }
+  const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
+  const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
+  await octokit.rest.issues.createComment({
+    issue_number: import_github.context.issue.number,
+    owner: import_github.context.repo.owner,
+    repo: import_github.context.repo.repo,
+    body: `\u{1F6A8} **Snapshot command failed**
+
+Snapshots are updated automatically in following commit ${commitUrl}
+Please review before merging.`
   });
 }
 __name(main, "main");
-main().catch(import_core2.setFailed);
+main().catch(import_core.setFailed);
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
