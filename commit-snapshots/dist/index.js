@@ -6118,7 +6118,8 @@ async function main() {
   }
   try {
     await (0, import_core.group)("Running command", async () => {
-      await execOutput(command);
+      const output = await execOutput(command);
+      console.log(output);
     });
     return;
   } catch (error) {

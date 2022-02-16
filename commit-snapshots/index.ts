@@ -17,7 +17,9 @@ async function main() {
 
   try {
     await group('Running command', async () => {
-      await execOutput(command);
+      const output = await execOutput(command);
+
+      console.log(output);
     });
     return;
   } catch (error: unknown) {}
