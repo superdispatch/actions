@@ -194,4 +194,4 @@ jobs:
       - uses: ./commit-snapshots
         with:
           command: exit 1
-          update-command: echo "test" > test.txt
+          update-command: touch test.txt
