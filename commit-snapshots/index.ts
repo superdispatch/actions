@@ -15,6 +15,9 @@ async function main() {
     throw new Error('GITHUB_HEAD_REF is not set');
   }
 
+  await execOutput('git', ['checkout', '-b', branch]);
+  await execOutput('git', ['pull', 'origin', branch]);
+
   try {
     await group('Running command', async () => {
       const output = await execOutput(command);
@@ -45,7 +48,6 @@ async function main() {
 
   await group('Committing changes', async () => {
     await execOutput('git', ['config', 'user.name', 'github_actions']);
-    await execOutput('git', ['checkout', '-b', branch]);
     await execOutput('git', ['add', '.']);
     await execOutput('git', ['commit', '-m', message]);
     await execOutput('git', ['push', 'origin', branch]);
