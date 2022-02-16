@@ -44,7 +44,7 @@ async function main() {
   }
 
   await group('Committing changes', async () => {
-    await execOutput('git', ['checkout', branch]);
+    await execOutput('git', ['checkout', '-b', branch]);
     await execOutput('git', ['config', 'user.name', 'github_actions']);
     await execOutput('git', ['commit', '-am', message]);
     await execOutput('git', ['push', 'origin', branch]);
