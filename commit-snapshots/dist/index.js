@@ -7983,15 +7983,8 @@ async function main() {
     "user.email",
     "github-actions[bot]@users.noreply.github.com"
   ]);
-  await execOutput("git", ["fetch", "--all", "--unshallow"]);
-  await execOutput("git", ["checkout", "-b", branch]);
-  await execOutput("git", [
-    "pull",
-    "--unshallow",
-    "--ff-only",
-    "origin",
-    branch
-  ]);
+  await execOutput("git", ["fetch", "--unshallow", `origin/${branch}`]);
+  await execOutput("git", ["checkout", "-b", branch, `origin/${branch}`]);
   await (0, import_core.group)("Running update command", async () => {
     await execOutput(updateCommand);
   });
