@@ -3,6 +3,11 @@ description: 'Commit Snapshots changes'
 author: 'superdispatch'
 
 inputs:
+  dry-run:
+    required: false
+    default: 'false'
+    description: 'Dry run'
+
   command:
     required: true
     description: 'Command to execute'

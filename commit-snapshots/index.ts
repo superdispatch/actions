@@ -3,6 +3,7 @@ import { context, getOctokit } from '@actions/github';
 import { execOutput } from 'utils/exec';
 
 const message = getInput('message');
+const dryRun = getInput('dry-run');
 const token = getInput('token', { required: true });
 const command = getInput('command', { required: true });
 const updateCommand = getInput('update-command', { required: true });
@@ -55,10 +56,20 @@ async function main() {
   }
 
   await group('Committing changes', async () => {
+    if (dryRun === 'true') {
+      info('Dry run enabled, skipping commit');
+      return;
+    }
+
     await execOutput('git', ['add', '.']);
     await execOutput('git', ['commit', '-m', message]);
     await execOutput('git', ['push', 'origin', branch]);
   });
+
+  if (dryRun === 'true') {
+    info('Dry run enabled, skipping PR comment');
+    return;
+  }
 
   const { stdout: sha } = await execOutput('git', ['rev-parse', 'HEAD']);
   const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;

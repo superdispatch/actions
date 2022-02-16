@@ -193,5 +193,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./commit-snapshots
         with:
+          dry-run: true
           command: exit 1
           update-command: touch test4.txt

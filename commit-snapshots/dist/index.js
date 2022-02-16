@@ -7959,6 +7959,7 @@ __name(execOutput, "execOutput");
 
 // commit-snapshots/index.ts
 var message = (0, import_core.getInput)("message");
+var dryRun = (0, import_core.getInput)("dry-run");
 var token = (0, import_core.getInput)("token", { required: true });
 var command = (0, import_core.getInput)("command", { required: true });
 var updateCommand = (0, import_core.getInput)("update-command", { required: true });
@@ -7998,10 +7999,18 @@ async function main() {
     return;
   }
   await (0, import_core.group)("Committing changes", async () => {
+    if (dryRun === "true") {
+      (0, import_core.info)("Dry run enabled, skipping commit");
+      return;
+    }
     await execOutput("git", ["add", "."]);
     await execOutput("git", ["commit", "-m", message]);
     await execOutput("git", ["push", "origin", branch]);
   });
+  if (dryRun === "true") {
+    (0, import_core.info)("Dry run enabled, skipping PR comment");
+    return;
+  }
   const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
   const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
   await octokit.rest.issues.createComment({
