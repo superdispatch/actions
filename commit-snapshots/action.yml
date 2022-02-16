@@ -1,0 +1,26 @@
+name: 'Commit Snapshots'
+description: 'Commit Snapshots changes'
+author: 'superdispatch'
+
+inputs:
+  command:
+    required: true
+    description: 'Command to execute'
+
+  update-command:
+    required: true
+    description: 'Update snapshot command'
+
+  message:
+    required: true
+    default: 'chore: Updated snapshots changes.'
+    description: 'Commit message for snapshots'
+
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
