@@ -6129,7 +6129,7 @@ async function main() {
   await execOutput("git", [
     "config",
     "user.email",
-    "github-actions@github.com"
+    "github-actions[bot]@users.noreply.github.com"
   ]);
   await execOutput("git", ["fetch", "--all", "--unshallow"]);
   await execOutput("git", ["checkout", "-b", branch]);
