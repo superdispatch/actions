@@ -6116,14 +6116,6 @@ async function main() {
   if (!branch) {
     throw new Error("GITHUB_HEAD_REF is not set");
   }
-  await execOutput("git", ["checkout", "-b", branch]);
-  await execOutput("git", [
-    "pull",
-    "--unshallow",
-    "--no-rebase",
-    "origin",
-    branch
-  ]);
   try {
     await (0, import_core.group)("Running command", async () => {
       const { exitCode } = await execOutput(command);
@@ -6133,6 +6125,21 @@ async function main() {
     });
   } catch (error) {
   }
+  await execOutput("git", ["config", "user.name", "github_actions"]);
+  await execOutput("git", [
+    "config",
+    "user.email",
+    "github-actions@github.com"
+  ]);
+  await execOutput("git", ["fetch", "--all", "--unshallow"]);
+  await execOutput("git", ["checkout", "-b", branch]);
+  await execOutput("git", [
+    "pull",
+    "--unshallow",
+    "--ff-only",
+    "origin",
+    branch
+  ]);
   await (0, import_core.group)("Running update command", async () => {
     await execOutput(updateCommand);
   });
@@ -6146,7 +6153,6 @@ async function main() {
     return;
   }
   await (0, import_core.group)("Committing changes", async () => {
-    await execOutput("git", ["config", "user.name", "github_actions"]);
     await execOutput("git", ["add", "."]);
     await execOutput("git", ["commit", "-m", message]);
     await execOutput("git", ["push", "origin", branch]);
