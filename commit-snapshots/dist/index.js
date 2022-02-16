@@ -93,26 +93,26 @@ var require_command = __commonJS({
     exports2.issue = exports2.issueCommand = void 0;
     var os = __importStar(require("os"));
     var utils_1 = require_utils();
-    function issueCommand(command, properties, message) {
-      const cmd = new Command(command, properties, message);
+    function issueCommand(command2, properties, message2) {
+      const cmd = new Command(command2, properties, message2);
       process.stdout.write(cmd.toString() + os.EOL);
     }
     __name(issueCommand, "issueCommand");
     exports2.issueCommand = issueCommand;
-    function issue(name, message = "") {
-      issueCommand(name, {}, message);
+    function issue(name, message2 = "") {
+      issueCommand(name, {}, message2);
     }
     __name(issue, "issue");
     exports2.issue = issue;
     var CMD_STRING = "::";
     var Command = class {
-      constructor(command, properties, message) {
-        if (!command) {
-          command = "missing.command";
+      constructor(command2, properties, message2) {
+        if (!command2) {
+          command2 = "missing.command";
         }
-        this.command = command;
+        this.command = command2;
         this.properties = properties;
-        this.message = message;
+        this.message = message2;
       }
       toString() {
         let cmdStr = CMD_STRING + this.command;
@@ -186,15 +186,15 @@ var require_file_command = __commonJS({
     var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
     var utils_1 = require_utils();
-    function issueCommand(command, message) {
-      const filePath = process.env[`GITHUB_${command}`];
+    function issueCommand(command2, message2) {
+      const filePath = process.env[`GITHUB_${command2}`];
       if (!filePath) {
-        throw new Error(`Unable to find environment variable for file command ${command}`);
+        throw new Error(`Unable to find environment variable for file command ${command2}`);
       }
       if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${utils_1.toCommandValue(message2)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
@@ -350,9 +350,9 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(setCommandEcho, "setCommandEcho");
     exports2.setCommandEcho = setCommandEcho;
-    function setFailed2(message) {
+    function setFailed2(message2) {
       process.exitCode = ExitCode.Failure;
-      error(message);
+      error(message2);
     }
     __name(setFailed2, "setFailed");
     exports2.setFailed = setFailed2;
@@ -361,23 +361,23 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(isDebug, "isDebug");
     exports2.isDebug = isDebug;
-    function debug(message) {
-      command_1.issueCommand("debug", {}, message);
+    function debug(message2) {
+      command_1.issueCommand("debug", {}, message2);
     }
     __name(debug, "debug");
     exports2.debug = debug;
-    function error(message) {
-      command_1.issue("error", message instanceof Error ? message.toString() : message);
+    function error(message2) {
+      command_1.issue("error", message2 instanceof Error ? message2.toString() : message2);
     }
     __name(error, "error");
     exports2.error = error;
-    function warning(message) {
-      command_1.issue("warning", message instanceof Error ? message.toString() : message);
+    function warning(message2) {
+      command_1.issue("warning", message2 instanceof Error ? message2.toString() : message2);
     }
     __name(warning, "warning");
     exports2.warning = warning;
-    function info2(message) {
-      process.stdout.write(message + os.EOL);
+    function info2(message2) {
+      process.stdout.write(message2 + os.EOL);
     }
     __name(info2, "info");
     exports2.info = info2;
@@ -844,8 +844,8 @@ var require_http_client = __commonJS({
     var ExponentialBackoffCeiling = 10;
     var ExponentialBackoffTimeSlice = 5;
     var HttpClientError = class extends Error {
-      constructor(message, statusCode) {
-        super(message);
+      constructor(message2, statusCode) {
+        super(message2);
         this.name = "HttpClientError";
         this.statusCode = statusCode;
         Object.setPrototypeOf(this, HttpClientError.prototype);
@@ -854,8 +854,8 @@ var require_http_client = __commonJS({
     __name(HttpClientError, "HttpClientError");
     exports2.HttpClientError = HttpClientError;
     var HttpClientResponse = class {
-      constructor(message) {
-        this.message = message;
+      constructor(message2) {
+        this.message = message2;
       }
       readBody() {
         return new Promise(async (resolve, reject) => {
@@ -1628,8 +1628,8 @@ var require_dist_node2 = __commonJS({
       return operator === ";" || operator === "&" || operator === "?";
     }
     __name(isKeyOperator, "isKeyOperator");
-    function getValues(context3, operator, key, modifier) {
-      var value = context3[key], result = [];
+    function getValues(context2, operator, key, modifier) {
+      var value = context2[key], result = [];
       if (isDefined(value) && value !== "") {
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
           value = value.toString();
@@ -1691,7 +1691,7 @@ var require_dist_node2 = __commonJS({
       };
     }
     __name(parseUrl, "parseUrl");
-    function expand(template, context3) {
+    function expand(template, context2) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
       return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
         if (expression) {
@@ -1703,7 +1703,7 @@ var require_dist_node2 = __commonJS({
           }
           expression.split(/,/g).forEach(function(variable) {
             var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
+            values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
           });
           if (operator && operator !== "+") {
             var separator = ",";
@@ -1927,9 +1927,9 @@ var require_lib = __commonJS({
       enumerable: false,
       configurable: true
     });
-    function FetchError(message, type, systemError) {
-      Error.call(this, message);
-      this.message = message;
+    function FetchError(message2, type, systemError) {
+      Error.call(this, message2);
+      this.message = message2;
       this.type = type;
       if (systemError) {
         this.code = this.errno = systemError.code;
@@ -2694,10 +2694,10 @@ var require_lib = __commonJS({
       });
     }
     __name(getNodeRequestOptions, "getNodeRequestOptions");
-    function AbortError(message) {
-      Error.call(this, message);
+    function AbortError(message2) {
+      Error.call(this, message2);
       this.type = "aborted";
-      this.message = message;
+      this.message = message2;
       Error.captureStackTrace(this, this.constructor);
     }
     __name(AbortError, "AbortError");
@@ -2891,8 +2891,8 @@ var require_dist_node3 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     var Deprecation = class extends Error {
-      constructor(message) {
-        super(message);
+      constructor(message2) {
+        super(message2);
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
@@ -2998,8 +2998,8 @@ var require_dist_node4 = __commonJS({
     var logOnceCode = once((deprecation2) => console.warn(deprecation2));
     var logOnceHeaders = once((deprecation2) => console.warn(deprecation2));
     var RequestError = class extends Error {
-      constructor(message, statusCode, options) {
-        super(message);
+      constructor(message2, statusCode, options) {
+        super(message2);
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
@@ -3206,8 +3206,8 @@ var require_dist_node6 = __commonJS({
     var VERSION = "4.6.4";
     var GraphqlError = class extends Error {
       constructor(request2, response) {
-        const message = response.data.errors[0].message;
-        super(message);
+        const message2 = response.data.errors[0].message;
+        super(message2);
         Object.assign(this, response.data);
         Object.assign(this, {
           headers: response.headers
@@ -4673,11 +4673,11 @@ var require_dist_node9 = __commonJS({
         }
         if (decorations.renamedParameters) {
           const options2 = requestWithDefaults.endpoint.merge(...args);
-          for (const [name, alias2] of Object.entries(decorations.renamedParameters)) {
+          for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
             if (name in options2) {
-              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias2}" instead`);
-              if (!(alias2 in options2)) {
-                options2[alias2] = options2[name];
+              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
+              if (!(alias in options2)) {
+                options2[alias] = options2[name];
               }
               delete options2[name];
             }
@@ -5557,9 +5557,9 @@ var require_toolrunner = __commonJS({
         this.args = args || [];
         this.options = options || {};
       }
-      _debug(message) {
+      _debug(message2) {
         if (this.options.listeners && this.options.listeners.debug) {
-          this.options.listeners.debug(message);
+          this.options.listeners.debug(message2);
         }
       }
       _getCommandString(options, noPrefix) {
@@ -5762,8 +5762,8 @@ var require_toolrunner = __commonJS({
               optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
             }
             const state = new ExecState(optionsNonNull, this.toolPath);
-            state.on("debug", (message) => {
-              this._debug(message);
+            state.on("debug", (message2) => {
+              this._debug(message2);
             });
             if (this.options.cwd && !(yield ioUtil.exists(this.options.cwd))) {
               return reject(new Error(`The cwd: ${this.options.cwd} does not exist!`));
@@ -5926,8 +5926,8 @@ var require_toolrunner = __commonJS({
           this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
       }
-      _debug(message) {
-        this.emit("debug", message);
+      _debug(message2) {
+        this.emit("debug", message2);
       }
       _setResult() {
         let error;
@@ -5952,8 +5952,8 @@ var require_toolrunner = __commonJS({
           return;
         }
         if (!state.processClosed && state.processExited) {
-          const message = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
-          state._debug(message);
+          const message2 = `The STDIO streams did not close within ${state.delay / 1e3} seconds of the exit event from process '${state.toolPath}'. This may indicate a child process inherited the STDIO streams and has not yet exited.`;
+          state._debug(message2);
         }
         state._setResult();
       }
@@ -6080,9 +6080,9 @@ var require_exec = __commonJS({
   }
 });
 
-// deploy-preview/index.ts
-var import_core2 = __toModule(require_core());
-var import_github2 = __toModule(require_github());
+// commit-snapshots/index.ts
+var import_core = __toModule(require_core());
+var import_github = __toModule(require_github());
 
 // utils/exec.ts
 var import_exec = __toModule(require_exec());
@@ -6104,94 +6104,70 @@ async function execOutput(commandLine, args, options) {
   return output;
 }
 __name(execOutput, "execOutput");
-async function execString(commandLine, args, options) {
-  const { stdout } = await execOutput(commandLine, args, options);
-  return stdout.trim();
-}
-__name(execString, "execString");
-async function execJSON(commandLine, args, options) {
-  const json = await execString(commandLine, args, options);
-  try {
-    return JSON.parse(json);
-  } catch {
-    throw new Error(`Failed to parse output: ${JSON.stringify(json)}`);
-  }
-}
-__name(execJSON, "execJSON");
 
-// utils/sendReport.ts
-var import_core = __toModule(require_core());
-var import_github = __toModule(require_github());
-var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
-async function sendReport({
-  pr: pr2,
-  token: token2,
-  label: label2,
-  title,
-  content
-}) {
-  const octokit = (0, import_github.getOctokit)(token2);
-  const reportTitle = `### ${!label2 ? title : `${title} (${label2})`}
-`;
-  let previousCommentID = void 0;
-  (0, import_core.info)(`Looking for the previous reports in: #${pr2}`);
-  for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
-    per_page: 100,
-    issue_number: pr2
-  }))) {
-    for (const { id, body: body2, user } of comments) {
-      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
-        if (previousCommentID == null) {
-          (0, import_core.info)(`Found previous report: ${id}`);
-          previousCommentID = id;
-          break;
-        }
-      }
-    }
-  }
-  const body = reportTitle + content;
-  if (previousCommentID != null) {
-    (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
-    await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
-  } else {
-    (0, import_core.info)("Sending new report");
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
-  }
-}
-__name(sendReport, "sendReport");
-
-// deploy-preview/index.ts
-var pr = Number((0, import_core2.getInput)("pr", { required: true }));
-var defaultAlias = `preview-${pr}`;
-var dir = (0, import_core2.getInput)("dir", { required: true });
-var alias = (0, import_core2.getInput)("alias") || defaultAlias;
-var token = (0, import_core2.getInput)("token", { required: true });
-var netlifyToken = (0, import_core2.getInput)("netlify-token", { required: true });
-var netlifySiteID = (0, import_core2.getInput)("netlify-site-id", { required: true });
-var label = alias === defaultAlias ? "" : alias;
+// commit-snapshots/index.ts
+var message = (0, import_core.getInput)("message");
+var token = (0, import_core.getInput)("token", { required: true });
+var command = (0, import_core.getInput)("command", { required: true });
+var updateCommand = (0, import_core.getInput)("update-command", { required: true });
 async function main() {
-  const { deploy_url: previewURL } = await (0, import_core2.group)("Deploying to Netlify", () => execJSON("netlify", [
-    "deploy",
-    "--json",
-    `--dir=${dir}`,
-    `--alias=${alias}`,
-    `--auth=${netlifyToken}`,
-    `--site=${netlifySiteID}`
-  ]));
-  await (0, import_core2.group)("Sending deployment report", () => {
-    const content = `Built with commit ${import_github2.context.sha}
-${previewURL}`;
-    return sendReport({
-      pr,
-      token,
-      label,
-      content,
-      title: "Preview is ready!"
+  const octokit = (0, import_github.getOctokit)(token);
+  const branch = process.env.GITHUB_HEAD_REF;
+  if (!branch) {
+    throw new Error("GITHUB_HEAD_REF is not set");
+  }
+  try {
+    await (0, import_core.group)("Running command", async () => {
+      const { exitCode } = await execOutput(command);
+      if (exitCode !== 0) {
+        throw new Error(`Command exited with code ${exitCode}`);
+      }
     });
+  } catch (error) {
+  }
+  await execOutput("git", ["config", "user.name", "github_actions"]);
+  await execOutput("git", [
+    "config",
+    "user.email",
+    "github-actions@github.com"
+  ]);
+  await execOutput("git", ["fetch", "--all", "--unshallow"]);
+  await execOutput("git", ["checkout", "-b", branch]);
+  await execOutput("git", [
+    "pull",
+    "--unshallow",
+    "--ff-only",
+    "origin",
+    branch
+  ]);
+  await (0, import_core.group)("Running update command", async () => {
+    await execOutput(updateCommand);
+  });
+  const { stdout: changes } = await execOutput("git", [
+    "status",
+    "--porcelain"
+  ]);
+  const changedFiles = changes.split("\n").filter(Boolean).map((file) => file.split(" ").pop());
+  if (!changedFiles.length) {
+    (0, import_core.info)("No changes detected");
+    return;
+  }
+  await (0, import_core.group)("Committing changes", async () => {
+    await execOutput("git", ["add", "."]);
+    await execOutput("git", ["commit", "-m", message]);
+    await execOutput("git", ["push", "origin", branch]);
+  });
+  const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
+  const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
+  await octokit.rest.issues.createComment({
+    issue_number: import_github.context.issue.number,
+    owner: import_github.context.repo.owner,
+    repo: import_github.context.repo.repo,
+    body: `Detected snapshot changes. Updated in commit ${commitUrl}`
   });
 }
 __name(main, "main");
-main().catch(import_core2.setFailed);
+main().catch(import_core.setFailed);
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *

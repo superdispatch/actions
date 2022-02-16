@@ -66590,8 +66590,8 @@ var import_fs = __toModule(require("fs"));
 // utils/exec.ts
 var import_exec = __toModule(require_exec());
 async function execOutput(commandLine, args, options) {
-  const output = { debug: [], stdout: "", stderr: "" };
-  await (0, import_exec.exec)(commandLine, args, __spreadProps(__spreadValues({}, options), {
+  const output = { exitCode: 0, debug: [], stdout: "", stderr: "" };
+  output.exitCode = await (0, import_exec.exec)(commandLine, args, __spreadProps(__spreadValues({}, options), {
     listeners: {
       stdout(data) {
         output.stdout += data.toString("utf8");
