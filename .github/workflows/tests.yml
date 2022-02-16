@@ -191,7 +191,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./commit-snapshots
+      - uses: ./update-snapshots
         with:
           dry-run: true
           command: exit 1

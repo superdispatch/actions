@@ -1,5 +1,5 @@
-name: 'Commit Snapshots'
-description: 'Commit Snapshots changes'
+name: 'Update Snapshots'
+description: 'Updates the snapshots if there is any changes'
 author: 'superdispatch'
 
 inputs:

@@ -7932,7 +7932,7 @@ var require_exec = __commonJS({
   }
 });
 
-// commit-snapshots/index.ts
+// update-snapshots/index.ts
 var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
 
@@ -7957,7 +7957,7 @@ async function execOutput(commandLine, args, options) {
 }
 __name(execOutput, "execOutput");
 
-// commit-snapshots/index.ts
+// update-snapshots/index.ts
 var message = (0, import_core.getInput)("message");
 var dryRun = (0, import_core.getInput)("dry-run");
 var token = (0, import_core.getInput)("token", { required: true });
@@ -8017,7 +8017,10 @@ async function main() {
     issue_number: import_github.context.issue.number,
     owner: import_github.context.repo.owner,
     repo: import_github.context.repo.repo,
-    body: `Detected snapshot changes. Updated in commit ${commitUrl}`
+    body: `\u{1F6A8} **Snapshot command failed**
+
+Snapshots are updated automatically in following commit ${commitUrl}
+Please review before merging.`
   });
 }
 __name(main, "main");

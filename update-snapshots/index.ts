@@ -78,7 +78,10 @@ async function main() {
     issue_number: context.issue.number,
     owner: context.repo.owner,
     repo: context.repo.repo,
-    body: `Detected snapshot changes. Updated in commit ${commitUrl}`,
+    body: `🚨 **Snapshot command failed**
+
+Snapshots are updated automatically in following commit ${commitUrl}
+Please review before merging.`,
   });
 }
 
