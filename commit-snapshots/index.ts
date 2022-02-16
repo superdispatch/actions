@@ -28,26 +28,26 @@ async function main() {
     await execOutput(updateCommand);
   });
 
-  await execOutput('git', ['add', '.']);
   const { stdout: changes } = await execOutput('git', [
     'status',
     '--porcelain',
   ]);
 
-  const files = changes
+  const changedFiles = changes
     .split('\n')
     .filter(Boolean)
     .map((file) => file.split(' ').pop());
 
-  if (!files.length) {
+  if (!changedFiles.length) {
     info('No changes detected');
     return;
   }
 
   await group('Committing changes', async () => {
+    await execOutput('git', ['checkout', branch]);
     await execOutput('git', ['config', 'user.name', 'github_actions']);
     await execOutput('git', ['commit', '-am', message]);
-    await execOutput('git', ['push', 'origin', `HEAD:${branch}`]);
+    await execOutput('git', ['push', 'origin', branch]);
   });
 
   const { stdout: sha } = await execOutput('git', ['rev-parse', 'HEAD']);

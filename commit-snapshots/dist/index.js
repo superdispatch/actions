@@ -6127,20 +6127,20 @@ async function main() {
   await (0, import_core.group)("Running update command", async () => {
     await execOutput(updateCommand);
   });
-  await execOutput("git", ["add", "."]);
   const { stdout: changes } = await execOutput("git", [
     "status",
     "--porcelain"
   ]);
-  const files = changes.split("\n").filter(Boolean).map((file) => file.split(" ").pop());
-  if (!files.length) {
+  const changedFiles = changes.split("\n").filter(Boolean).map((file) => file.split(" ").pop());
+  if (!changedFiles.length) {
     (0, import_core.info)("No changes detected");
     return;
   }
   await (0, import_core.group)("Committing changes", async () => {
+    await execOutput("git", ["checkout", branch]);
     await execOutput("git", ["config", "user.name", "github_actions"]);
     await execOutput("git", ["commit", "-am", message]);
-    await execOutput("git", ["push", "origin", `HEAD:${branch}`]);
+    await execOutput("git", ["push", "origin", branch]);
   });
   const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
   const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
