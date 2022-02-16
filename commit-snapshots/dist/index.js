@@ -6117,7 +6117,13 @@ async function main() {
     throw new Error("GITHUB_HEAD_REF is not set");
   }
   await execOutput("git", ["checkout", "-b", branch]);
-  await execOutput("git", ["pull", "--no-rebase", "origin", branch]);
+  await execOutput("git", [
+    "pull",
+    "--unshallow ",
+    "--no-rebase",
+    "origin",
+    branch
+  ]);
   try {
     await (0, import_core.group)("Running command", async () => {
       const output = await execOutput(command);
