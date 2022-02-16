@@ -195,5 +195,5 @@ jobs:
 
       - uses: ./commit-snapshots
         with:
-          command: echo 1 && exit 1
+          command: unknown
           update-command: echo test > test.txt

@@ -15,12 +15,12 @@ async function main() {
     throw new Error('GITHUB_HEAD_REF is not set');
   }
 
-  const { exitCode } = await execOutput(command);
-
-  if (exitCode === 0) {
+  try {
+    await execOutput(command);
     info('Command executed successfully');
+
     return;
-  }
+  } catch (error: unknown) {}
 
   info('Running update command');
   await execOutput(updateCommand);
