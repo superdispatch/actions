@@ -6116,10 +6116,11 @@ async function main() {
   if (!branch) {
     throw new Error("GITHUB_HEAD_REF is not set");
   }
-  const { exitCode } = await execOutput(command);
-  if (exitCode === 0) {
+  try {
+    await execOutput(command);
     (0, import_core.info)("Command executed successfully");
     return;
+  } catch (error) {
   }
   (0, import_core.info)("Running update command");
   await execOutput(updateCommand);
