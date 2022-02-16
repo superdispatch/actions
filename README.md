@@ -144,3 +144,35 @@ jobs:
         with:
           limit: 2
 ```
+
+
+### Update snapshots
+
+Updates changed files if changes are detected.
+
+##### Inputs
+
+- `dry-run` - string, dry run commit and push commands
+- `command` - string, a command that is run for checking
+- `update-command` - string, a command that is run if main command fails
+- `message` - string, commit message when there is changes found. Defaults "chore: Updated snapshots changes."
+- `token` - github token, uses `${{ github.token }}` as default
+
+##### Usage
+
+```yml
+name: Tests
+
+on:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: superdispatch/update-snapshots
+        with:
+          command: yarn test
+          update-command: yarn test -u
+```
+
