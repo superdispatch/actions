@@ -6126,10 +6126,11 @@ async function main() {
   ]);
   try {
     await (0, import_core.group)("Running command", async () => {
-      const output = await execOutput(command);
-      console.log(output);
+      const { exitCode } = await execOutput(command);
+      if (exitCode !== 0) {
+        throw new Error(`Command exited with code ${exitCode}`);
+      }
     });
-    return;
   } catch (error) {
   }
   await (0, import_core.group)("Running update command", async () => {

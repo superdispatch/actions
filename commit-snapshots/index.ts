@@ -26,11 +26,12 @@ async function main() {
 
   try {
     await group('Running command', async () => {
-      const output = await execOutput(command);
+      const { exitCode } = await execOutput(command);
 
-      console.log(output);
+      if (exitCode !== 0) {
+        throw new Error(`Command exited with code ${exitCode}`);
+      }
     });
-    return;
   } catch (error: unknown) {}
 
   await group('Running update command', async () => {
