@@ -18,7 +18,7 @@ async function main() {
   await execOutput('git', ['checkout', '-b', branch]);
   await execOutput('git', [
     'pull',
-    '--unshallow ',
+    '--unshallow',
     '--no-rebase',
     'origin',
     branch,
