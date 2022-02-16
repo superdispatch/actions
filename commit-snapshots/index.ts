@@ -34,6 +34,7 @@ async function main() {
 
   await execOutput('git', ['fetch', '--all', '--unshallow']);
   await execOutput('git', ['checkout', '-b', branch]);
+  await execOutput('git', ['pull', '--ff-only', 'origin', branch]);
 
   await group('Running update command', async () => {
     await execOutput(updateCommand);
