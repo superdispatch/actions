@@ -16,14 +16,15 @@ async function main() {
   }
 
   try {
-    await execOutput(command);
-    info('Command executed successfully');
-
+    await group('Running command', async () => {
+      await execOutput(command);
+    });
     return;
   } catch (error: unknown) {}
 
-  info('Running update command');
-  await execOutput(updateCommand);
+  await group('Running update command', async () => {
+    await execOutput(updateCommand);
+  });
 
   const { stdout: changes } = await execOutput('git', [
     'status',
@@ -37,6 +38,7 @@ async function main() {
 
   if (!files.length) {
     info('No changes detected');
+    return;
   }
 
   await group('Committing changes', async () => {

@@ -6117,13 +6117,15 @@ async function main() {
     throw new Error("GITHUB_HEAD_REF is not set");
   }
   try {
-    await execOutput(command);
-    (0, import_core.info)("Command executed successfully");
+    await (0, import_core.group)("Running command", async () => {
+      await execOutput(command);
+    });
     return;
   } catch (error) {
   }
-  (0, import_core.info)("Running update command");
-  await execOutput(updateCommand);
+  await (0, import_core.group)("Running update command", async () => {
+    await execOutput(updateCommand);
+  });
   const { stdout: changes } = await execOutput("git", [
     "status",
     "--porcelain"
@@ -6131,6 +6133,7 @@ async function main() {
   const files = changes.split("\n").filter(Boolean).map((file) => file.split(" ").pop());
   if (!files.length) {
     (0, import_core.info)("No changes detected");
+    return;
   }
   await (0, import_core.group)("Committing changes", async () => {
     await execOutput("git", ["config", "user.name", "github_actions"]);
