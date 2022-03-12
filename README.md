@@ -170,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: superdispatch/update-snapshots@v1.5.0
+      - uses: superdispatch/actions/update-snapshots@v1.5.0
         with:
           command: yarn test
           update-command: yarn test -u
