@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn install
       - run: yarn build
-      - uses: superdispatch/actions/build-size/report@v1
+      - uses: superdispatch/actions/build-size/report@v1.5.0
         with:
           dir: build
 ```
@@ -89,7 +89,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: yarn install
       - run: yarn build
-      - uses: superdispatch/actions/deploy-preview@v1
+      - uses: superdispatch/actions/deploy-preview@v1.5.0
         with:
           dir: build
           netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -116,7 +116,7 @@ jobs:
   prune-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: superdispatch/actions/prune-artifacts@v1
+      - uses: superdispatch/actions/prune-artifacts@v1.5.0
         with:
           skip-recent: 5
           pattern: '^e2e-'
@@ -140,7 +140,7 @@ jobs:
   pr-limit:
     runs-on: ubuntu-latest
     steps:
-      - uses: superdispatch/actions/pr-limit@v1
+      - uses: superdispatch/actions/pr-limit@v1.5.0
         with:
           limit: 2
 ```
@@ -170,7 +170,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: superdispatch/update-snapshots@1
+      - uses: superdispatch/update-snapshots@v1.5.0
         with:
           command: yarn test
           update-command: yarn test -u
