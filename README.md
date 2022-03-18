@@ -145,7 +145,6 @@ jobs:
           limit: 2
 ```
 
-
 ### Update snapshots
 
 Updates changed files if changes are detected.
@@ -175,4 +174,3 @@ jobs:
           command: yarn test
           update-command: yarn test -u
 ```
-
