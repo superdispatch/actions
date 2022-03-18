@@ -1,4 +1,4 @@
-import { getInput, group, info, setFailed } from '@actions/core';
+import { getInput, group, info, setFailed, warning } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import { execOutput } from 'utils/exec';
 
@@ -13,7 +13,9 @@ async function main() {
   const branch = process.env.GITHUB_HEAD_REF;
 
   if (!branch) {
-    throw new Error('GITHUB_HEAD_REF is not set');
+    warning('GITHUB_HEAD_REF is not found');
+    info('Skipping...');
+    return;
   }
 
   try {

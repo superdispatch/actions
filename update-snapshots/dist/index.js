@@ -371,11 +371,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(error, "error");
     exports2.error = error;
-    function warning(message2) {
+    function warning2(message2) {
       command_1.issue("warning", message2 instanceof Error ? message2.toString() : message2);
     }
-    __name(warning, "warning");
-    exports2.warning = warning;
+    __name(warning2, "warning");
+    exports2.warning = warning2;
     function info2(message2) {
       process.stdout.write(message2 + os.EOL);
     }
@@ -7967,7 +7967,9 @@ async function main() {
   const octokit = (0, import_github.getOctokit)(token);
   const branch = process.env.GITHUB_HEAD_REF;
   if (!branch) {
-    throw new Error("GITHUB_HEAD_REF is not set");
+    (0, import_core.warning)("GITHUB_HEAD_REF is not found");
+    (0, import_core.info)("Skipping...");
+    return;
   }
   try {
     await (0, import_core.group)("Running command", async () => {
