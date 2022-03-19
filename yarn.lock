@@ -3309,10 +3309,10 @@ normalize-url@^6.0.1:
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-6.0.1.tgz#a4f27f58cf8c7b287b440b8a8201f42d0b00d256"
   integrity sha512-VU4pzAuh7Kip71XEmO9aNREYAdMHFGTVj/i+CaTImS8x0i1d3jUZkXhqluy/PRgjPLMgsLQulYY3PJ/aSbSjpQ==
 
-np@7.5.0:
-  version "7.5.0"
-  resolved "https://registry.yarnpkg.com/np/-/np-7.5.0.tgz#03e3f8fb77ff0b8718dfd54b76cbd3c0f383a221"
-  integrity sha512-CdpgqtO6JpDKJjQ2gueY0jnbz6APWA9wFXSwPv5bXg4seSBibHqQ8JyWxYlS8YRfVbpeDtj582wcAWTlfy5qNA==
+np@7.6.1:
+  version "7.6.1"
+  resolved "https://registry.yarnpkg.com/np/-/np-7.6.1.tgz#b1cd70a0941d03779f4c7e9036ec67b227aee604"
+  integrity sha512-EHr5PtMPzNmkM/trnWQWTKAogJnVP1RzTFfIyvPK2COvLN6Vqut4gFXuWNng15xuqnTgmUPzKYbpQAZsYR+Dkw==
   dependencies:
     "@samverschueren/stream-to-observable" "^0.3.1"
     any-observable "^0.5.1"
