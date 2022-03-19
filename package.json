@@ -31,7 +31,7 @@
     "eslint": "7.28.0",
     "husky": "7.0.4",
     "jira-client": "6.23.0",
-    "lint-staged": "11.2.6",
+    "lint-staged": "12.3.7",
     "np": "7.6.1",
     "prettier": "2.5.1",
     "pretty-bytes": "5.6.0",
