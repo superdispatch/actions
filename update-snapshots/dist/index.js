@@ -7984,13 +7984,15 @@ async function main() {
   try {
     await (0, import_core.group)("Running command", async () => {
       const result = await execOutput(command);
-      console.log(result);
+      console.log({ result });
       exitCode = result.exitCode;
       if (result.exitCode !== 0) {
         throw new Error(`Command exited with code ${exitCode}`);
       }
     });
   } catch (error) {
+    console.log({ error });
+    exitCode = 1;
   }
   console.log({ exitCode });
   if (exitCode === 0) {

@@ -27,14 +27,17 @@ async function main() {
     await group('Running command', async () => {
       const result = await execOutput(command);
 
-      console.log(result);
+      console.log({ result });
       exitCode = result.exitCode;
 
       if (result.exitCode !== 0) {
         throw new Error(`Command exited with code ${exitCode}`);
       }
     });
-  } catch (error: unknown) {}
+  } catch (error: unknown) {
+    console.log({ error });
+    exitCode = 1;
+  }
 
   console.log({ exitCode });
 
