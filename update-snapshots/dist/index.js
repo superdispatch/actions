@@ -7984,6 +7984,7 @@ async function main() {
   try {
     await (0, import_core.group)("Running command", async () => {
       const result = await execOutput(command);
+      console.log(result);
       exitCode = result.exitCode;
       if (result.exitCode !== 0) {
         throw new Error(`Command exited with code ${exitCode}`);
@@ -7997,7 +7998,8 @@ async function main() {
     await completeCheck({
       conclusion: "success",
       output: {
-        title: `"${command}" succeed`
+        title: `"${command}" succeed`,
+        summary: "Successfully completed"
       }
     });
     return;

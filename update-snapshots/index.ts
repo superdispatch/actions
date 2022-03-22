@@ -27,6 +27,7 @@ async function main() {
     await group('Running command', async () => {
       const result = await execOutput(command);
 
+      console.log(result);
       exitCode = result.exitCode;
 
       if (result.exitCode !== 0) {
@@ -44,6 +45,7 @@ async function main() {
       conclusion: 'success',
       output: {
         title: `"${command}" succeed`,
+        summary: 'Successfully completed',
       },
     });
     return;
@@ -125,8 +127,8 @@ interface CheckDetails {
   details_url?: string;
   conclusion?: 'failure' | 'success';
   output?: {
-    title?: string;
-    summary?: string;
+    title: string;
+    summary: string;
   };
 }
 
