@@ -8033,7 +8033,7 @@ async function main() {
     return;
   }
   const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
-  const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}/`;
+  const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
   await octokit.rest.issues.createComment(__spreadProps(__spreadValues({}, import_github.context.repo), {
     issue_number: import_github.context.issue.number,
     body: `\u{1F6A8} **Snapshot command failed**
@@ -8042,7 +8042,7 @@ Snapshots are updated automatically in following commit ${commitUrl}
 Please review before merging.`
   }));
   await completeCheck({
-    details_url: "https://superdipsatch.com",
+    details_url: commitUrl,
     conclusion: "failure",
     output: {
       title: `"${command}" failed`,

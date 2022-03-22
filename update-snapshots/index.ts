@@ -92,7 +92,7 @@ async function main() {
   }
 
   const { stdout: sha } = await execOutput('git', ['rev-parse', 'HEAD']);
-  const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}/`;
+  const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
 
   await octokit.rest.issues.createComment({
     ...context.repo,
@@ -104,7 +104,7 @@ Please review before merging.`,
   });
 
   await completeCheck({
-    details_url: 'https://superdipsatch.com',
+    details_url: commitUrl,
     conclusion: 'failure',
     output: {
       title: `"${command}" failed`,
