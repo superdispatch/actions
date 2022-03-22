@@ -194,4 +194,4 @@ jobs:
       - uses: ./update-snapshots
         with:
           command: exit 1
-          update-command: touch test4.txt
+          update-command: touch test5.txt

@@ -8034,6 +8034,13 @@ async function main() {
   }
   const { stdout: sha } = await execOutput("git", ["rev-parse", "HEAD"]);
   const commitUrl = `https://github.com/${import_github.context.repo.owner}/${import_github.context.repo.repo}/pull/${import_github.context.issue.number}/commits/${sha}`;
+  await octokit.rest.issues.createComment(__spreadProps(__spreadValues({}, import_github.context.repo), {
+    issue_number: import_github.context.issue.number,
+    body: `\u{1F6A8} **Snapshot command failed**
+
+Snapshots are updated automatically in following commit ${commitUrl}
+Please review before merging.`
+  }));
   await completeCheck({
     details_url: commitUrl,
     conclusion: "failure",
@@ -8041,15 +8048,6 @@ async function main() {
       title: `"${command}" failed`,
       summary: `Snapshots are updated for command: "${command}"`
     }
-  });
-  await octokit.rest.issues.createComment({
-    issue_number: import_github.context.issue.number,
-    owner: import_github.context.repo.owner,
-    repo: import_github.context.repo.repo,
-    body: `\u{1F6A8} **Snapshot command failed**
-
-Snapshots are updated automatically in following commit ${commitUrl}
-Please review before merging.`
   });
 }
 __name(main, "main");

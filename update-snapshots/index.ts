@@ -94,6 +94,15 @@ async function main() {
   const { stdout: sha } = await execOutput('git', ['rev-parse', 'HEAD']);
   const commitUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${context.issue.number}/commits/${sha}`;
 
+  await octokit.rest.issues.createComment({
+    ...context.repo,
+    issue_number: context.issue.number,
+    body: `🚨 **Snapshot command failed**
+
+Snapshots are updated automatically in following commit ${commitUrl}
+Please review before merging.`,
+  });
+
   await completeCheck({
     details_url: commitUrl,
     conclusion: 'failure',
@@ -101,16 +110,6 @@ async function main() {
       title: `"${command}" failed`,
       summary: `Snapshots are updated for command: "${command}"`,
     },
-  });
-
-  await octokit.rest.issues.createComment({
-    issue_number: context.issue.number,
-    owner: context.repo.owner,
-    repo: context.repo.repo,
-    body: `🚨 **Snapshot command failed**
-
-Snapshots are updated automatically in following commit ${commitUrl}
-Please review before merging.`,
   });
 }
 
