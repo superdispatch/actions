@@ -8061,8 +8061,10 @@ async function checkoutRepo(branch) {
 }
 __name(checkoutRepo, "checkoutRepo");
 async function createCheck(octokit) {
+  const pull_request = import_github.context.payload.pull_request;
   const check = await octokit.rest.checks.create(__spreadProps(__spreadValues({}, import_github.context.repo), {
     name: "Update snapshots",
+    head_sha: pull_request.head.sha,
     status: "in_progress"
   }));
   return async (details) => {

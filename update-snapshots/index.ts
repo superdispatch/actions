@@ -131,10 +131,14 @@ interface CheckDetails {
 }
 
 export async function createCheck(octokit: InstanceType<typeof GitHub>) {
+  const pull_request = context.payload.pull_request as unknown as {
+    head: { sha: string };
+  };
+
   const check = await octokit.rest.checks.create({
     ...context.repo,
     name: 'Update snapshots',
-    // head_sha: context.payload.pull_request?.head.sha,
+    head_sha: pull_request.head.sha,
     status: 'in_progress',
   });
 
