@@ -59950,14 +59950,14 @@ function getEnv(key) {
 __name(getEnv, "getEnv");
 
 // jira/utils/JiraIssue.ts
-var ISSUE_REGEX = /([a-z]{2,}-\d+)/g;
+var ISSUE_REGEX = /([a-z]{2,}-\d+)/gi;
 async function findIssueKey(input) {
   const matches = input.match(ISSUE_REGEX);
   if (matches) {
     const jira = createClient();
     for (const match of matches) {
       try {
-        const issue = await jira.getIssue(match);
+        const issue = await jira.getIssue(match.toUpperCase());
         return issue.key;
       } catch (error) {
       }

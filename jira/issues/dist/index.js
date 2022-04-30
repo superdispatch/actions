@@ -53506,7 +53506,7 @@ function getEnv(key) {
 __name(getEnv, "getEnv");
 
 // jira/utils/JiraIssue.ts
-var ISSUE_REGEX = /([a-z]{2,}-\d+)/g;
+var ISSUE_REGEX = /([a-z]{2,}-\d+)/gi;
 function parseIssue(input) {
   const match = ISSUE_REGEX.exec(input);
   return match == null ? void 0 : match[1].toUpperCase();
