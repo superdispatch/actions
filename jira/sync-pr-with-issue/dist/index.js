@@ -60329,7 +60329,7 @@ __name(findIssueKey, "findIssueKey");
 
 // jira/sync-pr-with-issue/index.ts
 var token = (0, import_core.getInput)("token", { required: true });
-var jiraNamespace = (0, import_core.getInput)("jira-namespace", { required: true });
+var JIRA_BASE_URL2 = getEnv("JIRA_BASE_URL");
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
 var _a;
 var PR_NUMBER = (_a = import_github.context.payload.pull_request) == null ? void 0 : _a.number;
@@ -60357,7 +60357,7 @@ async function main() {
 
 **JIRA card:**
 
-[${issueKey}](https://${jiraNamespace}.atlassian.net/browse/${issueKey})
+[${issueKey}](${JIRA_BASE_URL2}/browse/${issueKey})
 `
     });
     (0, import_core.info)("Updated PR title");

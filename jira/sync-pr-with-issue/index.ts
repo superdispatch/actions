@@ -1,9 +1,10 @@
 import { getInput, info, setFailed, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
+import { getEnv } from 'jira/utils/JiraAPI';
 import { findIssueKey } from '../utils/JiraIssue';
 
 const token = getInput('token', { required: true });
-const jiraNamespace = getInput('jira-namespace', { required: true });
+const JIRA_BASE_URL = getEnv('JIRA_BASE_URL');
 
 const HEAD_REF = process.env.GITHUB_HEAD_REF;
 const PR_NUMBER = context.payload.pull_request?.number;
@@ -40,7 +41,7 @@ async function main() {
 
 **JIRA card:**
 
-[${issueKey}](https://${jiraNamespace}.atlassian.net/browse/${issueKey})
+[${issueKey}](${JIRA_BASE_URL}/browse/${issueKey})
 `,
     });
     info('Updated PR title');

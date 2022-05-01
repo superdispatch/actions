@@ -8,10 +8,6 @@ inputs:
     default: '${{ github.token }}'
     description: 'github token'
 
-  jira-namespace:
-    description: 'JIRA namespace'
-    required: true
-
 outputs:
   issue:
     description: 'JIRA Issue number'
