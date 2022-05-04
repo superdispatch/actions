@@ -6841,7 +6841,7 @@ var require_dist_node9 = __commonJS({
       }
     };
     var VERSION = "5.3.1";
-    function endpointsToMethods(octokit, endpointsMap) {
+    function endpointsToMethods(octokit2, endpointsMap) {
       const newMethods = {};
       for (const [scope, endpoints] of Object.entries(endpointsMap)) {
         for (const [methodName, endpoint] of Object.entries(endpoints)) {
@@ -6856,17 +6856,17 @@ var require_dist_node9 = __commonJS({
           }
           const scopeMethods = newMethods[scope];
           if (decorations) {
-            scopeMethods[methodName] = decorate(octokit, scope, methodName, endpointDefaults, decorations);
+            scopeMethods[methodName] = decorate(octokit2, scope, methodName, endpointDefaults, decorations);
             continue;
           }
-          scopeMethods[methodName] = octokit.request.defaults(endpointDefaults);
+          scopeMethods[methodName] = octokit2.request.defaults(endpointDefaults);
         }
       }
       return newMethods;
     }
     __name(endpointsToMethods, "endpointsToMethods");
-    function decorate(octokit, scope, methodName, defaults, decorations) {
-      const requestWithDefaults = octokit.request.defaults(defaults);
+    function decorate(octokit2, scope, methodName, defaults, decorations) {
+      const requestWithDefaults = octokit2.request.defaults(defaults);
       function withDecorations(...args) {
         let options = requestWithDefaults.endpoint.merge(...args);
         if (decorations.mapToData) {
@@ -6878,16 +6878,16 @@ var require_dist_node9 = __commonJS({
         }
         if (decorations.renamed) {
           const [newScope, newMethodName] = decorations.renamed;
-          octokit.log.warn(`octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`);
+          octokit2.log.warn(`octokit.${scope}.${methodName}() has been renamed to octokit.${newScope}.${newMethodName}()`);
         }
         if (decorations.deprecated) {
-          octokit.log.warn(decorations.deprecated);
+          octokit2.log.warn(decorations.deprecated);
         }
         if (decorations.renamedParameters) {
           const options2 = requestWithDefaults.endpoint.merge(...args);
           for (const [name, alias] of Object.entries(decorations.renamedParameters)) {
             if (name in options2) {
-              octokit.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
+              octokit2.log.warn(`"${name}" parameter is deprecated for "octokit.${scope}.${methodName}()". Use "${alias}" instead`);
               if (!(alias in options2)) {
                 options2[alias] = options2[name];
               }
@@ -6902,16 +6902,16 @@ var require_dist_node9 = __commonJS({
       return Object.assign(withDecorations, requestWithDefaults);
     }
     __name(decorate, "decorate");
-    function restEndpointMethods(octokit) {
-      const api = endpointsToMethods(octokit, Endpoints);
+    function restEndpointMethods(octokit2) {
+      const api = endpointsToMethods(octokit2, Endpoints);
       return {
         rest: api
       };
     }
     __name(restEndpointMethods, "restEndpointMethods");
     restEndpointMethods.VERSION = VERSION;
-    function legacyRestEndpointMethods(octokit) {
-      const api = endpointsToMethods(octokit, Endpoints);
+    function legacyRestEndpointMethods(octokit2) {
+      const api = endpointsToMethods(octokit2, Endpoints);
       return _objectSpread2(_objectSpread2({}, api), {}, {
         rest: api
       });
@@ -7003,9 +7003,9 @@ var require_dist_node10 = __commonJS({
       return response;
     }
     __name(normalizePaginatedListResponse, "normalizePaginatedListResponse");
-    function iterator(octokit, route, parameters) {
-      const options = typeof route === "function" ? route.endpoint(parameters) : octokit.request.endpoint(route, parameters);
-      const requestMethod = typeof route === "function" ? route : octokit.request;
+    function iterator(octokit2, route, parameters) {
+      const options = typeof route === "function" ? route.endpoint(parameters) : octokit2.request.endpoint(route, parameters);
+      const requestMethod = typeof route === "function" ? route : octokit2.request;
       const method = options.method;
       const headers = options.headers;
       let url = options.url;
@@ -7044,15 +7044,15 @@ var require_dist_node10 = __commonJS({
       };
     }
     __name(iterator, "iterator");
-    function paginate(octokit, route, parameters, mapFn) {
+    function paginate(octokit2, route, parameters, mapFn) {
       if (typeof parameters === "function") {
         mapFn = parameters;
         parameters = void 0;
       }
-      return gather(octokit, [], iterator(octokit, route, parameters)[Symbol.asyncIterator](), mapFn);
+      return gather(octokit2, [], iterator(octokit2, route, parameters)[Symbol.asyncIterator](), mapFn);
     }
     __name(paginate, "paginate");
-    function gather(octokit, results, iterator2, mapFn) {
+    function gather(octokit2, results, iterator2, mapFn) {
       return iterator2.next().then((result) => {
         if (result.done) {
           return results;
@@ -7066,7 +7066,7 @@ var require_dist_node10 = __commonJS({
         if (earlyExit) {
           return results;
         }
-        return gather(octokit, results, iterator2, mapFn);
+        return gather(octokit2, results, iterator2, mapFn);
       });
     }
     __name(gather, "gather");
@@ -7082,10 +7082,10 @@ var require_dist_node10 = __commonJS({
       }
     }
     __name(isPaginatingEndpoint, "isPaginatingEndpoint");
-    function paginateRest(octokit) {
+    function paginateRest(octokit2) {
       return {
-        paginate: Object.assign(paginate.bind(null, octokit), {
-          iterator: iterator.bind(null, octokit)
+        paginate: Object.assign(paginate.bind(null, octokit2), {
+          iterator: iterator.bind(null, octokit2)
         })
       };
     }
@@ -7209,37 +7209,46 @@ var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
 var limit = Number((0, import_core.getInput)("limit", { required: true }));
 var token = (0, import_core.getInput)("token", { required: true });
+var octokit = (0, import_github.getOctokit)(token);
+main().catch(import_core.setFailed);
 async function main() {
-  const octokit = (0, import_github.getOctokit)(token);
   await (0, import_core.group)("Checking PR limit", async () => {
-    var _a;
-    let userPRCount = 0;
     const pr = import_github.context.payload.pull_request;
     if (!pr) {
       (0, import_core.info)("Skipping PR limit");
       return;
     }
-    const pullRequests = await octokit.request("GET /repos/{owner}/{repo}/pulls", import_github.context.repo);
-    for (const item of pullRequests.data) {
-      if (((_a = item.user) == null ? void 0 : _a.login) === import_github.context.actor) {
-        userPRCount++;
-      }
-    }
+    const userPRCount = await calculatePRCount();
     if (userPRCount > limit) {
       (0, import_core.info)("Limit exceeded. Closing PR");
-      await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
-        body: `You can create max ${limit} pull requests at once. Closing PR...`,
-        issue_number: pr.number
-      }));
-      await octokit.request("PATCH /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), {
-        pull_number: pr.number,
-        state: "closed"
-      }));
+      await closePRWithComment(pr.number);
     }
   });
 }
 __name(main, "main");
-main().catch(import_core.setFailed);
+async function calculatePRCount() {
+  var _a;
+  let userPRCount = 0;
+  const pullRequests = await octokit.request("GET /repos/{owner}/{repo}/pulls", import_github.context.repo);
+  for (const item of pullRequests.data) {
+    if (((_a = item.user) == null ? void 0 : _a.login) === import_github.context.actor) {
+      userPRCount++;
+    }
+  }
+  return userPRCount;
+}
+__name(calculatePRCount, "calculatePRCount");
+async function closePRWithComment(prNumber) {
+  await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
+    body: `You can create max ${limit} pull requests at once. Closing PR...`,
+    issue_number: prNumber
+  }));
+  await octokit.request("PATCH /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), {
+    pull_number: prNumber,
+    state: "closed"
+  }));
+}
+__name(closePRWithComment, "closePRWithComment");
 /*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
