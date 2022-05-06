@@ -16,9 +16,9 @@ async function main() {
       return;
     }
 
-    const userPRCount = await calculatePRCount();
+    const prCount = await calculatePRCount(context.actor);
 
-    if (userPRCount > limit) {
+    if (prCount > limit) {
       info('Limit exceeded. Closing PR');
 
       await closePRWithComment(pr.number);
@@ -26,8 +26,8 @@ async function main() {
   });
 }
 
-async function calculatePRCount() {
-  let userPRCount = 0;
+async function calculatePRCount(author: string) {
+  let count = 0;
 
   const pullRequests = await octokit.request(
     'GET /repos/{owner}/{repo}/pulls',
@@ -35,12 +35,12 @@ async function calculatePRCount() {
   );
 
   for (const item of pullRequests.data) {
-    if (item.user?.login === context.actor) {
-      userPRCount++;
+    if (item.user?.login === author) {
+      count++;
     }
   }
 
-  return userPRCount;
+  return count;
 }
 
 async function closePRWithComment(prNumber: number) {

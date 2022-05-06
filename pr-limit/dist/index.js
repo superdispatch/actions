@@ -7218,24 +7218,24 @@ async function main() {
       (0, import_core.info)("Skipping PR limit");
       return;
     }
-    const userPRCount = await calculatePRCount();
-    if (userPRCount > limit) {
+    const prCount = await calculatePRCount(import_github.context.actor);
+    if (prCount > limit) {
       (0, import_core.info)("Limit exceeded. Closing PR");
       await closePRWithComment(pr.number);
     }
   });
 }
 __name(main, "main");
-async function calculatePRCount() {
+async function calculatePRCount(author) {
   var _a;
-  let userPRCount = 0;
+  let count = 0;
   const pullRequests = await octokit.request("GET /repos/{owner}/{repo}/pulls", import_github.context.repo);
   for (const item of pullRequests.data) {
-    if (((_a = item.user) == null ? void 0 : _a.login) === import_github.context.actor) {
-      userPRCount++;
+    if (((_a = item.user) == null ? void 0 : _a.login) === author) {
+      count++;
     }
   }
-  return userPRCount;
+  return count;
 }
 __name(calculatePRCount, "calculatePRCount");
 async function closePRWithComment(prNumber) {
