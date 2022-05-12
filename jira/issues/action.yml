@@ -10,8 +10,8 @@ inputs:
     description: 'JIRA card comment'
     required: false
 
-  changelog:
-    description: 'Changelog'
+  issues:
+    description: 'List of JIRA issues'
     required: true
 
 runs:
