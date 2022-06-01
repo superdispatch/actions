@@ -17,5 +17,5 @@ jobs:
       - run: yarn lint
       - uses: superdispatch/actions/update-snapshots@v1.5.0
         with:
-          command: yarn build
-          update-command: set CI=false && yarn build
+          command: yarn build --verify
+          update-command: yarn build
