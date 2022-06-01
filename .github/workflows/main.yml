@@ -14,4 +14,4 @@ jobs:
       - uses: umidbekk/actions/npm/install@v2
       - run: yarn tsc
       - run: yarn lint
-      - run: yarn build
+      - run: yarn build --verify
