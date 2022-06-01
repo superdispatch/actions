@@ -15,4 +15,7 @@ jobs:
       - uses: umidbekk/actions/npm/install@v2
       - run: yarn tsc
       - run: yarn lint
-      - run: yarn build
+      - uses: superdispatch/actions/update-snapshots@v1.5.0
+        with:
+          command: yarn build
+          update-command: CI=false yarn build
