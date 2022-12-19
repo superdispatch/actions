@@ -164,6 +164,522 @@ var require_command = __commonJS({
   }
 });
 
+// node_modules/uuid/dist/rng.js
+var require_rng = __commonJS({
+  "node_modules/uuid/dist/rng.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = rng;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var rnds8Pool = new Uint8Array(256);
+    var poolPtr = rnds8Pool.length;
+    function rng() {
+      if (poolPtr > rnds8Pool.length - 16) {
+        _crypto.default.randomFillSync(rnds8Pool);
+        poolPtr = 0;
+      }
+      return rnds8Pool.slice(poolPtr, poolPtr += 16);
+    }
+    __name(rng, "rng");
+  }
+});
+
+// node_modules/uuid/dist/regex.js
+var require_regex = __commonJS({
+  "node_modules/uuid/dist/regex.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/validate.js
+var require_validate = __commonJS({
+  "node_modules/uuid/dist/validate.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _regex = _interopRequireDefault(require_regex());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function validate(uuid) {
+      return typeof uuid === "string" && _regex.default.test(uuid);
+    }
+    __name(validate, "validate");
+    var _default = validate;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/stringify.js
+var require_stringify = __commonJS({
+  "node_modules/uuid/dist/stringify.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var byteToHex = [];
+    for (let i = 0; i < 256; ++i) {
+      byteToHex.push((i + 256).toString(16).substr(1));
+    }
+    function stringify(arr, offset = 0) {
+      const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Stringified UUID is invalid");
+      }
+      return uuid;
+    }
+    __name(stringify, "stringify");
+    var _default = stringify;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v1.js
+var require_v1 = __commonJS({
+  "node_modules/uuid/dist/v1.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _rng = _interopRequireDefault(require_rng());
+    var _stringify = _interopRequireDefault(require_stringify());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var _nodeId;
+    var _clockseq;
+    var _lastMSecs = 0;
+    var _lastNSecs = 0;
+    function v1(options, buf, offset) {
+      let i = buf && offset || 0;
+      const b = buf || new Array(16);
+      options = options || {};
+      let node = options.node || _nodeId;
+      let clockseq = options.clockseq !== void 0 ? options.clockseq : _clockseq;
+      if (node == null || clockseq == null) {
+        const seedBytes = options.random || (options.rng || _rng.default)();
+        if (node == null) {
+          node = _nodeId = [seedBytes[0] | 1, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+        }
+        if (clockseq == null) {
+          clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 16383;
+        }
+      }
+      let msecs = options.msecs !== void 0 ? options.msecs : Date.now();
+      let nsecs = options.nsecs !== void 0 ? options.nsecs : _lastNSecs + 1;
+      const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 1e4;
+      if (dt < 0 && options.clockseq === void 0) {
+        clockseq = clockseq + 1 & 16383;
+      }
+      if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === void 0) {
+        nsecs = 0;
+      }
+      if (nsecs >= 1e4) {
+        throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+      }
+      _lastMSecs = msecs;
+      _lastNSecs = nsecs;
+      _clockseq = clockseq;
+      msecs += 122192928e5;
+      const tl = ((msecs & 268435455) * 1e4 + nsecs) % 4294967296;
+      b[i++] = tl >>> 24 & 255;
+      b[i++] = tl >>> 16 & 255;
+      b[i++] = tl >>> 8 & 255;
+      b[i++] = tl & 255;
+      const tmh = msecs / 4294967296 * 1e4 & 268435455;
+      b[i++] = tmh >>> 8 & 255;
+      b[i++] = tmh & 255;
+      b[i++] = tmh >>> 24 & 15 | 16;
+      b[i++] = tmh >>> 16 & 255;
+      b[i++] = clockseq >>> 8 | 128;
+      b[i++] = clockseq & 255;
+      for (let n = 0; n < 6; ++n) {
+        b[i + n] = node[n];
+      }
+      return buf || (0, _stringify.default)(b);
+    }
+    __name(v1, "v1");
+    var _default = v1;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/parse.js
+var require_parse = __commonJS({
+  "node_modules/uuid/dist/parse.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function parse(uuid) {
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Invalid UUID");
+      }
+      let v;
+      const arr = new Uint8Array(16);
+      arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+      arr[1] = v >>> 16 & 255;
+      arr[2] = v >>> 8 & 255;
+      arr[3] = v & 255;
+      arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+      arr[5] = v & 255;
+      arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+      arr[7] = v & 255;
+      arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+      arr[9] = v & 255;
+      arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 1099511627776 & 255;
+      arr[11] = v / 4294967296 & 255;
+      arr[12] = v >>> 24 & 255;
+      arr[13] = v >>> 16 & 255;
+      arr[14] = v >>> 8 & 255;
+      arr[15] = v & 255;
+      return arr;
+    }
+    __name(parse, "parse");
+    var _default = parse;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v35.js
+var require_v35 = __commonJS({
+  "node_modules/uuid/dist/v35.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = _default;
+    exports2.URL = exports2.DNS = void 0;
+    var _stringify = _interopRequireDefault(require_stringify());
+    var _parse = _interopRequireDefault(require_parse());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function stringToBytes(str) {
+      str = unescape(encodeURIComponent(str));
+      const bytes = [];
+      for (let i = 0; i < str.length; ++i) {
+        bytes.push(str.charCodeAt(i));
+      }
+      return bytes;
+    }
+    __name(stringToBytes, "stringToBytes");
+    var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+    exports2.DNS = DNS;
+    var URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
+    exports2.URL = URL2;
+    function _default(name, version, hashfunc) {
+      function generateUUID(value, namespace, buf, offset) {
+        if (typeof value === "string") {
+          value = stringToBytes(value);
+        }
+        if (typeof namespace === "string") {
+          namespace = (0, _parse.default)(namespace);
+        }
+        if (namespace.length !== 16) {
+          throw TypeError("Namespace must be array-like (16 iterable integer values, 0-255)");
+        }
+        let bytes = new Uint8Array(16 + value.length);
+        bytes.set(namespace);
+        bytes.set(value, namespace.length);
+        bytes = hashfunc(bytes);
+        bytes[6] = bytes[6] & 15 | version;
+        bytes[8] = bytes[8] & 63 | 128;
+        if (buf) {
+          offset = offset || 0;
+          for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = bytes[i];
+          }
+          return buf;
+        }
+        return (0, _stringify.default)(bytes);
+      }
+      __name(generateUUID, "generateUUID");
+      try {
+        generateUUID.name = name;
+      } catch (err) {
+      }
+      generateUUID.DNS = DNS;
+      generateUUID.URL = URL2;
+      return generateUUID;
+    }
+    __name(_default, "_default");
+  }
+});
+
+// node_modules/uuid/dist/md5.js
+var require_md5 = __commonJS({
+  "node_modules/uuid/dist/md5.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function md5(bytes) {
+      if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+      } else if (typeof bytes === "string") {
+        bytes = Buffer.from(bytes, "utf8");
+      }
+      return _crypto.default.createHash("md5").update(bytes).digest();
+    }
+    __name(md5, "md5");
+    var _default = md5;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v3.js
+var require_v3 = __commonJS({
+  "node_modules/uuid/dist/v3.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _v = _interopRequireDefault(require_v35());
+    var _md = _interopRequireDefault(require_md5());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var v3 = (0, _v.default)("v3", 48, _md.default);
+    var _default = v3;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v4.js
+var require_v4 = __commonJS({
+  "node_modules/uuid/dist/v4.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _rng = _interopRequireDefault(require_rng());
+    var _stringify = _interopRequireDefault(require_stringify());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function v4(options, buf, offset) {
+      options = options || {};
+      const rnds = options.random || (options.rng || _rng.default)();
+      rnds[6] = rnds[6] & 15 | 64;
+      rnds[8] = rnds[8] & 63 | 128;
+      if (buf) {
+        offset = offset || 0;
+        for (let i = 0; i < 16; ++i) {
+          buf[offset + i] = rnds[i];
+        }
+        return buf;
+      }
+      return (0, _stringify.default)(rnds);
+    }
+    __name(v4, "v4");
+    var _default = v4;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/sha1.js
+var require_sha1 = __commonJS({
+  "node_modules/uuid/dist/sha1.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function sha1(bytes) {
+      if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+      } else if (typeof bytes === "string") {
+        bytes = Buffer.from(bytes, "utf8");
+      }
+      return _crypto.default.createHash("sha1").update(bytes).digest();
+    }
+    __name(sha1, "sha1");
+    var _default = sha1;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v5.js
+var require_v5 = __commonJS({
+  "node_modules/uuid/dist/v5.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _v = _interopRequireDefault(require_v35());
+    var _sha = _interopRequireDefault(require_sha1());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var v5 = (0, _v.default)("v5", 80, _sha.default);
+    var _default = v5;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/nil.js
+var require_nil = __commonJS({
+  "node_modules/uuid/dist/nil.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _default = "00000000-0000-0000-0000-000000000000";
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/version.js
+var require_version = __commonJS({
+  "node_modules/uuid/dist/version.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function version(uuid) {
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Invalid UUID");
+      }
+      return parseInt(uuid.substr(14, 1), 16);
+    }
+    __name(version, "version");
+    var _default = version;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/uuid/dist/index.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    Object.defineProperty(exports2, "v1", {
+      enumerable: true,
+      get: function() {
+        return _v.default;
+      }
+    });
+    Object.defineProperty(exports2, "v3", {
+      enumerable: true,
+      get: function() {
+        return _v2.default;
+      }
+    });
+    Object.defineProperty(exports2, "v4", {
+      enumerable: true,
+      get: function() {
+        return _v3.default;
+      }
+    });
+    Object.defineProperty(exports2, "v5", {
+      enumerable: true,
+      get: function() {
+        return _v4.default;
+      }
+    });
+    Object.defineProperty(exports2, "NIL", {
+      enumerable: true,
+      get: function() {
+        return _nil.default;
+      }
+    });
+    Object.defineProperty(exports2, "version", {
+      enumerable: true,
+      get: function() {
+        return _version.default;
+      }
+    });
+    Object.defineProperty(exports2, "validate", {
+      enumerable: true,
+      get: function() {
+        return _validate.default;
+      }
+    });
+    Object.defineProperty(exports2, "stringify", {
+      enumerable: true,
+      get: function() {
+        return _stringify.default;
+      }
+    });
+    Object.defineProperty(exports2, "parse", {
+      enumerable: true,
+      get: function() {
+        return _parse.default;
+      }
+    });
+    var _v = _interopRequireDefault(require_v1());
+    var _v2 = _interopRequireDefault(require_v3());
+    var _v3 = _interopRequireDefault(require_v4());
+    var _v4 = _interopRequireDefault(require_v5());
+    var _nil = _interopRequireDefault(require_nil());
+    var _version = _interopRequireDefault(require_version());
+    var _validate = _interopRequireDefault(require_validate());
+    var _stringify = _interopRequireDefault(require_stringify());
+    var _parse = _interopRequireDefault(require_parse());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+  }
+});
+
 // node_modules/@actions/core/lib/file-command.js
 var require_file_command = __commonJS({
   "node_modules/@actions/core/lib/file-command.js"(exports2) {
@@ -197,11 +713,12 @@ var require_file_command = __commonJS({
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.issueCommand = void 0;
+    exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
     var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
+    var uuid_1 = require_dist();
     var utils_1 = require_utils();
-    function issueCommand(command, message) {
+    function issueFileCommand(command, message) {
       const filePath = process.env[`GITHUB_${command}`];
       if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
@@ -213,14 +730,27 @@ var require_file_command = __commonJS({
         encoding: "utf8"
       });
     }
-    __name(issueCommand, "issueCommand");
-    exports2.issueCommand = issueCommand;
+    __name(issueFileCommand, "issueFileCommand");
+    exports2.issueFileCommand = issueFileCommand;
+    function prepareKeyValueMessage(key, value) {
+      const delimiter = `ghadelimiter_${uuid_1.v4()}`;
+      const convertedValue = utils_1.toCommandValue(value);
+      if (key.includes(delimiter)) {
+        throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
+      }
+      if (convertedValue.includes(delimiter)) {
+        throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
+      }
+      return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
+    }
+    __name(prepareKeyValueMessage, "prepareKeyValueMessage");
+    exports2.prepareKeyValueMessage = prepareKeyValueMessage;
   }
 });
 
-// node_modules/@actions/core/node_modules/@actions/http-client/lib/proxy.js
+// node_modules/@actions/http-client/lib/proxy.js
 var require_proxy = __commonJS({
-  "node_modules/@actions/core/node_modules/@actions/http-client/lib/proxy.js"(exports2) {
+  "node_modules/@actions/http-client/lib/proxy.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.checkBypass = exports2.getProxyUrl = void 0;
@@ -520,9 +1050,9 @@ var require_tunnel2 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/@actions/http-client/lib/index.js
+// node_modules/@actions/http-client/lib/index.js
 var require_lib = __commonJS({
-  "node_modules/@actions/core/node_modules/@actions/http-client/lib/index.js"(exports2) {
+  "node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0)
@@ -1084,9 +1614,9 @@ var require_lib = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/@actions/http-client/lib/auth.js
+// node_modules/@actions/http-client/lib/auth.js
 var require_auth = __commonJS({
-  "node_modules/@actions/core/node_modules/@actions/http-client/lib/auth.js"(exports2) {
+  "node_modules/@actions/http-client/lib/auth.js"(exports2) {
     "use strict";
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
@@ -1461,6 +1991,59 @@ var require_summary = __commonJS({
   }
 });
 
+// node_modules/@actions/core/lib/path-utils.js
+var require_path_utils = __commonJS({
+  "node_modules/@actions/core/lib/path-utils.js"(exports2) {
+    "use strict";
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
+        return m[k];
+      } });
+    } : function(o, m, k, k2) {
+      if (k2 === void 0)
+        k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
+      if (mod && mod.__esModule)
+        return mod;
+      var result = {};
+      if (mod != null) {
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
+      }
+      __setModuleDefault(result, mod);
+      return result;
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.toPlatformPath = exports2.toWin32Path = exports2.toPosixPath = void 0;
+    var path = __importStar(require("path"));
+    function toPosixPath(pth) {
+      return pth.replace(/[\\]/g, "/");
+    }
+    __name(toPosixPath, "toPosixPath");
+    exports2.toPosixPath = toPosixPath;
+    function toWin32Path(pth) {
+      return pth.replace(/[/]/g, "\\");
+    }
+    __name(toWin32Path, "toWin32Path");
+    exports2.toWin32Path = toWin32Path;
+    function toPlatformPath(pth) {
+      return pth.replace(/[/\\]/g, path.sep);
+    }
+    __name(toPlatformPath, "toPlatformPath");
+    exports2.toPlatformPath = toPlatformPath;
+  }
+});
+
 // node_modules/@actions/core/lib/core.js
 var require_core = __commonJS({
   "node_modules/@actions/core/lib/core.js"(exports2) {
@@ -1542,12 +2125,9 @@ var require_core = __commonJS({
       process.env[name] = convertedVal;
       const filePath = process.env["GITHUB_ENV"] || "";
       if (filePath) {
-        const delimiter = "_GitHubActionsFileCommandDelimeter_";
-        const commandValue = `${name}<<${delimiter}${os.EOL}${convertedVal}${os.EOL}${delimiter}`;
-        file_command_1.issueCommand("ENV", commandValue);
-      } else {
-        command_1.issueCommand("set-env", { name }, convertedVal);
+        return file_command_1.issueFileCommand("ENV", file_command_1.prepareKeyValueMessage(name, val));
       }
+      command_1.issueCommand("set-env", { name }, convertedVal);
     }
     __name(exportVariable, "exportVariable");
     exports2.exportVariable = exportVariable;
@@ -1559,7 +2139,7 @@ var require_core = __commonJS({
     function addPath(inputPath) {
       const filePath = process.env["GITHUB_PATH"] || "";
       if (filePath) {
-        file_command_1.issueCommand("PATH", inputPath);
+        file_command_1.issueFileCommand("PATH", inputPath);
       } else {
         command_1.issueCommand("add-path", {}, inputPath);
       }
@@ -1581,7 +2161,10 @@ var require_core = __commonJS({
     exports2.getInput = getInput2;
     function getMultilineInput(name, options) {
       const inputs = getInput2(name, options).split("\n").filter((x) => x !== "");
-      return inputs;
+      if (options && options.trimWhitespace === false) {
+        return inputs;
+      }
+      return inputs.map((input) => input.trim());
     }
     __name(getMultilineInput, "getMultilineInput");
     exports2.getMultilineInput = getMultilineInput;
@@ -1599,8 +2182,12 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     __name(getBooleanInput, "getBooleanInput");
     exports2.getBooleanInput = getBooleanInput;
     function setOutput(name, value) {
+      const filePath = process.env["GITHUB_OUTPUT"] || "";
+      if (filePath) {
+        return file_command_1.issueFileCommand("OUTPUT", file_command_1.prepareKeyValueMessage(name, value));
+      }
       process.stdout.write(os.EOL);
-      command_1.issueCommand("set-output", { name }, value);
+      command_1.issueCommand("set-output", { name }, utils_1.toCommandValue(value));
     }
     __name(setOutput, "setOutput");
     exports2.setOutput = setOutput;
@@ -1670,7 +2257,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     __name(group, "group");
     exports2.group = group;
     function saveState(name, value) {
-      command_1.issueCommand("save-state", { name }, value);
+      const filePath = process.env["GITHUB_STATE"] || "";
+      if (filePath) {
+        return file_command_1.issueFileCommand("STATE", file_command_1.prepareKeyValueMessage(name, value));
+      }
+      command_1.issueCommand("save-state", { name }, utils_1.toCommandValue(value));
     }
     __name(saveState, "saveState");
     exports2.saveState = saveState;
@@ -1693,6 +2284,16 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     var summary_2 = require_summary();
     Object.defineProperty(exports2, "markdownSummary", { enumerable: true, get: function() {
       return summary_2.markdownSummary;
+    } });
+    var path_utils_1 = require_path_utils();
+    Object.defineProperty(exports2, "toPosixPath", { enumerable: true, get: function() {
+      return path_utils_1.toPosixPath;
+    } });
+    Object.defineProperty(exports2, "toWin32Path", { enumerable: true, get: function() {
+      return path_utils_1.toWin32Path;
+    } });
+    Object.defineProperty(exports2, "toPlatformPath", { enumerable: true, get: function() {
+      return path_utils_1.toPlatformPath;
     } });
   }
 });
@@ -1753,530 +2354,6 @@ var require_context = __commonJS({
   }
 });
 
-// node_modules/@actions/http-client/proxy.js
-var require_proxy2 = __commonJS({
-  "node_modules/@actions/http-client/proxy.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    function getProxyUrl(reqUrl) {
-      let usingSsl = reqUrl.protocol === "https:";
-      let proxyUrl;
-      if (checkBypass(reqUrl)) {
-        return proxyUrl;
-      }
-      let proxyVar;
-      if (usingSsl) {
-        proxyVar = process.env["https_proxy"] || process.env["HTTPS_PROXY"];
-      } else {
-        proxyVar = process.env["http_proxy"] || process.env["HTTP_PROXY"];
-      }
-      if (proxyVar) {
-        proxyUrl = new URL(proxyVar);
-      }
-      return proxyUrl;
-    }
-    __name(getProxyUrl, "getProxyUrl");
-    exports2.getProxyUrl = getProxyUrl;
-    function checkBypass(reqUrl) {
-      if (!reqUrl.hostname) {
-        return false;
-      }
-      let noProxy = process.env["no_proxy"] || process.env["NO_PROXY"] || "";
-      if (!noProxy) {
-        return false;
-      }
-      let reqPort;
-      if (reqUrl.port) {
-        reqPort = Number(reqUrl.port);
-      } else if (reqUrl.protocol === "http:") {
-        reqPort = 80;
-      } else if (reqUrl.protocol === "https:") {
-        reqPort = 443;
-      }
-      let upperReqHosts = [reqUrl.hostname.toUpperCase()];
-      if (typeof reqPort === "number") {
-        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
-      }
-      for (let upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x)) {
-        if (upperReqHosts.some((x) => x === upperNoProxyItem)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    __name(checkBypass, "checkBypass");
-    exports2.checkBypass = checkBypass;
-  }
-});
-
-// node_modules/@actions/http-client/index.js
-var require_http_client = __commonJS({
-  "node_modules/@actions/http-client/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var http = require("http");
-    var https = require("https");
-    var pm = require_proxy2();
-    var tunnel;
-    var HttpCodes;
-    (function(HttpCodes2) {
-      HttpCodes2[HttpCodes2["OK"] = 200] = "OK";
-      HttpCodes2[HttpCodes2["MultipleChoices"] = 300] = "MultipleChoices";
-      HttpCodes2[HttpCodes2["MovedPermanently"] = 301] = "MovedPermanently";
-      HttpCodes2[HttpCodes2["ResourceMoved"] = 302] = "ResourceMoved";
-      HttpCodes2[HttpCodes2["SeeOther"] = 303] = "SeeOther";
-      HttpCodes2[HttpCodes2["NotModified"] = 304] = "NotModified";
-      HttpCodes2[HttpCodes2["UseProxy"] = 305] = "UseProxy";
-      HttpCodes2[HttpCodes2["SwitchProxy"] = 306] = "SwitchProxy";
-      HttpCodes2[HttpCodes2["TemporaryRedirect"] = 307] = "TemporaryRedirect";
-      HttpCodes2[HttpCodes2["PermanentRedirect"] = 308] = "PermanentRedirect";
-      HttpCodes2[HttpCodes2["BadRequest"] = 400] = "BadRequest";
-      HttpCodes2[HttpCodes2["Unauthorized"] = 401] = "Unauthorized";
-      HttpCodes2[HttpCodes2["PaymentRequired"] = 402] = "PaymentRequired";
-      HttpCodes2[HttpCodes2["Forbidden"] = 403] = "Forbidden";
-      HttpCodes2[HttpCodes2["NotFound"] = 404] = "NotFound";
-      HttpCodes2[HttpCodes2["MethodNotAllowed"] = 405] = "MethodNotAllowed";
-      HttpCodes2[HttpCodes2["NotAcceptable"] = 406] = "NotAcceptable";
-      HttpCodes2[HttpCodes2["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
-      HttpCodes2[HttpCodes2["RequestTimeout"] = 408] = "RequestTimeout";
-      HttpCodes2[HttpCodes2["Conflict"] = 409] = "Conflict";
-      HttpCodes2[HttpCodes2["Gone"] = 410] = "Gone";
-      HttpCodes2[HttpCodes2["TooManyRequests"] = 429] = "TooManyRequests";
-      HttpCodes2[HttpCodes2["InternalServerError"] = 500] = "InternalServerError";
-      HttpCodes2[HttpCodes2["NotImplemented"] = 501] = "NotImplemented";
-      HttpCodes2[HttpCodes2["BadGateway"] = 502] = "BadGateway";
-      HttpCodes2[HttpCodes2["ServiceUnavailable"] = 503] = "ServiceUnavailable";
-      HttpCodes2[HttpCodes2["GatewayTimeout"] = 504] = "GatewayTimeout";
-    })(HttpCodes = exports2.HttpCodes || (exports2.HttpCodes = {}));
-    var Headers;
-    (function(Headers2) {
-      Headers2["Accept"] = "accept";
-      Headers2["ContentType"] = "content-type";
-    })(Headers = exports2.Headers || (exports2.Headers = {}));
-    var MediaTypes;
-    (function(MediaTypes2) {
-      MediaTypes2["ApplicationJson"] = "application/json";
-    })(MediaTypes = exports2.MediaTypes || (exports2.MediaTypes = {}));
-    function getProxyUrl(serverUrl) {
-      let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
-      return proxyUrl ? proxyUrl.href : "";
-    }
-    __name(getProxyUrl, "getProxyUrl");
-    exports2.getProxyUrl = getProxyUrl;
-    var HttpRedirectCodes = [
-      HttpCodes.MovedPermanently,
-      HttpCodes.ResourceMoved,
-      HttpCodes.SeeOther,
-      HttpCodes.TemporaryRedirect,
-      HttpCodes.PermanentRedirect
-    ];
-    var HttpResponseRetryCodes = [
-      HttpCodes.BadGateway,
-      HttpCodes.ServiceUnavailable,
-      HttpCodes.GatewayTimeout
-    ];
-    var RetryableHttpVerbs = ["OPTIONS", "GET", "DELETE", "HEAD"];
-    var ExponentialBackoffCeiling = 10;
-    var ExponentialBackoffTimeSlice = 5;
-    var HttpClientError = class extends Error {
-      constructor(message, statusCode) {
-        super(message);
-        this.name = "HttpClientError";
-        this.statusCode = statusCode;
-        Object.setPrototypeOf(this, HttpClientError.prototype);
-      }
-    };
-    __name(HttpClientError, "HttpClientError");
-    exports2.HttpClientError = HttpClientError;
-    var HttpClientResponse = class {
-      constructor(message) {
-        this.message = message;
-      }
-      readBody() {
-        return new Promise(async (resolve, reject) => {
-          let output = Buffer.alloc(0);
-          this.message.on("data", (chunk) => {
-            output = Buffer.concat([output, chunk]);
-          });
-          this.message.on("end", () => {
-            resolve(output.toString());
-          });
-        });
-      }
-    };
-    __name(HttpClientResponse, "HttpClientResponse");
-    exports2.HttpClientResponse = HttpClientResponse;
-    function isHttps(requestUrl) {
-      let parsedUrl = new URL(requestUrl);
-      return parsedUrl.protocol === "https:";
-    }
-    __name(isHttps, "isHttps");
-    exports2.isHttps = isHttps;
-    var HttpClient = class {
-      constructor(userAgent, handlers, requestOptions) {
-        this._ignoreSslError = false;
-        this._allowRedirects = true;
-        this._allowRedirectDowngrade = false;
-        this._maxRedirects = 50;
-        this._allowRetries = false;
-        this._maxRetries = 1;
-        this._keepAlive = false;
-        this._disposed = false;
-        this.userAgent = userAgent;
-        this.handlers = handlers || [];
-        this.requestOptions = requestOptions;
-        if (requestOptions) {
-          if (requestOptions.ignoreSslError != null) {
-            this._ignoreSslError = requestOptions.ignoreSslError;
-          }
-          this._socketTimeout = requestOptions.socketTimeout;
-          if (requestOptions.allowRedirects != null) {
-            this._allowRedirects = requestOptions.allowRedirects;
-          }
-          if (requestOptions.allowRedirectDowngrade != null) {
-            this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
-          }
-          if (requestOptions.maxRedirects != null) {
-            this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
-          }
-          if (requestOptions.keepAlive != null) {
-            this._keepAlive = requestOptions.keepAlive;
-          }
-          if (requestOptions.allowRetries != null) {
-            this._allowRetries = requestOptions.allowRetries;
-          }
-          if (requestOptions.maxRetries != null) {
-            this._maxRetries = requestOptions.maxRetries;
-          }
-        }
-      }
-      options(requestUrl, additionalHeaders) {
-        return this.request("OPTIONS", requestUrl, null, additionalHeaders || {});
-      }
-      get(requestUrl, additionalHeaders) {
-        return this.request("GET", requestUrl, null, additionalHeaders || {});
-      }
-      del(requestUrl, additionalHeaders) {
-        return this.request("DELETE", requestUrl, null, additionalHeaders || {});
-      }
-      post(requestUrl, data, additionalHeaders) {
-        return this.request("POST", requestUrl, data, additionalHeaders || {});
-      }
-      patch(requestUrl, data, additionalHeaders) {
-        return this.request("PATCH", requestUrl, data, additionalHeaders || {});
-      }
-      put(requestUrl, data, additionalHeaders) {
-        return this.request("PUT", requestUrl, data, additionalHeaders || {});
-      }
-      head(requestUrl, additionalHeaders) {
-        return this.request("HEAD", requestUrl, null, additionalHeaders || {});
-      }
-      sendStream(verb, requestUrl, stream, additionalHeaders) {
-        return this.request(verb, requestUrl, stream, additionalHeaders);
-      }
-      async getJson(requestUrl, additionalHeaders = {}) {
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        let res = await this.get(requestUrl, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async postJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.post(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async putJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.put(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async patchJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.patch(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async request(verb, requestUrl, data, headers) {
-        if (this._disposed) {
-          throw new Error("Client has already been disposed.");
-        }
-        let parsedUrl = new URL(requestUrl);
-        let info2 = this._prepareRequest(verb, parsedUrl, headers);
-        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
-        let numTries = 0;
-        let response;
-        while (numTries < maxTries) {
-          response = await this.requestRaw(info2, data);
-          if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
-            let authenticationHandler;
-            for (let i = 0; i < this.handlers.length; i++) {
-              if (this.handlers[i].canHandleAuthentication(response)) {
-                authenticationHandler = this.handlers[i];
-                break;
-              }
-            }
-            if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info2, data);
-            } else {
-              return response;
-            }
-          }
-          let redirectsRemaining = this._maxRedirects;
-          while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 && this._allowRedirects && redirectsRemaining > 0) {
-            const redirectUrl = response.message.headers["location"];
-            if (!redirectUrl) {
-              break;
-            }
-            let parsedRedirectUrl = new URL(redirectUrl);
-            if (parsedUrl.protocol == "https:" && parsedUrl.protocol != parsedRedirectUrl.protocol && !this._allowRedirectDowngrade) {
-              throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.");
-            }
-            await response.readBody();
-            if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
-              for (let header in headers) {
-                if (header.toLowerCase() === "authorization") {
-                  delete headers[header];
-                }
-              }
-            }
-            info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info2, data);
-            redirectsRemaining--;
-          }
-          if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
-            return response;
-          }
-          numTries += 1;
-          if (numTries < maxTries) {
-            await response.readBody();
-            await this._performExponentialBackoff(numTries);
-          }
-        }
-        return response;
-      }
-      dispose() {
-        if (this._agent) {
-          this._agent.destroy();
-        }
-        this._disposed = true;
-      }
-      requestRaw(info2, data) {
-        return new Promise((resolve, reject) => {
-          let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
-            if (err) {
-              reject(err);
-            }
-            resolve(res);
-          }, "callbackForResult");
-          this.requestRawWithCallback(info2, data, callbackForResult);
-        });
-      }
-      requestRawWithCallback(info2, data, onResult) {
-        let socket;
-        if (typeof data === "string") {
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
-        }
-        let callbackCalled = false;
-        let handleResult = /* @__PURE__ */ __name((err, res) => {
-          if (!callbackCalled) {
-            callbackCalled = true;
-            onResult(err, res);
-          }
-        }, "handleResult");
-        let req = info2.httpModule.request(info2.options, (msg) => {
-          let res = new HttpClientResponse(msg);
-          handleResult(null, res);
-        });
-        req.on("socket", (sock) => {
-          socket = sock;
-        });
-        req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
-          if (socket) {
-            socket.end();
-          }
-          handleResult(new Error("Request timeout: " + info2.options.path), null);
-        });
-        req.on("error", function(err) {
-          handleResult(err, null);
-        });
-        if (data && typeof data === "string") {
-          req.write(data, "utf8");
-        }
-        if (data && typeof data !== "string") {
-          data.on("close", function() {
-            req.end();
-          });
-          data.pipe(req);
-        } else {
-          req.end();
-        }
-      }
-      getAgent(serverUrl) {
-        let parsedUrl = new URL(serverUrl);
-        return this._getAgent(parsedUrl);
-      }
-      _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http;
-        const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
-        if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
-        }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
-        if (this.handlers) {
-          this.handlers.forEach((handler) => {
-            handler.prepareRequest(info2.options);
-          });
-        }
-        return info2;
-      }
-      _mergeHeaders(headers) {
-        const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
-        if (this.requestOptions && this.requestOptions.headers) {
-          return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
-        }
-        return lowercaseKeys(headers || {});
-      }
-      _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
-        const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
-        let clientHeader;
-        if (this.requestOptions && this.requestOptions.headers) {
-          clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
-        }
-        return additionalHeaders[header] || clientHeader || _default;
-      }
-      _getAgent(parsedUrl) {
-        let agent;
-        let proxyUrl = pm.getProxyUrl(parsedUrl);
-        let useProxy = proxyUrl && proxyUrl.hostname;
-        if (this._keepAlive && useProxy) {
-          agent = this._proxyAgent;
-        }
-        if (this._keepAlive && !useProxy) {
-          agent = this._agent;
-        }
-        if (!!agent) {
-          return agent;
-        }
-        const usingSsl = parsedUrl.protocol === "https:";
-        let maxSockets = 100;
-        if (!!this.requestOptions) {
-          maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
-        }
-        if (useProxy) {
-          if (!tunnel) {
-            tunnel = require_tunnel2();
-          }
-          const agentOptions = {
-            maxSockets,
-            keepAlive: this._keepAlive,
-            proxy: __spreadProps(__spreadValues({}, (proxyUrl.username || proxyUrl.password) && {
-              proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
-            }), {
-              host: proxyUrl.hostname,
-              port: proxyUrl.port
-            })
-          };
-          let tunnelAgent;
-          const overHttps = proxyUrl.protocol === "https:";
-          if (usingSsl) {
-            tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
-          } else {
-            tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
-          }
-          agent = tunnelAgent(agentOptions);
-          this._proxyAgent = agent;
-        }
-        if (this._keepAlive && !agent) {
-          const options = { keepAlive: this._keepAlive, maxSockets };
-          agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
-          this._agent = agent;
-        }
-        if (!agent) {
-          agent = usingSsl ? https.globalAgent : http.globalAgent;
-        }
-        if (usingSsl && this._ignoreSslError) {
-          agent.options = Object.assign(agent.options || {}, {
-            rejectUnauthorized: false
-          });
-        }
-        return agent;
-      }
-      _performExponentialBackoff(retryNumber) {
-        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
-        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-        return new Promise((resolve) => setTimeout(() => resolve(), ms));
-      }
-      static dateTimeDeserializer(key, value) {
-        if (typeof value === "string") {
-          let a = new Date(value);
-          if (!isNaN(a.valueOf())) {
-            return a;
-          }
-        }
-        return value;
-      }
-      async _processResponse(res, options) {
-        return new Promise(async (resolve, reject) => {
-          const statusCode = res.message.statusCode;
-          const response = {
-            statusCode,
-            result: null,
-            headers: {}
-          };
-          if (statusCode == HttpCodes.NotFound) {
-            resolve(response);
-          }
-          let obj;
-          let contents;
-          try {
-            contents = await res.readBody();
-            if (contents && contents.length > 0) {
-              if (options && options.deserializeDates) {
-                obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
-              } else {
-                obj = JSON.parse(contents);
-              }
-              response.result = obj;
-            }
-            response.headers = res.message.headers;
-          } catch (err) {
-          }
-          if (statusCode > 299) {
-            let msg;
-            if (obj && obj.message) {
-              msg = obj.message;
-            } else if (contents && contents.length > 0) {
-              msg = contents;
-            } else {
-              msg = "Failed request: (" + statusCode + ")";
-            }
-            let err = new HttpClientError(msg, statusCode);
-            err.result = response.result;
-            reject(err);
-          } else {
-            resolve(response);
-          }
-        });
-      }
-    };
-    __name(HttpClient, "HttpClient");
-    exports2.HttpClient = HttpClient;
-  }
-});
-
 // node_modules/@actions/github/lib/internal/utils.js
 var require_utils2 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
@@ -2311,7 +2388,7 @@ var require_utils2 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
-    var httpClient = __importStar(require_http_client());
+    var httpClient = __importStar(require_lib());
     function getAuthString(token2, options) {
       if (!token2 && !options.auth) {
         throw new Error("Parameter token or opts.auth is required");
@@ -5941,7 +6018,7 @@ var require_dist_node5 = __commonJS({
     var isPlainObject = require_is_plain_object();
     var nodeFetch = _interopDefault(require_lib3());
     var requestError = require_dist_node4();
-    var VERSION = "5.6.0";
+    var VERSION = "5.6.3";
     function getBufferResponse(response) {
       return response.arrayBuffer();
     }
@@ -6271,7 +6348,7 @@ var require_dist_node8 = __commonJS({
       return target;
     }
     __name(_objectWithoutProperties, "_objectWithoutProperties");
-    var VERSION = "3.5.1";
+    var VERSION = "3.6.0";
     var _excluded = ["authStrategy"];
     var Octokit = class {
       constructor(options = {}) {
@@ -6442,6 +6519,7 @@ var require_dist_node9 = __commonJS({
         disableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable"],
         downloadArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}"],
         downloadJobLogsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs"],
+        downloadWorkflowRunAttemptLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/logs"],
         downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
         enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
         enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
@@ -6466,11 +6544,13 @@ var require_dist_node9 = __commonJS({
         getSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],
         getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
         getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
+        getWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"],
         getWorkflowRunUsage: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],
         getWorkflowUsage: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/timing"],
         listArtifactsForRepo: ["GET /repos/{owner}/{repo}/actions/artifacts"],
         listEnvironmentSecrets: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets"],
         listJobsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],
+        listJobsForWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"],
         listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
         listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
         listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
@@ -6483,7 +6563,6 @@ var require_dist_node9 = __commonJS({
         listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
         listWorkflowRuns: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],
         listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
-        reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
         removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
         reviewPendingDeploymentsForRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"],
         setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
@@ -6527,7 +6606,10 @@ var require_dist_node9 = __commonJS({
         unstarRepoForAuthenticatedUser: ["DELETE /user/starred/{owner}/{repo}"]
       },
       apps: {
-        addRepoToInstallation: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
+        addRepoToInstallation: ["PUT /user/installations/{installation_id}/repositories/{repository_id}", {}, {
+          renamed: ["apps", "addRepoToInstallationForAuthenticatedUser"]
+        }],
+        addRepoToInstallationForAuthenticatedUser: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
         checkToken: ["POST /applications/{client_id}/token"],
         createContentAttachment: ["POST /content_references/{content_reference_id}/attachments", {
           mediaType: {
@@ -6553,6 +6635,7 @@ var require_dist_node9 = __commonJS({
         getSubscriptionPlanForAccountStubbed: ["GET /marketplace_listing/stubbed/accounts/{account_id}"],
         getUserInstallation: ["GET /users/{username}/installation"],
         getWebhookConfigForApp: ["GET /app/hook/config"],
+        getWebhookDelivery: ["GET /app/hook/deliveries/{delivery_id}"],
         listAccountsForPlan: ["GET /marketplace_listing/plans/{plan_id}/accounts"],
         listAccountsForPlanStubbed: ["GET /marketplace_listing/stubbed/plans/{plan_id}/accounts"],
         listInstallationReposForAuthenticatedUser: ["GET /user/installations/{installation_id}/repositories"],
@@ -6563,7 +6646,12 @@ var require_dist_node9 = __commonJS({
         listReposAccessibleToInstallation: ["GET /installation/repositories"],
         listSubscriptionsForAuthenticatedUser: ["GET /user/marketplace_purchases"],
         listSubscriptionsForAuthenticatedUserStubbed: ["GET /user/marketplace_purchases/stubbed"],
-        removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
+        listWebhookDeliveries: ["GET /app/hook/deliveries"],
+        redeliverWebhookDelivery: ["POST /app/hook/deliveries/{delivery_id}/attempts"],
+        removeRepoFromInstallation: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}", {}, {
+          renamed: ["apps", "removeRepoFromInstallationForAuthenticatedUser"]
+        }],
+        removeRepoFromInstallationForAuthenticatedUser: ["DELETE /user/installations/{installation_id}/repositories/{repository_id}"],
         resetToken: ["PATCH /applications/{client_id}/token"],
         revokeInstallationAccessToken: ["DELETE /installation/token"],
         scopeToken: ["POST /applications/{client_id}/token/scoped"],
@@ -6588,6 +6676,7 @@ var require_dist_node9 = __commonJS({
         listForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-runs"],
         listForSuite: ["GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs"],
         listSuitesForRef: ["GET /repos/{owner}/{repo}/commits/{ref}/check-suites"],
+        rerequestRun: ["POST /repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest"],
         rerequestSuite: ["POST /repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest"],
         setSuitesPreferences: ["PATCH /repos/{owner}/{repo}/check-suites/preferences"],
         update: ["PATCH /repos/{owner}/{repo}/check-runs/{check_run_id}"]
@@ -6611,21 +6700,8 @@ var require_dist_node9 = __commonJS({
         uploadSarif: ["POST /repos/{owner}/{repo}/code-scanning/sarifs"]
       },
       codesOfConduct: {
-        getAllCodesOfConduct: ["GET /codes_of_conduct", {
-          mediaType: {
-            previews: ["scarlet-witch"]
-          }
-        }],
-        getConductCode: ["GET /codes_of_conduct/{key}", {
-          mediaType: {
-            previews: ["scarlet-witch"]
-          }
-        }],
-        getForRepo: ["GET /repos/{owner}/{repo}/community/code_of_conduct", {
-          mediaType: {
-            previews: ["scarlet-witch"]
-          }
-        }]
+        getAllCodesOfConduct: ["GET /codes_of_conduct"],
+        getConductCode: ["GET /codes_of_conduct/{key}"]
       },
       emojis: {
         get: ["GET /emojis"]
@@ -6723,11 +6799,7 @@ var require_dist_node9 = __commonJS({
         listCommentsForRepo: ["GET /repos/{owner}/{repo}/issues/comments"],
         listEvents: ["GET /repos/{owner}/{repo}/issues/{issue_number}/events"],
         listEventsForRepo: ["GET /repos/{owner}/{repo}/issues/events"],
-        listEventsForTimeline: ["GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", {
-          mediaType: {
-            previews: ["mockingbird"]
-          }
-        }],
+        listEventsForTimeline: ["GET /repos/{owner}/{repo}/issues/{issue_number}/timeline"],
         listForAuthenticatedUser: ["GET /user/issues"],
         listForOrg: ["GET /orgs/{org}/issues"],
         listForRepo: ["GET /repos/{owner}/{repo}/issues"],
@@ -6767,74 +6839,29 @@ var require_dist_node9 = __commonJS({
       },
       migrations: {
         cancelImport: ["DELETE /repos/{owner}/{repo}/import"],
-        deleteArchiveForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/archive", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        deleteArchiveForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/archive", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        downloadArchiveForOrg: ["GET /orgs/{org}/migrations/{migration_id}/archive", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        getArchiveForAuthenticatedUser: ["GET /user/migrations/{migration_id}/archive", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
+        deleteArchiveForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/archive"],
+        deleteArchiveForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/archive"],
+        downloadArchiveForOrg: ["GET /orgs/{org}/migrations/{migration_id}/archive"],
+        getArchiveForAuthenticatedUser: ["GET /user/migrations/{migration_id}/archive"],
         getCommitAuthors: ["GET /repos/{owner}/{repo}/import/authors"],
         getImportStatus: ["GET /repos/{owner}/{repo}/import"],
         getLargeFiles: ["GET /repos/{owner}/{repo}/import/large_files"],
-        getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        listForAuthenticatedUser: ["GET /user/migrations", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        listForOrg: ["GET /orgs/{org}/migrations", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        listReposForOrg: ["GET /orgs/{org}/migrations/{migration_id}/repositories", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
+        getStatusForAuthenticatedUser: ["GET /user/migrations/{migration_id}"],
+        getStatusForOrg: ["GET /orgs/{org}/migrations/{migration_id}"],
+        listForAuthenticatedUser: ["GET /user/migrations"],
+        listForOrg: ["GET /orgs/{org}/migrations"],
+        listReposForAuthenticatedUser: ["GET /user/migrations/{migration_id}/repositories"],
+        listReposForOrg: ["GET /orgs/{org}/migrations/{migration_id}/repositories"],
+        listReposForUser: ["GET /user/migrations/{migration_id}/repositories", {}, {
+          renamed: ["migrations", "listReposForAuthenticatedUser"]
         }],
         mapCommitAuthor: ["PATCH /repos/{owner}/{repo}/import/authors/{author_id}"],
         setLfsPreference: ["PATCH /repos/{owner}/{repo}/import/lfs"],
         startForAuthenticatedUser: ["POST /user/migrations"],
         startForOrg: ["POST /orgs/{org}/migrations"],
         startImport: ["PUT /repos/{owner}/{repo}/import"],
-        unlockRepoForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
-        unlockRepoForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock", {
-          mediaType: {
-            previews: ["wyandotte"]
-          }
-        }],
+        unlockRepoForAuthenticatedUser: ["DELETE /user/migrations/{migration_id}/repos/{repo_name}/lock"],
+        unlockRepoForOrg: ["DELETE /orgs/{org}/migrations/{migration_id}/repos/{repo_name}/lock"],
         updateImport: ["PATCH /repos/{owner}/{repo}/import"]
       },
       orgs: {
@@ -6852,6 +6879,7 @@ var require_dist_node9 = __commonJS({
         getMembershipForUser: ["GET /orgs/{org}/memberships/{username}"],
         getWebhook: ["GET /orgs/{org}/hooks/{hook_id}"],
         getWebhookConfigForOrg: ["GET /orgs/{org}/hooks/{hook_id}/config"],
+        getWebhookDelivery: ["GET /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}"],
         list: ["GET /organizations"],
         listAppInstallations: ["GET /orgs/{org}/installations"],
         listBlockedUsers: ["GET /orgs/{org}/blocks"],
@@ -6864,8 +6892,10 @@ var require_dist_node9 = __commonJS({
         listOutsideCollaborators: ["GET /orgs/{org}/outside_collaborators"],
         listPendingInvitations: ["GET /orgs/{org}/invitations"],
         listPublicMembers: ["GET /orgs/{org}/public_members"],
+        listWebhookDeliveries: ["GET /orgs/{org}/hooks/{hook_id}/deliveries"],
         listWebhooks: ["GET /orgs/{org}/hooks"],
         pingWebhook: ["POST /orgs/{org}/hooks/{hook_id}/pings"],
+        redeliverWebhookDelivery: ["POST /orgs/{org}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"],
         removeMember: ["DELETE /orgs/{org}/members/{username}"],
         removeMembershipForUser: ["DELETE /orgs/{org}/memberships/{username}"],
         removeOutsideCollaborator: ["DELETE /orgs/{org}/outside_collaborators/{username}"],
@@ -6881,8 +6911,10 @@ var require_dist_node9 = __commonJS({
       packages: {
         deletePackageForAuthenticatedUser: ["DELETE /user/packages/{package_type}/{package_name}"],
         deletePackageForOrg: ["DELETE /orgs/{org}/packages/{package_type}/{package_name}"],
+        deletePackageForUser: ["DELETE /users/{username}/packages/{package_type}/{package_name}"],
         deletePackageVersionForAuthenticatedUser: ["DELETE /user/packages/{package_type}/{package_name}/versions/{package_version_id}"],
         deletePackageVersionForOrg: ["DELETE /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+        deletePackageVersionForUser: ["DELETE /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
         getAllPackageVersionsForAPackageOwnedByAnOrg: ["GET /orgs/{org}/packages/{package_type}/{package_name}/versions", {}, {
           renamed: ["packages", "getAllPackageVersionsForPackageOwnedByOrg"]
         }],
@@ -6898,137 +6930,42 @@ var require_dist_node9 = __commonJS({
         getPackageVersionForAuthenticatedUser: ["GET /user/packages/{package_type}/{package_name}/versions/{package_version_id}"],
         getPackageVersionForOrganization: ["GET /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
         getPackageVersionForUser: ["GET /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}"],
+        listPackagesForAuthenticatedUser: ["GET /user/packages"],
+        listPackagesForOrganization: ["GET /orgs/{org}/packages"],
+        listPackagesForUser: ["GET /users/{username}/packages"],
         restorePackageForAuthenticatedUser: ["POST /user/packages/{package_type}/{package_name}/restore{?token}"],
         restorePackageForOrg: ["POST /orgs/{org}/packages/{package_type}/{package_name}/restore{?token}"],
+        restorePackageForUser: ["POST /users/{username}/packages/{package_type}/{package_name}/restore{?token}"],
         restorePackageVersionForAuthenticatedUser: ["POST /user/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"],
-        restorePackageVersionForOrg: ["POST /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"]
+        restorePackageVersionForOrg: ["POST /orgs/{org}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"],
+        restorePackageVersionForUser: ["POST /users/{username}/packages/{package_type}/{package_name}/versions/{package_version_id}/restore"]
       },
       projects: {
-        addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        createCard: ["POST /projects/columns/{column_id}/cards", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        createColumn: ["POST /projects/{project_id}/columns", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        createForAuthenticatedUser: ["POST /user/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        createForOrg: ["POST /orgs/{org}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        createForRepo: ["POST /repos/{owner}/{repo}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        delete: ["DELETE /projects/{project_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        deleteCard: ["DELETE /projects/columns/cards/{card_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        deleteColumn: ["DELETE /projects/columns/{column_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        get: ["GET /projects/{project_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        getCard: ["GET /projects/columns/cards/{card_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        getColumn: ["GET /projects/columns/{column_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        getPermissionForUser: ["GET /projects/{project_id}/collaborators/{username}/permission", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listCards: ["GET /projects/columns/{column_id}/cards", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listCollaborators: ["GET /projects/{project_id}/collaborators", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listColumns: ["GET /projects/{project_id}/columns", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listForOrg: ["GET /orgs/{org}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listForRepo: ["GET /repos/{owner}/{repo}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        listForUser: ["GET /users/{username}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        moveCard: ["POST /projects/columns/cards/{card_id}/moves", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        moveColumn: ["POST /projects/columns/{column_id}/moves", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        removeCollaborator: ["DELETE /projects/{project_id}/collaborators/{username}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        update: ["PATCH /projects/{project_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        updateCard: ["PATCH /projects/columns/cards/{card_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
-        updateColumn: ["PATCH /projects/columns/{column_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }]
+        addCollaborator: ["PUT /projects/{project_id}/collaborators/{username}"],
+        createCard: ["POST /projects/columns/{column_id}/cards"],
+        createColumn: ["POST /projects/{project_id}/columns"],
+        createForAuthenticatedUser: ["POST /user/projects"],
+        createForOrg: ["POST /orgs/{org}/projects"],
+        createForRepo: ["POST /repos/{owner}/{repo}/projects"],
+        delete: ["DELETE /projects/{project_id}"],
+        deleteCard: ["DELETE /projects/columns/cards/{card_id}"],
+        deleteColumn: ["DELETE /projects/columns/{column_id}"],
+        get: ["GET /projects/{project_id}"],
+        getCard: ["GET /projects/columns/cards/{card_id}"],
+        getColumn: ["GET /projects/columns/{column_id}"],
+        getPermissionForUser: ["GET /projects/{project_id}/collaborators/{username}/permission"],
+        listCards: ["GET /projects/columns/{column_id}/cards"],
+        listCollaborators: ["GET /projects/{project_id}/collaborators"],
+        listColumns: ["GET /projects/{project_id}/columns"],
+        listForOrg: ["GET /orgs/{org}/projects"],
+        listForRepo: ["GET /repos/{owner}/{repo}/projects"],
+        listForUser: ["GET /users/{username}/projects"],
+        moveCard: ["POST /projects/columns/cards/{card_id}/moves"],
+        moveColumn: ["POST /projects/columns/{column_id}/moves"],
+        removeCollaborator: ["DELETE /projects/{project_id}/collaborators/{username}"],
+        update: ["PATCH /projects/{project_id}"],
+        updateCard: ["PATCH /projects/columns/cards/{card_id}"],
+        updateColumn: ["PATCH /projects/columns/{column_id}"]
       },
       pulls: {
         checkIfMerged: ["GET /repos/{owner}/{repo}/pulls/{pull_number}/merge"],
@@ -7055,11 +6992,7 @@ var require_dist_node9 = __commonJS({
         requestReviewers: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers"],
         submitReview: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/events"],
         update: ["PATCH /repos/{owner}/{repo}/pulls/{pull_number}"],
-        updateBranch: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch", {
-          mediaType: {
-            previews: ["lydian"]
-          }
-        }],
+        updateBranch: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/update-branch"],
         updateReview: ["PUT /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}"],
         updateReviewComment: ["PATCH /repos/{owner}/{repo}/pulls/comments/{comment_id}"]
       },
@@ -7067,111 +7000,31 @@ var require_dist_node9 = __commonJS({
         get: ["GET /rate_limit"]
       },
       reactions: {
-        createForCommitComment: ["POST /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForIssue: ["POST /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForIssueComment: ["POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForPullRequestReviewComment: ["POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForRelease: ["POST /repos/{owner}/{repo}/releases/{release_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForTeamDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        createForTeamDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        deleteLegacy: ["DELETE /reactions/{reaction_id}", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }, {
-          deprecated: "octokit.rest.reactions.deleteLegacy() is deprecated, see https://docs.github.com/rest/reference/reactions/#delete-a-reaction-legacy"
-        }],
-        listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }],
-        listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", {
-          mediaType: {
-            previews: ["squirrel-girl"]
-          }
-        }]
+        createForCommitComment: ["POST /repos/{owner}/{repo}/comments/{comment_id}/reactions"],
+        createForIssue: ["POST /repos/{owner}/{repo}/issues/{issue_number}/reactions"],
+        createForIssueComment: ["POST /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"],
+        createForPullRequestReviewComment: ["POST /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"],
+        createForRelease: ["POST /repos/{owner}/{repo}/releases/{release_id}/reactions"],
+        createForTeamDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"],
+        createForTeamDiscussionInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"],
+        deleteForCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}"],
+        deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"],
+        deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"],
+        deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"],
+        deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}"],
+        deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}"],
+        listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions"],
+        listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions"],
+        listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"],
+        listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"],
+        listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"],
+        listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"]
       },
       repos: {
-        acceptInvitation: ["PATCH /user/repository_invitations/{invitation_id}"],
+        acceptInvitation: ["PATCH /user/repository_invitations/{invitation_id}", {}, {
+          renamed: ["repos", "acceptInvitationForAuthenticatedUser"]
+        }],
+        acceptInvitationForAuthenticatedUser: ["PATCH /user/repository_invitations/{invitation_id}"],
         addAppAccessRestrictions: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
           mapToData: "apps"
         }],
@@ -7186,19 +7039,12 @@ var require_dist_node9 = __commonJS({
           mapToData: "users"
         }],
         checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
-        checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts", {
-          mediaType: {
-            previews: ["dorian"]
-          }
-        }],
+        checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts"],
         compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
         compareCommitsWithBasehead: ["GET /repos/{owner}/{repo}/compare/{basehead}"],
+        createAutolink: ["POST /repos/{owner}/{repo}/autolinks"],
         createCommitComment: ["POST /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
-        createCommitSignatureProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-          mediaType: {
-            previews: ["zzzax"]
-          }
-        }],
+        createCommitSignatureProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"],
         createCommitStatus: ["POST /repos/{owner}/{repo}/statuses/{sha}"],
         createDeployKey: ["POST /repos/{owner}/{repo}/keys"],
         createDeployment: ["POST /repos/{owner}/{repo}/deployments"],
@@ -7209,68 +7055,43 @@ var require_dist_node9 = __commonJS({
         createInOrg: ["POST /orgs/{org}/repos"],
         createOrUpdateEnvironment: ["PUT /repos/{owner}/{repo}/environments/{environment_name}"],
         createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
-        createPagesSite: ["POST /repos/{owner}/{repo}/pages", {
-          mediaType: {
-            previews: ["switcheroo"]
-          }
-        }],
+        createPagesSite: ["POST /repos/{owner}/{repo}/pages"],
         createRelease: ["POST /repos/{owner}/{repo}/releases"],
-        createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate", {
-          mediaType: {
-            previews: ["baptiste"]
-          }
-        }],
+        createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate"],
         createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
-        declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}"],
+        declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}", {}, {
+          renamed: ["repos", "declineInvitationForAuthenticatedUser"]
+        }],
+        declineInvitationForAuthenticatedUser: ["DELETE /user/repository_invitations/{invitation_id}"],
         delete: ["DELETE /repos/{owner}/{repo}"],
         deleteAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
         deleteAdminBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
         deleteAnEnvironment: ["DELETE /repos/{owner}/{repo}/environments/{environment_name}"],
+        deleteAutolink: ["DELETE /repos/{owner}/{repo}/autolinks/{autolink_id}"],
         deleteBranchProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection"],
         deleteCommitComment: ["DELETE /repos/{owner}/{repo}/comments/{comment_id}"],
-        deleteCommitSignatureProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-          mediaType: {
-            previews: ["zzzax"]
-          }
-        }],
+        deleteCommitSignatureProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"],
         deleteDeployKey: ["DELETE /repos/{owner}/{repo}/keys/{key_id}"],
         deleteDeployment: ["DELETE /repos/{owner}/{repo}/deployments/{deployment_id}"],
         deleteFile: ["DELETE /repos/{owner}/{repo}/contents/{path}"],
         deleteInvitation: ["DELETE /repos/{owner}/{repo}/invitations/{invitation_id}"],
-        deletePagesSite: ["DELETE /repos/{owner}/{repo}/pages", {
-          mediaType: {
-            previews: ["switcheroo"]
-          }
-        }],
+        deletePagesSite: ["DELETE /repos/{owner}/{repo}/pages"],
         deletePullRequestReviewProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
         deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
         deleteReleaseAsset: ["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],
         deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
-        disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes", {
-          mediaType: {
-            previews: ["london"]
-          }
-        }],
-        disableVulnerabilityAlerts: ["DELETE /repos/{owner}/{repo}/vulnerability-alerts", {
-          mediaType: {
-            previews: ["dorian"]
-          }
-        }],
+        disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes"],
+        disableLfsForRepo: ["DELETE /repos/{owner}/{repo}/lfs"],
+        disableVulnerabilityAlerts: ["DELETE /repos/{owner}/{repo}/vulnerability-alerts"],
         downloadArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}", {}, {
           renamed: ["repos", "downloadZipballArchive"]
         }],
         downloadTarballArchive: ["GET /repos/{owner}/{repo}/tarball/{ref}"],
         downloadZipballArchive: ["GET /repos/{owner}/{repo}/zipball/{ref}"],
-        enableAutomatedSecurityFixes: ["PUT /repos/{owner}/{repo}/automated-security-fixes", {
-          mediaType: {
-            previews: ["london"]
-          }
-        }],
-        enableVulnerabilityAlerts: ["PUT /repos/{owner}/{repo}/vulnerability-alerts", {
-          mediaType: {
-            previews: ["dorian"]
-          }
-        }],
+        enableAutomatedSecurityFixes: ["PUT /repos/{owner}/{repo}/automated-security-fixes"],
+        enableLfsForRepo: ["PUT /repos/{owner}/{repo}/lfs"],
+        enableVulnerabilityAlerts: ["PUT /repos/{owner}/{repo}/vulnerability-alerts"],
+        generateReleaseNotes: ["POST /repos/{owner}/{repo}/releases/generate-notes"],
         get: ["GET /repos/{owner}/{repo}"],
         getAccessRestrictions: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions"],
         getAdminBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
@@ -7282,6 +7103,7 @@ var require_dist_node9 = __commonJS({
           }
         }],
         getAppsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],
+        getAutolink: ["GET /repos/{owner}/{repo}/autolinks/{autolink_id}"],
         getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
         getBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection"],
         getClones: ["GET /repos/{owner}/{repo}/traffic/clones"],
@@ -7291,11 +7113,7 @@ var require_dist_node9 = __commonJS({
         getCommit: ["GET /repos/{owner}/{repo}/commits/{ref}"],
         getCommitActivityStats: ["GET /repos/{owner}/{repo}/stats/commit_activity"],
         getCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}"],
-        getCommitSignatureProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures", {
-          mediaType: {
-            previews: ["zzzax"]
-          }
-        }],
+        getCommitSignatureProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_signatures"],
         getCommunityProfileMetrics: ["GET /repos/{owner}/{repo}/community/profile"],
         getContent: ["GET /repos/{owner}/{repo}/contents/{path}"],
         getContributorsStats: ["GET /repos/{owner}/{repo}/stats/contributors"],
@@ -7324,12 +7142,10 @@ var require_dist_node9 = __commonJS({
         getViews: ["GET /repos/{owner}/{repo}/traffic/views"],
         getWebhook: ["GET /repos/{owner}/{repo}/hooks/{hook_id}"],
         getWebhookConfigForRepo: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/config"],
+        getWebhookDelivery: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}"],
+        listAutolinks: ["GET /repos/{owner}/{repo}/autolinks"],
         listBranches: ["GET /repos/{owner}/{repo}/branches"],
-        listBranchesForHeadCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", {
-          mediaType: {
-            previews: ["groot"]
-          }
-        }],
+        listBranchesForHeadCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head"],
         listCollaborators: ["GET /repos/{owner}/{repo}/collaborators"],
         listCommentsForCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/comments"],
         listCommitCommentsForRepo: ["GET /repos/{owner}/{repo}/comments"],
@@ -7348,18 +7164,17 @@ var require_dist_node9 = __commonJS({
         listLanguages: ["GET /repos/{owner}/{repo}/languages"],
         listPagesBuilds: ["GET /repos/{owner}/{repo}/pages/builds"],
         listPublic: ["GET /repositories"],
-        listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", {
-          mediaType: {
-            previews: ["groot"]
-          }
-        }],
+        listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls"],
         listReleaseAssets: ["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],
         listReleases: ["GET /repos/{owner}/{repo}/releases"],
         listTags: ["GET /repos/{owner}/{repo}/tags"],
         listTeams: ["GET /repos/{owner}/{repo}/teams"],
+        listWebhookDeliveries: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries"],
         listWebhooks: ["GET /repos/{owner}/{repo}/hooks"],
         merge: ["POST /repos/{owner}/{repo}/merges"],
+        mergeUpstream: ["POST /repos/{owner}/{repo}/merge-upstream"],
         pingWebhook: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/pings"],
+        redeliverWebhookDelivery: ["POST /repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts"],
         removeAppAccessRestrictions: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
           mapToData: "apps"
         }],
@@ -7416,11 +7231,7 @@ var require_dist_node9 = __commonJS({
       },
       search: {
         code: ["GET /search/code"],
-        commits: ["GET /search/commits", {
-          mediaType: {
-            previews: ["cloak"]
-          }
-        }],
+        commits: ["GET /search/commits"],
         issuesAndPullRequests: ["GET /search/issues"],
         labels: ["GET /search/labels"],
         repos: ["GET /search/repositories"],
@@ -7433,22 +7244,15 @@ var require_dist_node9 = __commonJS({
       },
       secretScanning: {
         getAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"],
+        listAlertsForOrg: ["GET /orgs/{org}/secret-scanning/alerts"],
         listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
         updateAlert: ["PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"]
       },
       teams: {
         addOrUpdateMembershipForUserInOrg: ["PUT /orgs/{org}/teams/{team_slug}/memberships/{username}"],
-        addOrUpdateProjectPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
+        addOrUpdateProjectPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/projects/{project_id}"],
         addOrUpdateRepoPermissionsInOrg: ["PUT /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
-        checkPermissionsForProjectInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects/{project_id}", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
+        checkPermissionsForProjectInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects/{project_id}"],
         checkPermissionsForRepoInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos/{owner}/{repo}"],
         create: ["POST /orgs/{org}/teams"],
         createDiscussionCommentInOrg: ["POST /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments"],
@@ -7467,11 +7271,7 @@ var require_dist_node9 = __commonJS({
         listForAuthenticatedUser: ["GET /user/teams"],
         listMembersInOrg: ["GET /orgs/{org}/teams/{team_slug}/members"],
         listPendingInvitationsInOrg: ["GET /orgs/{org}/teams/{team_slug}/invitations"],
-        listProjectsInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects", {
-          mediaType: {
-            previews: ["inertia"]
-          }
-        }],
+        listProjectsInOrg: ["GET /orgs/{org}/teams/{team_slug}/projects"],
         listReposInOrg: ["GET /orgs/{org}/teams/{team_slug}/repos"],
         removeMembershipForUserInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}"],
         removeProjectInOrg: ["DELETE /orgs/{org}/teams/{team_slug}/projects/{project_id}"],
@@ -7481,41 +7281,86 @@ var require_dist_node9 = __commonJS({
         updateInOrg: ["PATCH /orgs/{org}/teams/{team_slug}"]
       },
       users: {
-        addEmailForAuthenticated: ["POST /user/emails"],
+        addEmailForAuthenticated: ["POST /user/emails", {}, {
+          renamed: ["users", "addEmailForAuthenticatedUser"]
+        }],
+        addEmailForAuthenticatedUser: ["POST /user/emails"],
         block: ["PUT /user/blocks/{username}"],
         checkBlocked: ["GET /user/blocks/{username}"],
         checkFollowingForUser: ["GET /users/{username}/following/{target_user}"],
         checkPersonIsFollowedByAuthenticated: ["GET /user/following/{username}"],
-        createGpgKeyForAuthenticated: ["POST /user/gpg_keys"],
-        createPublicSshKeyForAuthenticated: ["POST /user/keys"],
-        deleteEmailForAuthenticated: ["DELETE /user/emails"],
-        deleteGpgKeyForAuthenticated: ["DELETE /user/gpg_keys/{gpg_key_id}"],
-        deletePublicSshKeyForAuthenticated: ["DELETE /user/keys/{key_id}"],
+        createGpgKeyForAuthenticated: ["POST /user/gpg_keys", {}, {
+          renamed: ["users", "createGpgKeyForAuthenticatedUser"]
+        }],
+        createGpgKeyForAuthenticatedUser: ["POST /user/gpg_keys"],
+        createPublicSshKeyForAuthenticated: ["POST /user/keys", {}, {
+          renamed: ["users", "createPublicSshKeyForAuthenticatedUser"]
+        }],
+        createPublicSshKeyForAuthenticatedUser: ["POST /user/keys"],
+        deleteEmailForAuthenticated: ["DELETE /user/emails", {}, {
+          renamed: ["users", "deleteEmailForAuthenticatedUser"]
+        }],
+        deleteEmailForAuthenticatedUser: ["DELETE /user/emails"],
+        deleteGpgKeyForAuthenticated: ["DELETE /user/gpg_keys/{gpg_key_id}", {}, {
+          renamed: ["users", "deleteGpgKeyForAuthenticatedUser"]
+        }],
+        deleteGpgKeyForAuthenticatedUser: ["DELETE /user/gpg_keys/{gpg_key_id}"],
+        deletePublicSshKeyForAuthenticated: ["DELETE /user/keys/{key_id}", {}, {
+          renamed: ["users", "deletePublicSshKeyForAuthenticatedUser"]
+        }],
+        deletePublicSshKeyForAuthenticatedUser: ["DELETE /user/keys/{key_id}"],
         follow: ["PUT /user/following/{username}"],
         getAuthenticated: ["GET /user"],
         getByUsername: ["GET /users/{username}"],
         getContextForUser: ["GET /users/{username}/hovercard"],
-        getGpgKeyForAuthenticated: ["GET /user/gpg_keys/{gpg_key_id}"],
-        getPublicSshKeyForAuthenticated: ["GET /user/keys/{key_id}"],
+        getGpgKeyForAuthenticated: ["GET /user/gpg_keys/{gpg_key_id}", {}, {
+          renamed: ["users", "getGpgKeyForAuthenticatedUser"]
+        }],
+        getGpgKeyForAuthenticatedUser: ["GET /user/gpg_keys/{gpg_key_id}"],
+        getPublicSshKeyForAuthenticated: ["GET /user/keys/{key_id}", {}, {
+          renamed: ["users", "getPublicSshKeyForAuthenticatedUser"]
+        }],
+        getPublicSshKeyForAuthenticatedUser: ["GET /user/keys/{key_id}"],
         list: ["GET /users"],
-        listBlockedByAuthenticated: ["GET /user/blocks"],
-        listEmailsForAuthenticated: ["GET /user/emails"],
-        listFollowedByAuthenticated: ["GET /user/following"],
+        listBlockedByAuthenticated: ["GET /user/blocks", {}, {
+          renamed: ["users", "listBlockedByAuthenticatedUser"]
+        }],
+        listBlockedByAuthenticatedUser: ["GET /user/blocks"],
+        listEmailsForAuthenticated: ["GET /user/emails", {}, {
+          renamed: ["users", "listEmailsForAuthenticatedUser"]
+        }],
+        listEmailsForAuthenticatedUser: ["GET /user/emails"],
+        listFollowedByAuthenticated: ["GET /user/following", {}, {
+          renamed: ["users", "listFollowedByAuthenticatedUser"]
+        }],
+        listFollowedByAuthenticatedUser: ["GET /user/following"],
         listFollowersForAuthenticatedUser: ["GET /user/followers"],
         listFollowersForUser: ["GET /users/{username}/followers"],
         listFollowingForUser: ["GET /users/{username}/following"],
-        listGpgKeysForAuthenticated: ["GET /user/gpg_keys"],
+        listGpgKeysForAuthenticated: ["GET /user/gpg_keys", {}, {
+          renamed: ["users", "listGpgKeysForAuthenticatedUser"]
+        }],
+        listGpgKeysForAuthenticatedUser: ["GET /user/gpg_keys"],
         listGpgKeysForUser: ["GET /users/{username}/gpg_keys"],
-        listPublicEmailsForAuthenticated: ["GET /user/public_emails"],
+        listPublicEmailsForAuthenticated: ["GET /user/public_emails", {}, {
+          renamed: ["users", "listPublicEmailsForAuthenticatedUser"]
+        }],
+        listPublicEmailsForAuthenticatedUser: ["GET /user/public_emails"],
         listPublicKeysForUser: ["GET /users/{username}/keys"],
-        listPublicSshKeysForAuthenticated: ["GET /user/keys"],
-        setPrimaryEmailVisibilityForAuthenticated: ["PATCH /user/email/visibility"],
+        listPublicSshKeysForAuthenticated: ["GET /user/keys", {}, {
+          renamed: ["users", "listPublicSshKeysForAuthenticatedUser"]
+        }],
+        listPublicSshKeysForAuthenticatedUser: ["GET /user/keys"],
+        setPrimaryEmailVisibilityForAuthenticated: ["PATCH /user/email/visibility", {}, {
+          renamed: ["users", "setPrimaryEmailVisibilityForAuthenticatedUser"]
+        }],
+        setPrimaryEmailVisibilityForAuthenticatedUser: ["PATCH /user/email/visibility"],
         unblock: ["DELETE /user/blocks/{username}"],
         unfollow: ["DELETE /user/following/{username}"],
         updateAuthenticated: ["PATCH /user"]
       }
     };
-    var VERSION = "5.3.1";
+    var VERSION = "5.13.0";
     function endpointsToMethods(octokit, endpointsMap) {
       const newMethods = {};
       for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -7603,7 +7448,7 @@ var require_dist_node10 = __commonJS({
   "node_modules/@octokit/plugin-paginate-rest/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var VERSION = "2.13.5";
+    var VERSION = "2.17.0";
     function ownKeys(object, enumerableOnly) {
       var keys = Object.keys(object);
       if (Object.getOwnPropertySymbols) {
@@ -7748,7 +7593,7 @@ var require_dist_node10 = __commonJS({
     var composePaginateRest = Object.assign(paginate, {
       iterator
     });
-    var paginatingEndpoints = ["GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/events", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
+    var paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/events", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/autolinks", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
     function isPaginatingEndpoint(arg) {
       if (typeof arg === "string") {
         return paginatingEndpoints.includes(arg);
