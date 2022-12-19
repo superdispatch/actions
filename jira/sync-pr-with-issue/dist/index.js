@@ -1781,7 +1781,7 @@ var require_oidc_utils = __commonJS({
         return runtimeUrl;
       }
       static getCall(id_token_url) {
-        var _a2;
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
           const httpclient = OidcClient.createHttpClient();
           const res = yield httpclient.getJson(id_token_url).catch((error) => {
@@ -1791,7 +1791,7 @@ var require_oidc_utils = __commonJS({
  
         Error Message: ${error.result.message}`);
           });
-          const id_token = (_a2 = res.result) === null || _a2 === void 0 ? void 0 : _a2.value;
+          const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
           if (!id_token) {
             throw new Error("Response json body do not have ID Token field");
           }
@@ -1878,7 +1878,7 @@ var require_summary = __commonJS({
           }
           try {
             yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
-          } catch (_a2) {
+          } catch (_a) {
             throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
           }
           this._filePath = pathFromEnv;
@@ -2308,7 +2308,7 @@ var require_context = __commonJS({
     var os_1 = require("os");
     var Context = class {
       constructor() {
-        var _a2, _b, _c;
+        var _a, _b, _c;
         this.payload = {};
         if (process.env.GITHUB_EVENT_PATH) {
           if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
@@ -2327,7 +2327,7 @@ var require_context = __commonJS({
         this.job = process.env.GITHUB_JOB;
         this.runNumber = parseInt(process.env.GITHUB_RUN_NUMBER, 10);
         this.runId = parseInt(process.env.GITHUB_RUN_ID, 10);
-        this.apiUrl = (_a2 = process.env.GITHUB_API_URL) !== null && _a2 !== void 0 ? _a2 : `https://api.github.com`;
+        this.apiUrl = (_a = process.env.GITHUB_API_URL) !== null && _a !== void 0 ? _a : `https://api.github.com`;
         this.serverUrl = (_b = process.env.GITHUB_SERVER_URL) !== null && _b !== void 0 ? _b : `https://github.com`;
         this.graphqlUrl = (_c = process.env.GITHUB_GRAPHQL_URL) !== null && _c !== void 0 ? _c : `https://api.github.com/graphql`;
       }
@@ -6429,10 +6429,10 @@ var require_dist_node8 = __commonJS({
         return OctokitWithDefaults;
       }
       static plugin(...newPlugins) {
-        var _a2;
+        var _a;
         const currentPlugins = this.plugins;
-        const NewOctokit = (_a2 = /* @__PURE__ */ __name(class extends this {
-        }, "_a"), _a2.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a2);
+        const NewOctokit = (_a = /* @__PURE__ */ __name(class extends this {
+        }, "_a"), _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a);
         return NewOctokit;
       }
     };
@@ -60851,8 +60851,7 @@ __name(findIssueKey, "findIssueKey");
 var token = (0, import_core.getInput)("token", { required: true });
 var JIRA_BASE_URL2 = getEnv("JIRA_BASE_URL");
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
-var _a;
-var PR_NUMBER = (_a = import_github.context.payload.pull_request) == null ? void 0 : _a.number;
+var PR_NUMBER = import_github.context.payload.pull_request?.number;
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
     (0, import_core.info)("Skipping... This action runs in PR only");

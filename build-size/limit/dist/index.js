@@ -66952,7 +66952,7 @@ async function sendReport({
     issue_number: pr2
   }))) {
     for (const { id, body: body2, user } of comments) {
-      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
+      if (user?.login === GITHUB_ACTIONS_BOT_LOGIN && body2?.startsWith(reportTitle)) {
         if (previousCommentID == null) {
           (0, import_core.info)(`Found previous report: ${id}`);
           previousCommentID = id;

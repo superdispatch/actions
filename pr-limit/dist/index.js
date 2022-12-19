@@ -7747,11 +7747,10 @@ async function main() {
 }
 __name(main, "main");
 async function calculatePRCount(author) {
-  var _a;
   let count = 0;
   const pullRequests = await octokit.request("GET /repos/{owner}/{repo}/pulls", import_github.context.repo);
   for (const item of pullRequests.data) {
-    if (((_a = item.user) == null ? void 0 : _a.login) === author) {
+    if (item.user?.login === author) {
       count++;
     }
   }
