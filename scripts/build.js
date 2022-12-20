@@ -26,7 +26,7 @@ async function main() {
       entryPoints: [entryPath],
       outfile: outPath,
 
-      target: 'node12',
+      target: 'node16',
       platform: 'node',
 
       external: [

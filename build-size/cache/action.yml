@@ -17,5 +17,5 @@ inputs:
     description: 'custom label to distinguish multiple builds'
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

@@ -17,5 +17,5 @@ inputs:
     description: 'keep specified number of artifacts even if they are matching provided pattern'
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
