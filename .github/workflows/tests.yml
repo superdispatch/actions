@@ -9,9 +9,9 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: main
           ref: ${{ github.event.pull_request.base.sha }}
@@ -51,7 +51,7 @@ jobs:
       - build-size-cache
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: ./build-size/report
         with:
@@ -87,7 +87,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: ./build-size/limit
         with:
@@ -99,7 +99,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - run: |
           mkdir site
@@ -128,34 +128,34 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test upload-artifacts') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-1-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-2-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-3-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-4-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-5-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: test-6-${{ github.event.number }}
           path: package.json
@@ -164,7 +164,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test prune-artifacts') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: ./prune-artifacts
         with:
@@ -181,7 +181,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test pr-limit') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./pr-limit
         with:
           limit: 1
@@ -190,7 +190,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test commit-snapshots') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./update-snapshots
         with:
           dry-run: true
