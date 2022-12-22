@@ -7651,7 +7651,7 @@ var require_utils4 = __commonJS({
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getOctokitOptions = exports2.GitHub = exports2.context = void 0;
+    exports2.getOctokitOptions = exports2.GitHub = exports2.defaults = exports2.context = void 0;
     var Context = __importStar(require_context());
     var Utils = __importStar(require_utils2());
     var core_1 = require_dist_node8();
@@ -7659,13 +7659,13 @@ var require_utils4 = __commonJS({
     var plugin_paginate_rest_1 = require_dist_node10();
     exports2.context = new Context.Context();
     var baseUrl = Utils.getApiBaseUrl();
-    var defaults = {
+    exports2.defaults = {
       baseUrl,
       request: {
         agent: Utils.getProxyAgent(baseUrl)
       }
     };
-    exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
+    exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports2.defaults);
     function getOctokitOptions(token2, options) {
       const opts = Object.assign({}, options || {});
       const auth = Utils.getAuthString(token2, opts);
@@ -7716,8 +7716,9 @@ var require_github = __commonJS({
     var Context = __importStar(require_context());
     var utils_1 = require_utils4();
     exports2.context = new Context.Context();
-    function getOctokit2(token2, options) {
-      return new utils_1.GitHub(utils_1.getOctokitOptions(token2, options));
+    function getOctokit2(token2, options, ...additionalPlugins) {
+      const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
+      return new GitHubWithPlugins(utils_1.getOctokitOptions(token2, options));
     }
     __name(getOctokit2, "getOctokit");
     exports2.getOctokit = getOctokit2;

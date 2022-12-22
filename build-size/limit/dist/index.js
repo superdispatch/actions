@@ -6627,7 +6627,11 @@ var require_cacheUtils = __commonJS({
             const file = _d.value;
             const relativeFile = path.relative(workspace, file).replace(new RegExp(`\\${path.sep}`, "g"), "/");
             core.debug(`Matched: ${relativeFile}`);
-            paths.push(`${relativeFile}`);
+            if (relativeFile === "") {
+              paths.push(".");
+            } else {
+              paths.push(`${relativeFile}`);
+            }
           }
         } catch (e_1_1) {
           e_1 = { error: e_1_1 };
@@ -6713,587 +6717,12 @@ var require_cacheUtils = __commonJS({
     }
     __name(assertDefined, "assertDefined");
     exports2.assertDefined = assertDefined;
-  }
-});
-
-// node_modules/@actions/cache/node_modules/@actions/http-client/proxy.js
-var require_proxy2 = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/http-client/proxy.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    function getProxyUrl(reqUrl) {
-      let usingSsl = reqUrl.protocol === "https:";
-      let proxyUrl;
-      if (checkBypass(reqUrl)) {
-        return proxyUrl;
-      }
-      let proxyVar;
-      if (usingSsl) {
-        proxyVar = process.env["https_proxy"] || process.env["HTTPS_PROXY"];
-      } else {
-        proxyVar = process.env["http_proxy"] || process.env["HTTP_PROXY"];
-      }
-      if (proxyVar) {
-        proxyUrl = new URL(proxyVar);
-      }
-      return proxyUrl;
+    function isGhes() {
+      const ghUrl = new URL(process.env["GITHUB_SERVER_URL"] || "https://github.com");
+      return ghUrl.hostname.toUpperCase() !== "GITHUB.COM";
     }
-    __name(getProxyUrl, "getProxyUrl");
-    exports2.getProxyUrl = getProxyUrl;
-    function checkBypass(reqUrl) {
-      if (!reqUrl.hostname) {
-        return false;
-      }
-      let noProxy = process.env["no_proxy"] || process.env["NO_PROXY"] || "";
-      if (!noProxy) {
-        return false;
-      }
-      let reqPort;
-      if (reqUrl.port) {
-        reqPort = Number(reqUrl.port);
-      } else if (reqUrl.protocol === "http:") {
-        reqPort = 80;
-      } else if (reqUrl.protocol === "https:") {
-        reqPort = 443;
-      }
-      let upperReqHosts = [reqUrl.hostname.toUpperCase()];
-      if (typeof reqPort === "number") {
-        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
-      }
-      for (let upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x)) {
-        if (upperReqHosts.some((x) => x === upperNoProxyItem)) {
-          return true;
-        }
-      }
-      return false;
-    }
-    __name(checkBypass, "checkBypass");
-    exports2.checkBypass = checkBypass;
-  }
-});
-
-// node_modules/@actions/cache/node_modules/@actions/http-client/index.js
-var require_http_client = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/http-client/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var http = require("http");
-    var https = require("https");
-    var pm = require_proxy2();
-    var tunnel;
-    var HttpCodes;
-    (function(HttpCodes2) {
-      HttpCodes2[HttpCodes2["OK"] = 200] = "OK";
-      HttpCodes2[HttpCodes2["MultipleChoices"] = 300] = "MultipleChoices";
-      HttpCodes2[HttpCodes2["MovedPermanently"] = 301] = "MovedPermanently";
-      HttpCodes2[HttpCodes2["ResourceMoved"] = 302] = "ResourceMoved";
-      HttpCodes2[HttpCodes2["SeeOther"] = 303] = "SeeOther";
-      HttpCodes2[HttpCodes2["NotModified"] = 304] = "NotModified";
-      HttpCodes2[HttpCodes2["UseProxy"] = 305] = "UseProxy";
-      HttpCodes2[HttpCodes2["SwitchProxy"] = 306] = "SwitchProxy";
-      HttpCodes2[HttpCodes2["TemporaryRedirect"] = 307] = "TemporaryRedirect";
-      HttpCodes2[HttpCodes2["PermanentRedirect"] = 308] = "PermanentRedirect";
-      HttpCodes2[HttpCodes2["BadRequest"] = 400] = "BadRequest";
-      HttpCodes2[HttpCodes2["Unauthorized"] = 401] = "Unauthorized";
-      HttpCodes2[HttpCodes2["PaymentRequired"] = 402] = "PaymentRequired";
-      HttpCodes2[HttpCodes2["Forbidden"] = 403] = "Forbidden";
-      HttpCodes2[HttpCodes2["NotFound"] = 404] = "NotFound";
-      HttpCodes2[HttpCodes2["MethodNotAllowed"] = 405] = "MethodNotAllowed";
-      HttpCodes2[HttpCodes2["NotAcceptable"] = 406] = "NotAcceptable";
-      HttpCodes2[HttpCodes2["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
-      HttpCodes2[HttpCodes2["RequestTimeout"] = 408] = "RequestTimeout";
-      HttpCodes2[HttpCodes2["Conflict"] = 409] = "Conflict";
-      HttpCodes2[HttpCodes2["Gone"] = 410] = "Gone";
-      HttpCodes2[HttpCodes2["TooManyRequests"] = 429] = "TooManyRequests";
-      HttpCodes2[HttpCodes2["InternalServerError"] = 500] = "InternalServerError";
-      HttpCodes2[HttpCodes2["NotImplemented"] = 501] = "NotImplemented";
-      HttpCodes2[HttpCodes2["BadGateway"] = 502] = "BadGateway";
-      HttpCodes2[HttpCodes2["ServiceUnavailable"] = 503] = "ServiceUnavailable";
-      HttpCodes2[HttpCodes2["GatewayTimeout"] = 504] = "GatewayTimeout";
-    })(HttpCodes = exports2.HttpCodes || (exports2.HttpCodes = {}));
-    var Headers;
-    (function(Headers2) {
-      Headers2["Accept"] = "accept";
-      Headers2["ContentType"] = "content-type";
-    })(Headers = exports2.Headers || (exports2.Headers = {}));
-    var MediaTypes;
-    (function(MediaTypes2) {
-      MediaTypes2["ApplicationJson"] = "application/json";
-    })(MediaTypes = exports2.MediaTypes || (exports2.MediaTypes = {}));
-    function getProxyUrl(serverUrl) {
-      let proxyUrl = pm.getProxyUrl(new URL(serverUrl));
-      return proxyUrl ? proxyUrl.href : "";
-    }
-    __name(getProxyUrl, "getProxyUrl");
-    exports2.getProxyUrl = getProxyUrl;
-    var HttpRedirectCodes = [
-      HttpCodes.MovedPermanently,
-      HttpCodes.ResourceMoved,
-      HttpCodes.SeeOther,
-      HttpCodes.TemporaryRedirect,
-      HttpCodes.PermanentRedirect
-    ];
-    var HttpResponseRetryCodes = [
-      HttpCodes.BadGateway,
-      HttpCodes.ServiceUnavailable,
-      HttpCodes.GatewayTimeout
-    ];
-    var RetryableHttpVerbs = ["OPTIONS", "GET", "DELETE", "HEAD"];
-    var ExponentialBackoffCeiling = 10;
-    var ExponentialBackoffTimeSlice = 5;
-    var HttpClientError = class extends Error {
-      constructor(message, statusCode) {
-        super(message);
-        this.name = "HttpClientError";
-        this.statusCode = statusCode;
-        Object.setPrototypeOf(this, HttpClientError.prototype);
-      }
-    };
-    __name(HttpClientError, "HttpClientError");
-    exports2.HttpClientError = HttpClientError;
-    var HttpClientResponse = class {
-      constructor(message) {
-        this.message = message;
-      }
-      readBody() {
-        return new Promise(async (resolve, reject) => {
-          let output = Buffer.alloc(0);
-          this.message.on("data", (chunk) => {
-            output = Buffer.concat([output, chunk]);
-          });
-          this.message.on("end", () => {
-            resolve(output.toString());
-          });
-        });
-      }
-    };
-    __name(HttpClientResponse, "HttpClientResponse");
-    exports2.HttpClientResponse = HttpClientResponse;
-    function isHttps(requestUrl) {
-      let parsedUrl = new URL(requestUrl);
-      return parsedUrl.protocol === "https:";
-    }
-    __name(isHttps, "isHttps");
-    exports2.isHttps = isHttps;
-    var HttpClient = class {
-      constructor(userAgent, handlers, requestOptions) {
-        this._ignoreSslError = false;
-        this._allowRedirects = true;
-        this._allowRedirectDowngrade = false;
-        this._maxRedirects = 50;
-        this._allowRetries = false;
-        this._maxRetries = 1;
-        this._keepAlive = false;
-        this._disposed = false;
-        this.userAgent = userAgent;
-        this.handlers = handlers || [];
-        this.requestOptions = requestOptions;
-        if (requestOptions) {
-          if (requestOptions.ignoreSslError != null) {
-            this._ignoreSslError = requestOptions.ignoreSslError;
-          }
-          this._socketTimeout = requestOptions.socketTimeout;
-          if (requestOptions.allowRedirects != null) {
-            this._allowRedirects = requestOptions.allowRedirects;
-          }
-          if (requestOptions.allowRedirectDowngrade != null) {
-            this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
-          }
-          if (requestOptions.maxRedirects != null) {
-            this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
-          }
-          if (requestOptions.keepAlive != null) {
-            this._keepAlive = requestOptions.keepAlive;
-          }
-          if (requestOptions.allowRetries != null) {
-            this._allowRetries = requestOptions.allowRetries;
-          }
-          if (requestOptions.maxRetries != null) {
-            this._maxRetries = requestOptions.maxRetries;
-          }
-        }
-      }
-      options(requestUrl, additionalHeaders) {
-        return this.request("OPTIONS", requestUrl, null, additionalHeaders || {});
-      }
-      get(requestUrl, additionalHeaders) {
-        return this.request("GET", requestUrl, null, additionalHeaders || {});
-      }
-      del(requestUrl, additionalHeaders) {
-        return this.request("DELETE", requestUrl, null, additionalHeaders || {});
-      }
-      post(requestUrl, data, additionalHeaders) {
-        return this.request("POST", requestUrl, data, additionalHeaders || {});
-      }
-      patch(requestUrl, data, additionalHeaders) {
-        return this.request("PATCH", requestUrl, data, additionalHeaders || {});
-      }
-      put(requestUrl, data, additionalHeaders) {
-        return this.request("PUT", requestUrl, data, additionalHeaders || {});
-      }
-      head(requestUrl, additionalHeaders) {
-        return this.request("HEAD", requestUrl, null, additionalHeaders || {});
-      }
-      sendStream(verb, requestUrl, stream, additionalHeaders) {
-        return this.request(verb, requestUrl, stream, additionalHeaders);
-      }
-      async getJson(requestUrl, additionalHeaders = {}) {
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        let res = await this.get(requestUrl, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async postJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.post(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async putJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.put(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async patchJson(requestUrl, obj, additionalHeaders = {}) {
-        let data = JSON.stringify(obj, null, 2);
-        additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
-        additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
-        let res = await this.patch(requestUrl, data, additionalHeaders);
-        return this._processResponse(res, this.requestOptions);
-      }
-      async request(verb, requestUrl, data, headers) {
-        if (this._disposed) {
-          throw new Error("Client has already been disposed.");
-        }
-        let parsedUrl = new URL(requestUrl);
-        let info3 = this._prepareRequest(verb, parsedUrl, headers);
-        let maxTries = this._allowRetries && RetryableHttpVerbs.indexOf(verb) != -1 ? this._maxRetries + 1 : 1;
-        let numTries = 0;
-        let response;
-        while (numTries < maxTries) {
-          response = await this.requestRaw(info3, data);
-          if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
-            let authenticationHandler;
-            for (let i = 0; i < this.handlers.length; i++) {
-              if (this.handlers[i].canHandleAuthentication(response)) {
-                authenticationHandler = this.handlers[i];
-                break;
-              }
-            }
-            if (authenticationHandler) {
-              return authenticationHandler.handleAuthentication(this, info3, data);
-            } else {
-              return response;
-            }
-          }
-          let redirectsRemaining = this._maxRedirects;
-          while (HttpRedirectCodes.indexOf(response.message.statusCode) != -1 && this._allowRedirects && redirectsRemaining > 0) {
-            const redirectUrl = response.message.headers["location"];
-            if (!redirectUrl) {
-              break;
-            }
-            let parsedRedirectUrl = new URL(redirectUrl);
-            if (parsedUrl.protocol == "https:" && parsedUrl.protocol != parsedRedirectUrl.protocol && !this._allowRedirectDowngrade) {
-              throw new Error("Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.");
-            }
-            await response.readBody();
-            if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
-              for (let header in headers) {
-                if (header.toLowerCase() === "authorization") {
-                  delete headers[header];
-                }
-              }
-            }
-            info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-            response = await this.requestRaw(info3, data);
-            redirectsRemaining--;
-          }
-          if (HttpResponseRetryCodes.indexOf(response.message.statusCode) == -1) {
-            return response;
-          }
-          numTries += 1;
-          if (numTries < maxTries) {
-            await response.readBody();
-            await this._performExponentialBackoff(numTries);
-          }
-        }
-        return response;
-      }
-      dispose() {
-        if (this._agent) {
-          this._agent.destroy();
-        }
-        this._disposed = true;
-      }
-      requestRaw(info3, data) {
-        return new Promise((resolve, reject) => {
-          let callbackForResult = /* @__PURE__ */ __name(function(err, res) {
-            if (err) {
-              reject(err);
-            }
-            resolve(res);
-          }, "callbackForResult");
-          this.requestRawWithCallback(info3, data, callbackForResult);
-        });
-      }
-      requestRawWithCallback(info3, data, onResult) {
-        let socket;
-        if (typeof data === "string") {
-          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
-        }
-        let callbackCalled = false;
-        let handleResult = /* @__PURE__ */ __name((err, res) => {
-          if (!callbackCalled) {
-            callbackCalled = true;
-            onResult(err, res);
-          }
-        }, "handleResult");
-        let req = info3.httpModule.request(info3.options, (msg) => {
-          let res = new HttpClientResponse(msg);
-          handleResult(null, res);
-        });
-        req.on("socket", (sock) => {
-          socket = sock;
-        });
-        req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
-          if (socket) {
-            socket.end();
-          }
-          handleResult(new Error("Request timeout: " + info3.options.path), null);
-        });
-        req.on("error", function(err) {
-          handleResult(err, null);
-        });
-        if (data && typeof data === "string") {
-          req.write(data, "utf8");
-        }
-        if (data && typeof data !== "string") {
-          data.on("close", function() {
-            req.end();
-          });
-          data.pipe(req);
-        } else {
-          req.end();
-        }
-      }
-      getAgent(serverUrl) {
-        let parsedUrl = new URL(serverUrl);
-        return this._getAgent(parsedUrl);
-      }
-      _prepareRequest(method, requestUrl, headers) {
-        const info3 = {};
-        info3.parsedUrl = requestUrl;
-        const usingSsl = info3.parsedUrl.protocol === "https:";
-        info3.httpModule = usingSsl ? https : http;
-        const defaultPort = usingSsl ? 443 : 80;
-        info3.options = {};
-        info3.options.host = info3.parsedUrl.hostname;
-        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
-        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
-        info3.options.method = method;
-        info3.options.headers = this._mergeHeaders(headers);
-        if (this.userAgent != null) {
-          info3.options.headers["user-agent"] = this.userAgent;
-        }
-        info3.options.agent = this._getAgent(info3.parsedUrl);
-        if (this.handlers) {
-          this.handlers.forEach((handler) => {
-            handler.prepareRequest(info3.options);
-          });
-        }
-        return info3;
-      }
-      _mergeHeaders(headers) {
-        const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
-        if (this.requestOptions && this.requestOptions.headers) {
-          return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers));
-        }
-        return lowercaseKeys(headers || {});
-      }
-      _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
-        const lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
-        let clientHeader;
-        if (this.requestOptions && this.requestOptions.headers) {
-          clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
-        }
-        return additionalHeaders[header] || clientHeader || _default;
-      }
-      _getAgent(parsedUrl) {
-        let agent;
-        let proxyUrl = pm.getProxyUrl(parsedUrl);
-        let useProxy = proxyUrl && proxyUrl.hostname;
-        if (this._keepAlive && useProxy) {
-          agent = this._proxyAgent;
-        }
-        if (this._keepAlive && !useProxy) {
-          agent = this._agent;
-        }
-        if (!!agent) {
-          return agent;
-        }
-        const usingSsl = parsedUrl.protocol === "https:";
-        let maxSockets = 100;
-        if (!!this.requestOptions) {
-          maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
-        }
-        if (useProxy) {
-          if (!tunnel) {
-            tunnel = require_tunnel2();
-          }
-          const agentOptions = {
-            maxSockets,
-            keepAlive: this._keepAlive,
-            proxy: __spreadProps(__spreadValues({}, (proxyUrl.username || proxyUrl.password) && {
-              proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
-            }), {
-              host: proxyUrl.hostname,
-              port: proxyUrl.port
-            })
-          };
-          let tunnelAgent;
-          const overHttps = proxyUrl.protocol === "https:";
-          if (usingSsl) {
-            tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
-          } else {
-            tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
-          }
-          agent = tunnelAgent(agentOptions);
-          this._proxyAgent = agent;
-        }
-        if (this._keepAlive && !agent) {
-          const options = { keepAlive: this._keepAlive, maxSockets };
-          agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
-          this._agent = agent;
-        }
-        if (!agent) {
-          agent = usingSsl ? https.globalAgent : http.globalAgent;
-        }
-        if (usingSsl && this._ignoreSslError) {
-          agent.options = Object.assign(agent.options || {}, {
-            rejectUnauthorized: false
-          });
-        }
-        return agent;
-      }
-      _performExponentialBackoff(retryNumber) {
-        retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
-        const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-        return new Promise((resolve) => setTimeout(() => resolve(), ms));
-      }
-      static dateTimeDeserializer(key, value) {
-        if (typeof value === "string") {
-          let a = new Date(value);
-          if (!isNaN(a.valueOf())) {
-            return a;
-          }
-        }
-        return value;
-      }
-      async _processResponse(res, options) {
-        return new Promise(async (resolve, reject) => {
-          const statusCode = res.message.statusCode;
-          const response = {
-            statusCode,
-            result: null,
-            headers: {}
-          };
-          if (statusCode == HttpCodes.NotFound) {
-            resolve(response);
-          }
-          let obj;
-          let contents;
-          try {
-            contents = await res.readBody();
-            if (contents && contents.length > 0) {
-              if (options && options.deserializeDates) {
-                obj = JSON.parse(contents, HttpClient.dateTimeDeserializer);
-              } else {
-                obj = JSON.parse(contents);
-              }
-              response.result = obj;
-            }
-            response.headers = res.message.headers;
-          } catch (err) {
-          }
-          if (statusCode > 299) {
-            let msg;
-            if (obj && obj.message) {
-              msg = obj.message;
-            } else if (contents && contents.length > 0) {
-              msg = contents;
-            } else {
-              msg = "Failed request: (" + statusCode + ")";
-            }
-            let err = new HttpClientError(msg, statusCode);
-            err.result = response.result;
-            reject(err);
-          } else {
-            resolve(response);
-          }
-        });
-      }
-    };
-    __name(HttpClient, "HttpClient");
-    exports2.HttpClient = HttpClient;
-  }
-});
-
-// node_modules/@actions/cache/node_modules/@actions/http-client/auth.js
-var require_auth2 = __commonJS({
-  "node_modules/@actions/cache/node_modules/@actions/http-client/auth.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    var BasicCredentialHandler = class {
-      constructor(username, password) {
-        this.username = username;
-        this.password = password;
-      }
-      prepareRequest(options) {
-        options.headers["Authorization"] = "Basic " + Buffer.from(this.username + ":" + this.password).toString("base64");
-      }
-      canHandleAuthentication(response) {
-        return false;
-      }
-      handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-      }
-    };
-    __name(BasicCredentialHandler, "BasicCredentialHandler");
-    exports2.BasicCredentialHandler = BasicCredentialHandler;
-    var BearerCredentialHandler = class {
-      constructor(token2) {
-        this.token = token2;
-      }
-      prepareRequest(options) {
-        options.headers["Authorization"] = "Bearer " + this.token;
-      }
-      canHandleAuthentication(response) {
-        return false;
-      }
-      handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-      }
-    };
-    __name(BearerCredentialHandler, "BearerCredentialHandler");
-    exports2.BearerCredentialHandler = BearerCredentialHandler;
-    var PersonalAccessTokenCredentialHandler = class {
-      constructor(token2) {
-        this.token = token2;
-      }
-      prepareRequest(options) {
-        options.headers["Authorization"] = "Basic " + Buffer.from("PAT:" + this.token).toString("base64");
-      }
-      canHandleAuthentication(response) {
-        return false;
-      }
-      handleAuthentication(httpClient, requestInfo, objs) {
-        return null;
-      }
-    };
-    __name(PersonalAccessTokenCredentialHandler, "PersonalAccessTokenCredentialHandler");
-    exports2.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
+    __name(isGhes, "isGhes");
+    exports2.isGhes = isGhes;
   }
 });
 
@@ -13688,55 +13117,45 @@ var require_dist2 = __commonJS({
   "node_modules/@azure/abort-controller/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var tslib = require_tslib();
     var listenersMap = new WeakMap();
     var abortedMap = new WeakMap();
-    var AbortSignal = function() {
-      function AbortSignal2() {
+    var AbortSignal = class {
+      constructor() {
         this.onabort = null;
         listenersMap.set(this, []);
         abortedMap.set(this, false);
       }
-      __name(AbortSignal2, "AbortSignal");
-      Object.defineProperty(AbortSignal2.prototype, "aborted", {
-        get: function() {
-          if (!abortedMap.has(this)) {
-            throw new TypeError("Expected `this` to be an instance of AbortSignal.");
-          }
-          return abortedMap.get(this);
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(AbortSignal2, "none", {
-        get: function() {
-          return new AbortSignal2();
-        },
-        enumerable: false,
-        configurable: true
-      });
-      AbortSignal2.prototype.addEventListener = function(_type, listener) {
+      get aborted() {
+        if (!abortedMap.has(this)) {
+          throw new TypeError("Expected `this` to be an instance of AbortSignal.");
+        }
+        return abortedMap.get(this);
+      }
+      static get none() {
+        return new AbortSignal();
+      }
+      addEventListener(_type, listener) {
         if (!listenersMap.has(this)) {
           throw new TypeError("Expected `this` to be an instance of AbortSignal.");
         }
-        var listeners = listenersMap.get(this);
+        const listeners = listenersMap.get(this);
         listeners.push(listener);
-      };
-      AbortSignal2.prototype.removeEventListener = function(_type, listener) {
+      }
+      removeEventListener(_type, listener) {
         if (!listenersMap.has(this)) {
           throw new TypeError("Expected `this` to be an instance of AbortSignal.");
         }
-        var listeners = listenersMap.get(this);
-        var index = listeners.indexOf(listener);
+        const listeners = listenersMap.get(this);
+        const index = listeners.indexOf(listener);
         if (index > -1) {
           listeners.splice(index, 1);
         }
-      };
-      AbortSignal2.prototype.dispatchEvent = function(_event) {
+      }
+      dispatchEvent(_event) {
         throw new Error("This is a stub dispatchEvent implementation that should not be used.  It only exists for type-checking purposes.");
-      };
-      return AbortSignal2;
-    }();
+      }
+    };
+    __name(AbortSignal, "AbortSignal");
     function abortSignal(signal) {
       if (signal.aborted) {
         return;
@@ -13744,28 +13163,24 @@ var require_dist2 = __commonJS({
       if (signal.onabort) {
         signal.onabort.call(signal);
       }
-      var listeners = listenersMap.get(signal);
+      const listeners = listenersMap.get(signal);
       if (listeners) {
-        listeners.slice().forEach(function(listener) {
+        listeners.slice().forEach((listener) => {
           listener.call(signal, { type: "abort" });
         });
       }
       abortedMap.set(signal, true);
     }
     __name(abortSignal, "abortSignal");
-    var AbortError = function(_super) {
-      tslib.__extends(AbortError2, _super);
-      function AbortError2(message) {
-        var _this = _super.call(this, message) || this;
-        _this.name = "AbortError";
-        return _this;
+    var AbortError = class extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "AbortError";
       }
-      __name(AbortError2, "AbortError");
-      return AbortError2;
-    }(Error);
-    var AbortController = function() {
-      function AbortController2(parentSignals) {
-        var _this = this;
+    };
+    __name(AbortError, "AbortError");
+    var AbortController = class {
+      constructor(parentSignals) {
         this._signal = new AbortSignal();
         if (!parentSignals) {
           return;
@@ -13773,38 +13188,32 @@ var require_dist2 = __commonJS({
         if (!Array.isArray(parentSignals)) {
           parentSignals = arguments;
         }
-        for (var _i = 0, parentSignals_1 = parentSignals; _i < parentSignals_1.length; _i++) {
-          var parentSignal = parentSignals_1[_i];
+        for (const parentSignal of parentSignals) {
           if (parentSignal.aborted) {
             this.abort();
           } else {
-            parentSignal.addEventListener("abort", function() {
-              _this.abort();
+            parentSignal.addEventListener("abort", () => {
+              this.abort();
             });
           }
         }
       }
-      __name(AbortController2, "AbortController");
-      Object.defineProperty(AbortController2.prototype, "signal", {
-        get: function() {
-          return this._signal;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      AbortController2.prototype.abort = function() {
+      get signal() {
+        return this._signal;
+      }
+      abort() {
         abortSignal(this._signal);
-      };
-      AbortController2.timeout = function(ms) {
-        var signal = new AbortSignal();
-        var timer = setTimeout(abortSignal, ms, signal);
+      }
+      static timeout(ms) {
+        const signal = new AbortSignal();
+        const timer = setTimeout(abortSignal, ms, signal);
         if (typeof timer.unref === "function") {
           timer.unref();
         }
         return signal;
-      };
-      return AbortController2;
-    }();
+      }
+    };
+    __name(AbortController, "AbortController");
     exports2.AbortController = AbortController;
     exports2.AbortError = AbortError;
     exports2.AbortSignal = AbortSignal;
@@ -61917,7 +61326,7 @@ var require_requestUtils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
-    var http_client_1 = require_http_client();
+    var http_client_1 = require_lib();
     var constants_1 = require_constants();
     function isSuccessStatusCode(statusCode) {
       if (!statusCode) {
@@ -62001,7 +61410,8 @@ var require_requestUtils = __commonJS({
             return {
               statusCode: error.statusCode,
               result: null,
-              headers: {}
+              headers: {},
+              error
             };
           } else {
             return void 0;
@@ -62070,7 +61480,7 @@ var require_downloadUtils = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
-    var http_client_1 = require_http_client();
+    var http_client_1 = require_lib();
     var storage_blob_1 = require_dist9();
     var buffer = __importStar(require("buffer"));
     var fs2 = __importStar(require("fs"));
@@ -62079,6 +61489,7 @@ var require_downloadUtils = __commonJS({
     var utils = __importStar(require_cacheUtils());
     var constants_1 = require_constants();
     var requestUtils_1 = require_requestUtils();
+    var abort_controller_1 = require_dist2();
     function pipeResponseToStream(response, output) {
       return __awaiter(this, void 0, void 0, function* () {
         const pipeline = util.promisify(stream.pipeline);
@@ -62189,20 +61600,28 @@ var require_downloadUtils = __commonJS({
           core.debug("Unable to determine content length, downloading file with http-client...");
           yield downloadCacheHttpClient(archiveLocation, archivePath);
         } else {
-          const maxSegmentSize = buffer.constants.MAX_LENGTH;
+          const maxSegmentSize = Math.min(2147483647, buffer.constants.MAX_LENGTH);
           const downloadProgress = new DownloadProgress(contentLength);
           const fd = fs2.openSync(archivePath, "w");
           try {
             downloadProgress.startDisplayTimer();
+            const controller = new abort_controller_1.AbortController();
+            const abortSignal = controller.signal;
             while (!downloadProgress.isDone()) {
               const segmentStart = downloadProgress.segmentOffset + downloadProgress.segmentSize;
               const segmentSize = Math.min(maxSegmentSize, contentLength - segmentStart);
               downloadProgress.nextSegment(segmentSize);
-              const result = yield client.downloadToBuffer(segmentStart, segmentSize, {
+              const result = yield promiseWithTimeout(options.segmentTimeoutInMs || 36e5, client.downloadToBuffer(segmentStart, segmentSize, {
+                abortSignal,
                 concurrency: options.downloadConcurrency,
                 onProgress: downloadProgress.onProgress()
-              });
-              fs2.writeFileSync(fd, result);
+              }));
+              if (result === "timeout") {
+                controller.abort();
+                throw new Error("Aborting cache download as the download time exceeded the timeout.");
+              } else if (Buffer.isBuffer(result)) {
+                fs2.writeFileSync(fd, result);
+              }
             }
           } finally {
             downloadProgress.stopDisplayTimer();
@@ -62213,6 +61632,16 @@ var require_downloadUtils = __commonJS({
     }
     __name(downloadCacheStorageSDK, "downloadCacheStorageSDK");
     exports2.downloadCacheStorageSDK = downloadCacheStorageSDK;
+    var promiseWithTimeout = /* @__PURE__ */ __name((timeoutMs, promise) => __awaiter(void 0, void 0, void 0, function* () {
+      let timeoutHandle;
+      const timeoutPromise = new Promise((resolve) => {
+        timeoutHandle = setTimeout(() => resolve("timeout"), timeoutMs);
+      });
+      return Promise.race([promise, timeoutPromise]).then((result) => {
+        clearTimeout(timeoutHandle);
+        return result;
+      });
+    }), "promiseWithTimeout");
   }
 });
 
@@ -62257,7 +61686,8 @@ var require_options = __commonJS({
       const result = {
         useAzureSdk: true,
         downloadConcurrency: 8,
-        timeoutInMs: 3e4
+        timeoutInMs: 3e4,
+        segmentTimeoutInMs: 36e5
       };
       if (copy) {
         if (typeof copy.useAzureSdk === "boolean") {
@@ -62269,10 +61699,19 @@ var require_options = __commonJS({
         if (typeof copy.timeoutInMs === "number") {
           result.timeoutInMs = copy.timeoutInMs;
         }
+        if (typeof copy.segmentTimeoutInMs === "number") {
+          result.segmentTimeoutInMs = copy.segmentTimeoutInMs;
+        }
+      }
+      const segmentDownloadTimeoutMins = process.env["SEGMENT_DOWNLOAD_TIMEOUT_MINS"];
+      if (segmentDownloadTimeoutMins && !isNaN(Number(segmentDownloadTimeoutMins)) && isFinite(Number(segmentDownloadTimeoutMins))) {
+        result.segmentTimeoutInMs = Number(segmentDownloadTimeoutMins) * 60 * 1e3;
       }
       core.debug(`Use Azure SDK: ${result.useAzureSdk}`);
       core.debug(`Download concurrency: ${result.downloadConcurrency}`);
       core.debug(`Request timeout (ms): ${result.timeoutInMs}`);
+      core.debug(`Cache segment download timeout mins env var: ${process.env["SEGMENT_DOWNLOAD_TIMEOUT_MINS"]}`);
+      core.debug(`Segment download timeout (ms): ${result.segmentTimeoutInMs}`);
       return result;
     }
     __name(getDownloadOptions, "getDownloadOptions");
@@ -62329,8 +61768,8 @@ var require_cacheHttpClient = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
-    var http_client_1 = require_http_client();
-    var auth_1 = require_auth2();
+    var http_client_1 = require_lib();
+    var auth_1 = require_auth();
     var crypto = __importStar(require("crypto"));
     var fs2 = __importStar(require("fs"));
     var url_1 = require("url");
@@ -62341,7 +61780,7 @@ var require_cacheHttpClient = __commonJS({
     var requestUtils_1 = require_requestUtils();
     var versionSalt = "1.0";
     function getCacheApiUrl(resource) {
-      const baseUrl = (process.env["ACTIONS_CACHE_URL"] || process.env["ACTIONS_RUNTIME_URL"] || "").replace("pipelines", "artifactcache");
+      const baseUrl = process.env["ACTIONS_CACHE_URL"] || "";
       if (!baseUrl) {
         throw new Error("Cache Service Url not found, unable to restore cache.");
       }
@@ -62417,18 +61856,18 @@ var require_cacheHttpClient = __commonJS({
     __name(downloadCache, "downloadCache");
     exports2.downloadCache = downloadCache;
     function reserveCache(key, paths, options) {
-      var _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
         const httpClient = createHttpClient();
         const version = getCacheVersion(paths, options === null || options === void 0 ? void 0 : options.compressionMethod);
         const reserveCacheRequest = {
           key,
-          version
+          version,
+          cacheSize: options === null || options === void 0 ? void 0 : options.cacheSize
         };
         const response = yield requestUtils_1.retryTypedResponse("reserveCache", () => __awaiter(this, void 0, void 0, function* () {
           return httpClient.postJson(getCacheApiUrl("caches"), reserveCacheRequest);
         }));
-        return (_b = (_a = response === null || response === void 0 ? void 0 : response.result) === null || _a === void 0 ? void 0 : _a.cacheId) !== null && _b !== void 0 ? _b : -1;
+        return response;
       });
     }
     __name(reserveCache, "reserveCache");
@@ -62571,6 +62010,7 @@ var require_tar = __commonJS({
     var path = __importStar(require("path"));
     var utils = __importStar(require_cacheUtils());
     var constants_1 = require_constants();
+    var IS_WINDOWS = process.platform === "win32";
     function getTarPath(args, compressionMethod) {
       return __awaiter(this, void 0, void 0, function* () {
         switch (process.platform) {
@@ -62615,23 +62055,39 @@ var require_tar = __commonJS({
       return (_a = process.env["GITHUB_WORKSPACE"]) !== null && _a !== void 0 ? _a : process.cwd();
     }
     __name(getWorkingDirectory, "getWorkingDirectory");
+    function getCompressionProgram(compressionMethod) {
+      switch (compressionMethod) {
+        case constants_1.CompressionMethod.Zstd:
+          return [
+            "--use-compress-program",
+            IS_WINDOWS ? "zstd -d --long=30" : "unzstd --long=30"
+          ];
+        case constants_1.CompressionMethod.ZstdWithoutLong:
+          return ["--use-compress-program", IS_WINDOWS ? "zstd -d" : "unzstd"];
+        default:
+          return ["-z"];
+      }
+    }
+    __name(getCompressionProgram, "getCompressionProgram");
+    function listTar(archivePath, compressionMethod) {
+      return __awaiter(this, void 0, void 0, function* () {
+        const args = [
+          ...getCompressionProgram(compressionMethod),
+          "-tf",
+          archivePath.replace(new RegExp(`\\${path.sep}`, "g"), "/"),
+          "-P"
+        ];
+        yield execTar(args, compressionMethod);
+      });
+    }
+    __name(listTar, "listTar");
+    exports2.listTar = listTar;
     function extractTar(archivePath, compressionMethod) {
       return __awaiter(this, void 0, void 0, function* () {
         const workingDirectory = getWorkingDirectory();
         yield io.mkdirP(workingDirectory);
-        function getCompressionProgram() {
-          switch (compressionMethod) {
-            case constants_1.CompressionMethod.Zstd:
-              return ["--use-compress-program", "zstd -d --long=30"];
-            case constants_1.CompressionMethod.ZstdWithoutLong:
-              return ["--use-compress-program", "zstd -d"];
-            default:
-              return ["-z"];
-          }
-        }
-        __name(getCompressionProgram, "getCompressionProgram");
         const args = [
-          ...getCompressionProgram(),
+          ...getCompressionProgram(compressionMethod),
           "-xf",
           archivePath.replace(new RegExp(`\\${path.sep}`, "g"), "/"),
           "-P",
@@ -62649,21 +62105,26 @@ var require_tar = __commonJS({
         const cacheFileName = utils.getCacheFileName(compressionMethod);
         fs_1.writeFileSync(path.join(archiveFolder, manifestFilename), sourceDirectories.join("\n"));
         const workingDirectory = getWorkingDirectory();
-        function getCompressionProgram() {
+        function getCompressionProgram2() {
           switch (compressionMethod) {
             case constants_1.CompressionMethod.Zstd:
-              return ["--use-compress-program", "zstd -T0 --long=30"];
+              return [
+                "--use-compress-program",
+                IS_WINDOWS ? "zstd -T0 --long=30" : "zstdmt --long=30"
+              ];
             case constants_1.CompressionMethod.ZstdWithoutLong:
-              return ["--use-compress-program", "zstd -T0"];
+              return ["--use-compress-program", IS_WINDOWS ? "zstd -T0" : "zstdmt"];
             default:
               return ["-z"];
           }
         }
-        __name(getCompressionProgram, "getCompressionProgram");
+        __name(getCompressionProgram2, "getCompressionProgram");
         const args = [
           "--posix",
-          ...getCompressionProgram(),
+          ...getCompressionProgram2(),
           "-cf",
+          cacheFileName.replace(new RegExp(`\\${path.sep}`, "g"), "/"),
+          "--exclude",
           cacheFileName.replace(new RegExp(`\\${path.sep}`, "g"), "/"),
           "-P",
           "-C",
@@ -62676,30 +62137,6 @@ var require_tar = __commonJS({
     }
     __name(createTar, "createTar");
     exports2.createTar = createTar;
-    function listTar(archivePath, compressionMethod) {
-      return __awaiter(this, void 0, void 0, function* () {
-        function getCompressionProgram() {
-          switch (compressionMethod) {
-            case constants_1.CompressionMethod.Zstd:
-              return ["--use-compress-program", "zstd -d --long=30"];
-            case constants_1.CompressionMethod.ZstdWithoutLong:
-              return ["--use-compress-program", "zstd -d"];
-            default:
-              return ["-z"];
-          }
-        }
-        __name(getCompressionProgram, "getCompressionProgram");
-        const args = [
-          ...getCompressionProgram(),
-          "-tf",
-          archivePath.replace(new RegExp(`\\${path.sep}`, "g"), "/"),
-          "-P"
-        ];
-        yield execTar(args, compressionMethod);
-      });
-    }
-    __name(listTar, "listTar");
-    exports2.listTar = listTar;
   }
 });
 
@@ -62790,6 +62227,11 @@ var require_cache = __commonJS({
       }
     }
     __name(checkKey, "checkKey");
+    function isFeatureAvailable() {
+      return !!process.env["ACTIONS_CACHE_URL"];
+    }
+    __name(isFeatureAvailable, "isFeatureAvailable");
+    exports2.isFeatureAvailable = isFeatureAvailable;
     function restoreCache2(paths, primaryKey, restoreKeys, options) {
       return __awaiter(this, void 0, void 0, function* () {
         checkPaths(paths);
@@ -62804,15 +62246,16 @@ var require_cache = __commonJS({
           checkKey(key);
         }
         const compressionMethod = yield utils.getCompressionMethod();
-        const cacheEntry = yield cacheHttpClient.getCacheEntry(keys, paths, {
-          compressionMethod
-        });
-        if (!(cacheEntry === null || cacheEntry === void 0 ? void 0 : cacheEntry.archiveLocation)) {
-          return void 0;
-        }
-        const archivePath = path.join(yield utils.createTempDirectory(), utils.getCacheFileName(compressionMethod));
-        core.debug(`Archive Path: ${archivePath}`);
+        let archivePath = "";
         try {
+          const cacheEntry = yield cacheHttpClient.getCacheEntry(keys, paths, {
+            compressionMethod
+          });
+          if (!(cacheEntry === null || cacheEntry === void 0 ? void 0 : cacheEntry.archiveLocation)) {
+            return void 0;
+          }
+          archivePath = path.join(yield utils.createTempDirectory(), utils.getCacheFileName(compressionMethod));
+          core.debug(`Archive Path: ${archivePath}`);
           yield cacheHttpClient.downloadCache(cacheEntry.archiveLocation, archivePath, options);
           if (core.isDebug()) {
             yield tar_1.listTar(archivePath, compressionMethod);
@@ -62821,6 +62264,14 @@ var require_cache = __commonJS({
           core.info(`Cache Size: ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B)`);
           yield tar_1.extractTar(archivePath, compressionMethod);
           core.info("Cache restored successfully");
+          return cacheEntry.cacheKey;
+        } catch (error) {
+          const typedError = error;
+          if (typedError.name === ValidationError.name) {
+            throw error;
+          } else {
+            core.warning(`Failed to restore: ${error.message}`);
+          }
         } finally {
           try {
             yield utils.unlinkFile(archivePath);
@@ -62828,27 +62279,24 @@ var require_cache = __commonJS({
             core.debug(`Failed to delete archive: ${error}`);
           }
         }
-        return cacheEntry.cacheKey;
+        return void 0;
       });
     }
     __name(restoreCache2, "restoreCache");
     exports2.restoreCache = restoreCache2;
     function saveCache2(paths, key, options) {
+      var _a, _b, _c, _d, _e;
       return __awaiter(this, void 0, void 0, function* () {
         checkPaths(paths);
         checkKey(key);
         const compressionMethod = yield utils.getCompressionMethod();
-        core.debug("Reserving Cache");
-        const cacheId = yield cacheHttpClient.reserveCache(key, paths, {
-          compressionMethod
-        });
-        if (cacheId === -1) {
-          throw new ReserveCacheError2(`Unable to reserve cache with key ${key}, another job may be creating this cache.`);
-        }
-        core.debug(`Cache ID: ${cacheId}`);
+        let cacheId = -1;
         const cachePaths = yield utils.resolvePaths(paths);
         core.debug("Cache Paths:");
         core.debug(`${JSON.stringify(cachePaths)}`);
+        if (cachePaths.length === 0) {
+          throw new Error(`Path Validation Error: Path(s) specified in the action for caching do(es) not exist, hence no cache is being saved.`);
+        }
         const archiveFolder = yield utils.createTempDirectory();
         const archivePath = path.join(archiveFolder, utils.getCacheFileName(compressionMethod));
         core.debug(`Archive Path: ${archivePath}`);
@@ -62860,11 +62308,32 @@ var require_cache = __commonJS({
           const fileSizeLimit = 10 * 1024 * 1024 * 1024;
           const archiveFileSize = utils.getArchiveFileSizeInBytes(archivePath);
           core.debug(`File Size: ${archiveFileSize}`);
-          if (archiveFileSize > fileSizeLimit) {
+          if (archiveFileSize > fileSizeLimit && !utils.isGhes()) {
             throw new Error(`Cache size of ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B) is over the 10GB limit, not saving cache.`);
+          }
+          core.debug("Reserving Cache");
+          const reserveCacheResponse = yield cacheHttpClient.reserveCache(key, paths, {
+            compressionMethod,
+            cacheSize: archiveFileSize
+          });
+          if ((_a = reserveCacheResponse === null || reserveCacheResponse === void 0 ? void 0 : reserveCacheResponse.result) === null || _a === void 0 ? void 0 : _a.cacheId) {
+            cacheId = (_b = reserveCacheResponse === null || reserveCacheResponse === void 0 ? void 0 : reserveCacheResponse.result) === null || _b === void 0 ? void 0 : _b.cacheId;
+          } else if ((reserveCacheResponse === null || reserveCacheResponse === void 0 ? void 0 : reserveCacheResponse.statusCode) === 400) {
+            throw new Error((_d = (_c = reserveCacheResponse === null || reserveCacheResponse === void 0 ? void 0 : reserveCacheResponse.error) === null || _c === void 0 ? void 0 : _c.message) !== null && _d !== void 0 ? _d : `Cache size of ~${Math.round(archiveFileSize / (1024 * 1024))} MB (${archiveFileSize} B) is over the data cap limit, not saving cache.`);
+          } else {
+            throw new ReserveCacheError2(`Unable to reserve cache with key ${key}, another job may be creating this cache. More details: ${(_e = reserveCacheResponse === null || reserveCacheResponse === void 0 ? void 0 : reserveCacheResponse.error) === null || _e === void 0 ? void 0 : _e.message}`);
           }
           core.debug(`Saving Cache (ID: ${cacheId})`);
           yield cacheHttpClient.saveCache(cacheId, archivePath, options);
+        } catch (error) {
+          const typedError = error;
+          if (typedError.name === ValidationError.name) {
+            throw error;
+          } else if (typedError.name === ReserveCacheError2.name) {
+            core.info(`Failed to save: ${typedError.message}`);
+          } else {
+            core.warning(`Failed to save: ${typedError.message}`);
+          }
         } finally {
           try {
             yield utils.unlinkFile(archivePath);
@@ -65308,7 +64777,7 @@ var require_utils5 = __commonJS({
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getOctokitOptions = exports2.GitHub = exports2.context = void 0;
+    exports2.getOctokitOptions = exports2.GitHub = exports2.defaults = exports2.context = void 0;
     var Context = __importStar(require_context3());
     var Utils = __importStar(require_utils4());
     var core_1 = require_dist_node8();
@@ -65316,13 +64785,13 @@ var require_utils5 = __commonJS({
     var plugin_paginate_rest_1 = require_dist_node10();
     exports2.context = new Context.Context();
     var baseUrl = Utils.getApiBaseUrl();
-    var defaults = {
+    exports2.defaults = {
       baseUrl,
       request: {
         agent: Utils.getProxyAgent(baseUrl)
       }
     };
-    exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(defaults);
+    exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports2.defaults);
     function getOctokitOptions(token2, options) {
       const opts = Object.assign({}, options || {});
       const auth = Utils.getAuthString(token2, opts);
@@ -65373,8 +64842,9 @@ var require_github = __commonJS({
     var Context = __importStar(require_context3());
     var utils_1 = require_utils5();
     exports2.context = new Context.Context();
-    function getOctokit2(token2, options) {
-      return new utils_1.GitHub(utils_1.getOctokitOptions(token2, options));
+    function getOctokit2(token2, options, ...additionalPlugins) {
+      const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
+      return new GitHubWithPlugins(utils_1.getOctokitOptions(token2, options));
     }
     __name(getOctokit2, "getOctokit");
     exports2.getOctokit = getOctokit2;
