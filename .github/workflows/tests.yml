@@ -48,7 +48,7 @@ jobs:
       - uses: ./build-size/report
         with:
           label: custom-hash-patten
-          dir: ./node_modules/@actions/core/lib
+          dir: node_modules/@actions/core/lib
           filenames-hash-pattern: \-([a-f0-9])+\.
 
   build-size-report:
@@ -92,7 +92,7 @@ jobs:
       - uses: ./build-size/report
         with:
           label: custom-hash-patten
-          dir: ./node_modules/@actions/core/lib
+          dir: node_modules/@actions/core/lib
           filenames-hash-pattern: \-([a-f0-9])+\.
 
   build-size-limit:
