@@ -66218,12 +66218,12 @@ function isValidFile(filename) {
   return /\.(js|css|htm|html)$/.test(filename) && !/service-worker\.js$/.test(filename) && !/precache-manifest\.[0-9a-f]+\.js$/.test(filename);
 }
 __name(isValidFile, "isValidFile");
-function getFileNameKey(filename, buildPath) {
+function getFileNameKey(filename, buildPath, filenamesHashPattern2) {
   const key = import_path.default.relative(buildPath, filename);
-  return key.replace(/\.([a-f0-9])+\./, ".[hash].");
+  return key.replace(filenamesHashPattern2 || /.([a-f0-9])+./, ".[hash].");
 }
 __name(getFileNameKey, "getFileNameKey");
-async function getBuildSizes(dir2) {
+async function getBuildSizes(dir2, filenamesHashPattern2) {
   (0, import_core2.info)(`Computing build size for the: ${dir2}`);
   const globber = await (0, import_glob.create)(dir2);
   const [buildPath] = globber.getSearchPaths();
@@ -66231,7 +66231,7 @@ async function getBuildSizes(dir2) {
   for await (const filename of globber.globGenerator()) {
     if (!isValidFile(filename))
       continue;
-    const key = getFileNameKey(filename, buildPath);
+    const key = getFileNameKey(filename, buildPath, filenamesHashPattern2);
     sizes[key] = await computeFileSize(filename);
   }
   (0, import_core2.info)(`Computed file sizes:
@@ -66261,11 +66261,14 @@ __name(getBuildSnapshotMeta, "getBuildSnapshotMeta");
 // build-size/report/index.ts
 var pr = Number((0, import_core3.getInput)("pr", { required: true }));
 var dir = (0, import_core3.getInput)("dir", { required: true });
+var filenamesHashPattern = (0, import_core3.getInput)("filenames-hash-pattern", {
+  required: false
+});
 var sha = (0, import_core3.getInput)("sha", { required: true });
 var label = (0, import_core3.getInput)("label", { required: true });
 var token = (0, import_core3.getInput)("token", { required: true });
 async function main() {
-  const currentSizes = await (0, import_core3.group)("Computing current build size", () => getBuildSizes(dir));
+  const currentSizes = await (0, import_core3.group)("Computing current build size", () => getBuildSizes(dir, filenamesHashPattern));
   const report = await (0, import_core3.group)("Restoring previous build size from cache", async () => {
     const meta = getBuildSnapshotMeta({ sha, label });
     (0, import_core3.info)(`Restoring from: ${meta.key}, ${meta.restoreKey}`);
