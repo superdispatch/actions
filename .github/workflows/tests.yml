@@ -45,10 +45,10 @@ jobs:
           dir: ./main/prune-artifacts
           sha: ${{ github.event.pull_request.base.sha }}
 
-      - uses: ./build-size/report
+      - uses: ./build-size/cache
         with:
           label: custom-hash-patten
-          dir: node_modules/@actions/core/lib
+          dir: ./main/scripts/
           filenames-hash-pattern: \-([a-f0-9])+\.
 
   build-size-report:
@@ -92,7 +92,7 @@ jobs:
       - uses: ./build-size/report
         with:
           label: custom-hash-patten
-          dir: node_modules/@actions/core/lib
+          dir: ./scripts
           filenames-hash-pattern: \-([a-f0-9])+\.
 
   build-size-limit:
