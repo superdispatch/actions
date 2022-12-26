@@ -49,7 +49,7 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./main/scripts/
-          filenames-hash-pattern: \-([a-f0-9])+\.
+          filenames-hash-pattern: \-([a-f])+\.
 
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
@@ -93,7 +93,7 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./scripts
-          filenames-hash-pattern: \-([a-f0-9])+\.
+          filenames-hash-pattern: \-([a-f])+\.
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
