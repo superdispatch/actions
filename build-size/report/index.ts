@@ -8,16 +8,15 @@ import { getBuildSnapshotMeta } from '../utils/BuildSnapshotMeta';
 
 const pr = Number(getInput('pr', { required: true }));
 const dir = getInput('dir', { required: true });
-const filenamesHashPattern = getInput('filenames-hash-pattern', {
-  required: false,
-});
+const hashPattern = getInput('hash-pattern', { required: false });
+const hashPlaceholder = getInput('hash-placeholder', { required: false });
 const sha = getInput('sha', { required: true });
 const label = getInput('label', { required: true });
 const token = getInput('token', { required: true });
 
 async function main() {
   const currentSizes = await group('Computing current build size', () =>
-    getBuildSizes(dir, filenamesHashPattern),
+    getBuildSizes(dir, { hashPattern, hashPlaceholder }),
   );
 
   const report = await group(

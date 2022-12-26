@@ -6,9 +6,13 @@ inputs:
     required: true
     description: 'path to the build folder'
 
-  filenames-hash-pattern:
+  hash-pattern:
     required: false
     description: 'regex pattern to detect hash part of file name'
+
+  hash-placeholder:
+    required: false
+    description: 'string to replace hash part of file name'
 
   sha:
     required: true

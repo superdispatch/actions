@@ -26,23 +26,31 @@ function isValidFile(filename: string) {
   );
 }
 
+interface GetFileNameKeyOptions {
+  hashPattern?: string;
+  hashPlaceholder?: string;
+}
+
 function getFileNameKey(
   filename: string,
   buildPath: string,
-  filenamesHashPattern?: string,
+  options?: GetFileNameKeyOptions,
 ): string {
   const key = path.relative(buildPath, filename);
 
   return (
     key
       // `1.a57f92fb.chunk.js` -> `1.[hash].chunk.js`
-      .replace(filenamesHashPattern || /.([a-f0-9])+./, '.[hash].')
+      .replace(
+        new RegExp(options?.hashPattern || /.([a-f0-9])+./),
+        options?.hashPlaceholder || '.[hash].',
+      )
   );
 }
 
 export async function getBuildSizes(
   dir: string,
-  filenamesHashPattern?: string,
+  options?: GetFileNameKeyOptions,
 ): Promise<Record<string, number>> {
   info(`Computing build size for the: ${dir}`);
   const globber = await createGlob(dir);
@@ -52,7 +60,7 @@ export async function getBuildSizes(
 
   for await (const filename of globber.globGenerator()) {
     if (!isValidFile(filename)) continue;
-    const key = getFileNameKey(filename, buildPath, filenamesHashPattern);
+    const key = getFileNameKey(filename, buildPath, options);
     sizes[key] = await computeFileSize(filename);
   }
 

@@ -49,7 +49,8 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./main/scripts/
-          filenames-hash-pattern: \-([a-z])+\.
+          hash-pattern: \-([a-z])+\.
+          hash-placeholder: -[hash].
 
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
@@ -93,7 +94,8 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./scripts
-          filenames-hash-pattern: \-([a-z])+\.
+          hash-pattern: \-([a-z])+\.
+          hash-placeholder: -[hash].
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
