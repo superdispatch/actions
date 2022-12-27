@@ -7,11 +7,13 @@ inputs:
     description: 'path to the build folder'
 
   hash-pattern:
-    required: false
+    required: true
+    default: '/.([a-f0-9])+./'
     description: 'regex pattern to detect hash part of file name'
 
   hash-placeholder:
-    required: false
+    required: true
+    default: '.[hash].'
     description: 'string to replace hash part of file name'
 
   sha:

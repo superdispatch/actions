@@ -27,30 +27,27 @@ function isValidFile(filename: string) {
 }
 
 interface GetFileNameKeyOptions {
-  hashPattern?: string;
-  hashPlaceholder?: string;
+  hashPattern: string;
+  hashPlaceholder: string;
 }
 
 function getFileNameKey(
   filename: string,
   buildPath: string,
-  options?: GetFileNameKeyOptions,
+  options: GetFileNameKeyOptions,
 ): string {
   const key = path.relative(buildPath, filename);
 
   return (
     key
-      // `1.a57f92fb.chunk.js` -> `1.[hash].chunk.js`
-      .replace(
-        new RegExp(options?.hashPattern || /.([a-f0-9])+./),
-        options?.hashPlaceholder || '.[hash].',
-      )
+      // default behavior `1.a57f92fb.chunk.js` -> `1.[hash].chunk.js`
+      .replace(new RegExp(options.hashPattern), options.hashPlaceholder)
   );
 }
 
 export async function getBuildSizes(
   dir: string,
-  options?: GetFileNameKeyOptions,
+  options: GetFileNameKeyOptions,
 ): Promise<Record<string, number>> {
   info(`Computing build size for the: ${dir}`);
   const globber = await createGlob(dir);

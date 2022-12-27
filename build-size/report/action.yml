@@ -8,10 +8,12 @@ inputs:
 
   hash-pattern:
     required: false
+    default: '/.([a-f0-9])+./'
     description: 'regex pattern to detect hash part of file name'
 
   hash-placeholder:
     required: false
+    default: '.[hash].'
     description: 'string to replace hash part of file name'
 
   sha:

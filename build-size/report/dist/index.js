@@ -66220,7 +66220,7 @@ function isValidFile(filename) {
 __name(isValidFile, "isValidFile");
 function getFileNameKey(filename, buildPath, options) {
   const key = import_path.default.relative(buildPath, filename);
-  return key.replace(new RegExp(options?.hashPattern || /.([a-f0-9])+./), options?.hashPlaceholder || ".[hash].");
+  return key.replace(new RegExp(options.hashPattern), options.hashPlaceholder);
 }
 __name(getFileNameKey, "getFileNameKey");
 async function getBuildSizes(dir2, options) {
