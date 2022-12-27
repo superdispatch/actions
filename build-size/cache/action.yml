@@ -6,6 +6,16 @@ inputs:
     required: true
     description: 'path to the build folder'
 
+  hash-pattern:
+    required: true
+    default: '/.([a-f0-9])+./'
+    description: 'regex pattern to detect hash part of file name'
+
+  hash-placeholder:
+    required: true
+    default: '.[hash].'
+    description: 'string to replace hash part of file name'
+
   sha:
     required: true
     default: '${{ github.sha }}'

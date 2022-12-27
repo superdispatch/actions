@@ -45,6 +45,14 @@ jobs:
           dir: ./main/prune-artifacts
           sha: ${{ github.event.pull_request.base.sha }}
 
+      - uses: ./build-size/cache
+        with:
+          label: custom-hash-patten
+          dir: ./main/scripts/
+          hash-pattern: \-([a-z])+\.
+          hash-placeholder: -[hash].
+          sha: ${{ github.event.pull_request.base.sha }}
+
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     needs:
@@ -82,6 +90,13 @@ jobs:
         with:
           label: prune-artifacts
           dir: ./prune-artifacts
+
+      - uses: ./build-size/report
+        with:
+          label: custom-hash-patten
+          dir: ./scripts
+          hash-pattern: \-([a-z])+\.
+          hash-placeholder: -[hash].
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
