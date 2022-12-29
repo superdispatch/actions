@@ -110,8 +110,6 @@ jobs:
         with:
           label: same-file-name
           dir: ./build-size/utils
-          hash-pattern: '(Sizes|SizeDiffReport|SnapshotMeta)'
-          hash-placeholder: '[hash]'
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
