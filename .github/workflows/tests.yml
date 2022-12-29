@@ -53,6 +53,14 @@ jobs:
           hash-placeholder: -[hash].
           sha: ${{ github.event.pull_request.base.sha }}
 
+      - uses: ./build-size/cache
+        with:
+          label: same-file-name
+          dir: ./build-size/utils
+          hash-pattern: (Sizes|SizeDiffReport|SnapshotMeta)
+          hash-placeholder: [hash]
+          sha: ${{ github.event.pull_request.base.sha }}
+
   build-size-report:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     needs:
@@ -97,6 +105,13 @@ jobs:
           dir: ./scripts
           hash-pattern: \-([a-z])+\.
           hash-placeholder: -[hash].
+
+      - uses: ./build-size/report
+        with:
+          label: same-file-name
+          dir: ./build-size/utils
+          hash-pattern: (Sizes|SizeDiffReport|SnapshotMeta)
+          hash-placeholder: [hash]
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
