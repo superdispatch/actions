@@ -106,10 +106,14 @@ jobs:
           hash-pattern: '\-([a-z])+\.'
           hash-placeholder: '-[hash].'
 
+      - run: |
+          mkdir ./build-size/test-same-file-name
+          echo 'test' >> ./build-size/test-same-file-name/index.123.txt
+          echo 'test' >> ./build-size/test-same-file-name/index.456.txt
       - uses: ./build-size/report
         with:
           label: same-file-name
-          dir: ./build-size/utils
+          dir: ./build-size/test-same-file-name
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
