@@ -8,7 +8,7 @@ inputs:
 
   hash-pattern:
     required: true
-    default: '\\.([a-f0-9])+\\.'
+    default: '\.([a-f0-9])+\.'
     description: 'regex pattern to detect hash part of file name'
 
   hash-placeholder:
