@@ -103,7 +103,7 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./scripts
-          hash-pattern: '\-([a-z])+\.'
+          hash-pattern: '\\-([a-z])+\\.'
           hash-placeholder: '-[hash].'
 
       - run: |
