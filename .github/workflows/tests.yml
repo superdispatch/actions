@@ -53,12 +53,14 @@ jobs:
           hash-placeholder: '-[hash].'
           sha: ${{ github.event.pull_request.base.sha }}
 
-      - uses: ./build-size/cache
+      - run: |
+          mkdir ./build-size/test-same-file-name
+          echo 'test' >> ./build-size/test-same-file-name/index.335dae46.js
+          echo 'test' >> ./build-size/test-same-file-name/index.adeb62af.js
+      - uses: ./build-size/report
         with:
           label: same-file-name
-          dir: ./build-size/utils
-          hash-pattern: '(Sizes|SizeDiffReport|SnapshotMeta)'
-          hash-placeholder: '[hash]'
+          dir: ./build-size/test-same-file-name
           sha: ${{ github.event.pull_request.base.sha }}
 
   build-size-report:
