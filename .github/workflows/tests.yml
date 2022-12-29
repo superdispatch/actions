@@ -108,8 +108,8 @@ jobs:
 
       - run: |
           mkdir ./build-size/test-same-file-name
-          echo 'test' >> ./build-size/test-same-file-name/index.abc123.js
-          echo 'test' >> ./build-size/test-same-file-name/index.abc456.js
+          echo 'test' >> ./build-size/test-same-file-name/index.335dae46.js
+          echo 'test' >> ./build-size/test-same-file-name/index.adeb62af.js
       - uses: ./build-size/report
         with:
           label: same-file-name
