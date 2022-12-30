@@ -58,7 +58,9 @@ export async function getBuildSizes(
   for await (const filename of globber.globGenerator()) {
     if (!isValidFile(filename)) continue;
     const key = getFileNameKey(filename, buildPath, options);
-    sizes[key] = await computeFileSize(filename);
+    const fileSize = await computeFileSize(filename);
+    //index.[hash].js - 300KB, index.[hash].js - 0.3KB -> index.[hash].js - 300.3KB
+    sizes[key] = (sizes[key] || 0) + fileSize;
   }
 
   info(`Computed file sizes:\n${JSON.stringify(sizes, null, 2)}`);

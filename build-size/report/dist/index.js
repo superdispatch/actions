@@ -66232,7 +66232,8 @@ async function getBuildSizes(dir2, options) {
     if (!isValidFile(filename))
       continue;
     const key = getFileNameKey(filename, buildPath, options);
-    sizes[key] = await computeFileSize(filename);
+    const fileSize = await computeFileSize(filename);
+    sizes[key] = (sizes[key] || 0) + fileSize;
   }
   (0, import_core2.info)(`Computed file sizes:
 ${JSON.stringify(sizes, null, 2)}`);

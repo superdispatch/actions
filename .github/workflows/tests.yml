@@ -49,8 +49,18 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./main/scripts/
-          hash-pattern: \-([a-z])+\.
-          hash-placeholder: -[hash].
+          hash-pattern: '\-([a-z])+\.'
+          hash-placeholder: '-[hash].'
+          sha: ${{ github.event.pull_request.base.sha }}
+
+      - run: |
+          mkdir ./build-size/test-same-file-name
+          echo 'test' >> ./build-size/test-same-file-name/index.335dae46.js
+          echo 'test' >> ./build-size/test-same-file-name/index.adeb62af.js
+      - uses: ./build-size/report
+        with:
+          label: same-file-name
+          dir: ./build-size/test-same-file-name
           sha: ${{ github.event.pull_request.base.sha }}
 
   build-size-report:
@@ -95,8 +105,17 @@ jobs:
         with:
           label: custom-hash-patten
           dir: ./scripts
-          hash-pattern: \-([a-z])+\.
-          hash-placeholder: -[hash].
+          hash-pattern: '\-([a-z])+\.'
+          hash-placeholder: '-[hash].'
+
+      - run: |
+          mkdir ./build-size/test-same-file-name
+          echo 'test' >> ./build-size/test-same-file-name/index.335dae46.js
+          echo 'test' >> ./build-size/test-same-file-name/index.adeb62af.js
+      - uses: ./build-size/report
+        with:
+          label: same-file-name
+          dir: ./build-size/test-same-file-name
 
   build-size-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
