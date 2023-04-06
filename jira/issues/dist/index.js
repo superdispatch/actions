@@ -55367,7 +55367,10 @@ var JiraClient = class extends import_jira_client.default {
     return super.issueLink({
       type: { name: type },
       inwardIssue: { key: inwardIssue },
-      outwardIssue: { key: outwardIssue }
+      outwardIssue: { key: outwardIssue },
+      comment: {
+        body: `superdispatch-actions: This card blocks ${outwardIssue}`
+      }
     });
   }
 };

@@ -80,6 +80,9 @@ export class JiraClient extends JiraApi {
       type: { name: type },
       inwardIssue: { key: inwardIssue },
       outwardIssue: { key: outwardIssue },
+      comment: {
+        body: `superdispatch-actions: This card blocks ${outwardIssue}`,
+      },
     });
   }
 }
