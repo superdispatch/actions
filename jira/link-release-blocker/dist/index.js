@@ -60894,7 +60894,7 @@ async function main() {
         outwardIssue: mainIssue.key
       });
       (0, import_core.info)("Successfully linked");
-      break;
+      return;
     }
   }
   (0, import_core.info)("Could not find target issue from commits");

@@ -51,7 +51,7 @@ async function main() {
 
       info('Successfully linked');
 
-      break;
+      return;
     }
   }
 
