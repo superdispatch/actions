@@ -60807,16 +60807,18 @@ var JiraClient = class extends import_jira_client.default {
   issueLink({
     type,
     inwardIssue,
-    outwardIssue
+    outwardIssue,
+    comment
   }) {
     return super.issueLink({
       type: { name: type },
       inwardIssue: { key: inwardIssue },
       outwardIssue: { key: outwardIssue },
-      comment: {
-        body: `superdispatch-actions: This card blocks ${outwardIssue}`
-      }
+      comment: { body: comment }
     });
+  }
+  addComment(issueId, comment) {
+    return super.addComment(issueId, comment);
   }
 };
 __name(JiraClient, "JiraClient");
@@ -60891,8 +60893,10 @@ async function main() {
       await jira.issueLink({
         inwardIssue: blockerIssue.key,
         type: "Blocks",
-        outwardIssue: mainIssue.key
+        outwardIssue: mainIssue.key,
+        comment: `superdispatch-actions: This card blocks ${mainIssue.key}`
       });
+      await jira.addComment(mainIssue.key, `superdispatch-actions: This card is blocked by ${blockerIssue.key}`);
       (0, import_core.info)("Successfully linked");
       return;
     }

@@ -47,7 +47,13 @@ async function main() {
         inwardIssue: blockerIssue.key,
         type: 'Blocks',
         outwardIssue: mainIssue.key,
+        comment: `superdispatch-actions: This card blocks ${mainIssue.key}`,
       });
+
+      await jira.addComment(
+        mainIssue.key,
+        `superdispatch-actions: This card is blocked by ${blockerIssue.key}`,
+      );
 
       info('Successfully linked');
 

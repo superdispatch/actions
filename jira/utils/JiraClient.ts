@@ -70,9 +70,11 @@ export class JiraClient extends JiraApi {
     type,
     inwardIssue,
     outwardIssue,
+    comment,
   }: {
     inwardIssue: string;
     outwardIssue: string;
+    comment: string;
     type: 'Blocks' | 'Issue split' | 'Relates';
   }) {
     // https://docs.atlassian.com/software/jira/docs/api/REST/8.5.0/#api/2/issueLink-linkIssues
@@ -80,9 +82,11 @@ export class JiraClient extends JiraApi {
       type: { name: type },
       inwardIssue: { key: inwardIssue },
       outwardIssue: { key: outwardIssue },
-      comment: {
-        body: `superdispatch-actions: This card blocks ${outwardIssue}`,
-      },
+      comment: { body: comment },
     });
+  }
+
+  addComment(issueId: string, comment: string) {
+    return super.addComment(issueId, comment);
   }
 }

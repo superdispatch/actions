@@ -55362,16 +55362,18 @@ var JiraClient = class extends import_jira_client.default {
   issueLink({
     type,
     inwardIssue,
-    outwardIssue
+    outwardIssue,
+    comment: comment2
   }) {
     return super.issueLink({
       type: { name: type },
       inwardIssue: { key: inwardIssue },
       outwardIssue: { key: outwardIssue },
-      comment: {
-        body: `superdispatch-actions: This card blocks ${outwardIssue}`
-      }
+      comment: { body: comment2 }
     });
+  }
+  addComment(issueId, comment2) {
+    return super.addComment(issueId, comment2);
   }
 };
 __name(JiraClient, "JiraClient");
