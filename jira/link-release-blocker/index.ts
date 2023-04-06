@@ -44,9 +44,9 @@ async function main() {
       info(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
 
       await jira.issueLink({
-        outwardIssue: blockerIssue.key,
+        inwardIssue: blockerIssue.key,
         type: 'Blocks',
-        inwardIssue: mainIssue.key,
+        outwardIssue: mainIssue.key,
       });
 
       info('Successfully linked');

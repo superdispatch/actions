@@ -60886,9 +60886,9 @@ async function main() {
       (0, import_core.info)(`Found blocker "${blockerIssue.key}" issue`);
       (0, import_core.info)(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
       await jira.issueLink({
-        outwardIssue: blockerIssue.key,
+        inwardIssue: blockerIssue.key,
         type: "Blocks",
-        inwardIssue: mainIssue.key
+        outwardIssue: mainIssue.key
       });
       (0, import_core.info)("Successfully linked");
       break;
