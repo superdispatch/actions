@@ -19,11 +19,20 @@ interface RemoteLink {
   };
 }
 
-interface Issue {
+export interface JIRAIssue {
   id: string;
   self: string; // jira link
   key: string;
-  fields: Record<string, unknown>;
+  fields: {
+    project: {
+      self: string;
+      id: string;
+      key: string;
+      name: string;
+      projectTypeKey: string;
+      simplified: boolean;
+    };
+  };
 }
 
 export class JiraClient extends JiraApi {
@@ -54,6 +63,6 @@ export class JiraClient extends JiraApi {
   }
 
   getIssue(issueIdOrKey: string, fields?: string | string[], expand?: string) {
-    return super.getIssue(issueIdOrKey, fields, expand) as Promise<Issue>;
+    return super.getIssue(issueIdOrKey, fields, expand) as Promise<JIRAIssue>;
   }
 }

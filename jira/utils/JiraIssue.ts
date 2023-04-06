@@ -1,4 +1,5 @@
 import { createClient } from './JiraAPI';
+import { JIRAIssue } from './JiraClient';
 
 const ISSUE_REGEX = /([a-z]{2,}-\d+)/gi;
 
@@ -7,7 +8,7 @@ export function parseIssue(input: string) {
   return match?.[1].toUpperCase();
 }
 
-export async function findIssueKey(input: string): Promise<string | null> {
+export async function findIssue(input: string): Promise<JIRAIssue | null> {
   const matches = input.match(ISSUE_REGEX);
 
   if (matches) {
@@ -15,8 +16,7 @@ export async function findIssueKey(input: string): Promise<string | null> {
 
     for (const match of matches) {
       try {
-        const issue = await jira.getIssue(match.toUpperCase());
-        return issue.key;
+        return await jira.getIssue(match.toUpperCase());
       } catch (error: unknown) {
         // ignore issue not found error
       }

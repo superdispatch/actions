@@ -1,0 +1,19 @@
+name: 'Add project label'
+description: 'Adds JIRA project key as a PR/Issue label'
+author: 'superdispatch'
+
+inputs:
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+outputs:
+  issue:
+    description: 'JIRA Issue number'
+  label:
+    description: 'Added PR label'
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
