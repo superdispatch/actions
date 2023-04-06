@@ -1,0 +1,13 @@
+name: 'Link release blocker'
+description: 'Find potential release blocker and add them as a linked issue'
+author: 'superdispatch'
+
+inputs:
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

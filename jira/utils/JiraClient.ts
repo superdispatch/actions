@@ -65,4 +65,21 @@ export class JiraClient extends JiraApi {
   getIssue(issueIdOrKey: string, fields?: string | string[], expand?: string) {
     return super.getIssue(issueIdOrKey, fields, expand) as Promise<JIRAIssue>;
   }
+
+  issueLink({
+    type,
+    inwardIssue,
+    outwardIssue,
+  }: {
+    inwardIssue: string;
+    outwardIssue: string;
+    type: 'Blocks' | 'Issue split' | 'Relates';
+  }) {
+    // https://docs.atlassian.com/software/jira/docs/api/REST/8.5.0/#api/2/issueLink-linkIssues
+    return super.issueLink({
+      type: { name: type },
+      inwardIssue: { key: inwardIssue },
+      outwardIssue: { key: outwardIssue },
+    });
+  }
 }

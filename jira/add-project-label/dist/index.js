@@ -60804,6 +60804,17 @@ var JiraClient = class extends import_jira_client.default {
   getIssue(issueIdOrKey, fields, expand) {
     return super.getIssue(issueIdOrKey, fields, expand);
   }
+  issueLink({
+    type,
+    inwardIssue,
+    outwardIssue
+  }) {
+    return super.issueLink({
+      type: { name: type },
+      inwardIssue: { key: inwardIssue },
+      outwardIssue: { key: outwardIssue }
+    });
+  }
 };
 __name(JiraClient, "JiraClient");
 
