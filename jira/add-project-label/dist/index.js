@@ -60857,7 +60857,8 @@ async function main() {
     return;
   }
   const octokit = (0, import_github.getOctokit)(token);
-  const issue = await findIssue(HEAD_REF);
+  const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
+  const issue = await findIssue(HEAD_REF) || await findIssue(pr.title);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;
@@ -60873,7 +60874,6 @@ async function main() {
       color: "f29513"
     }));
   }
-  const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
   const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
   if (!hasPRLabel) {
     (0, import_core.info)(`Adding label "${projectLabel}"`);

@@ -14,7 +14,12 @@ async function main() {
   }
 
   const octokit = getOctokit(token);
-  const issue = await findIssue(HEAD_REF);
+  const { data: pr } = await octokit.request(
+    'GET /repos/{owner}/{repo}/pulls/{pull_number}',
+    { ...context.repo, pull_number: PR_NUMBER },
+  );
+
+  const issue = (await findIssue(HEAD_REF)) || (await findIssue(pr.title));
 
   if (!issue) {
     info('Skipping... Could not find issue');
@@ -39,10 +44,6 @@ async function main() {
     });
   }
 
-  const { data: pr } = await octokit.request(
-    'GET /repos/{owner}/{repo}/pulls/{pull_number}',
-    { ...context.repo, pull_number: PR_NUMBER },
-  );
   const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
 
   if (!hasPRLabel) {
