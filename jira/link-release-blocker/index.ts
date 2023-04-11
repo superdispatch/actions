@@ -39,7 +39,7 @@ async function main() {
   for (const item of commits.slice(1)) {
     const blockerIssue = await findIssue(item.commit.message);
 
-    if (blockerIssue) {
+    if (blockerIssue && blockerIssue.key !== mainIssue.key) {
       info(`Found blocker "${blockerIssue.key}" issue`);
       info(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
 
@@ -60,7 +60,7 @@ async function main() {
     }
   }
 
-  info('Could not find target issue from commits');
+  info('Could not find blocker issue from commits');
 }
 
 main().catch(setFailed);

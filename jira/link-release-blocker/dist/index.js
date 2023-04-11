@@ -60885,7 +60885,7 @@ async function main() {
   (0, import_core.info)(`Found main "${mainIssue.key}" issue`);
   for (const item of commits.slice(1)) {
     const blockerIssue = await findIssue(item.commit.message);
-    if (blockerIssue) {
+    if (blockerIssue && blockerIssue.key !== mainIssue.key) {
       (0, import_core.info)(`Found blocker "${blockerIssue.key}" issue`);
       (0, import_core.info)(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
       await jira.issueLink({
@@ -60898,7 +60898,7 @@ async function main() {
       return;
     }
   }
-  (0, import_core.info)("Could not find target issue from commits");
+  (0, import_core.info)("Could not find blocker issue from commits");
 }
 __name(main, "main");
 main().catch(import_core.setFailed);
