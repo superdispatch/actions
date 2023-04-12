@@ -20,6 +20,7 @@ async function main() {
     return;
   }
 
+  const blockers: JIRAIssue[] = [];
   const octokit = getOctokit(token);
 
   const { data: commits } = await octokit.request(
@@ -44,20 +45,24 @@ async function main() {
     }
 
     if (blockerIssue.fields.status.name === 'Released') {
-      info('Issue is not blocked.');
-      return;
+      break;
     }
 
-    info(`Found blocker "${blockerIssue.key}" issue`);
-    info(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
+    info(`Found blocker issue: "${blockerIssue.key}"`);
+    blockers.push(blockerIssue);
+  }
 
-    await linkReleaseBlocker(mainIssue, blockerIssue);
-
-    info('Successfully linked');
+  if (!blockers.length) {
+    info('Issue is not blocked');
     return;
   }
 
-  info('Could not find blocker issue from commits');
+  for (const blocker of blockers) {
+    info(`Linking blocker: "${blocker.key}"`);
+    await linkReleaseBlocker(mainIssue, blocker);
+  }
+
+  info('Successfully linked');
 }
 
 async function linkReleaseBlocker(

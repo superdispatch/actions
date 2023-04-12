@@ -60874,6 +60874,7 @@ async function main() {
     (0, import_core.info)("Skipping... Could not find commit hash");
     return;
   }
+  const blockers = [];
   const octokit = (0, import_github.getOctokit)(token);
   const { data: commits } = await octokit.request("GET /repos/{owner}/{repo}/commits", __spreadProps(__spreadValues({}, import_github.context.repo), { sha: SHA }));
   const mainIssue = await findIssue(commits[0].commit.message);
@@ -60888,16 +60889,20 @@ async function main() {
       continue;
     }
     if (blockerIssue.fields.status.name === "Released") {
-      (0, import_core.info)("Issue is not blocked.");
-      return;
+      break;
     }
-    (0, import_core.info)(`Found blocker "${blockerIssue.key}" issue`);
-    (0, import_core.info)(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
-    await linkReleaseBlocker(mainIssue, blockerIssue);
-    (0, import_core.info)("Successfully linked");
+    (0, import_core.info)(`Found blocker issue: "${blockerIssue.key}"`);
+    blockers.push(blockerIssue);
+  }
+  if (!blockers.length) {
+    (0, import_core.info)("Issue is not blocked");
     return;
   }
-  (0, import_core.info)("Could not find blocker issue from commits");
+  for (const blocker of blockers) {
+    (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
+    await linkReleaseBlocker(mainIssue, blocker);
+  }
+  (0, import_core.info)("Successfully linked");
 }
 __name(main, "main");
 async function linkReleaseBlocker(mainIssue, blockerIssue) {
