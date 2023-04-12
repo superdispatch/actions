@@ -32,6 +32,20 @@ export interface JIRAIssue {
       projectTypeKey: string;
       simplified: boolean;
     };
+    status: {
+      self: string;
+      description: string;
+      iconUrl: string;
+      name: 'Released' | 'Ready for QA';
+      id: string;
+      statusCategory: {
+        self: string;
+        id: 3;
+        key: 'done';
+        colorName: 'green';
+        name: 'Done';
+      };
+    };
   };
 }
 

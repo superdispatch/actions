@@ -60875,7 +60875,6 @@ async function main() {
     return;
   }
   const octokit = (0, import_github.getOctokit)(token);
-  const jira = createClient();
   const { data: commits } = await octokit.request("GET /repos/{owner}/{repo}/commits", __spreadProps(__spreadValues({}, import_github.context.repo), { sha: SHA }));
   const mainIssue = await findIssue(commits[0].commit.message);
   if (!mainIssue) {
@@ -60885,22 +60884,32 @@ async function main() {
   (0, import_core.info)(`Found main "${mainIssue.key}" issue`);
   for (const item of commits.slice(1)) {
     const blockerIssue = await findIssue(item.commit.message);
-    if (blockerIssue && blockerIssue.key !== mainIssue.key) {
-      (0, import_core.info)(`Found blocker "${blockerIssue.key}" issue`);
-      (0, import_core.info)(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
-      await jira.issueLink({
-        inwardIssue: blockerIssue.key,
-        type: "Blocks",
-        outwardIssue: mainIssue.key
-      });
-      await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by ${blockerIssue.key}`);
-      (0, import_core.info)("Successfully linked");
+    if (!blockerIssue || blockerIssue.key === mainIssue.key) {
+      continue;
+    }
+    if (blockerIssue.fields.status.name === "Released") {
+      (0, import_core.info)("Issue is not blocked.");
       return;
     }
+    (0, import_core.info)(`Found blocker "${blockerIssue.key}" issue`);
+    (0, import_core.info)(`Linking "${blockerIssue.key} Blocks ${mainIssue.key}" ...`);
+    await linkReleaseBlocker(mainIssue, blockerIssue);
+    (0, import_core.info)("Successfully linked");
+    return;
   }
   (0, import_core.info)("Could not find blocker issue from commits");
 }
 __name(main, "main");
+async function linkReleaseBlocker(mainIssue, blockerIssue) {
+  const jira = createClient();
+  await jira.issueLink({
+    inwardIssue: blockerIssue.key,
+    type: "Blocks",
+    outwardIssue: mainIssue.key
+  });
+  await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by ${blockerIssue.key}`);
+}
+__name(linkReleaseBlocker, "linkReleaseBlocker");
 main().catch(import_core.setFailed);
 /*!
  *  Copyright 2010 LearnBoost <dev@learnboost.com>
