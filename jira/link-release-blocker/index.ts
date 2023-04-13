@@ -1,5 +1,6 @@
 import { getInput, info, setFailed } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
+import { components } from '@octokit/openapi-types';
 import { createClient } from '../utils/JiraAPI';
 import { JIRAIssue } from '../utils/JiraClient';
 import { findIssue } from '../utils/JiraIssue';
@@ -20,7 +21,7 @@ async function main() {
     return;
   }
 
-  const blockers: JIRAIssue[] = [];
+  const jira = createClient();
   const octokit = getOctokit(token);
 
   const { data: commits } = await octokit.request(
@@ -37,10 +38,45 @@ async function main() {
 
   info(`Found main "${mainIssue.key}" issue`);
 
-  for (const item of commits.slice(1)) {
+  const blockers = await findBlockersFromCommits(
+    mainIssue,
+    commits.slice(0, 10),
+  );
+
+  if (!blockers.length) {
+    info('Issue is not blocked');
+    return;
+  }
+
+  for (const blocker of blockers) {
+    info(`Linking blocker: "${blocker.key}"`);
+
+    await jira.issueLink({
+      inwardIssue: blocker.key,
+      type: 'Blocks',
+      outwardIssue: mainIssue.key,
+    });
+  }
+
+  await jira.addComment(
+    mainIssue.key,
+    `SuperdispatchActions: Release is blocked by following card(s): 
+${blockers.map((x) => x.key).join('\n')}`,
+  );
+
+  info('Successfully linked');
+}
+
+async function findBlockersFromCommits(
+  targetIssue: JIRAIssue,
+  commits: Array<components['schemas']['commit']>,
+): Promise<JIRAIssue[]> {
+  const blockers: JIRAIssue[] = [];
+
+  for (const item of commits) {
     const blockerIssue = await findIssue(item.commit.message);
 
-    if (!blockerIssue || blockerIssue.key === mainIssue.key) {
+    if (!blockerIssue || blockerIssue.key === targetIssue.key) {
       continue;
     }
 
@@ -52,35 +88,7 @@ async function main() {
     blockers.push(blockerIssue);
   }
 
-  if (!blockers.length) {
-    info('Issue is not blocked');
-    return;
-  }
-
-  for (const blocker of blockers) {
-    info(`Linking blocker: "${blocker.key}"`);
-    await linkReleaseBlocker(mainIssue, blocker);
-  }
-
-  info('Successfully linked');
-}
-
-async function linkReleaseBlocker(
-  mainIssue: JIRAIssue,
-  blockerIssue: JIRAIssue,
-) {
-  const jira = createClient();
-
-  await jira.issueLink({
-    inwardIssue: blockerIssue.key,
-    type: 'Blocks',
-    outwardIssue: mainIssue.key,
-  });
-
-  await jira.addComment(
-    mainIssue.key,
-    `SuperdispatchActions: Release is blocked by ${blockerIssue.key}`,
-  );
+  return blockers;
 }
 
 main().catch(setFailed);

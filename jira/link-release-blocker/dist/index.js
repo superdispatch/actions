@@ -60874,7 +60874,7 @@ async function main() {
     (0, import_core.info)("Skipping... Could not find commit hash");
     return;
   }
-  const blockers = [];
+  const jira = createClient();
   const octokit = (0, import_github.getOctokit)(token);
   const { data: commits } = await octokit.request("GET /repos/{owner}/{repo}/commits", __spreadProps(__spreadValues({}, import_github.context.repo), { sha: SHA }));
   const mainIssue = await findIssue(commits[0].commit.message);
@@ -60883,9 +60883,29 @@ async function main() {
     return;
   }
   (0, import_core.info)(`Found main "${mainIssue.key}" issue`);
-  for (const item of commits.slice(1)) {
+  const blockers = await findBlockersFromCommits(mainIssue, commits.slice(0, 10));
+  if (!blockers.length) {
+    (0, import_core.info)("Issue is not blocked");
+    return;
+  }
+  for (const blocker of blockers) {
+    (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
+    await jira.issueLink({
+      inwardIssue: blocker.key,
+      type: "Blocks",
+      outwardIssue: mainIssue.key
+    });
+  }
+  await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by following card(s): 
+${blockers.map((x) => x.key).join("\n")}`);
+  (0, import_core.info)("Successfully linked");
+}
+__name(main, "main");
+async function findBlockersFromCommits(targetIssue, commits) {
+  const blockers = [];
+  for (const item of commits) {
     const blockerIssue = await findIssue(item.commit.message);
-    if (!blockerIssue || blockerIssue.key === mainIssue.key) {
+    if (!blockerIssue || blockerIssue.key === targetIssue.key) {
       continue;
     }
     if (blockerIssue.fields.status.name === "Released") {
@@ -60894,27 +60914,9 @@ async function main() {
     (0, import_core.info)(`Found blocker issue: "${blockerIssue.key}"`);
     blockers.push(blockerIssue);
   }
-  if (!blockers.length) {
-    (0, import_core.info)("Issue is not blocked");
-    return;
-  }
-  for (const blocker of blockers) {
-    (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
-    await linkReleaseBlocker(mainIssue, blocker);
-  }
-  (0, import_core.info)("Successfully linked");
+  return blockers;
 }
-__name(main, "main");
-async function linkReleaseBlocker(mainIssue, blockerIssue) {
-  const jira = createClient();
-  await jira.issueLink({
-    inwardIssue: blockerIssue.key,
-    type: "Blocks",
-    outwardIssue: mainIssue.key
-  });
-  await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by ${blockerIssue.key}`);
-}
-__name(linkReleaseBlocker, "linkReleaseBlocker");
+__name(findBlockersFromCommits, "findBlockersFromCommits");
 main().catch(import_core.setFailed);
 /*!
  *  Copyright 2010 LearnBoost <dev@learnboost.com>
