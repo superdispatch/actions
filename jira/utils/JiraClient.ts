@@ -24,6 +24,57 @@ export interface JIRAIssue {
   self: string; // jira link
   key: string;
   fields: {
+    issuelinks: [
+      {
+        id: string;
+        self: string;
+        type: {
+          id: string;
+          name: 'Blocks' | 'Relates';
+          inward: 'is blocked by';
+          outward: 'blocks';
+          self: string;
+        };
+        inwardIssue: {
+          id: string;
+          key: string;
+          self: string;
+          fields: {
+            summary: string;
+            status: {
+              self: string;
+              description: string;
+              iconUrl: string;
+              name: 'Released';
+              id: string;
+              statusCategory: {
+                self: string;
+                id: number;
+                key: 'done';
+                colorName: 'green';
+                name: 'Done';
+              };
+            };
+            priority: {
+              self: string;
+              iconUrl: string;
+              name: string;
+              id: string;
+            };
+            issuetype: {
+              self: string;
+              id: string;
+              description: string;
+              iconUrl: string;
+              name: string;
+              subtask: false;
+              avatarId: number;
+              hierarchyLevel: number;
+            };
+          };
+        };
+      },
+    ];
     project: {
       self: string;
       id: string;

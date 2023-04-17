@@ -60899,11 +60899,11 @@ async function main() {
       outwardIssue: mainIssue.key
     });
   }
-  const { comments } = await jira.getComments(mainIssue.key);
-  const hasComment = comments.find((c) => c.body.content[0].content[0].text === "SuperdispatchActions: Release is blocked by following card(s): ");
-  if (!hasComment) {
+  const existingBlockers = new Set(mainIssue.fields.issuelinks.filter((x) => x.type.name === "Blocks").map((x) => x.inwardIssue.key));
+  const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
+  if (newBlockers.length) {
     await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by following card(s): 
-${blockers.map((x) => x.key).join("\n")}`);
+${newBlockers.map((x) => x.key).join("\n")}`);
   }
   (0, import_core.info)("Successfully linked");
 }
