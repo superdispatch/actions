@@ -55373,6 +55373,9 @@ var JiraClient = class extends import_jira_client.default {
   addComment(issueId, comment) {
     return super.addComment(issueId, comment);
   }
+  getComments(issueId) {
+    return super.getComments(issueId);
+  }
 };
 __name(JiraClient, "JiraClient");
 

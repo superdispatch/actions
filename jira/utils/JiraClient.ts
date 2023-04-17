@@ -49,6 +49,52 @@ export interface JIRAIssue {
   };
 }
 
+export interface JIRAComment {
+  startAt: number;
+  maxResults: number;
+  total: number;
+  comments: [
+    {
+      self: string;
+      id: string;
+      author: {
+        self: string;
+        accountId: string;
+        displayName: string;
+        active: false;
+      };
+      body: {
+        type: string;
+        version: number;
+        content: [
+          {
+            type: string;
+            content: [
+              {
+                type: string;
+                text?: string;
+              },
+            ];
+          },
+        ];
+      };
+      updateAuthor: {
+        self: string;
+        accountId: string;
+        displayName: string;
+        active: boolean;
+      };
+      created: string;
+      updated: string;
+      visibility: {
+        type: string;
+        value: string;
+        identifier: string;
+      };
+    },
+  ];
+}
+
 export class JiraClient extends JiraApi {
   listTransitions(issueId: string) {
     return super.listTransitions(issueId) as Promise<{
@@ -99,5 +145,9 @@ export class JiraClient extends JiraApi {
 
   addComment(issueId: string, comment: string) {
     return super.addComment(issueId, comment);
+  }
+
+  getComments(issueId: string) {
+    return super.getComments(issueId) as Promise<JIRAComment>;
   }
 }

@@ -58,11 +58,20 @@ async function main() {
     });
   }
 
-  await jira.addComment(
-    mainIssue.key,
-    `SuperdispatchActions: Release is blocked by following card(s): 
-${blockers.map((x) => x.key).join('\n')}`,
+  const { comments } = await jira.getComments(mainIssue.key);
+  const hasComment = comments.find(
+    (c) =>
+      c.body.content[0].content[0].text ===
+      'SuperdispatchActions: Release is blocked by following card(s): ',
   );
+
+  if (!hasComment) {
+    await jira.addComment(
+      mainIssue.key,
+      `SuperdispatchActions: Release is blocked by following card(s): 
+${blockers.map((x) => x.key).join('\n')}`,
+    );
+  }
 
   info('Successfully linked');
 }
