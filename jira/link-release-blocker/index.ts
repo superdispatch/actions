@@ -44,6 +44,8 @@ async function main() {
   );
 
   if (!blockers.length) {
+    await jira.addComment(mainIssue.key, 'Release is not blocked 🎉');
+
     info('Issue is not blocked');
     return;
   }
@@ -68,7 +70,7 @@ async function main() {
   if (newBlockers.length) {
     await jira.addComment(
       mainIssue.key,
-      `SuperdispatchActions: Release is blocked by following card(s): 
+      `Release is blocked by following card(s): 
 ${newBlockers.map((x) => x.key).join('\n')}`,
     );
   }

@@ -60888,6 +60888,7 @@ async function main() {
   (0, import_core.info)(`Found main "${mainIssue.key}" issue`);
   const blockers = await findBlockersFromCommits(mainIssue, commits.slice(0, 10));
   if (!blockers.length) {
+    await jira.addComment(mainIssue.key, "Release is not blocked \u{1F389}");
     (0, import_core.info)("Issue is not blocked");
     return;
   }
@@ -60902,7 +60903,7 @@ async function main() {
   const existingBlockers = new Set(mainIssue.fields.issuelinks.filter((x) => x.type.name === "Blocks").map((x) => x.inwardIssue.key));
   const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
   if (newBlockers.length) {
-    await jira.addComment(mainIssue.key, `SuperdispatchActions: Release is blocked by following card(s): 
+    await jira.addComment(mainIssue.key, `Release is blocked by following card(s): 
 ${newBlockers.map((x) => x.key).join("\n")}`);
   }
   (0, import_core.info)("Successfully linked");
