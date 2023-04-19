@@ -60892,14 +60892,6 @@ async function main() {
     (0, import_core.info)("Issue is not blocked");
     return;
   }
-  for (const blocker of blockers) {
-    (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
-    await jira.issueLink({
-      inwardIssue: blocker.key,
-      type: "Blocks",
-      outwardIssue: mainIssue.key
-    });
-  }
   const existingBlockers = new Set(mainIssue.fields.issuelinks.filter((x) => x.type.name === "Blocks").map((x) => x.inwardIssue.key));
   const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
   if (newBlockers.length) {

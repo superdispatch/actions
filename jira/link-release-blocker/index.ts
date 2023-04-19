@@ -50,16 +50,6 @@ async function main() {
     return;
   }
 
-  for (const blocker of blockers) {
-    info(`Linking blocker: "${blocker.key}"`);
-
-    await jira.issueLink({
-      inwardIssue: blocker.key,
-      type: 'Blocks',
-      outwardIssue: mainIssue.key,
-    });
-  }
-
   const existingBlockers = new Set(
     mainIssue.fields.issuelinks
       .filter((x) => x.type.name === 'Blocks')
