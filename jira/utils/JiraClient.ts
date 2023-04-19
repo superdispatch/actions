@@ -30,7 +30,7 @@ export interface JIRAIssue {
         self: string;
         type: {
           id: string;
-          name: 'Blocks' | 'Relates';
+          name: 'Blocks' | 'Relates' | 'Blocks Release';
           inward: 'is blocked by';
           outward: 'blocks';
           self: string;
@@ -184,7 +184,7 @@ export class JiraClient extends JiraApi {
   }: {
     inwardIssue: string;
     outwardIssue: string;
-    type: 'Blocks' | 'Issue split' | 'Relates';
+    type: 'Blocks' | 'Issue split' | 'Relates' | 'Blocks Release';
   }) {
     // https://docs.atlassian.com/software/jira/docs/api/REST/8.5.0/#api/2/issueLink-linkIssues
     return super.issueLink({

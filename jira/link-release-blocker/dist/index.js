@@ -60892,7 +60892,15 @@ async function main() {
     (0, import_core.info)("Issue is not blocked");
     return;
   }
-  const existingBlockers = new Set(mainIssue.fields.issuelinks.filter((x) => x.type.name === "Blocks").map((x) => x.inwardIssue.key));
+  for (const blocker of blockers) {
+    (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
+    await jira.issueLink({
+      inwardIssue: blocker.key,
+      type: "Blocks Release",
+      outwardIssue: mainIssue.key
+    });
+  }
+  const existingBlockers = new Set(mainIssue.fields.issuelinks.filter((x) => x.type.name === "Blocks Release").map((x) => x.inwardIssue.key));
   const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
   if (newBlockers.length) {
     await jira.addComment(mainIssue.key, `Release is blocked by following card(s): 
