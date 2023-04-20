@@ -60867,12 +60867,7 @@ __name(findIssue, "findIssue");
 // jira/link-release-blocker/index.ts
 var token = (0, import_core.getInput)("token", { required: true });
 var SHA = process.env.GITHUB_SHA;
-var REF_NAME = process.env.GITHUB_REF_NAME;
 async function main() {
-  if (REF_NAME !== "main" && REF_NAME !== "master") {
-    (0, import_core.info)("Skipping... This action runs only in main/master branch");
-    return;
-  }
   if (!SHA) {
     (0, import_core.info)("Skipping... Could not find commit hash");
     return;

@@ -8,14 +8,8 @@ import { findIssue } from '../utils/JiraIssue';
 const token = getInput('token', { required: true });
 
 const SHA = process.env.GITHUB_SHA;
-const REF_NAME = process.env.GITHUB_REF_NAME;
 
 async function main() {
-  if (REF_NAME !== 'main' && REF_NAME !== 'master') {
-    info('Skipping... This action runs only in main/master branch');
-    return;
-  }
-
   if (!SHA) {
     info('Skipping... Could not find commit hash');
     return;
