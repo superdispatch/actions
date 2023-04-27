@@ -60888,7 +60888,7 @@ async function main() {
     return;
   }
   const remoteLinks = await jira.getRemoteLinks(mainIssue.key);
-  const existingBlockers = new Set(remoteLinks.filter((x) => x.object.title.includes("Blocked by ")).map((x) => x.object.title.replace("Blocked by ", "")));
+  const existingBlockers = new Set(remoteLinks.filter((x) => x.object.title.includes("Blocked by ") || x.object.title.includes("Release Blocked by ")).map((x) => x.object.title.replace("Release Blocked by ", "").replace("Blocked by ", "")));
   const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
   if (!newBlockers.length) {
     (0, import_core.info)("Release blockers are already added");
@@ -60898,13 +60898,11 @@ async function main() {
     (0, import_core.info)(`Linking blocker: "${blocker.key}"`);
     await jira.createRemoteLink(mainIssue.key, {
       object: {
-        title: `Blocked by ${blocker.key}`,
+        title: `Release Blocked by ${blocker.key}`,
         url: `https://superdispatch.atlassian.net/browse/${blocker.key}`
       }
     });
   }
-  await jira.addComment(mainIssue.key, `Release is blocked by following card(s): 
-${newBlockers.map((x) => x.key).join("\n")}`);
   (0, import_core.info)("Successfully linked");
 }
 __name(main, "main");

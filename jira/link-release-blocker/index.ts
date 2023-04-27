@@ -47,8 +47,17 @@ async function main() {
   const remoteLinks = await jira.getRemoteLinks(mainIssue.key);
   const existingBlockers = new Set(
     remoteLinks
-      .filter((x) => x.object.title.includes('Blocked by '))
-      .map((x) => x.object.title.replace('Blocked by ', '')),
+      .filter(
+        (x) =>
+          x.object.title.includes('Blocked by ') || // for backward compatibility
+          x.object.title.includes('Release Blocked by '),
+      )
+      .map(
+        (x) =>
+          x.object.title
+            .replace('Release Blocked by ', '')
+            .replace('Blocked by ', ''), // for backward compatibility
+      ),
   );
   const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
 
@@ -62,17 +71,11 @@ async function main() {
 
     await jira.createRemoteLink(mainIssue.key, {
       object: {
-        title: `Blocked by ${blocker.key}`,
+        title: `Release Blocked by ${blocker.key}`,
         url: `https://superdispatch.atlassian.net/browse/${blocker.key}`,
       },
     });
   }
-
-  await jira.addComment(
-    mainIssue.key,
-    `Release is blocked by following card(s): 
-${newBlockers.map((x) => x.key).join('\n')}`,
-  );
 
   info('Successfully linked');
 }
