@@ -778,6 +778,10 @@ var require_proxy = __commonJS({
       if (!reqUrl.hostname) {
         return false;
       }
+      const reqHost = reqUrl.hostname;
+      if (isLoopbackAddress(reqHost)) {
+        return true;
+      }
       const noProxy = process.env["no_proxy"] || process.env["NO_PROXY"] || "";
       if (!noProxy) {
         return false;
@@ -795,7 +799,7 @@ var require_proxy = __commonJS({
         upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
       }
       for (const upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x)) {
-        if (upperReqHosts.some((x) => x === upperNoProxyItem)) {
+        if (upperNoProxyItem === "*" || upperReqHosts.some((x) => x === upperNoProxyItem || x.endsWith(`.${upperNoProxyItem}`) || upperNoProxyItem.startsWith(".") && x.endsWith(`${upperNoProxyItem}`))) {
           return true;
         }
       }
@@ -803,6 +807,11 @@ var require_proxy = __commonJS({
     }
     __name(checkBypass, "checkBypass");
     exports2.checkBypass = checkBypass;
+    function isLoopbackAddress(host) {
+      const hostLower = host.toLowerCase();
+      return hostLower === "localhost" || hostLower.startsWith("127.") || hostLower.startsWith("[::1]") || hostLower.startsWith("[0:0:0:0:0:0:0:1]");
+    }
+    __name(isLoopbackAddress, "isLoopbackAddress");
   }
 });
 
@@ -2363,11 +2372,13 @@ var require_io_util = __commonJS({
     };
     var _a;
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getCmdPath = exports2.tryGetExecutablePath = exports2.isRooted = exports2.isDirectory = exports2.exists = exports2.IS_WINDOWS = exports2.unlink = exports2.symlink = exports2.stat = exports2.rmdir = exports2.rename = exports2.readlink = exports2.readdir = exports2.mkdir = exports2.lstat = exports2.copyFile = exports2.chmod = void 0;
+    exports2.getCmdPath = exports2.tryGetExecutablePath = exports2.isRooted = exports2.isDirectory = exports2.exists = exports2.READONLY = exports2.UV_FS_O_EXLOCK = exports2.IS_WINDOWS = exports2.unlink = exports2.symlink = exports2.stat = exports2.rmdir = exports2.rm = exports2.rename = exports2.readlink = exports2.readdir = exports2.open = exports2.mkdir = exports2.lstat = exports2.copyFile = exports2.chmod = void 0;
     var fs3 = __importStar(require("fs"));
     var path3 = __importStar(require("path"));
-    _a = fs3.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
+    _a = fs3.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
     exports2.IS_WINDOWS = process.platform === "win32";
+    exports2.UV_FS_O_EXLOCK = 268435456;
+    exports2.READONLY = fs3.constants.O_RDONLY;
     function exists(fsPath) {
       return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -2551,12 +2562,8 @@ var require_io = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.findInPath = exports2.which = exports2.mkdirP = exports2.rmRF = exports2.mv = exports2.cp = void 0;
     var assert_1 = require("assert");
-    var childProcess = __importStar(require("child_process"));
     var path3 = __importStar(require("path"));
-    var util_1 = require("util");
     var ioUtil = __importStar(require_io_util());
-    var exec = util_1.promisify(childProcess.exec);
-    var execFile = util_1.promisify(childProcess.execFile);
     function cp(source, dest, options = {}) {
       return __awaiter(this, void 0, void 0, function* () {
         const { force, recursive, copySourceDirectory } = readCopyOptions(options);
@@ -2613,41 +2620,16 @@ var require_io = __commonJS({
           if (/[*"<>|]/.test(inputPath)) {
             throw new Error('File path must not contain `*`, `"`, `<`, `>` or `|` on Windows');
           }
-          try {
-            const cmdPath = ioUtil.getCmdPath();
-            if (yield ioUtil.isDirectory(inputPath, true)) {
-              yield exec(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
-                env: { inputPath }
-              });
-            } else {
-              yield exec(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
-                env: { inputPath }
-              });
-            }
-          } catch (err) {
-            if (err.code !== "ENOENT")
-              throw err;
-          }
-          try {
-            yield ioUtil.unlink(inputPath);
-          } catch (err) {
-            if (err.code !== "ENOENT")
-              throw err;
-          }
-        } else {
-          let isDir = false;
-          try {
-            isDir = yield ioUtil.isDirectory(inputPath);
-          } catch (err) {
-            if (err.code !== "ENOENT")
-              throw err;
-            return;
-          }
-          if (isDir) {
-            yield execFile(`rm`, [`-rf`, `${inputPath}`]);
-          } else {
-            yield ioUtil.unlink(inputPath);
-          }
+        }
+        try {
+          yield ioUtil.rm(inputPath, {
+            force: true,
+            maxRetries: 3,
+            recursive: true,
+            retryDelay: 300
+          });
+        } catch (err) {
+          throw new Error(`File was unable to be removed ${err}`);
         }
       });
     }
@@ -3940,11 +3922,15 @@ var require_minimatch = __commonJS({
   "node_modules/minimatch/minimatch.js"(exports2, module2) {
     module2.exports = minimatch;
     minimatch.Minimatch = Minimatch;
-    var path3 = { sep: "/" };
-    try {
-      path3 = require("path");
-    } catch (er) {
-    }
+    var path3 = function() {
+      try {
+        return require("path");
+      } catch (e) {
+      }
+    }() || {
+      sep: "/"
+    };
+    minimatch.sep = path3.sep;
     var GLOBSTAR = minimatch.GLOBSTAR = Minimatch.GLOBSTAR = {};
     var expand = require_brace_expansion();
     var plTypes = {
@@ -3976,46 +3962,58 @@ var require_minimatch = __commonJS({
     }
     __name(filter, "filter");
     function ext(a, b) {
-      a = a || {};
       b = b || {};
       var t = {};
-      Object.keys(b).forEach(function(k) {
-        t[k] = b[k];
-      });
       Object.keys(a).forEach(function(k) {
         t[k] = a[k];
+      });
+      Object.keys(b).forEach(function(k) {
+        t[k] = b[k];
       });
       return t;
     }
     __name(ext, "ext");
     minimatch.defaults = function(def) {
-      if (!def || !Object.keys(def).length)
+      if (!def || typeof def !== "object" || !Object.keys(def).length) {
         return minimatch;
+      }
       var orig = minimatch;
       var m = /* @__PURE__ */ __name(function minimatch2(p, pattern, options) {
-        return orig.minimatch(p, pattern, ext(def, options));
+        return orig(p, pattern, ext(def, options));
       }, "minimatch");
       m.Minimatch = /* @__PURE__ */ __name(function Minimatch2(pattern, options) {
         return new orig.Minimatch(pattern, ext(def, options));
       }, "Minimatch");
+      m.Minimatch.defaults = /* @__PURE__ */ __name(function defaults(options) {
+        return orig.defaults(ext(def, options)).Minimatch;
+      }, "defaults");
+      m.filter = /* @__PURE__ */ __name(function filter2(pattern, options) {
+        return orig.filter(pattern, ext(def, options));
+      }, "filter");
+      m.defaults = /* @__PURE__ */ __name(function defaults(options) {
+        return orig.defaults(ext(def, options));
+      }, "defaults");
+      m.makeRe = /* @__PURE__ */ __name(function makeRe2(pattern, options) {
+        return orig.makeRe(pattern, ext(def, options));
+      }, "makeRe");
+      m.braceExpand = /* @__PURE__ */ __name(function braceExpand2(pattern, options) {
+        return orig.braceExpand(pattern, ext(def, options));
+      }, "braceExpand");
+      m.match = function(list, pattern, options) {
+        return orig.match(list, pattern, ext(def, options));
+      };
       return m;
     };
     Minimatch.defaults = function(def) {
-      if (!def || !Object.keys(def).length)
-        return Minimatch;
       return minimatch.defaults(def).Minimatch;
     };
     function minimatch(p, pattern, options) {
-      if (typeof pattern !== "string") {
-        throw new TypeError("glob pattern string required");
-      }
+      assertValidPattern(pattern);
       if (!options)
         options = {};
       if (!options.nocomment && pattern.charAt(0) === "#") {
         return false;
       }
-      if (pattern.trim() === "")
-        return p === "";
       return new Minimatch(pattern, options).match(p);
     }
     __name(minimatch, "minimatch");
@@ -4023,13 +4021,11 @@ var require_minimatch = __commonJS({
       if (!(this instanceof Minimatch)) {
         return new Minimatch(pattern, options);
       }
-      if (typeof pattern !== "string") {
-        throw new TypeError("glob pattern string required");
-      }
+      assertValidPattern(pattern);
       if (!options)
         options = {};
       pattern = pattern.trim();
-      if (path3.sep !== "/") {
+      if (!options.allowWindowsEscape && path3.sep !== "/") {
         pattern = pattern.split(path3.sep).join("/");
       }
       this.options = options;
@@ -4039,6 +4035,7 @@ var require_minimatch = __commonJS({
       this.negate = false;
       this.comment = false;
       this.empty = false;
+      this.partial = !!options.partial;
       this.make();
     }
     __name(Minimatch, "Minimatch");
@@ -4046,8 +4043,6 @@ var require_minimatch = __commonJS({
     };
     Minimatch.prototype.make = make;
     function make() {
-      if (this._made)
-        return;
       var pattern = this.pattern;
       var options = this.options;
       if (!options.nocomment && pattern.charAt(0) === "#") {
@@ -4061,7 +4056,9 @@ var require_minimatch = __commonJS({
       this.parseNegate();
       var set = this.globSet = this.braceExpand();
       if (options.debug)
-        this.debug = console.error;
+        this.debug = /* @__PURE__ */ __name(function debug() {
+          console.error.apply(console, arguments);
+        }, "debug");
       this.debug(this.pattern, set);
       set = this.globParts = set.map(function(s) {
         return s.split(slashSplit);
@@ -4108,24 +4105,33 @@ var require_minimatch = __commonJS({
         }
       }
       pattern = typeof pattern === "undefined" ? this.pattern : pattern;
-      if (typeof pattern === "undefined") {
-        throw new TypeError("undefined pattern");
-      }
-      if (options.nobrace || !pattern.match(/\{.*\}/)) {
+      assertValidPattern(pattern);
+      if (options.nobrace || !/\{(?:(?!\{).)*\}/.test(pattern)) {
         return [pattern];
       }
       return expand(pattern);
     }
     __name(braceExpand, "braceExpand");
+    var MAX_PATTERN_LENGTH = 1024 * 64;
+    var assertValidPattern = /* @__PURE__ */ __name(function(pattern) {
+      if (typeof pattern !== "string") {
+        throw new TypeError("invalid pattern");
+      }
+      if (pattern.length > MAX_PATTERN_LENGTH) {
+        throw new TypeError("pattern is too long");
+      }
+    }, "assertValidPattern");
     Minimatch.prototype.parse = parse;
     var SUBPARSE = {};
     function parse(pattern, isSub) {
-      if (pattern.length > 1024 * 64) {
-        throw new TypeError("pattern is too long");
-      }
+      assertValidPattern(pattern);
       var options = this.options;
-      if (!options.noglobstar && pattern === "**")
-        return GLOBSTAR;
+      if (pattern === "**") {
+        if (!options.noglobstar)
+          return GLOBSTAR;
+        else
+          pattern = "*";
+      }
       if (pattern === "")
         return "";
       var re = "";
@@ -4167,8 +4173,9 @@ var require_minimatch = __commonJS({
           continue;
         }
         switch (c) {
-          case "/":
+          case "/": {
             return false;
+          }
           case "\\":
             clearStateChar();
             escaping = true;
@@ -4252,17 +4259,15 @@ var require_minimatch = __commonJS({
               escaping = false;
               continue;
             }
-            if (inClass) {
-              var cs = pattern.substring(classStart + 1, i);
-              try {
-                RegExp("[" + cs + "]");
-              } catch (er) {
-                var sp = this.parse(cs, SUBPARSE);
-                re = re.substr(0, reClassStart) + "\\[" + sp[0] + "\\]";
-                hasMagic = hasMagic || sp[1];
-                inClass = false;
-                continue;
-              }
+            var cs = pattern.substring(classStart + 1, i);
+            try {
+              RegExp("[" + cs + "]");
+            } catch (er) {
+              var sp = this.parse(cs, SUBPARSE);
+              re = re.substr(0, reClassStart) + "\\[" + sp[0] + "\\]";
+              hasMagic = hasMagic || sp[1];
+              inClass = false;
+              continue;
             }
             hasMagic = true;
             inClass = false;
@@ -4304,8 +4309,8 @@ var require_minimatch = __commonJS({
       }
       var addPatternStart = false;
       switch (re.charAt(0)) {
-        case ".":
         case "[":
+        case ".":
         case "(":
           addPatternStart = true;
       }
@@ -4394,8 +4399,9 @@ var require_minimatch = __commonJS({
       }
       return list;
     };
-    Minimatch.prototype.match = match;
-    function match(f, partial) {
+    Minimatch.prototype.match = /* @__PURE__ */ __name(function match(f, partial) {
+      if (typeof partial === "undefined")
+        partial = this.partial;
       this.debug("match", f, this.pattern);
       if (this.comment)
         return false;
@@ -4434,8 +4440,7 @@ var require_minimatch = __commonJS({
       if (options.flipNegate)
         return false;
       return this.negate;
-    }
-    __name(match, "match");
+    }, "match");
     Minimatch.prototype.matchOne = function(file, pattern, partial) {
       var options = this.options;
       this.debug("matchOne", { "this": this, file, pattern });
@@ -4483,11 +4488,7 @@ var require_minimatch = __commonJS({
         }
         var hit;
         if (typeof p === "string") {
-          if (options.nocase) {
-            hit = f.toLowerCase() === p.toLowerCase();
-          } else {
-            hit = f === p;
-          }
+          hit = f === p;
           this.debug("string match", p, f, hit);
         } else {
           hit = f.match(p);
@@ -4501,8 +4502,7 @@ var require_minimatch = __commonJS({
       } else if (fi === fl) {
         return partial;
       } else if (pi === pl) {
-        var emptyFileEnd = fi === fl - 1 && file[fi] === "";
-        return emptyFileEnd;
+        return fi === fl - 1 && file[fi] === "";
       }
       throw new Error("wtf?");
     };
@@ -6734,6 +6734,10 @@ var require_tslib = __commonJS({
     var __rest;
     var __decorate;
     var __param;
+    var __esDecorate;
+    var __runInitializers;
+    var __propKey;
+    var __setFunctionName;
     var __metadata;
     var __awaiter;
     var __generator;
@@ -6752,6 +6756,7 @@ var require_tslib = __commonJS({
     var __importDefault;
     var __classPrivateFieldGet;
     var __classPrivateFieldSet;
+    var __classPrivateFieldIn;
     var __createBinding;
     (function(factory) {
       var root = typeof global === "object" ? global : typeof self === "object" ? self : typeof this === "object" ? this : {};
@@ -6831,6 +6836,66 @@ var require_tslib = __commonJS({
           decorator(target, key, paramIndex);
         };
       }, "__param");
+      __esDecorate = /* @__PURE__ */ __name(function(ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+        function accept(f) {
+          if (f !== void 0 && typeof f !== "function")
+            throw new TypeError("Function expected");
+          return f;
+        }
+        __name(accept, "accept");
+        var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+        var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+        var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+        var _, done = false;
+        for (var i = decorators.length - 1; i >= 0; i--) {
+          var context2 = {};
+          for (var p in contextIn)
+            context2[p] = p === "access" ? {} : contextIn[p];
+          for (var p in contextIn.access)
+            context2.access[p] = contextIn.access[p];
+          context2.addInitializer = function(f) {
+            if (done)
+              throw new TypeError("Cannot add initializers after decoration has completed");
+            extraInitializers.push(accept(f || null));
+          };
+          var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context2);
+          if (kind === "accessor") {
+            if (result === void 0)
+              continue;
+            if (result === null || typeof result !== "object")
+              throw new TypeError("Object expected");
+            if (_ = accept(result.get))
+              descriptor.get = _;
+            if (_ = accept(result.set))
+              descriptor.set = _;
+            if (_ = accept(result.init))
+              initializers.push(_);
+          } else if (_ = accept(result)) {
+            if (kind === "field")
+              initializers.push(_);
+            else
+              descriptor[key] = _;
+          }
+        }
+        if (target)
+          Object.defineProperty(target, contextIn.name, descriptor);
+        done = true;
+      }, "__esDecorate");
+      __runInitializers = /* @__PURE__ */ __name(function(thisArg, initializers, value) {
+        var useValue = arguments.length > 2;
+        for (var i = 0; i < initializers.length; i++) {
+          value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+        }
+        return useValue ? value : void 0;
+      }, "__runInitializers");
+      __propKey = /* @__PURE__ */ __name(function(x) {
+        return typeof x === "symbol" ? x : "".concat(x);
+      }, "__propKey");
+      __setFunctionName = /* @__PURE__ */ __name(function(f, name, prefix) {
+        if (typeof name === "symbol")
+          name = name.description ? "[".concat(name.description, "]") : "";
+        return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
+      }, "__setFunctionName");
       __metadata = /* @__PURE__ */ __name(function(metadataKey, metadataValue) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
           return Reflect.metadata(metadataKey, metadataValue);
@@ -6884,7 +6949,7 @@ var require_tslib = __commonJS({
         function step(op) {
           if (f)
             throw new TypeError("Generator is already executing.");
-          while (_)
+          while (g && (g = 0, op[0] && (_ = 0)), _)
             try {
               if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
                 return t;
@@ -6952,9 +7017,13 @@ var require_tslib = __commonJS({
       __createBinding = Object.create ? function(o, m, k, k2) {
         if (k2 === void 0)
           k2 = k;
-        Object.defineProperty(o, k2, { enumerable: true, get: function() {
-          return m[k];
-        } });
+        var desc = Object.getOwnPropertyDescriptor(m, k);
+        if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+          desc = { enumerable: true, get: function() {
+            return m[k];
+          } };
+        }
+        Object.defineProperty(o, k2, desc);
       } : function(o, m, k, k2) {
         if (k2 === void 0)
           k2 = k;
@@ -7017,7 +7086,7 @@ var require_tslib = __commonJS({
               ar[i] = from[i];
             }
           }
-        return to.concat(ar || from);
+        return to.concat(ar || Array.prototype.slice.call(from));
       }, "__spreadArray");
       __await = /* @__PURE__ */ __name(function(v) {
         return this instanceof __await ? (this.v = v, this) : new __await(v);
@@ -7073,7 +7142,7 @@ var require_tslib = __commonJS({
         }, i;
         function verb(n, f) {
           i[n] = o[n] ? function(v) {
-            return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v;
+            return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v;
           } : f;
         }
         __name(verb, "verb");
@@ -7144,11 +7213,20 @@ var require_tslib = __commonJS({
           throw new TypeError("Cannot write private member to an object whose class did not declare it");
         return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
       }, "__classPrivateFieldSet");
+      __classPrivateFieldIn = /* @__PURE__ */ __name(function(state, receiver) {
+        if (receiver === null || typeof receiver !== "object" && typeof receiver !== "function")
+          throw new TypeError("Cannot use 'in' operator on non-object");
+        return typeof state === "function" ? receiver === state : state.has(receiver);
+      }, "__classPrivateFieldIn");
       exporter("__extends", __extends);
       exporter("__assign", __assign);
       exporter("__rest", __rest);
       exporter("__decorate", __decorate);
       exporter("__param", __param);
+      exporter("__esDecorate", __esDecorate);
+      exporter("__runInitializers", __runInitializers);
+      exporter("__propKey", __propKey);
+      exporter("__setFunctionName", __setFunctionName);
       exporter("__metadata", __metadata);
       exporter("__awaiter", __awaiter);
       exporter("__generator", __generator);
@@ -7168,6 +7246,7 @@ var require_tslib = __commonJS({
       exporter("__importDefault", __importDefault);
       exporter("__classPrivateFieldGet", __classPrivateFieldGet);
       exporter("__classPrivateFieldSet", __classPrivateFieldSet);
+      exporter("__classPrivateFieldIn", __classPrivateFieldIn);
     });
   }
 });
@@ -12835,7 +12914,7 @@ var require_parser = __commonJS({
           this.saxParser.onopentag = function(_this) {
             return function(node) {
               var key, newValue, obj, processedKey, ref;
-              obj = {};
+              obj = Object.create(null);
               obj[charkey] = "";
               if (!_this.options.ignoreAttrs) {
                 ref = node.attributes;
@@ -12843,7 +12922,7 @@ var require_parser = __commonJS({
                   if (!hasProp.call(ref, key))
                     continue;
                   if (!(attrkey in obj) && !_this.options.mergeAttrs) {
-                    obj[attrkey] = {};
+                    obj[attrkey] = Object.create(null);
                   }
                   newValue = _this.options.attrValueProcessors ? processItem(_this.options.attrValueProcessors, node.attributes[key], key) : node.attributes[key];
                   processedKey = _this.options.attrNameProcessors ? processItem(_this.options.attrNameProcessors, key) : key;
@@ -12893,7 +12972,11 @@ var require_parser = __commonJS({
                 }
               }
               if (isEmpty(obj)) {
-                obj = _this.options.emptyTag !== "" ? _this.options.emptyTag : emptyStr;
+                if (typeof _this.options.emptyTag === "function") {
+                  obj = _this.options.emptyTag();
+                } else {
+                  obj = _this.options.emptyTag !== "" ? _this.options.emptyTag : emptyStr;
+                }
               }
               if (_this.options.validator != null) {
                 xpath = "/" + function() {
@@ -12917,7 +13000,7 @@ var require_parser = __commonJS({
               }
               if (_this.options.explicitChildren && !_this.options.mergeAttrs && typeof obj === "object") {
                 if (!_this.options.preserveChildrenOrder) {
-                  node = {};
+                  node = Object.create(null);
                   if (_this.options.attrkey in obj) {
                     node[_this.options.attrkey] = obj[_this.options.attrkey];
                     delete obj[_this.options.attrkey];
@@ -12932,7 +13015,7 @@ var require_parser = __commonJS({
                   obj = node;
                 } else if (s) {
                   s[_this.options.childkey] = s[_this.options.childkey] || [];
-                  objClone = {};
+                  objClone = Object.create(null);
                   for (key in obj) {
                     if (!hasProp.call(obj, key))
                       continue;
@@ -12950,7 +13033,7 @@ var require_parser = __commonJS({
               } else {
                 if (_this.options.explicitRoot) {
                   old = obj;
-                  obj = {};
+                  obj = Object.create(null);
                   obj[nodeName] = old;
                 }
                 _this.resultObject = obj;
@@ -13220,24 +13303,187 @@ var require_dist2 = __commonJS({
   }
 });
 
-// node_modules/@azure/logger/dist/index.js
+// node_modules/@azure/core-util/dist/index.js
 var require_dist3 = __commonJS({
+  "node_modules/@azure/core-util/dist/index.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    var abortController = require_dist2();
+    var crypto = require("crypto");
+    var _a$1;
+    var isNode = typeof process !== "undefined" && Boolean(process.version) && Boolean((_a$1 = process.versions) === null || _a$1 === void 0 ? void 0 : _a$1.node);
+    function createAbortablePromise(buildPromise, options) {
+      const { cleanupBeforeAbort, abortSignal, abortErrorMsg } = options !== null && options !== void 0 ? options : {};
+      return new Promise((resolve, reject) => {
+        function rejectOnAbort() {
+          reject(new abortController.AbortError(abortErrorMsg !== null && abortErrorMsg !== void 0 ? abortErrorMsg : "The operation was aborted."));
+        }
+        __name(rejectOnAbort, "rejectOnAbort");
+        function removeListeners() {
+          abortSignal === null || abortSignal === void 0 ? void 0 : abortSignal.removeEventListener("abort", onAbort);
+        }
+        __name(removeListeners, "removeListeners");
+        function onAbort() {
+          cleanupBeforeAbort === null || cleanupBeforeAbort === void 0 ? void 0 : cleanupBeforeAbort();
+          removeListeners();
+          rejectOnAbort();
+        }
+        __name(onAbort, "onAbort");
+        if (abortSignal === null || abortSignal === void 0 ? void 0 : abortSignal.aborted) {
+          return rejectOnAbort();
+        }
+        try {
+          buildPromise((x) => {
+            removeListeners();
+            resolve(x);
+          }, (x) => {
+            removeListeners();
+            reject(x);
+          });
+        } catch (err) {
+          reject(err);
+        }
+        abortSignal === null || abortSignal === void 0 ? void 0 : abortSignal.addEventListener("abort", onAbort);
+      });
+    }
+    __name(createAbortablePromise, "createAbortablePromise");
+    var StandardAbortMessage = "The delay was aborted.";
+    function delay(timeInMs, options) {
+      let token2;
+      const { abortSignal, abortErrorMsg } = options !== null && options !== void 0 ? options : {};
+      return createAbortablePromise((resolve) => {
+        token2 = setTimeout(resolve, timeInMs);
+      }, {
+        cleanupBeforeAbort: () => clearTimeout(token2),
+        abortSignal,
+        abortErrorMsg: abortErrorMsg !== null && abortErrorMsg !== void 0 ? abortErrorMsg : StandardAbortMessage
+      });
+    }
+    __name(delay, "delay");
+    function getRandomIntegerInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      const offset = Math.floor(Math.random() * (max - min + 1));
+      return offset + min;
+    }
+    __name(getRandomIntegerInclusive, "getRandomIntegerInclusive");
+    function isObject(input) {
+      return typeof input === "object" && input !== null && !Array.isArray(input) && !(input instanceof RegExp) && !(input instanceof Date);
+    }
+    __name(isObject, "isObject");
+    function isError(e) {
+      if (isObject(e)) {
+        const hasName = typeof e.name === "string";
+        const hasMessage = typeof e.message === "string";
+        return hasName && hasMessage;
+      }
+      return false;
+    }
+    __name(isError, "isError");
+    function getErrorMessage(e) {
+      if (isError(e)) {
+        return e.message;
+      } else {
+        let stringified;
+        try {
+          if (typeof e === "object" && e) {
+            stringified = JSON.stringify(e);
+          } else {
+            stringified = String(e);
+          }
+        } catch (err) {
+          stringified = "[unable to stringify input]";
+        }
+        return `Unknown error ${stringified}`;
+      }
+    }
+    __name(getErrorMessage, "getErrorMessage");
+    async function computeSha256Hmac(key, stringToSign, encoding) {
+      const decodedKey = Buffer.from(key, "base64");
+      return crypto.createHmac("sha256", decodedKey).update(stringToSign).digest(encoding);
+    }
+    __name(computeSha256Hmac, "computeSha256Hmac");
+    async function computeSha256Hash(content, encoding) {
+      return crypto.createHash("sha256").update(content).digest(encoding);
+    }
+    __name(computeSha256Hash, "computeSha256Hash");
+    function isDefined(thing) {
+      return typeof thing !== "undefined" && thing !== null;
+    }
+    __name(isDefined, "isDefined");
+    function isObjectWithProperties(thing, properties) {
+      if (!isDefined(thing) || typeof thing !== "object") {
+        return false;
+      }
+      for (const property of properties) {
+        if (!objectHasProperty(thing, property)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    __name(isObjectWithProperties, "isObjectWithProperties");
+    function objectHasProperty(thing, property) {
+      return isDefined(thing) && typeof thing === "object" && property in thing;
+    }
+    __name(objectHasProperty, "objectHasProperty");
+    function generateUUID() {
+      let uuid = "";
+      for (let i = 0; i < 32; i++) {
+        const randomNumber = Math.floor(Math.random() * 16);
+        if (i === 12) {
+          uuid += "4";
+        } else if (i === 16) {
+          uuid += randomNumber & 3 | 8;
+        } else {
+          uuid += randomNumber.toString(16);
+        }
+        if (i === 7 || i === 11 || i === 15 || i === 19) {
+          uuid += "-";
+        }
+      }
+      return uuid;
+    }
+    __name(generateUUID, "generateUUID");
+    var _a;
+    var uuidFunction = typeof ((_a = globalThis === null || globalThis === void 0 ? void 0 : globalThis.crypto) === null || _a === void 0 ? void 0 : _a.randomUUID) === "function" ? globalThis.crypto.randomUUID.bind(globalThis.crypto) : crypto.randomUUID;
+    if (!uuidFunction) {
+      uuidFunction = generateUUID;
+    }
+    function randomUUID() {
+      return uuidFunction();
+    }
+    __name(randomUUID, "randomUUID");
+    exports2.computeSha256Hash = computeSha256Hash;
+    exports2.computeSha256Hmac = computeSha256Hmac;
+    exports2.createAbortablePromise = createAbortablePromise;
+    exports2.delay = delay;
+    exports2.getErrorMessage = getErrorMessage;
+    exports2.getRandomIntegerInclusive = getRandomIntegerInclusive;
+    exports2.isDefined = isDefined;
+    exports2.isError = isError;
+    exports2.isNode = isNode;
+    exports2.isObject = isObject;
+    exports2.isObjectWithProperties = isObjectWithProperties;
+    exports2.objectHasProperty = objectHasProperty;
+    exports2.randomUUID = randomUUID;
+  }
+});
+
+// node_modules/@azure/logger/dist/index.js
+var require_dist4 = __commonJS({
   "node_modules/@azure/logger/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    function _interopDefault(ex) {
-      return ex && typeof ex === "object" && "default" in ex ? ex["default"] : ex;
-    }
-    __name(_interopDefault, "_interopDefault");
-    var tslib = require_tslib();
-    var util = _interopDefault(require("util"));
     var os2 = require("os");
-    function log(message) {
-      var args = [];
-      for (var _i = 1; _i < arguments.length; _i++) {
-        args[_i - 1] = arguments[_i];
-      }
-      process.stderr.write("" + util.format.apply(util, tslib.__spread([message], args)) + os2.EOL);
+    var util = require("util");
+    function _interopDefaultLegacy(e) {
+      return e && typeof e === "object" && "default" in e ? e : { "default": e };
+    }
+    __name(_interopDefaultLegacy, "_interopDefaultLegacy");
+    var util__default = /* @__PURE__ */ _interopDefaultLegacy(util);
+    function log(message, ...args) {
+      process.stderr.write(`${util__default["default"].format(message, ...args)}${os2.EOL}`);
     }
     __name(log, "log");
     var debugEnvVariable = typeof process !== "undefined" && process.env && process.env.DEBUG || void 0;
@@ -13248,7 +13494,7 @@ var require_dist3 = __commonJS({
     if (debugEnvVariable) {
       enable(debugEnvVariable);
     }
-    var debugObj = Object.assign(function(namespace) {
+    var debugObj = Object.assign((namespace) => {
       return createDebugger(namespace);
     }, {
       enable,
@@ -13257,130 +13503,70 @@ var require_dist3 = __commonJS({
       log
     });
     function enable(namespaces) {
-      var e_1, _a, e_2, _b;
       enabledString = namespaces;
       enabledNamespaces = [];
       skippedNamespaces = [];
-      var wildcard = /\*/g;
-      var namespaceList = namespaces.split(",").map(function(ns2) {
-        return ns2.trim().replace(wildcard, ".*?");
-      });
-      try {
-        for (var namespaceList_1 = tslib.__values(namespaceList), namespaceList_1_1 = namespaceList_1.next(); !namespaceList_1_1.done; namespaceList_1_1 = namespaceList_1.next()) {
-          var ns = namespaceList_1_1.value;
-          if (ns.startsWith("-")) {
-            skippedNamespaces.push(new RegExp("^" + ns.substr(1) + "$"));
-          } else {
-            enabledNamespaces.push(new RegExp("^" + ns + "$"));
-          }
-        }
-      } catch (e_1_1) {
-        e_1 = { error: e_1_1 };
-      } finally {
-        try {
-          if (namespaceList_1_1 && !namespaceList_1_1.done && (_a = namespaceList_1.return))
-            _a.call(namespaceList_1);
-        } finally {
-          if (e_1)
-            throw e_1.error;
+      const wildcard = /\*/g;
+      const namespaceList = namespaces.split(",").map((ns) => ns.trim().replace(wildcard, ".*?"));
+      for (const ns of namespaceList) {
+        if (ns.startsWith("-")) {
+          skippedNamespaces.push(new RegExp(`^${ns.substr(1)}$`));
+        } else {
+          enabledNamespaces.push(new RegExp(`^${ns}$`));
         }
       }
-      try {
-        for (var debuggers_1 = tslib.__values(debuggers), debuggers_1_1 = debuggers_1.next(); !debuggers_1_1.done; debuggers_1_1 = debuggers_1.next()) {
-          var instance = debuggers_1_1.value;
-          instance.enabled = enabled(instance.namespace);
-        }
-      } catch (e_2_1) {
-        e_2 = { error: e_2_1 };
-      } finally {
-        try {
-          if (debuggers_1_1 && !debuggers_1_1.done && (_b = debuggers_1.return))
-            _b.call(debuggers_1);
-        } finally {
-          if (e_2)
-            throw e_2.error;
-        }
+      for (const instance of debuggers) {
+        instance.enabled = enabled(instance.namespace);
       }
     }
     __name(enable, "enable");
     function enabled(namespace) {
-      var e_3, _a, e_4, _b;
       if (namespace.endsWith("*")) {
         return true;
       }
-      try {
-        for (var skippedNamespaces_1 = tslib.__values(skippedNamespaces), skippedNamespaces_1_1 = skippedNamespaces_1.next(); !skippedNamespaces_1_1.done; skippedNamespaces_1_1 = skippedNamespaces_1.next()) {
-          var skipped = skippedNamespaces_1_1.value;
-          if (skipped.test(namespace)) {
-            return false;
-          }
-        }
-      } catch (e_3_1) {
-        e_3 = { error: e_3_1 };
-      } finally {
-        try {
-          if (skippedNamespaces_1_1 && !skippedNamespaces_1_1.done && (_a = skippedNamespaces_1.return))
-            _a.call(skippedNamespaces_1);
-        } finally {
-          if (e_3)
-            throw e_3.error;
+      for (const skipped of skippedNamespaces) {
+        if (skipped.test(namespace)) {
+          return false;
         }
       }
-      try {
-        for (var enabledNamespaces_1 = tslib.__values(enabledNamespaces), enabledNamespaces_1_1 = enabledNamespaces_1.next(); !enabledNamespaces_1_1.done; enabledNamespaces_1_1 = enabledNamespaces_1.next()) {
-          var enabledNamespace = enabledNamespaces_1_1.value;
-          if (enabledNamespace.test(namespace)) {
-            return true;
-          }
-        }
-      } catch (e_4_1) {
-        e_4 = { error: e_4_1 };
-      } finally {
-        try {
-          if (enabledNamespaces_1_1 && !enabledNamespaces_1_1.done && (_b = enabledNamespaces_1.return))
-            _b.call(enabledNamespaces_1);
-        } finally {
-          if (e_4)
-            throw e_4.error;
+      for (const enabledNamespace of enabledNamespaces) {
+        if (enabledNamespace.test(namespace)) {
+          return true;
         }
       }
       return false;
     }
     __name(enabled, "enabled");
     function disable() {
-      var result = enabledString || "";
+      const result = enabledString || "";
       enable("");
       return result;
     }
     __name(disable, "disable");
     function createDebugger(namespace) {
-      var newDebugger = Object.assign(debug, {
+      const newDebugger = Object.assign(debug2, {
         enabled: enabled(namespace),
         destroy,
         log: debugObj.log,
         namespace,
         extend
       });
-      function debug() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      function debug2(...args) {
         if (!newDebugger.enabled) {
           return;
         }
         if (args.length > 0) {
-          args[0] = namespace + " " + args[0];
+          args[0] = `${namespace} ${args[0]}`;
         }
-        newDebugger.log.apply(newDebugger, tslib.__spread(args));
+        newDebugger.log(...args);
       }
-      __name(debug, "debug");
+      __name(debug2, "debug");
       debuggers.push(newDebugger);
       return newDebugger;
     }
     __name(createDebugger, "createDebugger");
     function destroy() {
-      var index = debuggers.indexOf(this);
+      const index = debuggers.indexOf(this);
       if (index >= 0) {
         debuggers.splice(index, 1);
         return true;
@@ -13389,56 +13575,39 @@ var require_dist3 = __commonJS({
     }
     __name(destroy, "destroy");
     function extend(namespace) {
-      var newDebugger = createDebugger(this.namespace + ":" + namespace);
+      const newDebugger = createDebugger(`${this.namespace}:${namespace}`);
       newDebugger.log = this.log;
       return newDebugger;
     }
     __name(extend, "extend");
+    var debug = debugObj;
     var registeredLoggers = new Set();
     var logLevelFromEnv = typeof process !== "undefined" && process.env && process.env.AZURE_LOG_LEVEL || void 0;
     var azureLogLevel;
-    var AzureLogger = debugObj("azure");
-    AzureLogger.log = function() {
-      var args = [];
-      for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-      }
-      debugObj.log.apply(debugObj, tslib.__spread(args));
+    var AzureLogger = debug("azure");
+    AzureLogger.log = (...args) => {
+      debug.log(...args);
     };
     var AZURE_LOG_LEVELS = ["verbose", "info", "warning", "error"];
     if (logLevelFromEnv) {
       if (isAzureLogLevel(logLevelFromEnv)) {
         setLogLevel(logLevelFromEnv);
       } else {
-        console.error("AZURE_LOG_LEVEL set to unknown log level '" + logLevelFromEnv + "'; logging is not enabled. Acceptable values: " + AZURE_LOG_LEVELS.join(", ") + ".");
+        console.error(`AZURE_LOG_LEVEL set to unknown log level '${logLevelFromEnv}'; logging is not enabled. Acceptable values: ${AZURE_LOG_LEVELS.join(", ")}.`);
       }
     }
     function setLogLevel(level) {
-      var e_1, _a;
       if (level && !isAzureLogLevel(level)) {
-        throw new Error("Unknown log level '" + level + "'. Acceptable values: " + AZURE_LOG_LEVELS.join(","));
+        throw new Error(`Unknown log level '${level}'. Acceptable values: ${AZURE_LOG_LEVELS.join(",")}`);
       }
       azureLogLevel = level;
-      var enabledNamespaces2 = [];
-      try {
-        for (var registeredLoggers_1 = tslib.__values(registeredLoggers), registeredLoggers_1_1 = registeredLoggers_1.next(); !registeredLoggers_1_1.done; registeredLoggers_1_1 = registeredLoggers_1.next()) {
-          var logger = registeredLoggers_1_1.value;
-          if (shouldEnable(logger)) {
-            enabledNamespaces2.push(logger.namespace);
-          }
-        }
-      } catch (e_1_1) {
-        e_1 = { error: e_1_1 };
-      } finally {
-        try {
-          if (registeredLoggers_1_1 && !registeredLoggers_1_1.done && (_a = registeredLoggers_1.return))
-            _a.call(registeredLoggers_1);
-        } finally {
-          if (e_1)
-            throw e_1.error;
+      const enabledNamespaces2 = [];
+      for (const logger of registeredLoggers) {
+        if (shouldEnable(logger)) {
+          enabledNamespaces2.push(logger.namespace);
         }
       }
-      debugObj.enable(enabledNamespaces2.join(","));
+      debug.enable(enabledNamespaces2.join(","));
     }
     __name(setLogLevel, "setLogLevel");
     function getLogLevel() {
@@ -13452,7 +13621,7 @@ var require_dist3 = __commonJS({
       error: 100
     };
     function createClientLogger(namespace) {
-      var clientRootLogger = AzureLogger.extend(namespace);
+      const clientRootLogger = AzureLogger.extend(namespace);
       patchLogMethod(AzureLogger, clientRootLogger);
       return {
         error: createLogger(clientRootLogger, "error"),
@@ -13463,34 +13632,26 @@ var require_dist3 = __commonJS({
     }
     __name(createClientLogger, "createClientLogger");
     function patchLogMethod(parent, child) {
-      child.log = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
-        parent.log.apply(parent, tslib.__spread(args));
+      child.log = (...args) => {
+        parent.log(...args);
       };
     }
     __name(patchLogMethod, "patchLogMethod");
     function createLogger(parent, level) {
-      var logger = Object.assign(parent.extend(level), {
+      const logger = Object.assign(parent.extend(level), {
         level
       });
       patchLogMethod(parent, logger);
       if (shouldEnable(logger)) {
-        var enabledNamespaces2 = debugObj.disable();
-        debugObj.enable(enabledNamespaces2 + "," + logger.namespace);
+        const enabledNamespaces2 = debug.disable();
+        debug.enable(enabledNamespaces2 + "," + logger.namespace);
       }
       registeredLoggers.add(logger);
       return logger;
     }
     __name(createLogger, "createLogger");
     function shouldEnable(logger) {
-      if (azureLogLevel && levelMap[logger.level] <= levelMap[azureLogLevel]) {
-        return true;
-      } else {
-        return false;
-      }
+      return Boolean(azureLogLevel && levelMap[logger.level] <= levelMap[azureLogLevel]);
     }
     __name(shouldEnable, "shouldEnable");
     function isAzureLogLevel(logLevel) {
@@ -13505,30 +13666,25 @@ var require_dist3 = __commonJS({
 });
 
 // node_modules/@azure/core-auth/dist/index.js
-var require_dist4 = __commonJS({
+var require_dist5 = __commonJS({
   "node_modules/@azure/core-auth/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var AzureKeyCredential = function() {
-      function AzureKeyCredential2(key) {
+    var AzureKeyCredential = class {
+      constructor(key) {
         if (!key) {
           throw new Error("key must be a non-empty string");
         }
         this._key = key;
       }
-      __name(AzureKeyCredential2, "AzureKeyCredential");
-      Object.defineProperty(AzureKeyCredential2.prototype, "key", {
-        get: function() {
-          return this._key;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      AzureKeyCredential2.prototype.update = function(newKey) {
+      get key() {
+        return this._key;
+      }
+      update(newKey) {
         this._key = newKey;
-      };
-      return AzureKeyCredential2;
-    }();
+      }
+    };
+    __name(AzureKeyCredential, "AzureKeyCredential");
     function isDefined(thing) {
       return typeof thing !== "undefined" && thing !== null;
     }
@@ -13537,8 +13693,7 @@ var require_dist4 = __commonJS({
       if (!isDefined(thing) || typeof thing !== "object") {
         return false;
       }
-      for (var _i = 0, properties_1 = properties; _i < properties_1.length; _i++) {
-        var property = properties_1[_i];
+      for (const property of properties) {
         if (!objectHasProperty(thing, property)) {
           return false;
         }
@@ -13550,71 +13705,57 @@ var require_dist4 = __commonJS({
       return typeof thing === "object" && property in thing;
     }
     __name(objectHasProperty, "objectHasProperty");
-    var AzureNamedKeyCredential = function() {
-      function AzureNamedKeyCredential2(name, key) {
+    var AzureNamedKeyCredential = class {
+      constructor(name, key) {
         if (!name || !key) {
           throw new TypeError("name and key must be non-empty strings");
         }
         this._name = name;
         this._key = key;
       }
-      __name(AzureNamedKeyCredential2, "AzureNamedKeyCredential");
-      Object.defineProperty(AzureNamedKeyCredential2.prototype, "key", {
-        get: function() {
-          return this._key;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      Object.defineProperty(AzureNamedKeyCredential2.prototype, "name", {
-        get: function() {
-          return this._name;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      AzureNamedKeyCredential2.prototype.update = function(newName, newKey) {
+      get key() {
+        return this._key;
+      }
+      get name() {
+        return this._name;
+      }
+      update(newName, newKey) {
         if (!newName || !newKey) {
           throw new TypeError("newName and newKey must be non-empty strings");
         }
         this._name = newName;
         this._key = newKey;
-      };
-      return AzureNamedKeyCredential2;
-    }();
+      }
+    };
+    __name(AzureNamedKeyCredential, "AzureNamedKeyCredential");
     function isNamedKeyCredential(credential) {
       return isObjectWithProperties(credential, ["name", "key"]) && typeof credential.key === "string" && typeof credential.name === "string";
     }
     __name(isNamedKeyCredential, "isNamedKeyCredential");
-    var AzureSASCredential = function() {
-      function AzureSASCredential2(signature) {
+    var AzureSASCredential = class {
+      constructor(signature) {
         if (!signature) {
           throw new Error("shared access signature must be a non-empty string");
         }
         this._signature = signature;
       }
-      __name(AzureSASCredential2, "AzureSASCredential");
-      Object.defineProperty(AzureSASCredential2.prototype, "signature", {
-        get: function() {
-          return this._signature;
-        },
-        enumerable: false,
-        configurable: true
-      });
-      AzureSASCredential2.prototype.update = function(newSignature) {
+      get signature() {
+        return this._signature;
+      }
+      update(newSignature) {
         if (!newSignature) {
           throw new Error("shared access signature must be a non-empty string");
         }
         this._signature = newSignature;
-      };
-      return AzureSASCredential2;
-    }();
+      }
+    };
+    __name(AzureSASCredential, "AzureSASCredential");
     function isSASCredential(credential) {
       return isObjectWithProperties(credential, ["signature"]) && typeof credential.signature === "string";
     }
     __name(isSASCredential, "isSASCredential");
     function isTokenCredential(credential) {
-      var castCredential = credential;
+      const castCredential = credential;
       return castCredential && typeof castCredential.getToken === "function" && (castCredential.signRequest === void 0 || castCredential.getToken.length > 0);
     }
     __name(isTokenCredential, "isTokenCredential");
@@ -13624,10386 +13765,6 @@ var require_dist4 = __commonJS({
     exports2.isNamedKeyCredential = isNamedKeyCredential;
     exports2.isSASCredential = isSASCredential;
     exports2.isTokenCredential = isTokenCredential;
-  }
-});
-
-// node_modules/psl/data/rules.json
-var require_rules = __commonJS({
-  "node_modules/psl/data/rules.json"(exports2, module2) {
-    module2.exports = [
-      "ac",
-      "com.ac",
-      "edu.ac",
-      "gov.ac",
-      "net.ac",
-      "mil.ac",
-      "org.ac",
-      "ad",
-      "nom.ad",
-      "ae",
-      "co.ae",
-      "net.ae",
-      "org.ae",
-      "sch.ae",
-      "ac.ae",
-      "gov.ae",
-      "mil.ae",
-      "aero",
-      "accident-investigation.aero",
-      "accident-prevention.aero",
-      "aerobatic.aero",
-      "aeroclub.aero",
-      "aerodrome.aero",
-      "agents.aero",
-      "aircraft.aero",
-      "airline.aero",
-      "airport.aero",
-      "air-surveillance.aero",
-      "airtraffic.aero",
-      "air-traffic-control.aero",
-      "ambulance.aero",
-      "amusement.aero",
-      "association.aero",
-      "author.aero",
-      "ballooning.aero",
-      "broker.aero",
-      "caa.aero",
-      "cargo.aero",
-      "catering.aero",
-      "certification.aero",
-      "championship.aero",
-      "charter.aero",
-      "civilaviation.aero",
-      "club.aero",
-      "conference.aero",
-      "consultant.aero",
-      "consulting.aero",
-      "control.aero",
-      "council.aero",
-      "crew.aero",
-      "design.aero",
-      "dgca.aero",
-      "educator.aero",
-      "emergency.aero",
-      "engine.aero",
-      "engineer.aero",
-      "entertainment.aero",
-      "equipment.aero",
-      "exchange.aero",
-      "express.aero",
-      "federation.aero",
-      "flight.aero",
-      "freight.aero",
-      "fuel.aero",
-      "gliding.aero",
-      "government.aero",
-      "groundhandling.aero",
-      "group.aero",
-      "hanggliding.aero",
-      "homebuilt.aero",
-      "insurance.aero",
-      "journal.aero",
-      "journalist.aero",
-      "leasing.aero",
-      "logistics.aero",
-      "magazine.aero",
-      "maintenance.aero",
-      "media.aero",
-      "microlight.aero",
-      "modelling.aero",
-      "navigation.aero",
-      "parachuting.aero",
-      "paragliding.aero",
-      "passenger-association.aero",
-      "pilot.aero",
-      "press.aero",
-      "production.aero",
-      "recreation.aero",
-      "repbody.aero",
-      "res.aero",
-      "research.aero",
-      "rotorcraft.aero",
-      "safety.aero",
-      "scientist.aero",
-      "services.aero",
-      "show.aero",
-      "skydiving.aero",
-      "software.aero",
-      "student.aero",
-      "trader.aero",
-      "trading.aero",
-      "trainer.aero",
-      "union.aero",
-      "workinggroup.aero",
-      "works.aero",
-      "af",
-      "gov.af",
-      "com.af",
-      "org.af",
-      "net.af",
-      "edu.af",
-      "ag",
-      "com.ag",
-      "org.ag",
-      "net.ag",
-      "co.ag",
-      "nom.ag",
-      "ai",
-      "off.ai",
-      "com.ai",
-      "net.ai",
-      "org.ai",
-      "al",
-      "com.al",
-      "edu.al",
-      "gov.al",
-      "mil.al",
-      "net.al",
-      "org.al",
-      "am",
-      "co.am",
-      "com.am",
-      "commune.am",
-      "net.am",
-      "org.am",
-      "ao",
-      "ed.ao",
-      "gv.ao",
-      "og.ao",
-      "co.ao",
-      "pb.ao",
-      "it.ao",
-      "aq",
-      "ar",
-      "com.ar",
-      "edu.ar",
-      "gob.ar",
-      "gov.ar",
-      "int.ar",
-      "mil.ar",
-      "musica.ar",
-      "net.ar",
-      "org.ar",
-      "tur.ar",
-      "arpa",
-      "e164.arpa",
-      "in-addr.arpa",
-      "ip6.arpa",
-      "iris.arpa",
-      "uri.arpa",
-      "urn.arpa",
-      "as",
-      "gov.as",
-      "asia",
-      "at",
-      "ac.at",
-      "co.at",
-      "gv.at",
-      "or.at",
-      "au",
-      "com.au",
-      "net.au",
-      "org.au",
-      "edu.au",
-      "gov.au",
-      "asn.au",
-      "id.au",
-      "info.au",
-      "conf.au",
-      "oz.au",
-      "act.au",
-      "nsw.au",
-      "nt.au",
-      "qld.au",
-      "sa.au",
-      "tas.au",
-      "vic.au",
-      "wa.au",
-      "act.edu.au",
-      "catholic.edu.au",
-      "nsw.edu.au",
-      "nt.edu.au",
-      "qld.edu.au",
-      "sa.edu.au",
-      "tas.edu.au",
-      "vic.edu.au",
-      "wa.edu.au",
-      "qld.gov.au",
-      "sa.gov.au",
-      "tas.gov.au",
-      "vic.gov.au",
-      "wa.gov.au",
-      "education.tas.edu.au",
-      "schools.nsw.edu.au",
-      "aw",
-      "com.aw",
-      "ax",
-      "az",
-      "com.az",
-      "net.az",
-      "int.az",
-      "gov.az",
-      "org.az",
-      "edu.az",
-      "info.az",
-      "pp.az",
-      "mil.az",
-      "name.az",
-      "pro.az",
-      "biz.az",
-      "ba",
-      "com.ba",
-      "edu.ba",
-      "gov.ba",
-      "mil.ba",
-      "net.ba",
-      "org.ba",
-      "bb",
-      "biz.bb",
-      "co.bb",
-      "com.bb",
-      "edu.bb",
-      "gov.bb",
-      "info.bb",
-      "net.bb",
-      "org.bb",
-      "store.bb",
-      "tv.bb",
-      "*.bd",
-      "be",
-      "ac.be",
-      "bf",
-      "gov.bf",
-      "bg",
-      "a.bg",
-      "b.bg",
-      "c.bg",
-      "d.bg",
-      "e.bg",
-      "f.bg",
-      "g.bg",
-      "h.bg",
-      "i.bg",
-      "j.bg",
-      "k.bg",
-      "l.bg",
-      "m.bg",
-      "n.bg",
-      "o.bg",
-      "p.bg",
-      "q.bg",
-      "r.bg",
-      "s.bg",
-      "t.bg",
-      "u.bg",
-      "v.bg",
-      "w.bg",
-      "x.bg",
-      "y.bg",
-      "z.bg",
-      "0.bg",
-      "1.bg",
-      "2.bg",
-      "3.bg",
-      "4.bg",
-      "5.bg",
-      "6.bg",
-      "7.bg",
-      "8.bg",
-      "9.bg",
-      "bh",
-      "com.bh",
-      "edu.bh",
-      "net.bh",
-      "org.bh",
-      "gov.bh",
-      "bi",
-      "co.bi",
-      "com.bi",
-      "edu.bi",
-      "or.bi",
-      "org.bi",
-      "biz",
-      "bj",
-      "asso.bj",
-      "barreau.bj",
-      "gouv.bj",
-      "bm",
-      "com.bm",
-      "edu.bm",
-      "gov.bm",
-      "net.bm",
-      "org.bm",
-      "bn",
-      "com.bn",
-      "edu.bn",
-      "gov.bn",
-      "net.bn",
-      "org.bn",
-      "bo",
-      "com.bo",
-      "edu.bo",
-      "gob.bo",
-      "int.bo",
-      "org.bo",
-      "net.bo",
-      "mil.bo",
-      "tv.bo",
-      "web.bo",
-      "academia.bo",
-      "agro.bo",
-      "arte.bo",
-      "blog.bo",
-      "bolivia.bo",
-      "ciencia.bo",
-      "cooperativa.bo",
-      "democracia.bo",
-      "deporte.bo",
-      "ecologia.bo",
-      "economia.bo",
-      "empresa.bo",
-      "indigena.bo",
-      "industria.bo",
-      "info.bo",
-      "medicina.bo",
-      "movimiento.bo",
-      "musica.bo",
-      "natural.bo",
-      "nombre.bo",
-      "noticias.bo",
-      "patria.bo",
-      "politica.bo",
-      "profesional.bo",
-      "plurinacional.bo",
-      "pueblo.bo",
-      "revista.bo",
-      "salud.bo",
-      "tecnologia.bo",
-      "tksat.bo",
-      "transporte.bo",
-      "wiki.bo",
-      "br",
-      "9guacu.br",
-      "abc.br",
-      "adm.br",
-      "adv.br",
-      "agr.br",
-      "aju.br",
-      "am.br",
-      "anani.br",
-      "aparecida.br",
-      "arq.br",
-      "art.br",
-      "ato.br",
-      "b.br",
-      "barueri.br",
-      "belem.br",
-      "bhz.br",
-      "bio.br",
-      "blog.br",
-      "bmd.br",
-      "boavista.br",
-      "bsb.br",
-      "campinagrande.br",
-      "campinas.br",
-      "caxias.br",
-      "cim.br",
-      "cng.br",
-      "cnt.br",
-      "com.br",
-      "contagem.br",
-      "coop.br",
-      "cri.br",
-      "cuiaba.br",
-      "curitiba.br",
-      "def.br",
-      "ecn.br",
-      "eco.br",
-      "edu.br",
-      "emp.br",
-      "eng.br",
-      "esp.br",
-      "etc.br",
-      "eti.br",
-      "far.br",
-      "feira.br",
-      "flog.br",
-      "floripa.br",
-      "fm.br",
-      "fnd.br",
-      "fortal.br",
-      "fot.br",
-      "foz.br",
-      "fst.br",
-      "g12.br",
-      "ggf.br",
-      "goiania.br",
-      "gov.br",
-      "ac.gov.br",
-      "al.gov.br",
-      "am.gov.br",
-      "ap.gov.br",
-      "ba.gov.br",
-      "ce.gov.br",
-      "df.gov.br",
-      "es.gov.br",
-      "go.gov.br",
-      "ma.gov.br",
-      "mg.gov.br",
-      "ms.gov.br",
-      "mt.gov.br",
-      "pa.gov.br",
-      "pb.gov.br",
-      "pe.gov.br",
-      "pi.gov.br",
-      "pr.gov.br",
-      "rj.gov.br",
-      "rn.gov.br",
-      "ro.gov.br",
-      "rr.gov.br",
-      "rs.gov.br",
-      "sc.gov.br",
-      "se.gov.br",
-      "sp.gov.br",
-      "to.gov.br",
-      "gru.br",
-      "imb.br",
-      "ind.br",
-      "inf.br",
-      "jab.br",
-      "jampa.br",
-      "jdf.br",
-      "joinville.br",
-      "jor.br",
-      "jus.br",
-      "leg.br",
-      "lel.br",
-      "londrina.br",
-      "macapa.br",
-      "maceio.br",
-      "manaus.br",
-      "maringa.br",
-      "mat.br",
-      "med.br",
-      "mil.br",
-      "morena.br",
-      "mp.br",
-      "mus.br",
-      "natal.br",
-      "net.br",
-      "niteroi.br",
-      "*.nom.br",
-      "not.br",
-      "ntr.br",
-      "odo.br",
-      "ong.br",
-      "org.br",
-      "osasco.br",
-      "palmas.br",
-      "poa.br",
-      "ppg.br",
-      "pro.br",
-      "psc.br",
-      "psi.br",
-      "pvh.br",
-      "qsl.br",
-      "radio.br",
-      "rec.br",
-      "recife.br",
-      "ribeirao.br",
-      "rio.br",
-      "riobranco.br",
-      "riopreto.br",
-      "salvador.br",
-      "sampa.br",
-      "santamaria.br",
-      "santoandre.br",
-      "saobernardo.br",
-      "saogonca.br",
-      "sjc.br",
-      "slg.br",
-      "slz.br",
-      "sorocaba.br",
-      "srv.br",
-      "taxi.br",
-      "tc.br",
-      "teo.br",
-      "the.br",
-      "tmp.br",
-      "trd.br",
-      "tur.br",
-      "tv.br",
-      "udi.br",
-      "vet.br",
-      "vix.br",
-      "vlog.br",
-      "wiki.br",
-      "zlg.br",
-      "bs",
-      "com.bs",
-      "net.bs",
-      "org.bs",
-      "edu.bs",
-      "gov.bs",
-      "bt",
-      "com.bt",
-      "edu.bt",
-      "gov.bt",
-      "net.bt",
-      "org.bt",
-      "bv",
-      "bw",
-      "co.bw",
-      "org.bw",
-      "by",
-      "gov.by",
-      "mil.by",
-      "com.by",
-      "of.by",
-      "bz",
-      "com.bz",
-      "net.bz",
-      "org.bz",
-      "edu.bz",
-      "gov.bz",
-      "ca",
-      "ab.ca",
-      "bc.ca",
-      "mb.ca",
-      "nb.ca",
-      "nf.ca",
-      "nl.ca",
-      "ns.ca",
-      "nt.ca",
-      "nu.ca",
-      "on.ca",
-      "pe.ca",
-      "qc.ca",
-      "sk.ca",
-      "yk.ca",
-      "gc.ca",
-      "cat",
-      "cc",
-      "cd",
-      "gov.cd",
-      "cf",
-      "cg",
-      "ch",
-      "ci",
-      "org.ci",
-      "or.ci",
-      "com.ci",
-      "co.ci",
-      "edu.ci",
-      "ed.ci",
-      "ac.ci",
-      "net.ci",
-      "go.ci",
-      "asso.ci",
-      "a\xE9roport.ci",
-      "int.ci",
-      "presse.ci",
-      "md.ci",
-      "gouv.ci",
-      "*.ck",
-      "!www.ck",
-      "cl",
-      "aprendemas.cl",
-      "co.cl",
-      "gob.cl",
-      "gov.cl",
-      "mil.cl",
-      "cm",
-      "co.cm",
-      "com.cm",
-      "gov.cm",
-      "net.cm",
-      "cn",
-      "ac.cn",
-      "com.cn",
-      "edu.cn",
-      "gov.cn",
-      "net.cn",
-      "org.cn",
-      "mil.cn",
-      "\u516C\u53F8.cn",
-      "\u7F51\u7EDC.cn",
-      "\u7DB2\u7D61.cn",
-      "ah.cn",
-      "bj.cn",
-      "cq.cn",
-      "fj.cn",
-      "gd.cn",
-      "gs.cn",
-      "gz.cn",
-      "gx.cn",
-      "ha.cn",
-      "hb.cn",
-      "he.cn",
-      "hi.cn",
-      "hl.cn",
-      "hn.cn",
-      "jl.cn",
-      "js.cn",
-      "jx.cn",
-      "ln.cn",
-      "nm.cn",
-      "nx.cn",
-      "qh.cn",
-      "sc.cn",
-      "sd.cn",
-      "sh.cn",
-      "sn.cn",
-      "sx.cn",
-      "tj.cn",
-      "xj.cn",
-      "xz.cn",
-      "yn.cn",
-      "zj.cn",
-      "hk.cn",
-      "mo.cn",
-      "tw.cn",
-      "co",
-      "arts.co",
-      "com.co",
-      "edu.co",
-      "firm.co",
-      "gov.co",
-      "info.co",
-      "int.co",
-      "mil.co",
-      "net.co",
-      "nom.co",
-      "org.co",
-      "rec.co",
-      "web.co",
-      "com",
-      "coop",
-      "cr",
-      "ac.cr",
-      "co.cr",
-      "ed.cr",
-      "fi.cr",
-      "go.cr",
-      "or.cr",
-      "sa.cr",
-      "cu",
-      "com.cu",
-      "edu.cu",
-      "org.cu",
-      "net.cu",
-      "gov.cu",
-      "inf.cu",
-      "cv",
-      "cw",
-      "com.cw",
-      "edu.cw",
-      "net.cw",
-      "org.cw",
-      "cx",
-      "gov.cx",
-      "cy",
-      "ac.cy",
-      "biz.cy",
-      "com.cy",
-      "ekloges.cy",
-      "gov.cy",
-      "ltd.cy",
-      "name.cy",
-      "net.cy",
-      "org.cy",
-      "parliament.cy",
-      "press.cy",
-      "pro.cy",
-      "tm.cy",
-      "cz",
-      "de",
-      "dj",
-      "dk",
-      "dm",
-      "com.dm",
-      "net.dm",
-      "org.dm",
-      "edu.dm",
-      "gov.dm",
-      "do",
-      "art.do",
-      "com.do",
-      "edu.do",
-      "gob.do",
-      "gov.do",
-      "mil.do",
-      "net.do",
-      "org.do",
-      "sld.do",
-      "web.do",
-      "dz",
-      "com.dz",
-      "org.dz",
-      "net.dz",
-      "gov.dz",
-      "edu.dz",
-      "asso.dz",
-      "pol.dz",
-      "art.dz",
-      "ec",
-      "com.ec",
-      "info.ec",
-      "net.ec",
-      "fin.ec",
-      "k12.ec",
-      "med.ec",
-      "pro.ec",
-      "org.ec",
-      "edu.ec",
-      "gov.ec",
-      "gob.ec",
-      "mil.ec",
-      "edu",
-      "ee",
-      "edu.ee",
-      "gov.ee",
-      "riik.ee",
-      "lib.ee",
-      "med.ee",
-      "com.ee",
-      "pri.ee",
-      "aip.ee",
-      "org.ee",
-      "fie.ee",
-      "eg",
-      "com.eg",
-      "edu.eg",
-      "eun.eg",
-      "gov.eg",
-      "mil.eg",
-      "name.eg",
-      "net.eg",
-      "org.eg",
-      "sci.eg",
-      "*.er",
-      "es",
-      "com.es",
-      "nom.es",
-      "org.es",
-      "gob.es",
-      "edu.es",
-      "et",
-      "com.et",
-      "gov.et",
-      "org.et",
-      "edu.et",
-      "biz.et",
-      "name.et",
-      "info.et",
-      "net.et",
-      "eu",
-      "fi",
-      "aland.fi",
-      "fj",
-      "ac.fj",
-      "biz.fj",
-      "com.fj",
-      "gov.fj",
-      "info.fj",
-      "mil.fj",
-      "name.fj",
-      "net.fj",
-      "org.fj",
-      "pro.fj",
-      "*.fk",
-      "fm",
-      "fo",
-      "fr",
-      "asso.fr",
-      "com.fr",
-      "gouv.fr",
-      "nom.fr",
-      "prd.fr",
-      "tm.fr",
-      "aeroport.fr",
-      "avocat.fr",
-      "avoues.fr",
-      "cci.fr",
-      "chambagri.fr",
-      "chirurgiens-dentistes.fr",
-      "experts-comptables.fr",
-      "geometre-expert.fr",
-      "greta.fr",
-      "huissier-justice.fr",
-      "medecin.fr",
-      "notaires.fr",
-      "pharmacien.fr",
-      "port.fr",
-      "veterinaire.fr",
-      "ga",
-      "gb",
-      "gd",
-      "ge",
-      "com.ge",
-      "edu.ge",
-      "gov.ge",
-      "org.ge",
-      "mil.ge",
-      "net.ge",
-      "pvt.ge",
-      "gf",
-      "gg",
-      "co.gg",
-      "net.gg",
-      "org.gg",
-      "gh",
-      "com.gh",
-      "edu.gh",
-      "gov.gh",
-      "org.gh",
-      "mil.gh",
-      "gi",
-      "com.gi",
-      "ltd.gi",
-      "gov.gi",
-      "mod.gi",
-      "edu.gi",
-      "org.gi",
-      "gl",
-      "co.gl",
-      "com.gl",
-      "edu.gl",
-      "net.gl",
-      "org.gl",
-      "gm",
-      "gn",
-      "ac.gn",
-      "com.gn",
-      "edu.gn",
-      "gov.gn",
-      "org.gn",
-      "net.gn",
-      "gov",
-      "gp",
-      "com.gp",
-      "net.gp",
-      "mobi.gp",
-      "edu.gp",
-      "org.gp",
-      "asso.gp",
-      "gq",
-      "gr",
-      "com.gr",
-      "edu.gr",
-      "net.gr",
-      "org.gr",
-      "gov.gr",
-      "gs",
-      "gt",
-      "com.gt",
-      "edu.gt",
-      "gob.gt",
-      "ind.gt",
-      "mil.gt",
-      "net.gt",
-      "org.gt",
-      "gu",
-      "com.gu",
-      "edu.gu",
-      "gov.gu",
-      "guam.gu",
-      "info.gu",
-      "net.gu",
-      "org.gu",
-      "web.gu",
-      "gw",
-      "gy",
-      "co.gy",
-      "com.gy",
-      "edu.gy",
-      "gov.gy",
-      "net.gy",
-      "org.gy",
-      "hk",
-      "com.hk",
-      "edu.hk",
-      "gov.hk",
-      "idv.hk",
-      "net.hk",
-      "org.hk",
-      "\u516C\u53F8.hk",
-      "\u6559\u80B2.hk",
-      "\u654E\u80B2.hk",
-      "\u653F\u5E9C.hk",
-      "\u500B\u4EBA.hk",
-      "\u4E2A\u4EBA.hk",
-      "\u7B87\u4EBA.hk",
-      "\u7DB2\u7EDC.hk",
-      "\u7F51\u7EDC.hk",
-      "\u7EC4\u7E54.hk",
-      "\u7DB2\u7D61.hk",
-      "\u7F51\u7D61.hk",
-      "\u7EC4\u7EC7.hk",
-      "\u7D44\u7E54.hk",
-      "\u7D44\u7EC7.hk",
-      "hm",
-      "hn",
-      "com.hn",
-      "edu.hn",
-      "org.hn",
-      "net.hn",
-      "mil.hn",
-      "gob.hn",
-      "hr",
-      "iz.hr",
-      "from.hr",
-      "name.hr",
-      "com.hr",
-      "ht",
-      "com.ht",
-      "shop.ht",
-      "firm.ht",
-      "info.ht",
-      "adult.ht",
-      "net.ht",
-      "pro.ht",
-      "org.ht",
-      "med.ht",
-      "art.ht",
-      "coop.ht",
-      "pol.ht",
-      "asso.ht",
-      "edu.ht",
-      "rel.ht",
-      "gouv.ht",
-      "perso.ht",
-      "hu",
-      "co.hu",
-      "info.hu",
-      "org.hu",
-      "priv.hu",
-      "sport.hu",
-      "tm.hu",
-      "2000.hu",
-      "agrar.hu",
-      "bolt.hu",
-      "casino.hu",
-      "city.hu",
-      "erotica.hu",
-      "erotika.hu",
-      "film.hu",
-      "forum.hu",
-      "games.hu",
-      "hotel.hu",
-      "ingatlan.hu",
-      "jogasz.hu",
-      "konyvelo.hu",
-      "lakas.hu",
-      "media.hu",
-      "news.hu",
-      "reklam.hu",
-      "sex.hu",
-      "shop.hu",
-      "suli.hu",
-      "szex.hu",
-      "tozsde.hu",
-      "utazas.hu",
-      "video.hu",
-      "id",
-      "ac.id",
-      "biz.id",
-      "co.id",
-      "desa.id",
-      "go.id",
-      "mil.id",
-      "my.id",
-      "net.id",
-      "or.id",
-      "ponpes.id",
-      "sch.id",
-      "web.id",
-      "ie",
-      "gov.ie",
-      "il",
-      "ac.il",
-      "co.il",
-      "gov.il",
-      "idf.il",
-      "k12.il",
-      "muni.il",
-      "net.il",
-      "org.il",
-      "im",
-      "ac.im",
-      "co.im",
-      "com.im",
-      "ltd.co.im",
-      "net.im",
-      "org.im",
-      "plc.co.im",
-      "tt.im",
-      "tv.im",
-      "in",
-      "co.in",
-      "firm.in",
-      "net.in",
-      "org.in",
-      "gen.in",
-      "ind.in",
-      "nic.in",
-      "ac.in",
-      "edu.in",
-      "res.in",
-      "gov.in",
-      "mil.in",
-      "info",
-      "int",
-      "eu.int",
-      "io",
-      "com.io",
-      "iq",
-      "gov.iq",
-      "edu.iq",
-      "mil.iq",
-      "com.iq",
-      "org.iq",
-      "net.iq",
-      "ir",
-      "ac.ir",
-      "co.ir",
-      "gov.ir",
-      "id.ir",
-      "net.ir",
-      "org.ir",
-      "sch.ir",
-      "\u0627\u06CC\u0631\u0627\u0646.ir",
-      "\u0627\u064A\u0631\u0627\u0646.ir",
-      "is",
-      "net.is",
-      "com.is",
-      "edu.is",
-      "gov.is",
-      "org.is",
-      "int.is",
-      "it",
-      "gov.it",
-      "edu.it",
-      "abr.it",
-      "abruzzo.it",
-      "aosta-valley.it",
-      "aostavalley.it",
-      "bas.it",
-      "basilicata.it",
-      "cal.it",
-      "calabria.it",
-      "cam.it",
-      "campania.it",
-      "emilia-romagna.it",
-      "emiliaromagna.it",
-      "emr.it",
-      "friuli-v-giulia.it",
-      "friuli-ve-giulia.it",
-      "friuli-vegiulia.it",
-      "friuli-venezia-giulia.it",
-      "friuli-veneziagiulia.it",
-      "friuli-vgiulia.it",
-      "friuliv-giulia.it",
-      "friulive-giulia.it",
-      "friulivegiulia.it",
-      "friulivenezia-giulia.it",
-      "friuliveneziagiulia.it",
-      "friulivgiulia.it",
-      "fvg.it",
-      "laz.it",
-      "lazio.it",
-      "lig.it",
-      "liguria.it",
-      "lom.it",
-      "lombardia.it",
-      "lombardy.it",
-      "lucania.it",
-      "mar.it",
-      "marche.it",
-      "mol.it",
-      "molise.it",
-      "piedmont.it",
-      "piemonte.it",
-      "pmn.it",
-      "pug.it",
-      "puglia.it",
-      "sar.it",
-      "sardegna.it",
-      "sardinia.it",
-      "sic.it",
-      "sicilia.it",
-      "sicily.it",
-      "taa.it",
-      "tos.it",
-      "toscana.it",
-      "trentin-sud-tirol.it",
-      "trentin-s\xFCd-tirol.it",
-      "trentin-sudtirol.it",
-      "trentin-s\xFCdtirol.it",
-      "trentin-sued-tirol.it",
-      "trentin-suedtirol.it",
-      "trentino-a-adige.it",
-      "trentino-aadige.it",
-      "trentino-alto-adige.it",
-      "trentino-altoadige.it",
-      "trentino-s-tirol.it",
-      "trentino-stirol.it",
-      "trentino-sud-tirol.it",
-      "trentino-s\xFCd-tirol.it",
-      "trentino-sudtirol.it",
-      "trentino-s\xFCdtirol.it",
-      "trentino-sued-tirol.it",
-      "trentino-suedtirol.it",
-      "trentino.it",
-      "trentinoa-adige.it",
-      "trentinoaadige.it",
-      "trentinoalto-adige.it",
-      "trentinoaltoadige.it",
-      "trentinos-tirol.it",
-      "trentinostirol.it",
-      "trentinosud-tirol.it",
-      "trentinos\xFCd-tirol.it",
-      "trentinosudtirol.it",
-      "trentinos\xFCdtirol.it",
-      "trentinosued-tirol.it",
-      "trentinosuedtirol.it",
-      "trentinsud-tirol.it",
-      "trentins\xFCd-tirol.it",
-      "trentinsudtirol.it",
-      "trentins\xFCdtirol.it",
-      "trentinsued-tirol.it",
-      "trentinsuedtirol.it",
-      "tuscany.it",
-      "umb.it",
-      "umbria.it",
-      "val-d-aosta.it",
-      "val-daosta.it",
-      "vald-aosta.it",
-      "valdaosta.it",
-      "valle-aosta.it",
-      "valle-d-aosta.it",
-      "valle-daosta.it",
-      "valleaosta.it",
-      "valled-aosta.it",
-      "valledaosta.it",
-      "vallee-aoste.it",
-      "vall\xE9e-aoste.it",
-      "vallee-d-aoste.it",
-      "vall\xE9e-d-aoste.it",
-      "valleeaoste.it",
-      "vall\xE9eaoste.it",
-      "valleedaoste.it",
-      "vall\xE9edaoste.it",
-      "vao.it",
-      "vda.it",
-      "ven.it",
-      "veneto.it",
-      "ag.it",
-      "agrigento.it",
-      "al.it",
-      "alessandria.it",
-      "alto-adige.it",
-      "altoadige.it",
-      "an.it",
-      "ancona.it",
-      "andria-barletta-trani.it",
-      "andria-trani-barletta.it",
-      "andriabarlettatrani.it",
-      "andriatranibarletta.it",
-      "ao.it",
-      "aosta.it",
-      "aoste.it",
-      "ap.it",
-      "aq.it",
-      "aquila.it",
-      "ar.it",
-      "arezzo.it",
-      "ascoli-piceno.it",
-      "ascolipiceno.it",
-      "asti.it",
-      "at.it",
-      "av.it",
-      "avellino.it",
-      "ba.it",
-      "balsan-sudtirol.it",
-      "balsan-s\xFCdtirol.it",
-      "balsan-suedtirol.it",
-      "balsan.it",
-      "bari.it",
-      "barletta-trani-andria.it",
-      "barlettatraniandria.it",
-      "belluno.it",
-      "benevento.it",
-      "bergamo.it",
-      "bg.it",
-      "bi.it",
-      "biella.it",
-      "bl.it",
-      "bn.it",
-      "bo.it",
-      "bologna.it",
-      "bolzano-altoadige.it",
-      "bolzano.it",
-      "bozen-sudtirol.it",
-      "bozen-s\xFCdtirol.it",
-      "bozen-suedtirol.it",
-      "bozen.it",
-      "br.it",
-      "brescia.it",
-      "brindisi.it",
-      "bs.it",
-      "bt.it",
-      "bulsan-sudtirol.it",
-      "bulsan-s\xFCdtirol.it",
-      "bulsan-suedtirol.it",
-      "bulsan.it",
-      "bz.it",
-      "ca.it",
-      "cagliari.it",
-      "caltanissetta.it",
-      "campidano-medio.it",
-      "campidanomedio.it",
-      "campobasso.it",
-      "carbonia-iglesias.it",
-      "carboniaiglesias.it",
-      "carrara-massa.it",
-      "carraramassa.it",
-      "caserta.it",
-      "catania.it",
-      "catanzaro.it",
-      "cb.it",
-      "ce.it",
-      "cesena-forli.it",
-      "cesena-forl\xEC.it",
-      "cesenaforli.it",
-      "cesenaforl\xEC.it",
-      "ch.it",
-      "chieti.it",
-      "ci.it",
-      "cl.it",
-      "cn.it",
-      "co.it",
-      "como.it",
-      "cosenza.it",
-      "cr.it",
-      "cremona.it",
-      "crotone.it",
-      "cs.it",
-      "ct.it",
-      "cuneo.it",
-      "cz.it",
-      "dell-ogliastra.it",
-      "dellogliastra.it",
-      "en.it",
-      "enna.it",
-      "fc.it",
-      "fe.it",
-      "fermo.it",
-      "ferrara.it",
-      "fg.it",
-      "fi.it",
-      "firenze.it",
-      "florence.it",
-      "fm.it",
-      "foggia.it",
-      "forli-cesena.it",
-      "forl\xEC-cesena.it",
-      "forlicesena.it",
-      "forl\xECcesena.it",
-      "fr.it",
-      "frosinone.it",
-      "ge.it",
-      "genoa.it",
-      "genova.it",
-      "go.it",
-      "gorizia.it",
-      "gr.it",
-      "grosseto.it",
-      "iglesias-carbonia.it",
-      "iglesiascarbonia.it",
-      "im.it",
-      "imperia.it",
-      "is.it",
-      "isernia.it",
-      "kr.it",
-      "la-spezia.it",
-      "laquila.it",
-      "laspezia.it",
-      "latina.it",
-      "lc.it",
-      "le.it",
-      "lecce.it",
-      "lecco.it",
-      "li.it",
-      "livorno.it",
-      "lo.it",
-      "lodi.it",
-      "lt.it",
-      "lu.it",
-      "lucca.it",
-      "macerata.it",
-      "mantova.it",
-      "massa-carrara.it",
-      "massacarrara.it",
-      "matera.it",
-      "mb.it",
-      "mc.it",
-      "me.it",
-      "medio-campidano.it",
-      "mediocampidano.it",
-      "messina.it",
-      "mi.it",
-      "milan.it",
-      "milano.it",
-      "mn.it",
-      "mo.it",
-      "modena.it",
-      "monza-brianza.it",
-      "monza-e-della-brianza.it",
-      "monza.it",
-      "monzabrianza.it",
-      "monzaebrianza.it",
-      "monzaedellabrianza.it",
-      "ms.it",
-      "mt.it",
-      "na.it",
-      "naples.it",
-      "napoli.it",
-      "no.it",
-      "novara.it",
-      "nu.it",
-      "nuoro.it",
-      "og.it",
-      "ogliastra.it",
-      "olbia-tempio.it",
-      "olbiatempio.it",
-      "or.it",
-      "oristano.it",
-      "ot.it",
-      "pa.it",
-      "padova.it",
-      "padua.it",
-      "palermo.it",
-      "parma.it",
-      "pavia.it",
-      "pc.it",
-      "pd.it",
-      "pe.it",
-      "perugia.it",
-      "pesaro-urbino.it",
-      "pesarourbino.it",
-      "pescara.it",
-      "pg.it",
-      "pi.it",
-      "piacenza.it",
-      "pisa.it",
-      "pistoia.it",
-      "pn.it",
-      "po.it",
-      "pordenone.it",
-      "potenza.it",
-      "pr.it",
-      "prato.it",
-      "pt.it",
-      "pu.it",
-      "pv.it",
-      "pz.it",
-      "ra.it",
-      "ragusa.it",
-      "ravenna.it",
-      "rc.it",
-      "re.it",
-      "reggio-calabria.it",
-      "reggio-emilia.it",
-      "reggiocalabria.it",
-      "reggioemilia.it",
-      "rg.it",
-      "ri.it",
-      "rieti.it",
-      "rimini.it",
-      "rm.it",
-      "rn.it",
-      "ro.it",
-      "roma.it",
-      "rome.it",
-      "rovigo.it",
-      "sa.it",
-      "salerno.it",
-      "sassari.it",
-      "savona.it",
-      "si.it",
-      "siena.it",
-      "siracusa.it",
-      "so.it",
-      "sondrio.it",
-      "sp.it",
-      "sr.it",
-      "ss.it",
-      "suedtirol.it",
-      "s\xFCdtirol.it",
-      "sv.it",
-      "ta.it",
-      "taranto.it",
-      "te.it",
-      "tempio-olbia.it",
-      "tempioolbia.it",
-      "teramo.it",
-      "terni.it",
-      "tn.it",
-      "to.it",
-      "torino.it",
-      "tp.it",
-      "tr.it",
-      "trani-andria-barletta.it",
-      "trani-barletta-andria.it",
-      "traniandriabarletta.it",
-      "tranibarlettaandria.it",
-      "trapani.it",
-      "trento.it",
-      "treviso.it",
-      "trieste.it",
-      "ts.it",
-      "turin.it",
-      "tv.it",
-      "ud.it",
-      "udine.it",
-      "urbino-pesaro.it",
-      "urbinopesaro.it",
-      "va.it",
-      "varese.it",
-      "vb.it",
-      "vc.it",
-      "ve.it",
-      "venezia.it",
-      "venice.it",
-      "verbania.it",
-      "vercelli.it",
-      "verona.it",
-      "vi.it",
-      "vibo-valentia.it",
-      "vibovalentia.it",
-      "vicenza.it",
-      "viterbo.it",
-      "vr.it",
-      "vs.it",
-      "vt.it",
-      "vv.it",
-      "je",
-      "co.je",
-      "net.je",
-      "org.je",
-      "*.jm",
-      "jo",
-      "com.jo",
-      "org.jo",
-      "net.jo",
-      "edu.jo",
-      "sch.jo",
-      "gov.jo",
-      "mil.jo",
-      "name.jo",
-      "jobs",
-      "jp",
-      "ac.jp",
-      "ad.jp",
-      "co.jp",
-      "ed.jp",
-      "go.jp",
-      "gr.jp",
-      "lg.jp",
-      "ne.jp",
-      "or.jp",
-      "aichi.jp",
-      "akita.jp",
-      "aomori.jp",
-      "chiba.jp",
-      "ehime.jp",
-      "fukui.jp",
-      "fukuoka.jp",
-      "fukushima.jp",
-      "gifu.jp",
-      "gunma.jp",
-      "hiroshima.jp",
-      "hokkaido.jp",
-      "hyogo.jp",
-      "ibaraki.jp",
-      "ishikawa.jp",
-      "iwate.jp",
-      "kagawa.jp",
-      "kagoshima.jp",
-      "kanagawa.jp",
-      "kochi.jp",
-      "kumamoto.jp",
-      "kyoto.jp",
-      "mie.jp",
-      "miyagi.jp",
-      "miyazaki.jp",
-      "nagano.jp",
-      "nagasaki.jp",
-      "nara.jp",
-      "niigata.jp",
-      "oita.jp",
-      "okayama.jp",
-      "okinawa.jp",
-      "osaka.jp",
-      "saga.jp",
-      "saitama.jp",
-      "shiga.jp",
-      "shimane.jp",
-      "shizuoka.jp",
-      "tochigi.jp",
-      "tokushima.jp",
-      "tokyo.jp",
-      "tottori.jp",
-      "toyama.jp",
-      "wakayama.jp",
-      "yamagata.jp",
-      "yamaguchi.jp",
-      "yamanashi.jp",
-      "\u6803\u6728.jp",
-      "\u611B\u77E5.jp",
-      "\u611B\u5A9B.jp",
-      "\u5175\u5EAB.jp",
-      "\u718A\u672C.jp",
-      "\u8328\u57CE.jp",
-      "\u5317\u6D77\u9053.jp",
-      "\u5343\u8449.jp",
-      "\u548C\u6B4C\u5C71.jp",
-      "\u9577\u5D0E.jp",
-      "\u9577\u91CE.jp",
-      "\u65B0\u6F5F.jp",
-      "\u9752\u68EE.jp",
-      "\u9759\u5CA1.jp",
-      "\u6771\u4EAC.jp",
-      "\u77F3\u5DDD.jp",
-      "\u57FC\u7389.jp",
-      "\u4E09\u91CD.jp",
-      "\u4EAC\u90FD.jp",
-      "\u4F50\u8CC0.jp",
-      "\u5927\u5206.jp",
-      "\u5927\u962A.jp",
-      "\u5948\u826F.jp",
-      "\u5BAE\u57CE.jp",
-      "\u5BAE\u5D0E.jp",
-      "\u5BCC\u5C71.jp",
-      "\u5C71\u53E3.jp",
-      "\u5C71\u5F62.jp",
-      "\u5C71\u68A8.jp",
-      "\u5CA9\u624B.jp",
-      "\u5C90\u961C.jp",
-      "\u5CA1\u5C71.jp",
-      "\u5CF6\u6839.jp",
-      "\u5E83\u5CF6.jp",
-      "\u5FB3\u5CF6.jp",
-      "\u6C96\u7E04.jp",
-      "\u6ECB\u8CC0.jp",
-      "\u795E\u5948\u5DDD.jp",
-      "\u798F\u4E95.jp",
-      "\u798F\u5CA1.jp",
-      "\u798F\u5CF6.jp",
-      "\u79CB\u7530.jp",
-      "\u7FA4\u99AC.jp",
-      "\u9999\u5DDD.jp",
-      "\u9AD8\u77E5.jp",
-      "\u9CE5\u53D6.jp",
-      "\u9E7F\u5150\u5CF6.jp",
-      "*.kawasaki.jp",
-      "*.kitakyushu.jp",
-      "*.kobe.jp",
-      "*.nagoya.jp",
-      "*.sapporo.jp",
-      "*.sendai.jp",
-      "*.yokohama.jp",
-      "!city.kawasaki.jp",
-      "!city.kitakyushu.jp",
-      "!city.kobe.jp",
-      "!city.nagoya.jp",
-      "!city.sapporo.jp",
-      "!city.sendai.jp",
-      "!city.yokohama.jp",
-      "aisai.aichi.jp",
-      "ama.aichi.jp",
-      "anjo.aichi.jp",
-      "asuke.aichi.jp",
-      "chiryu.aichi.jp",
-      "chita.aichi.jp",
-      "fuso.aichi.jp",
-      "gamagori.aichi.jp",
-      "handa.aichi.jp",
-      "hazu.aichi.jp",
-      "hekinan.aichi.jp",
-      "higashiura.aichi.jp",
-      "ichinomiya.aichi.jp",
-      "inazawa.aichi.jp",
-      "inuyama.aichi.jp",
-      "isshiki.aichi.jp",
-      "iwakura.aichi.jp",
-      "kanie.aichi.jp",
-      "kariya.aichi.jp",
-      "kasugai.aichi.jp",
-      "kira.aichi.jp",
-      "kiyosu.aichi.jp",
-      "komaki.aichi.jp",
-      "konan.aichi.jp",
-      "kota.aichi.jp",
-      "mihama.aichi.jp",
-      "miyoshi.aichi.jp",
-      "nishio.aichi.jp",
-      "nisshin.aichi.jp",
-      "obu.aichi.jp",
-      "oguchi.aichi.jp",
-      "oharu.aichi.jp",
-      "okazaki.aichi.jp",
-      "owariasahi.aichi.jp",
-      "seto.aichi.jp",
-      "shikatsu.aichi.jp",
-      "shinshiro.aichi.jp",
-      "shitara.aichi.jp",
-      "tahara.aichi.jp",
-      "takahama.aichi.jp",
-      "tobishima.aichi.jp",
-      "toei.aichi.jp",
-      "togo.aichi.jp",
-      "tokai.aichi.jp",
-      "tokoname.aichi.jp",
-      "toyoake.aichi.jp",
-      "toyohashi.aichi.jp",
-      "toyokawa.aichi.jp",
-      "toyone.aichi.jp",
-      "toyota.aichi.jp",
-      "tsushima.aichi.jp",
-      "yatomi.aichi.jp",
-      "akita.akita.jp",
-      "daisen.akita.jp",
-      "fujisato.akita.jp",
-      "gojome.akita.jp",
-      "hachirogata.akita.jp",
-      "happou.akita.jp",
-      "higashinaruse.akita.jp",
-      "honjo.akita.jp",
-      "honjyo.akita.jp",
-      "ikawa.akita.jp",
-      "kamikoani.akita.jp",
-      "kamioka.akita.jp",
-      "katagami.akita.jp",
-      "kazuno.akita.jp",
-      "kitaakita.akita.jp",
-      "kosaka.akita.jp",
-      "kyowa.akita.jp",
-      "misato.akita.jp",
-      "mitane.akita.jp",
-      "moriyoshi.akita.jp",
-      "nikaho.akita.jp",
-      "noshiro.akita.jp",
-      "odate.akita.jp",
-      "oga.akita.jp",
-      "ogata.akita.jp",
-      "semboku.akita.jp",
-      "yokote.akita.jp",
-      "yurihonjo.akita.jp",
-      "aomori.aomori.jp",
-      "gonohe.aomori.jp",
-      "hachinohe.aomori.jp",
-      "hashikami.aomori.jp",
-      "hiranai.aomori.jp",
-      "hirosaki.aomori.jp",
-      "itayanagi.aomori.jp",
-      "kuroishi.aomori.jp",
-      "misawa.aomori.jp",
-      "mutsu.aomori.jp",
-      "nakadomari.aomori.jp",
-      "noheji.aomori.jp",
-      "oirase.aomori.jp",
-      "owani.aomori.jp",
-      "rokunohe.aomori.jp",
-      "sannohe.aomori.jp",
-      "shichinohe.aomori.jp",
-      "shingo.aomori.jp",
-      "takko.aomori.jp",
-      "towada.aomori.jp",
-      "tsugaru.aomori.jp",
-      "tsuruta.aomori.jp",
-      "abiko.chiba.jp",
-      "asahi.chiba.jp",
-      "chonan.chiba.jp",
-      "chosei.chiba.jp",
-      "choshi.chiba.jp",
-      "chuo.chiba.jp",
-      "funabashi.chiba.jp",
-      "futtsu.chiba.jp",
-      "hanamigawa.chiba.jp",
-      "ichihara.chiba.jp",
-      "ichikawa.chiba.jp",
-      "ichinomiya.chiba.jp",
-      "inzai.chiba.jp",
-      "isumi.chiba.jp",
-      "kamagaya.chiba.jp",
-      "kamogawa.chiba.jp",
-      "kashiwa.chiba.jp",
-      "katori.chiba.jp",
-      "katsuura.chiba.jp",
-      "kimitsu.chiba.jp",
-      "kisarazu.chiba.jp",
-      "kozaki.chiba.jp",
-      "kujukuri.chiba.jp",
-      "kyonan.chiba.jp",
-      "matsudo.chiba.jp",
-      "midori.chiba.jp",
-      "mihama.chiba.jp",
-      "minamiboso.chiba.jp",
-      "mobara.chiba.jp",
-      "mutsuzawa.chiba.jp",
-      "nagara.chiba.jp",
-      "nagareyama.chiba.jp",
-      "narashino.chiba.jp",
-      "narita.chiba.jp",
-      "noda.chiba.jp",
-      "oamishirasato.chiba.jp",
-      "omigawa.chiba.jp",
-      "onjuku.chiba.jp",
-      "otaki.chiba.jp",
-      "sakae.chiba.jp",
-      "sakura.chiba.jp",
-      "shimofusa.chiba.jp",
-      "shirako.chiba.jp",
-      "shiroi.chiba.jp",
-      "shisui.chiba.jp",
-      "sodegaura.chiba.jp",
-      "sosa.chiba.jp",
-      "tako.chiba.jp",
-      "tateyama.chiba.jp",
-      "togane.chiba.jp",
-      "tohnosho.chiba.jp",
-      "tomisato.chiba.jp",
-      "urayasu.chiba.jp",
-      "yachimata.chiba.jp",
-      "yachiyo.chiba.jp",
-      "yokaichiba.chiba.jp",
-      "yokoshibahikari.chiba.jp",
-      "yotsukaido.chiba.jp",
-      "ainan.ehime.jp",
-      "honai.ehime.jp",
-      "ikata.ehime.jp",
-      "imabari.ehime.jp",
-      "iyo.ehime.jp",
-      "kamijima.ehime.jp",
-      "kihoku.ehime.jp",
-      "kumakogen.ehime.jp",
-      "masaki.ehime.jp",
-      "matsuno.ehime.jp",
-      "matsuyama.ehime.jp",
-      "namikata.ehime.jp",
-      "niihama.ehime.jp",
-      "ozu.ehime.jp",
-      "saijo.ehime.jp",
-      "seiyo.ehime.jp",
-      "shikokuchuo.ehime.jp",
-      "tobe.ehime.jp",
-      "toon.ehime.jp",
-      "uchiko.ehime.jp",
-      "uwajima.ehime.jp",
-      "yawatahama.ehime.jp",
-      "echizen.fukui.jp",
-      "eiheiji.fukui.jp",
-      "fukui.fukui.jp",
-      "ikeda.fukui.jp",
-      "katsuyama.fukui.jp",
-      "mihama.fukui.jp",
-      "minamiechizen.fukui.jp",
-      "obama.fukui.jp",
-      "ohi.fukui.jp",
-      "ono.fukui.jp",
-      "sabae.fukui.jp",
-      "sakai.fukui.jp",
-      "takahama.fukui.jp",
-      "tsuruga.fukui.jp",
-      "wakasa.fukui.jp",
-      "ashiya.fukuoka.jp",
-      "buzen.fukuoka.jp",
-      "chikugo.fukuoka.jp",
-      "chikuho.fukuoka.jp",
-      "chikujo.fukuoka.jp",
-      "chikushino.fukuoka.jp",
-      "chikuzen.fukuoka.jp",
-      "chuo.fukuoka.jp",
-      "dazaifu.fukuoka.jp",
-      "fukuchi.fukuoka.jp",
-      "hakata.fukuoka.jp",
-      "higashi.fukuoka.jp",
-      "hirokawa.fukuoka.jp",
-      "hisayama.fukuoka.jp",
-      "iizuka.fukuoka.jp",
-      "inatsuki.fukuoka.jp",
-      "kaho.fukuoka.jp",
-      "kasuga.fukuoka.jp",
-      "kasuya.fukuoka.jp",
-      "kawara.fukuoka.jp",
-      "keisen.fukuoka.jp",
-      "koga.fukuoka.jp",
-      "kurate.fukuoka.jp",
-      "kurogi.fukuoka.jp",
-      "kurume.fukuoka.jp",
-      "minami.fukuoka.jp",
-      "miyako.fukuoka.jp",
-      "miyama.fukuoka.jp",
-      "miyawaka.fukuoka.jp",
-      "mizumaki.fukuoka.jp",
-      "munakata.fukuoka.jp",
-      "nakagawa.fukuoka.jp",
-      "nakama.fukuoka.jp",
-      "nishi.fukuoka.jp",
-      "nogata.fukuoka.jp",
-      "ogori.fukuoka.jp",
-      "okagaki.fukuoka.jp",
-      "okawa.fukuoka.jp",
-      "oki.fukuoka.jp",
-      "omuta.fukuoka.jp",
-      "onga.fukuoka.jp",
-      "onojo.fukuoka.jp",
-      "oto.fukuoka.jp",
-      "saigawa.fukuoka.jp",
-      "sasaguri.fukuoka.jp",
-      "shingu.fukuoka.jp",
-      "shinyoshitomi.fukuoka.jp",
-      "shonai.fukuoka.jp",
-      "soeda.fukuoka.jp",
-      "sue.fukuoka.jp",
-      "tachiarai.fukuoka.jp",
-      "tagawa.fukuoka.jp",
-      "takata.fukuoka.jp",
-      "toho.fukuoka.jp",
-      "toyotsu.fukuoka.jp",
-      "tsuiki.fukuoka.jp",
-      "ukiha.fukuoka.jp",
-      "umi.fukuoka.jp",
-      "usui.fukuoka.jp",
-      "yamada.fukuoka.jp",
-      "yame.fukuoka.jp",
-      "yanagawa.fukuoka.jp",
-      "yukuhashi.fukuoka.jp",
-      "aizubange.fukushima.jp",
-      "aizumisato.fukushima.jp",
-      "aizuwakamatsu.fukushima.jp",
-      "asakawa.fukushima.jp",
-      "bandai.fukushima.jp",
-      "date.fukushima.jp",
-      "fukushima.fukushima.jp",
-      "furudono.fukushima.jp",
-      "futaba.fukushima.jp",
-      "hanawa.fukushima.jp",
-      "higashi.fukushima.jp",
-      "hirata.fukushima.jp",
-      "hirono.fukushima.jp",
-      "iitate.fukushima.jp",
-      "inawashiro.fukushima.jp",
-      "ishikawa.fukushima.jp",
-      "iwaki.fukushima.jp",
-      "izumizaki.fukushima.jp",
-      "kagamiishi.fukushima.jp",
-      "kaneyama.fukushima.jp",
-      "kawamata.fukushima.jp",
-      "kitakata.fukushima.jp",
-      "kitashiobara.fukushima.jp",
-      "koori.fukushima.jp",
-      "koriyama.fukushima.jp",
-      "kunimi.fukushima.jp",
-      "miharu.fukushima.jp",
-      "mishima.fukushima.jp",
-      "namie.fukushima.jp",
-      "nango.fukushima.jp",
-      "nishiaizu.fukushima.jp",
-      "nishigo.fukushima.jp",
-      "okuma.fukushima.jp",
-      "omotego.fukushima.jp",
-      "ono.fukushima.jp",
-      "otama.fukushima.jp",
-      "samegawa.fukushima.jp",
-      "shimogo.fukushima.jp",
-      "shirakawa.fukushima.jp",
-      "showa.fukushima.jp",
-      "soma.fukushima.jp",
-      "sukagawa.fukushima.jp",
-      "taishin.fukushima.jp",
-      "tamakawa.fukushima.jp",
-      "tanagura.fukushima.jp",
-      "tenei.fukushima.jp",
-      "yabuki.fukushima.jp",
-      "yamato.fukushima.jp",
-      "yamatsuri.fukushima.jp",
-      "yanaizu.fukushima.jp",
-      "yugawa.fukushima.jp",
-      "anpachi.gifu.jp",
-      "ena.gifu.jp",
-      "gifu.gifu.jp",
-      "ginan.gifu.jp",
-      "godo.gifu.jp",
-      "gujo.gifu.jp",
-      "hashima.gifu.jp",
-      "hichiso.gifu.jp",
-      "hida.gifu.jp",
-      "higashishirakawa.gifu.jp",
-      "ibigawa.gifu.jp",
-      "ikeda.gifu.jp",
-      "kakamigahara.gifu.jp",
-      "kani.gifu.jp",
-      "kasahara.gifu.jp",
-      "kasamatsu.gifu.jp",
-      "kawaue.gifu.jp",
-      "kitagata.gifu.jp",
-      "mino.gifu.jp",
-      "minokamo.gifu.jp",
-      "mitake.gifu.jp",
-      "mizunami.gifu.jp",
-      "motosu.gifu.jp",
-      "nakatsugawa.gifu.jp",
-      "ogaki.gifu.jp",
-      "sakahogi.gifu.jp",
-      "seki.gifu.jp",
-      "sekigahara.gifu.jp",
-      "shirakawa.gifu.jp",
-      "tajimi.gifu.jp",
-      "takayama.gifu.jp",
-      "tarui.gifu.jp",
-      "toki.gifu.jp",
-      "tomika.gifu.jp",
-      "wanouchi.gifu.jp",
-      "yamagata.gifu.jp",
-      "yaotsu.gifu.jp",
-      "yoro.gifu.jp",
-      "annaka.gunma.jp",
-      "chiyoda.gunma.jp",
-      "fujioka.gunma.jp",
-      "higashiagatsuma.gunma.jp",
-      "isesaki.gunma.jp",
-      "itakura.gunma.jp",
-      "kanna.gunma.jp",
-      "kanra.gunma.jp",
-      "katashina.gunma.jp",
-      "kawaba.gunma.jp",
-      "kiryu.gunma.jp",
-      "kusatsu.gunma.jp",
-      "maebashi.gunma.jp",
-      "meiwa.gunma.jp",
-      "midori.gunma.jp",
-      "minakami.gunma.jp",
-      "naganohara.gunma.jp",
-      "nakanojo.gunma.jp",
-      "nanmoku.gunma.jp",
-      "numata.gunma.jp",
-      "oizumi.gunma.jp",
-      "ora.gunma.jp",
-      "ota.gunma.jp",
-      "shibukawa.gunma.jp",
-      "shimonita.gunma.jp",
-      "shinto.gunma.jp",
-      "showa.gunma.jp",
-      "takasaki.gunma.jp",
-      "takayama.gunma.jp",
-      "tamamura.gunma.jp",
-      "tatebayashi.gunma.jp",
-      "tomioka.gunma.jp",
-      "tsukiyono.gunma.jp",
-      "tsumagoi.gunma.jp",
-      "ueno.gunma.jp",
-      "yoshioka.gunma.jp",
-      "asaminami.hiroshima.jp",
-      "daiwa.hiroshima.jp",
-      "etajima.hiroshima.jp",
-      "fuchu.hiroshima.jp",
-      "fukuyama.hiroshima.jp",
-      "hatsukaichi.hiroshima.jp",
-      "higashihiroshima.hiroshima.jp",
-      "hongo.hiroshima.jp",
-      "jinsekikogen.hiroshima.jp",
-      "kaita.hiroshima.jp",
-      "kui.hiroshima.jp",
-      "kumano.hiroshima.jp",
-      "kure.hiroshima.jp",
-      "mihara.hiroshima.jp",
-      "miyoshi.hiroshima.jp",
-      "naka.hiroshima.jp",
-      "onomichi.hiroshima.jp",
-      "osakikamijima.hiroshima.jp",
-      "otake.hiroshima.jp",
-      "saka.hiroshima.jp",
-      "sera.hiroshima.jp",
-      "seranishi.hiroshima.jp",
-      "shinichi.hiroshima.jp",
-      "shobara.hiroshima.jp",
-      "takehara.hiroshima.jp",
-      "abashiri.hokkaido.jp",
-      "abira.hokkaido.jp",
-      "aibetsu.hokkaido.jp",
-      "akabira.hokkaido.jp",
-      "akkeshi.hokkaido.jp",
-      "asahikawa.hokkaido.jp",
-      "ashibetsu.hokkaido.jp",
-      "ashoro.hokkaido.jp",
-      "assabu.hokkaido.jp",
-      "atsuma.hokkaido.jp",
-      "bibai.hokkaido.jp",
-      "biei.hokkaido.jp",
-      "bifuka.hokkaido.jp",
-      "bihoro.hokkaido.jp",
-      "biratori.hokkaido.jp",
-      "chippubetsu.hokkaido.jp",
-      "chitose.hokkaido.jp",
-      "date.hokkaido.jp",
-      "ebetsu.hokkaido.jp",
-      "embetsu.hokkaido.jp",
-      "eniwa.hokkaido.jp",
-      "erimo.hokkaido.jp",
-      "esan.hokkaido.jp",
-      "esashi.hokkaido.jp",
-      "fukagawa.hokkaido.jp",
-      "fukushima.hokkaido.jp",
-      "furano.hokkaido.jp",
-      "furubira.hokkaido.jp",
-      "haboro.hokkaido.jp",
-      "hakodate.hokkaido.jp",
-      "hamatonbetsu.hokkaido.jp",
-      "hidaka.hokkaido.jp",
-      "higashikagura.hokkaido.jp",
-      "higashikawa.hokkaido.jp",
-      "hiroo.hokkaido.jp",
-      "hokuryu.hokkaido.jp",
-      "hokuto.hokkaido.jp",
-      "honbetsu.hokkaido.jp",
-      "horokanai.hokkaido.jp",
-      "horonobe.hokkaido.jp",
-      "ikeda.hokkaido.jp",
-      "imakane.hokkaido.jp",
-      "ishikari.hokkaido.jp",
-      "iwamizawa.hokkaido.jp",
-      "iwanai.hokkaido.jp",
-      "kamifurano.hokkaido.jp",
-      "kamikawa.hokkaido.jp",
-      "kamishihoro.hokkaido.jp",
-      "kamisunagawa.hokkaido.jp",
-      "kamoenai.hokkaido.jp",
-      "kayabe.hokkaido.jp",
-      "kembuchi.hokkaido.jp",
-      "kikonai.hokkaido.jp",
-      "kimobetsu.hokkaido.jp",
-      "kitahiroshima.hokkaido.jp",
-      "kitami.hokkaido.jp",
-      "kiyosato.hokkaido.jp",
-      "koshimizu.hokkaido.jp",
-      "kunneppu.hokkaido.jp",
-      "kuriyama.hokkaido.jp",
-      "kuromatsunai.hokkaido.jp",
-      "kushiro.hokkaido.jp",
-      "kutchan.hokkaido.jp",
-      "kyowa.hokkaido.jp",
-      "mashike.hokkaido.jp",
-      "matsumae.hokkaido.jp",
-      "mikasa.hokkaido.jp",
-      "minamifurano.hokkaido.jp",
-      "mombetsu.hokkaido.jp",
-      "moseushi.hokkaido.jp",
-      "mukawa.hokkaido.jp",
-      "muroran.hokkaido.jp",
-      "naie.hokkaido.jp",
-      "nakagawa.hokkaido.jp",
-      "nakasatsunai.hokkaido.jp",
-      "nakatombetsu.hokkaido.jp",
-      "nanae.hokkaido.jp",
-      "nanporo.hokkaido.jp",
-      "nayoro.hokkaido.jp",
-      "nemuro.hokkaido.jp",
-      "niikappu.hokkaido.jp",
-      "niki.hokkaido.jp",
-      "nishiokoppe.hokkaido.jp",
-      "noboribetsu.hokkaido.jp",
-      "numata.hokkaido.jp",
-      "obihiro.hokkaido.jp",
-      "obira.hokkaido.jp",
-      "oketo.hokkaido.jp",
-      "okoppe.hokkaido.jp",
-      "otaru.hokkaido.jp",
-      "otobe.hokkaido.jp",
-      "otofuke.hokkaido.jp",
-      "otoineppu.hokkaido.jp",
-      "oumu.hokkaido.jp",
-      "ozora.hokkaido.jp",
-      "pippu.hokkaido.jp",
-      "rankoshi.hokkaido.jp",
-      "rebun.hokkaido.jp",
-      "rikubetsu.hokkaido.jp",
-      "rishiri.hokkaido.jp",
-      "rishirifuji.hokkaido.jp",
-      "saroma.hokkaido.jp",
-      "sarufutsu.hokkaido.jp",
-      "shakotan.hokkaido.jp",
-      "shari.hokkaido.jp",
-      "shibecha.hokkaido.jp",
-      "shibetsu.hokkaido.jp",
-      "shikabe.hokkaido.jp",
-      "shikaoi.hokkaido.jp",
-      "shimamaki.hokkaido.jp",
-      "shimizu.hokkaido.jp",
-      "shimokawa.hokkaido.jp",
-      "shinshinotsu.hokkaido.jp",
-      "shintoku.hokkaido.jp",
-      "shiranuka.hokkaido.jp",
-      "shiraoi.hokkaido.jp",
-      "shiriuchi.hokkaido.jp",
-      "sobetsu.hokkaido.jp",
-      "sunagawa.hokkaido.jp",
-      "taiki.hokkaido.jp",
-      "takasu.hokkaido.jp",
-      "takikawa.hokkaido.jp",
-      "takinoue.hokkaido.jp",
-      "teshikaga.hokkaido.jp",
-      "tobetsu.hokkaido.jp",
-      "tohma.hokkaido.jp",
-      "tomakomai.hokkaido.jp",
-      "tomari.hokkaido.jp",
-      "toya.hokkaido.jp",
-      "toyako.hokkaido.jp",
-      "toyotomi.hokkaido.jp",
-      "toyoura.hokkaido.jp",
-      "tsubetsu.hokkaido.jp",
-      "tsukigata.hokkaido.jp",
-      "urakawa.hokkaido.jp",
-      "urausu.hokkaido.jp",
-      "uryu.hokkaido.jp",
-      "utashinai.hokkaido.jp",
-      "wakkanai.hokkaido.jp",
-      "wassamu.hokkaido.jp",
-      "yakumo.hokkaido.jp",
-      "yoichi.hokkaido.jp",
-      "aioi.hyogo.jp",
-      "akashi.hyogo.jp",
-      "ako.hyogo.jp",
-      "amagasaki.hyogo.jp",
-      "aogaki.hyogo.jp",
-      "asago.hyogo.jp",
-      "ashiya.hyogo.jp",
-      "awaji.hyogo.jp",
-      "fukusaki.hyogo.jp",
-      "goshiki.hyogo.jp",
-      "harima.hyogo.jp",
-      "himeji.hyogo.jp",
-      "ichikawa.hyogo.jp",
-      "inagawa.hyogo.jp",
-      "itami.hyogo.jp",
-      "kakogawa.hyogo.jp",
-      "kamigori.hyogo.jp",
-      "kamikawa.hyogo.jp",
-      "kasai.hyogo.jp",
-      "kasuga.hyogo.jp",
-      "kawanishi.hyogo.jp",
-      "miki.hyogo.jp",
-      "minamiawaji.hyogo.jp",
-      "nishinomiya.hyogo.jp",
-      "nishiwaki.hyogo.jp",
-      "ono.hyogo.jp",
-      "sanda.hyogo.jp",
-      "sannan.hyogo.jp",
-      "sasayama.hyogo.jp",
-      "sayo.hyogo.jp",
-      "shingu.hyogo.jp",
-      "shinonsen.hyogo.jp",
-      "shiso.hyogo.jp",
-      "sumoto.hyogo.jp",
-      "taishi.hyogo.jp",
-      "taka.hyogo.jp",
-      "takarazuka.hyogo.jp",
-      "takasago.hyogo.jp",
-      "takino.hyogo.jp",
-      "tamba.hyogo.jp",
-      "tatsuno.hyogo.jp",
-      "toyooka.hyogo.jp",
-      "yabu.hyogo.jp",
-      "yashiro.hyogo.jp",
-      "yoka.hyogo.jp",
-      "yokawa.hyogo.jp",
-      "ami.ibaraki.jp",
-      "asahi.ibaraki.jp",
-      "bando.ibaraki.jp",
-      "chikusei.ibaraki.jp",
-      "daigo.ibaraki.jp",
-      "fujishiro.ibaraki.jp",
-      "hitachi.ibaraki.jp",
-      "hitachinaka.ibaraki.jp",
-      "hitachiomiya.ibaraki.jp",
-      "hitachiota.ibaraki.jp",
-      "ibaraki.ibaraki.jp",
-      "ina.ibaraki.jp",
-      "inashiki.ibaraki.jp",
-      "itako.ibaraki.jp",
-      "iwama.ibaraki.jp",
-      "joso.ibaraki.jp",
-      "kamisu.ibaraki.jp",
-      "kasama.ibaraki.jp",
-      "kashima.ibaraki.jp",
-      "kasumigaura.ibaraki.jp",
-      "koga.ibaraki.jp",
-      "miho.ibaraki.jp",
-      "mito.ibaraki.jp",
-      "moriya.ibaraki.jp",
-      "naka.ibaraki.jp",
-      "namegata.ibaraki.jp",
-      "oarai.ibaraki.jp",
-      "ogawa.ibaraki.jp",
-      "omitama.ibaraki.jp",
-      "ryugasaki.ibaraki.jp",
-      "sakai.ibaraki.jp",
-      "sakuragawa.ibaraki.jp",
-      "shimodate.ibaraki.jp",
-      "shimotsuma.ibaraki.jp",
-      "shirosato.ibaraki.jp",
-      "sowa.ibaraki.jp",
-      "suifu.ibaraki.jp",
-      "takahagi.ibaraki.jp",
-      "tamatsukuri.ibaraki.jp",
-      "tokai.ibaraki.jp",
-      "tomobe.ibaraki.jp",
-      "tone.ibaraki.jp",
-      "toride.ibaraki.jp",
-      "tsuchiura.ibaraki.jp",
-      "tsukuba.ibaraki.jp",
-      "uchihara.ibaraki.jp",
-      "ushiku.ibaraki.jp",
-      "yachiyo.ibaraki.jp",
-      "yamagata.ibaraki.jp",
-      "yawara.ibaraki.jp",
-      "yuki.ibaraki.jp",
-      "anamizu.ishikawa.jp",
-      "hakui.ishikawa.jp",
-      "hakusan.ishikawa.jp",
-      "kaga.ishikawa.jp",
-      "kahoku.ishikawa.jp",
-      "kanazawa.ishikawa.jp",
-      "kawakita.ishikawa.jp",
-      "komatsu.ishikawa.jp",
-      "nakanoto.ishikawa.jp",
-      "nanao.ishikawa.jp",
-      "nomi.ishikawa.jp",
-      "nonoichi.ishikawa.jp",
-      "noto.ishikawa.jp",
-      "shika.ishikawa.jp",
-      "suzu.ishikawa.jp",
-      "tsubata.ishikawa.jp",
-      "tsurugi.ishikawa.jp",
-      "uchinada.ishikawa.jp",
-      "wajima.ishikawa.jp",
-      "fudai.iwate.jp",
-      "fujisawa.iwate.jp",
-      "hanamaki.iwate.jp",
-      "hiraizumi.iwate.jp",
-      "hirono.iwate.jp",
-      "ichinohe.iwate.jp",
-      "ichinoseki.iwate.jp",
-      "iwaizumi.iwate.jp",
-      "iwate.iwate.jp",
-      "joboji.iwate.jp",
-      "kamaishi.iwate.jp",
-      "kanegasaki.iwate.jp",
-      "karumai.iwate.jp",
-      "kawai.iwate.jp",
-      "kitakami.iwate.jp",
-      "kuji.iwate.jp",
-      "kunohe.iwate.jp",
-      "kuzumaki.iwate.jp",
-      "miyako.iwate.jp",
-      "mizusawa.iwate.jp",
-      "morioka.iwate.jp",
-      "ninohe.iwate.jp",
-      "noda.iwate.jp",
-      "ofunato.iwate.jp",
-      "oshu.iwate.jp",
-      "otsuchi.iwate.jp",
-      "rikuzentakata.iwate.jp",
-      "shiwa.iwate.jp",
-      "shizukuishi.iwate.jp",
-      "sumita.iwate.jp",
-      "tanohata.iwate.jp",
-      "tono.iwate.jp",
-      "yahaba.iwate.jp",
-      "yamada.iwate.jp",
-      "ayagawa.kagawa.jp",
-      "higashikagawa.kagawa.jp",
-      "kanonji.kagawa.jp",
-      "kotohira.kagawa.jp",
-      "manno.kagawa.jp",
-      "marugame.kagawa.jp",
-      "mitoyo.kagawa.jp",
-      "naoshima.kagawa.jp",
-      "sanuki.kagawa.jp",
-      "tadotsu.kagawa.jp",
-      "takamatsu.kagawa.jp",
-      "tonosho.kagawa.jp",
-      "uchinomi.kagawa.jp",
-      "utazu.kagawa.jp",
-      "zentsuji.kagawa.jp",
-      "akune.kagoshima.jp",
-      "amami.kagoshima.jp",
-      "hioki.kagoshima.jp",
-      "isa.kagoshima.jp",
-      "isen.kagoshima.jp",
-      "izumi.kagoshima.jp",
-      "kagoshima.kagoshima.jp",
-      "kanoya.kagoshima.jp",
-      "kawanabe.kagoshima.jp",
-      "kinko.kagoshima.jp",
-      "kouyama.kagoshima.jp",
-      "makurazaki.kagoshima.jp",
-      "matsumoto.kagoshima.jp",
-      "minamitane.kagoshima.jp",
-      "nakatane.kagoshima.jp",
-      "nishinoomote.kagoshima.jp",
-      "satsumasendai.kagoshima.jp",
-      "soo.kagoshima.jp",
-      "tarumizu.kagoshima.jp",
-      "yusui.kagoshima.jp",
-      "aikawa.kanagawa.jp",
-      "atsugi.kanagawa.jp",
-      "ayase.kanagawa.jp",
-      "chigasaki.kanagawa.jp",
-      "ebina.kanagawa.jp",
-      "fujisawa.kanagawa.jp",
-      "hadano.kanagawa.jp",
-      "hakone.kanagawa.jp",
-      "hiratsuka.kanagawa.jp",
-      "isehara.kanagawa.jp",
-      "kaisei.kanagawa.jp",
-      "kamakura.kanagawa.jp",
-      "kiyokawa.kanagawa.jp",
-      "matsuda.kanagawa.jp",
-      "minamiashigara.kanagawa.jp",
-      "miura.kanagawa.jp",
-      "nakai.kanagawa.jp",
-      "ninomiya.kanagawa.jp",
-      "odawara.kanagawa.jp",
-      "oi.kanagawa.jp",
-      "oiso.kanagawa.jp",
-      "sagamihara.kanagawa.jp",
-      "samukawa.kanagawa.jp",
-      "tsukui.kanagawa.jp",
-      "yamakita.kanagawa.jp",
-      "yamato.kanagawa.jp",
-      "yokosuka.kanagawa.jp",
-      "yugawara.kanagawa.jp",
-      "zama.kanagawa.jp",
-      "zushi.kanagawa.jp",
-      "aki.kochi.jp",
-      "geisei.kochi.jp",
-      "hidaka.kochi.jp",
-      "higashitsuno.kochi.jp",
-      "ino.kochi.jp",
-      "kagami.kochi.jp",
-      "kami.kochi.jp",
-      "kitagawa.kochi.jp",
-      "kochi.kochi.jp",
-      "mihara.kochi.jp",
-      "motoyama.kochi.jp",
-      "muroto.kochi.jp",
-      "nahari.kochi.jp",
-      "nakamura.kochi.jp",
-      "nankoku.kochi.jp",
-      "nishitosa.kochi.jp",
-      "niyodogawa.kochi.jp",
-      "ochi.kochi.jp",
-      "okawa.kochi.jp",
-      "otoyo.kochi.jp",
-      "otsuki.kochi.jp",
-      "sakawa.kochi.jp",
-      "sukumo.kochi.jp",
-      "susaki.kochi.jp",
-      "tosa.kochi.jp",
-      "tosashimizu.kochi.jp",
-      "toyo.kochi.jp",
-      "tsuno.kochi.jp",
-      "umaji.kochi.jp",
-      "yasuda.kochi.jp",
-      "yusuhara.kochi.jp",
-      "amakusa.kumamoto.jp",
-      "arao.kumamoto.jp",
-      "aso.kumamoto.jp",
-      "choyo.kumamoto.jp",
-      "gyokuto.kumamoto.jp",
-      "kamiamakusa.kumamoto.jp",
-      "kikuchi.kumamoto.jp",
-      "kumamoto.kumamoto.jp",
-      "mashiki.kumamoto.jp",
-      "mifune.kumamoto.jp",
-      "minamata.kumamoto.jp",
-      "minamioguni.kumamoto.jp",
-      "nagasu.kumamoto.jp",
-      "nishihara.kumamoto.jp",
-      "oguni.kumamoto.jp",
-      "ozu.kumamoto.jp",
-      "sumoto.kumamoto.jp",
-      "takamori.kumamoto.jp",
-      "uki.kumamoto.jp",
-      "uto.kumamoto.jp",
-      "yamaga.kumamoto.jp",
-      "yamato.kumamoto.jp",
-      "yatsushiro.kumamoto.jp",
-      "ayabe.kyoto.jp",
-      "fukuchiyama.kyoto.jp",
-      "higashiyama.kyoto.jp",
-      "ide.kyoto.jp",
-      "ine.kyoto.jp",
-      "joyo.kyoto.jp",
-      "kameoka.kyoto.jp",
-      "kamo.kyoto.jp",
-      "kita.kyoto.jp",
-      "kizu.kyoto.jp",
-      "kumiyama.kyoto.jp",
-      "kyotamba.kyoto.jp",
-      "kyotanabe.kyoto.jp",
-      "kyotango.kyoto.jp",
-      "maizuru.kyoto.jp",
-      "minami.kyoto.jp",
-      "minamiyamashiro.kyoto.jp",
-      "miyazu.kyoto.jp",
-      "muko.kyoto.jp",
-      "nagaokakyo.kyoto.jp",
-      "nakagyo.kyoto.jp",
-      "nantan.kyoto.jp",
-      "oyamazaki.kyoto.jp",
-      "sakyo.kyoto.jp",
-      "seika.kyoto.jp",
-      "tanabe.kyoto.jp",
-      "uji.kyoto.jp",
-      "ujitawara.kyoto.jp",
-      "wazuka.kyoto.jp",
-      "yamashina.kyoto.jp",
-      "yawata.kyoto.jp",
-      "asahi.mie.jp",
-      "inabe.mie.jp",
-      "ise.mie.jp",
-      "kameyama.mie.jp",
-      "kawagoe.mie.jp",
-      "kiho.mie.jp",
-      "kisosaki.mie.jp",
-      "kiwa.mie.jp",
-      "komono.mie.jp",
-      "kumano.mie.jp",
-      "kuwana.mie.jp",
-      "matsusaka.mie.jp",
-      "meiwa.mie.jp",
-      "mihama.mie.jp",
-      "minamiise.mie.jp",
-      "misugi.mie.jp",
-      "miyama.mie.jp",
-      "nabari.mie.jp",
-      "shima.mie.jp",
-      "suzuka.mie.jp",
-      "tado.mie.jp",
-      "taiki.mie.jp",
-      "taki.mie.jp",
-      "tamaki.mie.jp",
-      "toba.mie.jp",
-      "tsu.mie.jp",
-      "udono.mie.jp",
-      "ureshino.mie.jp",
-      "watarai.mie.jp",
-      "yokkaichi.mie.jp",
-      "furukawa.miyagi.jp",
-      "higashimatsushima.miyagi.jp",
-      "ishinomaki.miyagi.jp",
-      "iwanuma.miyagi.jp",
-      "kakuda.miyagi.jp",
-      "kami.miyagi.jp",
-      "kawasaki.miyagi.jp",
-      "marumori.miyagi.jp",
-      "matsushima.miyagi.jp",
-      "minamisanriku.miyagi.jp",
-      "misato.miyagi.jp",
-      "murata.miyagi.jp",
-      "natori.miyagi.jp",
-      "ogawara.miyagi.jp",
-      "ohira.miyagi.jp",
-      "onagawa.miyagi.jp",
-      "osaki.miyagi.jp",
-      "rifu.miyagi.jp",
-      "semine.miyagi.jp",
-      "shibata.miyagi.jp",
-      "shichikashuku.miyagi.jp",
-      "shikama.miyagi.jp",
-      "shiogama.miyagi.jp",
-      "shiroishi.miyagi.jp",
-      "tagajo.miyagi.jp",
-      "taiwa.miyagi.jp",
-      "tome.miyagi.jp",
-      "tomiya.miyagi.jp",
-      "wakuya.miyagi.jp",
-      "watari.miyagi.jp",
-      "yamamoto.miyagi.jp",
-      "zao.miyagi.jp",
-      "aya.miyazaki.jp",
-      "ebino.miyazaki.jp",
-      "gokase.miyazaki.jp",
-      "hyuga.miyazaki.jp",
-      "kadogawa.miyazaki.jp",
-      "kawaminami.miyazaki.jp",
-      "kijo.miyazaki.jp",
-      "kitagawa.miyazaki.jp",
-      "kitakata.miyazaki.jp",
-      "kitaura.miyazaki.jp",
-      "kobayashi.miyazaki.jp",
-      "kunitomi.miyazaki.jp",
-      "kushima.miyazaki.jp",
-      "mimata.miyazaki.jp",
-      "miyakonojo.miyazaki.jp",
-      "miyazaki.miyazaki.jp",
-      "morotsuka.miyazaki.jp",
-      "nichinan.miyazaki.jp",
-      "nishimera.miyazaki.jp",
-      "nobeoka.miyazaki.jp",
-      "saito.miyazaki.jp",
-      "shiiba.miyazaki.jp",
-      "shintomi.miyazaki.jp",
-      "takaharu.miyazaki.jp",
-      "takanabe.miyazaki.jp",
-      "takazaki.miyazaki.jp",
-      "tsuno.miyazaki.jp",
-      "achi.nagano.jp",
-      "agematsu.nagano.jp",
-      "anan.nagano.jp",
-      "aoki.nagano.jp",
-      "asahi.nagano.jp",
-      "azumino.nagano.jp",
-      "chikuhoku.nagano.jp",
-      "chikuma.nagano.jp",
-      "chino.nagano.jp",
-      "fujimi.nagano.jp",
-      "hakuba.nagano.jp",
-      "hara.nagano.jp",
-      "hiraya.nagano.jp",
-      "iida.nagano.jp",
-      "iijima.nagano.jp",
-      "iiyama.nagano.jp",
-      "iizuna.nagano.jp",
-      "ikeda.nagano.jp",
-      "ikusaka.nagano.jp",
-      "ina.nagano.jp",
-      "karuizawa.nagano.jp",
-      "kawakami.nagano.jp",
-      "kiso.nagano.jp",
-      "kisofukushima.nagano.jp",
-      "kitaaiki.nagano.jp",
-      "komagane.nagano.jp",
-      "komoro.nagano.jp",
-      "matsukawa.nagano.jp",
-      "matsumoto.nagano.jp",
-      "miasa.nagano.jp",
-      "minamiaiki.nagano.jp",
-      "minamimaki.nagano.jp",
-      "minamiminowa.nagano.jp",
-      "minowa.nagano.jp",
-      "miyada.nagano.jp",
-      "miyota.nagano.jp",
-      "mochizuki.nagano.jp",
-      "nagano.nagano.jp",
-      "nagawa.nagano.jp",
-      "nagiso.nagano.jp",
-      "nakagawa.nagano.jp",
-      "nakano.nagano.jp",
-      "nozawaonsen.nagano.jp",
-      "obuse.nagano.jp",
-      "ogawa.nagano.jp",
-      "okaya.nagano.jp",
-      "omachi.nagano.jp",
-      "omi.nagano.jp",
-      "ookuwa.nagano.jp",
-      "ooshika.nagano.jp",
-      "otaki.nagano.jp",
-      "otari.nagano.jp",
-      "sakae.nagano.jp",
-      "sakaki.nagano.jp",
-      "saku.nagano.jp",
-      "sakuho.nagano.jp",
-      "shimosuwa.nagano.jp",
-      "shinanomachi.nagano.jp",
-      "shiojiri.nagano.jp",
-      "suwa.nagano.jp",
-      "suzaka.nagano.jp",
-      "takagi.nagano.jp",
-      "takamori.nagano.jp",
-      "takayama.nagano.jp",
-      "tateshina.nagano.jp",
-      "tatsuno.nagano.jp",
-      "togakushi.nagano.jp",
-      "togura.nagano.jp",
-      "tomi.nagano.jp",
-      "ueda.nagano.jp",
-      "wada.nagano.jp",
-      "yamagata.nagano.jp",
-      "yamanouchi.nagano.jp",
-      "yasaka.nagano.jp",
-      "yasuoka.nagano.jp",
-      "chijiwa.nagasaki.jp",
-      "futsu.nagasaki.jp",
-      "goto.nagasaki.jp",
-      "hasami.nagasaki.jp",
-      "hirado.nagasaki.jp",
-      "iki.nagasaki.jp",
-      "isahaya.nagasaki.jp",
-      "kawatana.nagasaki.jp",
-      "kuchinotsu.nagasaki.jp",
-      "matsuura.nagasaki.jp",
-      "nagasaki.nagasaki.jp",
-      "obama.nagasaki.jp",
-      "omura.nagasaki.jp",
-      "oseto.nagasaki.jp",
-      "saikai.nagasaki.jp",
-      "sasebo.nagasaki.jp",
-      "seihi.nagasaki.jp",
-      "shimabara.nagasaki.jp",
-      "shinkamigoto.nagasaki.jp",
-      "togitsu.nagasaki.jp",
-      "tsushima.nagasaki.jp",
-      "unzen.nagasaki.jp",
-      "ando.nara.jp",
-      "gose.nara.jp",
-      "heguri.nara.jp",
-      "higashiyoshino.nara.jp",
-      "ikaruga.nara.jp",
-      "ikoma.nara.jp",
-      "kamikitayama.nara.jp",
-      "kanmaki.nara.jp",
-      "kashiba.nara.jp",
-      "kashihara.nara.jp",
-      "katsuragi.nara.jp",
-      "kawai.nara.jp",
-      "kawakami.nara.jp",
-      "kawanishi.nara.jp",
-      "koryo.nara.jp",
-      "kurotaki.nara.jp",
-      "mitsue.nara.jp",
-      "miyake.nara.jp",
-      "nara.nara.jp",
-      "nosegawa.nara.jp",
-      "oji.nara.jp",
-      "ouda.nara.jp",
-      "oyodo.nara.jp",
-      "sakurai.nara.jp",
-      "sango.nara.jp",
-      "shimoichi.nara.jp",
-      "shimokitayama.nara.jp",
-      "shinjo.nara.jp",
-      "soni.nara.jp",
-      "takatori.nara.jp",
-      "tawaramoto.nara.jp",
-      "tenkawa.nara.jp",
-      "tenri.nara.jp",
-      "uda.nara.jp",
-      "yamatokoriyama.nara.jp",
-      "yamatotakada.nara.jp",
-      "yamazoe.nara.jp",
-      "yoshino.nara.jp",
-      "aga.niigata.jp",
-      "agano.niigata.jp",
-      "gosen.niigata.jp",
-      "itoigawa.niigata.jp",
-      "izumozaki.niigata.jp",
-      "joetsu.niigata.jp",
-      "kamo.niigata.jp",
-      "kariwa.niigata.jp",
-      "kashiwazaki.niigata.jp",
-      "minamiuonuma.niigata.jp",
-      "mitsuke.niigata.jp",
-      "muika.niigata.jp",
-      "murakami.niigata.jp",
-      "myoko.niigata.jp",
-      "nagaoka.niigata.jp",
-      "niigata.niigata.jp",
-      "ojiya.niigata.jp",
-      "omi.niigata.jp",
-      "sado.niigata.jp",
-      "sanjo.niigata.jp",
-      "seiro.niigata.jp",
-      "seirou.niigata.jp",
-      "sekikawa.niigata.jp",
-      "shibata.niigata.jp",
-      "tagami.niigata.jp",
-      "tainai.niigata.jp",
-      "tochio.niigata.jp",
-      "tokamachi.niigata.jp",
-      "tsubame.niigata.jp",
-      "tsunan.niigata.jp",
-      "uonuma.niigata.jp",
-      "yahiko.niigata.jp",
-      "yoita.niigata.jp",
-      "yuzawa.niigata.jp",
-      "beppu.oita.jp",
-      "bungoono.oita.jp",
-      "bungotakada.oita.jp",
-      "hasama.oita.jp",
-      "hiji.oita.jp",
-      "himeshima.oita.jp",
-      "hita.oita.jp",
-      "kamitsue.oita.jp",
-      "kokonoe.oita.jp",
-      "kuju.oita.jp",
-      "kunisaki.oita.jp",
-      "kusu.oita.jp",
-      "oita.oita.jp",
-      "saiki.oita.jp",
-      "taketa.oita.jp",
-      "tsukumi.oita.jp",
-      "usa.oita.jp",
-      "usuki.oita.jp",
-      "yufu.oita.jp",
-      "akaiwa.okayama.jp",
-      "asakuchi.okayama.jp",
-      "bizen.okayama.jp",
-      "hayashima.okayama.jp",
-      "ibara.okayama.jp",
-      "kagamino.okayama.jp",
-      "kasaoka.okayama.jp",
-      "kibichuo.okayama.jp",
-      "kumenan.okayama.jp",
-      "kurashiki.okayama.jp",
-      "maniwa.okayama.jp",
-      "misaki.okayama.jp",
-      "nagi.okayama.jp",
-      "niimi.okayama.jp",
-      "nishiawakura.okayama.jp",
-      "okayama.okayama.jp",
-      "satosho.okayama.jp",
-      "setouchi.okayama.jp",
-      "shinjo.okayama.jp",
-      "shoo.okayama.jp",
-      "soja.okayama.jp",
-      "takahashi.okayama.jp",
-      "tamano.okayama.jp",
-      "tsuyama.okayama.jp",
-      "wake.okayama.jp",
-      "yakage.okayama.jp",
-      "aguni.okinawa.jp",
-      "ginowan.okinawa.jp",
-      "ginoza.okinawa.jp",
-      "gushikami.okinawa.jp",
-      "haebaru.okinawa.jp",
-      "higashi.okinawa.jp",
-      "hirara.okinawa.jp",
-      "iheya.okinawa.jp",
-      "ishigaki.okinawa.jp",
-      "ishikawa.okinawa.jp",
-      "itoman.okinawa.jp",
-      "izena.okinawa.jp",
-      "kadena.okinawa.jp",
-      "kin.okinawa.jp",
-      "kitadaito.okinawa.jp",
-      "kitanakagusuku.okinawa.jp",
-      "kumejima.okinawa.jp",
-      "kunigami.okinawa.jp",
-      "minamidaito.okinawa.jp",
-      "motobu.okinawa.jp",
-      "nago.okinawa.jp",
-      "naha.okinawa.jp",
-      "nakagusuku.okinawa.jp",
-      "nakijin.okinawa.jp",
-      "nanjo.okinawa.jp",
-      "nishihara.okinawa.jp",
-      "ogimi.okinawa.jp",
-      "okinawa.okinawa.jp",
-      "onna.okinawa.jp",
-      "shimoji.okinawa.jp",
-      "taketomi.okinawa.jp",
-      "tarama.okinawa.jp",
-      "tokashiki.okinawa.jp",
-      "tomigusuku.okinawa.jp",
-      "tonaki.okinawa.jp",
-      "urasoe.okinawa.jp",
-      "uruma.okinawa.jp",
-      "yaese.okinawa.jp",
-      "yomitan.okinawa.jp",
-      "yonabaru.okinawa.jp",
-      "yonaguni.okinawa.jp",
-      "zamami.okinawa.jp",
-      "abeno.osaka.jp",
-      "chihayaakasaka.osaka.jp",
-      "chuo.osaka.jp",
-      "daito.osaka.jp",
-      "fujiidera.osaka.jp",
-      "habikino.osaka.jp",
-      "hannan.osaka.jp",
-      "higashiosaka.osaka.jp",
-      "higashisumiyoshi.osaka.jp",
-      "higashiyodogawa.osaka.jp",
-      "hirakata.osaka.jp",
-      "ibaraki.osaka.jp",
-      "ikeda.osaka.jp",
-      "izumi.osaka.jp",
-      "izumiotsu.osaka.jp",
-      "izumisano.osaka.jp",
-      "kadoma.osaka.jp",
-      "kaizuka.osaka.jp",
-      "kanan.osaka.jp",
-      "kashiwara.osaka.jp",
-      "katano.osaka.jp",
-      "kawachinagano.osaka.jp",
-      "kishiwada.osaka.jp",
-      "kita.osaka.jp",
-      "kumatori.osaka.jp",
-      "matsubara.osaka.jp",
-      "minato.osaka.jp",
-      "minoh.osaka.jp",
-      "misaki.osaka.jp",
-      "moriguchi.osaka.jp",
-      "neyagawa.osaka.jp",
-      "nishi.osaka.jp",
-      "nose.osaka.jp",
-      "osakasayama.osaka.jp",
-      "sakai.osaka.jp",
-      "sayama.osaka.jp",
-      "sennan.osaka.jp",
-      "settsu.osaka.jp",
-      "shijonawate.osaka.jp",
-      "shimamoto.osaka.jp",
-      "suita.osaka.jp",
-      "tadaoka.osaka.jp",
-      "taishi.osaka.jp",
-      "tajiri.osaka.jp",
-      "takaishi.osaka.jp",
-      "takatsuki.osaka.jp",
-      "tondabayashi.osaka.jp",
-      "toyonaka.osaka.jp",
-      "toyono.osaka.jp",
-      "yao.osaka.jp",
-      "ariake.saga.jp",
-      "arita.saga.jp",
-      "fukudomi.saga.jp",
-      "genkai.saga.jp",
-      "hamatama.saga.jp",
-      "hizen.saga.jp",
-      "imari.saga.jp",
-      "kamimine.saga.jp",
-      "kanzaki.saga.jp",
-      "karatsu.saga.jp",
-      "kashima.saga.jp",
-      "kitagata.saga.jp",
-      "kitahata.saga.jp",
-      "kiyama.saga.jp",
-      "kouhoku.saga.jp",
-      "kyuragi.saga.jp",
-      "nishiarita.saga.jp",
-      "ogi.saga.jp",
-      "omachi.saga.jp",
-      "ouchi.saga.jp",
-      "saga.saga.jp",
-      "shiroishi.saga.jp",
-      "taku.saga.jp",
-      "tara.saga.jp",
-      "tosu.saga.jp",
-      "yoshinogari.saga.jp",
-      "arakawa.saitama.jp",
-      "asaka.saitama.jp",
-      "chichibu.saitama.jp",
-      "fujimi.saitama.jp",
-      "fujimino.saitama.jp",
-      "fukaya.saitama.jp",
-      "hanno.saitama.jp",
-      "hanyu.saitama.jp",
-      "hasuda.saitama.jp",
-      "hatogaya.saitama.jp",
-      "hatoyama.saitama.jp",
-      "hidaka.saitama.jp",
-      "higashichichibu.saitama.jp",
-      "higashimatsuyama.saitama.jp",
-      "honjo.saitama.jp",
-      "ina.saitama.jp",
-      "iruma.saitama.jp",
-      "iwatsuki.saitama.jp",
-      "kamiizumi.saitama.jp",
-      "kamikawa.saitama.jp",
-      "kamisato.saitama.jp",
-      "kasukabe.saitama.jp",
-      "kawagoe.saitama.jp",
-      "kawaguchi.saitama.jp",
-      "kawajima.saitama.jp",
-      "kazo.saitama.jp",
-      "kitamoto.saitama.jp",
-      "koshigaya.saitama.jp",
-      "kounosu.saitama.jp",
-      "kuki.saitama.jp",
-      "kumagaya.saitama.jp",
-      "matsubushi.saitama.jp",
-      "minano.saitama.jp",
-      "misato.saitama.jp",
-      "miyashiro.saitama.jp",
-      "miyoshi.saitama.jp",
-      "moroyama.saitama.jp",
-      "nagatoro.saitama.jp",
-      "namegawa.saitama.jp",
-      "niiza.saitama.jp",
-      "ogano.saitama.jp",
-      "ogawa.saitama.jp",
-      "ogose.saitama.jp",
-      "okegawa.saitama.jp",
-      "omiya.saitama.jp",
-      "otaki.saitama.jp",
-      "ranzan.saitama.jp",
-      "ryokami.saitama.jp",
-      "saitama.saitama.jp",
-      "sakado.saitama.jp",
-      "satte.saitama.jp",
-      "sayama.saitama.jp",
-      "shiki.saitama.jp",
-      "shiraoka.saitama.jp",
-      "soka.saitama.jp",
-      "sugito.saitama.jp",
-      "toda.saitama.jp",
-      "tokigawa.saitama.jp",
-      "tokorozawa.saitama.jp",
-      "tsurugashima.saitama.jp",
-      "urawa.saitama.jp",
-      "warabi.saitama.jp",
-      "yashio.saitama.jp",
-      "yokoze.saitama.jp",
-      "yono.saitama.jp",
-      "yorii.saitama.jp",
-      "yoshida.saitama.jp",
-      "yoshikawa.saitama.jp",
-      "yoshimi.saitama.jp",
-      "aisho.shiga.jp",
-      "gamo.shiga.jp",
-      "higashiomi.shiga.jp",
-      "hikone.shiga.jp",
-      "koka.shiga.jp",
-      "konan.shiga.jp",
-      "kosei.shiga.jp",
-      "koto.shiga.jp",
-      "kusatsu.shiga.jp",
-      "maibara.shiga.jp",
-      "moriyama.shiga.jp",
-      "nagahama.shiga.jp",
-      "nishiazai.shiga.jp",
-      "notogawa.shiga.jp",
-      "omihachiman.shiga.jp",
-      "otsu.shiga.jp",
-      "ritto.shiga.jp",
-      "ryuoh.shiga.jp",
-      "takashima.shiga.jp",
-      "takatsuki.shiga.jp",
-      "torahime.shiga.jp",
-      "toyosato.shiga.jp",
-      "yasu.shiga.jp",
-      "akagi.shimane.jp",
-      "ama.shimane.jp",
-      "gotsu.shimane.jp",
-      "hamada.shimane.jp",
-      "higashiizumo.shimane.jp",
-      "hikawa.shimane.jp",
-      "hikimi.shimane.jp",
-      "izumo.shimane.jp",
-      "kakinoki.shimane.jp",
-      "masuda.shimane.jp",
-      "matsue.shimane.jp",
-      "misato.shimane.jp",
-      "nishinoshima.shimane.jp",
-      "ohda.shimane.jp",
-      "okinoshima.shimane.jp",
-      "okuizumo.shimane.jp",
-      "shimane.shimane.jp",
-      "tamayu.shimane.jp",
-      "tsuwano.shimane.jp",
-      "unnan.shimane.jp",
-      "yakumo.shimane.jp",
-      "yasugi.shimane.jp",
-      "yatsuka.shimane.jp",
-      "arai.shizuoka.jp",
-      "atami.shizuoka.jp",
-      "fuji.shizuoka.jp",
-      "fujieda.shizuoka.jp",
-      "fujikawa.shizuoka.jp",
-      "fujinomiya.shizuoka.jp",
-      "fukuroi.shizuoka.jp",
-      "gotemba.shizuoka.jp",
-      "haibara.shizuoka.jp",
-      "hamamatsu.shizuoka.jp",
-      "higashiizu.shizuoka.jp",
-      "ito.shizuoka.jp",
-      "iwata.shizuoka.jp",
-      "izu.shizuoka.jp",
-      "izunokuni.shizuoka.jp",
-      "kakegawa.shizuoka.jp",
-      "kannami.shizuoka.jp",
-      "kawanehon.shizuoka.jp",
-      "kawazu.shizuoka.jp",
-      "kikugawa.shizuoka.jp",
-      "kosai.shizuoka.jp",
-      "makinohara.shizuoka.jp",
-      "matsuzaki.shizuoka.jp",
-      "minamiizu.shizuoka.jp",
-      "mishima.shizuoka.jp",
-      "morimachi.shizuoka.jp",
-      "nishiizu.shizuoka.jp",
-      "numazu.shizuoka.jp",
-      "omaezaki.shizuoka.jp",
-      "shimada.shizuoka.jp",
-      "shimizu.shizuoka.jp",
-      "shimoda.shizuoka.jp",
-      "shizuoka.shizuoka.jp",
-      "susono.shizuoka.jp",
-      "yaizu.shizuoka.jp",
-      "yoshida.shizuoka.jp",
-      "ashikaga.tochigi.jp",
-      "bato.tochigi.jp",
-      "haga.tochigi.jp",
-      "ichikai.tochigi.jp",
-      "iwafune.tochigi.jp",
-      "kaminokawa.tochigi.jp",
-      "kanuma.tochigi.jp",
-      "karasuyama.tochigi.jp",
-      "kuroiso.tochigi.jp",
-      "mashiko.tochigi.jp",
-      "mibu.tochigi.jp",
-      "moka.tochigi.jp",
-      "motegi.tochigi.jp",
-      "nasu.tochigi.jp",
-      "nasushiobara.tochigi.jp",
-      "nikko.tochigi.jp",
-      "nishikata.tochigi.jp",
-      "nogi.tochigi.jp",
-      "ohira.tochigi.jp",
-      "ohtawara.tochigi.jp",
-      "oyama.tochigi.jp",
-      "sakura.tochigi.jp",
-      "sano.tochigi.jp",
-      "shimotsuke.tochigi.jp",
-      "shioya.tochigi.jp",
-      "takanezawa.tochigi.jp",
-      "tochigi.tochigi.jp",
-      "tsuga.tochigi.jp",
-      "ujiie.tochigi.jp",
-      "utsunomiya.tochigi.jp",
-      "yaita.tochigi.jp",
-      "aizumi.tokushima.jp",
-      "anan.tokushima.jp",
-      "ichiba.tokushima.jp",
-      "itano.tokushima.jp",
-      "kainan.tokushima.jp",
-      "komatsushima.tokushima.jp",
-      "matsushige.tokushima.jp",
-      "mima.tokushima.jp",
-      "minami.tokushima.jp",
-      "miyoshi.tokushima.jp",
-      "mugi.tokushima.jp",
-      "nakagawa.tokushima.jp",
-      "naruto.tokushima.jp",
-      "sanagochi.tokushima.jp",
-      "shishikui.tokushima.jp",
-      "tokushima.tokushima.jp",
-      "wajiki.tokushima.jp",
-      "adachi.tokyo.jp",
-      "akiruno.tokyo.jp",
-      "akishima.tokyo.jp",
-      "aogashima.tokyo.jp",
-      "arakawa.tokyo.jp",
-      "bunkyo.tokyo.jp",
-      "chiyoda.tokyo.jp",
-      "chofu.tokyo.jp",
-      "chuo.tokyo.jp",
-      "edogawa.tokyo.jp",
-      "fuchu.tokyo.jp",
-      "fussa.tokyo.jp",
-      "hachijo.tokyo.jp",
-      "hachioji.tokyo.jp",
-      "hamura.tokyo.jp",
-      "higashikurume.tokyo.jp",
-      "higashimurayama.tokyo.jp",
-      "higashiyamato.tokyo.jp",
-      "hino.tokyo.jp",
-      "hinode.tokyo.jp",
-      "hinohara.tokyo.jp",
-      "inagi.tokyo.jp",
-      "itabashi.tokyo.jp",
-      "katsushika.tokyo.jp",
-      "kita.tokyo.jp",
-      "kiyose.tokyo.jp",
-      "kodaira.tokyo.jp",
-      "koganei.tokyo.jp",
-      "kokubunji.tokyo.jp",
-      "komae.tokyo.jp",
-      "koto.tokyo.jp",
-      "kouzushima.tokyo.jp",
-      "kunitachi.tokyo.jp",
-      "machida.tokyo.jp",
-      "meguro.tokyo.jp",
-      "minato.tokyo.jp",
-      "mitaka.tokyo.jp",
-      "mizuho.tokyo.jp",
-      "musashimurayama.tokyo.jp",
-      "musashino.tokyo.jp",
-      "nakano.tokyo.jp",
-      "nerima.tokyo.jp",
-      "ogasawara.tokyo.jp",
-      "okutama.tokyo.jp",
-      "ome.tokyo.jp",
-      "oshima.tokyo.jp",
-      "ota.tokyo.jp",
-      "setagaya.tokyo.jp",
-      "shibuya.tokyo.jp",
-      "shinagawa.tokyo.jp",
-      "shinjuku.tokyo.jp",
-      "suginami.tokyo.jp",
-      "sumida.tokyo.jp",
-      "tachikawa.tokyo.jp",
-      "taito.tokyo.jp",
-      "tama.tokyo.jp",
-      "toshima.tokyo.jp",
-      "chizu.tottori.jp",
-      "hino.tottori.jp",
-      "kawahara.tottori.jp",
-      "koge.tottori.jp",
-      "kotoura.tottori.jp",
-      "misasa.tottori.jp",
-      "nanbu.tottori.jp",
-      "nichinan.tottori.jp",
-      "sakaiminato.tottori.jp",
-      "tottori.tottori.jp",
-      "wakasa.tottori.jp",
-      "yazu.tottori.jp",
-      "yonago.tottori.jp",
-      "asahi.toyama.jp",
-      "fuchu.toyama.jp",
-      "fukumitsu.toyama.jp",
-      "funahashi.toyama.jp",
-      "himi.toyama.jp",
-      "imizu.toyama.jp",
-      "inami.toyama.jp",
-      "johana.toyama.jp",
-      "kamiichi.toyama.jp",
-      "kurobe.toyama.jp",
-      "nakaniikawa.toyama.jp",
-      "namerikawa.toyama.jp",
-      "nanto.toyama.jp",
-      "nyuzen.toyama.jp",
-      "oyabe.toyama.jp",
-      "taira.toyama.jp",
-      "takaoka.toyama.jp",
-      "tateyama.toyama.jp",
-      "toga.toyama.jp",
-      "tonami.toyama.jp",
-      "toyama.toyama.jp",
-      "unazuki.toyama.jp",
-      "uozu.toyama.jp",
-      "yamada.toyama.jp",
-      "arida.wakayama.jp",
-      "aridagawa.wakayama.jp",
-      "gobo.wakayama.jp",
-      "hashimoto.wakayama.jp",
-      "hidaka.wakayama.jp",
-      "hirogawa.wakayama.jp",
-      "inami.wakayama.jp",
-      "iwade.wakayama.jp",
-      "kainan.wakayama.jp",
-      "kamitonda.wakayama.jp",
-      "katsuragi.wakayama.jp",
-      "kimino.wakayama.jp",
-      "kinokawa.wakayama.jp",
-      "kitayama.wakayama.jp",
-      "koya.wakayama.jp",
-      "koza.wakayama.jp",
-      "kozagawa.wakayama.jp",
-      "kudoyama.wakayama.jp",
-      "kushimoto.wakayama.jp",
-      "mihama.wakayama.jp",
-      "misato.wakayama.jp",
-      "nachikatsuura.wakayama.jp",
-      "shingu.wakayama.jp",
-      "shirahama.wakayama.jp",
-      "taiji.wakayama.jp",
-      "tanabe.wakayama.jp",
-      "wakayama.wakayama.jp",
-      "yuasa.wakayama.jp",
-      "yura.wakayama.jp",
-      "asahi.yamagata.jp",
-      "funagata.yamagata.jp",
-      "higashine.yamagata.jp",
-      "iide.yamagata.jp",
-      "kahoku.yamagata.jp",
-      "kaminoyama.yamagata.jp",
-      "kaneyama.yamagata.jp",
-      "kawanishi.yamagata.jp",
-      "mamurogawa.yamagata.jp",
-      "mikawa.yamagata.jp",
-      "murayama.yamagata.jp",
-      "nagai.yamagata.jp",
-      "nakayama.yamagata.jp",
-      "nanyo.yamagata.jp",
-      "nishikawa.yamagata.jp",
-      "obanazawa.yamagata.jp",
-      "oe.yamagata.jp",
-      "oguni.yamagata.jp",
-      "ohkura.yamagata.jp",
-      "oishida.yamagata.jp",
-      "sagae.yamagata.jp",
-      "sakata.yamagata.jp",
-      "sakegawa.yamagata.jp",
-      "shinjo.yamagata.jp",
-      "shirataka.yamagata.jp",
-      "shonai.yamagata.jp",
-      "takahata.yamagata.jp",
-      "tendo.yamagata.jp",
-      "tozawa.yamagata.jp",
-      "tsuruoka.yamagata.jp",
-      "yamagata.yamagata.jp",
-      "yamanobe.yamagata.jp",
-      "yonezawa.yamagata.jp",
-      "yuza.yamagata.jp",
-      "abu.yamaguchi.jp",
-      "hagi.yamaguchi.jp",
-      "hikari.yamaguchi.jp",
-      "hofu.yamaguchi.jp",
-      "iwakuni.yamaguchi.jp",
-      "kudamatsu.yamaguchi.jp",
-      "mitou.yamaguchi.jp",
-      "nagato.yamaguchi.jp",
-      "oshima.yamaguchi.jp",
-      "shimonoseki.yamaguchi.jp",
-      "shunan.yamaguchi.jp",
-      "tabuse.yamaguchi.jp",
-      "tokuyama.yamaguchi.jp",
-      "toyota.yamaguchi.jp",
-      "ube.yamaguchi.jp",
-      "yuu.yamaguchi.jp",
-      "chuo.yamanashi.jp",
-      "doshi.yamanashi.jp",
-      "fuefuki.yamanashi.jp",
-      "fujikawa.yamanashi.jp",
-      "fujikawaguchiko.yamanashi.jp",
-      "fujiyoshida.yamanashi.jp",
-      "hayakawa.yamanashi.jp",
-      "hokuto.yamanashi.jp",
-      "ichikawamisato.yamanashi.jp",
-      "kai.yamanashi.jp",
-      "kofu.yamanashi.jp",
-      "koshu.yamanashi.jp",
-      "kosuge.yamanashi.jp",
-      "minami-alps.yamanashi.jp",
-      "minobu.yamanashi.jp",
-      "nakamichi.yamanashi.jp",
-      "nanbu.yamanashi.jp",
-      "narusawa.yamanashi.jp",
-      "nirasaki.yamanashi.jp",
-      "nishikatsura.yamanashi.jp",
-      "oshino.yamanashi.jp",
-      "otsuki.yamanashi.jp",
-      "showa.yamanashi.jp",
-      "tabayama.yamanashi.jp",
-      "tsuru.yamanashi.jp",
-      "uenohara.yamanashi.jp",
-      "yamanakako.yamanashi.jp",
-      "yamanashi.yamanashi.jp",
-      "ke",
-      "ac.ke",
-      "co.ke",
-      "go.ke",
-      "info.ke",
-      "me.ke",
-      "mobi.ke",
-      "ne.ke",
-      "or.ke",
-      "sc.ke",
-      "kg",
-      "org.kg",
-      "net.kg",
-      "com.kg",
-      "edu.kg",
-      "gov.kg",
-      "mil.kg",
-      "*.kh",
-      "ki",
-      "edu.ki",
-      "biz.ki",
-      "net.ki",
-      "org.ki",
-      "gov.ki",
-      "info.ki",
-      "com.ki",
-      "km",
-      "org.km",
-      "nom.km",
-      "gov.km",
-      "prd.km",
-      "tm.km",
-      "edu.km",
-      "mil.km",
-      "ass.km",
-      "com.km",
-      "coop.km",
-      "asso.km",
-      "presse.km",
-      "medecin.km",
-      "notaires.km",
-      "pharmaciens.km",
-      "veterinaire.km",
-      "gouv.km",
-      "kn",
-      "net.kn",
-      "org.kn",
-      "edu.kn",
-      "gov.kn",
-      "kp",
-      "com.kp",
-      "edu.kp",
-      "gov.kp",
-      "org.kp",
-      "rep.kp",
-      "tra.kp",
-      "kr",
-      "ac.kr",
-      "co.kr",
-      "es.kr",
-      "go.kr",
-      "hs.kr",
-      "kg.kr",
-      "mil.kr",
-      "ms.kr",
-      "ne.kr",
-      "or.kr",
-      "pe.kr",
-      "re.kr",
-      "sc.kr",
-      "busan.kr",
-      "chungbuk.kr",
-      "chungnam.kr",
-      "daegu.kr",
-      "daejeon.kr",
-      "gangwon.kr",
-      "gwangju.kr",
-      "gyeongbuk.kr",
-      "gyeonggi.kr",
-      "gyeongnam.kr",
-      "incheon.kr",
-      "jeju.kr",
-      "jeonbuk.kr",
-      "jeonnam.kr",
-      "seoul.kr",
-      "ulsan.kr",
-      "kw",
-      "com.kw",
-      "edu.kw",
-      "emb.kw",
-      "gov.kw",
-      "ind.kw",
-      "net.kw",
-      "org.kw",
-      "ky",
-      "edu.ky",
-      "gov.ky",
-      "com.ky",
-      "org.ky",
-      "net.ky",
-      "kz",
-      "org.kz",
-      "edu.kz",
-      "net.kz",
-      "gov.kz",
-      "mil.kz",
-      "com.kz",
-      "la",
-      "int.la",
-      "net.la",
-      "info.la",
-      "edu.la",
-      "gov.la",
-      "per.la",
-      "com.la",
-      "org.la",
-      "lb",
-      "com.lb",
-      "edu.lb",
-      "gov.lb",
-      "net.lb",
-      "org.lb",
-      "lc",
-      "com.lc",
-      "net.lc",
-      "co.lc",
-      "org.lc",
-      "edu.lc",
-      "gov.lc",
-      "li",
-      "lk",
-      "gov.lk",
-      "sch.lk",
-      "net.lk",
-      "int.lk",
-      "com.lk",
-      "org.lk",
-      "edu.lk",
-      "ngo.lk",
-      "soc.lk",
-      "web.lk",
-      "ltd.lk",
-      "assn.lk",
-      "grp.lk",
-      "hotel.lk",
-      "ac.lk",
-      "lr",
-      "com.lr",
-      "edu.lr",
-      "gov.lr",
-      "org.lr",
-      "net.lr",
-      "ls",
-      "ac.ls",
-      "biz.ls",
-      "co.ls",
-      "edu.ls",
-      "gov.ls",
-      "info.ls",
-      "net.ls",
-      "org.ls",
-      "sc.ls",
-      "lt",
-      "gov.lt",
-      "lu",
-      "lv",
-      "com.lv",
-      "edu.lv",
-      "gov.lv",
-      "org.lv",
-      "mil.lv",
-      "id.lv",
-      "net.lv",
-      "asn.lv",
-      "conf.lv",
-      "ly",
-      "com.ly",
-      "net.ly",
-      "gov.ly",
-      "plc.ly",
-      "edu.ly",
-      "sch.ly",
-      "med.ly",
-      "org.ly",
-      "id.ly",
-      "ma",
-      "co.ma",
-      "net.ma",
-      "gov.ma",
-      "org.ma",
-      "ac.ma",
-      "press.ma",
-      "mc",
-      "tm.mc",
-      "asso.mc",
-      "md",
-      "me",
-      "co.me",
-      "net.me",
-      "org.me",
-      "edu.me",
-      "ac.me",
-      "gov.me",
-      "its.me",
-      "priv.me",
-      "mg",
-      "org.mg",
-      "nom.mg",
-      "gov.mg",
-      "prd.mg",
-      "tm.mg",
-      "edu.mg",
-      "mil.mg",
-      "com.mg",
-      "co.mg",
-      "mh",
-      "mil",
-      "mk",
-      "com.mk",
-      "org.mk",
-      "net.mk",
-      "edu.mk",
-      "gov.mk",
-      "inf.mk",
-      "name.mk",
-      "ml",
-      "com.ml",
-      "edu.ml",
-      "gouv.ml",
-      "gov.ml",
-      "net.ml",
-      "org.ml",
-      "presse.ml",
-      "*.mm",
-      "mn",
-      "gov.mn",
-      "edu.mn",
-      "org.mn",
-      "mo",
-      "com.mo",
-      "net.mo",
-      "org.mo",
-      "edu.mo",
-      "gov.mo",
-      "mobi",
-      "mp",
-      "mq",
-      "mr",
-      "gov.mr",
-      "ms",
-      "com.ms",
-      "edu.ms",
-      "gov.ms",
-      "net.ms",
-      "org.ms",
-      "mt",
-      "com.mt",
-      "edu.mt",
-      "net.mt",
-      "org.mt",
-      "mu",
-      "com.mu",
-      "net.mu",
-      "org.mu",
-      "gov.mu",
-      "ac.mu",
-      "co.mu",
-      "or.mu",
-      "museum",
-      "academy.museum",
-      "agriculture.museum",
-      "air.museum",
-      "airguard.museum",
-      "alabama.museum",
-      "alaska.museum",
-      "amber.museum",
-      "ambulance.museum",
-      "american.museum",
-      "americana.museum",
-      "americanantiques.museum",
-      "americanart.museum",
-      "amsterdam.museum",
-      "and.museum",
-      "annefrank.museum",
-      "anthro.museum",
-      "anthropology.museum",
-      "antiques.museum",
-      "aquarium.museum",
-      "arboretum.museum",
-      "archaeological.museum",
-      "archaeology.museum",
-      "architecture.museum",
-      "art.museum",
-      "artanddesign.museum",
-      "artcenter.museum",
-      "artdeco.museum",
-      "arteducation.museum",
-      "artgallery.museum",
-      "arts.museum",
-      "artsandcrafts.museum",
-      "asmatart.museum",
-      "assassination.museum",
-      "assisi.museum",
-      "association.museum",
-      "astronomy.museum",
-      "atlanta.museum",
-      "austin.museum",
-      "australia.museum",
-      "automotive.museum",
-      "aviation.museum",
-      "axis.museum",
-      "badajoz.museum",
-      "baghdad.museum",
-      "bahn.museum",
-      "bale.museum",
-      "baltimore.museum",
-      "barcelona.museum",
-      "baseball.museum",
-      "basel.museum",
-      "baths.museum",
-      "bauern.museum",
-      "beauxarts.museum",
-      "beeldengeluid.museum",
-      "bellevue.museum",
-      "bergbau.museum",
-      "berkeley.museum",
-      "berlin.museum",
-      "bern.museum",
-      "bible.museum",
-      "bilbao.museum",
-      "bill.museum",
-      "birdart.museum",
-      "birthplace.museum",
-      "bonn.museum",
-      "boston.museum",
-      "botanical.museum",
-      "botanicalgarden.museum",
-      "botanicgarden.museum",
-      "botany.museum",
-      "brandywinevalley.museum",
-      "brasil.museum",
-      "bristol.museum",
-      "british.museum",
-      "britishcolumbia.museum",
-      "broadcast.museum",
-      "brunel.museum",
-      "brussel.museum",
-      "brussels.museum",
-      "bruxelles.museum",
-      "building.museum",
-      "burghof.museum",
-      "bus.museum",
-      "bushey.museum",
-      "cadaques.museum",
-      "california.museum",
-      "cambridge.museum",
-      "can.museum",
-      "canada.museum",
-      "capebreton.museum",
-      "carrier.museum",
-      "cartoonart.museum",
-      "casadelamoneda.museum",
-      "castle.museum",
-      "castres.museum",
-      "celtic.museum",
-      "center.museum",
-      "chattanooga.museum",
-      "cheltenham.museum",
-      "chesapeakebay.museum",
-      "chicago.museum",
-      "children.museum",
-      "childrens.museum",
-      "childrensgarden.museum",
-      "chiropractic.museum",
-      "chocolate.museum",
-      "christiansburg.museum",
-      "cincinnati.museum",
-      "cinema.museum",
-      "circus.museum",
-      "civilisation.museum",
-      "civilization.museum",
-      "civilwar.museum",
-      "clinton.museum",
-      "clock.museum",
-      "coal.museum",
-      "coastaldefence.museum",
-      "cody.museum",
-      "coldwar.museum",
-      "collection.museum",
-      "colonialwilliamsburg.museum",
-      "coloradoplateau.museum",
-      "columbia.museum",
-      "columbus.museum",
-      "communication.museum",
-      "communications.museum",
-      "community.museum",
-      "computer.museum",
-      "computerhistory.museum",
-      "comunica\xE7\xF5es.museum",
-      "contemporary.museum",
-      "contemporaryart.museum",
-      "convent.museum",
-      "copenhagen.museum",
-      "corporation.museum",
-      "correios-e-telecomunica\xE7\xF5es.museum",
-      "corvette.museum",
-      "costume.museum",
-      "countryestate.museum",
-      "county.museum",
-      "crafts.museum",
-      "cranbrook.museum",
-      "creation.museum",
-      "cultural.museum",
-      "culturalcenter.museum",
-      "culture.museum",
-      "cyber.museum",
-      "cymru.museum",
-      "dali.museum",
-      "dallas.museum",
-      "database.museum",
-      "ddr.museum",
-      "decorativearts.museum",
-      "delaware.museum",
-      "delmenhorst.museum",
-      "denmark.museum",
-      "depot.museum",
-      "design.museum",
-      "detroit.museum",
-      "dinosaur.museum",
-      "discovery.museum",
-      "dolls.museum",
-      "donostia.museum",
-      "durham.museum",
-      "eastafrica.museum",
-      "eastcoast.museum",
-      "education.museum",
-      "educational.museum",
-      "egyptian.museum",
-      "eisenbahn.museum",
-      "elburg.museum",
-      "elvendrell.museum",
-      "embroidery.museum",
-      "encyclopedic.museum",
-      "england.museum",
-      "entomology.museum",
-      "environment.museum",
-      "environmentalconservation.museum",
-      "epilepsy.museum",
-      "essex.museum",
-      "estate.museum",
-      "ethnology.museum",
-      "exeter.museum",
-      "exhibition.museum",
-      "family.museum",
-      "farm.museum",
-      "farmequipment.museum",
-      "farmers.museum",
-      "farmstead.museum",
-      "field.museum",
-      "figueres.museum",
-      "filatelia.museum",
-      "film.museum",
-      "fineart.museum",
-      "finearts.museum",
-      "finland.museum",
-      "flanders.museum",
-      "florida.museum",
-      "force.museum",
-      "fortmissoula.museum",
-      "fortworth.museum",
-      "foundation.museum",
-      "francaise.museum",
-      "frankfurt.museum",
-      "franziskaner.museum",
-      "freemasonry.museum",
-      "freiburg.museum",
-      "fribourg.museum",
-      "frog.museum",
-      "fundacio.museum",
-      "furniture.museum",
-      "gallery.museum",
-      "garden.museum",
-      "gateway.museum",
-      "geelvinck.museum",
-      "gemological.museum",
-      "geology.museum",
-      "georgia.museum",
-      "giessen.museum",
-      "glas.museum",
-      "glass.museum",
-      "gorge.museum",
-      "grandrapids.museum",
-      "graz.museum",
-      "guernsey.museum",
-      "halloffame.museum",
-      "hamburg.museum",
-      "handson.museum",
-      "harvestcelebration.museum",
-      "hawaii.museum",
-      "health.museum",
-      "heimatunduhren.museum",
-      "hellas.museum",
-      "helsinki.museum",
-      "hembygdsforbund.museum",
-      "heritage.museum",
-      "histoire.museum",
-      "historical.museum",
-      "historicalsociety.museum",
-      "historichouses.museum",
-      "historisch.museum",
-      "historisches.museum",
-      "history.museum",
-      "historyofscience.museum",
-      "horology.museum",
-      "house.museum",
-      "humanities.museum",
-      "illustration.museum",
-      "imageandsound.museum",
-      "indian.museum",
-      "indiana.museum",
-      "indianapolis.museum",
-      "indianmarket.museum",
-      "intelligence.museum",
-      "interactive.museum",
-      "iraq.museum",
-      "iron.museum",
-      "isleofman.museum",
-      "jamison.museum",
-      "jefferson.museum",
-      "jerusalem.museum",
-      "jewelry.museum",
-      "jewish.museum",
-      "jewishart.museum",
-      "jfk.museum",
-      "journalism.museum",
-      "judaica.museum",
-      "judygarland.museum",
-      "juedisches.museum",
-      "juif.museum",
-      "karate.museum",
-      "karikatur.museum",
-      "kids.museum",
-      "koebenhavn.museum",
-      "koeln.museum",
-      "kunst.museum",
-      "kunstsammlung.museum",
-      "kunstunddesign.museum",
-      "labor.museum",
-      "labour.museum",
-      "lajolla.museum",
-      "lancashire.museum",
-      "landes.museum",
-      "lans.museum",
-      "l\xE4ns.museum",
-      "larsson.museum",
-      "lewismiller.museum",
-      "lincoln.museum",
-      "linz.museum",
-      "living.museum",
-      "livinghistory.museum",
-      "localhistory.museum",
-      "london.museum",
-      "losangeles.museum",
-      "louvre.museum",
-      "loyalist.museum",
-      "lucerne.museum",
-      "luxembourg.museum",
-      "luzern.museum",
-      "mad.museum",
-      "madrid.museum",
-      "mallorca.museum",
-      "manchester.museum",
-      "mansion.museum",
-      "mansions.museum",
-      "manx.museum",
-      "marburg.museum",
-      "maritime.museum",
-      "maritimo.museum",
-      "maryland.museum",
-      "marylhurst.museum",
-      "media.museum",
-      "medical.museum",
-      "medizinhistorisches.museum",
-      "meeres.museum",
-      "memorial.museum",
-      "mesaverde.museum",
-      "michigan.museum",
-      "midatlantic.museum",
-      "military.museum",
-      "mill.museum",
-      "miners.museum",
-      "mining.museum",
-      "minnesota.museum",
-      "missile.museum",
-      "missoula.museum",
-      "modern.museum",
-      "moma.museum",
-      "money.museum",
-      "monmouth.museum",
-      "monticello.museum",
-      "montreal.museum",
-      "moscow.museum",
-      "motorcycle.museum",
-      "muenchen.museum",
-      "muenster.museum",
-      "mulhouse.museum",
-      "muncie.museum",
-      "museet.museum",
-      "museumcenter.museum",
-      "museumvereniging.museum",
-      "music.museum",
-      "national.museum",
-      "nationalfirearms.museum",
-      "nationalheritage.museum",
-      "nativeamerican.museum",
-      "naturalhistory.museum",
-      "naturalhistorymuseum.museum",
-      "naturalsciences.museum",
-      "nature.museum",
-      "naturhistorisches.museum",
-      "natuurwetenschappen.museum",
-      "naumburg.museum",
-      "naval.museum",
-      "nebraska.museum",
-      "neues.museum",
-      "newhampshire.museum",
-      "newjersey.museum",
-      "newmexico.museum",
-      "newport.museum",
-      "newspaper.museum",
-      "newyork.museum",
-      "niepce.museum",
-      "norfolk.museum",
-      "north.museum",
-      "nrw.museum",
-      "nyc.museum",
-      "nyny.museum",
-      "oceanographic.museum",
-      "oceanographique.museum",
-      "omaha.museum",
-      "online.museum",
-      "ontario.museum",
-      "openair.museum",
-      "oregon.museum",
-      "oregontrail.museum",
-      "otago.museum",
-      "oxford.museum",
-      "pacific.museum",
-      "paderborn.museum",
-      "palace.museum",
-      "paleo.museum",
-      "palmsprings.museum",
-      "panama.museum",
-      "paris.museum",
-      "pasadena.museum",
-      "pharmacy.museum",
-      "philadelphia.museum",
-      "philadelphiaarea.museum",
-      "philately.museum",
-      "phoenix.museum",
-      "photography.museum",
-      "pilots.museum",
-      "pittsburgh.museum",
-      "planetarium.museum",
-      "plantation.museum",
-      "plants.museum",
-      "plaza.museum",
-      "portal.museum",
-      "portland.museum",
-      "portlligat.museum",
-      "posts-and-telecommunications.museum",
-      "preservation.museum",
-      "presidio.museum",
-      "press.museum",
-      "project.museum",
-      "public.museum",
-      "pubol.museum",
-      "quebec.museum",
-      "railroad.museum",
-      "railway.museum",
-      "research.museum",
-      "resistance.museum",
-      "riodejaneiro.museum",
-      "rochester.museum",
-      "rockart.museum",
-      "roma.museum",
-      "russia.museum",
-      "saintlouis.museum",
-      "salem.museum",
-      "salvadordali.museum",
-      "salzburg.museum",
-      "sandiego.museum",
-      "sanfrancisco.museum",
-      "santabarbara.museum",
-      "santacruz.museum",
-      "santafe.museum",
-      "saskatchewan.museum",
-      "satx.museum",
-      "savannahga.museum",
-      "schlesisches.museum",
-      "schoenbrunn.museum",
-      "schokoladen.museum",
-      "school.museum",
-      "schweiz.museum",
-      "science.museum",
-      "scienceandhistory.museum",
-      "scienceandindustry.museum",
-      "sciencecenter.museum",
-      "sciencecenters.museum",
-      "science-fiction.museum",
-      "sciencehistory.museum",
-      "sciences.museum",
-      "sciencesnaturelles.museum",
-      "scotland.museum",
-      "seaport.museum",
-      "settlement.museum",
-      "settlers.museum",
-      "shell.museum",
-      "sherbrooke.museum",
-      "sibenik.museum",
-      "silk.museum",
-      "ski.museum",
-      "skole.museum",
-      "society.museum",
-      "sologne.museum",
-      "soundandvision.museum",
-      "southcarolina.museum",
-      "southwest.museum",
-      "space.museum",
-      "spy.museum",
-      "square.museum",
-      "stadt.museum",
-      "stalbans.museum",
-      "starnberg.museum",
-      "state.museum",
-      "stateofdelaware.museum",
-      "station.museum",
-      "steam.museum",
-      "steiermark.museum",
-      "stjohn.museum",
-      "stockholm.museum",
-      "stpetersburg.museum",
-      "stuttgart.museum",
-      "suisse.museum",
-      "surgeonshall.museum",
-      "surrey.museum",
-      "svizzera.museum",
-      "sweden.museum",
-      "sydney.museum",
-      "tank.museum",
-      "tcm.museum",
-      "technology.museum",
-      "telekommunikation.museum",
-      "television.museum",
-      "texas.museum",
-      "textile.museum",
-      "theater.museum",
-      "time.museum",
-      "timekeeping.museum",
-      "topology.museum",
-      "torino.museum",
-      "touch.museum",
-      "town.museum",
-      "transport.museum",
-      "tree.museum",
-      "trolley.museum",
-      "trust.museum",
-      "trustee.museum",
-      "uhren.museum",
-      "ulm.museum",
-      "undersea.museum",
-      "university.museum",
-      "usa.museum",
-      "usantiques.museum",
-      "usarts.museum",
-      "uscountryestate.museum",
-      "usculture.museum",
-      "usdecorativearts.museum",
-      "usgarden.museum",
-      "ushistory.museum",
-      "ushuaia.museum",
-      "uslivinghistory.museum",
-      "utah.museum",
-      "uvic.museum",
-      "valley.museum",
-      "vantaa.museum",
-      "versailles.museum",
-      "viking.museum",
-      "village.museum",
-      "virginia.museum",
-      "virtual.museum",
-      "virtuel.museum",
-      "vlaanderen.museum",
-      "volkenkunde.museum",
-      "wales.museum",
-      "wallonie.museum",
-      "war.museum",
-      "washingtondc.museum",
-      "watchandclock.museum",
-      "watch-and-clock.museum",
-      "western.museum",
-      "westfalen.museum",
-      "whaling.museum",
-      "wildlife.museum",
-      "williamsburg.museum",
-      "windmill.museum",
-      "workshop.museum",
-      "york.museum",
-      "yorkshire.museum",
-      "yosemite.museum",
-      "youth.museum",
-      "zoological.museum",
-      "zoology.museum",
-      "\u05D9\u05E8\u05D5\u05E9\u05DC\u05D9\u05DD.museum",
-      "\u0438\u043A\u043E\u043C.museum",
-      "mv",
-      "aero.mv",
-      "biz.mv",
-      "com.mv",
-      "coop.mv",
-      "edu.mv",
-      "gov.mv",
-      "info.mv",
-      "int.mv",
-      "mil.mv",
-      "museum.mv",
-      "name.mv",
-      "net.mv",
-      "org.mv",
-      "pro.mv",
-      "mw",
-      "ac.mw",
-      "biz.mw",
-      "co.mw",
-      "com.mw",
-      "coop.mw",
-      "edu.mw",
-      "gov.mw",
-      "int.mw",
-      "museum.mw",
-      "net.mw",
-      "org.mw",
-      "mx",
-      "com.mx",
-      "org.mx",
-      "gob.mx",
-      "edu.mx",
-      "net.mx",
-      "my",
-      "com.my",
-      "net.my",
-      "org.my",
-      "gov.my",
-      "edu.my",
-      "mil.my",
-      "name.my",
-      "mz",
-      "ac.mz",
-      "adv.mz",
-      "co.mz",
-      "edu.mz",
-      "gov.mz",
-      "mil.mz",
-      "net.mz",
-      "org.mz",
-      "na",
-      "info.na",
-      "pro.na",
-      "name.na",
-      "school.na",
-      "or.na",
-      "dr.na",
-      "us.na",
-      "mx.na",
-      "ca.na",
-      "in.na",
-      "cc.na",
-      "tv.na",
-      "ws.na",
-      "mobi.na",
-      "co.na",
-      "com.na",
-      "org.na",
-      "name",
-      "nc",
-      "asso.nc",
-      "nom.nc",
-      "ne",
-      "net",
-      "nf",
-      "com.nf",
-      "net.nf",
-      "per.nf",
-      "rec.nf",
-      "web.nf",
-      "arts.nf",
-      "firm.nf",
-      "info.nf",
-      "other.nf",
-      "store.nf",
-      "ng",
-      "com.ng",
-      "edu.ng",
-      "gov.ng",
-      "i.ng",
-      "mil.ng",
-      "mobi.ng",
-      "name.ng",
-      "net.ng",
-      "org.ng",
-      "sch.ng",
-      "ni",
-      "ac.ni",
-      "biz.ni",
-      "co.ni",
-      "com.ni",
-      "edu.ni",
-      "gob.ni",
-      "in.ni",
-      "info.ni",
-      "int.ni",
-      "mil.ni",
-      "net.ni",
-      "nom.ni",
-      "org.ni",
-      "web.ni",
-      "nl",
-      "no",
-      "fhs.no",
-      "vgs.no",
-      "fylkesbibl.no",
-      "folkebibl.no",
-      "museum.no",
-      "idrett.no",
-      "priv.no",
-      "mil.no",
-      "stat.no",
-      "dep.no",
-      "kommune.no",
-      "herad.no",
-      "aa.no",
-      "ah.no",
-      "bu.no",
-      "fm.no",
-      "hl.no",
-      "hm.no",
-      "jan-mayen.no",
-      "mr.no",
-      "nl.no",
-      "nt.no",
-      "of.no",
-      "ol.no",
-      "oslo.no",
-      "rl.no",
-      "sf.no",
-      "st.no",
-      "svalbard.no",
-      "tm.no",
-      "tr.no",
-      "va.no",
-      "vf.no",
-      "gs.aa.no",
-      "gs.ah.no",
-      "gs.bu.no",
-      "gs.fm.no",
-      "gs.hl.no",
-      "gs.hm.no",
-      "gs.jan-mayen.no",
-      "gs.mr.no",
-      "gs.nl.no",
-      "gs.nt.no",
-      "gs.of.no",
-      "gs.ol.no",
-      "gs.oslo.no",
-      "gs.rl.no",
-      "gs.sf.no",
-      "gs.st.no",
-      "gs.svalbard.no",
-      "gs.tm.no",
-      "gs.tr.no",
-      "gs.va.no",
-      "gs.vf.no",
-      "akrehamn.no",
-      "\xE5krehamn.no",
-      "algard.no",
-      "\xE5lg\xE5rd.no",
-      "arna.no",
-      "brumunddal.no",
-      "bryne.no",
-      "bronnoysund.no",
-      "br\xF8nn\xF8ysund.no",
-      "drobak.no",
-      "dr\xF8bak.no",
-      "egersund.no",
-      "fetsund.no",
-      "floro.no",
-      "flor\xF8.no",
-      "fredrikstad.no",
-      "hokksund.no",
-      "honefoss.no",
-      "h\xF8nefoss.no",
-      "jessheim.no",
-      "jorpeland.no",
-      "j\xF8rpeland.no",
-      "kirkenes.no",
-      "kopervik.no",
-      "krokstadelva.no",
-      "langevag.no",
-      "langev\xE5g.no",
-      "leirvik.no",
-      "mjondalen.no",
-      "mj\xF8ndalen.no",
-      "mo-i-rana.no",
-      "mosjoen.no",
-      "mosj\xF8en.no",
-      "nesoddtangen.no",
-      "orkanger.no",
-      "osoyro.no",
-      "os\xF8yro.no",
-      "raholt.no",
-      "r\xE5holt.no",
-      "sandnessjoen.no",
-      "sandnessj\xF8en.no",
-      "skedsmokorset.no",
-      "slattum.no",
-      "spjelkavik.no",
-      "stathelle.no",
-      "stavern.no",
-      "stjordalshalsen.no",
-      "stj\xF8rdalshalsen.no",
-      "tananger.no",
-      "tranby.no",
-      "vossevangen.no",
-      "afjord.no",
-      "\xE5fjord.no",
-      "agdenes.no",
-      "al.no",
-      "\xE5l.no",
-      "alesund.no",
-      "\xE5lesund.no",
-      "alstahaug.no",
-      "alta.no",
-      "\xE1lt\xE1.no",
-      "alaheadju.no",
-      "\xE1laheadju.no",
-      "alvdal.no",
-      "amli.no",
-      "\xE5mli.no",
-      "amot.no",
-      "\xE5mot.no",
-      "andebu.no",
-      "andoy.no",
-      "and\xF8y.no",
-      "andasuolo.no",
-      "ardal.no",
-      "\xE5rdal.no",
-      "aremark.no",
-      "arendal.no",
-      "\xE5s.no",
-      "aseral.no",
-      "\xE5seral.no",
-      "asker.no",
-      "askim.no",
-      "askvoll.no",
-      "askoy.no",
-      "ask\xF8y.no",
-      "asnes.no",
-      "\xE5snes.no",
-      "audnedaln.no",
-      "aukra.no",
-      "aure.no",
-      "aurland.no",
-      "aurskog-holand.no",
-      "aurskog-h\xF8land.no",
-      "austevoll.no",
-      "austrheim.no",
-      "averoy.no",
-      "aver\xF8y.no",
-      "balestrand.no",
-      "ballangen.no",
-      "balat.no",
-      "b\xE1l\xE1t.no",
-      "balsfjord.no",
-      "bahccavuotna.no",
-      "b\xE1hccavuotna.no",
-      "bamble.no",
-      "bardu.no",
-      "beardu.no",
-      "beiarn.no",
-      "bajddar.no",
-      "b\xE1jddar.no",
-      "baidar.no",
-      "b\xE1id\xE1r.no",
-      "berg.no",
-      "bergen.no",
-      "berlevag.no",
-      "berlev\xE5g.no",
-      "bearalvahki.no",
-      "bearalv\xE1hki.no",
-      "bindal.no",
-      "birkenes.no",
-      "bjarkoy.no",
-      "bjark\xF8y.no",
-      "bjerkreim.no",
-      "bjugn.no",
-      "bodo.no",
-      "bod\xF8.no",
-      "badaddja.no",
-      "b\xE5d\xE5ddj\xE5.no",
-      "budejju.no",
-      "bokn.no",
-      "bremanger.no",
-      "bronnoy.no",
-      "br\xF8nn\xF8y.no",
-      "bygland.no",
-      "bykle.no",
-      "barum.no",
-      "b\xE6rum.no",
-      "bo.telemark.no",
-      "b\xF8.telemark.no",
-      "bo.nordland.no",
-      "b\xF8.nordland.no",
-      "bievat.no",
-      "biev\xE1t.no",
-      "bomlo.no",
-      "b\xF8mlo.no",
-      "batsfjord.no",
-      "b\xE5tsfjord.no",
-      "bahcavuotna.no",
-      "b\xE1hcavuotna.no",
-      "dovre.no",
-      "drammen.no",
-      "drangedal.no",
-      "dyroy.no",
-      "dyr\xF8y.no",
-      "donna.no",
-      "d\xF8nna.no",
-      "eid.no",
-      "eidfjord.no",
-      "eidsberg.no",
-      "eidskog.no",
-      "eidsvoll.no",
-      "eigersund.no",
-      "elverum.no",
-      "enebakk.no",
-      "engerdal.no",
-      "etne.no",
-      "etnedal.no",
-      "evenes.no",
-      "evenassi.no",
-      "even\xE1\u0161\u0161i.no",
-      "evje-og-hornnes.no",
-      "farsund.no",
-      "fauske.no",
-      "fuossko.no",
-      "fuoisku.no",
-      "fedje.no",
-      "fet.no",
-      "finnoy.no",
-      "finn\xF8y.no",
-      "fitjar.no",
-      "fjaler.no",
-      "fjell.no",
-      "flakstad.no",
-      "flatanger.no",
-      "flekkefjord.no",
-      "flesberg.no",
-      "flora.no",
-      "fla.no",
-      "fl\xE5.no",
-      "folldal.no",
-      "forsand.no",
-      "fosnes.no",
-      "frei.no",
-      "frogn.no",
-      "froland.no",
-      "frosta.no",
-      "frana.no",
-      "fr\xE6na.no",
-      "froya.no",
-      "fr\xF8ya.no",
-      "fusa.no",
-      "fyresdal.no",
-      "forde.no",
-      "f\xF8rde.no",
-      "gamvik.no",
-      "gangaviika.no",
-      "g\xE1\u014Bgaviika.no",
-      "gaular.no",
-      "gausdal.no",
-      "gildeskal.no",
-      "gildesk\xE5l.no",
-      "giske.no",
-      "gjemnes.no",
-      "gjerdrum.no",
-      "gjerstad.no",
-      "gjesdal.no",
-      "gjovik.no",
-      "gj\xF8vik.no",
-      "gloppen.no",
-      "gol.no",
-      "gran.no",
-      "grane.no",
-      "granvin.no",
-      "gratangen.no",
-      "grimstad.no",
-      "grong.no",
-      "kraanghke.no",
-      "kr\xE5anghke.no",
-      "grue.no",
-      "gulen.no",
-      "hadsel.no",
-      "halden.no",
-      "halsa.no",
-      "hamar.no",
-      "hamaroy.no",
-      "habmer.no",
-      "h\xE1bmer.no",
-      "hapmir.no",
-      "h\xE1pmir.no",
-      "hammerfest.no",
-      "hammarfeasta.no",
-      "h\xE1mm\xE1rfeasta.no",
-      "haram.no",
-      "hareid.no",
-      "harstad.no",
-      "hasvik.no",
-      "aknoluokta.no",
-      "\xE1k\u014Boluokta.no",
-      "hattfjelldal.no",
-      "aarborte.no",
-      "haugesund.no",
-      "hemne.no",
-      "hemnes.no",
-      "hemsedal.no",
-      "heroy.more-og-romsdal.no",
-      "her\xF8y.m\xF8re-og-romsdal.no",
-      "heroy.nordland.no",
-      "her\xF8y.nordland.no",
-      "hitra.no",
-      "hjartdal.no",
-      "hjelmeland.no",
-      "hobol.no",
-      "hob\xF8l.no",
-      "hof.no",
-      "hol.no",
-      "hole.no",
-      "holmestrand.no",
-      "holtalen.no",
-      "holt\xE5len.no",
-      "hornindal.no",
-      "horten.no",
-      "hurdal.no",
-      "hurum.no",
-      "hvaler.no",
-      "hyllestad.no",
-      "hagebostad.no",
-      "h\xE6gebostad.no",
-      "hoyanger.no",
-      "h\xF8yanger.no",
-      "hoylandet.no",
-      "h\xF8ylandet.no",
-      "ha.no",
-      "h\xE5.no",
-      "ibestad.no",
-      "inderoy.no",
-      "inder\xF8y.no",
-      "iveland.no",
-      "jevnaker.no",
-      "jondal.no",
-      "jolster.no",
-      "j\xF8lster.no",
-      "karasjok.no",
-      "karasjohka.no",
-      "k\xE1r\xE1\u0161johka.no",
-      "karlsoy.no",
-      "galsa.no",
-      "g\xE1ls\xE1.no",
-      "karmoy.no",
-      "karm\xF8y.no",
-      "kautokeino.no",
-      "guovdageaidnu.no",
-      "klepp.no",
-      "klabu.no",
-      "kl\xE6bu.no",
-      "kongsberg.no",
-      "kongsvinger.no",
-      "kragero.no",
-      "krager\xF8.no",
-      "kristiansand.no",
-      "kristiansund.no",
-      "krodsherad.no",
-      "kr\xF8dsherad.no",
-      "kvalsund.no",
-      "rahkkeravju.no",
-      "r\xE1hkker\xE1vju.no",
-      "kvam.no",
-      "kvinesdal.no",
-      "kvinnherad.no",
-      "kviteseid.no",
-      "kvitsoy.no",
-      "kvits\xF8y.no",
-      "kvafjord.no",
-      "kv\xE6fjord.no",
-      "giehtavuoatna.no",
-      "kvanangen.no",
-      "kv\xE6nangen.no",
-      "navuotna.no",
-      "n\xE1vuotna.no",
-      "kafjord.no",
-      "k\xE5fjord.no",
-      "gaivuotna.no",
-      "g\xE1ivuotna.no",
-      "larvik.no",
-      "lavangen.no",
-      "lavagis.no",
-      "loabat.no",
-      "loab\xE1t.no",
-      "lebesby.no",
-      "davvesiida.no",
-      "leikanger.no",
-      "leirfjord.no",
-      "leka.no",
-      "leksvik.no",
-      "lenvik.no",
-      "leangaviika.no",
-      "lea\u014Bgaviika.no",
-      "lesja.no",
-      "levanger.no",
-      "lier.no",
-      "lierne.no",
-      "lillehammer.no",
-      "lillesand.no",
-      "lindesnes.no",
-      "lindas.no",
-      "lind\xE5s.no",
-      "lom.no",
-      "loppa.no",
-      "lahppi.no",
-      "l\xE1hppi.no",
-      "lund.no",
-      "lunner.no",
-      "luroy.no",
-      "lur\xF8y.no",
-      "luster.no",
-      "lyngdal.no",
-      "lyngen.no",
-      "ivgu.no",
-      "lardal.no",
-      "lerdal.no",
-      "l\xE6rdal.no",
-      "lodingen.no",
-      "l\xF8dingen.no",
-      "lorenskog.no",
-      "l\xF8renskog.no",
-      "loten.no",
-      "l\xF8ten.no",
-      "malvik.no",
-      "masoy.no",
-      "m\xE5s\xF8y.no",
-      "muosat.no",
-      "muos\xE1t.no",
-      "mandal.no",
-      "marker.no",
-      "marnardal.no",
-      "masfjorden.no",
-      "meland.no",
-      "meldal.no",
-      "melhus.no",
-      "meloy.no",
-      "mel\xF8y.no",
-      "meraker.no",
-      "mer\xE5ker.no",
-      "moareke.no",
-      "mo\xE5reke.no",
-      "midsund.no",
-      "midtre-gauldal.no",
-      "modalen.no",
-      "modum.no",
-      "molde.no",
-      "moskenes.no",
-      "moss.no",
-      "mosvik.no",
-      "malselv.no",
-      "m\xE5lselv.no",
-      "malatvuopmi.no",
-      "m\xE1latvuopmi.no",
-      "namdalseid.no",
-      "aejrie.no",
-      "namsos.no",
-      "namsskogan.no",
-      "naamesjevuemie.no",
-      "n\xE5\xE5mesjevuemie.no",
-      "laakesvuemie.no",
-      "nannestad.no",
-      "narvik.no",
-      "narviika.no",
-      "naustdal.no",
-      "nedre-eiker.no",
-      "nes.akershus.no",
-      "nes.buskerud.no",
-      "nesna.no",
-      "nesodden.no",
-      "nesseby.no",
-      "unjarga.no",
-      "unj\xE1rga.no",
-      "nesset.no",
-      "nissedal.no",
-      "nittedal.no",
-      "nord-aurdal.no",
-      "nord-fron.no",
-      "nord-odal.no",
-      "norddal.no",
-      "nordkapp.no",
-      "davvenjarga.no",
-      "davvenj\xE1rga.no",
-      "nordre-land.no",
-      "nordreisa.no",
-      "raisa.no",
-      "r\xE1isa.no",
-      "nore-og-uvdal.no",
-      "notodden.no",
-      "naroy.no",
-      "n\xE6r\xF8y.no",
-      "notteroy.no",
-      "n\xF8tter\xF8y.no",
-      "odda.no",
-      "oksnes.no",
-      "\xF8ksnes.no",
-      "oppdal.no",
-      "oppegard.no",
-      "oppeg\xE5rd.no",
-      "orkdal.no",
-      "orland.no",
-      "\xF8rland.no",
-      "orskog.no",
-      "\xF8rskog.no",
-      "orsta.no",
-      "\xF8rsta.no",
-      "os.hedmark.no",
-      "os.hordaland.no",
-      "osen.no",
-      "osteroy.no",
-      "oster\xF8y.no",
-      "ostre-toten.no",
-      "\xF8stre-toten.no",
-      "overhalla.no",
-      "ovre-eiker.no",
-      "\xF8vre-eiker.no",
-      "oyer.no",
-      "\xF8yer.no",
-      "oygarden.no",
-      "\xF8ygarden.no",
-      "oystre-slidre.no",
-      "\xF8ystre-slidre.no",
-      "porsanger.no",
-      "porsangu.no",
-      "pors\xE1\u014Bgu.no",
-      "porsgrunn.no",
-      "radoy.no",
-      "rad\xF8y.no",
-      "rakkestad.no",
-      "rana.no",
-      "ruovat.no",
-      "randaberg.no",
-      "rauma.no",
-      "rendalen.no",
-      "rennebu.no",
-      "rennesoy.no",
-      "rennes\xF8y.no",
-      "rindal.no",
-      "ringebu.no",
-      "ringerike.no",
-      "ringsaker.no",
-      "rissa.no",
-      "risor.no",
-      "ris\xF8r.no",
-      "roan.no",
-      "rollag.no",
-      "rygge.no",
-      "ralingen.no",
-      "r\xE6lingen.no",
-      "rodoy.no",
-      "r\xF8d\xF8y.no",
-      "romskog.no",
-      "r\xF8mskog.no",
-      "roros.no",
-      "r\xF8ros.no",
-      "rost.no",
-      "r\xF8st.no",
-      "royken.no",
-      "r\xF8yken.no",
-      "royrvik.no",
-      "r\xF8yrvik.no",
-      "rade.no",
-      "r\xE5de.no",
-      "salangen.no",
-      "siellak.no",
-      "saltdal.no",
-      "salat.no",
-      "s\xE1l\xE1t.no",
-      "s\xE1lat.no",
-      "samnanger.no",
-      "sande.more-og-romsdal.no",
-      "sande.m\xF8re-og-romsdal.no",
-      "sande.vestfold.no",
-      "sandefjord.no",
-      "sandnes.no",
-      "sandoy.no",
-      "sand\xF8y.no",
-      "sarpsborg.no",
-      "sauda.no",
-      "sauherad.no",
-      "sel.no",
-      "selbu.no",
-      "selje.no",
-      "seljord.no",
-      "sigdal.no",
-      "siljan.no",
-      "sirdal.no",
-      "skaun.no",
-      "skedsmo.no",
-      "ski.no",
-      "skien.no",
-      "skiptvet.no",
-      "skjervoy.no",
-      "skjerv\xF8y.no",
-      "skierva.no",
-      "skierv\xE1.no",
-      "skjak.no",
-      "skj\xE5k.no",
-      "skodje.no",
-      "skanland.no",
-      "sk\xE5nland.no",
-      "skanit.no",
-      "sk\xE1nit.no",
-      "smola.no",
-      "sm\xF8la.no",
-      "snillfjord.no",
-      "snasa.no",
-      "sn\xE5sa.no",
-      "snoasa.no",
-      "snaase.no",
-      "sn\xE5ase.no",
-      "sogndal.no",
-      "sokndal.no",
-      "sola.no",
-      "solund.no",
-      "songdalen.no",
-      "sortland.no",
-      "spydeberg.no",
-      "stange.no",
-      "stavanger.no",
-      "steigen.no",
-      "steinkjer.no",
-      "stjordal.no",
-      "stj\xF8rdal.no",
-      "stokke.no",
-      "stor-elvdal.no",
-      "stord.no",
-      "stordal.no",
-      "storfjord.no",
-      "omasvuotna.no",
-      "strand.no",
-      "stranda.no",
-      "stryn.no",
-      "sula.no",
-      "suldal.no",
-      "sund.no",
-      "sunndal.no",
-      "surnadal.no",
-      "sveio.no",
-      "svelvik.no",
-      "sykkylven.no",
-      "sogne.no",
-      "s\xF8gne.no",
-      "somna.no",
-      "s\xF8mna.no",
-      "sondre-land.no",
-      "s\xF8ndre-land.no",
-      "sor-aurdal.no",
-      "s\xF8r-aurdal.no",
-      "sor-fron.no",
-      "s\xF8r-fron.no",
-      "sor-odal.no",
-      "s\xF8r-odal.no",
-      "sor-varanger.no",
-      "s\xF8r-varanger.no",
-      "matta-varjjat.no",
-      "m\xE1tta-v\xE1rjjat.no",
-      "sorfold.no",
-      "s\xF8rfold.no",
-      "sorreisa.no",
-      "s\xF8rreisa.no",
-      "sorum.no",
-      "s\xF8rum.no",
-      "tana.no",
-      "deatnu.no",
-      "time.no",
-      "tingvoll.no",
-      "tinn.no",
-      "tjeldsund.no",
-      "dielddanuorri.no",
-      "tjome.no",
-      "tj\xF8me.no",
-      "tokke.no",
-      "tolga.no",
-      "torsken.no",
-      "tranoy.no",
-      "tran\xF8y.no",
-      "tromso.no",
-      "troms\xF8.no",
-      "tromsa.no",
-      "romsa.no",
-      "trondheim.no",
-      "troandin.no",
-      "trysil.no",
-      "trana.no",
-      "tr\xE6na.no",
-      "trogstad.no",
-      "tr\xF8gstad.no",
-      "tvedestrand.no",
-      "tydal.no",
-      "tynset.no",
-      "tysfjord.no",
-      "divtasvuodna.no",
-      "divttasvuotna.no",
-      "tysnes.no",
-      "tysvar.no",
-      "tysv\xE6r.no",
-      "tonsberg.no",
-      "t\xF8nsberg.no",
-      "ullensaker.no",
-      "ullensvang.no",
-      "ulvik.no",
-      "utsira.no",
-      "vadso.no",
-      "vads\xF8.no",
-      "cahcesuolo.no",
-      "\u010D\xE1hcesuolo.no",
-      "vaksdal.no",
-      "valle.no",
-      "vang.no",
-      "vanylven.no",
-      "vardo.no",
-      "vard\xF8.no",
-      "varggat.no",
-      "v\xE1rgg\xE1t.no",
-      "vefsn.no",
-      "vaapste.no",
-      "vega.no",
-      "vegarshei.no",
-      "veg\xE5rshei.no",
-      "vennesla.no",
-      "verdal.no",
-      "verran.no",
-      "vestby.no",
-      "vestnes.no",
-      "vestre-slidre.no",
-      "vestre-toten.no",
-      "vestvagoy.no",
-      "vestv\xE5g\xF8y.no",
-      "vevelstad.no",
-      "vik.no",
-      "vikna.no",
-      "vindafjord.no",
-      "volda.no",
-      "voss.no",
-      "varoy.no",
-      "v\xE6r\xF8y.no",
-      "vagan.no",
-      "v\xE5gan.no",
-      "voagat.no",
-      "vagsoy.no",
-      "v\xE5gs\xF8y.no",
-      "vaga.no",
-      "v\xE5g\xE5.no",
-      "valer.ostfold.no",
-      "v\xE5ler.\xF8stfold.no",
-      "valer.hedmark.no",
-      "v\xE5ler.hedmark.no",
-      "*.np",
-      "nr",
-      "biz.nr",
-      "info.nr",
-      "gov.nr",
-      "edu.nr",
-      "org.nr",
-      "net.nr",
-      "com.nr",
-      "nu",
-      "nz",
-      "ac.nz",
-      "co.nz",
-      "cri.nz",
-      "geek.nz",
-      "gen.nz",
-      "govt.nz",
-      "health.nz",
-      "iwi.nz",
-      "kiwi.nz",
-      "maori.nz",
-      "mil.nz",
-      "m\u0101ori.nz",
-      "net.nz",
-      "org.nz",
-      "parliament.nz",
-      "school.nz",
-      "om",
-      "co.om",
-      "com.om",
-      "edu.om",
-      "gov.om",
-      "med.om",
-      "museum.om",
-      "net.om",
-      "org.om",
-      "pro.om",
-      "onion",
-      "org",
-      "pa",
-      "ac.pa",
-      "gob.pa",
-      "com.pa",
-      "org.pa",
-      "sld.pa",
-      "edu.pa",
-      "net.pa",
-      "ing.pa",
-      "abo.pa",
-      "med.pa",
-      "nom.pa",
-      "pe",
-      "edu.pe",
-      "gob.pe",
-      "nom.pe",
-      "mil.pe",
-      "org.pe",
-      "com.pe",
-      "net.pe",
-      "pf",
-      "com.pf",
-      "org.pf",
-      "edu.pf",
-      "*.pg",
-      "ph",
-      "com.ph",
-      "net.ph",
-      "org.ph",
-      "gov.ph",
-      "edu.ph",
-      "ngo.ph",
-      "mil.ph",
-      "i.ph",
-      "pk",
-      "com.pk",
-      "net.pk",
-      "edu.pk",
-      "org.pk",
-      "fam.pk",
-      "biz.pk",
-      "web.pk",
-      "gov.pk",
-      "gob.pk",
-      "gok.pk",
-      "gon.pk",
-      "gop.pk",
-      "gos.pk",
-      "info.pk",
-      "pl",
-      "com.pl",
-      "net.pl",
-      "org.pl",
-      "aid.pl",
-      "agro.pl",
-      "atm.pl",
-      "auto.pl",
-      "biz.pl",
-      "edu.pl",
-      "gmina.pl",
-      "gsm.pl",
-      "info.pl",
-      "mail.pl",
-      "miasta.pl",
-      "media.pl",
-      "mil.pl",
-      "nieruchomosci.pl",
-      "nom.pl",
-      "pc.pl",
-      "powiat.pl",
-      "priv.pl",
-      "realestate.pl",
-      "rel.pl",
-      "sex.pl",
-      "shop.pl",
-      "sklep.pl",
-      "sos.pl",
-      "szkola.pl",
-      "targi.pl",
-      "tm.pl",
-      "tourism.pl",
-      "travel.pl",
-      "turystyka.pl",
-      "gov.pl",
-      "ap.gov.pl",
-      "ic.gov.pl",
-      "is.gov.pl",
-      "us.gov.pl",
-      "kmpsp.gov.pl",
-      "kppsp.gov.pl",
-      "kwpsp.gov.pl",
-      "psp.gov.pl",
-      "wskr.gov.pl",
-      "kwp.gov.pl",
-      "mw.gov.pl",
-      "ug.gov.pl",
-      "um.gov.pl",
-      "umig.gov.pl",
-      "ugim.gov.pl",
-      "upow.gov.pl",
-      "uw.gov.pl",
-      "starostwo.gov.pl",
-      "pa.gov.pl",
-      "po.gov.pl",
-      "psse.gov.pl",
-      "pup.gov.pl",
-      "rzgw.gov.pl",
-      "sa.gov.pl",
-      "so.gov.pl",
-      "sr.gov.pl",
-      "wsa.gov.pl",
-      "sko.gov.pl",
-      "uzs.gov.pl",
-      "wiih.gov.pl",
-      "winb.gov.pl",
-      "pinb.gov.pl",
-      "wios.gov.pl",
-      "witd.gov.pl",
-      "wzmiuw.gov.pl",
-      "piw.gov.pl",
-      "wiw.gov.pl",
-      "griw.gov.pl",
-      "wif.gov.pl",
-      "oum.gov.pl",
-      "sdn.gov.pl",
-      "zp.gov.pl",
-      "uppo.gov.pl",
-      "mup.gov.pl",
-      "wuoz.gov.pl",
-      "konsulat.gov.pl",
-      "oirm.gov.pl",
-      "augustow.pl",
-      "babia-gora.pl",
-      "bedzin.pl",
-      "beskidy.pl",
-      "bialowieza.pl",
-      "bialystok.pl",
-      "bielawa.pl",
-      "bieszczady.pl",
-      "boleslawiec.pl",
-      "bydgoszcz.pl",
-      "bytom.pl",
-      "cieszyn.pl",
-      "czeladz.pl",
-      "czest.pl",
-      "dlugoleka.pl",
-      "elblag.pl",
-      "elk.pl",
-      "glogow.pl",
-      "gniezno.pl",
-      "gorlice.pl",
-      "grajewo.pl",
-      "ilawa.pl",
-      "jaworzno.pl",
-      "jelenia-gora.pl",
-      "jgora.pl",
-      "kalisz.pl",
-      "kazimierz-dolny.pl",
-      "karpacz.pl",
-      "kartuzy.pl",
-      "kaszuby.pl",
-      "katowice.pl",
-      "kepno.pl",
-      "ketrzyn.pl",
-      "klodzko.pl",
-      "kobierzyce.pl",
-      "kolobrzeg.pl",
-      "konin.pl",
-      "konskowola.pl",
-      "kutno.pl",
-      "lapy.pl",
-      "lebork.pl",
-      "legnica.pl",
-      "lezajsk.pl",
-      "limanowa.pl",
-      "lomza.pl",
-      "lowicz.pl",
-      "lubin.pl",
-      "lukow.pl",
-      "malbork.pl",
-      "malopolska.pl",
-      "mazowsze.pl",
-      "mazury.pl",
-      "mielec.pl",
-      "mielno.pl",
-      "mragowo.pl",
-      "naklo.pl",
-      "nowaruda.pl",
-      "nysa.pl",
-      "olawa.pl",
-      "olecko.pl",
-      "olkusz.pl",
-      "olsztyn.pl",
-      "opoczno.pl",
-      "opole.pl",
-      "ostroda.pl",
-      "ostroleka.pl",
-      "ostrowiec.pl",
-      "ostrowwlkp.pl",
-      "pila.pl",
-      "pisz.pl",
-      "podhale.pl",
-      "podlasie.pl",
-      "polkowice.pl",
-      "pomorze.pl",
-      "pomorskie.pl",
-      "prochowice.pl",
-      "pruszkow.pl",
-      "przeworsk.pl",
-      "pulawy.pl",
-      "radom.pl",
-      "rawa-maz.pl",
-      "rybnik.pl",
-      "rzeszow.pl",
-      "sanok.pl",
-      "sejny.pl",
-      "slask.pl",
-      "slupsk.pl",
-      "sosnowiec.pl",
-      "stalowa-wola.pl",
-      "skoczow.pl",
-      "starachowice.pl",
-      "stargard.pl",
-      "suwalki.pl",
-      "swidnica.pl",
-      "swiebodzin.pl",
-      "swinoujscie.pl",
-      "szczecin.pl",
-      "szczytno.pl",
-      "tarnobrzeg.pl",
-      "tgory.pl",
-      "turek.pl",
-      "tychy.pl",
-      "ustka.pl",
-      "walbrzych.pl",
-      "warmia.pl",
-      "warszawa.pl",
-      "waw.pl",
-      "wegrow.pl",
-      "wielun.pl",
-      "wlocl.pl",
-      "wloclawek.pl",
-      "wodzislaw.pl",
-      "wolomin.pl",
-      "wroclaw.pl",
-      "zachpomor.pl",
-      "zagan.pl",
-      "zarow.pl",
-      "zgora.pl",
-      "zgorzelec.pl",
-      "pm",
-      "pn",
-      "gov.pn",
-      "co.pn",
-      "org.pn",
-      "edu.pn",
-      "net.pn",
-      "post",
-      "pr",
-      "com.pr",
-      "net.pr",
-      "org.pr",
-      "gov.pr",
-      "edu.pr",
-      "isla.pr",
-      "pro.pr",
-      "biz.pr",
-      "info.pr",
-      "name.pr",
-      "est.pr",
-      "prof.pr",
-      "ac.pr",
-      "pro",
-      "aaa.pro",
-      "aca.pro",
-      "acct.pro",
-      "avocat.pro",
-      "bar.pro",
-      "cpa.pro",
-      "eng.pro",
-      "jur.pro",
-      "law.pro",
-      "med.pro",
-      "recht.pro",
-      "ps",
-      "edu.ps",
-      "gov.ps",
-      "sec.ps",
-      "plo.ps",
-      "com.ps",
-      "org.ps",
-      "net.ps",
-      "pt",
-      "net.pt",
-      "gov.pt",
-      "org.pt",
-      "edu.pt",
-      "int.pt",
-      "publ.pt",
-      "com.pt",
-      "nome.pt",
-      "pw",
-      "co.pw",
-      "ne.pw",
-      "or.pw",
-      "ed.pw",
-      "go.pw",
-      "belau.pw",
-      "py",
-      "com.py",
-      "coop.py",
-      "edu.py",
-      "gov.py",
-      "mil.py",
-      "net.py",
-      "org.py",
-      "qa",
-      "com.qa",
-      "edu.qa",
-      "gov.qa",
-      "mil.qa",
-      "name.qa",
-      "net.qa",
-      "org.qa",
-      "sch.qa",
-      "re",
-      "asso.re",
-      "com.re",
-      "nom.re",
-      "ro",
-      "arts.ro",
-      "com.ro",
-      "firm.ro",
-      "info.ro",
-      "nom.ro",
-      "nt.ro",
-      "org.ro",
-      "rec.ro",
-      "store.ro",
-      "tm.ro",
-      "www.ro",
-      "rs",
-      "ac.rs",
-      "co.rs",
-      "edu.rs",
-      "gov.rs",
-      "in.rs",
-      "org.rs",
-      "ru",
-      "rw",
-      "ac.rw",
-      "co.rw",
-      "coop.rw",
-      "gov.rw",
-      "mil.rw",
-      "net.rw",
-      "org.rw",
-      "sa",
-      "com.sa",
-      "net.sa",
-      "org.sa",
-      "gov.sa",
-      "med.sa",
-      "pub.sa",
-      "edu.sa",
-      "sch.sa",
-      "sb",
-      "com.sb",
-      "edu.sb",
-      "gov.sb",
-      "net.sb",
-      "org.sb",
-      "sc",
-      "com.sc",
-      "gov.sc",
-      "net.sc",
-      "org.sc",
-      "edu.sc",
-      "sd",
-      "com.sd",
-      "net.sd",
-      "org.sd",
-      "edu.sd",
-      "med.sd",
-      "tv.sd",
-      "gov.sd",
-      "info.sd",
-      "se",
-      "a.se",
-      "ac.se",
-      "b.se",
-      "bd.se",
-      "brand.se",
-      "c.se",
-      "d.se",
-      "e.se",
-      "f.se",
-      "fh.se",
-      "fhsk.se",
-      "fhv.se",
-      "g.se",
-      "h.se",
-      "i.se",
-      "k.se",
-      "komforb.se",
-      "kommunalforbund.se",
-      "komvux.se",
-      "l.se",
-      "lanbib.se",
-      "m.se",
-      "n.se",
-      "naturbruksgymn.se",
-      "o.se",
-      "org.se",
-      "p.se",
-      "parti.se",
-      "pp.se",
-      "press.se",
-      "r.se",
-      "s.se",
-      "t.se",
-      "tm.se",
-      "u.se",
-      "w.se",
-      "x.se",
-      "y.se",
-      "z.se",
-      "sg",
-      "com.sg",
-      "net.sg",
-      "org.sg",
-      "gov.sg",
-      "edu.sg",
-      "per.sg",
-      "sh",
-      "com.sh",
-      "net.sh",
-      "gov.sh",
-      "org.sh",
-      "mil.sh",
-      "si",
-      "sj",
-      "sk",
-      "sl",
-      "com.sl",
-      "net.sl",
-      "edu.sl",
-      "gov.sl",
-      "org.sl",
-      "sm",
-      "sn",
-      "art.sn",
-      "com.sn",
-      "edu.sn",
-      "gouv.sn",
-      "org.sn",
-      "perso.sn",
-      "univ.sn",
-      "so",
-      "com.so",
-      "edu.so",
-      "gov.so",
-      "me.so",
-      "net.so",
-      "org.so",
-      "sr",
-      "ss",
-      "biz.ss",
-      "com.ss",
-      "edu.ss",
-      "gov.ss",
-      "net.ss",
-      "org.ss",
-      "st",
-      "co.st",
-      "com.st",
-      "consulado.st",
-      "edu.st",
-      "embaixada.st",
-      "gov.st",
-      "mil.st",
-      "net.st",
-      "org.st",
-      "principe.st",
-      "saotome.st",
-      "store.st",
-      "su",
-      "sv",
-      "com.sv",
-      "edu.sv",
-      "gob.sv",
-      "org.sv",
-      "red.sv",
-      "sx",
-      "gov.sx",
-      "sy",
-      "edu.sy",
-      "gov.sy",
-      "net.sy",
-      "mil.sy",
-      "com.sy",
-      "org.sy",
-      "sz",
-      "co.sz",
-      "ac.sz",
-      "org.sz",
-      "tc",
-      "td",
-      "tel",
-      "tf",
-      "tg",
-      "th",
-      "ac.th",
-      "co.th",
-      "go.th",
-      "in.th",
-      "mi.th",
-      "net.th",
-      "or.th",
-      "tj",
-      "ac.tj",
-      "biz.tj",
-      "co.tj",
-      "com.tj",
-      "edu.tj",
-      "go.tj",
-      "gov.tj",
-      "int.tj",
-      "mil.tj",
-      "name.tj",
-      "net.tj",
-      "nic.tj",
-      "org.tj",
-      "test.tj",
-      "web.tj",
-      "tk",
-      "tl",
-      "gov.tl",
-      "tm",
-      "com.tm",
-      "co.tm",
-      "org.tm",
-      "net.tm",
-      "nom.tm",
-      "gov.tm",
-      "mil.tm",
-      "edu.tm",
-      "tn",
-      "com.tn",
-      "ens.tn",
-      "fin.tn",
-      "gov.tn",
-      "ind.tn",
-      "intl.tn",
-      "nat.tn",
-      "net.tn",
-      "org.tn",
-      "info.tn",
-      "perso.tn",
-      "tourism.tn",
-      "edunet.tn",
-      "rnrt.tn",
-      "rns.tn",
-      "rnu.tn",
-      "mincom.tn",
-      "agrinet.tn",
-      "defense.tn",
-      "turen.tn",
-      "to",
-      "com.to",
-      "gov.to",
-      "net.to",
-      "org.to",
-      "edu.to",
-      "mil.to",
-      "tr",
-      "av.tr",
-      "bbs.tr",
-      "bel.tr",
-      "biz.tr",
-      "com.tr",
-      "dr.tr",
-      "edu.tr",
-      "gen.tr",
-      "gov.tr",
-      "info.tr",
-      "mil.tr",
-      "k12.tr",
-      "kep.tr",
-      "name.tr",
-      "net.tr",
-      "org.tr",
-      "pol.tr",
-      "tel.tr",
-      "tsk.tr",
-      "tv.tr",
-      "web.tr",
-      "nc.tr",
-      "gov.nc.tr",
-      "tt",
-      "co.tt",
-      "com.tt",
-      "org.tt",
-      "net.tt",
-      "biz.tt",
-      "info.tt",
-      "pro.tt",
-      "int.tt",
-      "coop.tt",
-      "jobs.tt",
-      "mobi.tt",
-      "travel.tt",
-      "museum.tt",
-      "aero.tt",
-      "name.tt",
-      "gov.tt",
-      "edu.tt",
-      "tv",
-      "tw",
-      "edu.tw",
-      "gov.tw",
-      "mil.tw",
-      "com.tw",
-      "net.tw",
-      "org.tw",
-      "idv.tw",
-      "game.tw",
-      "ebiz.tw",
-      "club.tw",
-      "\u7DB2\u8DEF.tw",
-      "\u7D44\u7E54.tw",
-      "\u5546\u696D.tw",
-      "tz",
-      "ac.tz",
-      "co.tz",
-      "go.tz",
-      "hotel.tz",
-      "info.tz",
-      "me.tz",
-      "mil.tz",
-      "mobi.tz",
-      "ne.tz",
-      "or.tz",
-      "sc.tz",
-      "tv.tz",
-      "ua",
-      "com.ua",
-      "edu.ua",
-      "gov.ua",
-      "in.ua",
-      "net.ua",
-      "org.ua",
-      "cherkassy.ua",
-      "cherkasy.ua",
-      "chernigov.ua",
-      "chernihiv.ua",
-      "chernivtsi.ua",
-      "chernovtsy.ua",
-      "ck.ua",
-      "cn.ua",
-      "cr.ua",
-      "crimea.ua",
-      "cv.ua",
-      "dn.ua",
-      "dnepropetrovsk.ua",
-      "dnipropetrovsk.ua",
-      "dominic.ua",
-      "donetsk.ua",
-      "dp.ua",
-      "if.ua",
-      "ivano-frankivsk.ua",
-      "kh.ua",
-      "kharkiv.ua",
-      "kharkov.ua",
-      "kherson.ua",
-      "khmelnitskiy.ua",
-      "khmelnytskyi.ua",
-      "kiev.ua",
-      "kirovograd.ua",
-      "km.ua",
-      "kr.ua",
-      "krym.ua",
-      "ks.ua",
-      "kv.ua",
-      "kyiv.ua",
-      "lg.ua",
-      "lt.ua",
-      "lugansk.ua",
-      "lutsk.ua",
-      "lv.ua",
-      "lviv.ua",
-      "mk.ua",
-      "mykolaiv.ua",
-      "nikolaev.ua",
-      "od.ua",
-      "odesa.ua",
-      "odessa.ua",
-      "pl.ua",
-      "poltava.ua",
-      "rivne.ua",
-      "rovno.ua",
-      "rv.ua",
-      "sb.ua",
-      "sebastopol.ua",
-      "sevastopol.ua",
-      "sm.ua",
-      "sumy.ua",
-      "te.ua",
-      "ternopil.ua",
-      "uz.ua",
-      "uzhgorod.ua",
-      "vinnica.ua",
-      "vinnytsia.ua",
-      "vn.ua",
-      "volyn.ua",
-      "yalta.ua",
-      "zaporizhzhe.ua",
-      "zaporizhzhia.ua",
-      "zhitomir.ua",
-      "zhytomyr.ua",
-      "zp.ua",
-      "zt.ua",
-      "ug",
-      "co.ug",
-      "or.ug",
-      "ac.ug",
-      "sc.ug",
-      "go.ug",
-      "ne.ug",
-      "com.ug",
-      "org.ug",
-      "uk",
-      "ac.uk",
-      "co.uk",
-      "gov.uk",
-      "ltd.uk",
-      "me.uk",
-      "net.uk",
-      "nhs.uk",
-      "org.uk",
-      "plc.uk",
-      "police.uk",
-      "*.sch.uk",
-      "us",
-      "dni.us",
-      "fed.us",
-      "isa.us",
-      "kids.us",
-      "nsn.us",
-      "ak.us",
-      "al.us",
-      "ar.us",
-      "as.us",
-      "az.us",
-      "ca.us",
-      "co.us",
-      "ct.us",
-      "dc.us",
-      "de.us",
-      "fl.us",
-      "ga.us",
-      "gu.us",
-      "hi.us",
-      "ia.us",
-      "id.us",
-      "il.us",
-      "in.us",
-      "ks.us",
-      "ky.us",
-      "la.us",
-      "ma.us",
-      "md.us",
-      "me.us",
-      "mi.us",
-      "mn.us",
-      "mo.us",
-      "ms.us",
-      "mt.us",
-      "nc.us",
-      "nd.us",
-      "ne.us",
-      "nh.us",
-      "nj.us",
-      "nm.us",
-      "nv.us",
-      "ny.us",
-      "oh.us",
-      "ok.us",
-      "or.us",
-      "pa.us",
-      "pr.us",
-      "ri.us",
-      "sc.us",
-      "sd.us",
-      "tn.us",
-      "tx.us",
-      "ut.us",
-      "vi.us",
-      "vt.us",
-      "va.us",
-      "wa.us",
-      "wi.us",
-      "wv.us",
-      "wy.us",
-      "k12.ak.us",
-      "k12.al.us",
-      "k12.ar.us",
-      "k12.as.us",
-      "k12.az.us",
-      "k12.ca.us",
-      "k12.co.us",
-      "k12.ct.us",
-      "k12.dc.us",
-      "k12.de.us",
-      "k12.fl.us",
-      "k12.ga.us",
-      "k12.gu.us",
-      "k12.ia.us",
-      "k12.id.us",
-      "k12.il.us",
-      "k12.in.us",
-      "k12.ks.us",
-      "k12.ky.us",
-      "k12.la.us",
-      "k12.ma.us",
-      "k12.md.us",
-      "k12.me.us",
-      "k12.mi.us",
-      "k12.mn.us",
-      "k12.mo.us",
-      "k12.ms.us",
-      "k12.mt.us",
-      "k12.nc.us",
-      "k12.ne.us",
-      "k12.nh.us",
-      "k12.nj.us",
-      "k12.nm.us",
-      "k12.nv.us",
-      "k12.ny.us",
-      "k12.oh.us",
-      "k12.ok.us",
-      "k12.or.us",
-      "k12.pa.us",
-      "k12.pr.us",
-      "k12.ri.us",
-      "k12.sc.us",
-      "k12.tn.us",
-      "k12.tx.us",
-      "k12.ut.us",
-      "k12.vi.us",
-      "k12.vt.us",
-      "k12.va.us",
-      "k12.wa.us",
-      "k12.wi.us",
-      "k12.wy.us",
-      "cc.ak.us",
-      "cc.al.us",
-      "cc.ar.us",
-      "cc.as.us",
-      "cc.az.us",
-      "cc.ca.us",
-      "cc.co.us",
-      "cc.ct.us",
-      "cc.dc.us",
-      "cc.de.us",
-      "cc.fl.us",
-      "cc.ga.us",
-      "cc.gu.us",
-      "cc.hi.us",
-      "cc.ia.us",
-      "cc.id.us",
-      "cc.il.us",
-      "cc.in.us",
-      "cc.ks.us",
-      "cc.ky.us",
-      "cc.la.us",
-      "cc.ma.us",
-      "cc.md.us",
-      "cc.me.us",
-      "cc.mi.us",
-      "cc.mn.us",
-      "cc.mo.us",
-      "cc.ms.us",
-      "cc.mt.us",
-      "cc.nc.us",
-      "cc.nd.us",
-      "cc.ne.us",
-      "cc.nh.us",
-      "cc.nj.us",
-      "cc.nm.us",
-      "cc.nv.us",
-      "cc.ny.us",
-      "cc.oh.us",
-      "cc.ok.us",
-      "cc.or.us",
-      "cc.pa.us",
-      "cc.pr.us",
-      "cc.ri.us",
-      "cc.sc.us",
-      "cc.sd.us",
-      "cc.tn.us",
-      "cc.tx.us",
-      "cc.ut.us",
-      "cc.vi.us",
-      "cc.vt.us",
-      "cc.va.us",
-      "cc.wa.us",
-      "cc.wi.us",
-      "cc.wv.us",
-      "cc.wy.us",
-      "lib.ak.us",
-      "lib.al.us",
-      "lib.ar.us",
-      "lib.as.us",
-      "lib.az.us",
-      "lib.ca.us",
-      "lib.co.us",
-      "lib.ct.us",
-      "lib.dc.us",
-      "lib.fl.us",
-      "lib.ga.us",
-      "lib.gu.us",
-      "lib.hi.us",
-      "lib.ia.us",
-      "lib.id.us",
-      "lib.il.us",
-      "lib.in.us",
-      "lib.ks.us",
-      "lib.ky.us",
-      "lib.la.us",
-      "lib.ma.us",
-      "lib.md.us",
-      "lib.me.us",
-      "lib.mi.us",
-      "lib.mn.us",
-      "lib.mo.us",
-      "lib.ms.us",
-      "lib.mt.us",
-      "lib.nc.us",
-      "lib.nd.us",
-      "lib.ne.us",
-      "lib.nh.us",
-      "lib.nj.us",
-      "lib.nm.us",
-      "lib.nv.us",
-      "lib.ny.us",
-      "lib.oh.us",
-      "lib.ok.us",
-      "lib.or.us",
-      "lib.pa.us",
-      "lib.pr.us",
-      "lib.ri.us",
-      "lib.sc.us",
-      "lib.sd.us",
-      "lib.tn.us",
-      "lib.tx.us",
-      "lib.ut.us",
-      "lib.vi.us",
-      "lib.vt.us",
-      "lib.va.us",
-      "lib.wa.us",
-      "lib.wi.us",
-      "lib.wy.us",
-      "pvt.k12.ma.us",
-      "chtr.k12.ma.us",
-      "paroch.k12.ma.us",
-      "ann-arbor.mi.us",
-      "cog.mi.us",
-      "dst.mi.us",
-      "eaton.mi.us",
-      "gen.mi.us",
-      "mus.mi.us",
-      "tec.mi.us",
-      "washtenaw.mi.us",
-      "uy",
-      "com.uy",
-      "edu.uy",
-      "gub.uy",
-      "mil.uy",
-      "net.uy",
-      "org.uy",
-      "uz",
-      "co.uz",
-      "com.uz",
-      "net.uz",
-      "org.uz",
-      "va",
-      "vc",
-      "com.vc",
-      "net.vc",
-      "org.vc",
-      "gov.vc",
-      "mil.vc",
-      "edu.vc",
-      "ve",
-      "arts.ve",
-      "co.ve",
-      "com.ve",
-      "e12.ve",
-      "edu.ve",
-      "firm.ve",
-      "gob.ve",
-      "gov.ve",
-      "info.ve",
-      "int.ve",
-      "mil.ve",
-      "net.ve",
-      "org.ve",
-      "rec.ve",
-      "store.ve",
-      "tec.ve",
-      "web.ve",
-      "vg",
-      "vi",
-      "co.vi",
-      "com.vi",
-      "k12.vi",
-      "net.vi",
-      "org.vi",
-      "vn",
-      "com.vn",
-      "net.vn",
-      "org.vn",
-      "edu.vn",
-      "gov.vn",
-      "int.vn",
-      "ac.vn",
-      "biz.vn",
-      "info.vn",
-      "name.vn",
-      "pro.vn",
-      "health.vn",
-      "vu",
-      "com.vu",
-      "edu.vu",
-      "net.vu",
-      "org.vu",
-      "wf",
-      "ws",
-      "com.ws",
-      "net.ws",
-      "org.ws",
-      "gov.ws",
-      "edu.ws",
-      "yt",
-      "\u0627\u0645\u0627\u0631\u0627\u062A",
-      "\u0570\u0561\u0575",
-      "\u09AC\u09BE\u0982\u09B2\u09BE",
-      "\u0431\u0433",
-      "\u0431\u0435\u043B",
-      "\u4E2D\u56FD",
-      "\u4E2D\u570B",
-      "\u0627\u0644\u062C\u0632\u0627\u0626\u0631",
-      "\u0645\u0635\u0631",
-      "\u0435\u044E",
-      "\u03B5\u03C5",
-      "\u0645\u0648\u0631\u064A\u062A\u0627\u0646\u064A\u0627",
-      "\u10D2\u10D4",
-      "\u03B5\u03BB",
-      "\u9999\u6E2F",
-      "\u516C\u53F8.\u9999\u6E2F",
-      "\u6559\u80B2.\u9999\u6E2F",
-      "\u653F\u5E9C.\u9999\u6E2F",
-      "\u500B\u4EBA.\u9999\u6E2F",
-      "\u7DB2\u7D61.\u9999\u6E2F",
-      "\u7D44\u7E54.\u9999\u6E2F",
-      "\u0CAD\u0CBE\u0CB0\u0CA4",
-      "\u0B2D\u0B3E\u0B30\u0B24",
-      "\u09AD\u09BE\u09F0\u09A4",
-      "\u092D\u093E\u0930\u0924\u092E\u094D",
-      "\u092D\u093E\u0930\u094B\u0924",
-      "\u0680\u0627\u0631\u062A",
-      "\u0D2D\u0D3E\u0D30\u0D24\u0D02",
-      "\u092D\u093E\u0930\u0924",
-      "\u0628\u0627\u0631\u062A",
-      "\u0628\u06BE\u0627\u0631\u062A",
-      "\u0C2D\u0C3E\u0C30\u0C24\u0C4D",
-      "\u0AAD\u0ABE\u0AB0\u0AA4",
-      "\u0A2D\u0A3E\u0A30\u0A24",
-      "\u09AD\u09BE\u09B0\u09A4",
-      "\u0B87\u0BA8\u0BCD\u0BA4\u0BBF\u0BAF\u0BBE",
-      "\u0627\u06CC\u0631\u0627\u0646",
-      "\u0627\u064A\u0631\u0627\u0646",
-      "\u0639\u0631\u0627\u0642",
-      "\u0627\u0644\u0627\u0631\u062F\u0646",
-      "\uD55C\uAD6D",
-      "\u049B\u0430\u0437",
-      "\u0DBD\u0D82\u0D9A\u0DCF",
-      "\u0B87\u0BB2\u0B99\u0BCD\u0B95\u0BC8",
-      "\u0627\u0644\u0645\u063A\u0631\u0628",
-      "\u043C\u043A\u0434",
-      "\u043C\u043E\u043D",
-      "\u6FB3\u9580",
-      "\u6FB3\u95E8",
-      "\u0645\u0644\u064A\u0633\u064A\u0627",
-      "\u0639\u0645\u0627\u0646",
-      "\u067E\u0627\u06A9\u0633\u062A\u0627\u0646",
-      "\u067E\u0627\u0643\u0633\u062A\u0627\u0646",
-      "\u0641\u0644\u0633\u0637\u064A\u0646",
-      "\u0441\u0440\u0431",
-      "\u043F\u0440.\u0441\u0440\u0431",
-      "\u043E\u0440\u0433.\u0441\u0440\u0431",
-      "\u043E\u0431\u0440.\u0441\u0440\u0431",
-      "\u043E\u0434.\u0441\u0440\u0431",
-      "\u0443\u043F\u0440.\u0441\u0440\u0431",
-      "\u0430\u043A.\u0441\u0440\u0431",
-      "\u0440\u0444",
-      "\u0642\u0637\u0631",
-      "\u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0629",
-      "\u0627\u0644\u0633\u0639\u0648\u062F\u06CC\u0629",
-      "\u0627\u0644\u0633\u0639\u0648\u062F\u06CC\u06C3",
-      "\u0627\u0644\u0633\u0639\u0648\u062F\u064A\u0647",
-      "\u0633\u0648\u062F\u0627\u0646",
-      "\u65B0\u52A0\u5761",
-      "\u0B9A\u0BBF\u0B99\u0BCD\u0B95\u0BAA\u0BCD\u0BAA\u0BC2\u0BB0\u0BCD",
-      "\u0633\u0648\u0631\u064A\u0629",
-      "\u0633\u0648\u0631\u064A\u0627",
-      "\u0E44\u0E17\u0E22",
-      "\u0E28\u0E36\u0E01\u0E29\u0E32.\u0E44\u0E17\u0E22",
-      "\u0E18\u0E38\u0E23\u0E01\u0E34\u0E08.\u0E44\u0E17\u0E22",
-      "\u0E23\u0E31\u0E10\u0E1A\u0E32\u0E25.\u0E44\u0E17\u0E22",
-      "\u0E17\u0E2B\u0E32\u0E23.\u0E44\u0E17\u0E22",
-      "\u0E40\u0E19\u0E47\u0E15.\u0E44\u0E17\u0E22",
-      "\u0E2D\u0E07\u0E04\u0E4C\u0E01\u0E23.\u0E44\u0E17\u0E22",
-      "\u062A\u0648\u0646\u0633",
-      "\u53F0\u7063",
-      "\u53F0\u6E7E",
-      "\u81FA\u7063",
-      "\u0443\u043A\u0440",
-      "\u0627\u0644\u064A\u0645\u0646",
-      "xxx",
-      "*.ye",
-      "ac.za",
-      "agric.za",
-      "alt.za",
-      "co.za",
-      "edu.za",
-      "gov.za",
-      "grondar.za",
-      "law.za",
-      "mil.za",
-      "net.za",
-      "ngo.za",
-      "nic.za",
-      "nis.za",
-      "nom.za",
-      "org.za",
-      "school.za",
-      "tm.za",
-      "web.za",
-      "zm",
-      "ac.zm",
-      "biz.zm",
-      "co.zm",
-      "com.zm",
-      "edu.zm",
-      "gov.zm",
-      "info.zm",
-      "mil.zm",
-      "net.zm",
-      "org.zm",
-      "sch.zm",
-      "zw",
-      "ac.zw",
-      "co.zw",
-      "gov.zw",
-      "mil.zw",
-      "org.zw",
-      "aaa",
-      "aarp",
-      "abarth",
-      "abb",
-      "abbott",
-      "abbvie",
-      "abc",
-      "able",
-      "abogado",
-      "abudhabi",
-      "academy",
-      "accenture",
-      "accountant",
-      "accountants",
-      "aco",
-      "actor",
-      "adac",
-      "ads",
-      "adult",
-      "aeg",
-      "aetna",
-      "afamilycompany",
-      "afl",
-      "africa",
-      "agakhan",
-      "agency",
-      "aig",
-      "aigo",
-      "airbus",
-      "airforce",
-      "airtel",
-      "akdn",
-      "alfaromeo",
-      "alibaba",
-      "alipay",
-      "allfinanz",
-      "allstate",
-      "ally",
-      "alsace",
-      "alstom",
-      "amazon",
-      "americanexpress",
-      "americanfamily",
-      "amex",
-      "amfam",
-      "amica",
-      "amsterdam",
-      "analytics",
-      "android",
-      "anquan",
-      "anz",
-      "aol",
-      "apartments",
-      "app",
-      "apple",
-      "aquarelle",
-      "arab",
-      "aramco",
-      "archi",
-      "army",
-      "art",
-      "arte",
-      "asda",
-      "associates",
-      "athleta",
-      "attorney",
-      "auction",
-      "audi",
-      "audible",
-      "audio",
-      "auspost",
-      "author",
-      "auto",
-      "autos",
-      "avianca",
-      "aws",
-      "axa",
-      "azure",
-      "baby",
-      "baidu",
-      "banamex",
-      "bananarepublic",
-      "band",
-      "bank",
-      "bar",
-      "barcelona",
-      "barclaycard",
-      "barclays",
-      "barefoot",
-      "bargains",
-      "baseball",
-      "basketball",
-      "bauhaus",
-      "bayern",
-      "bbc",
-      "bbt",
-      "bbva",
-      "bcg",
-      "bcn",
-      "beats",
-      "beauty",
-      "beer",
-      "bentley",
-      "berlin",
-      "best",
-      "bestbuy",
-      "bet",
-      "bharti",
-      "bible",
-      "bid",
-      "bike",
-      "bing",
-      "bingo",
-      "bio",
-      "black",
-      "blackfriday",
-      "blockbuster",
-      "blog",
-      "bloomberg",
-      "blue",
-      "bms",
-      "bmw",
-      "bnpparibas",
-      "boats",
-      "boehringer",
-      "bofa",
-      "bom",
-      "bond",
-      "boo",
-      "book",
-      "booking",
-      "bosch",
-      "bostik",
-      "boston",
-      "bot",
-      "boutique",
-      "box",
-      "bradesco",
-      "bridgestone",
-      "broadway",
-      "broker",
-      "brother",
-      "brussels",
-      "budapest",
-      "bugatti",
-      "build",
-      "builders",
-      "business",
-      "buy",
-      "buzz",
-      "bzh",
-      "cab",
-      "cafe",
-      "cal",
-      "call",
-      "calvinklein",
-      "cam",
-      "camera",
-      "camp",
-      "cancerresearch",
-      "canon",
-      "capetown",
-      "capital",
-      "capitalone",
-      "car",
-      "caravan",
-      "cards",
-      "care",
-      "career",
-      "careers",
-      "cars",
-      "casa",
-      "case",
-      "caseih",
-      "cash",
-      "casino",
-      "catering",
-      "catholic",
-      "cba",
-      "cbn",
-      "cbre",
-      "cbs",
-      "ceb",
-      "center",
-      "ceo",
-      "cern",
-      "cfa",
-      "cfd",
-      "chanel",
-      "channel",
-      "charity",
-      "chase",
-      "chat",
-      "cheap",
-      "chintai",
-      "christmas",
-      "chrome",
-      "church",
-      "cipriani",
-      "circle",
-      "cisco",
-      "citadel",
-      "citi",
-      "citic",
-      "city",
-      "cityeats",
-      "claims",
-      "cleaning",
-      "click",
-      "clinic",
-      "clinique",
-      "clothing",
-      "cloud",
-      "club",
-      "clubmed",
-      "coach",
-      "codes",
-      "coffee",
-      "college",
-      "cologne",
-      "comcast",
-      "commbank",
-      "community",
-      "company",
-      "compare",
-      "computer",
-      "comsec",
-      "condos",
-      "construction",
-      "consulting",
-      "contact",
-      "contractors",
-      "cooking",
-      "cookingchannel",
-      "cool",
-      "corsica",
-      "country",
-      "coupon",
-      "coupons",
-      "courses",
-      "cpa",
-      "credit",
-      "creditcard",
-      "creditunion",
-      "cricket",
-      "crown",
-      "crs",
-      "cruise",
-      "cruises",
-      "csc",
-      "cuisinella",
-      "cymru",
-      "cyou",
-      "dabur",
-      "dad",
-      "dance",
-      "data",
-      "date",
-      "dating",
-      "datsun",
-      "day",
-      "dclk",
-      "dds",
-      "deal",
-      "dealer",
-      "deals",
-      "degree",
-      "delivery",
-      "dell",
-      "deloitte",
-      "delta",
-      "democrat",
-      "dental",
-      "dentist",
-      "desi",
-      "design",
-      "dev",
-      "dhl",
-      "diamonds",
-      "diet",
-      "digital",
-      "direct",
-      "directory",
-      "discount",
-      "discover",
-      "dish",
-      "diy",
-      "dnp",
-      "docs",
-      "doctor",
-      "dog",
-      "domains",
-      "dot",
-      "download",
-      "drive",
-      "dtv",
-      "dubai",
-      "duck",
-      "dunlop",
-      "dupont",
-      "durban",
-      "dvag",
-      "dvr",
-      "earth",
-      "eat",
-      "eco",
-      "edeka",
-      "education",
-      "email",
-      "emerck",
-      "energy",
-      "engineer",
-      "engineering",
-      "enterprises",
-      "epson",
-      "equipment",
-      "ericsson",
-      "erni",
-      "esq",
-      "estate",
-      "esurance",
-      "etisalat",
-      "eurovision",
-      "eus",
-      "events",
-      "exchange",
-      "expert",
-      "exposed",
-      "express",
-      "extraspace",
-      "fage",
-      "fail",
-      "fairwinds",
-      "faith",
-      "family",
-      "fan",
-      "fans",
-      "farm",
-      "farmers",
-      "fashion",
-      "fast",
-      "fedex",
-      "feedback",
-      "ferrari",
-      "ferrero",
-      "fiat",
-      "fidelity",
-      "fido",
-      "film",
-      "final",
-      "finance",
-      "financial",
-      "fire",
-      "firestone",
-      "firmdale",
-      "fish",
-      "fishing",
-      "fit",
-      "fitness",
-      "flickr",
-      "flights",
-      "flir",
-      "florist",
-      "flowers",
-      "fly",
-      "foo",
-      "food",
-      "foodnetwork",
-      "football",
-      "ford",
-      "forex",
-      "forsale",
-      "forum",
-      "foundation",
-      "fox",
-      "free",
-      "fresenius",
-      "frl",
-      "frogans",
-      "frontdoor",
-      "frontier",
-      "ftr",
-      "fujitsu",
-      "fujixerox",
-      "fun",
-      "fund",
-      "furniture",
-      "futbol",
-      "fyi",
-      "gal",
-      "gallery",
-      "gallo",
-      "gallup",
-      "game",
-      "games",
-      "gap",
-      "garden",
-      "gay",
-      "gbiz",
-      "gdn",
-      "gea",
-      "gent",
-      "genting",
-      "george",
-      "ggee",
-      "gift",
-      "gifts",
-      "gives",
-      "giving",
-      "glade",
-      "glass",
-      "gle",
-      "global",
-      "globo",
-      "gmail",
-      "gmbh",
-      "gmo",
-      "gmx",
-      "godaddy",
-      "gold",
-      "goldpoint",
-      "golf",
-      "goo",
-      "goodyear",
-      "goog",
-      "google",
-      "gop",
-      "got",
-      "grainger",
-      "graphics",
-      "gratis",
-      "green",
-      "gripe",
-      "grocery",
-      "group",
-      "guardian",
-      "gucci",
-      "guge",
-      "guide",
-      "guitars",
-      "guru",
-      "hair",
-      "hamburg",
-      "hangout",
-      "haus",
-      "hbo",
-      "hdfc",
-      "hdfcbank",
-      "health",
-      "healthcare",
-      "help",
-      "helsinki",
-      "here",
-      "hermes",
-      "hgtv",
-      "hiphop",
-      "hisamitsu",
-      "hitachi",
-      "hiv",
-      "hkt",
-      "hockey",
-      "holdings",
-      "holiday",
-      "homedepot",
-      "homegoods",
-      "homes",
-      "homesense",
-      "honda",
-      "horse",
-      "hospital",
-      "host",
-      "hosting",
-      "hot",
-      "hoteles",
-      "hotels",
-      "hotmail",
-      "house",
-      "how",
-      "hsbc",
-      "hughes",
-      "hyatt",
-      "hyundai",
-      "ibm",
-      "icbc",
-      "ice",
-      "icu",
-      "ieee",
-      "ifm",
-      "ikano",
-      "imamat",
-      "imdb",
-      "immo",
-      "immobilien",
-      "inc",
-      "industries",
-      "infiniti",
-      "ing",
-      "ink",
-      "institute",
-      "insurance",
-      "insure",
-      "intel",
-      "international",
-      "intuit",
-      "investments",
-      "ipiranga",
-      "irish",
-      "ismaili",
-      "ist",
-      "istanbul",
-      "itau",
-      "itv",
-      "iveco",
-      "jaguar",
-      "java",
-      "jcb",
-      "jcp",
-      "jeep",
-      "jetzt",
-      "jewelry",
-      "jio",
-      "jll",
-      "jmp",
-      "jnj",
-      "joburg",
-      "jot",
-      "joy",
-      "jpmorgan",
-      "jprs",
-      "juegos",
-      "juniper",
-      "kaufen",
-      "kddi",
-      "kerryhotels",
-      "kerrylogistics",
-      "kerryproperties",
-      "kfh",
-      "kia",
-      "kim",
-      "kinder",
-      "kindle",
-      "kitchen",
-      "kiwi",
-      "koeln",
-      "komatsu",
-      "kosher",
-      "kpmg",
-      "kpn",
-      "krd",
-      "kred",
-      "kuokgroup",
-      "kyoto",
-      "lacaixa",
-      "lamborghini",
-      "lamer",
-      "lancaster",
-      "lancia",
-      "land",
-      "landrover",
-      "lanxess",
-      "lasalle",
-      "lat",
-      "latino",
-      "latrobe",
-      "law",
-      "lawyer",
-      "lds",
-      "lease",
-      "leclerc",
-      "lefrak",
-      "legal",
-      "lego",
-      "lexus",
-      "lgbt",
-      "lidl",
-      "life",
-      "lifeinsurance",
-      "lifestyle",
-      "lighting",
-      "like",
-      "lilly",
-      "limited",
-      "limo",
-      "lincoln",
-      "linde",
-      "link",
-      "lipsy",
-      "live",
-      "living",
-      "lixil",
-      "llc",
-      "llp",
-      "loan",
-      "loans",
-      "locker",
-      "locus",
-      "loft",
-      "lol",
-      "london",
-      "lotte",
-      "lotto",
-      "love",
-      "lpl",
-      "lplfinancial",
-      "ltd",
-      "ltda",
-      "lundbeck",
-      "lupin",
-      "luxe",
-      "luxury",
-      "macys",
-      "madrid",
-      "maif",
-      "maison",
-      "makeup",
-      "man",
-      "management",
-      "mango",
-      "map",
-      "market",
-      "marketing",
-      "markets",
-      "marriott",
-      "marshalls",
-      "maserati",
-      "mattel",
-      "mba",
-      "mckinsey",
-      "med",
-      "media",
-      "meet",
-      "melbourne",
-      "meme",
-      "memorial",
-      "men",
-      "menu",
-      "merckmsd",
-      "metlife",
-      "miami",
-      "microsoft",
-      "mini",
-      "mint",
-      "mit",
-      "mitsubishi",
-      "mlb",
-      "mls",
-      "mma",
-      "mobile",
-      "moda",
-      "moe",
-      "moi",
-      "mom",
-      "monash",
-      "money",
-      "monster",
-      "mormon",
-      "mortgage",
-      "moscow",
-      "moto",
-      "motorcycles",
-      "mov",
-      "movie",
-      "msd",
-      "mtn",
-      "mtr",
-      "mutual",
-      "nab",
-      "nadex",
-      "nagoya",
-      "nationwide",
-      "natura",
-      "navy",
-      "nba",
-      "nec",
-      "netbank",
-      "netflix",
-      "network",
-      "neustar",
-      "new",
-      "newholland",
-      "news",
-      "next",
-      "nextdirect",
-      "nexus",
-      "nfl",
-      "ngo",
-      "nhk",
-      "nico",
-      "nike",
-      "nikon",
-      "ninja",
-      "nissan",
-      "nissay",
-      "nokia",
-      "northwesternmutual",
-      "norton",
-      "now",
-      "nowruz",
-      "nowtv",
-      "nra",
-      "nrw",
-      "ntt",
-      "nyc",
-      "obi",
-      "observer",
-      "off",
-      "office",
-      "okinawa",
-      "olayan",
-      "olayangroup",
-      "oldnavy",
-      "ollo",
-      "omega",
-      "one",
-      "ong",
-      "onl",
-      "online",
-      "onyourside",
-      "ooo",
-      "open",
-      "oracle",
-      "orange",
-      "organic",
-      "origins",
-      "osaka",
-      "otsuka",
-      "ott",
-      "ovh",
-      "page",
-      "panasonic",
-      "paris",
-      "pars",
-      "partners",
-      "parts",
-      "party",
-      "passagens",
-      "pay",
-      "pccw",
-      "pet",
-      "pfizer",
-      "pharmacy",
-      "phd",
-      "philips",
-      "phone",
-      "photo",
-      "photography",
-      "photos",
-      "physio",
-      "pics",
-      "pictet",
-      "pictures",
-      "pid",
-      "pin",
-      "ping",
-      "pink",
-      "pioneer",
-      "pizza",
-      "place",
-      "play",
-      "playstation",
-      "plumbing",
-      "plus",
-      "pnc",
-      "pohl",
-      "poker",
-      "politie",
-      "porn",
-      "pramerica",
-      "praxi",
-      "press",
-      "prime",
-      "prod",
-      "productions",
-      "prof",
-      "progressive",
-      "promo",
-      "properties",
-      "property",
-      "protection",
-      "pru",
-      "prudential",
-      "pub",
-      "pwc",
-      "qpon",
-      "quebec",
-      "quest",
-      "qvc",
-      "racing",
-      "radio",
-      "raid",
-      "read",
-      "realestate",
-      "realtor",
-      "realty",
-      "recipes",
-      "red",
-      "redstone",
-      "redumbrella",
-      "rehab",
-      "reise",
-      "reisen",
-      "reit",
-      "reliance",
-      "ren",
-      "rent",
-      "rentals",
-      "repair",
-      "report",
-      "republican",
-      "rest",
-      "restaurant",
-      "review",
-      "reviews",
-      "rexroth",
-      "rich",
-      "richardli",
-      "ricoh",
-      "rightathome",
-      "ril",
-      "rio",
-      "rip",
-      "rmit",
-      "rocher",
-      "rocks",
-      "rodeo",
-      "rogers",
-      "room",
-      "rsvp",
-      "rugby",
-      "ruhr",
-      "run",
-      "rwe",
-      "ryukyu",
-      "saarland",
-      "safe",
-      "safety",
-      "sakura",
-      "sale",
-      "salon",
-      "samsclub",
-      "samsung",
-      "sandvik",
-      "sandvikcoromant",
-      "sanofi",
-      "sap",
-      "sarl",
-      "sas",
-      "save",
-      "saxo",
-      "sbi",
-      "sbs",
-      "sca",
-      "scb",
-      "schaeffler",
-      "schmidt",
-      "scholarships",
-      "school",
-      "schule",
-      "schwarz",
-      "science",
-      "scjohnson",
-      "scor",
-      "scot",
-      "search",
-      "seat",
-      "secure",
-      "security",
-      "seek",
-      "select",
-      "sener",
-      "services",
-      "ses",
-      "seven",
-      "sew",
-      "sex",
-      "sexy",
-      "sfr",
-      "shangrila",
-      "sharp",
-      "shaw",
-      "shell",
-      "shia",
-      "shiksha",
-      "shoes",
-      "shop",
-      "shopping",
-      "shouji",
-      "show",
-      "showtime",
-      "shriram",
-      "silk",
-      "sina",
-      "singles",
-      "site",
-      "ski",
-      "skin",
-      "sky",
-      "skype",
-      "sling",
-      "smart",
-      "smile",
-      "sncf",
-      "soccer",
-      "social",
-      "softbank",
-      "software",
-      "sohu",
-      "solar",
-      "solutions",
-      "song",
-      "sony",
-      "soy",
-      "spa",
-      "space",
-      "sport",
-      "spot",
-      "spreadbetting",
-      "srl",
-      "stada",
-      "staples",
-      "star",
-      "statebank",
-      "statefarm",
-      "stc",
-      "stcgroup",
-      "stockholm",
-      "storage",
-      "store",
-      "stream",
-      "studio",
-      "study",
-      "style",
-      "sucks",
-      "supplies",
-      "supply",
-      "support",
-      "surf",
-      "surgery",
-      "suzuki",
-      "swatch",
-      "swiftcover",
-      "swiss",
-      "sydney",
-      "symantec",
-      "systems",
-      "tab",
-      "taipei",
-      "talk",
-      "taobao",
-      "target",
-      "tatamotors",
-      "tatar",
-      "tattoo",
-      "tax",
-      "taxi",
-      "tci",
-      "tdk",
-      "team",
-      "tech",
-      "technology",
-      "temasek",
-      "tennis",
-      "teva",
-      "thd",
-      "theater",
-      "theatre",
-      "tiaa",
-      "tickets",
-      "tienda",
-      "tiffany",
-      "tips",
-      "tires",
-      "tirol",
-      "tjmaxx",
-      "tjx",
-      "tkmaxx",
-      "tmall",
-      "today",
-      "tokyo",
-      "tools",
-      "top",
-      "toray",
-      "toshiba",
-      "total",
-      "tours",
-      "town",
-      "toyota",
-      "toys",
-      "trade",
-      "trading",
-      "training",
-      "travel",
-      "travelchannel",
-      "travelers",
-      "travelersinsurance",
-      "trust",
-      "trv",
-      "tube",
-      "tui",
-      "tunes",
-      "tushu",
-      "tvs",
-      "ubank",
-      "ubs",
-      "unicom",
-      "university",
-      "uno",
-      "uol",
-      "ups",
-      "vacations",
-      "vana",
-      "vanguard",
-      "vegas",
-      "ventures",
-      "verisign",
-      "versicherung",
-      "vet",
-      "viajes",
-      "video",
-      "vig",
-      "viking",
-      "villas",
-      "vin",
-      "vip",
-      "virgin",
-      "visa",
-      "vision",
-      "viva",
-      "vivo",
-      "vlaanderen",
-      "vodka",
-      "volkswagen",
-      "volvo",
-      "vote",
-      "voting",
-      "voto",
-      "voyage",
-      "vuelos",
-      "wales",
-      "walmart",
-      "walter",
-      "wang",
-      "wanggou",
-      "watch",
-      "watches",
-      "weather",
-      "weatherchannel",
-      "webcam",
-      "weber",
-      "website",
-      "wed",
-      "wedding",
-      "weibo",
-      "weir",
-      "whoswho",
-      "wien",
-      "wiki",
-      "williamhill",
-      "win",
-      "windows",
-      "wine",
-      "winners",
-      "wme",
-      "wolterskluwer",
-      "woodside",
-      "work",
-      "works",
-      "world",
-      "wow",
-      "wtc",
-      "wtf",
-      "xbox",
-      "xerox",
-      "xfinity",
-      "xihuan",
-      "xin",
-      "\u0915\u0949\u092E",
-      "\u30BB\u30FC\u30EB",
-      "\u4F5B\u5C71",
-      "\u6148\u5584",
-      "\u96C6\u56E2",
-      "\u5728\u7EBF",
-      "\u5927\u4F17\u6C7D\u8F66",
-      "\u70B9\u770B",
-      "\u0E04\u0E2D\u0E21",
-      "\u516B\u5366",
-      "\u0645\u0648\u0642\u0639",
-      "\u516C\u76CA",
-      "\u516C\u53F8",
-      "\u9999\u683C\u91CC\u62C9",
-      "\u7F51\u7AD9",
-      "\u79FB\u52A8",
-      "\u6211\u7231\u4F60",
-      "\u043C\u043E\u0441\u043A\u0432\u0430",
-      "\u043A\u0430\u0442\u043E\u043B\u0438\u043A",
-      "\u043E\u043D\u043B\u0430\u0439\u043D",
-      "\u0441\u0430\u0439\u0442",
-      "\u8054\u901A",
-      "\u05E7\u05D5\u05DD",
-      "\u65F6\u5C1A",
-      "\u5FAE\u535A",
-      "\u6DE1\u9A6C\u9521",
-      "\u30D5\u30A1\u30C3\u30B7\u30E7\u30F3",
-      "\u043E\u0440\u0433",
-      "\u0928\u0947\u091F",
-      "\u30B9\u30C8\u30A2",
-      "\u30A2\u30DE\u30BE\u30F3",
-      "\uC0BC\uC131",
-      "\u5546\u6807",
-      "\u5546\u5E97",
-      "\u5546\u57CE",
-      "\u0434\u0435\u0442\u0438",
-      "\u30DD\u30A4\u30F3\u30C8",
-      "\u65B0\u95FB",
-      "\u5DE5\u884C",
-      "\u5BB6\u96FB",
-      "\u0643\u0648\u0645",
-      "\u4E2D\u6587\u7F51",
-      "\u4E2D\u4FE1",
-      "\u5A31\u4E50",
-      "\u8C37\u6B4C",
-      "\u96FB\u8A0A\u76C8\u79D1",
-      "\u8D2D\u7269",
-      "\u30AF\u30E9\u30A6\u30C9",
-      "\u901A\u8CA9",
-      "\u7F51\u5E97",
-      "\u0938\u0902\u0917\u0920\u0928",
-      "\u9910\u5385",
-      "\u7F51\u7EDC",
-      "\u043A\u043E\u043C",
-      "\u4E9A\u9A6C\u900A",
-      "\u8BFA\u57FA\u4E9A",
-      "\u98DF\u54C1",
-      "\u98DE\u5229\u6D66",
-      "\u624B\u8868",
-      "\u624B\u673A",
-      "\u0627\u0631\u0627\u0645\u0643\u0648",
-      "\u0627\u0644\u0639\u0644\u064A\u0627\u0646",
-      "\u0627\u062A\u0635\u0627\u0644\u0627\u062A",
-      "\u0628\u0627\u0632\u0627\u0631",
-      "\u0627\u0628\u0648\u0638\u0628\u064A",
-      "\u0643\u0627\u062B\u0648\u0644\u064A\u0643",
-      "\u0647\u0645\u0631\u0627\u0647",
-      "\uB2F7\uCEF4",
-      "\u653F\u5E9C",
-      "\u0634\u0628\u0643\u0629",
-      "\u0628\u064A\u062A\u0643",
-      "\u0639\u0631\u0628",
-      "\u673A\u6784",
-      "\u7EC4\u7EC7\u673A\u6784",
-      "\u5065\u5EB7",
-      "\u62DB\u8058",
-      "\u0440\u0443\u0441",
-      "\u73E0\u5B9D",
-      "\u5927\u62FF",
-      "\u307F\u3093\u306A",
-      "\u30B0\u30FC\u30B0\u30EB",
-      "\u4E16\u754C",
-      "\u66F8\u7C4D",
-      "\u7F51\u5740",
-      "\uB2F7\uB137",
-      "\u30B3\u30E0",
-      "\u5929\u4E3B\u6559",
-      "\u6E38\u620F",
-      "verm\xF6gensberater",
-      "verm\xF6gensberatung",
-      "\u4F01\u4E1A",
-      "\u4FE1\u606F",
-      "\u5609\u91CC\u5927\u9152\u5E97",
-      "\u5609\u91CC",
-      "\u5E7F\u4E1C",
-      "\u653F\u52A1",
-      "xyz",
-      "yachts",
-      "yahoo",
-      "yamaxun",
-      "yandex",
-      "yodobashi",
-      "yoga",
-      "yokohama",
-      "you",
-      "youtube",
-      "yun",
-      "zappos",
-      "zara",
-      "zero",
-      "zip",
-      "zone",
-      "zuerich",
-      "cc.ua",
-      "inf.ua",
-      "ltd.ua",
-      "adobeaemcloud.com",
-      "adobeaemcloud.net",
-      "*.dev.adobeaemcloud.com",
-      "beep.pl",
-      "barsy.ca",
-      "*.compute.estate",
-      "*.alces.network",
-      "altervista.org",
-      "alwaysdata.net",
-      "cloudfront.net",
-      "*.compute.amazonaws.com",
-      "*.compute-1.amazonaws.com",
-      "*.compute.amazonaws.com.cn",
-      "us-east-1.amazonaws.com",
-      "cn-north-1.eb.amazonaws.com.cn",
-      "cn-northwest-1.eb.amazonaws.com.cn",
-      "elasticbeanstalk.com",
-      "ap-northeast-1.elasticbeanstalk.com",
-      "ap-northeast-2.elasticbeanstalk.com",
-      "ap-northeast-3.elasticbeanstalk.com",
-      "ap-south-1.elasticbeanstalk.com",
-      "ap-southeast-1.elasticbeanstalk.com",
-      "ap-southeast-2.elasticbeanstalk.com",
-      "ca-central-1.elasticbeanstalk.com",
-      "eu-central-1.elasticbeanstalk.com",
-      "eu-west-1.elasticbeanstalk.com",
-      "eu-west-2.elasticbeanstalk.com",
-      "eu-west-3.elasticbeanstalk.com",
-      "sa-east-1.elasticbeanstalk.com",
-      "us-east-1.elasticbeanstalk.com",
-      "us-east-2.elasticbeanstalk.com",
-      "us-gov-west-1.elasticbeanstalk.com",
-      "us-west-1.elasticbeanstalk.com",
-      "us-west-2.elasticbeanstalk.com",
-      "*.elb.amazonaws.com",
-      "*.elb.amazonaws.com.cn",
-      "s3.amazonaws.com",
-      "s3-ap-northeast-1.amazonaws.com",
-      "s3-ap-northeast-2.amazonaws.com",
-      "s3-ap-south-1.amazonaws.com",
-      "s3-ap-southeast-1.amazonaws.com",
-      "s3-ap-southeast-2.amazonaws.com",
-      "s3-ca-central-1.amazonaws.com",
-      "s3-eu-central-1.amazonaws.com",
-      "s3-eu-west-1.amazonaws.com",
-      "s3-eu-west-2.amazonaws.com",
-      "s3-eu-west-3.amazonaws.com",
-      "s3-external-1.amazonaws.com",
-      "s3-fips-us-gov-west-1.amazonaws.com",
-      "s3-sa-east-1.amazonaws.com",
-      "s3-us-gov-west-1.amazonaws.com",
-      "s3-us-east-2.amazonaws.com",
-      "s3-us-west-1.amazonaws.com",
-      "s3-us-west-2.amazonaws.com",
-      "s3.ap-northeast-2.amazonaws.com",
-      "s3.ap-south-1.amazonaws.com",
-      "s3.cn-north-1.amazonaws.com.cn",
-      "s3.ca-central-1.amazonaws.com",
-      "s3.eu-central-1.amazonaws.com",
-      "s3.eu-west-2.amazonaws.com",
-      "s3.eu-west-3.amazonaws.com",
-      "s3.us-east-2.amazonaws.com",
-      "s3.dualstack.ap-northeast-1.amazonaws.com",
-      "s3.dualstack.ap-northeast-2.amazonaws.com",
-      "s3.dualstack.ap-south-1.amazonaws.com",
-      "s3.dualstack.ap-southeast-1.amazonaws.com",
-      "s3.dualstack.ap-southeast-2.amazonaws.com",
-      "s3.dualstack.ca-central-1.amazonaws.com",
-      "s3.dualstack.eu-central-1.amazonaws.com",
-      "s3.dualstack.eu-west-1.amazonaws.com",
-      "s3.dualstack.eu-west-2.amazonaws.com",
-      "s3.dualstack.eu-west-3.amazonaws.com",
-      "s3.dualstack.sa-east-1.amazonaws.com",
-      "s3.dualstack.us-east-1.amazonaws.com",
-      "s3.dualstack.us-east-2.amazonaws.com",
-      "s3-website-us-east-1.amazonaws.com",
-      "s3-website-us-west-1.amazonaws.com",
-      "s3-website-us-west-2.amazonaws.com",
-      "s3-website-ap-northeast-1.amazonaws.com",
-      "s3-website-ap-southeast-1.amazonaws.com",
-      "s3-website-ap-southeast-2.amazonaws.com",
-      "s3-website-eu-west-1.amazonaws.com",
-      "s3-website-sa-east-1.amazonaws.com",
-      "s3-website.ap-northeast-2.amazonaws.com",
-      "s3-website.ap-south-1.amazonaws.com",
-      "s3-website.ca-central-1.amazonaws.com",
-      "s3-website.eu-central-1.amazonaws.com",
-      "s3-website.eu-west-2.amazonaws.com",
-      "s3-website.eu-west-3.amazonaws.com",
-      "s3-website.us-east-2.amazonaws.com",
-      "amsw.nl",
-      "t3l3p0rt.net",
-      "tele.amune.org",
-      "apigee.io",
-      "on-aptible.com",
-      "user.aseinet.ne.jp",
-      "gv.vc",
-      "d.gv.vc",
-      "user.party.eus",
-      "pimienta.org",
-      "poivron.org",
-      "potager.org",
-      "sweetpepper.org",
-      "myasustor.com",
-      "myfritz.net",
-      "*.awdev.ca",
-      "*.advisor.ws",
-      "b-data.io",
-      "backplaneapp.io",
-      "balena-devices.com",
-      "app.banzaicloud.io",
-      "betainabox.com",
-      "bnr.la",
-      "blackbaudcdn.net",
-      "boomla.net",
-      "boxfuse.io",
-      "square7.ch",
-      "bplaced.com",
-      "bplaced.de",
-      "square7.de",
-      "bplaced.net",
-      "square7.net",
-      "browsersafetymark.io",
-      "uk0.bigv.io",
-      "dh.bytemark.co.uk",
-      "vm.bytemark.co.uk",
-      "mycd.eu",
-      "carrd.co",
-      "crd.co",
-      "uwu.ai",
-      "ae.org",
-      "ar.com",
-      "br.com",
-      "cn.com",
-      "com.de",
-      "com.se",
-      "de.com",
-      "eu.com",
-      "gb.com",
-      "gb.net",
-      "hu.com",
-      "hu.net",
-      "jp.net",
-      "jpn.com",
-      "kr.com",
-      "mex.com",
-      "no.com",
-      "qc.com",
-      "ru.com",
-      "sa.com",
-      "se.net",
-      "uk.com",
-      "uk.net",
-      "us.com",
-      "uy.com",
-      "za.bz",
-      "za.com",
-      "africa.com",
-      "gr.com",
-      "in.net",
-      "us.org",
-      "co.com",
-      "c.la",
-      "certmgr.org",
-      "xenapponazure.com",
-      "discourse.group",
-      "discourse.team",
-      "virtueeldomein.nl",
-      "cleverapps.io",
-      "*.lcl.dev",
-      "*.stg.dev",
-      "c66.me",
-      "cloud66.ws",
-      "cloud66.zone",
-      "jdevcloud.com",
-      "wpdevcloud.com",
-      "cloudaccess.host",
-      "freesite.host",
-      "cloudaccess.net",
-      "cloudcontrolled.com",
-      "cloudcontrolapp.com",
-      "cloudera.site",
-      "trycloudflare.com",
-      "workers.dev",
-      "wnext.app",
-      "co.ca",
-      "*.otap.co",
-      "co.cz",
-      "c.cdn77.org",
-      "cdn77-ssl.net",
-      "r.cdn77.net",
-      "rsc.cdn77.org",
-      "ssl.origin.cdn77-secure.org",
-      "cloudns.asia",
-      "cloudns.biz",
-      "cloudns.club",
-      "cloudns.cc",
-      "cloudns.eu",
-      "cloudns.in",
-      "cloudns.info",
-      "cloudns.org",
-      "cloudns.pro",
-      "cloudns.pw",
-      "cloudns.us",
-      "cloudeity.net",
-      "cnpy.gdn",
-      "co.nl",
-      "co.no",
-      "webhosting.be",
-      "hosting-cluster.nl",
-      "ac.ru",
-      "edu.ru",
-      "gov.ru",
-      "int.ru",
-      "mil.ru",
-      "test.ru",
-      "dyn.cosidns.de",
-      "dynamisches-dns.de",
-      "dnsupdater.de",
-      "internet-dns.de",
-      "l-o-g-i-n.de",
-      "dynamic-dns.info",
-      "feste-ip.net",
-      "knx-server.net",
-      "static-access.net",
-      "realm.cz",
-      "*.cryptonomic.net",
-      "cupcake.is",
-      "*.customer-oci.com",
-      "*.oci.customer-oci.com",
-      "*.ocp.customer-oci.com",
-      "*.ocs.customer-oci.com",
-      "cyon.link",
-      "cyon.site",
-      "daplie.me",
-      "localhost.daplie.me",
-      "dattolocal.com",
-      "dattorelay.com",
-      "dattoweb.com",
-      "mydatto.com",
-      "dattolocal.net",
-      "mydatto.net",
-      "biz.dk",
-      "co.dk",
-      "firm.dk",
-      "reg.dk",
-      "store.dk",
-      "*.dapps.earth",
-      "*.bzz.dapps.earth",
-      "builtwithdark.com",
-      "edgestack.me",
-      "debian.net",
-      "dedyn.io",
-      "dnshome.de",
-      "online.th",
-      "shop.th",
-      "drayddns.com",
-      "dreamhosters.com",
-      "mydrobo.com",
-      "drud.io",
-      "drud.us",
-      "duckdns.org",
-      "dy.fi",
-      "tunk.org",
-      "dyndns-at-home.com",
-      "dyndns-at-work.com",
-      "dyndns-blog.com",
-      "dyndns-free.com",
-      "dyndns-home.com",
-      "dyndns-ip.com",
-      "dyndns-mail.com",
-      "dyndns-office.com",
-      "dyndns-pics.com",
-      "dyndns-remote.com",
-      "dyndns-server.com",
-      "dyndns-web.com",
-      "dyndns-wiki.com",
-      "dyndns-work.com",
-      "dyndns.biz",
-      "dyndns.info",
-      "dyndns.org",
-      "dyndns.tv",
-      "at-band-camp.net",
-      "ath.cx",
-      "barrel-of-knowledge.info",
-      "barrell-of-knowledge.info",
-      "better-than.tv",
-      "blogdns.com",
-      "blogdns.net",
-      "blogdns.org",
-      "blogsite.org",
-      "boldlygoingnowhere.org",
-      "broke-it.net",
-      "buyshouses.net",
-      "cechire.com",
-      "dnsalias.com",
-      "dnsalias.net",
-      "dnsalias.org",
-      "dnsdojo.com",
-      "dnsdojo.net",
-      "dnsdojo.org",
-      "does-it.net",
-      "doesntexist.com",
-      "doesntexist.org",
-      "dontexist.com",
-      "dontexist.net",
-      "dontexist.org",
-      "doomdns.com",
-      "doomdns.org",
-      "dvrdns.org",
-      "dyn-o-saur.com",
-      "dynalias.com",
-      "dynalias.net",
-      "dynalias.org",
-      "dynathome.net",
-      "dyndns.ws",
-      "endofinternet.net",
-      "endofinternet.org",
-      "endoftheinternet.org",
-      "est-a-la-maison.com",
-      "est-a-la-masion.com",
-      "est-le-patron.com",
-      "est-mon-blogueur.com",
-      "for-better.biz",
-      "for-more.biz",
-      "for-our.info",
-      "for-some.biz",
-      "for-the.biz",
-      "forgot.her.name",
-      "forgot.his.name",
-      "from-ak.com",
-      "from-al.com",
-      "from-ar.com",
-      "from-az.net",
-      "from-ca.com",
-      "from-co.net",
-      "from-ct.com",
-      "from-dc.com",
-      "from-de.com",
-      "from-fl.com",
-      "from-ga.com",
-      "from-hi.com",
-      "from-ia.com",
-      "from-id.com",
-      "from-il.com",
-      "from-in.com",
-      "from-ks.com",
-      "from-ky.com",
-      "from-la.net",
-      "from-ma.com",
-      "from-md.com",
-      "from-me.org",
-      "from-mi.com",
-      "from-mn.com",
-      "from-mo.com",
-      "from-ms.com",
-      "from-mt.com",
-      "from-nc.com",
-      "from-nd.com",
-      "from-ne.com",
-      "from-nh.com",
-      "from-nj.com",
-      "from-nm.com",
-      "from-nv.com",
-      "from-ny.net",
-      "from-oh.com",
-      "from-ok.com",
-      "from-or.com",
-      "from-pa.com",
-      "from-pr.com",
-      "from-ri.com",
-      "from-sc.com",
-      "from-sd.com",
-      "from-tn.com",
-      "from-tx.com",
-      "from-ut.com",
-      "from-va.com",
-      "from-vt.com",
-      "from-wa.com",
-      "from-wi.com",
-      "from-wv.com",
-      "from-wy.com",
-      "ftpaccess.cc",
-      "fuettertdasnetz.de",
-      "game-host.org",
-      "game-server.cc",
-      "getmyip.com",
-      "gets-it.net",
-      "go.dyndns.org",
-      "gotdns.com",
-      "gotdns.org",
-      "groks-the.info",
-      "groks-this.info",
-      "ham-radio-op.net",
-      "here-for-more.info",
-      "hobby-site.com",
-      "hobby-site.org",
-      "home.dyndns.org",
-      "homedns.org",
-      "homeftp.net",
-      "homeftp.org",
-      "homeip.net",
-      "homelinux.com",
-      "homelinux.net",
-      "homelinux.org",
-      "homeunix.com",
-      "homeunix.net",
-      "homeunix.org",
-      "iamallama.com",
-      "in-the-band.net",
-      "is-a-anarchist.com",
-      "is-a-blogger.com",
-      "is-a-bookkeeper.com",
-      "is-a-bruinsfan.org",
-      "is-a-bulls-fan.com",
-      "is-a-candidate.org",
-      "is-a-caterer.com",
-      "is-a-celticsfan.org",
-      "is-a-chef.com",
-      "is-a-chef.net",
-      "is-a-chef.org",
-      "is-a-conservative.com",
-      "is-a-cpa.com",
-      "is-a-cubicle-slave.com",
-      "is-a-democrat.com",
-      "is-a-designer.com",
-      "is-a-doctor.com",
-      "is-a-financialadvisor.com",
-      "is-a-geek.com",
-      "is-a-geek.net",
-      "is-a-geek.org",
-      "is-a-green.com",
-      "is-a-guru.com",
-      "is-a-hard-worker.com",
-      "is-a-hunter.com",
-      "is-a-knight.org",
-      "is-a-landscaper.com",
-      "is-a-lawyer.com",
-      "is-a-liberal.com",
-      "is-a-libertarian.com",
-      "is-a-linux-user.org",
-      "is-a-llama.com",
-      "is-a-musician.com",
-      "is-a-nascarfan.com",
-      "is-a-nurse.com",
-      "is-a-painter.com",
-      "is-a-patsfan.org",
-      "is-a-personaltrainer.com",
-      "is-a-photographer.com",
-      "is-a-player.com",
-      "is-a-republican.com",
-      "is-a-rockstar.com",
-      "is-a-socialist.com",
-      "is-a-soxfan.org",
-      "is-a-student.com",
-      "is-a-teacher.com",
-      "is-a-techie.com",
-      "is-a-therapist.com",
-      "is-an-accountant.com",
-      "is-an-actor.com",
-      "is-an-actress.com",
-      "is-an-anarchist.com",
-      "is-an-artist.com",
-      "is-an-engineer.com",
-      "is-an-entertainer.com",
-      "is-by.us",
-      "is-certified.com",
-      "is-found.org",
-      "is-gone.com",
-      "is-into-anime.com",
-      "is-into-cars.com",
-      "is-into-cartoons.com",
-      "is-into-games.com",
-      "is-leet.com",
-      "is-lost.org",
-      "is-not-certified.com",
-      "is-saved.org",
-      "is-slick.com",
-      "is-uberleet.com",
-      "is-very-bad.org",
-      "is-very-evil.org",
-      "is-very-good.org",
-      "is-very-nice.org",
-      "is-very-sweet.org",
-      "is-with-theband.com",
-      "isa-geek.com",
-      "isa-geek.net",
-      "isa-geek.org",
-      "isa-hockeynut.com",
-      "issmarterthanyou.com",
-      "isteingeek.de",
-      "istmein.de",
-      "kicks-ass.net",
-      "kicks-ass.org",
-      "knowsitall.info",
-      "land-4-sale.us",
-      "lebtimnetz.de",
-      "leitungsen.de",
-      "likes-pie.com",
-      "likescandy.com",
-      "merseine.nu",
-      "mine.nu",
-      "misconfused.org",
-      "mypets.ws",
-      "myphotos.cc",
-      "neat-url.com",
-      "office-on-the.net",
-      "on-the-web.tv",
-      "podzone.net",
-      "podzone.org",
-      "readmyblog.org",
-      "saves-the-whales.com",
-      "scrapper-site.net",
-      "scrapping.cc",
-      "selfip.biz",
-      "selfip.com",
-      "selfip.info",
-      "selfip.net",
-      "selfip.org",
-      "sells-for-less.com",
-      "sells-for-u.com",
-      "sells-it.net",
-      "sellsyourhome.org",
-      "servebbs.com",
-      "servebbs.net",
-      "servebbs.org",
-      "serveftp.net",
-      "serveftp.org",
-      "servegame.org",
-      "shacknet.nu",
-      "simple-url.com",
-      "space-to-rent.com",
-      "stuff-4-sale.org",
-      "stuff-4-sale.us",
-      "teaches-yoga.com",
-      "thruhere.net",
-      "traeumtgerade.de",
-      "webhop.biz",
-      "webhop.info",
-      "webhop.net",
-      "webhop.org",
-      "worse-than.tv",
-      "writesthisblog.com",
-      "ddnss.de",
-      "dyn.ddnss.de",
-      "dyndns.ddnss.de",
-      "dyndns1.de",
-      "dyn-ip24.de",
-      "home-webserver.de",
-      "dyn.home-webserver.de",
-      "myhome-server.de",
-      "ddnss.org",
-      "definima.net",
-      "definima.io",
-      "bci.dnstrace.pro",
-      "ddnsfree.com",
-      "ddnsgeek.com",
-      "giize.com",
-      "gleeze.com",
-      "kozow.com",
-      "loseyourip.com",
-      "ooguy.com",
-      "theworkpc.com",
-      "casacam.net",
-      "dynu.net",
-      "accesscam.org",
-      "camdvr.org",
-      "freeddns.org",
-      "mywire.org",
-      "webredirect.org",
-      "myddns.rocks",
-      "blogsite.xyz",
-      "dynv6.net",
-      "e4.cz",
-      "en-root.fr",
-      "mytuleap.com",
-      "onred.one",
-      "staging.onred.one",
-      "enonic.io",
-      "customer.enonic.io",
-      "eu.org",
-      "al.eu.org",
-      "asso.eu.org",
-      "at.eu.org",
-      "au.eu.org",
-      "be.eu.org",
-      "bg.eu.org",
-      "ca.eu.org",
-      "cd.eu.org",
-      "ch.eu.org",
-      "cn.eu.org",
-      "cy.eu.org",
-      "cz.eu.org",
-      "de.eu.org",
-      "dk.eu.org",
-      "edu.eu.org",
-      "ee.eu.org",
-      "es.eu.org",
-      "fi.eu.org",
-      "fr.eu.org",
-      "gr.eu.org",
-      "hr.eu.org",
-      "hu.eu.org",
-      "ie.eu.org",
-      "il.eu.org",
-      "in.eu.org",
-      "int.eu.org",
-      "is.eu.org",
-      "it.eu.org",
-      "jp.eu.org",
-      "kr.eu.org",
-      "lt.eu.org",
-      "lu.eu.org",
-      "lv.eu.org",
-      "mc.eu.org",
-      "me.eu.org",
-      "mk.eu.org",
-      "mt.eu.org",
-      "my.eu.org",
-      "net.eu.org",
-      "ng.eu.org",
-      "nl.eu.org",
-      "no.eu.org",
-      "nz.eu.org",
-      "paris.eu.org",
-      "pl.eu.org",
-      "pt.eu.org",
-      "q-a.eu.org",
-      "ro.eu.org",
-      "ru.eu.org",
-      "se.eu.org",
-      "si.eu.org",
-      "sk.eu.org",
-      "tr.eu.org",
-      "uk.eu.org",
-      "us.eu.org",
-      "eu-1.evennode.com",
-      "eu-2.evennode.com",
-      "eu-3.evennode.com",
-      "eu-4.evennode.com",
-      "us-1.evennode.com",
-      "us-2.evennode.com",
-      "us-3.evennode.com",
-      "us-4.evennode.com",
-      "twmail.cc",
-      "twmail.net",
-      "twmail.org",
-      "mymailer.com.tw",
-      "url.tw",
-      "apps.fbsbx.com",
-      "ru.net",
-      "adygeya.ru",
-      "bashkiria.ru",
-      "bir.ru",
-      "cbg.ru",
-      "com.ru",
-      "dagestan.ru",
-      "grozny.ru",
-      "kalmykia.ru",
-      "kustanai.ru",
-      "marine.ru",
-      "mordovia.ru",
-      "msk.ru",
-      "mytis.ru",
-      "nalchik.ru",
-      "nov.ru",
-      "pyatigorsk.ru",
-      "spb.ru",
-      "vladikavkaz.ru",
-      "vladimir.ru",
-      "abkhazia.su",
-      "adygeya.su",
-      "aktyubinsk.su",
-      "arkhangelsk.su",
-      "armenia.su",
-      "ashgabad.su",
-      "azerbaijan.su",
-      "balashov.su",
-      "bashkiria.su",
-      "bryansk.su",
-      "bukhara.su",
-      "chimkent.su",
-      "dagestan.su",
-      "east-kazakhstan.su",
-      "exnet.su",
-      "georgia.su",
-      "grozny.su",
-      "ivanovo.su",
-      "jambyl.su",
-      "kalmykia.su",
-      "kaluga.su",
-      "karacol.su",
-      "karaganda.su",
-      "karelia.su",
-      "khakassia.su",
-      "krasnodar.su",
-      "kurgan.su",
-      "kustanai.su",
-      "lenug.su",
-      "mangyshlak.su",
-      "mordovia.su",
-      "msk.su",
-      "murmansk.su",
-      "nalchik.su",
-      "navoi.su",
-      "north-kazakhstan.su",
-      "nov.su",
-      "obninsk.su",
-      "penza.su",
-      "pokrovsk.su",
-      "sochi.su",
-      "spb.su",
-      "tashkent.su",
-      "termez.su",
-      "togliatti.su",
-      "troitsk.su",
-      "tselinograd.su",
-      "tula.su",
-      "tuva.su",
-      "vladikavkaz.su",
-      "vladimir.su",
-      "vologda.su",
-      "channelsdvr.net",
-      "u.channelsdvr.net",
-      "fastly-terrarium.com",
-      "fastlylb.net",
-      "map.fastlylb.net",
-      "freetls.fastly.net",
-      "map.fastly.net",
-      "a.prod.fastly.net",
-      "global.prod.fastly.net",
-      "a.ssl.fastly.net",
-      "b.ssl.fastly.net",
-      "global.ssl.fastly.net",
-      "fastpanel.direct",
-      "fastvps-server.com",
-      "fhapp.xyz",
-      "fedorainfracloud.org",
-      "fedorapeople.org",
-      "cloud.fedoraproject.org",
-      "app.os.fedoraproject.org",
-      "app.os.stg.fedoraproject.org",
-      "mydobiss.com",
-      "filegear.me",
-      "filegear-au.me",
-      "filegear-de.me",
-      "filegear-gb.me",
-      "filegear-ie.me",
-      "filegear-jp.me",
-      "filegear-sg.me",
-      "firebaseapp.com",
-      "flynnhub.com",
-      "flynnhosting.net",
-      "0e.vc",
-      "freebox-os.com",
-      "freeboxos.com",
-      "fbx-os.fr",
-      "fbxos.fr",
-      "freebox-os.fr",
-      "freeboxos.fr",
-      "freedesktop.org",
-      "*.futurecms.at",
-      "*.ex.futurecms.at",
-      "*.in.futurecms.at",
-      "futurehosting.at",
-      "futuremailing.at",
-      "*.ex.ortsinfo.at",
-      "*.kunden.ortsinfo.at",
-      "*.statics.cloud",
-      "service.gov.uk",
-      "gehirn.ne.jp",
-      "usercontent.jp",
-      "gentapps.com",
-      "lab.ms",
-      "github.io",
-      "githubusercontent.com",
-      "gitlab.io",
-      "glitch.me",
-      "lolipop.io",
-      "cloudapps.digital",
-      "london.cloudapps.digital",
-      "homeoffice.gov.uk",
-      "ro.im",
-      "shop.ro",
-      "goip.de",
-      "run.app",
-      "a.run.app",
-      "web.app",
-      "*.0emm.com",
-      "appspot.com",
-      "*.r.appspot.com",
-      "blogspot.ae",
-      "blogspot.al",
-      "blogspot.am",
-      "blogspot.ba",
-      "blogspot.be",
-      "blogspot.bg",
-      "blogspot.bj",
-      "blogspot.ca",
-      "blogspot.cf",
-      "blogspot.ch",
-      "blogspot.cl",
-      "blogspot.co.at",
-      "blogspot.co.id",
-      "blogspot.co.il",
-      "blogspot.co.ke",
-      "blogspot.co.nz",
-      "blogspot.co.uk",
-      "blogspot.co.za",
-      "blogspot.com",
-      "blogspot.com.ar",
-      "blogspot.com.au",
-      "blogspot.com.br",
-      "blogspot.com.by",
-      "blogspot.com.co",
-      "blogspot.com.cy",
-      "blogspot.com.ee",
-      "blogspot.com.eg",
-      "blogspot.com.es",
-      "blogspot.com.mt",
-      "blogspot.com.ng",
-      "blogspot.com.tr",
-      "blogspot.com.uy",
-      "blogspot.cv",
-      "blogspot.cz",
-      "blogspot.de",
-      "blogspot.dk",
-      "blogspot.fi",
-      "blogspot.fr",
-      "blogspot.gr",
-      "blogspot.hk",
-      "blogspot.hr",
-      "blogspot.hu",
-      "blogspot.ie",
-      "blogspot.in",
-      "blogspot.is",
-      "blogspot.it",
-      "blogspot.jp",
-      "blogspot.kr",
-      "blogspot.li",
-      "blogspot.lt",
-      "blogspot.lu",
-      "blogspot.md",
-      "blogspot.mk",
-      "blogspot.mr",
-      "blogspot.mx",
-      "blogspot.my",
-      "blogspot.nl",
-      "blogspot.no",
-      "blogspot.pe",
-      "blogspot.pt",
-      "blogspot.qa",
-      "blogspot.re",
-      "blogspot.ro",
-      "blogspot.rs",
-      "blogspot.ru",
-      "blogspot.se",
-      "blogspot.sg",
-      "blogspot.si",
-      "blogspot.sk",
-      "blogspot.sn",
-      "blogspot.td",
-      "blogspot.tw",
-      "blogspot.ug",
-      "blogspot.vn",
-      "cloudfunctions.net",
-      "cloud.goog",
-      "codespot.com",
-      "googleapis.com",
-      "googlecode.com",
-      "pagespeedmobilizer.com",
-      "publishproxy.com",
-      "withgoogle.com",
-      "withyoutube.com",
-      "awsmppl.com",
-      "fin.ci",
-      "free.hr",
-      "caa.li",
-      "ua.rs",
-      "conf.se",
-      "hs.zone",
-      "hs.run",
-      "hashbang.sh",
-      "hasura.app",
-      "hasura-app.io",
-      "hepforge.org",
-      "herokuapp.com",
-      "herokussl.com",
-      "myravendb.com",
-      "ravendb.community",
-      "ravendb.me",
-      "development.run",
-      "ravendb.run",
-      "bpl.biz",
-      "orx.biz",
-      "ng.city",
-      "biz.gl",
-      "ng.ink",
-      "col.ng",
-      "firm.ng",
-      "gen.ng",
-      "ltd.ng",
-      "ngo.ng",
-      "ng.school",
-      "sch.so",
-      "h\xE4kkinen.fi",
-      "*.moonscale.io",
-      "moonscale.net",
-      "iki.fi",
-      "dyn-berlin.de",
-      "in-berlin.de",
-      "in-brb.de",
-      "in-butter.de",
-      "in-dsl.de",
-      "in-dsl.net",
-      "in-dsl.org",
-      "in-vpn.de",
-      "in-vpn.net",
-      "in-vpn.org",
-      "biz.at",
-      "info.at",
-      "info.cx",
-      "ac.leg.br",
-      "al.leg.br",
-      "am.leg.br",
-      "ap.leg.br",
-      "ba.leg.br",
-      "ce.leg.br",
-      "df.leg.br",
-      "es.leg.br",
-      "go.leg.br",
-      "ma.leg.br",
-      "mg.leg.br",
-      "ms.leg.br",
-      "mt.leg.br",
-      "pa.leg.br",
-      "pb.leg.br",
-      "pe.leg.br",
-      "pi.leg.br",
-      "pr.leg.br",
-      "rj.leg.br",
-      "rn.leg.br",
-      "ro.leg.br",
-      "rr.leg.br",
-      "rs.leg.br",
-      "sc.leg.br",
-      "se.leg.br",
-      "sp.leg.br",
-      "to.leg.br",
-      "pixolino.com",
-      "ipifony.net",
-      "mein-iserv.de",
-      "test-iserv.de",
-      "iserv.dev",
-      "iobb.net",
-      "myjino.ru",
-      "*.hosting.myjino.ru",
-      "*.landing.myjino.ru",
-      "*.spectrum.myjino.ru",
-      "*.vps.myjino.ru",
-      "*.triton.zone",
-      "*.cns.joyent.com",
-      "js.org",
-      "kaas.gg",
-      "khplay.nl",
-      "keymachine.de",
-      "kinghost.net",
-      "uni5.net",
-      "knightpoint.systems",
-      "oya.to",
-      "co.krd",
-      "edu.krd",
-      "git-repos.de",
-      "lcube-server.de",
-      "svn-repos.de",
-      "leadpages.co",
-      "lpages.co",
-      "lpusercontent.com",
-      "lelux.site",
-      "co.business",
-      "co.education",
-      "co.events",
-      "co.financial",
-      "co.network",
-      "co.place",
-      "co.technology",
-      "app.lmpm.com",
-      "linkitools.space",
-      "linkyard.cloud",
-      "linkyard-cloud.ch",
-      "members.linode.com",
-      "nodebalancer.linode.com",
-      "we.bs",
-      "loginline.app",
-      "loginline.dev",
-      "loginline.io",
-      "loginline.services",
-      "loginline.site",
-      "krasnik.pl",
-      "leczna.pl",
-      "lubartow.pl",
-      "lublin.pl",
-      "poniatowa.pl",
-      "swidnik.pl",
-      "uklugs.org",
-      "glug.org.uk",
-      "lug.org.uk",
-      "lugs.org.uk",
-      "barsy.bg",
-      "barsy.co.uk",
-      "barsyonline.co.uk",
-      "barsycenter.com",
-      "barsyonline.com",
-      "barsy.club",
-      "barsy.de",
-      "barsy.eu",
-      "barsy.in",
-      "barsy.info",
-      "barsy.io",
-      "barsy.me",
-      "barsy.menu",
-      "barsy.mobi",
-      "barsy.net",
-      "barsy.online",
-      "barsy.org",
-      "barsy.pro",
-      "barsy.pub",
-      "barsy.shop",
-      "barsy.site",
-      "barsy.support",
-      "barsy.uk",
-      "*.magentosite.cloud",
-      "mayfirst.info",
-      "mayfirst.org",
-      "hb.cldmail.ru",
-      "miniserver.com",
-      "memset.net",
-      "cloud.metacentrum.cz",
-      "custom.metacentrum.cz",
-      "flt.cloud.muni.cz",
-      "usr.cloud.muni.cz",
-      "meteorapp.com",
-      "eu.meteorapp.com",
-      "co.pl",
-      "azurecontainer.io",
-      "azurewebsites.net",
-      "azure-mobile.net",
-      "cloudapp.net",
-      "mozilla-iot.org",
-      "bmoattachments.org",
-      "net.ru",
-      "org.ru",
-      "pp.ru",
-      "ui.nabu.casa",
-      "pony.club",
-      "of.fashion",
-      "on.fashion",
-      "of.football",
-      "in.london",
-      "of.london",
-      "for.men",
-      "and.mom",
-      "for.mom",
-      "for.one",
-      "for.sale",
-      "of.work",
-      "to.work",
-      "nctu.me",
-      "bitballoon.com",
-      "netlify.com",
-      "4u.com",
-      "ngrok.io",
-      "nh-serv.co.uk",
-      "nfshost.com",
-      "dnsking.ch",
-      "mypi.co",
-      "n4t.co",
-      "001www.com",
-      "ddnslive.com",
-      "myiphost.com",
-      "forumz.info",
-      "16-b.it",
-      "32-b.it",
-      "64-b.it",
-      "soundcast.me",
-      "tcp4.me",
-      "dnsup.net",
-      "hicam.net",
-      "now-dns.net",
-      "ownip.net",
-      "vpndns.net",
-      "dynserv.org",
-      "now-dns.org",
-      "x443.pw",
-      "now-dns.top",
-      "ntdll.top",
-      "freeddns.us",
-      "crafting.xyz",
-      "zapto.xyz",
-      "nsupdate.info",
-      "nerdpol.ovh",
-      "blogsyte.com",
-      "brasilia.me",
-      "cable-modem.org",
-      "ciscofreak.com",
-      "collegefan.org",
-      "couchpotatofries.org",
-      "damnserver.com",
-      "ddns.me",
-      "ditchyourip.com",
-      "dnsfor.me",
-      "dnsiskinky.com",
-      "dvrcam.info",
-      "dynns.com",
-      "eating-organic.net",
-      "fantasyleague.cc",
-      "geekgalaxy.com",
-      "golffan.us",
-      "health-carereform.com",
-      "homesecuritymac.com",
-      "homesecuritypc.com",
-      "hopto.me",
-      "ilovecollege.info",
-      "loginto.me",
-      "mlbfan.org",
-      "mmafan.biz",
-      "myactivedirectory.com",
-      "mydissent.net",
-      "myeffect.net",
-      "mymediapc.net",
-      "mypsx.net",
-      "mysecuritycamera.com",
-      "mysecuritycamera.net",
-      "mysecuritycamera.org",
-      "net-freaks.com",
-      "nflfan.org",
-      "nhlfan.net",
-      "no-ip.ca",
-      "no-ip.co.uk",
-      "no-ip.net",
-      "noip.us",
-      "onthewifi.com",
-      "pgafan.net",
-      "point2this.com",
-      "pointto.us",
-      "privatizehealthinsurance.net",
-      "quicksytes.com",
-      "read-books.org",
-      "securitytactics.com",
-      "serveexchange.com",
-      "servehumour.com",
-      "servep2p.com",
-      "servesarcasm.com",
-      "stufftoread.com",
-      "ufcfan.org",
-      "unusualperson.com",
-      "workisboring.com",
-      "3utilities.com",
-      "bounceme.net",
-      "ddns.net",
-      "ddnsking.com",
-      "gotdns.ch",
-      "hopto.org",
-      "myftp.biz",
-      "myftp.org",
-      "myvnc.com",
-      "no-ip.biz",
-      "no-ip.info",
-      "no-ip.org",
-      "noip.me",
-      "redirectme.net",
-      "servebeer.com",
-      "serveblog.net",
-      "servecounterstrike.com",
-      "serveftp.com",
-      "servegame.com",
-      "servehalflife.com",
-      "servehttp.com",
-      "serveirc.com",
-      "serveminecraft.net",
-      "servemp3.com",
-      "servepics.com",
-      "servequake.com",
-      "sytes.net",
-      "webhop.me",
-      "zapto.org",
-      "stage.nodeart.io",
-      "nodum.co",
-      "nodum.io",
-      "pcloud.host",
-      "nyc.mn",
-      "nom.ae",
-      "nom.af",
-      "nom.ai",
-      "nom.al",
-      "nym.by",
-      "nom.bz",
-      "nym.bz",
-      "nom.cl",
-      "nym.ec",
-      "nom.gd",
-      "nom.ge",
-      "nom.gl",
-      "nym.gr",
-      "nom.gt",
-      "nym.gy",
-      "nym.hk",
-      "nom.hn",
-      "nym.ie",
-      "nom.im",
-      "nom.ke",
-      "nym.kz",
-      "nym.la",
-      "nym.lc",
-      "nom.li",
-      "nym.li",
-      "nym.lt",
-      "nym.lu",
-      "nom.lv",
-      "nym.me",
-      "nom.mk",
-      "nym.mn",
-      "nym.mx",
-      "nom.nu",
-      "nym.nz",
-      "nym.pe",
-      "nym.pt",
-      "nom.pw",
-      "nom.qa",
-      "nym.ro",
-      "nom.rs",
-      "nom.si",
-      "nym.sk",
-      "nom.st",
-      "nym.su",
-      "nym.sx",
-      "nom.tj",
-      "nym.tw",
-      "nom.ug",
-      "nom.uy",
-      "nom.vc",
-      "nom.vg",
-      "static.observableusercontent.com",
-      "cya.gg",
-      "cloudycluster.net",
-      "nid.io",
-      "opencraft.hosting",
-      "operaunite.com",
-      "skygearapp.com",
-      "outsystemscloud.com",
-      "ownprovider.com",
-      "own.pm",
-      "ox.rs",
-      "oy.lc",
-      "pgfog.com",
-      "pagefrontapp.com",
-      "art.pl",
-      "gliwice.pl",
-      "krakow.pl",
-      "poznan.pl",
-      "wroc.pl",
-      "zakopane.pl",
-      "pantheonsite.io",
-      "gotpantheon.com",
-      "mypep.link",
-      "perspecta.cloud",
-      "on-web.fr",
-      "*.platform.sh",
-      "*.platformsh.site",
-      "dyn53.io",
-      "co.bn",
-      "xen.prgmr.com",
-      "priv.at",
-      "prvcy.page",
-      "*.dweb.link",
-      "protonet.io",
-      "chirurgiens-dentistes-en-france.fr",
-      "byen.site",
-      "pubtls.org",
-      "qualifioapp.com",
-      "qbuser.com",
-      "instantcloud.cn",
-      "ras.ru",
-      "qa2.com",
-      "qcx.io",
-      "*.sys.qcx.io",
-      "dev-myqnapcloud.com",
-      "alpha-myqnapcloud.com",
-      "myqnapcloud.com",
-      "*.quipelements.com",
-      "vapor.cloud",
-      "vaporcloud.io",
-      "rackmaze.com",
-      "rackmaze.net",
-      "*.on-k3s.io",
-      "*.on-rancher.cloud",
-      "*.on-rio.io",
-      "readthedocs.io",
-      "rhcloud.com",
-      "app.render.com",
-      "onrender.com",
-      "repl.co",
-      "repl.run",
-      "resindevice.io",
-      "devices.resinstaging.io",
-      "hzc.io",
-      "wellbeingzone.eu",
-      "ptplus.fit",
-      "wellbeingzone.co.uk",
-      "git-pages.rit.edu",
-      "sandcats.io",
-      "logoip.de",
-      "logoip.com",
-      "schokokeks.net",
-      "gov.scot",
-      "scrysec.com",
-      "firewall-gateway.com",
-      "firewall-gateway.de",
-      "my-gateway.de",
-      "my-router.de",
-      "spdns.de",
-      "spdns.eu",
-      "firewall-gateway.net",
-      "my-firewall.org",
-      "myfirewall.org",
-      "spdns.org",
-      "senseering.net",
-      "biz.ua",
-      "co.ua",
-      "pp.ua",
-      "shiftedit.io",
-      "myshopblocks.com",
-      "shopitsite.com",
-      "mo-siemens.io",
-      "1kapp.com",
-      "appchizi.com",
-      "applinzi.com",
-      "sinaapp.com",
-      "vipsinaapp.com",
-      "siteleaf.net",
-      "bounty-full.com",
-      "alpha.bounty-full.com",
-      "beta.bounty-full.com",
-      "stackhero-network.com",
-      "static.land",
-      "dev.static.land",
-      "sites.static.land",
-      "apps.lair.io",
-      "*.stolos.io",
-      "spacekit.io",
-      "customer.speedpartner.de",
-      "api.stdlib.com",
-      "storj.farm",
-      "utwente.io",
-      "soc.srcf.net",
-      "user.srcf.net",
-      "temp-dns.com",
-      "applicationcloud.io",
-      "scapp.io",
-      "*.s5y.io",
-      "*.sensiosite.cloud",
-      "syncloud.it",
-      "diskstation.me",
-      "dscloud.biz",
-      "dscloud.me",
-      "dscloud.mobi",
-      "dsmynas.com",
-      "dsmynas.net",
-      "dsmynas.org",
-      "familyds.com",
-      "familyds.net",
-      "familyds.org",
-      "i234.me",
-      "myds.me",
-      "synology.me",
-      "vpnplus.to",
-      "direct.quickconnect.to",
-      "taifun-dns.de",
-      "gda.pl",
-      "gdansk.pl",
-      "gdynia.pl",
-      "med.pl",
-      "sopot.pl",
-      "edugit.org",
-      "telebit.app",
-      "telebit.io",
-      "*.telebit.xyz",
-      "gwiddle.co.uk",
-      "thingdustdata.com",
-      "cust.dev.thingdust.io",
-      "cust.disrec.thingdust.io",
-      "cust.prod.thingdust.io",
-      "cust.testing.thingdust.io",
-      "arvo.network",
-      "azimuth.network",
-      "bloxcms.com",
-      "townnews-staging.com",
-      "12hp.at",
-      "2ix.at",
-      "4lima.at",
-      "lima-city.at",
-      "12hp.ch",
-      "2ix.ch",
-      "4lima.ch",
-      "lima-city.ch",
-      "trafficplex.cloud",
-      "de.cool",
-      "12hp.de",
-      "2ix.de",
-      "4lima.de",
-      "lima-city.de",
-      "1337.pictures",
-      "clan.rip",
-      "lima-city.rocks",
-      "webspace.rocks",
-      "lima.zone",
-      "*.transurl.be",
-      "*.transurl.eu",
-      "*.transurl.nl",
-      "tuxfamily.org",
-      "dd-dns.de",
-      "diskstation.eu",
-      "diskstation.org",
-      "dray-dns.de",
-      "draydns.de",
-      "dyn-vpn.de",
-      "dynvpn.de",
-      "mein-vigor.de",
-      "my-vigor.de",
-      "my-wan.de",
-      "syno-ds.de",
-      "synology-diskstation.de",
-      "synology-ds.de",
-      "uber.space",
-      "*.uberspace.de",
-      "hk.com",
-      "hk.org",
-      "ltd.hk",
-      "inc.hk",
-      "virtualuser.de",
-      "virtual-user.de",
-      "urown.cloud",
-      "dnsupdate.info",
-      "lib.de.us",
-      "2038.io",
-      "router.management",
-      "v-info.info",
-      "voorloper.cloud",
-      "v.ua",
-      "wafflecell.com",
-      "*.webhare.dev",
-      "wedeploy.io",
-      "wedeploy.me",
-      "wedeploy.sh",
-      "remotewd.com",
-      "wmflabs.org",
-      "myforum.community",
-      "community-pro.de",
-      "diskussionsbereich.de",
-      "community-pro.net",
-      "meinforum.net",
-      "half.host",
-      "xnbay.com",
-      "u2.xnbay.com",
-      "u2-local.xnbay.com",
-      "cistron.nl",
-      "demon.nl",
-      "xs4all.space",
-      "yandexcloud.net",
-      "storage.yandexcloud.net",
-      "website.yandexcloud.net",
-      "official.academy",
-      "yolasite.com",
-      "ybo.faith",
-      "yombo.me",
-      "homelink.one",
-      "ybo.party",
-      "ybo.review",
-      "ybo.science",
-      "ybo.trade",
-      "nohost.me",
-      "noho.st",
-      "za.net",
-      "za.org",
-      "now.sh",
-      "bss.design",
-      "basicserver.io",
-      "virtualserver.io",
-      "enterprisecloud.nu"
-    ];
-  }
-});
-
-// node_modules/psl/index.js
-var require_psl = __commonJS({
-  "node_modules/psl/index.js"(exports2) {
-    "use strict";
-    var Punycode = require("punycode");
-    var internals = {};
-    internals.rules = require_rules().map(function(rule) {
-      return {
-        rule,
-        suffix: rule.replace(/^(\*\.|\!)/, ""),
-        punySuffix: -1,
-        wildcard: rule.charAt(0) === "*",
-        exception: rule.charAt(0) === "!"
-      };
-    });
-    internals.endsWith = function(str, suffix) {
-      return str.indexOf(suffix, str.length - suffix.length) !== -1;
-    };
-    internals.findRule = function(domain) {
-      var punyDomain = Punycode.toASCII(domain);
-      return internals.rules.reduce(function(memo, rule) {
-        if (rule.punySuffix === -1) {
-          rule.punySuffix = Punycode.toASCII(rule.suffix);
-        }
-        if (!internals.endsWith(punyDomain, "." + rule.punySuffix) && punyDomain !== rule.punySuffix) {
-          return memo;
-        }
-        return rule;
-      }, null);
-    };
-    exports2.errorCodes = {
-      DOMAIN_TOO_SHORT: "Domain name too short.",
-      DOMAIN_TOO_LONG: "Domain name too long. It should be no more than 255 chars.",
-      LABEL_STARTS_WITH_DASH: "Domain name label can not start with a dash.",
-      LABEL_ENDS_WITH_DASH: "Domain name label can not end with a dash.",
-      LABEL_TOO_LONG: "Domain name label should be at most 63 chars long.",
-      LABEL_TOO_SHORT: "Domain name label should be at least 1 character long.",
-      LABEL_INVALID_CHARS: "Domain name label can only contain alphanumeric characters or dashes."
-    };
-    internals.validate = function(input) {
-      var ascii = Punycode.toASCII(input);
-      if (ascii.length < 1) {
-        return "DOMAIN_TOO_SHORT";
-      }
-      if (ascii.length > 255) {
-        return "DOMAIN_TOO_LONG";
-      }
-      var labels = ascii.split(".");
-      var label2;
-      for (var i = 0; i < labels.length; ++i) {
-        label2 = labels[i];
-        if (!label2.length) {
-          return "LABEL_TOO_SHORT";
-        }
-        if (label2.length > 63) {
-          return "LABEL_TOO_LONG";
-        }
-        if (label2.charAt(0) === "-") {
-          return "LABEL_STARTS_WITH_DASH";
-        }
-        if (label2.charAt(label2.length - 1) === "-") {
-          return "LABEL_ENDS_WITH_DASH";
-        }
-        if (!/^[a-z0-9\-]+$/.test(label2)) {
-          return "LABEL_INVALID_CHARS";
-        }
-      }
-    };
-    exports2.parse = function(input) {
-      if (typeof input !== "string") {
-        throw new TypeError("Domain name must be a string.");
-      }
-      var domain = input.slice(0).toLowerCase();
-      if (domain.charAt(domain.length - 1) === ".") {
-        domain = domain.slice(0, domain.length - 1);
-      }
-      var error = internals.validate(domain);
-      if (error) {
-        return {
-          input,
-          error: {
-            message: exports2.errorCodes[error],
-            code: error
-          }
-        };
-      }
-      var parsed = {
-        input,
-        tld: null,
-        sld: null,
-        domain: null,
-        subdomain: null,
-        listed: false
-      };
-      var domainParts = domain.split(".");
-      if (domainParts[domainParts.length - 1] === "local") {
-        return parsed;
-      }
-      var handlePunycode = /* @__PURE__ */ __name(function() {
-        if (!/xn--/.test(domain)) {
-          return parsed;
-        }
-        if (parsed.domain) {
-          parsed.domain = Punycode.toASCII(parsed.domain);
-        }
-        if (parsed.subdomain) {
-          parsed.subdomain = Punycode.toASCII(parsed.subdomain);
-        }
-        return parsed;
-      }, "handlePunycode");
-      var rule = internals.findRule(domain);
-      if (!rule) {
-        if (domainParts.length < 2) {
-          return parsed;
-        }
-        parsed.tld = domainParts.pop();
-        parsed.sld = domainParts.pop();
-        parsed.domain = [parsed.sld, parsed.tld].join(".");
-        if (domainParts.length) {
-          parsed.subdomain = domainParts.pop();
-        }
-        return handlePunycode();
-      }
-      parsed.listed = true;
-      var tldParts = rule.suffix.split(".");
-      var privateParts = domainParts.slice(0, domainParts.length - tldParts.length);
-      if (rule.exception) {
-        privateParts.push(tldParts.shift());
-      }
-      parsed.tld = tldParts.join(".");
-      if (!privateParts.length) {
-        return handlePunycode();
-      }
-      if (rule.wildcard) {
-        tldParts.unshift(privateParts.pop());
-        parsed.tld = tldParts.join(".");
-      }
-      if (!privateParts.length) {
-        return handlePunycode();
-      }
-      parsed.sld = privateParts.pop();
-      parsed.domain = [parsed.sld, parsed.tld].join(".");
-      if (privateParts.length) {
-        parsed.subdomain = privateParts.join(".");
-      }
-      return handlePunycode();
-    };
-    exports2.get = function(domain) {
-      if (!domain) {
-        return null;
-      }
-      return exports2.parse(domain).domain || null;
-    };
-    exports2.isValid = function(domain) {
-      var parsed = exports2.parse(domain);
-      return Boolean(parsed.domain && parsed.listed);
-    };
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/pubsuffix-psl.js
-var require_pubsuffix_psl = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/pubsuffix-psl.js"(exports2) {
-    "use strict";
-    var psl = require_psl();
-    function getPublicSuffix(domain) {
-      return psl.get(domain);
-    }
-    __name(getPublicSuffix, "getPublicSuffix");
-    exports2.getPublicSuffix = getPublicSuffix;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/store.js
-var require_store = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/store.js"(exports2) {
-    "use strict";
-    var Store = class {
-      constructor() {
-        this.synchronous = false;
-      }
-      findCookie(domain, path3, key, cb) {
-        throw new Error("findCookie is not implemented");
-      }
-      findCookies(domain, path3, allowSpecialUseDomain, cb) {
-        throw new Error("findCookies is not implemented");
-      }
-      putCookie(cookie, cb) {
-        throw new Error("putCookie is not implemented");
-      }
-      updateCookie(oldCookie, newCookie, cb) {
-        throw new Error("updateCookie is not implemented");
-      }
-      removeCookie(domain, path3, key, cb) {
-        throw new Error("removeCookie is not implemented");
-      }
-      removeCookies(domain, path3, cb) {
-        throw new Error("removeCookies is not implemented");
-      }
-      removeAllCookies(cb) {
-        throw new Error("removeAllCookies is not implemented");
-      }
-      getAllCookies(cb) {
-        throw new Error("getAllCookies is not implemented (therefore jar cannot be serialized)");
-      }
-    };
-    __name(Store, "Store");
-    exports2.Store = Store;
-  }
-});
-
-// node_modules/universalify/index.js
-var require_universalify = __commonJS({
-  "node_modules/universalify/index.js"(exports2) {
-    "use strict";
-    exports2.fromCallback = function(fn) {
-      return Object.defineProperty(function() {
-        if (typeof arguments[arguments.length - 1] === "function")
-          fn.apply(this, arguments);
-        else {
-          return new Promise((resolve, reject) => {
-            arguments[arguments.length] = (err, res) => {
-              if (err)
-                return reject(err);
-              resolve(res);
-            };
-            arguments.length++;
-            fn.apply(this, arguments);
-          });
-        }
-      }, "name", { value: fn.name });
-    };
-    exports2.fromPromise = function(fn) {
-      return Object.defineProperty(function() {
-        const cb = arguments[arguments.length - 1];
-        if (typeof cb !== "function")
-          return fn.apply(this, arguments);
-        else
-          fn.apply(this, arguments).then((r) => cb(null, r), cb);
-      }, "name", { value: fn.name });
-    };
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/permuteDomain.js
-var require_permuteDomain = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/permuteDomain.js"(exports2) {
-    "use strict";
-    var pubsuffix = require_pubsuffix_psl();
-    var SPECIAL_USE_DOMAINS = ["local"];
-    function permuteDomain(domain, allowSpecialUseDomain) {
-      let pubSuf = null;
-      if (allowSpecialUseDomain) {
-        const domainParts = domain.split(".");
-        if (SPECIAL_USE_DOMAINS.includes(domainParts[domainParts.length - 1])) {
-          pubSuf = `${domainParts[domainParts.length - 2]}.${domainParts[domainParts.length - 1]}`;
-        } else {
-          pubSuf = pubsuffix.getPublicSuffix(domain);
-        }
-      } else {
-        pubSuf = pubsuffix.getPublicSuffix(domain);
-      }
-      if (!pubSuf) {
-        return null;
-      }
-      if (pubSuf == domain) {
-        return [domain];
-      }
-      const prefix = domain.slice(0, -(pubSuf.length + 1));
-      const parts = prefix.split(".").reverse();
-      let cur = pubSuf;
-      const permutations = [cur];
-      while (parts.length) {
-        cur = `${parts.shift()}.${cur}`;
-        permutations.push(cur);
-      }
-      return permutations;
-    }
-    __name(permuteDomain, "permuteDomain");
-    exports2.permuteDomain = permuteDomain;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/pathMatch.js
-var require_pathMatch = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/pathMatch.js"(exports2) {
-    "use strict";
-    function pathMatch(reqPath, cookiePath) {
-      if (cookiePath === reqPath) {
-        return true;
-      }
-      const idx = reqPath.indexOf(cookiePath);
-      if (idx === 0) {
-        if (cookiePath.substr(-1) === "/") {
-          return true;
-        }
-        if (reqPath.substr(cookiePath.length, 1) === "/") {
-          return true;
-        }
-      }
-      return false;
-    }
-    __name(pathMatch, "pathMatch");
-    exports2.pathMatch = pathMatch;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/memstore.js
-var require_memstore = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/memstore.js"(exports2) {
-    "use strict";
-    var { fromCallback } = require_universalify();
-    var Store = require_store().Store;
-    var permuteDomain = require_permuteDomain().permuteDomain;
-    var pathMatch = require_pathMatch().pathMatch;
-    var util = require("util");
-    var MemoryCookieStore = class extends Store {
-      constructor() {
-        super();
-        this.synchronous = true;
-        this.idx = {};
-        if (util.inspect.custom) {
-          this[util.inspect.custom] = this.inspect;
-        }
-      }
-      inspect() {
-        return `{ idx: ${util.inspect(this.idx, false, 2)} }`;
-      }
-      findCookie(domain, path3, key, cb) {
-        if (!this.idx[domain]) {
-          return cb(null, void 0);
-        }
-        if (!this.idx[domain][path3]) {
-          return cb(null, void 0);
-        }
-        return cb(null, this.idx[domain][path3][key] || null);
-      }
-      findCookies(domain, path3, allowSpecialUseDomain, cb) {
-        const results = [];
-        if (typeof allowSpecialUseDomain === "function") {
-          cb = allowSpecialUseDomain;
-          allowSpecialUseDomain = false;
-        }
-        if (!domain) {
-          return cb(null, []);
-        }
-        let pathMatcher;
-        if (!path3) {
-          pathMatcher = /* @__PURE__ */ __name(function matchAll(domainIndex) {
-            for (const curPath in domainIndex) {
-              const pathIndex = domainIndex[curPath];
-              for (const key in pathIndex) {
-                results.push(pathIndex[key]);
-              }
-            }
-          }, "matchAll");
-        } else {
-          pathMatcher = /* @__PURE__ */ __name(function matchRFC(domainIndex) {
-            Object.keys(domainIndex).forEach((cookiePath) => {
-              if (pathMatch(path3, cookiePath)) {
-                const pathIndex = domainIndex[cookiePath];
-                for (const key in pathIndex) {
-                  results.push(pathIndex[key]);
-                }
-              }
-            });
-          }, "matchRFC");
-        }
-        const domains = permuteDomain(domain, allowSpecialUseDomain) || [domain];
-        const idx = this.idx;
-        domains.forEach((curDomain) => {
-          const domainIndex = idx[curDomain];
-          if (!domainIndex) {
-            return;
-          }
-          pathMatcher(domainIndex);
-        });
-        cb(null, results);
-      }
-      putCookie(cookie, cb) {
-        if (!this.idx[cookie.domain]) {
-          this.idx[cookie.domain] = {};
-        }
-        if (!this.idx[cookie.domain][cookie.path]) {
-          this.idx[cookie.domain][cookie.path] = {};
-        }
-        this.idx[cookie.domain][cookie.path][cookie.key] = cookie;
-        cb(null);
-      }
-      updateCookie(oldCookie, newCookie, cb) {
-        this.putCookie(newCookie, cb);
-      }
-      removeCookie(domain, path3, key, cb) {
-        if (this.idx[domain] && this.idx[domain][path3] && this.idx[domain][path3][key]) {
-          delete this.idx[domain][path3][key];
-        }
-        cb(null);
-      }
-      removeCookies(domain, path3, cb) {
-        if (this.idx[domain]) {
-          if (path3) {
-            delete this.idx[domain][path3];
-          } else {
-            delete this.idx[domain];
-          }
-        }
-        return cb(null);
-      }
-      removeAllCookies(cb) {
-        this.idx = {};
-        return cb(null);
-      }
-      getAllCookies(cb) {
-        const cookies = [];
-        const idx = this.idx;
-        const domains = Object.keys(idx);
-        domains.forEach((domain) => {
-          const paths = Object.keys(idx[domain]);
-          paths.forEach((path3) => {
-            const keys = Object.keys(idx[domain][path3]);
-            keys.forEach((key) => {
-              if (key !== null) {
-                cookies.push(idx[domain][path3][key]);
-              }
-            });
-          });
-        });
-        cookies.sort((a, b) => {
-          return (a.creationIndex || 0) - (b.creationIndex || 0);
-        });
-        cb(null, cookies);
-      }
-    };
-    __name(MemoryCookieStore, "MemoryCookieStore");
-    [
-      "findCookie",
-      "findCookies",
-      "putCookie",
-      "updateCookie",
-      "removeCookie",
-      "removeCookies",
-      "removeAllCookies",
-      "getAllCookies"
-    ].forEach((name) => {
-      MemoryCookieStore[name] = fromCallback(MemoryCookieStore.prototype[name]);
-    });
-    exports2.MemoryCookieStore = MemoryCookieStore;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/version.js
-var require_version2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/version.js"(exports2, module2) {
-    module2.exports = "4.0.0";
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/tough-cookie/lib/cookie.js
-var require_cookie = __commonJS({
-  "node_modules/@azure/core-http/node_modules/tough-cookie/lib/cookie.js"(exports2) {
-    "use strict";
-    var punycode = require("punycode");
-    var urlParse = require("url").parse;
-    var util = require("util");
-    var pubsuffix = require_pubsuffix_psl();
-    var Store = require_store().Store;
-    var MemoryCookieStore = require_memstore().MemoryCookieStore;
-    var pathMatch = require_pathMatch().pathMatch;
-    var VERSION = require_version2();
-    var { fromCallback } = require_universalify();
-    var COOKIE_OCTETS = /^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]+$/;
-    var CONTROL_CHARS = /[\x00-\x1F]/;
-    var TERMINATORS = ["\n", "\r", "\0"];
-    var PATH_VALUE = /[\x20-\x3A\x3C-\x7E]+/;
-    var DATE_DELIM = /[\x09\x20-\x2F\x3B-\x40\x5B-\x60\x7B-\x7E]/;
-    var MONTH_TO_NUM = {
-      jan: 0,
-      feb: 1,
-      mar: 2,
-      apr: 3,
-      may: 4,
-      jun: 5,
-      jul: 6,
-      aug: 7,
-      sep: 8,
-      oct: 9,
-      nov: 10,
-      dec: 11
-    };
-    var MAX_TIME = 2147483647e3;
-    var MIN_TIME = 0;
-    var SAME_SITE_CONTEXT_VAL_ERR = 'Invalid sameSiteContext option for getCookies(); expected one of "strict", "lax", or "none"';
-    function checkSameSiteContext(value) {
-      const context2 = String(value).toLowerCase();
-      if (context2 === "none" || context2 === "lax" || context2 === "strict") {
-        return context2;
-      } else {
-        return null;
-      }
-    }
-    __name(checkSameSiteContext, "checkSameSiteContext");
-    var PrefixSecurityEnum = Object.freeze({
-      SILENT: "silent",
-      STRICT: "strict",
-      DISABLED: "unsafe-disabled"
-    });
-    var IP_REGEX_LOWERCASE = /(?:^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$)|(?:^(?:(?:[a-f\d]{1,4}:){7}(?:[a-f\d]{1,4}|:)|(?:[a-f\d]{1,4}:){6}(?:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|:[a-f\d]{1,4}|:)|(?:[a-f\d]{1,4}:){5}(?::(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,2}|:)|(?:[a-f\d]{1,4}:){4}(?:(?::[a-f\d]{1,4}){0,1}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,3}|:)|(?:[a-f\d]{1,4}:){3}(?:(?::[a-f\d]{1,4}){0,2}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,4}|:)|(?:[a-f\d]{1,4}:){2}(?:(?::[a-f\d]{1,4}){0,3}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,5}|:)|(?:[a-f\d]{1,4}:){1}(?:(?::[a-f\d]{1,4}){0,4}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,6}|:)|(?::(?:(?::[a-f\d]{1,4}){0,5}:(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:\.(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}|(?::[a-f\d]{1,4}){1,7}|:)))$)/;
-    function parseDigits(token2, minDigits, maxDigits, trailingOK) {
-      let count = 0;
-      while (count < token2.length) {
-        const c = token2.charCodeAt(count);
-        if (c <= 47 || c >= 58) {
-          break;
-        }
-        count++;
-      }
-      if (count < minDigits || count > maxDigits) {
-        return null;
-      }
-      if (!trailingOK && count != token2.length) {
-        return null;
-      }
-      return parseInt(token2.substr(0, count), 10);
-    }
-    __name(parseDigits, "parseDigits");
-    function parseTime(token2) {
-      const parts = token2.split(":");
-      const result = [0, 0, 0];
-      if (parts.length !== 3) {
-        return null;
-      }
-      for (let i = 0; i < 3; i++) {
-        const trailingOK = i == 2;
-        const num = parseDigits(parts[i], 1, 2, trailingOK);
-        if (num === null) {
-          return null;
-        }
-        result[i] = num;
-      }
-      return result;
-    }
-    __name(parseTime, "parseTime");
-    function parseMonth(token2) {
-      token2 = String(token2).substr(0, 3).toLowerCase();
-      const num = MONTH_TO_NUM[token2];
-      return num >= 0 ? num : null;
-    }
-    __name(parseMonth, "parseMonth");
-    function parseDate(str) {
-      if (!str) {
-        return;
-      }
-      const tokens = str.split(DATE_DELIM);
-      if (!tokens) {
-        return;
-      }
-      let hour = null;
-      let minute = null;
-      let second = null;
-      let dayOfMonth = null;
-      let month = null;
-      let year = null;
-      for (let i = 0; i < tokens.length; i++) {
-        const token2 = tokens[i].trim();
-        if (!token2.length) {
-          continue;
-        }
-        let result;
-        if (second === null) {
-          result = parseTime(token2);
-          if (result) {
-            hour = result[0];
-            minute = result[1];
-            second = result[2];
-            continue;
-          }
-        }
-        if (dayOfMonth === null) {
-          result = parseDigits(token2, 1, 2, true);
-          if (result !== null) {
-            dayOfMonth = result;
-            continue;
-          }
-        }
-        if (month === null) {
-          result = parseMonth(token2);
-          if (result !== null) {
-            month = result;
-            continue;
-          }
-        }
-        if (year === null) {
-          result = parseDigits(token2, 2, 4, true);
-          if (result !== null) {
-            year = result;
-            if (year >= 70 && year <= 99) {
-              year += 1900;
-            } else if (year >= 0 && year <= 69) {
-              year += 2e3;
-            }
-          }
-        }
-      }
-      if (dayOfMonth === null || month === null || year === null || second === null || dayOfMonth < 1 || dayOfMonth > 31 || year < 1601 || hour > 23 || minute > 59 || second > 59) {
-        return;
-      }
-      return new Date(Date.UTC(year, month, dayOfMonth, hour, minute, second));
-    }
-    __name(parseDate, "parseDate");
-    function formatDate(date) {
-      return date.toUTCString();
-    }
-    __name(formatDate, "formatDate");
-    function canonicalDomain(str) {
-      if (str == null) {
-        return null;
-      }
-      str = str.trim().replace(/^\./, "");
-      if (punycode && /[^\u0001-\u007f]/.test(str)) {
-        str = punycode.toASCII(str);
-      }
-      return str.toLowerCase();
-    }
-    __name(canonicalDomain, "canonicalDomain");
-    function domainMatch(str, domStr, canonicalize) {
-      if (str == null || domStr == null) {
-        return null;
-      }
-      if (canonicalize !== false) {
-        str = canonicalDomain(str);
-        domStr = canonicalDomain(domStr);
-      }
-      if (str == domStr) {
-        return true;
-      }
-      const idx = str.indexOf(domStr);
-      if (idx <= 0) {
-        return false;
-      }
-      if (str.length !== domStr.length + idx) {
-        return false;
-      }
-      if (str.substr(idx - 1, 1) !== ".") {
-        return false;
-      }
-      if (IP_REGEX_LOWERCASE.test(str)) {
-        return false;
-      }
-      return true;
-    }
-    __name(domainMatch, "domainMatch");
-    function defaultPath(path3) {
-      if (!path3 || path3.substr(0, 1) !== "/") {
-        return "/";
-      }
-      if (path3 === "/") {
-        return path3;
-      }
-      const rightSlash = path3.lastIndexOf("/");
-      if (rightSlash === 0) {
-        return "/";
-      }
-      return path3.slice(0, rightSlash);
-    }
-    __name(defaultPath, "defaultPath");
-    function trimTerminator(str) {
-      for (let t = 0; t < TERMINATORS.length; t++) {
-        const terminatorIdx = str.indexOf(TERMINATORS[t]);
-        if (terminatorIdx !== -1) {
-          str = str.substr(0, terminatorIdx);
-        }
-      }
-      return str;
-    }
-    __name(trimTerminator, "trimTerminator");
-    function parseCookiePair(cookiePair, looseMode) {
-      cookiePair = trimTerminator(cookiePair);
-      let firstEq = cookiePair.indexOf("=");
-      if (looseMode) {
-        if (firstEq === 0) {
-          cookiePair = cookiePair.substr(1);
-          firstEq = cookiePair.indexOf("=");
-        }
-      } else {
-        if (firstEq <= 0) {
-          return;
-        }
-      }
-      let cookieName, cookieValue;
-      if (firstEq <= 0) {
-        cookieName = "";
-        cookieValue = cookiePair.trim();
-      } else {
-        cookieName = cookiePair.substr(0, firstEq).trim();
-        cookieValue = cookiePair.substr(firstEq + 1).trim();
-      }
-      if (CONTROL_CHARS.test(cookieName) || CONTROL_CHARS.test(cookieValue)) {
-        return;
-      }
-      const c = new Cookie();
-      c.key = cookieName;
-      c.value = cookieValue;
-      return c;
-    }
-    __name(parseCookiePair, "parseCookiePair");
-    function parse(str, options) {
-      if (!options || typeof options !== "object") {
-        options = {};
-      }
-      str = str.trim();
-      const firstSemi = str.indexOf(";");
-      const cookiePair = firstSemi === -1 ? str : str.substr(0, firstSemi);
-      const c = parseCookiePair(cookiePair, !!options.loose);
-      if (!c) {
-        return;
-      }
-      if (firstSemi === -1) {
-        return c;
-      }
-      const unparsed = str.slice(firstSemi + 1).trim();
-      if (unparsed.length === 0) {
-        return c;
-      }
-      const cookie_avs = unparsed.split(";");
-      while (cookie_avs.length) {
-        const av = cookie_avs.shift().trim();
-        if (av.length === 0) {
-          continue;
-        }
-        const av_sep = av.indexOf("=");
-        let av_key, av_value;
-        if (av_sep === -1) {
-          av_key = av;
-          av_value = null;
-        } else {
-          av_key = av.substr(0, av_sep);
-          av_value = av.substr(av_sep + 1);
-        }
-        av_key = av_key.trim().toLowerCase();
-        if (av_value) {
-          av_value = av_value.trim();
-        }
-        switch (av_key) {
-          case "expires":
-            if (av_value) {
-              const exp = parseDate(av_value);
-              if (exp) {
-                c.expires = exp;
-              }
-            }
-            break;
-          case "max-age":
-            if (av_value) {
-              if (/^-?[0-9]+$/.test(av_value)) {
-                const delta = parseInt(av_value, 10);
-                c.setMaxAge(delta);
-              }
-            }
-            break;
-          case "domain":
-            if (av_value) {
-              const domain = av_value.trim().replace(/^\./, "");
-              if (domain) {
-                c.domain = domain.toLowerCase();
-              }
-            }
-            break;
-          case "path":
-            c.path = av_value && av_value[0] === "/" ? av_value : null;
-            break;
-          case "secure":
-            c.secure = true;
-            break;
-          case "httponly":
-            c.httpOnly = true;
-            break;
-          case "samesite":
-            const enforcement = av_value ? av_value.toLowerCase() : "";
-            switch (enforcement) {
-              case "strict":
-                c.sameSite = "strict";
-                break;
-              case "lax":
-                c.sameSite = "lax";
-                break;
-              default:
-                break;
-            }
-            break;
-          default:
-            c.extensions = c.extensions || [];
-            c.extensions.push(av);
-            break;
-        }
-      }
-      return c;
-    }
-    __name(parse, "parse");
-    function isSecurePrefixConditionMet(cookie) {
-      return !cookie.key.startsWith("__Secure-") || cookie.secure;
-    }
-    __name(isSecurePrefixConditionMet, "isSecurePrefixConditionMet");
-    function isHostPrefixConditionMet(cookie) {
-      return !cookie.key.startsWith("__Host-") || cookie.secure && cookie.hostOnly && cookie.path != null && cookie.path === "/";
-    }
-    __name(isHostPrefixConditionMet, "isHostPrefixConditionMet");
-    function jsonParse(str) {
-      let obj;
-      try {
-        obj = JSON.parse(str);
-      } catch (e) {
-        return e;
-      }
-      return obj;
-    }
-    __name(jsonParse, "jsonParse");
-    function fromJSON(str) {
-      if (!str) {
-        return null;
-      }
-      let obj;
-      if (typeof str === "string") {
-        obj = jsonParse(str);
-        if (obj instanceof Error) {
-          return null;
-        }
-      } else {
-        obj = str;
-      }
-      const c = new Cookie();
-      for (let i = 0; i < Cookie.serializableProperties.length; i++) {
-        const prop = Cookie.serializableProperties[i];
-        if (obj[prop] === void 0 || obj[prop] === cookieDefaults[prop]) {
-          continue;
-        }
-        if (prop === "expires" || prop === "creation" || prop === "lastAccessed") {
-          if (obj[prop] === null) {
-            c[prop] = null;
-          } else {
-            c[prop] = obj[prop] == "Infinity" ? "Infinity" : new Date(obj[prop]);
-          }
-        } else {
-          c[prop] = obj[prop];
-        }
-      }
-      return c;
-    }
-    __name(fromJSON, "fromJSON");
-    function cookieCompare(a, b) {
-      let cmp = 0;
-      const aPathLen = a.path ? a.path.length : 0;
-      const bPathLen = b.path ? b.path.length : 0;
-      cmp = bPathLen - aPathLen;
-      if (cmp !== 0) {
-        return cmp;
-      }
-      const aTime = a.creation ? a.creation.getTime() : MAX_TIME;
-      const bTime = b.creation ? b.creation.getTime() : MAX_TIME;
-      cmp = aTime - bTime;
-      if (cmp !== 0) {
-        return cmp;
-      }
-      cmp = a.creationIndex - b.creationIndex;
-      return cmp;
-    }
-    __name(cookieCompare, "cookieCompare");
-    function permutePath(path3) {
-      if (path3 === "/") {
-        return ["/"];
-      }
-      const permutations = [path3];
-      while (path3.length > 1) {
-        const lindex = path3.lastIndexOf("/");
-        if (lindex === 0) {
-          break;
-        }
-        path3 = path3.substr(0, lindex);
-        permutations.push(path3);
-      }
-      permutations.push("/");
-      return permutations;
-    }
-    __name(permutePath, "permutePath");
-    function getCookieContext(url) {
-      if (url instanceof Object) {
-        return url;
-      }
-      try {
-        url = decodeURI(url);
-      } catch (err) {
-      }
-      return urlParse(url);
-    }
-    __name(getCookieContext, "getCookieContext");
-    var cookieDefaults = {
-      key: "",
-      value: "",
-      expires: "Infinity",
-      maxAge: null,
-      domain: null,
-      path: null,
-      secure: false,
-      httpOnly: false,
-      extensions: null,
-      hostOnly: null,
-      pathIsDefault: null,
-      creation: null,
-      lastAccessed: null,
-      sameSite: "none"
-    };
-    var Cookie = class {
-      constructor(options = {}) {
-        if (util.inspect.custom) {
-          this[util.inspect.custom] = this.inspect;
-        }
-        Object.assign(this, cookieDefaults, options);
-        this.creation = this.creation || new Date();
-        Object.defineProperty(this, "creationIndex", {
-          configurable: false,
-          enumerable: false,
-          writable: true,
-          value: ++Cookie.cookiesCreated
-        });
-      }
-      inspect() {
-        const now = Date.now();
-        const hostOnly = this.hostOnly != null ? this.hostOnly : "?";
-        const createAge = this.creation ? `${now - this.creation.getTime()}ms` : "?";
-        const accessAge = this.lastAccessed ? `${now - this.lastAccessed.getTime()}ms` : "?";
-        return `Cookie="${this.toString()}; hostOnly=${hostOnly}; aAge=${accessAge}; cAge=${createAge}"`;
-      }
-      toJSON() {
-        const obj = {};
-        for (const prop of Cookie.serializableProperties) {
-          if (this[prop] === cookieDefaults[prop]) {
-            continue;
-          }
-          if (prop === "expires" || prop === "creation" || prop === "lastAccessed") {
-            if (this[prop] === null) {
-              obj[prop] = null;
-            } else {
-              obj[prop] = this[prop] == "Infinity" ? "Infinity" : this[prop].toISOString();
-            }
-          } else if (prop === "maxAge") {
-            if (this[prop] !== null) {
-              obj[prop] = this[prop] == Infinity || this[prop] == -Infinity ? this[prop].toString() : this[prop];
-            }
-          } else {
-            if (this[prop] !== cookieDefaults[prop]) {
-              obj[prop] = this[prop];
-            }
-          }
-        }
-        return obj;
-      }
-      clone() {
-        return fromJSON(this.toJSON());
-      }
-      validate() {
-        if (!COOKIE_OCTETS.test(this.value)) {
-          return false;
-        }
-        if (this.expires != Infinity && !(this.expires instanceof Date) && !parseDate(this.expires)) {
-          return false;
-        }
-        if (this.maxAge != null && this.maxAge <= 0) {
-          return false;
-        }
-        if (this.path != null && !PATH_VALUE.test(this.path)) {
-          return false;
-        }
-        const cdomain = this.cdomain();
-        if (cdomain) {
-          if (cdomain.match(/\.$/)) {
-            return false;
-          }
-          const suffix = pubsuffix.getPublicSuffix(cdomain);
-          if (suffix == null) {
-            return false;
-          }
-        }
-        return true;
-      }
-      setExpires(exp) {
-        if (exp instanceof Date) {
-          this.expires = exp;
-        } else {
-          this.expires = parseDate(exp) || "Infinity";
-        }
-      }
-      setMaxAge(age) {
-        if (age === Infinity || age === -Infinity) {
-          this.maxAge = age.toString();
-        } else {
-          this.maxAge = age;
-        }
-      }
-      cookieString() {
-        let val = this.value;
-        if (val == null) {
-          val = "";
-        }
-        if (this.key === "") {
-          return val;
-        }
-        return `${this.key}=${val}`;
-      }
-      toString() {
-        let str = this.cookieString();
-        if (this.expires != Infinity) {
-          if (this.expires instanceof Date) {
-            str += `; Expires=${formatDate(this.expires)}`;
-          } else {
-            str += `; Expires=${this.expires}`;
-          }
-        }
-        if (this.maxAge != null && this.maxAge != Infinity) {
-          str += `; Max-Age=${this.maxAge}`;
-        }
-        if (this.domain && !this.hostOnly) {
-          str += `; Domain=${this.domain}`;
-        }
-        if (this.path) {
-          str += `; Path=${this.path}`;
-        }
-        if (this.secure) {
-          str += "; Secure";
-        }
-        if (this.httpOnly) {
-          str += "; HttpOnly";
-        }
-        if (this.sameSite && this.sameSite !== "none") {
-          const ssCanon = Cookie.sameSiteCanonical[this.sameSite.toLowerCase()];
-          str += `; SameSite=${ssCanon ? ssCanon : this.sameSite}`;
-        }
-        if (this.extensions) {
-          this.extensions.forEach((ext) => {
-            str += `; ${ext}`;
-          });
-        }
-        return str;
-      }
-      TTL(now) {
-        if (this.maxAge != null) {
-          return this.maxAge <= 0 ? 0 : this.maxAge * 1e3;
-        }
-        let expires = this.expires;
-        if (expires != Infinity) {
-          if (!(expires instanceof Date)) {
-            expires = parseDate(expires) || Infinity;
-          }
-          if (expires == Infinity) {
-            return Infinity;
-          }
-          return expires.getTime() - (now || Date.now());
-        }
-        return Infinity;
-      }
-      expiryTime(now) {
-        if (this.maxAge != null) {
-          const relativeTo = now || this.creation || new Date();
-          const age = this.maxAge <= 0 ? -Infinity : this.maxAge * 1e3;
-          return relativeTo.getTime() + age;
-        }
-        if (this.expires == Infinity) {
-          return Infinity;
-        }
-        return this.expires.getTime();
-      }
-      expiryDate(now) {
-        const millisec = this.expiryTime(now);
-        if (millisec == Infinity) {
-          return new Date(MAX_TIME);
-        } else if (millisec == -Infinity) {
-          return new Date(MIN_TIME);
-        } else {
-          return new Date(millisec);
-        }
-      }
-      isPersistent() {
-        return this.maxAge != null || this.expires != Infinity;
-      }
-      canonicalizedDomain() {
-        if (this.domain == null) {
-          return null;
-        }
-        return canonicalDomain(this.domain);
-      }
-      cdomain() {
-        return this.canonicalizedDomain();
-      }
-    };
-    __name(Cookie, "Cookie");
-    Cookie.cookiesCreated = 0;
-    Cookie.parse = parse;
-    Cookie.fromJSON = fromJSON;
-    Cookie.serializableProperties = Object.keys(cookieDefaults);
-    Cookie.sameSiteLevel = {
-      strict: 3,
-      lax: 2,
-      none: 1
-    };
-    Cookie.sameSiteCanonical = {
-      strict: "Strict",
-      lax: "Lax"
-    };
-    function getNormalizedPrefixSecurity(prefixSecurity) {
-      if (prefixSecurity != null) {
-        const normalizedPrefixSecurity = prefixSecurity.toLowerCase();
-        switch (normalizedPrefixSecurity) {
-          case PrefixSecurityEnum.STRICT:
-          case PrefixSecurityEnum.SILENT:
-          case PrefixSecurityEnum.DISABLED:
-            return normalizedPrefixSecurity;
-        }
-      }
-      return PrefixSecurityEnum.SILENT;
-    }
-    __name(getNormalizedPrefixSecurity, "getNormalizedPrefixSecurity");
-    var CookieJar = class {
-      constructor(store, options = { rejectPublicSuffixes: true }) {
-        if (typeof options === "boolean") {
-          options = { rejectPublicSuffixes: options };
-        }
-        this.rejectPublicSuffixes = options.rejectPublicSuffixes;
-        this.enableLooseMode = !!options.looseMode;
-        this.allowSpecialUseDomain = !!options.allowSpecialUseDomain;
-        this.store = store || new MemoryCookieStore();
-        this.prefixSecurity = getNormalizedPrefixSecurity(options.prefixSecurity);
-        this._cloneSync = syncWrap("clone");
-        this._importCookiesSync = syncWrap("_importCookies");
-        this.getCookiesSync = syncWrap("getCookies");
-        this.getCookieStringSync = syncWrap("getCookieString");
-        this.getSetCookieStringsSync = syncWrap("getSetCookieStrings");
-        this.removeAllCookiesSync = syncWrap("removeAllCookies");
-        this.setCookieSync = syncWrap("setCookie");
-        this.serializeSync = syncWrap("serialize");
-      }
-      setCookie(cookie, url, options, cb) {
-        let err;
-        const context2 = getCookieContext(url);
-        if (typeof options === "function") {
-          cb = options;
-          options = {};
-        }
-        const host = canonicalDomain(context2.hostname);
-        const loose = options.loose || this.enableLooseMode;
-        let sameSiteContext = null;
-        if (options.sameSiteContext) {
-          sameSiteContext = checkSameSiteContext(options.sameSiteContext);
-          if (!sameSiteContext) {
-            return cb(new Error(SAME_SITE_CONTEXT_VAL_ERR));
-          }
-        }
-        if (typeof cookie === "string" || cookie instanceof String) {
-          cookie = Cookie.parse(cookie, { loose });
-          if (!cookie) {
-            err = new Error("Cookie failed to parse");
-            return cb(options.ignoreError ? null : err);
-          }
-        } else if (!(cookie instanceof Cookie)) {
-          err = new Error("First argument to setCookie must be a Cookie object or string");
-          return cb(options.ignoreError ? null : err);
-        }
-        const now = options.now || new Date();
-        if (this.rejectPublicSuffixes && cookie.domain) {
-          const suffix = pubsuffix.getPublicSuffix(cookie.cdomain());
-          if (suffix == null) {
-            err = new Error("Cookie has domain set to a public suffix");
-            return cb(options.ignoreError ? null : err);
-          }
-        }
-        if (cookie.domain) {
-          if (!domainMatch(host, cookie.cdomain(), false)) {
-            err = new Error(`Cookie not in this host's domain. Cookie:${cookie.cdomain()} Request:${host}`);
-            return cb(options.ignoreError ? null : err);
-          }
-          if (cookie.hostOnly == null) {
-            cookie.hostOnly = false;
-          }
-        } else {
-          cookie.hostOnly = true;
-          cookie.domain = host;
-        }
-        if (!cookie.path || cookie.path[0] !== "/") {
-          cookie.path = defaultPath(context2.pathname);
-          cookie.pathIsDefault = true;
-        }
-        if (options.http === false && cookie.httpOnly) {
-          err = new Error("Cookie is HttpOnly and this isn't an HTTP API");
-          return cb(options.ignoreError ? null : err);
-        }
-        if (cookie.sameSite !== "none" && sameSiteContext) {
-          if (sameSiteContext === "none") {
-            err = new Error("Cookie is SameSite but this is a cross-origin request");
-            return cb(options.ignoreError ? null : err);
-          }
-        }
-        const ignoreErrorForPrefixSecurity = this.prefixSecurity === PrefixSecurityEnum.SILENT;
-        const prefixSecurityDisabled = this.prefixSecurity === PrefixSecurityEnum.DISABLED;
-        if (!prefixSecurityDisabled) {
-          let errorFound = false;
-          let errorMsg;
-          if (!isSecurePrefixConditionMet(cookie)) {
-            errorFound = true;
-            errorMsg = "Cookie has __Secure prefix but Secure attribute is not set";
-          } else if (!isHostPrefixConditionMet(cookie)) {
-            errorFound = true;
-            errorMsg = "Cookie has __Host prefix but either Secure or HostOnly attribute is not set or Path is not '/'";
-          }
-          if (errorFound) {
-            return cb(options.ignoreError || ignoreErrorForPrefixSecurity ? null : new Error(errorMsg));
-          }
-        }
-        const store = this.store;
-        if (!store.updateCookie) {
-          store.updateCookie = function(oldCookie, newCookie, cb2) {
-            this.putCookie(newCookie, cb2);
-          };
-        }
-        function withCookie(err2, oldCookie) {
-          if (err2) {
-            return cb(err2);
-          }
-          const next = /* @__PURE__ */ __name(function(err3) {
-            if (err3) {
-              return cb(err3);
-            } else {
-              cb(null, cookie);
-            }
-          }, "next");
-          if (oldCookie) {
-            if (options.http === false && oldCookie.httpOnly) {
-              err2 = new Error("old Cookie is HttpOnly and this isn't an HTTP API");
-              return cb(options.ignoreError ? null : err2);
-            }
-            cookie.creation = oldCookie.creation;
-            cookie.creationIndex = oldCookie.creationIndex;
-            cookie.lastAccessed = now;
-            store.updateCookie(oldCookie, cookie, next);
-          } else {
-            cookie.creation = cookie.lastAccessed = now;
-            store.putCookie(cookie, next);
-          }
-        }
-        __name(withCookie, "withCookie");
-        store.findCookie(cookie.domain, cookie.path, cookie.key, withCookie);
-      }
-      getCookies(url, options, cb) {
-        const context2 = getCookieContext(url);
-        if (typeof options === "function") {
-          cb = options;
-          options = {};
-        }
-        const host = canonicalDomain(context2.hostname);
-        const path3 = context2.pathname || "/";
-        let secure = options.secure;
-        if (secure == null && context2.protocol && (context2.protocol == "https:" || context2.protocol == "wss:")) {
-          secure = true;
-        }
-        let sameSiteLevel = 0;
-        if (options.sameSiteContext) {
-          const sameSiteContext = checkSameSiteContext(options.sameSiteContext);
-          sameSiteLevel = Cookie.sameSiteLevel[sameSiteContext];
-          if (!sameSiteLevel) {
-            return cb(new Error(SAME_SITE_CONTEXT_VAL_ERR));
-          }
-        }
-        let http = options.http;
-        if (http == null) {
-          http = true;
-        }
-        const now = options.now || Date.now();
-        const expireCheck = options.expire !== false;
-        const allPaths = !!options.allPaths;
-        const store = this.store;
-        function matchingCookie(c) {
-          if (c.hostOnly) {
-            if (c.domain != host) {
-              return false;
-            }
-          } else {
-            if (!domainMatch(host, c.domain, false)) {
-              return false;
-            }
-          }
-          if (!allPaths && !pathMatch(path3, c.path)) {
-            return false;
-          }
-          if (c.secure && !secure) {
-            return false;
-          }
-          if (c.httpOnly && !http) {
-            return false;
-          }
-          if (sameSiteLevel) {
-            const cookieLevel = Cookie.sameSiteLevel[c.sameSite || "none"];
-            if (cookieLevel > sameSiteLevel) {
-              return false;
-            }
-          }
-          if (expireCheck && c.expiryTime() <= now) {
-            store.removeCookie(c.domain, c.path, c.key, () => {
-            });
-            return false;
-          }
-          return true;
-        }
-        __name(matchingCookie, "matchingCookie");
-        store.findCookies(host, allPaths ? null : path3, this.allowSpecialUseDomain, (err, cookies) => {
-          if (err) {
-            return cb(err);
-          }
-          cookies = cookies.filter(matchingCookie);
-          if (options.sort !== false) {
-            cookies = cookies.sort(cookieCompare);
-          }
-          const now2 = new Date();
-          for (const cookie of cookies) {
-            cookie.lastAccessed = now2;
-          }
-          cb(null, cookies);
-        });
-      }
-      getCookieString(...args) {
-        const cb = args.pop();
-        const next = /* @__PURE__ */ __name(function(err, cookies) {
-          if (err) {
-            cb(err);
-          } else {
-            cb(null, cookies.sort(cookieCompare).map((c) => c.cookieString()).join("; "));
-          }
-        }, "next");
-        args.push(next);
-        this.getCookies.apply(this, args);
-      }
-      getSetCookieStrings(...args) {
-        const cb = args.pop();
-        const next = /* @__PURE__ */ __name(function(err, cookies) {
-          if (err) {
-            cb(err);
-          } else {
-            cb(null, cookies.map((c) => {
-              return c.toString();
-            }));
-          }
-        }, "next");
-        args.push(next);
-        this.getCookies.apply(this, args);
-      }
-      serialize(cb) {
-        let type = this.store.constructor.name;
-        if (type === "Object") {
-          type = null;
-        }
-        const serialized = {
-          version: `tough-cookie@${VERSION}`,
-          storeType: type,
-          rejectPublicSuffixes: !!this.rejectPublicSuffixes,
-          cookies: []
-        };
-        if (!(this.store.getAllCookies && typeof this.store.getAllCookies === "function")) {
-          return cb(new Error("store does not support getAllCookies and cannot be serialized"));
-        }
-        this.store.getAllCookies((err, cookies) => {
-          if (err) {
-            return cb(err);
-          }
-          serialized.cookies = cookies.map((cookie) => {
-            cookie = cookie instanceof Cookie ? cookie.toJSON() : cookie;
-            delete cookie.creationIndex;
-            return cookie;
-          });
-          return cb(null, serialized);
-        });
-      }
-      toJSON() {
-        return this.serializeSync();
-      }
-      _importCookies(serialized, cb) {
-        let cookies = serialized.cookies;
-        if (!cookies || !Array.isArray(cookies)) {
-          return cb(new Error("serialized jar has no cookies array"));
-        }
-        cookies = cookies.slice();
-        const putNext = /* @__PURE__ */ __name((err) => {
-          if (err) {
-            return cb(err);
-          }
-          if (!cookies.length) {
-            return cb(err, this);
-          }
-          let cookie;
-          try {
-            cookie = fromJSON(cookies.shift());
-          } catch (e) {
-            return cb(e);
-          }
-          if (cookie === null) {
-            return putNext(null);
-          }
-          this.store.putCookie(cookie, putNext);
-        }, "putNext");
-        putNext();
-      }
-      clone(newStore, cb) {
-        if (arguments.length === 1) {
-          cb = newStore;
-          newStore = null;
-        }
-        this.serialize((err, serialized) => {
-          if (err) {
-            return cb(err);
-          }
-          CookieJar.deserialize(serialized, newStore, cb);
-        });
-      }
-      cloneSync(newStore) {
-        if (arguments.length === 0) {
-          return this._cloneSync();
-        }
-        if (!newStore.synchronous) {
-          throw new Error("CookieJar clone destination store is not synchronous; use async API instead.");
-        }
-        return this._cloneSync(newStore);
-      }
-      removeAllCookies(cb) {
-        const store = this.store;
-        if (typeof store.removeAllCookies === "function" && store.removeAllCookies !== Store.prototype.removeAllCookies) {
-          return store.removeAllCookies(cb);
-        }
-        store.getAllCookies((err, cookies) => {
-          if (err) {
-            return cb(err);
-          }
-          if (cookies.length === 0) {
-            return cb(null);
-          }
-          let completedCount = 0;
-          const removeErrors = [];
-          function removeCookieCb(removeErr) {
-            if (removeErr) {
-              removeErrors.push(removeErr);
-            }
-            completedCount++;
-            if (completedCount === cookies.length) {
-              return cb(removeErrors.length ? removeErrors[0] : null);
-            }
-          }
-          __name(removeCookieCb, "removeCookieCb");
-          cookies.forEach((cookie) => {
-            store.removeCookie(cookie.domain, cookie.path, cookie.key, removeCookieCb);
-          });
-        });
-      }
-      static deserialize(strOrObj, store, cb) {
-        if (arguments.length !== 3) {
-          cb = store;
-          store = null;
-        }
-        let serialized;
-        if (typeof strOrObj === "string") {
-          serialized = jsonParse(strOrObj);
-          if (serialized instanceof Error) {
-            return cb(serialized);
-          }
-        } else {
-          serialized = strOrObj;
-        }
-        const jar = new CookieJar(store, serialized.rejectPublicSuffixes);
-        jar._importCookies(serialized, (err) => {
-          if (err) {
-            return cb(err);
-          }
-          cb(null, jar);
-        });
-      }
-      static deserializeSync(strOrObj, store) {
-        const serialized = typeof strOrObj === "string" ? JSON.parse(strOrObj) : strOrObj;
-        const jar = new CookieJar(store, serialized.rejectPublicSuffixes);
-        if (!jar.store.synchronous) {
-          throw new Error("CookieJar store is not synchronous; use async API instead.");
-        }
-        jar._importCookiesSync(serialized);
-        return jar;
-      }
-    };
-    __name(CookieJar, "CookieJar");
-    CookieJar.fromJSON = CookieJar.deserializeSync;
-    [
-      "_importCookies",
-      "clone",
-      "getCookies",
-      "getCookieString",
-      "getSetCookieStrings",
-      "removeAllCookies",
-      "serialize",
-      "setCookie"
-    ].forEach((name) => {
-      CookieJar.prototype[name] = fromCallback(CookieJar.prototype[name]);
-    });
-    CookieJar.deserialize = fromCallback(CookieJar.deserialize);
-    function syncWrap(method) {
-      return function(...args) {
-        if (!this.store.synchronous) {
-          throw new Error("CookieJar store is not synchronous; use async API instead.");
-        }
-        let syncErr, syncResult;
-        this[method](...args, (err, result) => {
-          syncErr = err;
-          syncResult = result;
-        });
-        if (syncErr) {
-          throw syncErr;
-        }
-        return syncResult;
-      };
-    }
-    __name(syncWrap, "syncWrap");
-    exports2.version = VERSION;
-    exports2.CookieJar = CookieJar;
-    exports2.Cookie = Cookie;
-    exports2.Store = Store;
-    exports2.MemoryCookieStore = MemoryCookieStore;
-    exports2.parseDate = parseDate;
-    exports2.formatDate = formatDate;
-    exports2.parse = parse;
-    exports2.fromJSON = fromJSON;
-    exports2.domainMatch = domainMatch;
-    exports2.defaultPath = defaultPath;
-    exports2.pathMatch = pathMatch;
-    exports2.getPublicSuffix = pubsuffix.getPublicSuffix;
-    exports2.cookieCompare = cookieCompare;
-    exports2.permuteDomain = require_permuteDomain().permuteDomain;
-    exports2.permutePath = permutePath;
-    exports2.canonicalDomain = canonicalDomain;
-    exports2.PrefixSecurityEnum = PrefixSecurityEnum;
   }
 });
 
@@ -24526,6 +14287,10 @@ var require_db = __commonJS({
       "application/cfw": {
         source: "iana"
       },
+      "application/city+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/clr": {
         source: "iana"
       },
@@ -24569,7 +14334,8 @@ var require_db = __commonJS({
       },
       "application/cpl+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["cpl"]
       },
       "application/csrattrs": {
         source: "iana"
@@ -24603,6 +14369,11 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["mpd"]
+      },
+      "application/dash-patch+xml": {
+        source: "iana",
+        compressible: true,
+        extensions: ["mpp"]
       },
       "application/dashdelta": {
         source: "iana"
@@ -25144,7 +14915,8 @@ var require_db = __commonJS({
       },
       "application/media-policy-dataset+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["mpf"]
       },
       "application/media_control+xml": {
         source: "iana",
@@ -25300,6 +15072,9 @@ var require_db = __commonJS({
       "application/oauth-authz-req+jwt": {
         source: "iana"
       },
+      "application/oblivious-dns-message": {
+        source: "iana"
+      },
       "application/ocsp-request": {
         source: "iana"
       },
@@ -25392,7 +15167,8 @@ var require_db = __commonJS({
         extensions: ["pgp"]
       },
       "application/pgp-keys": {
-        source: "iana"
+        source: "iana",
+        extensions: ["asc"]
       },
       "application/pgp-signature": {
         source: "iana",
@@ -25811,6 +15587,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["srx"]
+      },
+      "application/spdx+json": {
+        source: "iana",
+        compressible: true
       },
       "application/spirits-event+xml": {
         source: "iana",
@@ -26292,6 +16072,10 @@ var require_db = __commonJS({
       },
       "application/vnd.afpc.modca-pagesegment": {
         source: "iana"
+      },
+      "application/vnd.age": {
+        source: "iana",
+        extensions: ["age"]
       },
       "application/vnd.ah-barcode": {
         source: "iana"
@@ -26915,6 +16699,10 @@ var require_db = __commonJS({
       "application/vnd.ecip.rlp": {
         source: "iana"
       },
+      "application/vnd.eclipse.ditto+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.ecowin.chart": {
         source: "iana",
         extensions: ["mag"]
@@ -27072,6 +16860,10 @@ var require_db = __commonJS({
       "application/vnd.etsi.tsl.der": {
         source: "iana"
       },
+      "application/vnd.eu.kasparian.car+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.eudora.data": {
         source: "iana"
       },
@@ -27101,6 +16893,10 @@ var require_db = __commonJS({
       },
       "application/vnd.f-secure.mobile": {
         source: "iana"
+      },
+      "application/vnd.familysearch.gedcom+zip": {
+        source: "iana",
+        compressible: false
       },
       "application/vnd.fastcopy-disk-image": {
         source: "iana"
@@ -27391,6 +17187,16 @@ var require_db = __commonJS({
       "application/vnd.hhe.lesson-player": {
         source: "iana",
         extensions: ["les"]
+      },
+      "application/vnd.hl7cda+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
+      },
+      "application/vnd.hl7v2+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
       },
       "application/vnd.hp-hpgl": {
         source: "iana",
@@ -27805,6 +17611,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.maxar.archive.3tz+zip": {
+        source: "iana",
+        compressible: false
+      },
       "application/vnd.maxmind.maxmind-db": {
         source: "iana"
       },
@@ -28133,6 +17943,10 @@ var require_db = __commonJS({
       "application/vnd.mynfc": {
         source: "iana",
         extensions: ["taglet"]
+      },
+      "application/vnd.nacamar.ybrid+json": {
+        source: "iana",
+        compressible: true
       },
       "application/vnd.ncd.control": {
         source: "iana"
@@ -29421,6 +19235,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.syft+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.symbian.install": {
         source: "apache",
         extensions: ["sis", "sisx"]
@@ -29811,7 +19629,8 @@ var require_db = __commonJS({
       },
       "application/watcherinfo+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["wif"]
       },
       "application/webpush-options+json": {
         source: "iana",
@@ -31231,10 +21050,12 @@ var require_db = __commonJS({
         extensions: ["apng"]
       },
       "image/avci": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avci"]
       },
       "image/avcs": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avcs"]
       },
       "image/avif": {
         source: "iana",
@@ -31468,6 +21289,7 @@ var require_db = __commonJS({
       },
       "image/vnd.microsoft.icon": {
         source: "iana",
+        compressible: true,
         extensions: ["ico"]
       },
       "image/vnd.mix": {
@@ -31477,6 +21299,7 @@ var require_db = __commonJS({
         source: "iana"
       },
       "image/vnd.ms-dds": {
+        compressible: true,
         extensions: ["dds"]
       },
       "image/vnd.ms-modi": {
@@ -32165,6 +21988,10 @@ var require_db = __commonJS({
       "text/vnd.esmertec.theme-descriptor": {
         source: "iana",
         charset: "UTF-8"
+      },
+      "text/vnd.familysearch.gedcom": {
+        source: "iana",
+        extensions: ["ged"]
       },
       "text/vnd.ficlab.flt": {
         source: "iana"
@@ -36113,6 +25940,11 @@ var require_lib4 = __commonJS({
       const dest = new URL$1(destination).hostname;
       return orig === dest || orig[orig.length - dest.length - 1] === "." && orig.endsWith(dest);
     }, "isDomainOrSubdomain");
+    var isSameProtocol = /* @__PURE__ */ __name(function isSameProtocol2(destination, original) {
+      const orig = new URL$1(original).protocol;
+      const dest = new URL$1(destination).protocol;
+      return orig === dest;
+    }, "isSameProtocol");
     function fetch(url, opts) {
       if (!fetch.Promise) {
         throw new Error("native promise missing, set fetch.Promise to your favorite alternative");
@@ -36128,7 +25960,7 @@ var require_lib4 = __commonJS({
           let error = new AbortError("The user aborted a request.");
           reject(error);
           if (request.body && request.body instanceof Stream.Readable) {
-            request.body.destroy(error);
+            destroyStream(request.body, error);
           }
           if (!response || !response.body)
             return;
@@ -36164,8 +25996,31 @@ var require_lib4 = __commonJS({
         }
         req.on("error", function(err) {
           reject(new FetchError(`request to ${request.url} failed, reason: ${err.message}`, "system", err));
+          if (response && response.body) {
+            destroyStream(response.body, err);
+          }
           finalize();
         });
+        fixResponseChunkedTransferBadEnding(req, function(err) {
+          if (signal && signal.aborted) {
+            return;
+          }
+          if (response && response.body) {
+            destroyStream(response.body, err);
+          }
+        });
+        if (parseInt(process.version.substring(1)) < 14) {
+          req.on("socket", function(s) {
+            s.addListener("close", function(hadError) {
+              const hasDataListener = s.listenerCount("data") > 0;
+              if (response && hasDataListener && !hadError && !(signal && signal.aborted)) {
+                const err = new Error("Premature close");
+                err.code = "ERR_STREAM_PREMATURE_CLOSE";
+                response.body.emit("error", err);
+              }
+            });
+          });
+        }
         req.on("response", function(res) {
           clearTimeout(reqTimeout);
           const headers = createHeadersLenient(res.headers);
@@ -36216,7 +26071,7 @@ var require_lib4 = __commonJS({
                   timeout: request.timeout,
                   size: request.size
                 };
-                if (!isDomainOrSubdomain(request.url, locationURL)) {
+                if (!isDomainOrSubdomain(request.url, locationURL) || !isSameProtocol(request.url, locationURL)) {
                   for (const name of ["authorization", "www-authenticate", "cookie", "cookie2"]) {
                     requestOpts.headers.delete(name);
                   }
@@ -36277,6 +26132,12 @@ var require_lib4 = __commonJS({
               response = new Response(body, response_options);
               resolve(response);
             });
+            raw.on("end", function() {
+              if (!response) {
+                response = new Response(body, response_options);
+                resolve(response);
+              }
+            });
             return;
           }
           if (codings == "br" && typeof zlib.createBrotliDecompress === "function") {
@@ -36292,6 +26153,35 @@ var require_lib4 = __commonJS({
       });
     }
     __name(fetch, "fetch");
+    function fixResponseChunkedTransferBadEnding(request, errorCallback) {
+      let socket;
+      request.on("socket", function(s) {
+        socket = s;
+      });
+      request.on("response", function(response) {
+        const headers = response.headers;
+        if (headers["transfer-encoding"] === "chunked" && !headers["content-length"]) {
+          response.once("close", function(hadError) {
+            const hasDataListener = socket.listenerCount("data") > 0;
+            if (hasDataListener && !hadError) {
+              const err = new Error("Premature close");
+              err.code = "ERR_STREAM_PREMATURE_CLOSE";
+              errorCallback(err);
+            }
+          });
+        }
+      });
+    }
+    __name(fixResponseChunkedTransferBadEnding, "fixResponseChunkedTransferBadEnding");
+    function destroyStream(stream, err) {
+      if (stream.destroy) {
+        stream.destroy(err);
+      } else {
+        stream.emit("error", err);
+        stream.end();
+      }
+    }
+    __name(destroyStream, "destroyStream");
     fetch.isRedirect = function(code) {
       return code === 301 || code === 302 || code === 303 || code === 307 || code === 308;
     };
@@ -36303,14 +26193,6 @@ var require_lib4 = __commonJS({
     exports2.Request = Request;
     exports2.Response = Response;
     exports2.FetchError = FetchError;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/baggage/types.js
-var require_types = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/baggage/types.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -36375,12 +26257,12 @@ var require_platform = __commonJS({
 });
 
 // node_modules/@opentelemetry/api/build/src/version.js
-var require_version3 = __commonJS({
+var require_version2 = __commonJS({
   "node_modules/@opentelemetry/api/build/src/version.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.VERSION = void 0;
-    exports2.VERSION = "1.0.4";
+    exports2.VERSION = "1.4.1";
   }
 });
 
@@ -36390,18 +26272,16 @@ var require_semver2 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.isCompatible = exports2._makeCompatibilityCheck = void 0;
-    var version_1 = require_version3();
+    var version_1 = require_version2();
     var re = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
     function _makeCompatibilityCheck(ownVersion) {
-      var acceptedVersions = new Set([ownVersion]);
-      var rejectedVersions = new Set();
-      var myVersionMatch = ownVersion.match(re);
+      const acceptedVersions = new Set([ownVersion]);
+      const rejectedVersions = new Set();
+      const myVersionMatch = ownVersion.match(re);
       if (!myVersionMatch) {
-        return function() {
-          return false;
-        };
+        return () => false;
       }
-      var ownVersionParsed = {
+      const ownVersionParsed = {
         major: +myVersionMatch[1],
         minor: +myVersionMatch[2],
         patch: +myVersionMatch[3],
@@ -36429,11 +26309,11 @@ var require_semver2 = __commonJS({
         if (rejectedVersions.has(globalVersion)) {
           return false;
         }
-        var globalVersionMatch = globalVersion.match(re);
+        const globalVersionMatch = globalVersion.match(re);
         if (!globalVersionMatch) {
           return _reject(globalVersion);
         }
-        var globalVersionParsed = {
+        const globalVersionParsed = {
           major: +globalVersionMatch[1],
           minor: +globalVersionMatch[2],
           patch: +globalVersionMatch[3],
@@ -36470,39 +26350,36 @@ var require_global_utils = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.unregisterGlobal = exports2.getGlobal = exports2.registerGlobal = void 0;
     var platform_1 = require_platform();
-    var version_1 = require_version3();
+    var version_1 = require_version2();
     var semver_1 = require_semver2();
     var major = version_1.VERSION.split(".")[0];
-    var GLOBAL_OPENTELEMETRY_API_KEY = Symbol.for("opentelemetry.js.api." + major);
+    var GLOBAL_OPENTELEMETRY_API_KEY = Symbol.for(`opentelemetry.js.api.${major}`);
     var _global = platform_1._globalThis;
-    function registerGlobal(type, instance, diag, allowOverride) {
+    function registerGlobal(type, instance, diag, allowOverride = false) {
       var _a;
-      if (allowOverride === void 0) {
-        allowOverride = false;
-      }
-      var api = _global[GLOBAL_OPENTELEMETRY_API_KEY] = (_a = _global[GLOBAL_OPENTELEMETRY_API_KEY]) !== null && _a !== void 0 ? _a : {
+      const api = _global[GLOBAL_OPENTELEMETRY_API_KEY] = (_a = _global[GLOBAL_OPENTELEMETRY_API_KEY]) !== null && _a !== void 0 ? _a : {
         version: version_1.VERSION
       };
       if (!allowOverride && api[type]) {
-        var err = new Error("@opentelemetry/api: Attempted duplicate registration of API: " + type);
+        const err = new Error(`@opentelemetry/api: Attempted duplicate registration of API: ${type}`);
         diag.error(err.stack || err.message);
         return false;
       }
       if (api.version !== version_1.VERSION) {
-        var err = new Error("@opentelemetry/api: All API registration versions must match");
+        const err = new Error(`@opentelemetry/api: Registration of version v${api.version} for ${type} does not match previously registered API v${version_1.VERSION}`);
         diag.error(err.stack || err.message);
         return false;
       }
       api[type] = instance;
-      diag.debug("@opentelemetry/api: Registered a global for " + type + " v" + version_1.VERSION + ".");
+      diag.debug(`@opentelemetry/api: Registered a global for ${type} v${version_1.VERSION}.`);
       return true;
     }
     __name(registerGlobal, "registerGlobal");
     exports2.registerGlobal = registerGlobal;
     function getGlobal(type) {
       var _a, _b;
-      var globalVersion = (_a = _global[GLOBAL_OPENTELEMETRY_API_KEY]) === null || _a === void 0 ? void 0 : _a.version;
-      if (!globalVersion || !semver_1.isCompatible(globalVersion)) {
+      const globalVersion = (_a = _global[GLOBAL_OPENTELEMETRY_API_KEY]) === null || _a === void 0 ? void 0 : _a.version;
+      if (!globalVersion || !(0, semver_1.isCompatible)(globalVersion)) {
         return;
       }
       return (_b = _global[GLOBAL_OPENTELEMETRY_API_KEY]) === null || _b === void 0 ? void 0 : _b[type];
@@ -36510,8 +26387,8 @@ var require_global_utils = __commonJS({
     __name(getGlobal, "getGlobal");
     exports2.getGlobal = getGlobal;
     function unregisterGlobal(type, diag) {
-      diag.debug("@opentelemetry/api: Unregistering a global for " + type + " v" + version_1.VERSION + ".");
-      var api = _global[GLOBAL_OPENTELEMETRY_API_KEY];
+      diag.debug(`@opentelemetry/api: Unregistering a global for ${type} v${version_1.VERSION}.`);
+      const api = _global[GLOBAL_OPENTELEMETRY_API_KEY];
       if (api) {
         delete api[type];
       }
@@ -36528,63 +26405,42 @@ var require_ComponentLogger = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.DiagComponentLogger = void 0;
     var global_utils_1 = require_global_utils();
-    var DiagComponentLogger = function() {
-      function DiagComponentLogger2(props) {
+    var DiagComponentLogger = class {
+      constructor(props) {
         this._namespace = props.namespace || "DiagComponentLogger";
       }
-      __name(DiagComponentLogger2, "DiagComponentLogger");
-      DiagComponentLogger2.prototype.debug = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      debug(...args) {
         return logProxy("debug", this._namespace, args);
-      };
-      DiagComponentLogger2.prototype.error = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      }
+      error(...args) {
         return logProxy("error", this._namespace, args);
-      };
-      DiagComponentLogger2.prototype.info = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      }
+      info(...args) {
         return logProxy("info", this._namespace, args);
-      };
-      DiagComponentLogger2.prototype.warn = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      }
+      warn(...args) {
         return logProxy("warn", this._namespace, args);
-      };
-      DiagComponentLogger2.prototype.verbose = function() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          args[_i] = arguments[_i];
-        }
+      }
+      verbose(...args) {
         return logProxy("verbose", this._namespace, args);
-      };
-      return DiagComponentLogger2;
-    }();
+      }
+    };
+    __name(DiagComponentLogger, "DiagComponentLogger");
     exports2.DiagComponentLogger = DiagComponentLogger;
     function logProxy(funcName, namespace, args) {
-      var logger = global_utils_1.getGlobal("diag");
+      const logger = (0, global_utils_1.getGlobal)("diag");
       if (!logger) {
         return;
       }
       args.unshift(namespace);
-      return logger[funcName].apply(logger, args);
+      return logger[funcName](...args);
     }
     __name(logProxy, "logProxy");
   }
 });
 
 // node_modules/@opentelemetry/api/build/src/diag/types.js
-var require_types2 = __commonJS({
+var require_types = __commonJS({
   "node_modules/@opentelemetry/api/build/src/diag/types.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -36608,7 +26464,7 @@ var require_logLevelLogger = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.createLogLevelDiagLogger = void 0;
-    var types_1 = require_types2();
+    var types_1 = require_types();
     function createLogLevelDiagLogger(maxLevel, logger) {
       if (maxLevel < types_1.DiagLogLevel.NONE) {
         maxLevel = types_1.DiagLogLevel.NONE;
@@ -36617,7 +26473,7 @@ var require_logLevelLogger = __commonJS({
       }
       logger = logger || {};
       function _filterFunc(funcName, theLevel) {
-        var theFunc = logger[funcName];
+        const theFunc = logger[funcName];
         if (typeof theFunc === "function" && maxLevel >= theLevel) {
           return theFunc.bind(logger);
         }
@@ -36646,48 +26502,47 @@ var require_diag = __commonJS({
     exports2.DiagAPI = void 0;
     var ComponentLogger_1 = require_ComponentLogger();
     var logLevelLogger_1 = require_logLevelLogger();
-    var types_1 = require_types2();
+    var types_1 = require_types();
     var global_utils_1 = require_global_utils();
     var API_NAME = "diag";
-    var DiagAPI = function() {
-      function DiagAPI2() {
+    var DiagAPI = class {
+      constructor() {
         function _logProxy(funcName) {
-          return function() {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-              args[_i] = arguments[_i];
-            }
-            var logger = global_utils_1.getGlobal("diag");
+          return function(...args) {
+            const logger = (0, global_utils_1.getGlobal)("diag");
             if (!logger)
               return;
-            return logger[funcName].apply(logger, args);
+            return logger[funcName](...args);
           };
         }
         __name(_logProxy, "_logProxy");
-        var self2 = this;
-        self2.setLogger = function(logger, logLevel) {
-          var _a, _b;
-          if (logLevel === void 0) {
-            logLevel = types_1.DiagLogLevel.INFO;
-          }
+        const self2 = this;
+        const setLogger = /* @__PURE__ */ __name((logger, optionsOrLogLevel = { logLevel: types_1.DiagLogLevel.INFO }) => {
+          var _a, _b, _c;
           if (logger === self2) {
-            var err = new Error("Cannot use diag as the logger for itself. Please use a DiagLogger implementation like ConsoleDiagLogger or a custom implementation");
+            const err = new Error("Cannot use diag as the logger for itself. Please use a DiagLogger implementation like ConsoleDiagLogger or a custom implementation");
             self2.error((_a = err.stack) !== null && _a !== void 0 ? _a : err.message);
             return false;
           }
-          var oldLogger = global_utils_1.getGlobal("diag");
-          var newLogger = logLevelLogger_1.createLogLevelDiagLogger(logLevel, logger);
-          if (oldLogger) {
-            var stack = (_b = new Error().stack) !== null && _b !== void 0 ? _b : "<failed to generate stacktrace>";
-            oldLogger.warn("Current logger will be overwritten from " + stack);
-            newLogger.warn("Current logger will overwrite one already registered from " + stack);
+          if (typeof optionsOrLogLevel === "number") {
+            optionsOrLogLevel = {
+              logLevel: optionsOrLogLevel
+            };
           }
-          return global_utils_1.registerGlobal("diag", newLogger, self2, true);
+          const oldLogger = (0, global_utils_1.getGlobal)("diag");
+          const newLogger = (0, logLevelLogger_1.createLogLevelDiagLogger)((_b = optionsOrLogLevel.logLevel) !== null && _b !== void 0 ? _b : types_1.DiagLogLevel.INFO, logger);
+          if (oldLogger && !optionsOrLogLevel.suppressOverrideMessage) {
+            const stack = (_c = new Error().stack) !== null && _c !== void 0 ? _c : "<failed to generate stacktrace>";
+            oldLogger.warn(`Current logger will be overwritten from ${stack}`);
+            newLogger.warn(`Current logger will overwrite one already registered from ${stack}`);
+          }
+          return (0, global_utils_1.registerGlobal)("diag", newLogger, self2, true);
+        }, "setLogger");
+        self2.setLogger = setLogger;
+        self2.disable = () => {
+          (0, global_utils_1.unregisterGlobal)(API_NAME, self2);
         };
-        self2.disable = function() {
-          global_utils_1.unregisterGlobal(API_NAME, self2);
-        };
-        self2.createComponentLogger = function(options) {
+        self2.createComponentLogger = (options) => {
           return new ComponentLogger_1.DiagComponentLogger(options);
         };
         self2.verbose = _logProxy("verbose");
@@ -36696,15 +26551,14 @@ var require_diag = __commonJS({
         self2.warn = _logProxy("warn");
         self2.error = _logProxy("error");
       }
-      __name(DiagAPI2, "DiagAPI");
-      DiagAPI2.instance = function() {
+      static instance() {
         if (!this._instance) {
-          this._instance = new DiagAPI2();
+          this._instance = new DiagAPI();
         }
         return this._instance;
-      };
-      return DiagAPI2;
-    }();
+      }
+    };
+    __name(DiagAPI, "DiagAPI");
     exports2.DiagAPI = DiagAPI;
   }
 });
@@ -36715,51 +26569,42 @@ var require_baggage_impl = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.BaggageImpl = void 0;
-    var BaggageImpl = function() {
-      function BaggageImpl2(entries) {
+    var BaggageImpl = class {
+      constructor(entries) {
         this._entries = entries ? new Map(entries) : new Map();
       }
-      __name(BaggageImpl2, "BaggageImpl");
-      BaggageImpl2.prototype.getEntry = function(key) {
-        var entry = this._entries.get(key);
+      getEntry(key) {
+        const entry = this._entries.get(key);
         if (!entry) {
           return void 0;
         }
         return Object.assign({}, entry);
-      };
-      BaggageImpl2.prototype.getAllEntries = function() {
-        return Array.from(this._entries.entries()).map(function(_a) {
-          var k = _a[0], v = _a[1];
-          return [k, v];
-        });
-      };
-      BaggageImpl2.prototype.setEntry = function(key, entry) {
-        var newBaggage = new BaggageImpl2(this._entries);
+      }
+      getAllEntries() {
+        return Array.from(this._entries.entries()).map(([k, v]) => [k, v]);
+      }
+      setEntry(key, entry) {
+        const newBaggage = new BaggageImpl(this._entries);
         newBaggage._entries.set(key, entry);
         return newBaggage;
-      };
-      BaggageImpl2.prototype.removeEntry = function(key) {
-        var newBaggage = new BaggageImpl2(this._entries);
+      }
+      removeEntry(key) {
+        const newBaggage = new BaggageImpl(this._entries);
         newBaggage._entries.delete(key);
         return newBaggage;
-      };
-      BaggageImpl2.prototype.removeEntries = function() {
-        var keys = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          keys[_i] = arguments[_i];
-        }
-        var newBaggage = new BaggageImpl2(this._entries);
-        for (var _a = 0, keys_1 = keys; _a < keys_1.length; _a++) {
-          var key = keys_1[_a];
+      }
+      removeEntries(...keys) {
+        const newBaggage = new BaggageImpl(this._entries);
+        for (const key of keys) {
           newBaggage._entries.delete(key);
         }
         return newBaggage;
-      };
-      BaggageImpl2.prototype.clear = function() {
-        return new BaggageImpl2();
-      };
-      return BaggageImpl2;
-    }();
+      }
+      clear() {
+        return new BaggageImpl();
+      }
+    };
+    __name(BaggageImpl, "BaggageImpl");
     exports2.BaggageImpl = BaggageImpl;
   }
 });
@@ -36784,22 +26629,19 @@ var require_utils3 = __commonJS({
     var baggage_impl_1 = require_baggage_impl();
     var symbol_1 = require_symbol();
     var diag = diag_1.DiagAPI.instance();
-    function createBaggage(entries) {
-      if (entries === void 0) {
-        entries = {};
-      }
+    function createBaggage(entries = {}) {
       return new baggage_impl_1.BaggageImpl(new Map(Object.entries(entries)));
     }
     __name(createBaggage, "createBaggage");
     exports2.createBaggage = createBaggage;
     function baggageEntryMetadataFromString(str) {
       if (typeof str !== "string") {
-        diag.error("Cannot create baggage metadata from unknown type: " + typeof str);
+        diag.error(`Cannot create baggage metadata from unknown type: ${typeof str}`);
         str = "";
       }
       return {
         __TYPE__: symbol_1.baggageEntryMetadataSymbol,
-        toString: function() {
+        toString() {
           return str;
         }
       };
@@ -36809,19 +26651,36 @@ var require_utils3 = __commonJS({
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/common/Exception.js
-var require_Exception = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/common/Exception.js"(exports2) {
+// node_modules/@opentelemetry/api/build/src/context/context.js
+var require_context = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/context/context.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/common/Time.js
-var require_Time = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/common/Time.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ROOT_CONTEXT = exports2.createContextKey = void 0;
+    function createContextKey(description) {
+      return Symbol.for(description);
+    }
+    __name(createContextKey, "createContextKey");
+    exports2.createContextKey = createContextKey;
+    var BaseContext = class {
+      constructor(parentContext) {
+        const self2 = this;
+        self2._currentContext = parentContext ? new Map(parentContext) : new Map();
+        self2.getValue = (key) => self2._currentContext.get(key);
+        self2.setValue = (key, value) => {
+          const context2 = new BaseContext(self2._currentContext);
+          context2._currentContext.set(key, value);
+          return context2;
+        };
+        self2.deleteValue = (key) => {
+          const context2 = new BaseContext(self2._currentContext);
+          context2._currentContext.delete(key);
+          return context2;
+        };
+      }
+    };
+    __name(BaseContext, "BaseContext");
+    exports2.ROOT_CONTEXT = new BaseContext();
   }
 });
 
@@ -36838,16 +26697,12 @@ var require_consoleLogger = __commonJS({
       { n: "debug", c: "debug" },
       { n: "verbose", c: "trace" }
     ];
-    var DiagConsoleLogger = function() {
-      function DiagConsoleLogger2() {
+    var DiagConsoleLogger = class {
+      constructor() {
         function _consoleFunc(funcName) {
-          return function() {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-              args[_i] = arguments[_i];
-            }
+          return function(...args) {
             if (console) {
-              var theFunc = console[funcName];
+              let theFunc = console[funcName];
               if (typeof theFunc !== "function") {
                 theFunc = console.log;
               }
@@ -36858,40 +26713,118 @@ var require_consoleLogger = __commonJS({
           };
         }
         __name(_consoleFunc, "_consoleFunc");
-        for (var i = 0; i < consoleMap.length; i++) {
+        for (let i = 0; i < consoleMap.length; i++) {
           this[consoleMap[i].n] = _consoleFunc(consoleMap[i].c);
         }
       }
-      __name(DiagConsoleLogger2, "DiagConsoleLogger");
-      return DiagConsoleLogger2;
-    }();
+    };
+    __name(DiagConsoleLogger, "DiagConsoleLogger");
     exports2.DiagConsoleLogger = DiagConsoleLogger;
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/diag/index.js
-var require_diag2 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/diag/index.js"(exports2) {
+// node_modules/@opentelemetry/api/build/src/metrics/NoopMeter.js
+var require_NoopMeter = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/metrics/NoopMeter.js"(exports2) {
     "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p))
-          __createBinding(exports3, m, p);
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    __exportStar(require_consoleLogger(), exports2);
-    __exportStar(require_types2(), exports2);
+    exports2.createNoopMeter = exports2.NOOP_OBSERVABLE_UP_DOWN_COUNTER_METRIC = exports2.NOOP_OBSERVABLE_GAUGE_METRIC = exports2.NOOP_OBSERVABLE_COUNTER_METRIC = exports2.NOOP_UP_DOWN_COUNTER_METRIC = exports2.NOOP_HISTOGRAM_METRIC = exports2.NOOP_COUNTER_METRIC = exports2.NOOP_METER = exports2.NoopObservableUpDownCounterMetric = exports2.NoopObservableGaugeMetric = exports2.NoopObservableCounterMetric = exports2.NoopObservableMetric = exports2.NoopHistogramMetric = exports2.NoopUpDownCounterMetric = exports2.NoopCounterMetric = exports2.NoopMetric = exports2.NoopMeter = void 0;
+    var NoopMeter = class {
+      constructor() {
+      }
+      createHistogram(_name, _options) {
+        return exports2.NOOP_HISTOGRAM_METRIC;
+      }
+      createCounter(_name, _options) {
+        return exports2.NOOP_COUNTER_METRIC;
+      }
+      createUpDownCounter(_name, _options) {
+        return exports2.NOOP_UP_DOWN_COUNTER_METRIC;
+      }
+      createObservableGauge(_name, _options) {
+        return exports2.NOOP_OBSERVABLE_GAUGE_METRIC;
+      }
+      createObservableCounter(_name, _options) {
+        return exports2.NOOP_OBSERVABLE_COUNTER_METRIC;
+      }
+      createObservableUpDownCounter(_name, _options) {
+        return exports2.NOOP_OBSERVABLE_UP_DOWN_COUNTER_METRIC;
+      }
+      addBatchObservableCallback(_callback, _observables) {
+      }
+      removeBatchObservableCallback(_callback) {
+      }
+    };
+    __name(NoopMeter, "NoopMeter");
+    exports2.NoopMeter = NoopMeter;
+    var NoopMetric = class {
+    };
+    __name(NoopMetric, "NoopMetric");
+    exports2.NoopMetric = NoopMetric;
+    var NoopCounterMetric = class extends NoopMetric {
+      add(_value, _attributes) {
+      }
+    };
+    __name(NoopCounterMetric, "NoopCounterMetric");
+    exports2.NoopCounterMetric = NoopCounterMetric;
+    var NoopUpDownCounterMetric = class extends NoopMetric {
+      add(_value, _attributes) {
+      }
+    };
+    __name(NoopUpDownCounterMetric, "NoopUpDownCounterMetric");
+    exports2.NoopUpDownCounterMetric = NoopUpDownCounterMetric;
+    var NoopHistogramMetric = class extends NoopMetric {
+      record(_value, _attributes) {
+      }
+    };
+    __name(NoopHistogramMetric, "NoopHistogramMetric");
+    exports2.NoopHistogramMetric = NoopHistogramMetric;
+    var NoopObservableMetric = class {
+      addCallback(_callback) {
+      }
+      removeCallback(_callback) {
+      }
+    };
+    __name(NoopObservableMetric, "NoopObservableMetric");
+    exports2.NoopObservableMetric = NoopObservableMetric;
+    var NoopObservableCounterMetric = class extends NoopObservableMetric {
+    };
+    __name(NoopObservableCounterMetric, "NoopObservableCounterMetric");
+    exports2.NoopObservableCounterMetric = NoopObservableCounterMetric;
+    var NoopObservableGaugeMetric = class extends NoopObservableMetric {
+    };
+    __name(NoopObservableGaugeMetric, "NoopObservableGaugeMetric");
+    exports2.NoopObservableGaugeMetric = NoopObservableGaugeMetric;
+    var NoopObservableUpDownCounterMetric = class extends NoopObservableMetric {
+    };
+    __name(NoopObservableUpDownCounterMetric, "NoopObservableUpDownCounterMetric");
+    exports2.NoopObservableUpDownCounterMetric = NoopObservableUpDownCounterMetric;
+    exports2.NOOP_METER = new NoopMeter();
+    exports2.NOOP_COUNTER_METRIC = new NoopCounterMetric();
+    exports2.NOOP_HISTOGRAM_METRIC = new NoopHistogramMetric();
+    exports2.NOOP_UP_DOWN_COUNTER_METRIC = new NoopUpDownCounterMetric();
+    exports2.NOOP_OBSERVABLE_COUNTER_METRIC = new NoopObservableCounterMetric();
+    exports2.NOOP_OBSERVABLE_GAUGE_METRIC = new NoopObservableGaugeMetric();
+    exports2.NOOP_OBSERVABLE_UP_DOWN_COUNTER_METRIC = new NoopObservableUpDownCounterMetric();
+    function createNoopMeter() {
+      return exports2.NOOP_METER;
+    }
+    __name(createNoopMeter, "createNoopMeter");
+    exports2.createNoopMeter = createNoopMeter;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/metrics/Metric.js
+var require_Metric = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/metrics/Metric.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.ValueType = void 0;
+    var ValueType;
+    (function(ValueType2) {
+      ValueType2[ValueType2["INT"] = 0] = "INT";
+      ValueType2[ValueType2["DOUBLE"] = 1] = "DOUBLE";
+    })(ValueType = exports2.ValueType || (exports2.ValueType = {}));
   }
 });
 
@@ -36902,13 +26835,13 @@ var require_TextMapPropagator = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.defaultTextMapSetter = exports2.defaultTextMapGetter = void 0;
     exports2.defaultTextMapGetter = {
-      get: function(carrier, key) {
+      get(carrier, key) {
         if (carrier == null) {
           return void 0;
         }
         return carrier[key];
       },
-      keys: function(carrier) {
+      keys(carrier) {
         if (carrier == null) {
           return [];
         }
@@ -36916,7 +26849,7 @@ var require_TextMapPropagator = __commonJS({
       }
     };
     exports2.defaultTextMapSetter = {
-      set: function(carrier, key, value) {
+      set(carrier, key, value) {
         if (carrier == null) {
           return;
         }
@@ -36926,95 +26859,31 @@ var require_TextMapPropagator = __commonJS({
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/trace/attributes.js
-var require_attributes = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/attributes.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/link.js
-var require_link = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/link.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/context.js
-var require_context = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.ROOT_CONTEXT = exports2.createContextKey = void 0;
-    function createContextKey(description) {
-      return Symbol.for(description);
-    }
-    __name(createContextKey, "createContextKey");
-    exports2.createContextKey = createContextKey;
-    var BaseContext = function() {
-      function BaseContext2(parentContext) {
-        var self2 = this;
-        self2._currentContext = parentContext ? new Map(parentContext) : new Map();
-        self2.getValue = function(key) {
-          return self2._currentContext.get(key);
-        };
-        self2.setValue = function(key, value) {
-          var context2 = new BaseContext2(self2._currentContext);
-          context2._currentContext.set(key, value);
-          return context2;
-        };
-        self2.deleteValue = function(key) {
-          var context2 = new BaseContext2(self2._currentContext);
-          context2._currentContext.delete(key);
-          return context2;
-        };
-      }
-      __name(BaseContext2, "BaseContext");
-      return BaseContext2;
-    }();
-    exports2.ROOT_CONTEXT = new BaseContext();
-  }
-});
-
 // node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js
 var require_NoopContextManager = __commonJS({
   "node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js"(exports2) {
     "use strict";
-    var __spreadArray = exports2 && exports2.__spreadArray || function(to, from) {
-      for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-      return to;
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NoopContextManager = void 0;
     var context_1 = require_context();
-    var NoopContextManager = function() {
-      function NoopContextManager2() {
-      }
-      __name(NoopContextManager2, "NoopContextManager");
-      NoopContextManager2.prototype.active = function() {
+    var NoopContextManager = class {
+      active() {
         return context_1.ROOT_CONTEXT;
-      };
-      NoopContextManager2.prototype.with = function(_context, fn, thisArg) {
-        var args = [];
-        for (var _i = 3; _i < arguments.length; _i++) {
-          args[_i - 3] = arguments[_i];
-        }
-        return fn.call.apply(fn, __spreadArray([thisArg], args));
-      };
-      NoopContextManager2.prototype.bind = function(_context, target) {
+      }
+      with(_context, fn, thisArg, ...args) {
+        return fn.call(thisArg, ...args);
+      }
+      bind(_context, target) {
         return target;
-      };
-      NoopContextManager2.prototype.enable = function() {
+      }
+      enable() {
         return this;
-      };
-      NoopContextManager2.prototype.disable = function() {
+      }
+      disable() {
         return this;
-      };
-      return NoopContextManager2;
-    }();
+      }
+    };
+    __name(NoopContextManager, "NoopContextManager");
     exports2.NoopContextManager = NoopContextManager;
   }
 });
@@ -37023,11 +26892,6 @@ var require_NoopContextManager = __commonJS({
 var require_context2 = __commonJS({
   "node_modules/@opentelemetry/api/build/src/api/context.js"(exports2) {
     "use strict";
-    var __spreadArray = exports2 && exports2.__spreadArray || function(to, from) {
-      for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-      return to;
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ContextAPI = void 0;
     var NoopContextManager_1 = require_NoopContextManager();
@@ -37035,42 +26899,36 @@ var require_context2 = __commonJS({
     var diag_1 = require_diag();
     var API_NAME = "context";
     var NOOP_CONTEXT_MANAGER = new NoopContextManager_1.NoopContextManager();
-    var ContextAPI = function() {
-      function ContextAPI2() {
+    var ContextAPI = class {
+      constructor() {
       }
-      __name(ContextAPI2, "ContextAPI");
-      ContextAPI2.getInstance = function() {
+      static getInstance() {
         if (!this._instance) {
-          this._instance = new ContextAPI2();
+          this._instance = new ContextAPI();
         }
         return this._instance;
-      };
-      ContextAPI2.prototype.setGlobalContextManager = function(contextManager) {
-        return global_utils_1.registerGlobal(API_NAME, contextManager, diag_1.DiagAPI.instance());
-      };
-      ContextAPI2.prototype.active = function() {
+      }
+      setGlobalContextManager(contextManager) {
+        return (0, global_utils_1.registerGlobal)(API_NAME, contextManager, diag_1.DiagAPI.instance());
+      }
+      active() {
         return this._getContextManager().active();
-      };
-      ContextAPI2.prototype.with = function(context2, fn, thisArg) {
-        var _a;
-        var args = [];
-        for (var _i = 3; _i < arguments.length; _i++) {
-          args[_i - 3] = arguments[_i];
-        }
-        return (_a = this._getContextManager()).with.apply(_a, __spreadArray([context2, fn, thisArg], args));
-      };
-      ContextAPI2.prototype.bind = function(context2, target) {
+      }
+      with(context2, fn, thisArg, ...args) {
+        return this._getContextManager().with(context2, fn, thisArg, ...args);
+      }
+      bind(context2, target) {
         return this._getContextManager().bind(context2, target);
-      };
-      ContextAPI2.prototype._getContextManager = function() {
-        return global_utils_1.getGlobal(API_NAME) || NOOP_CONTEXT_MANAGER;
-      };
-      ContextAPI2.prototype.disable = function() {
+      }
+      _getContextManager() {
+        return (0, global_utils_1.getGlobal)(API_NAME) || NOOP_CONTEXT_MANAGER;
+      }
+      disable() {
         this._getContextManager().disable();
-        global_utils_1.unregisterGlobal(API_NAME, diag_1.DiagAPI.instance());
-      };
-      return ContextAPI2;
-    }();
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
+      }
+    };
+    __name(ContextAPI, "ContextAPI");
     exports2.ContextAPI = ContextAPI;
   }
 });
@@ -37113,41 +26971,37 @@ var require_NonRecordingSpan = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NonRecordingSpan = void 0;
     var invalid_span_constants_1 = require_invalid_span_constants();
-    var NonRecordingSpan = function() {
-      function NonRecordingSpan2(_spanContext) {
-        if (_spanContext === void 0) {
-          _spanContext = invalid_span_constants_1.INVALID_SPAN_CONTEXT;
-        }
+    var NonRecordingSpan = class {
+      constructor(_spanContext = invalid_span_constants_1.INVALID_SPAN_CONTEXT) {
         this._spanContext = _spanContext;
       }
-      __name(NonRecordingSpan2, "NonRecordingSpan");
-      NonRecordingSpan2.prototype.spanContext = function() {
+      spanContext() {
         return this._spanContext;
-      };
-      NonRecordingSpan2.prototype.setAttribute = function(_key, _value) {
+      }
+      setAttribute(_key, _value) {
         return this;
-      };
-      NonRecordingSpan2.prototype.setAttributes = function(_attributes) {
+      }
+      setAttributes(_attributes) {
         return this;
-      };
-      NonRecordingSpan2.prototype.addEvent = function(_name, _attributes) {
+      }
+      addEvent(_name, _attributes) {
         return this;
-      };
-      NonRecordingSpan2.prototype.setStatus = function(_status) {
+      }
+      setStatus(_status) {
         return this;
-      };
-      NonRecordingSpan2.prototype.updateName = function(_name) {
+      }
+      updateName(_name) {
         return this;
-      };
-      NonRecordingSpan2.prototype.end = function(_endTime) {
-      };
-      NonRecordingSpan2.prototype.isRecording = function() {
+      }
+      end(_endTime) {
+      }
+      isRecording() {
         return false;
-      };
-      NonRecordingSpan2.prototype.recordException = function(_exception, _time) {
-      };
-      return NonRecordingSpan2;
-    }();
+      }
+      recordException(_exception, _time) {
+      }
+    };
+    __name(NonRecordingSpan, "NonRecordingSpan");
     exports2.NonRecordingSpan = NonRecordingSpan;
   }
 });
@@ -37157,15 +27011,21 @@ var require_context_utils = __commonJS({
   "node_modules/@opentelemetry/api/build/src/trace/context-utils.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getSpanContext = exports2.setSpanContext = exports2.deleteSpan = exports2.setSpan = exports2.getSpan = void 0;
+    exports2.getSpanContext = exports2.setSpanContext = exports2.deleteSpan = exports2.setSpan = exports2.getActiveSpan = exports2.getSpan = void 0;
     var context_1 = require_context();
     var NonRecordingSpan_1 = require_NonRecordingSpan();
-    var SPAN_KEY = context_1.createContextKey("OpenTelemetry Context Key SPAN");
+    var context_2 = require_context2();
+    var SPAN_KEY = (0, context_1.createContextKey)("OpenTelemetry Context Key SPAN");
     function getSpan(context2) {
       return context2.getValue(SPAN_KEY) || void 0;
     }
     __name(getSpan, "getSpan");
     exports2.getSpan = getSpan;
+    function getActiveSpan() {
+      return getSpan(context_2.ContextAPI.getInstance().active());
+    }
+    __name(getActiveSpan, "getActiveSpan");
+    exports2.getActiveSpan = getActiveSpan;
     function setSpan(context2, span) {
       return context2.setValue(SPAN_KEY, span);
     }
@@ -37233,27 +27093,24 @@ var require_NoopTracer = __commonJS({
     var context_utils_1 = require_context_utils();
     var NonRecordingSpan_1 = require_NonRecordingSpan();
     var spancontext_utils_1 = require_spancontext_utils();
-    var context2 = context_1.ContextAPI.getInstance();
-    var NoopTracer = function() {
-      function NoopTracer2() {
-      }
-      __name(NoopTracer2, "NoopTracer");
-      NoopTracer2.prototype.startSpan = function(name, options, context3) {
-        var root = Boolean(options === null || options === void 0 ? void 0 : options.root);
+    var contextApi = context_1.ContextAPI.getInstance();
+    var NoopTracer = class {
+      startSpan(name, options, context2 = contextApi.active()) {
+        const root = Boolean(options === null || options === void 0 ? void 0 : options.root);
         if (root) {
           return new NonRecordingSpan_1.NonRecordingSpan();
         }
-        var parentFromContext = context3 && context_utils_1.getSpanContext(context3);
-        if (isSpanContext(parentFromContext) && spancontext_utils_1.isSpanContextValid(parentFromContext)) {
+        const parentFromContext = context2 && (0, context_utils_1.getSpanContext)(context2);
+        if (isSpanContext(parentFromContext) && (0, spancontext_utils_1.isSpanContextValid)(parentFromContext)) {
           return new NonRecordingSpan_1.NonRecordingSpan(parentFromContext);
         } else {
           return new NonRecordingSpan_1.NonRecordingSpan();
         }
-      };
-      NoopTracer2.prototype.startActiveSpan = function(name, arg2, arg3, arg4) {
-        var opts;
-        var ctx;
-        var fn;
+      }
+      startActiveSpan(name, arg2, arg3, arg4) {
+        let opts;
+        let ctx;
+        let fn;
         if (arguments.length < 2) {
           return;
         } else if (arguments.length === 2) {
@@ -37266,13 +27123,13 @@ var require_NoopTracer = __commonJS({
           ctx = arg3;
           fn = arg4;
         }
-        var parentContext = ctx !== null && ctx !== void 0 ? ctx : context2.active();
-        var span = this.startSpan(name, opts, parentContext);
-        var contextWithSpanSet = context_utils_1.setSpan(parentContext, span);
-        return context2.with(contextWithSpanSet, fn, void 0, span);
-      };
-      return NoopTracer2;
-    }();
+        const parentContext = ctx !== null && ctx !== void 0 ? ctx : contextApi.active();
+        const span = this.startSpan(name, opts, parentContext);
+        const contextWithSpanSet = (0, context_utils_1.setSpan)(parentContext, span);
+        return contextApi.with(contextWithSpanSet, fn, void 0, span);
+      }
+    };
+    __name(NoopTracer, "NoopTracer");
     exports2.NoopTracer = NoopTracer;
     function isSpanContext(spanContext) {
       return typeof spanContext === "object" && typeof spanContext["spanId"] === "string" && typeof spanContext["traceId"] === "string" && typeof spanContext["traceFlags"] === "number";
@@ -37289,33 +27146,33 @@ var require_ProxyTracer = __commonJS({
     exports2.ProxyTracer = void 0;
     var NoopTracer_1 = require_NoopTracer();
     var NOOP_TRACER = new NoopTracer_1.NoopTracer();
-    var ProxyTracer = function() {
-      function ProxyTracer2(_provider, name, version) {
+    var ProxyTracer = class {
+      constructor(_provider, name, version, options) {
         this._provider = _provider;
         this.name = name;
         this.version = version;
+        this.options = options;
       }
-      __name(ProxyTracer2, "ProxyTracer");
-      ProxyTracer2.prototype.startSpan = function(name, options, context2) {
+      startSpan(name, options, context2) {
         return this._getTracer().startSpan(name, options, context2);
-      };
-      ProxyTracer2.prototype.startActiveSpan = function(_name, _options, _context, _fn) {
-        var tracer = this._getTracer();
+      }
+      startActiveSpan(_name, _options, _context, _fn) {
+        const tracer = this._getTracer();
         return Reflect.apply(tracer.startActiveSpan, tracer, arguments);
-      };
-      ProxyTracer2.prototype._getTracer = function() {
+      }
+      _getTracer() {
         if (this._delegate) {
           return this._delegate;
         }
-        var tracer = this._provider.getDelegateTracer(this.name, this.version);
+        const tracer = this._provider.getDelegateTracer(this.name, this.version, this.options);
         if (!tracer) {
           return NOOP_TRACER;
         }
         this._delegate = tracer;
         return this._delegate;
-      };
-      return ProxyTracer2;
-    }();
+      }
+    };
+    __name(ProxyTracer, "ProxyTracer");
     exports2.ProxyTracer = ProxyTracer;
   }
 });
@@ -37327,15 +27184,12 @@ var require_NoopTracerProvider = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NoopTracerProvider = void 0;
     var NoopTracer_1 = require_NoopTracer();
-    var NoopTracerProvider = function() {
-      function NoopTracerProvider2() {
-      }
-      __name(NoopTracerProvider2, "NoopTracerProvider");
-      NoopTracerProvider2.prototype.getTracer = function(_name, _version) {
+    var NoopTracerProvider = class {
+      getTracer(_name, _version, _options) {
         return new NoopTracer_1.NoopTracer();
-      };
-      return NoopTracerProvider2;
-    }();
+      }
+    };
+    __name(NoopTracerProvider, "NoopTracerProvider");
     exports2.NoopTracerProvider = NoopTracerProvider;
   }
 });
@@ -37349,36 +27203,25 @@ var require_ProxyTracerProvider = __commonJS({
     var ProxyTracer_1 = require_ProxyTracer();
     var NoopTracerProvider_1 = require_NoopTracerProvider();
     var NOOP_TRACER_PROVIDER = new NoopTracerProvider_1.NoopTracerProvider();
-    var ProxyTracerProvider = function() {
-      function ProxyTracerProvider2() {
-      }
-      __name(ProxyTracerProvider2, "ProxyTracerProvider");
-      ProxyTracerProvider2.prototype.getTracer = function(name, version) {
+    var ProxyTracerProvider = class {
+      getTracer(name, version, options) {
         var _a;
-        return (_a = this.getDelegateTracer(name, version)) !== null && _a !== void 0 ? _a : new ProxyTracer_1.ProxyTracer(this, name, version);
-      };
-      ProxyTracerProvider2.prototype.getDelegate = function() {
+        return (_a = this.getDelegateTracer(name, version, options)) !== null && _a !== void 0 ? _a : new ProxyTracer_1.ProxyTracer(this, name, version, options);
+      }
+      getDelegate() {
         var _a;
         return (_a = this._delegate) !== null && _a !== void 0 ? _a : NOOP_TRACER_PROVIDER;
-      };
-      ProxyTracerProvider2.prototype.setDelegate = function(delegate) {
+      }
+      setDelegate(delegate) {
         this._delegate = delegate;
-      };
-      ProxyTracerProvider2.prototype.getDelegateTracer = function(name, version) {
+      }
+      getDelegateTracer(name, version, options) {
         var _a;
-        return (_a = this._delegate) === null || _a === void 0 ? void 0 : _a.getTracer(name, version);
-      };
-      return ProxyTracerProvider2;
-    }();
+        return (_a = this._delegate) === null || _a === void 0 ? void 0 : _a.getTracer(name, version, options);
+      }
+    };
+    __name(ProxyTracerProvider, "ProxyTracerProvider");
     exports2.ProxyTracerProvider = ProxyTracerProvider;
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/Sampler.js
-var require_Sampler = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/Sampler.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -37394,14 +27237,6 @@ var require_SamplingResult = __commonJS({
       SamplingDecision2[SamplingDecision2["RECORD"] = 1] = "RECORD";
       SamplingDecision2[SamplingDecision2["RECORD_AND_SAMPLED"] = 2] = "RECORD_AND_SAMPLED";
     })(SamplingDecision = exports2.SamplingDecision || (exports2.SamplingDecision = {}));
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/span_context.js
-var require_span_context = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/span_context.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
   }
 });
 
@@ -37422,22 +27257,6 @@ var require_span_kind = __commonJS({
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/trace/span.js
-var require_span = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/span.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js
-var require_SpanOptions = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/SpanOptions.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
 // node_modules/@opentelemetry/api/build/src/trace/status.js
 var require_status = __commonJS({
   "node_modules/@opentelemetry/api/build/src/trace/status.js"(exports2) {
@@ -37453,88 +27272,204 @@ var require_status = __commonJS({
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/trace/trace_state.js
-var require_trace_state = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/trace_state.js"(exports2) {
+// node_modules/@opentelemetry/api/build/src/trace/internal/tracestate-validators.js
+var require_tracestate_validators = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/trace/internal/tracestate-validators.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.validateValue = exports2.validateKey = void 0;
+    var VALID_KEY_CHAR_RANGE = "[_0-9a-z-*/]";
+    var VALID_KEY = `[a-z]${VALID_KEY_CHAR_RANGE}{0,255}`;
+    var VALID_VENDOR_KEY = `[a-z0-9]${VALID_KEY_CHAR_RANGE}{0,240}@[a-z]${VALID_KEY_CHAR_RANGE}{0,13}`;
+    var VALID_KEY_REGEX = new RegExp(`^(?:${VALID_KEY}|${VALID_VENDOR_KEY})$`);
+    var VALID_VALUE_BASE_REGEX = /^[ -~]{0,255}[!-~]$/;
+    var INVALID_VALUE_COMMA_EQUAL_REGEX = /,|=/;
+    function validateKey(key) {
+      return VALID_KEY_REGEX.test(key);
+    }
+    __name(validateKey, "validateKey");
+    exports2.validateKey = validateKey;
+    function validateValue(value) {
+      return VALID_VALUE_BASE_REGEX.test(value) && !INVALID_VALUE_COMMA_EQUAL_REGEX.test(value);
+    }
+    __name(validateValue, "validateValue");
+    exports2.validateValue = validateValue;
   }
 });
 
-// node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js
-var require_tracer_provider = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/tracer_provider.js"(exports2) {
+// node_modules/@opentelemetry/api/build/src/trace/internal/tracestate-impl.js
+var require_tracestate_impl = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/trace/internal/tracestate-impl.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/trace/tracer.js
-var require_tracer = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/trace/tracer.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/context/types.js
-var require_types3 = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/context/types.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-  }
-});
-
-// node_modules/@opentelemetry/api/build/src/api/trace.js
-var require_trace = __commonJS({
-  "node_modules/@opentelemetry/api/build/src/api/trace.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.TraceAPI = void 0;
-    var global_utils_1 = require_global_utils();
-    var ProxyTracerProvider_1 = require_ProxyTracerProvider();
-    var spancontext_utils_1 = require_spancontext_utils();
-    var context_utils_1 = require_context_utils();
-    var diag_1 = require_diag();
-    var API_NAME = "trace";
-    var TraceAPI = function() {
-      function TraceAPI2() {
-        this._proxyTracerProvider = new ProxyTracerProvider_1.ProxyTracerProvider();
-        this.wrapSpanContext = spancontext_utils_1.wrapSpanContext;
-        this.isSpanContextValid = spancontext_utils_1.isSpanContextValid;
-        this.deleteSpan = context_utils_1.deleteSpan;
-        this.getSpan = context_utils_1.getSpan;
-        this.getSpanContext = context_utils_1.getSpanContext;
-        this.setSpan = context_utils_1.setSpan;
-        this.setSpanContext = context_utils_1.setSpanContext;
+    exports2.TraceStateImpl = void 0;
+    var tracestate_validators_1 = require_tracestate_validators();
+    var MAX_TRACE_STATE_ITEMS = 32;
+    var MAX_TRACE_STATE_LEN = 512;
+    var LIST_MEMBERS_SEPARATOR = ",";
+    var LIST_MEMBER_KEY_VALUE_SPLITTER = "=";
+    var TraceStateImpl = class {
+      constructor(rawTraceState) {
+        this._internalState = new Map();
+        if (rawTraceState)
+          this._parse(rawTraceState);
       }
-      __name(TraceAPI2, "TraceAPI");
-      TraceAPI2.getInstance = function() {
+      set(key, value) {
+        const traceState = this._clone();
+        if (traceState._internalState.has(key)) {
+          traceState._internalState.delete(key);
+        }
+        traceState._internalState.set(key, value);
+        return traceState;
+      }
+      unset(key) {
+        const traceState = this._clone();
+        traceState._internalState.delete(key);
+        return traceState;
+      }
+      get(key) {
+        return this._internalState.get(key);
+      }
+      serialize() {
+        return this._keys().reduce((agg, key) => {
+          agg.push(key + LIST_MEMBER_KEY_VALUE_SPLITTER + this.get(key));
+          return agg;
+        }, []).join(LIST_MEMBERS_SEPARATOR);
+      }
+      _parse(rawTraceState) {
+        if (rawTraceState.length > MAX_TRACE_STATE_LEN)
+          return;
+        this._internalState = rawTraceState.split(LIST_MEMBERS_SEPARATOR).reverse().reduce((agg, part) => {
+          const listMember = part.trim();
+          const i = listMember.indexOf(LIST_MEMBER_KEY_VALUE_SPLITTER);
+          if (i !== -1) {
+            const key = listMember.slice(0, i);
+            const value = listMember.slice(i + 1, part.length);
+            if ((0, tracestate_validators_1.validateKey)(key) && (0, tracestate_validators_1.validateValue)(value)) {
+              agg.set(key, value);
+            } else {
+            }
+          }
+          return agg;
+        }, new Map());
+        if (this._internalState.size > MAX_TRACE_STATE_ITEMS) {
+          this._internalState = new Map(Array.from(this._internalState.entries()).reverse().slice(0, MAX_TRACE_STATE_ITEMS));
+        }
+      }
+      _keys() {
+        return Array.from(this._internalState.keys()).reverse();
+      }
+      _clone() {
+        const traceState = new TraceStateImpl();
+        traceState._internalState = new Map(this._internalState);
+        return traceState;
+      }
+    };
+    __name(TraceStateImpl, "TraceStateImpl");
+    exports2.TraceStateImpl = TraceStateImpl;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/trace/internal/utils.js
+var require_utils4 = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/trace/internal/utils.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.createTraceState = void 0;
+    var tracestate_impl_1 = require_tracestate_impl();
+    function createTraceState(rawTraceState) {
+      return new tracestate_impl_1.TraceStateImpl(rawTraceState);
+    }
+    __name(createTraceState, "createTraceState");
+    exports2.createTraceState = createTraceState;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/context-api.js
+var require_context_api = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/context-api.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.context = void 0;
+    var context_1 = require_context2();
+    exports2.context = context_1.ContextAPI.getInstance();
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/diag-api.js
+var require_diag_api = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/diag-api.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.diag = void 0;
+    var diag_1 = require_diag();
+    exports2.diag = diag_1.DiagAPI.instance();
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/metrics/NoopMeterProvider.js
+var require_NoopMeterProvider = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/metrics/NoopMeterProvider.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.NOOP_METER_PROVIDER = exports2.NoopMeterProvider = void 0;
+    var NoopMeter_1 = require_NoopMeter();
+    var NoopMeterProvider = class {
+      getMeter(_name, _version, _options) {
+        return NoopMeter_1.NOOP_METER;
+      }
+    };
+    __name(NoopMeterProvider, "NoopMeterProvider");
+    exports2.NoopMeterProvider = NoopMeterProvider;
+    exports2.NOOP_METER_PROVIDER = new NoopMeterProvider();
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/api/metrics.js
+var require_metrics = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/api/metrics.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.MetricsAPI = void 0;
+    var NoopMeterProvider_1 = require_NoopMeterProvider();
+    var global_utils_1 = require_global_utils();
+    var diag_1 = require_diag();
+    var API_NAME = "metrics";
+    var MetricsAPI = class {
+      constructor() {
+      }
+      static getInstance() {
         if (!this._instance) {
-          this._instance = new TraceAPI2();
+          this._instance = new MetricsAPI();
         }
         return this._instance;
-      };
-      TraceAPI2.prototype.setGlobalTracerProvider = function(provider) {
-        var success = global_utils_1.registerGlobal(API_NAME, this._proxyTracerProvider, diag_1.DiagAPI.instance());
-        if (success) {
-          this._proxyTracerProvider.setDelegate(provider);
-        }
-        return success;
-      };
-      TraceAPI2.prototype.getTracerProvider = function() {
-        return global_utils_1.getGlobal(API_NAME) || this._proxyTracerProvider;
-      };
-      TraceAPI2.prototype.getTracer = function(name, version) {
-        return this.getTracerProvider().getTracer(name, version);
-      };
-      TraceAPI2.prototype.disable = function() {
-        global_utils_1.unregisterGlobal(API_NAME, diag_1.DiagAPI.instance());
-        this._proxyTracerProvider = new ProxyTracerProvider_1.ProxyTracerProvider();
-      };
-      return TraceAPI2;
-    }();
-    exports2.TraceAPI = TraceAPI;
+      }
+      setGlobalMeterProvider(provider) {
+        return (0, global_utils_1.registerGlobal)(API_NAME, provider, diag_1.DiagAPI.instance());
+      }
+      getMeterProvider() {
+        return (0, global_utils_1.getGlobal)(API_NAME) || NoopMeterProvider_1.NOOP_METER_PROVIDER;
+      }
+      getMeter(name, version, options) {
+        return this.getMeterProvider().getMeter(name, version, options);
+      }
+      disable() {
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
+      }
+    };
+    __name(MetricsAPI, "MetricsAPI");
+    exports2.MetricsAPI = MetricsAPI;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/metrics-api.js
+var require_metrics_api = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/metrics-api.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.metrics = void 0;
+    var metrics_1 = require_metrics();
+    exports2.metrics = metrics_1.MetricsAPI.getInstance();
   }
 });
 
@@ -37544,20 +27479,17 @@ var require_NoopTextMapPropagator = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NoopTextMapPropagator = void 0;
-    var NoopTextMapPropagator = function() {
-      function NoopTextMapPropagator2() {
+    var NoopTextMapPropagator = class {
+      inject(_context, _carrier) {
       }
-      __name(NoopTextMapPropagator2, "NoopTextMapPropagator");
-      NoopTextMapPropagator2.prototype.inject = function(_context, _carrier) {
-      };
-      NoopTextMapPropagator2.prototype.extract = function(context2, _carrier) {
+      extract(context2, _carrier) {
         return context2;
-      };
-      NoopTextMapPropagator2.prototype.fields = function() {
+      }
+      fields() {
         return [];
-      };
-      return NoopTextMapPropagator2;
-    }();
+      }
+    };
+    __name(NoopTextMapPropagator, "NoopTextMapPropagator");
     exports2.NoopTextMapPropagator = NoopTextMapPropagator;
   }
 });
@@ -37567,14 +27499,20 @@ var require_context_helpers = __commonJS({
   "node_modules/@opentelemetry/api/build/src/baggage/context-helpers.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.deleteBaggage = exports2.setBaggage = exports2.getBaggage = void 0;
-    var context_1 = require_context();
-    var BAGGAGE_KEY = context_1.createContextKey("OpenTelemetry Baggage Key");
+    exports2.deleteBaggage = exports2.setBaggage = exports2.getActiveBaggage = exports2.getBaggage = void 0;
+    var context_1 = require_context2();
+    var context_2 = require_context();
+    var BAGGAGE_KEY = (0, context_2.createContextKey)("OpenTelemetry Baggage Key");
     function getBaggage(context2) {
       return context2.getValue(BAGGAGE_KEY) || void 0;
     }
     __name(getBaggage, "getBaggage");
     exports2.getBaggage = getBaggage;
+    function getActiveBaggage() {
+      return getBaggage(context_1.ContextAPI.getInstance().active());
+    }
+    __name(getActiveBaggage, "getActiveBaggage");
+    exports2.getActiveBaggage = getActiveBaggage;
     function setBaggage(context2, baggage) {
       return context2.setValue(BAGGAGE_KEY, baggage);
     }
@@ -37602,47 +27540,116 @@ var require_propagation = __commonJS({
     var diag_1 = require_diag();
     var API_NAME = "propagation";
     var NOOP_TEXT_MAP_PROPAGATOR = new NoopTextMapPropagator_1.NoopTextMapPropagator();
-    var PropagationAPI = function() {
-      function PropagationAPI2() {
+    var PropagationAPI = class {
+      constructor() {
         this.createBaggage = utils_1.createBaggage;
         this.getBaggage = context_helpers_1.getBaggage;
+        this.getActiveBaggage = context_helpers_1.getActiveBaggage;
         this.setBaggage = context_helpers_1.setBaggage;
         this.deleteBaggage = context_helpers_1.deleteBaggage;
       }
-      __name(PropagationAPI2, "PropagationAPI");
-      PropagationAPI2.getInstance = function() {
+      static getInstance() {
         if (!this._instance) {
-          this._instance = new PropagationAPI2();
+          this._instance = new PropagationAPI();
         }
         return this._instance;
-      };
-      PropagationAPI2.prototype.setGlobalPropagator = function(propagator) {
-        return global_utils_1.registerGlobal(API_NAME, propagator, diag_1.DiagAPI.instance());
-      };
-      PropagationAPI2.prototype.inject = function(context2, carrier, setter) {
-        if (setter === void 0) {
-          setter = TextMapPropagator_1.defaultTextMapSetter;
-        }
+      }
+      setGlobalPropagator(propagator) {
+        return (0, global_utils_1.registerGlobal)(API_NAME, propagator, diag_1.DiagAPI.instance());
+      }
+      inject(context2, carrier, setter = TextMapPropagator_1.defaultTextMapSetter) {
         return this._getGlobalPropagator().inject(context2, carrier, setter);
-      };
-      PropagationAPI2.prototype.extract = function(context2, carrier, getter) {
-        if (getter === void 0) {
-          getter = TextMapPropagator_1.defaultTextMapGetter;
-        }
+      }
+      extract(context2, carrier, getter = TextMapPropagator_1.defaultTextMapGetter) {
         return this._getGlobalPropagator().extract(context2, carrier, getter);
-      };
-      PropagationAPI2.prototype.fields = function() {
+      }
+      fields() {
         return this._getGlobalPropagator().fields();
-      };
-      PropagationAPI2.prototype.disable = function() {
-        global_utils_1.unregisterGlobal(API_NAME, diag_1.DiagAPI.instance());
-      };
-      PropagationAPI2.prototype._getGlobalPropagator = function() {
-        return global_utils_1.getGlobal(API_NAME) || NOOP_TEXT_MAP_PROPAGATOR;
-      };
-      return PropagationAPI2;
-    }();
+      }
+      disable() {
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
+      }
+      _getGlobalPropagator() {
+        return (0, global_utils_1.getGlobal)(API_NAME) || NOOP_TEXT_MAP_PROPAGATOR;
+      }
+    };
+    __name(PropagationAPI, "PropagationAPI");
     exports2.PropagationAPI = PropagationAPI;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/propagation-api.js
+var require_propagation_api = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/propagation-api.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.propagation = void 0;
+    var propagation_1 = require_propagation();
+    exports2.propagation = propagation_1.PropagationAPI.getInstance();
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/api/trace.js
+var require_trace = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/api/trace.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.TraceAPI = void 0;
+    var global_utils_1 = require_global_utils();
+    var ProxyTracerProvider_1 = require_ProxyTracerProvider();
+    var spancontext_utils_1 = require_spancontext_utils();
+    var context_utils_1 = require_context_utils();
+    var diag_1 = require_diag();
+    var API_NAME = "trace";
+    var TraceAPI = class {
+      constructor() {
+        this._proxyTracerProvider = new ProxyTracerProvider_1.ProxyTracerProvider();
+        this.wrapSpanContext = spancontext_utils_1.wrapSpanContext;
+        this.isSpanContextValid = spancontext_utils_1.isSpanContextValid;
+        this.deleteSpan = context_utils_1.deleteSpan;
+        this.getSpan = context_utils_1.getSpan;
+        this.getActiveSpan = context_utils_1.getActiveSpan;
+        this.getSpanContext = context_utils_1.getSpanContext;
+        this.setSpan = context_utils_1.setSpan;
+        this.setSpanContext = context_utils_1.setSpanContext;
+      }
+      static getInstance() {
+        if (!this._instance) {
+          this._instance = new TraceAPI();
+        }
+        return this._instance;
+      }
+      setGlobalTracerProvider(provider) {
+        const success = (0, global_utils_1.registerGlobal)(API_NAME, this._proxyTracerProvider, diag_1.DiagAPI.instance());
+        if (success) {
+          this._proxyTracerProvider.setDelegate(provider);
+        }
+        return success;
+      }
+      getTracerProvider() {
+        return (0, global_utils_1.getGlobal)(API_NAME) || this._proxyTracerProvider;
+      }
+      getTracer(name, version) {
+        return this.getTracerProvider().getTracer(name, version);
+      }
+      disable() {
+        (0, global_utils_1.unregisterGlobal)(API_NAME, diag_1.DiagAPI.instance());
+        this._proxyTracerProvider = new ProxyTracerProvider_1.ProxyTracerProvider();
+      }
+    };
+    __name(TraceAPI, "TraceAPI");
+    exports2.TraceAPI = TraceAPI;
+  }
+});
+
+// node_modules/@opentelemetry/api/build/src/trace-api.js
+var require_trace_api = __commonJS({
+  "node_modules/@opentelemetry/api/build/src/trace-api.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.trace = void 0;
+    var trace_1 = require_trace();
+    exports2.trace = trace_1.TraceAPI.getInstance();
   }
 });
 
@@ -37650,48 +27657,70 @@ var require_propagation = __commonJS({
 var require_src = __commonJS({
   "node_modules/@opentelemetry/api/build/src/index.js"(exports2) {
     "use strict";
-    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: function() {
-        return m[k];
-      } });
-    } : function(o, m, k, k2) {
-      if (k2 === void 0)
-        k2 = k;
-      o[k2] = m[k];
-    });
-    var __exportStar = exports2 && exports2.__exportStar || function(m, exports3) {
-      for (var p in m)
-        if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p))
-          __createBinding(exports3, m, p);
-    };
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.diag = exports2.propagation = exports2.trace = exports2.context = exports2.INVALID_SPAN_CONTEXT = exports2.INVALID_TRACEID = exports2.INVALID_SPANID = exports2.isValidSpanId = exports2.isValidTraceId = exports2.isSpanContextValid = exports2.baggageEntryMetadataFromString = void 0;
-    __exportStar(require_types(), exports2);
+    exports2.trace = exports2.propagation = exports2.metrics = exports2.diag = exports2.context = exports2.INVALID_SPAN_CONTEXT = exports2.INVALID_TRACEID = exports2.INVALID_SPANID = exports2.isValidSpanId = exports2.isValidTraceId = exports2.isSpanContextValid = exports2.createTraceState = exports2.TraceFlags = exports2.SpanStatusCode = exports2.SpanKind = exports2.SamplingDecision = exports2.ProxyTracerProvider = exports2.ProxyTracer = exports2.defaultTextMapSetter = exports2.defaultTextMapGetter = exports2.ValueType = exports2.createNoopMeter = exports2.DiagLogLevel = exports2.DiagConsoleLogger = exports2.ROOT_CONTEXT = exports2.createContextKey = exports2.baggageEntryMetadataFromString = void 0;
     var utils_1 = require_utils3();
     Object.defineProperty(exports2, "baggageEntryMetadataFromString", { enumerable: true, get: function() {
       return utils_1.baggageEntryMetadataFromString;
     } });
-    __exportStar(require_Exception(), exports2);
-    __exportStar(require_Time(), exports2);
-    __exportStar(require_diag2(), exports2);
-    __exportStar(require_TextMapPropagator(), exports2);
-    __exportStar(require_attributes(), exports2);
-    __exportStar(require_link(), exports2);
-    __exportStar(require_ProxyTracer(), exports2);
-    __exportStar(require_ProxyTracerProvider(), exports2);
-    __exportStar(require_Sampler(), exports2);
-    __exportStar(require_SamplingResult(), exports2);
-    __exportStar(require_span_context(), exports2);
-    __exportStar(require_span_kind(), exports2);
-    __exportStar(require_span(), exports2);
-    __exportStar(require_SpanOptions(), exports2);
-    __exportStar(require_status(), exports2);
-    __exportStar(require_trace_flags(), exports2);
-    __exportStar(require_trace_state(), exports2);
-    __exportStar(require_tracer_provider(), exports2);
-    __exportStar(require_tracer(), exports2);
+    var context_1 = require_context();
+    Object.defineProperty(exports2, "createContextKey", { enumerable: true, get: function() {
+      return context_1.createContextKey;
+    } });
+    Object.defineProperty(exports2, "ROOT_CONTEXT", { enumerable: true, get: function() {
+      return context_1.ROOT_CONTEXT;
+    } });
+    var consoleLogger_1 = require_consoleLogger();
+    Object.defineProperty(exports2, "DiagConsoleLogger", { enumerable: true, get: function() {
+      return consoleLogger_1.DiagConsoleLogger;
+    } });
+    var types_1 = require_types();
+    Object.defineProperty(exports2, "DiagLogLevel", { enumerable: true, get: function() {
+      return types_1.DiagLogLevel;
+    } });
+    var NoopMeter_1 = require_NoopMeter();
+    Object.defineProperty(exports2, "createNoopMeter", { enumerable: true, get: function() {
+      return NoopMeter_1.createNoopMeter;
+    } });
+    var Metric_1 = require_Metric();
+    Object.defineProperty(exports2, "ValueType", { enumerable: true, get: function() {
+      return Metric_1.ValueType;
+    } });
+    var TextMapPropagator_1 = require_TextMapPropagator();
+    Object.defineProperty(exports2, "defaultTextMapGetter", { enumerable: true, get: function() {
+      return TextMapPropagator_1.defaultTextMapGetter;
+    } });
+    Object.defineProperty(exports2, "defaultTextMapSetter", { enumerable: true, get: function() {
+      return TextMapPropagator_1.defaultTextMapSetter;
+    } });
+    var ProxyTracer_1 = require_ProxyTracer();
+    Object.defineProperty(exports2, "ProxyTracer", { enumerable: true, get: function() {
+      return ProxyTracer_1.ProxyTracer;
+    } });
+    var ProxyTracerProvider_1 = require_ProxyTracerProvider();
+    Object.defineProperty(exports2, "ProxyTracerProvider", { enumerable: true, get: function() {
+      return ProxyTracerProvider_1.ProxyTracerProvider;
+    } });
+    var SamplingResult_1 = require_SamplingResult();
+    Object.defineProperty(exports2, "SamplingDecision", { enumerable: true, get: function() {
+      return SamplingResult_1.SamplingDecision;
+    } });
+    var span_kind_1 = require_span_kind();
+    Object.defineProperty(exports2, "SpanKind", { enumerable: true, get: function() {
+      return span_kind_1.SpanKind;
+    } });
+    var status_1 = require_status();
+    Object.defineProperty(exports2, "SpanStatusCode", { enumerable: true, get: function() {
+      return status_1.SpanStatusCode;
+    } });
+    var trace_flags_1 = require_trace_flags();
+    Object.defineProperty(exports2, "TraceFlags", { enumerable: true, get: function() {
+      return trace_flags_1.TraceFlags;
+    } });
+    var utils_2 = require_utils4();
+    Object.defineProperty(exports2, "createTraceState", { enumerable: true, get: function() {
+      return utils_2.createTraceState;
+    } });
     var spancontext_utils_1 = require_spancontext_utils();
     Object.defineProperty(exports2, "isSpanContextValid", { enumerable: true, get: function() {
       return spancontext_utils_1.isSpanContextValid;
@@ -37712,27 +27741,38 @@ var require_src = __commonJS({
     Object.defineProperty(exports2, "INVALID_SPAN_CONTEXT", { enumerable: true, get: function() {
       return invalid_span_constants_1.INVALID_SPAN_CONTEXT;
     } });
-    __exportStar(require_context(), exports2);
-    __exportStar(require_types3(), exports2);
-    var context_1 = require_context2();
-    exports2.context = context_1.ContextAPI.getInstance();
-    var trace_1 = require_trace();
-    exports2.trace = trace_1.TraceAPI.getInstance();
-    var propagation_1 = require_propagation();
-    exports2.propagation = propagation_1.PropagationAPI.getInstance();
-    var diag_1 = require_diag();
-    exports2.diag = diag_1.DiagAPI.instance();
+    var context_api_1 = require_context_api();
+    Object.defineProperty(exports2, "context", { enumerable: true, get: function() {
+      return context_api_1.context;
+    } });
+    var diag_api_1 = require_diag_api();
+    Object.defineProperty(exports2, "diag", { enumerable: true, get: function() {
+      return diag_api_1.diag;
+    } });
+    var metrics_api_1 = require_metrics_api();
+    Object.defineProperty(exports2, "metrics", { enumerable: true, get: function() {
+      return metrics_api_1.metrics;
+    } });
+    var propagation_api_1 = require_propagation_api();
+    Object.defineProperty(exports2, "propagation", { enumerable: true, get: function() {
+      return propagation_api_1.propagation;
+    } });
+    var trace_api_1 = require_trace_api();
+    Object.defineProperty(exports2, "trace", { enumerable: true, get: function() {
+      return trace_api_1.trace;
+    } });
     exports2.default = {
-      trace: exports2.trace,
-      context: exports2.context,
-      propagation: exports2.propagation,
-      diag: exports2.diag
+      context: context_api_1.context,
+      diag: diag_api_1.diag,
+      metrics: metrics_api_1.metrics,
+      propagation: propagation_api_1.propagation,
+      trace: trace_api_1.trace
     };
   }
 });
 
 // node_modules/@azure/core-tracing/dist/index.js
-var require_dist5 = __commonJS({
+var require_dist6 = __commonJS({
   "node_modules/@azure/core-tracing/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -37863,18 +27903,8 @@ var require_dist5 = __commonJS({
   }
 });
 
-// node_modules/@azure/core-asynciterator-polyfill/dist-esm/index.js
-var require_dist_esm = __commonJS({
-  "node_modules/@azure/core-asynciterator-polyfill/dist-esm/index.js"() {
-    "use strict";
-    if (typeof Symbol === void 0 || !Symbol.asyncIterator) {
-      Symbol.asyncIterator = Symbol.for("Symbol.asyncIterator");
-    }
-  }
-});
-
 // node_modules/@azure/core-http/dist/index.js
-var require_dist6 = __commonJS({
+var require_dist7 = __commonJS({
   "node_modules/@azure/core-http/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -37882,20 +27912,18 @@ var require_dist6 = __commonJS({
     var util = require("util");
     var tslib = require_tslib();
     var xml2js = require_xml2js();
-    var abortController = require_dist2();
-    var logger$1 = require_dist3();
-    var coreAuth = require_dist4();
+    var coreUtil = require_dist3();
+    var logger$1 = require_dist4();
+    var coreAuth = require_dist5();
     var os2 = require("os");
     var http = require("http");
     var https = require("https");
-    var tough = require_cookie();
+    var abortController = require_dist2();
     var tunnel = require_tunnel2();
     var stream = require("stream");
     var FormData = require_form_data();
     var node_fetch = require_lib4();
-    var coreTracing = require_dist5();
-    var url = require("url");
-    require_dist_esm();
+    var coreTracing = require_dist6();
     function _interopDefaultLegacy(e) {
       return e && typeof e === "object" && "default" in e ? e : { "default": e };
     }
@@ -37925,7 +27953,6 @@ var require_dist6 = __commonJS({
     var os__namespace = /* @__PURE__ */ _interopNamespace(os2);
     var http__namespace = /* @__PURE__ */ _interopNamespace(http);
     var https__namespace = /* @__PURE__ */ _interopNamespace(https);
-    var tough__namespace = /* @__PURE__ */ _interopNamespace(tough);
     var tunnel__namespace = /* @__PURE__ */ _interopNamespace(tunnel);
     var FormData__default = /* @__PURE__ */ _interopDefaultLegacy(FormData);
     var node_fetch__default = /* @__PURE__ */ _interopDefaultLegacy(node_fetch);
@@ -38038,7 +28065,7 @@ var require_dist6 = __commonJS({
     }
     __name(decodeString, "decodeString");
     var Constants = {
-      coreHttpVersion: "2.2.4",
+      coreHttpVersion: "3.0.1",
       HTTP: "http:",
       HTTPS: "https:",
       HTTP_PROXY: "HTTP_PROXY",
@@ -38262,7 +28289,6 @@ var require_dist6 = __commonJS({
         if (object == void 0) {
           payload = object;
         } else {
-          this.validateConstraints(mapper, object, objectName);
           if (mapperType.match(/^any$/i) !== null) {
             payload = object;
           } else if (mapperType.match(/^(Number|String|Boolean|Object|Stream|Uuid)$/i) !== null) {
@@ -38694,7 +28720,8 @@ var require_dist6 = __commonJS({
     }
     __name(isSpecialXmlProperty, "isSpecialXmlProperty");
     function deserializeCompositeType(serializer, mapper, responseBody, objectName, options) {
-      var _a;
+      var _a, _b;
+      const xmlCharKey = (_a = options.xmlCharKey) !== null && _a !== void 0 ? _a : XML_CHARKEY;
       if (getPolymorphicDiscriminatorRecursively(serializer, mapper)) {
         mapper = getPolymorphicMapper(serializer, mapper, responseBody, "serializedName");
       }
@@ -38723,15 +28750,23 @@ var require_dist6 = __commonJS({
         } else if (serializer.isXML) {
           if (propertyMapper.xmlIsAttribute && responseBody[XML_ATTRKEY]) {
             instance[key] = serializer.deserialize(propertyMapper, responseBody[XML_ATTRKEY][xmlName], propertyObjectName, options);
+          } else if (propertyMapper.xmlIsMsText) {
+            if (responseBody[xmlCharKey] !== void 0) {
+              instance[key] = responseBody[xmlCharKey];
+            } else if (typeof responseBody === "string") {
+              instance[key] = responseBody;
+            }
           } else {
             const propertyName = xmlElementName || xmlName || serializedName;
             if (propertyMapper.xmlIsWrapped) {
               const wrapped = responseBody[xmlName];
-              const elementList = (_a = wrapped === null || wrapped === void 0 ? void 0 : wrapped[xmlElementName]) !== null && _a !== void 0 ? _a : [];
+              const elementList = (_b = wrapped === null || wrapped === void 0 ? void 0 : wrapped[xmlElementName]) !== null && _b !== void 0 ? _b : [];
               instance[key] = serializer.deserialize(propertyMapper, elementList, propertyObjectName, options);
+              handledPropertyNames.push(xmlName);
             } else {
               const property = responseBody[propertyName];
               instance[key] = serializer.deserialize(propertyMapper, property, propertyObjectName, options);
+              handledPropertyNames.push(propertyName);
             }
           }
         } else {
@@ -38911,10 +28946,10 @@ var require_dist6 = __commonJS({
     }
     __name(isWebResourceLike, "isWebResourceLike");
     var WebResource = class {
-      constructor(url2, method, body, query, headers, streamResponseBody, withCredentials, abortSignal, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse, streamResponseStatusCodes) {
+      constructor(url, method, body, query, headers, streamResponseBody, withCredentials, abortSignal, timeout, onUploadProgress, onDownloadProgress, proxySettings, keepAlive, decompressResponse, streamResponseStatusCodes) {
         this.streamResponseBody = streamResponseBody;
         this.streamResponseStatusCodes = streamResponseStatusCodes;
-        this.url = url2 || "";
+        this.url = url || "";
         this.method = method || "GET";
         this.headers = isHttpHeadersLike(headers) ? headers : new HttpHeaders(headers);
         this.body = body;
@@ -38973,8 +29008,8 @@ var require_dist6 = __commonJS({
             options.baseUrl = "https://management.azure.com";
           }
           const baseUrl = options.baseUrl;
-          let url2 = baseUrl + (baseUrl.endsWith("/") ? "" : "/") + (pathTemplate.startsWith("/") ? pathTemplate.slice(1) : pathTemplate);
-          const segments = url2.match(/({[\w-]*\s*[\w-]*})/gi);
+          let url = baseUrl + (baseUrl.endsWith("/") ? "" : "/") + (pathTemplate.startsWith("/") ? pathTemplate.slice(1) : pathTemplate);
+          const segments = url.match(/({[\w-]*\s*[\w-]*})/gi);
           if (segments && segments.length) {
             if (!pathParameters) {
               throw new Error(`pathTemplate: ${pathTemplate} has been provided. Hence, options.pathParameters must also be provided.`);
@@ -38987,21 +29022,21 @@ var require_dist6 = __commonJS({
                 throw new Error(`pathTemplate: ${pathTemplate} contains the path parameter ${pathParamName} however, it is not present in parameters: ${stringifiedPathParameters}.The value of the path parameter can either be a "string" of the form { ${pathParamName}: "some sample value" } or it can be an "object" of the form { "${pathParamName}": { value: "some sample value", skipUrlEncoding: true } }.`);
               }
               if (typeof pathParam.valueOf() === "string") {
-                url2 = url2.replace(item, encodeURIComponent(pathParam));
+                url = url.replace(item, encodeURIComponent(pathParam));
               }
               if (typeof pathParam.valueOf() === "object") {
                 if (!pathParam.value) {
                   throw new Error(`options.pathParameters[${pathParamName}] is of type "object" but it does not contain a "value" property.`);
                 }
                 if (pathParam.skipUrlEncoding) {
-                  url2 = url2.replace(item, pathParam.value);
+                  url = url.replace(item, pathParam.value);
                 } else {
-                  url2 = url2.replace(item, encodeURIComponent(pathParam.value));
+                  url = url.replace(item, encodeURIComponent(pathParam.value));
                 }
               }
             });
           }
-          this.url = url2;
+          this.url = url;
         }
         if (options.queryParameters) {
           const queryParameters = options.queryParameters;
@@ -39580,8 +29615,8 @@ var require_dist6 = __commonJS({
       return proxyAgent;
     }
     __name(createProxyAgent, "createProxyAgent");
-    function isUrlHttps(url2) {
-      const urlScheme = URLBuilder.parse(url2).getScheme() || "";
+    function isUrlHttps(url) {
+      const urlScheme = URLBuilder.parse(url).getScheme() || "";
       return urlScheme.toLowerCase() === "https";
     }
     __name(isUrlHttps, "isUrlHttps");
@@ -39640,7 +29675,8 @@ var require_dist6 = __commonJS({
       "Retry-After",
       "Server",
       "Transfer-Encoding",
-      "User-Agent"
+      "User-Agent",
+      "WWW-Authenticate"
     ];
     var defaultAllowedQueryParameters = ["api-version"];
     var Sanitizer = class {
@@ -39783,7 +29819,6 @@ var require_dist6 = __commonJS({
       constructor() {
         this.proxyAgentMap = new Map();
         this.keepAliveAgents = {};
-        this.cookieJar = new tough__namespace.CookieJar(void 0, { looseMode: true });
       }
       async sendRequest(httpRequest) {
         var _a;
@@ -39854,7 +29889,13 @@ var require_dist6 = __commonJS({
           body = uploadReportStream;
         }
         const platformSpecificRequestInit = await this.prepareRequest(httpRequest);
-        const requestInit = Object.assign({ body, headers: httpRequest.headers.rawHeaders(), method: httpRequest.method, signal: abortController$1.signal, redirect: "manual" }, platformSpecificRequestInit);
+        const requestInit = Object.assign({
+          body,
+          headers: httpRequest.headers.rawHeaders(),
+          method: httpRequest.method,
+          signal: abortController$1.signal,
+          redirect: "manual"
+        }, platformSpecificRequestInit);
         let operationResponse;
         try {
           const response = await this.fetch(httpRequest.url, requestInit);
@@ -39954,37 +29995,11 @@ var require_dist6 = __commonJS({
       }
       async prepareRequest(httpRequest) {
         const requestInit = {};
-        if (this.cookieJar && !httpRequest.headers.get("Cookie")) {
-          const cookieString = await new Promise((resolve, reject) => {
-            this.cookieJar.getCookieString(httpRequest.url, (err, cookie) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(cookie);
-              }
-            });
-          });
-          httpRequest.headers.set("Cookie", cookieString);
-        }
         requestInit.agent = this.getOrCreateAgent(httpRequest);
         requestInit.compress = httpRequest.decompressResponse;
         return requestInit;
       }
-      async processRequest(operationResponse) {
-        if (this.cookieJar) {
-          const setCookieHeader = operationResponse.headers.get("Set-Cookie");
-          if (setCookieHeader !== void 0) {
-            await new Promise((resolve, reject) => {
-              this.cookieJar.setCookie(setCookieHeader, operationResponse.request.url, { ignoreError: true }, (err) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve();
-                }
-              });
-            });
-          }
-        }
+      async processRequest(_operationResponse) {
       }
     };
     __name(NodeFetchHttpClient, "NodeFetchHttpClient");
@@ -39996,7 +30011,6 @@ var require_dist6 = __commonJS({
       HttpPipelineLogLevel[HttpPipelineLogLevel["INFO"] = 3] = "INFO";
     })(exports2.HttpPipelineLogLevel || (exports2.HttpPipelineLogLevel = {}));
     function operationOptionsToRequestOptionsBase(opts) {
-      var _a;
       const { requestOptions, tracingOptions } = opts, additionalOptions = tslib.__rest(opts, ["requestOptions", "tracingOptions"]);
       let result = additionalOptions;
       if (requestOptions) {
@@ -40004,7 +30018,7 @@ var require_dist6 = __commonJS({
       }
       if (tracingOptions) {
         result.tracingContext = tracingOptions.tracingContext;
-        result.spanOptions = (_a = tracingOptions) === null || _a === void 0 ? void 0 : _a.spanOptions;
+        result.spanOptions = tracingOptions === null || tracingOptions === void 0 ? void 0 : tracingOptions.spanOptions;
       }
       return result;
     }
@@ -40208,7 +30222,7 @@ var require_dist6 = __commonJS({
             parsedResponse.parsedBody = response.status >= 200 && response.status < 300;
           }
           if (responseSpec.headersMapper) {
-            parsedResponse.parsedHeaders = operationSpec.serializer.deserialize(responseSpec.headersMapper, parsedResponse.headers.rawHeaders(), "operationRes.parsedHeaders", options);
+            parsedResponse.parsedHeaders = operationSpec.serializer.deserialize(responseSpec.headersMapper, parsedResponse.headers.toJson(), "operationRes.parsedHeaders", options);
           }
         }
         return parsedResponse;
@@ -40263,7 +30277,7 @@ var require_dist6 = __commonJS({
           }
         }
         if (parsedResponse.headers && defaultHeadersMapper) {
-          error.response.parsedHeaders = operationSpec.serializer.deserialize(defaultHeadersMapper, parsedResponse.headers.rawHeaders(), "operationRes.parsedHeaders");
+          error.response.parsedHeaders = operationSpec.serializer.deserialize(defaultHeadersMapper, parsedResponse.headers.toJson(), "operationRes.parsedHeaders");
         }
       } catch (defaultError) {
         error.message = `Error "${defaultError.message}" occurred in deserializing the responseBody - "${parsedResponse.bodyAsText}" for the default response.`;
@@ -40390,43 +30404,6 @@ var require_dist6 = __commonJS({
       return retryData;
     }
     __name(updateRetryData, "updateRetryData");
-    function isDefined(thing) {
-      return typeof thing !== "undefined" && thing !== null;
-    }
-    __name(isDefined, "isDefined");
-    var StandardAbortMessage$1 = "The operation was aborted.";
-    function delay(delayInMs, value, options) {
-      return new Promise((resolve, reject) => {
-        let timer = void 0;
-        let onAborted = void 0;
-        const rejectOnAbort = /* @__PURE__ */ __name(() => {
-          return reject(new abortController.AbortError((options === null || options === void 0 ? void 0 : options.abortErrorMsg) ? options === null || options === void 0 ? void 0 : options.abortErrorMsg : StandardAbortMessage$1));
-        }, "rejectOnAbort");
-        const removeListeners = /* @__PURE__ */ __name(() => {
-          if ((options === null || options === void 0 ? void 0 : options.abortSignal) && onAborted) {
-            options.abortSignal.removeEventListener("abort", onAborted);
-          }
-        }, "removeListeners");
-        onAborted = /* @__PURE__ */ __name(() => {
-          if (isDefined(timer)) {
-            clearTimeout(timer);
-          }
-          removeListeners();
-          return rejectOnAbort();
-        }, "onAborted");
-        if ((options === null || options === void 0 ? void 0 : options.abortSignal) && options.abortSignal.aborted) {
-          return rejectOnAbort();
-        }
-        timer = setTimeout(() => {
-          removeListeners();
-          resolve(value);
-        }, delayInMs);
-        if (options === null || options === void 0 ? void 0 : options.abortSignal) {
-          options.abortSignal.addEventListener("abort", onAborted);
-        }
-      });
-    }
-    __name(delay, "delay");
     function exponentialRetryPolicy(retryCount, retryInterval, maxRetryInterval) {
       return {
         create: (nextPolicy, options) => {
@@ -40477,7 +30454,7 @@ var require_dist6 = __commonJS({
       if (!isAborted && shouldRetry(policy.retryCount, shouldPolicyRetry, retryData, response)) {
         logger.info(`Retrying request in ${retryData.retryInterval}`);
         try {
-          await delay(retryData.retryInterval);
+          await coreUtil.delay(retryData.retryInterval);
           const res = await policy._nextPolicy.sendRequest(request.clone());
           return retry$1(policy, request, res, retryData);
         } catch (err) {
@@ -40663,7 +30640,7 @@ var require_dist6 = __commonJS({
       __name(tryGetAccessToken, "tryGetAccessToken");
       let token2 = await tryGetAccessToken();
       while (token2 === null) {
-        await delay(retryIntervalInMs);
+        await coreUtil.delay(retryIntervalInMs);
         token2 = await tryGetAccessToken();
       }
       return token2;
@@ -40892,19 +30869,19 @@ var require_dist6 = __commonJS({
       };
     }
     __name(proxyPolicy, "proxyPolicy");
-    function extractAuthFromUrl(url2) {
-      const atIndex = url2.indexOf("@");
+    function extractAuthFromUrl(url) {
+      const atIndex = url.indexOf("@");
       if (atIndex === -1) {
-        return { urlWithoutAuth: url2 };
+        return { urlWithoutAuth: url };
       }
-      const schemeIndex = url2.indexOf("://");
+      const schemeIndex = url.indexOf("://");
       const authStart = schemeIndex !== -1 ? schemeIndex + 3 : 0;
-      const auth = url2.substring(authStart, atIndex);
+      const auth = url.substring(authStart, atIndex);
       const colonIndex = auth.indexOf(":");
       const hasPassword = colonIndex !== -1;
       const username = hasPassword ? auth.substring(0, colonIndex) : auth;
       const password = hasPassword ? auth.substring(colonIndex + 1) : void 0;
-      const urlWithoutAuth = url2.substring(0, authStart) + url2.substring(atIndex + 1);
+      const urlWithoutAuth = url.substring(0, authStart) + url.substring(atIndex + 1);
       return {
         username,
         password,
@@ -40989,13 +30966,13 @@ var require_dist6 = __commonJS({
       return result;
     }
     __name(checkRPNotRegisteredError, "checkRPNotRegisteredError");
-    function extractSubscriptionUrl(url2) {
+    function extractSubscriptionUrl(url) {
       let result;
-      const matchRes = url2.match(/.*\/subscriptions\/[a-f0-9-]+\//gi);
+      const matchRes = url.match(/.*\/subscriptions\/[a-f0-9-]+\//gi);
       if (matchRes && matchRes[0]) {
         result = matchRes[0];
       } else {
-        throw new Error(`Unable to extract subscriptionId from the given url - ${url2}.`);
+        throw new Error(`Unable to extract subscriptionId from the given url - ${url}.`);
       }
       return result;
     }
@@ -41013,17 +30990,17 @@ var require_dist6 = __commonJS({
       return getRegistrationStatus(policy, getUrl, originalRequest);
     }
     __name(registerRP, "registerRP");
-    async function getRegistrationStatus(policy, url2, originalRequest) {
+    async function getRegistrationStatus(policy, url, originalRequest) {
       const reqOptions = getRequestEssentials(originalRequest);
-      reqOptions.url = url2;
+      reqOptions.url = url;
       reqOptions.method = "GET";
       const res = await policy._nextPolicy.sendRequest(reqOptions);
       const obj = res.parsedBody;
       if (res.parsedBody && obj.registrationState && obj.registrationState === "Registered") {
         return true;
       } else {
-        await delay(policy._retryTimeout * 1e3);
-        return getRegistrationStatus(policy, url2, originalRequest);
+        await coreUtil.delay(policy._retryTimeout * 1e3);
+        return getRegistrationStatus(policy, url, originalRequest);
       }
     }
     __name(getRegistrationStatus, "getRegistrationStatus");
@@ -41080,7 +31057,7 @@ var require_dist6 = __commonJS({
       __name(shouldPolicyRetry, "shouldPolicyRetry");
       if (shouldRetry(policy.retryCount, shouldPolicyRetry, retryData, operationResponse, err)) {
         try {
-          await delay(retryData.retryInterval);
+          await coreUtil.delay(retryData.retryInterval);
           return policy._nextPolicy.sendRequest(request.clone());
         } catch (nestedErr) {
           return retry(policy, request, operationResponse, nestedErr, retryData);
@@ -41125,7 +31102,7 @@ var require_dist6 = __commonJS({
           const delayInMs = ThrottlingRetryPolicy.parseRetryAfterHeader(retryAfterHeader);
           if (delayInMs) {
             this.numberOfRetries += 1;
-            await delay(delayInMs, void 0, {
+            await coreUtil.delay(delayInMs, {
               abortSignal: httpRequest.abortSignal,
               abortErrorMsg: StandardAbortMessage
             });
@@ -41745,7 +31722,7 @@ var require_dist6 = __commonJS({
     function getCredentialScopes(options, baseUri) {
       if (options === null || options === void 0 ? void 0 : options.credentialScopes) {
         const scopes = options.credentialScopes;
-        return Array.isArray(scopes) ? scopes.map((scope) => new url.URL(scope).toString()) : new url.URL(scopes).toString();
+        return Array.isArray(scopes) ? scopes.map((scope) => new URL(scope).toString()) : new URL(scopes).toString();
       }
       if (baseUri) {
         return `${baseUri}/.default`;
@@ -41875,6 +31852,12 @@ var require_dist6 = __commonJS({
       }
     };
     __name(TopicCredentials, "TopicCredentials");
+    Object.defineProperty(exports2, "delay", {
+      enumerable: true,
+      get: function() {
+        return coreUtil.delay;
+      }
+    });
     Object.defineProperty(exports2, "isTokenCredential", {
       enumerable: true,
       get: function() {
@@ -41904,7 +31887,6 @@ var require_dist6 = __commonJS({
     exports2.bearerTokenAuthenticationPolicy = bearerTokenAuthenticationPolicy;
     exports2.createPipelineFromOptions = createPipelineFromOptions;
     exports2.createSpanFunction = createSpanFunction;
-    exports2.delay = delay;
     exports2.deserializationPolicy = deserializationPolicy;
     exports2.deserializeResponseBody = deserializeResponseBody;
     exports2.disableResponseDecompressionPolicy = disableResponseDecompressionPolicy;
@@ -41940,20 +31922,738 @@ var require_dist6 = __commonJS({
 });
 
 // node_modules/@azure/core-paging/dist/index.js
-var require_dist7 = __commonJS({
+var require_dist8 = __commonJS({
   "node_modules/@azure/core-paging/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    require_dist_esm();
+    var tslib = require_tslib();
+    function getPagedAsyncIterator(pagedResult) {
+      var _a;
+      const iter = getItemAsyncIterator(pagedResult);
+      return {
+        next() {
+          return iter.next();
+        },
+        [Symbol.asyncIterator]() {
+          return this;
+        },
+        byPage: (_a = pagedResult === null || pagedResult === void 0 ? void 0 : pagedResult.byPage) !== null && _a !== void 0 ? _a : (settings) => {
+          const { continuationToken, maxPageSize } = settings !== null && settings !== void 0 ? settings : {};
+          return getPageAsyncIterator(pagedResult, {
+            pageLink: continuationToken,
+            maxPageSize
+          });
+        }
+      };
+    }
+    __name(getPagedAsyncIterator, "getPagedAsyncIterator");
+    function getItemAsyncIterator(pagedResult) {
+      return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* getItemAsyncIterator_1() {
+        var e_1, _a, e_2, _b;
+        const pages = getPageAsyncIterator(pagedResult);
+        const firstVal = yield tslib.__await(pages.next());
+        if (!Array.isArray(firstVal.value)) {
+          const { toElements } = pagedResult;
+          if (toElements) {
+            yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(toElements(firstVal.value))));
+            try {
+              for (var pages_1 = tslib.__asyncValues(pages), pages_1_1; pages_1_1 = yield tslib.__await(pages_1.next()), !pages_1_1.done; ) {
+                const page = pages_1_1.value;
+                yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(toElements(page))));
+              }
+            } catch (e_1_1) {
+              e_1 = { error: e_1_1 };
+            } finally {
+              try {
+                if (pages_1_1 && !pages_1_1.done && (_a = pages_1.return))
+                  yield tslib.__await(_a.call(pages_1));
+              } finally {
+                if (e_1)
+                  throw e_1.error;
+              }
+            }
+          } else {
+            yield yield tslib.__await(firstVal.value);
+            yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(pages)));
+          }
+        } else {
+          yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(firstVal.value)));
+          try {
+            for (var pages_2 = tslib.__asyncValues(pages), pages_2_1; pages_2_1 = yield tslib.__await(pages_2.next()), !pages_2_1.done; ) {
+              const page = pages_2_1.value;
+              yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(page)));
+            }
+          } catch (e_2_1) {
+            e_2 = { error: e_2_1 };
+          } finally {
+            try {
+              if (pages_2_1 && !pages_2_1.done && (_b = pages_2.return))
+                yield tslib.__await(_b.call(pages_2));
+            } finally {
+              if (e_2)
+                throw e_2.error;
+            }
+          }
+        }
+      }, "getItemAsyncIterator_1"));
+    }
+    __name(getItemAsyncIterator, "getItemAsyncIterator");
+    function getPageAsyncIterator(pagedResult, options = {}) {
+      return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* getPageAsyncIterator_1() {
+        const { pageLink, maxPageSize } = options;
+        let response = yield tslib.__await(pagedResult.getPage(pageLink !== null && pageLink !== void 0 ? pageLink : pagedResult.firstPageLink, maxPageSize));
+        if (!response) {
+          return yield tslib.__await(void 0);
+        }
+        yield yield tslib.__await(response.page);
+        while (response.nextPageLink) {
+          response = yield tslib.__await(pagedResult.getPage(response.nextPageLink, maxPageSize));
+          if (!response) {
+            return yield tslib.__await(void 0);
+          }
+          yield yield tslib.__await(response.page);
+        }
+      }, "getPageAsyncIterator_1"));
+    }
+    __name(getPageAsyncIterator, "getPageAsyncIterator");
+    exports2.getPagedAsyncIterator = getPagedAsyncIterator;
   }
 });
 
 // node_modules/@azure/core-lro/dist/index.js
-var require_dist8 = __commonJS({
+var require_dist9 = __commonJS({
   "node_modules/@azure/core-lro/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var logger$1 = require_dist3();
+    var logger$1 = require_dist4();
+    var abortController = require_dist2();
+    var coreUtil = require_dist3();
+    var logger = logger$1.createClientLogger("core-lro");
+    var POLL_INTERVAL_IN_MS = 2e3;
+    var terminalStates = ["succeeded", "canceled", "failed"];
+    function deserializeState(serializedState) {
+      try {
+        return JSON.parse(serializedState).state;
+      } catch (e) {
+        throw new Error(`Unable to deserialize input state: ${serializedState}`);
+      }
+    }
+    __name(deserializeState, "deserializeState");
+    function setStateError(inputs) {
+      const { state, stateProxy, isOperationError: isOperationError2 } = inputs;
+      return (error) => {
+        if (isOperationError2(error)) {
+          stateProxy.setError(state, error);
+          stateProxy.setFailed(state);
+        }
+        throw error;
+      };
+    }
+    __name(setStateError, "setStateError");
+    function processOperationStatus(result) {
+      const { state, stateProxy, status, isDone, processResult, response, setErrorAsResult } = result;
+      switch (status) {
+        case "succeeded": {
+          stateProxy.setSucceeded(state);
+          break;
+        }
+        case "failed": {
+          stateProxy.setError(state, new Error(`The long-running operation has failed`));
+          stateProxy.setFailed(state);
+          break;
+        }
+        case "canceled": {
+          stateProxy.setCanceled(state);
+          break;
+        }
+      }
+      if ((isDone === null || isDone === void 0 ? void 0 : isDone(response, state)) || isDone === void 0 && ["succeeded", "canceled"].concat(setErrorAsResult ? [] : ["failed"]).includes(status)) {
+        stateProxy.setResult(state, buildResult({
+          response,
+          state,
+          processResult
+        }));
+      }
+    }
+    __name(processOperationStatus, "processOperationStatus");
+    function buildResult(inputs) {
+      const { processResult, response, state } = inputs;
+      return processResult ? processResult(response, state) : response;
+    }
+    __name(buildResult, "buildResult");
+    async function initOperation(inputs) {
+      const { init, stateProxy, processResult, getOperationStatus: getOperationStatus2, withOperationLocation, setErrorAsResult } = inputs;
+      const { operationLocation, resourceLocation, metadata, response } = await init();
+      if (operationLocation)
+        withOperationLocation === null || withOperationLocation === void 0 ? void 0 : withOperationLocation(operationLocation, false);
+      const config = {
+        metadata,
+        operationLocation,
+        resourceLocation
+      };
+      logger.verbose(`LRO: Operation description:`, config);
+      const state = stateProxy.initState(config);
+      const status = getOperationStatus2({ response, state, operationLocation });
+      processOperationStatus({ state, status, stateProxy, response, setErrorAsResult, processResult });
+      return state;
+    }
+    __name(initOperation, "initOperation");
+    async function pollOperationHelper(inputs) {
+      const { poll, state, stateProxy, operationLocation, getOperationStatus: getOperationStatus2, getResourceLocation: getResourceLocation2, isOperationError: isOperationError2, options } = inputs;
+      const response = await poll(operationLocation, options).catch(setStateError({
+        state,
+        stateProxy,
+        isOperationError: isOperationError2
+      }));
+      const status = getOperationStatus2(response, state);
+      logger.verbose(`LRO: Status:
+	Polling from: ${state.config.operationLocation}
+	Operation status: ${status}
+	Polling status: ${terminalStates.includes(status) ? "Stopped" : "Running"}`);
+      if (status === "succeeded") {
+        const resourceLocation = getResourceLocation2(response, state);
+        if (resourceLocation !== void 0) {
+          return {
+            response: await poll(resourceLocation).catch(setStateError({ state, stateProxy, isOperationError: isOperationError2 })),
+            status
+          };
+        }
+      }
+      return { response, status };
+    }
+    __name(pollOperationHelper, "pollOperationHelper");
+    async function pollOperation(inputs) {
+      const { poll, state, stateProxy, options, getOperationStatus: getOperationStatus2, getResourceLocation: getResourceLocation2, getOperationLocation: getOperationLocation2, isOperationError: isOperationError2, withOperationLocation, getPollingInterval, processResult, updateState, setDelay, isDone, setErrorAsResult } = inputs;
+      const { operationLocation } = state.config;
+      if (operationLocation !== void 0) {
+        const { response, status } = await pollOperationHelper({
+          poll,
+          getOperationStatus: getOperationStatus2,
+          state,
+          stateProxy,
+          operationLocation,
+          getResourceLocation: getResourceLocation2,
+          isOperationError: isOperationError2,
+          options
+        });
+        processOperationStatus({
+          status,
+          response,
+          state,
+          stateProxy,
+          isDone,
+          processResult,
+          setErrorAsResult
+        });
+        if (!terminalStates.includes(status)) {
+          const intervalInMs = getPollingInterval === null || getPollingInterval === void 0 ? void 0 : getPollingInterval(response);
+          if (intervalInMs)
+            setDelay(intervalInMs);
+          const location = getOperationLocation2 === null || getOperationLocation2 === void 0 ? void 0 : getOperationLocation2(response, state);
+          if (location !== void 0) {
+            const isUpdated = operationLocation !== location;
+            state.config.operationLocation = location;
+            withOperationLocation === null || withOperationLocation === void 0 ? void 0 : withOperationLocation(location, isUpdated);
+          } else
+            withOperationLocation === null || withOperationLocation === void 0 ? void 0 : withOperationLocation(operationLocation, false);
+        }
+        updateState === null || updateState === void 0 ? void 0 : updateState(state, response);
+      }
+    }
+    __name(pollOperation, "pollOperation");
+    function getOperationLocationPollingUrl(inputs) {
+      const { azureAsyncOperation, operationLocation } = inputs;
+      return operationLocation !== null && operationLocation !== void 0 ? operationLocation : azureAsyncOperation;
+    }
+    __name(getOperationLocationPollingUrl, "getOperationLocationPollingUrl");
+    function getLocationHeader(rawResponse) {
+      return rawResponse.headers["location"];
+    }
+    __name(getLocationHeader, "getLocationHeader");
+    function getOperationLocationHeader(rawResponse) {
+      return rawResponse.headers["operation-location"];
+    }
+    __name(getOperationLocationHeader, "getOperationLocationHeader");
+    function getAzureAsyncOperationHeader(rawResponse) {
+      return rawResponse.headers["azure-asyncoperation"];
+    }
+    __name(getAzureAsyncOperationHeader, "getAzureAsyncOperationHeader");
+    function findResourceLocation(inputs) {
+      const { location, requestMethod, requestPath, resourceLocationConfig } = inputs;
+      switch (requestMethod) {
+        case "PUT": {
+          return requestPath;
+        }
+        case "DELETE": {
+          return void 0;
+        }
+        default: {
+          switch (resourceLocationConfig) {
+            case "azure-async-operation": {
+              return void 0;
+            }
+            case "original-uri": {
+              return requestPath;
+            }
+            case "location":
+            default: {
+              return location;
+            }
+          }
+        }
+      }
+    }
+    __name(findResourceLocation, "findResourceLocation");
+    function inferLroMode(inputs) {
+      const { rawResponse, requestMethod, requestPath, resourceLocationConfig } = inputs;
+      const operationLocation = getOperationLocationHeader(rawResponse);
+      const azureAsyncOperation = getAzureAsyncOperationHeader(rawResponse);
+      const pollingUrl = getOperationLocationPollingUrl({ operationLocation, azureAsyncOperation });
+      const location = getLocationHeader(rawResponse);
+      const normalizedRequestMethod = requestMethod === null || requestMethod === void 0 ? void 0 : requestMethod.toLocaleUpperCase();
+      if (pollingUrl !== void 0) {
+        return {
+          mode: "OperationLocation",
+          operationLocation: pollingUrl,
+          resourceLocation: findResourceLocation({
+            requestMethod: normalizedRequestMethod,
+            location,
+            requestPath,
+            resourceLocationConfig
+          })
+        };
+      } else if (location !== void 0) {
+        return {
+          mode: "ResourceLocation",
+          operationLocation: location
+        };
+      } else if (normalizedRequestMethod === "PUT" && requestPath) {
+        return {
+          mode: "Body",
+          operationLocation: requestPath
+        };
+      } else {
+        return void 0;
+      }
+    }
+    __name(inferLroMode, "inferLroMode");
+    function transformStatus(inputs) {
+      const { status, statusCode } = inputs;
+      if (typeof status !== "string" && status !== void 0) {
+        throw new Error(`Polling was unsuccessful. Expected status to have a string value or no value but it has instead: ${status}. This doesn't necessarily indicate the operation has failed. Check your Azure subscription or resource status for more information.`);
+      }
+      switch (status === null || status === void 0 ? void 0 : status.toLocaleLowerCase()) {
+        case void 0:
+          return toOperationStatus(statusCode);
+        case "succeeded":
+          return "succeeded";
+        case "failed":
+          return "failed";
+        case "running":
+        case "accepted":
+        case "started":
+        case "canceling":
+        case "cancelling":
+          return "running";
+        case "canceled":
+        case "cancelled":
+          return "canceled";
+        default: {
+          logger.verbose(`LRO: unrecognized operation status: ${status}`);
+          return status;
+        }
+      }
+    }
+    __name(transformStatus, "transformStatus");
+    function getStatus(rawResponse) {
+      var _a;
+      const { status } = (_a = rawResponse.body) !== null && _a !== void 0 ? _a : {};
+      return transformStatus({ status, statusCode: rawResponse.statusCode });
+    }
+    __name(getStatus, "getStatus");
+    function getProvisioningState(rawResponse) {
+      var _a, _b;
+      const { properties, provisioningState } = (_a = rawResponse.body) !== null && _a !== void 0 ? _a : {};
+      const status = (_b = properties === null || properties === void 0 ? void 0 : properties.provisioningState) !== null && _b !== void 0 ? _b : provisioningState;
+      return transformStatus({ status, statusCode: rawResponse.statusCode });
+    }
+    __name(getProvisioningState, "getProvisioningState");
+    function toOperationStatus(statusCode) {
+      if (statusCode === 202) {
+        return "running";
+      } else if (statusCode < 300) {
+        return "succeeded";
+      } else {
+        return "failed";
+      }
+    }
+    __name(toOperationStatus, "toOperationStatus");
+    function parseRetryAfter({ rawResponse }) {
+      const retryAfter = rawResponse.headers["retry-after"];
+      if (retryAfter !== void 0) {
+        const retryAfterInSeconds = parseInt(retryAfter);
+        return isNaN(retryAfterInSeconds) ? calculatePollingIntervalFromDate(new Date(retryAfter)) : retryAfterInSeconds * 1e3;
+      }
+      return void 0;
+    }
+    __name(parseRetryAfter, "parseRetryAfter");
+    function calculatePollingIntervalFromDate(retryAfterDate) {
+      const timeNow = Math.floor(new Date().getTime());
+      const retryAfterTime = retryAfterDate.getTime();
+      if (timeNow < retryAfterTime) {
+        return retryAfterTime - timeNow;
+      }
+      return void 0;
+    }
+    __name(calculatePollingIntervalFromDate, "calculatePollingIntervalFromDate");
+    function getStatusFromInitialResponse(inputs) {
+      const { response, state, operationLocation } = inputs;
+      function helper() {
+        var _a;
+        const mode = (_a = state.config.metadata) === null || _a === void 0 ? void 0 : _a["mode"];
+        switch (mode) {
+          case void 0:
+            return toOperationStatus(response.rawResponse.statusCode);
+          case "Body":
+            return getOperationStatus(response, state);
+          default:
+            return "running";
+        }
+      }
+      __name(helper, "helper");
+      const status = helper();
+      return status === "running" && operationLocation === void 0 ? "succeeded" : status;
+    }
+    __name(getStatusFromInitialResponse, "getStatusFromInitialResponse");
+    async function initHttpOperation(inputs) {
+      const { stateProxy, resourceLocationConfig, processResult, lro, setErrorAsResult } = inputs;
+      return initOperation({
+        init: async () => {
+          const response = await lro.sendInitialRequest();
+          const config = inferLroMode({
+            rawResponse: response.rawResponse,
+            requestPath: lro.requestPath,
+            requestMethod: lro.requestMethod,
+            resourceLocationConfig
+          });
+          return Object.assign({ response, operationLocation: config === null || config === void 0 ? void 0 : config.operationLocation, resourceLocation: config === null || config === void 0 ? void 0 : config.resourceLocation }, (config === null || config === void 0 ? void 0 : config.mode) ? { metadata: { mode: config.mode } } : {});
+        },
+        stateProxy,
+        processResult: processResult ? ({ flatResponse }, state) => processResult(flatResponse, state) : ({ flatResponse }) => flatResponse,
+        getOperationStatus: getStatusFromInitialResponse,
+        setErrorAsResult
+      });
+    }
+    __name(initHttpOperation, "initHttpOperation");
+    function getOperationLocation({ rawResponse }, state) {
+      var _a;
+      const mode = (_a = state.config.metadata) === null || _a === void 0 ? void 0 : _a["mode"];
+      switch (mode) {
+        case "OperationLocation": {
+          return getOperationLocationPollingUrl({
+            operationLocation: getOperationLocationHeader(rawResponse),
+            azureAsyncOperation: getAzureAsyncOperationHeader(rawResponse)
+          });
+        }
+        case "ResourceLocation": {
+          return getLocationHeader(rawResponse);
+        }
+        case "Body":
+        default: {
+          return void 0;
+        }
+      }
+    }
+    __name(getOperationLocation, "getOperationLocation");
+    function getOperationStatus({ rawResponse }, state) {
+      var _a;
+      const mode = (_a = state.config.metadata) === null || _a === void 0 ? void 0 : _a["mode"];
+      switch (mode) {
+        case "OperationLocation": {
+          return getStatus(rawResponse);
+        }
+        case "ResourceLocation": {
+          return toOperationStatus(rawResponse.statusCode);
+        }
+        case "Body": {
+          return getProvisioningState(rawResponse);
+        }
+        default:
+          throw new Error(`Internal error: Unexpected operation mode: ${mode}`);
+      }
+    }
+    __name(getOperationStatus, "getOperationStatus");
+    function getResourceLocation({ flatResponse }, state) {
+      if (typeof flatResponse === "object") {
+        const resourceLocation = flatResponse.resourceLocation;
+        if (resourceLocation !== void 0) {
+          state.config.resourceLocation = resourceLocation;
+        }
+      }
+      return state.config.resourceLocation;
+    }
+    __name(getResourceLocation, "getResourceLocation");
+    function isOperationError(e) {
+      return e.name === "RestError";
+    }
+    __name(isOperationError, "isOperationError");
+    async function pollHttpOperation(inputs) {
+      const { lro, stateProxy, options, processResult, updateState, setDelay, state, setErrorAsResult } = inputs;
+      return pollOperation({
+        state,
+        stateProxy,
+        setDelay,
+        processResult: processResult ? ({ flatResponse }, inputState) => processResult(flatResponse, inputState) : ({ flatResponse }) => flatResponse,
+        updateState,
+        getPollingInterval: parseRetryAfter,
+        getOperationLocation,
+        getOperationStatus,
+        isOperationError,
+        getResourceLocation,
+        options,
+        poll: async (location, inputOptions) => lro.sendPollRequest(location, inputOptions),
+        setErrorAsResult
+      });
+    }
+    __name(pollHttpOperation, "pollHttpOperation");
+    var createStateProxy$1 = /* @__PURE__ */ __name(() => ({
+      initState: (config) => ({ status: "running", config }),
+      setCanceled: (state) => state.status = "canceled",
+      setError: (state, error) => state.error = error,
+      setResult: (state, result) => state.result = result,
+      setRunning: (state) => state.status = "running",
+      setSucceeded: (state) => state.status = "succeeded",
+      setFailed: (state) => state.status = "failed",
+      getError: (state) => state.error,
+      getResult: (state) => state.result,
+      isCanceled: (state) => state.status === "canceled",
+      isFailed: (state) => state.status === "failed",
+      isRunning: (state) => state.status === "running",
+      isSucceeded: (state) => state.status === "succeeded"
+    }), "createStateProxy$1");
+    function buildCreatePoller(inputs) {
+      const { getOperationLocation: getOperationLocation2, getStatusFromInitialResponse: getStatusFromInitialResponse2, getStatusFromPollResponse, isOperationError: isOperationError2, getResourceLocation: getResourceLocation2, getPollingInterval, resolveOnUnsuccessful } = inputs;
+      return async ({ init, poll }, options) => {
+        const { processResult, updateState, withOperationLocation: withOperationLocationCallback, intervalInMs = POLL_INTERVAL_IN_MS, restoreFrom } = options || {};
+        const stateProxy = createStateProxy$1();
+        const withOperationLocation = withOperationLocationCallback ? (() => {
+          let called = false;
+          return (operationLocation, isUpdated) => {
+            if (isUpdated)
+              withOperationLocationCallback(operationLocation);
+            else if (!called)
+              withOperationLocationCallback(operationLocation);
+            called = true;
+          };
+        })() : void 0;
+        const state = restoreFrom ? deserializeState(restoreFrom) : await initOperation({
+          init,
+          stateProxy,
+          processResult,
+          getOperationStatus: getStatusFromInitialResponse2,
+          withOperationLocation,
+          setErrorAsResult: !resolveOnUnsuccessful
+        });
+        let resultPromise;
+        const abortController$1 = new abortController.AbortController();
+        const handlers = new Map();
+        const handleProgressEvents = /* @__PURE__ */ __name(async () => handlers.forEach((h) => h(state)), "handleProgressEvents");
+        const cancelErrMsg = "Operation was canceled";
+        let currentPollIntervalInMs = intervalInMs;
+        const poller = {
+          getOperationState: () => state,
+          getResult: () => state.result,
+          isDone: () => ["succeeded", "failed", "canceled"].includes(state.status),
+          isStopped: () => resultPromise === void 0,
+          stopPolling: () => {
+            abortController$1.abort();
+          },
+          toString: () => JSON.stringify({
+            state
+          }),
+          onProgress: (callback) => {
+            const s = Symbol();
+            handlers.set(s, callback);
+            return () => handlers.delete(s);
+          },
+          pollUntilDone: (pollOptions) => resultPromise !== null && resultPromise !== void 0 ? resultPromise : resultPromise = (async () => {
+            const { abortSignal: inputAbortSignal } = pollOptions || {};
+            const { signal: abortSignal } = inputAbortSignal ? new abortController.AbortController([inputAbortSignal, abortController$1.signal]) : abortController$1;
+            if (!poller.isDone()) {
+              await poller.poll({ abortSignal });
+              while (!poller.isDone()) {
+                await coreUtil.delay(currentPollIntervalInMs, { abortSignal });
+                await poller.poll({ abortSignal });
+              }
+            }
+            if (resolveOnUnsuccessful) {
+              return poller.getResult();
+            } else {
+              switch (state.status) {
+                case "succeeded":
+                  return poller.getResult();
+                case "canceled":
+                  throw new Error(cancelErrMsg);
+                case "failed":
+                  throw state.error;
+                case "notStarted":
+                case "running":
+                  throw new Error(`Polling completed without succeeding or failing`);
+              }
+            }
+          })().finally(() => {
+            resultPromise = void 0;
+          }),
+          async poll(pollOptions) {
+            if (resolveOnUnsuccessful) {
+              if (poller.isDone())
+                return;
+            } else {
+              switch (state.status) {
+                case "succeeded":
+                  return;
+                case "canceled":
+                  throw new Error(cancelErrMsg);
+                case "failed":
+                  throw state.error;
+              }
+            }
+            await pollOperation({
+              poll,
+              state,
+              stateProxy,
+              getOperationLocation: getOperationLocation2,
+              isOperationError: isOperationError2,
+              withOperationLocation,
+              getPollingInterval,
+              getOperationStatus: getStatusFromPollResponse,
+              getResourceLocation: getResourceLocation2,
+              processResult,
+              updateState,
+              options: pollOptions,
+              setDelay: (pollIntervalInMs) => {
+                currentPollIntervalInMs = pollIntervalInMs;
+              },
+              setErrorAsResult: !resolveOnUnsuccessful
+            });
+            await handleProgressEvents();
+            if (!resolveOnUnsuccessful) {
+              switch (state.status) {
+                case "canceled":
+                  throw new Error(cancelErrMsg);
+                case "failed":
+                  throw state.error;
+              }
+            }
+          }
+        };
+        return poller;
+      };
+    }
+    __name(buildCreatePoller, "buildCreatePoller");
+    async function createHttpPoller(lro, options) {
+      const { resourceLocationConfig, intervalInMs, processResult, restoreFrom, updateState, withOperationLocation, resolveOnUnsuccessful = false } = options || {};
+      return buildCreatePoller({
+        getStatusFromInitialResponse,
+        getStatusFromPollResponse: getOperationStatus,
+        isOperationError,
+        getOperationLocation,
+        getResourceLocation,
+        getPollingInterval: parseRetryAfter,
+        resolveOnUnsuccessful
+      })({
+        init: async () => {
+          const response = await lro.sendInitialRequest();
+          const config = inferLroMode({
+            rawResponse: response.rawResponse,
+            requestPath: lro.requestPath,
+            requestMethod: lro.requestMethod,
+            resourceLocationConfig
+          });
+          return Object.assign({ response, operationLocation: config === null || config === void 0 ? void 0 : config.operationLocation, resourceLocation: config === null || config === void 0 ? void 0 : config.resourceLocation }, (config === null || config === void 0 ? void 0 : config.mode) ? { metadata: { mode: config.mode } } : {});
+        },
+        poll: lro.sendPollRequest
+      }, {
+        intervalInMs,
+        withOperationLocation,
+        restoreFrom,
+        updateState,
+        processResult: processResult ? ({ flatResponse }, state) => processResult(flatResponse, state) : ({ flatResponse }) => flatResponse
+      });
+    }
+    __name(createHttpPoller, "createHttpPoller");
+    var createStateProxy = /* @__PURE__ */ __name(() => ({
+      initState: (config) => ({ config, isStarted: true }),
+      setCanceled: (state) => state.isCancelled = true,
+      setError: (state, error) => state.error = error,
+      setResult: (state, result) => state.result = result,
+      setRunning: (state) => state.isStarted = true,
+      setSucceeded: (state) => state.isCompleted = true,
+      setFailed: () => {
+      },
+      getError: (state) => state.error,
+      getResult: (state) => state.result,
+      isCanceled: (state) => !!state.isCancelled,
+      isFailed: (state) => !!state.error,
+      isRunning: (state) => !!state.isStarted,
+      isSucceeded: (state) => Boolean(state.isCompleted && !state.isCancelled && !state.error)
+    }), "createStateProxy");
+    var GenericPollOperation = class {
+      constructor(state, lro, setErrorAsResult, lroResourceLocationConfig, processResult, updateState, isDone) {
+        this.state = state;
+        this.lro = lro;
+        this.setErrorAsResult = setErrorAsResult;
+        this.lroResourceLocationConfig = lroResourceLocationConfig;
+        this.processResult = processResult;
+        this.updateState = updateState;
+        this.isDone = isDone;
+      }
+      setPollerConfig(pollerConfig) {
+        this.pollerConfig = pollerConfig;
+      }
+      async update(options) {
+        var _a;
+        const stateProxy = createStateProxy();
+        if (!this.state.isStarted) {
+          this.state = Object.assign(Object.assign({}, this.state), await initHttpOperation({
+            lro: this.lro,
+            stateProxy,
+            resourceLocationConfig: this.lroResourceLocationConfig,
+            processResult: this.processResult,
+            setErrorAsResult: this.setErrorAsResult
+          }));
+        }
+        const updateState = this.updateState;
+        const isDone = this.isDone;
+        if (!this.state.isCompleted && this.state.error === void 0) {
+          await pollHttpOperation({
+            lro: this.lro,
+            state: this.state,
+            stateProxy,
+            processResult: this.processResult,
+            updateState: updateState ? (state, { rawResponse }) => updateState(state, rawResponse) : void 0,
+            isDone: isDone ? ({ flatResponse }, state) => isDone(flatResponse, state) : void 0,
+            options,
+            setDelay: (intervalInMs) => {
+              this.pollerConfig.intervalInMs = intervalInMs;
+            },
+            setErrorAsResult: this.setErrorAsResult
+          });
+        }
+        (_a = options === null || options === void 0 ? void 0 : options.fireProgress) === null || _a === void 0 ? void 0 : _a.call(options, this.state);
+        return this;
+      }
+      async cancel() {
+        logger.error("`cancelOperation` is deprecated because it wasn't implemented");
+        return this;
+      }
+      toString() {
+        return JSON.stringify({
+          state: this.state
+        });
+      }
+    };
+    __name(GenericPollOperation, "GenericPollOperation");
     var PollerStoppedError = class extends Error {
       constructor(message) {
         super(message);
@@ -41972,6 +32672,7 @@ var require_dist8 = __commonJS({
     __name(PollerCancelledError, "PollerCancelledError");
     var Poller = class {
       constructor(operation) {
+        this.resolveOnUnsuccessful = false;
         this.stopped = true;
         this.pollProgressCallbacks = [];
         this.operation = operation;
@@ -41982,33 +32683,23 @@ var require_dist8 = __commonJS({
         this.promise.catch(() => {
         });
       }
-      async startPolling() {
+      async startPolling(pollOptions = {}) {
         if (this.stopped) {
           this.stopped = false;
         }
         while (!this.isStopped() && !this.isDone()) {
-          await this.poll();
+          await this.poll(pollOptions);
           await this.delay();
         }
       }
       async pollOnce(options = {}) {
-        try {
-          if (!this.isDone()) {
-            this.operation = await this.operation.update({
-              abortSignal: options.abortSignal,
-              fireProgress: this.fireProgress.bind(this)
-            });
-            if (this.isDone() && this.resolve) {
-              this.resolve(this.operation.state.result);
-            }
-          }
-        } catch (e) {
-          this.operation.state.error = e;
-          if (this.reject) {
-            this.reject(e);
-          }
-          throw e;
+        if (!this.isDone()) {
+          this.operation = await this.operation.update({
+            abortSignal: options.abortSignal,
+            fireProgress: this.fireProgress.bind(this)
+          });
         }
+        this.processUpdatedState();
       }
       fireProgress(state) {
         for (const callback of this.pollProgressCallbacks) {
@@ -42017,9 +32708,6 @@ var require_dist8 = __commonJS({
       }
       async cancelOnce(options = {}) {
         this.operation = await this.operation.cancel(options);
-        if (this.reject) {
-          this.reject(new PollerCancelledError("Poller cancelled"));
-        }
       }
       poll(options = {}) {
         if (!this.pollOncePromise) {
@@ -42031,10 +32719,31 @@ var require_dist8 = __commonJS({
         }
         return this.pollOncePromise;
       }
-      async pollUntilDone() {
-        if (this.stopped) {
-          this.startPolling().catch(this.reject);
+      processUpdatedState() {
+        if (this.operation.state.error) {
+          this.stopped = true;
+          if (!this.resolveOnUnsuccessful) {
+            this.reject(this.operation.state.error);
+            throw this.operation.state.error;
+          }
         }
+        if (this.operation.state.isCancelled) {
+          this.stopped = true;
+          if (!this.resolveOnUnsuccessful) {
+            const error = new PollerCancelledError("Operation was canceled");
+            this.reject(error);
+            throw error;
+          }
+        }
+        if (this.isDone() && this.resolve) {
+          this.resolve(this.getResult());
+        }
+      }
+      async pollUntilDone(pollOptions = {}) {
+        if (this.stopped) {
+          this.startPolling(pollOptions).catch(this.reject);
+        }
+        this.processUpdatedState();
         return this.promise;
       }
       onProgress(callback) {
@@ -42059,9 +32768,6 @@ var require_dist8 = __commonJS({
         return this.stopped;
       }
       cancelOperation(options = {}) {
-        if (!this.stopped) {
-          this.stopped = true;
-        }
         if (!this.cancelPromise) {
           this.cancelPromise = this.cancelOnce(options);
         } else if (options.abortSignal) {
@@ -42081,275 +32787,13 @@ var require_dist8 = __commonJS({
       }
     };
     __name(Poller, "Poller");
-    function getPollingUrl(rawResponse, defaultPath) {
-      var _a, _b, _c;
-      return (_c = (_b = (_a = getAzureAsyncOperation(rawResponse)) !== null && _a !== void 0 ? _a : getLocation(rawResponse)) !== null && _b !== void 0 ? _b : getOperationLocation(rawResponse)) !== null && _c !== void 0 ? _c : defaultPath;
-    }
-    __name(getPollingUrl, "getPollingUrl");
-    function getLocation(rawResponse) {
-      return rawResponse.headers["location"];
-    }
-    __name(getLocation, "getLocation");
-    function getOperationLocation(rawResponse) {
-      return rawResponse.headers["operation-location"];
-    }
-    __name(getOperationLocation, "getOperationLocation");
-    function getAzureAsyncOperation(rawResponse) {
-      return rawResponse.headers["azure-asyncoperation"];
-    }
-    __name(getAzureAsyncOperation, "getAzureAsyncOperation");
-    function inferLroMode(requestPath, requestMethod, rawResponse) {
-      if (getAzureAsyncOperation(rawResponse) !== void 0) {
-        return {
-          mode: "AzureAsync",
-          resourceLocation: requestMethod === "PUT" ? requestPath : requestMethod === "POST" || requestMethod === "PATCH" ? getLocation(rawResponse) : void 0
-        };
-      } else if (getLocation(rawResponse) !== void 0 || getOperationLocation(rawResponse) !== void 0) {
-        return {
-          mode: "Location"
-        };
-      } else if (["PUT", "PATCH"].includes(requestMethod)) {
-        return {
-          mode: "Body"
-        };
-      }
-      return {};
-    }
-    __name(inferLroMode, "inferLroMode");
-    var SimpleRestError = class extends Error {
-      constructor(message, statusCode) {
-        super(message);
-        this.name = "RestError";
-        this.statusCode = statusCode;
-        Object.setPrototypeOf(this, SimpleRestError.prototype);
-      }
-    };
-    __name(SimpleRestError, "SimpleRestError");
-    function isUnexpectedInitialResponse(rawResponse) {
-      const code = rawResponse.statusCode;
-      if (![203, 204, 202, 201, 200, 500].includes(code)) {
-        throw new SimpleRestError(`Received unexpected HTTP status code ${code} in the initial response. This may indicate a server issue.`, code);
-      }
-      return false;
-    }
-    __name(isUnexpectedInitialResponse, "isUnexpectedInitialResponse");
-    function isUnexpectedPollingResponse(rawResponse) {
-      const code = rawResponse.statusCode;
-      if (![202, 201, 200, 500].includes(code)) {
-        throw new SimpleRestError(`Received unexpected HTTP status code ${code} while polling. This may indicate a server issue.`, code);
-      }
-      return false;
-    }
-    __name(isUnexpectedPollingResponse, "isUnexpectedPollingResponse");
-    var successStates = ["succeeded"];
-    var failureStates = ["failed", "canceled", "cancelled"];
-    function getProvisioningState(rawResponse) {
-      var _a, _b;
-      const { properties, provisioningState } = (_a = rawResponse.body) !== null && _a !== void 0 ? _a : {};
-      const state = (_b = properties === null || properties === void 0 ? void 0 : properties.provisioningState) !== null && _b !== void 0 ? _b : provisioningState;
-      return typeof state === "string" ? state.toLowerCase() : "succeeded";
-    }
-    __name(getProvisioningState, "getProvisioningState");
-    function isBodyPollingDone(rawResponse) {
-      const state = getProvisioningState(rawResponse);
-      if (isUnexpectedPollingResponse(rawResponse) || failureStates.includes(state)) {
-        throw new Error(`The long running operation has failed. The provisioning state: ${state}.`);
-      }
-      return successStates.includes(state);
-    }
-    __name(isBodyPollingDone, "isBodyPollingDone");
-    function processBodyPollingOperationResult(response) {
-      return Object.assign(Object.assign({}, response), { done: isBodyPollingDone(response.rawResponse) });
-    }
-    __name(processBodyPollingOperationResult, "processBodyPollingOperationResult");
-    var logger = logger$1.createClientLogger("core-lro");
-    function getResponseStatus(rawResponse) {
-      var _a;
-      const { status } = (_a = rawResponse.body) !== null && _a !== void 0 ? _a : {};
-      return typeof status === "string" ? status.toLowerCase() : "succeeded";
-    }
-    __name(getResponseStatus, "getResponseStatus");
-    function isAzureAsyncPollingDone(rawResponse) {
-      const state = getResponseStatus(rawResponse);
-      if (isUnexpectedPollingResponse(rawResponse) || failureStates.includes(state)) {
-        throw new Error(`The long running operation has failed. The provisioning state: ${state}.`);
-      }
-      return successStates.includes(state);
-    }
-    __name(isAzureAsyncPollingDone, "isAzureAsyncPollingDone");
-    async function sendFinalRequest(lro, resourceLocation, lroResourceLocationConfig) {
-      switch (lroResourceLocationConfig) {
-        case "original-uri":
-          return lro.sendPollRequest(lro.requestPath);
-        case "azure-async-operation":
-          return void 0;
-        case "location":
-        default:
-          return lro.sendPollRequest(resourceLocation !== null && resourceLocation !== void 0 ? resourceLocation : lro.requestPath);
-      }
-    }
-    __name(sendFinalRequest, "sendFinalRequest");
-    function processAzureAsyncOperationResult(lro, resourceLocation, lroResourceLocationConfig) {
-      return (response) => {
-        if (isAzureAsyncPollingDone(response.rawResponse)) {
-          if (resourceLocation === void 0) {
-            return Object.assign(Object.assign({}, response), { done: true });
-          } else {
-            return Object.assign(Object.assign({}, response), { done: false, next: async () => {
-              const finalResponse = await sendFinalRequest(lro, resourceLocation, lroResourceLocationConfig);
-              return Object.assign(Object.assign({}, finalResponse !== null && finalResponse !== void 0 ? finalResponse : response), { done: true });
-            } });
-          }
-        }
-        return Object.assign(Object.assign({}, response), { done: false });
-      };
-    }
-    __name(processAzureAsyncOperationResult, "processAzureAsyncOperationResult");
-    function isLocationPollingDone(rawResponse) {
-      return !isUnexpectedPollingResponse(rawResponse) && rawResponse.statusCode !== 202;
-    }
-    __name(isLocationPollingDone, "isLocationPollingDone");
-    function processLocationPollingOperationResult(response) {
-      return Object.assign(Object.assign({}, response), { done: isLocationPollingDone(response.rawResponse) });
-    }
-    __name(processLocationPollingOperationResult, "processLocationPollingOperationResult");
-    function processPassthroughOperationResult(response) {
-      return Object.assign(Object.assign({}, response), { done: true });
-    }
-    __name(processPassthroughOperationResult, "processPassthroughOperationResult");
-    function createGetLroStatusFromResponse(lroPrimitives, config, lroResourceLocationConfig) {
-      switch (config.mode) {
-        case "AzureAsync": {
-          return processAzureAsyncOperationResult(lroPrimitives, config.resourceLocation, lroResourceLocationConfig);
-        }
-        case "Location": {
-          return processLocationPollingOperationResult;
-        }
-        case "Body": {
-          return processBodyPollingOperationResult;
-        }
-        default: {
-          return processPassthroughOperationResult;
-        }
-      }
-    }
-    __name(createGetLroStatusFromResponse, "createGetLroStatusFromResponse");
-    function createPoll(lroPrimitives) {
-      return async (path3, pollerConfig, getLroStatusFromResponse) => {
-        const response = await lroPrimitives.sendPollRequest(path3);
-        const retryAfter = response.rawResponse.headers["retry-after"];
-        if (retryAfter !== void 0) {
-          const retryAfterInSeconds = parseInt(retryAfter);
-          pollerConfig.intervalInMs = isNaN(retryAfterInSeconds) ? calculatePollingIntervalFromDate(new Date(retryAfter), pollerConfig.intervalInMs) : retryAfterInSeconds * 1e3;
-        }
-        return getLroStatusFromResponse(response);
-      };
-    }
-    __name(createPoll, "createPoll");
-    function calculatePollingIntervalFromDate(retryAfterDate, defaultIntervalInMs) {
-      const timeNow = Math.floor(new Date().getTime());
-      const retryAfterTime = retryAfterDate.getTime();
-      if (timeNow < retryAfterTime) {
-        return retryAfterTime - timeNow;
-      }
-      return defaultIntervalInMs;
-    }
-    __name(calculatePollingIntervalFromDate, "calculatePollingIntervalFromDate");
-    function createInitializeState(state, requestPath, requestMethod) {
-      return (response) => {
-        if (isUnexpectedInitialResponse(response.rawResponse))
-          ;
-        state.initialRawResponse = response.rawResponse;
-        state.isStarted = true;
-        state.pollingURL = getPollingUrl(state.initialRawResponse, requestPath);
-        state.config = inferLroMode(requestPath, requestMethod, state.initialRawResponse);
-        if (state.config.mode === void 0 || state.config.mode === "Body" && isBodyPollingDone(state.initialRawResponse)) {
-          state.result = response.flatResponse;
-          state.isCompleted = true;
-        }
-        logger.verbose(`LRO: initial state: ${JSON.stringify(state)}`);
-        return Boolean(state.isCompleted);
-      };
-    }
-    __name(createInitializeState, "createInitializeState");
-    var GenericPollOperation = class {
-      constructor(state, lro, lroResourceLocationConfig, processResult, updateState, isDone) {
-        this.state = state;
-        this.lro = lro;
-        this.lroResourceLocationConfig = lroResourceLocationConfig;
-        this.processResult = processResult;
-        this.updateState = updateState;
-        this.isDone = isDone;
-      }
-      setPollerConfig(pollerConfig) {
-        this.pollerConfig = pollerConfig;
-      }
-      async update(options) {
-        var _a, _b, _c;
-        const state = this.state;
-        let lastResponse = void 0;
-        if (!state.isStarted) {
-          const initializeState = createInitializeState(state, this.lro.requestPath, this.lro.requestMethod);
-          lastResponse = await this.lro.sendInitialRequest();
-          initializeState(lastResponse);
-        }
-        if (!state.isCompleted) {
-          if (!this.poll || !this.getLroStatusFromResponse) {
-            if (!state.config) {
-              throw new Error("Bad state: LRO mode is undefined. Please check if the serialized state is well-formed.");
-            }
-            const isDone = this.isDone;
-            this.getLroStatusFromResponse = isDone ? (response) => Object.assign(Object.assign({}, response), { done: isDone(response.flatResponse, this.state) }) : createGetLroStatusFromResponse(this.lro, state.config, this.lroResourceLocationConfig);
-            this.poll = createPoll(this.lro);
-          }
-          if (!state.pollingURL) {
-            throw new Error("Bad state: polling URL is undefined. Please check if the serialized state is well-formed.");
-          }
-          const currentState = await this.poll(state.pollingURL, this.pollerConfig, this.getLroStatusFromResponse);
-          logger.verbose(`LRO: polling response: ${JSON.stringify(currentState.rawResponse)}`);
-          if (currentState.done) {
-            state.result = this.processResult ? this.processResult(currentState.flatResponse, state) : currentState.flatResponse;
-            state.isCompleted = true;
-          } else {
-            this.poll = (_a = currentState.next) !== null && _a !== void 0 ? _a : this.poll;
-            state.pollingURL = getPollingUrl(currentState.rawResponse, state.pollingURL);
-          }
-          lastResponse = currentState;
-        }
-        logger.verbose(`LRO: current state: ${JSON.stringify(state)}`);
-        if (lastResponse) {
-          (_b = this.updateState) === null || _b === void 0 ? void 0 : _b.call(this, state, lastResponse === null || lastResponse === void 0 ? void 0 : lastResponse.rawResponse);
-        } else {
-          logger.error(`LRO: no response was received`);
-        }
-        (_c = options === null || options === void 0 ? void 0 : options.fireProgress) === null || _c === void 0 ? void 0 : _c.call(options, state);
-        return this;
-      }
-      async cancel() {
-        this.state.isCancelled = true;
-        return this;
-      }
-      toString() {
-        return JSON.stringify({
-          state: this.state
-        });
-      }
-    };
-    __name(GenericPollOperation, "GenericPollOperation");
-    function deserializeState(serializedState) {
-      try {
-        return JSON.parse(serializedState).state;
-      } catch (e) {
-        throw new Error(`LroEngine: Unable to deserialize state: ${serializedState}`);
-      }
-    }
-    __name(deserializeState, "deserializeState");
     var LroEngine = class extends Poller {
       constructor(lro, options) {
-        const { intervalInMs = 2e3, resumeFrom } = options || {};
+        const { intervalInMs = POLL_INTERVAL_IN_MS, resumeFrom, resolveOnUnsuccessful = false, isDone, lroResourceLocationConfig, processResult, updateState } = options || {};
         const state = resumeFrom ? deserializeState(resumeFrom) : {};
-        const operation = new GenericPollOperation(state, lro, options === null || options === void 0 ? void 0 : options.lroResourceLocationConfig, options === null || options === void 0 ? void 0 : options.processResult, options === null || options === void 0 ? void 0 : options.updateState, options === null || options === void 0 ? void 0 : options.isDone);
+        const operation = new GenericPollOperation(state, lro, !resolveOnUnsuccessful, lroResourceLocationConfig, processResult, updateState, isDone);
         super(operation);
+        this.resolveOnUnsuccessful = resolveOnUnsuccessful;
         this.config = { intervalInMs };
         operation.setPollerConfig(this.config);
       }
@@ -42362,27 +32806,53 @@ var require_dist8 = __commonJS({
     exports2.Poller = Poller;
     exports2.PollerCancelledError = PollerCancelledError;
     exports2.PollerStoppedError = PollerStoppedError;
+    exports2.createHttpPoller = createHttpPoller;
   }
 });
 
 // node_modules/@azure/storage-blob/dist/index.js
-var require_dist9 = __commonJS({
+var require_dist10 = __commonJS({
   "node_modules/@azure/storage-blob/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var coreHttp = require_dist6();
+    var coreHttp = require_dist7();
     var tslib = require_tslib();
-    var coreTracing = require_dist5();
-    var logger$1 = require_dist3();
+    var coreTracing = require_dist6();
+    var logger$1 = require_dist4();
     var abortController = require_dist2();
     var os2 = require("os");
     var crypto = require("crypto");
     var stream = require("stream");
-    require_dist7();
-    var coreLro = require_dist8();
+    require_dist8();
+    var coreLro = require_dist9();
     var events = require("events");
     var fs3 = require("fs");
     var util = require("util");
+    function _interopNamespace(e) {
+      if (e && e.__esModule)
+        return e;
+      var n = Object.create(null);
+      if (e) {
+        Object.keys(e).forEach(function(k) {
+          if (k !== "default") {
+            var d = Object.getOwnPropertyDescriptor(e, k);
+            Object.defineProperty(n, k, d.get ? d : {
+              enumerable: true,
+              get: function() {
+                return e[k];
+              }
+            });
+          }
+        });
+      }
+      n["default"] = e;
+      return Object.freeze(n);
+    }
+    __name(_interopNamespace, "_interopNamespace");
+    var coreHttp__namespace = /* @__PURE__ */ _interopNamespace(coreHttp);
+    var os__namespace = /* @__PURE__ */ _interopNamespace(os2);
+    var fs__namespace = /* @__PURE__ */ _interopNamespace(fs3);
+    var util__namespace = /* @__PURE__ */ _interopNamespace(util);
     var BlobServiceProperties = {
       serializedName: "BlobServiceProperties",
       xmlName: "StorageServiceProperties",
@@ -43330,10 +33800,10 @@ var require_dist9 = __commonJS({
         modelProperties: {
           name: {
             serializedName: "Name",
-            required: true,
             xmlName: "Name",
             type: {
-              name: "String"
+              name: "Composite",
+              className: "BlobName"
             }
           },
           deleted: {
@@ -43403,6 +33873,31 @@ var require_dist9 = __commonJS({
             xmlName: "HasVersionsOnly",
             type: {
               name: "Boolean"
+            }
+          }
+        }
+      }
+    };
+    var BlobName = {
+      serializedName: "BlobName",
+      type: {
+        name: "Composite",
+        className: "BlobName",
+        modelProperties: {
+          encoded: {
+            serializedName: "Encoded",
+            xmlName: "Encoded",
+            xmlIsAttribute: true,
+            type: {
+              name: "Boolean"
+            }
+          },
+          content: {
+            serializedName: "content",
+            xmlName: "content",
+            xmlIsMsText: true,
+            type: {
+              name: "String"
             }
           }
         }
@@ -43629,7 +34124,8 @@ var require_dist9 = __commonJS({
                 "P80",
                 "Hot",
                 "Cool",
-                "Archive"
+                "Archive",
+                "Cold"
               ]
             }
           },
@@ -43851,10 +34347,10 @@ var require_dist9 = __commonJS({
         modelProperties: {
           name: {
             serializedName: "Name",
-            required: true,
             xmlName: "Name",
             type: {
-              name: "String"
+              name: "Composite",
+              className: "BlobName"
             }
           }
         }
@@ -44005,6 +34501,13 @@ var require_dist9 = __commonJS({
                   className: "ClearRange"
                 }
               }
+            }
+          },
+          continuationToken: {
+            serializedName: "NextMarker",
+            xmlName: "NextMarker",
+            type: {
+              name: "String"
             }
           }
         }
@@ -45477,6 +35980,59 @@ var require_dist9 = __commonJS({
         }
       }
     };
+    var ContainerFilterBlobsHeaders = {
+      serializedName: "Container_filterBlobsHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerFilterBlobsHeaders",
+        modelProperties: {
+          clientRequestId: {
+            serializedName: "x-ms-client-request-id",
+            xmlName: "x-ms-client-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          requestId: {
+            serializedName: "x-ms-request-id",
+            xmlName: "x-ms-request-id",
+            type: {
+              name: "String"
+            }
+          },
+          version: {
+            serializedName: "x-ms-version",
+            xmlName: "x-ms-version",
+            type: {
+              name: "String"
+            }
+          },
+          date: {
+            serializedName: "date",
+            xmlName: "date",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          }
+        }
+      }
+    };
+    var ContainerFilterBlobsExceptionHeaders = {
+      serializedName: "Container_filterBlobsExceptionHeaders",
+      type: {
+        name: "Composite",
+        className: "ContainerFilterBlobsExceptionHeaders",
+        modelProperties: {
+          errorCode: {
+            serializedName: "x-ms-error-code",
+            xmlName: "x-ms-error-code",
+            type: {
+              name: "String"
+            }
+          }
+        }
+      }
+    };
     var ContainerAcquireLeaseHeaders = {
       serializedName: "Container_acquireLeaseHeaders",
       type: {
@@ -46064,6 +36620,13 @@ var require_dist9 = __commonJS({
           lastModified: {
             serializedName: "last-modified",
             xmlName: "last-modified",
+            type: {
+              name: "DateTimeRfc1123"
+            }
+          },
+          createdOn: {
+            serializedName: "x-ms-creation-time",
+            xmlName: "x-ms-creation-time",
             type: {
               name: "DateTimeRfc1123"
             }
@@ -47983,6 +38546,13 @@ var require_dist9 = __commonJS({
             xmlName: "x-ms-content-crc64",
             type: {
               name: "ByteArray"
+            }
+          },
+          encryptionScope: {
+            serializedName: "x-ms-encryption-scope",
+            xmlName: "x-ms-encryption-scope",
+            type: {
+              name: "String"
             }
           },
           errorCode: {
@@ -50501,6 +41071,7 @@ var require_dist9 = __commonJS({
       ListBlobsFlatSegmentResponse,
       BlobFlatListSegment,
       BlobItemInternal,
+      BlobName,
       BlobPropertiesInternal,
       ListBlobsHierarchySegmentResponse,
       BlobHierarchyListSegment,
@@ -50552,6 +41123,8 @@ var require_dist9 = __commonJS({
       ContainerRenameExceptionHeaders,
       ContainerSubmitBatchHeaders,
       ContainerSubmitBatchExceptionHeaders,
+      ContainerFilterBlobsHeaders,
+      ContainerFilterBlobsExceptionHeaders,
       ContainerAcquireLeaseHeaders,
       ContainerAcquireLeaseExceptionHeaders,
       ContainerReleaseLeaseHeaders,
@@ -50731,7 +41304,7 @@ var require_dist9 = __commonJS({
     var version = {
       parameterPath: "version",
       mapper: {
-        defaultValue: "2020-10-02",
+        defaultValue: "2022-11-02",
         isConstant: true,
         serializedName: "x-ms-version",
         type: {
@@ -50826,7 +41399,7 @@ var require_dist9 = __commonJS({
           element: {
             type: {
               name: "Enum",
-              allowedValues: ["metadata", "deleted"]
+              allowedValues: ["metadata", "deleted", "system"]
             }
           }
         }
@@ -51348,11 +41921,10 @@ var require_dist9 = __commonJS({
       }
     };
     var encryptionAlgorithm = {
-      parameterPath: ["options", "encryptionAlgorithm"],
+      parameterPath: ["options", "cpkInfo", "encryptionAlgorithm"],
       mapper: {
-        defaultValue: "AES256",
-        isConstant: true,
         serializedName: "x-ms-encryption-algorithm",
+        xmlName: "x-ms-encryption-algorithm",
         type: {
           name: "String"
         }
@@ -51597,7 +42169,8 @@ var require_dist9 = __commonJS({
             "P80",
             "Hot",
             "Cool",
-            "Archive"
+            "Archive",
+            "Cold"
           ]
         }
       }
@@ -51747,6 +42320,17 @@ var require_dist9 = __commonJS({
         }
       }
     };
+    var copySourceTags = {
+      parameterPath: ["options", "copySourceTags"],
+      mapper: {
+        serializedName: "x-ms-copy-source-tag-option",
+        xmlName: "x-ms-copy-source-tag-option",
+        type: {
+          name: "Enum",
+          allowedValues: ["REPLACE", "COPY"]
+        }
+      }
+    };
     var comp15 = {
       parameterPath: "comp",
       mapper: {
@@ -51813,7 +42397,8 @@ var require_dist9 = __commonJS({
             "P80",
             "Hot",
             "Cool",
-            "Archive"
+            "Archive",
+            "Cold"
           ]
         }
       }
@@ -52250,59 +42835,59 @@ var require_dist9 = __commonJS({
       setProperties(blobServiceProperties2, options) {
         const operationArguments = {
           blobServiceProperties: blobServiceProperties2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setPropertiesOperationSpec);
       }
       getProperties(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec$2);
       }
       getStatistics(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getStatisticsOperationSpec);
       }
       listContainersSegment(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, listContainersSegmentOperationSpec);
       }
       getUserDelegationKey(keyInfo2, options) {
         const operationArguments = {
           keyInfo: keyInfo2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getUserDelegationKeyOperationSpec);
       }
       getAccountInfo(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec$2);
       }
       submitBatch(contentLength2, multipartContentType2, body2, options) {
         const operationArguments = {
           contentLength: contentLength2,
           multipartContentType: multipartContentType2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec$1);
       }
       filterBlobs(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, filterBlobsOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, filterBlobsOperationSpec$1);
       }
     };
     __name(Service, "Service");
-    var xmlSerializer = new coreHttp.Serializer(Mappers, true);
+    var xmlSerializer$5 = new coreHttp__namespace.Serializer(Mappers, true);
     var setPropertiesOperationSpec = {
       path: "/",
       httpMethod: "PUT",
@@ -52331,9 +42916,9 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
-    var getPropertiesOperationSpec = {
+    var getPropertiesOperationSpec$2 = {
       path: "/",
       httpMethod: "GET",
       responses: {
@@ -52358,7 +42943,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
     var getStatisticsOperationSpec = {
       path: "/",
@@ -52385,7 +42970,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
     var listContainersSegmentOperationSpec = {
       path: "/",
@@ -52415,7 +43000,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
     var getUserDelegationKeyOperationSpec = {
       path: "/",
@@ -52446,9 +43031,9 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
-    var getAccountInfoOperationSpec = {
+    var getAccountInfoOperationSpec$2 = {
       path: "/",
       httpMethod: "GET",
       responses: {
@@ -52464,9 +43049,9 @@ var require_dist9 = __commonJS({
       urlParameters: [url],
       headerParameters: [version, accept1],
       isXML: true,
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
-    var submitBatchOperationSpec = {
+    var submitBatchOperationSpec$1 = {
       path: "/",
       httpMethod: "POST",
       responses: {
@@ -52496,9 +43081,9 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
-    var filterBlobsOperationSpec = {
+    var filterBlobsOperationSpec$1 = {
       path: "/",
       httpMethod: "GET",
       responses: {
@@ -52525,7 +43110,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer
+      serializer: xmlSerializer$5
     };
     var Container = class {
       constructor(client) {
@@ -52533,50 +43118,50 @@ var require_dist9 = __commonJS({
       }
       create(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, createOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, createOperationSpec$2);
       }
       getProperties(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec$1);
       }
       delete(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec$1);
       }
       setMetadata(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec$1);
       }
       getAccessPolicy(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getAccessPolicyOperationSpec);
       }
       setAccessPolicy(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setAccessPolicyOperationSpec);
       }
       restore(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, restoreOperationSpec);
       }
       rename(sourceContainerName2, options) {
         const operationArguments = {
           sourceContainerName: sourceContainerName2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, renameOperationSpec);
       }
@@ -52585,67 +43170,73 @@ var require_dist9 = __commonJS({
           contentLength: contentLength2,
           multipartContentType: multipartContentType2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, submitBatchOperationSpec);
+      }
+      filterBlobs(options) {
+        const operationArguments = {
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
+        };
+        return this.client.sendOperationRequest(operationArguments, filterBlobsOperationSpec);
       }
       acquireLease(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec$1);
       }
       releaseLease(leaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec$1);
       }
       renewLease(leaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec$1);
       }
       breakLease(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec$1);
       }
       changeLease(leaseId2, proposedLeaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
           proposedLeaseId: proposedLeaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec);
+        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec$1);
       }
       listBlobFlatSegment(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, listBlobFlatSegmentOperationSpec);
       }
       listBlobHierarchySegment(delimiter2, options) {
         const operationArguments = {
           delimiter: delimiter2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, listBlobHierarchySegmentOperationSpec);
       }
       getAccountInfo(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec$1);
       }
     };
     __name(Container, "Container");
-    var xmlSerializer$1 = new coreHttp.Serializer(Mappers, true);
-    var createOperationSpec = {
+    var xmlSerializer$4 = new coreHttp__namespace.Serializer(Mappers, true);
+    var createOperationSpec$2 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -52669,7 +43260,7 @@ var require_dist9 = __commonJS({
         preventEncryptionScopeOverride
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var getPropertiesOperationSpec$1 = {
       path: "/{containerName}",
@@ -52692,9 +43283,9 @@ var require_dist9 = __commonJS({
         leaseId
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var deleteOperationSpec = {
+    var deleteOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "DELETE",
       responses: {
@@ -52717,9 +43308,9 @@ var require_dist9 = __commonJS({
         ifUnmodifiedSince
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var setMetadataOperationSpec = {
+    var setMetadataOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -52746,7 +43337,7 @@ var require_dist9 = __commonJS({
         ifModifiedSince
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var getAccessPolicyOperationSpec = {
       path: "/{containerName}",
@@ -52785,7 +43376,7 @@ var require_dist9 = __commonJS({
         leaseId
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var setAccessPolicyOperationSpec = {
       path: "/{containerName}",
@@ -52819,7 +43410,7 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var restoreOperationSpec = {
       path: "/{containerName}",
@@ -52847,7 +43438,7 @@ var require_dist9 = __commonJS({
         deletedContainerVersion
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var renameOperationSpec = {
       path: "/{containerName}",
@@ -52875,9 +43466,9 @@ var require_dist9 = __commonJS({
         sourceLeaseId
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var submitBatchOperationSpec$1 = {
+    var submitBatchOperationSpec = {
       path: "/{containerName}",
       httpMethod: "POST",
       responses: {
@@ -52911,9 +43502,39 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var acquireLeaseOperationSpec = {
+    var filterBlobsOperationSpec = {
+      path: "/{containerName}",
+      httpMethod: "GET",
+      responses: {
+        200: {
+          bodyMapper: FilterBlobSegment,
+          headersMapper: ContainerFilterBlobsHeaders
+        },
+        default: {
+          bodyMapper: StorageError,
+          headersMapper: ContainerFilterBlobsExceptionHeaders
+        }
+      },
+      queryParameters: [
+        timeoutInSeconds,
+        marker,
+        maxPageSize,
+        comp5,
+        where,
+        restype2
+      ],
+      urlParameters: [url],
+      headerParameters: [
+        version,
+        requestId,
+        accept1
+      ],
+      isXML: true,
+      serializer: xmlSerializer$4
+    };
+    var acquireLeaseOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -52942,9 +43563,9 @@ var require_dist9 = __commonJS({
         proposedLeaseId
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var releaseLeaseOperationSpec = {
+    var releaseLeaseOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -52972,9 +43593,9 @@ var require_dist9 = __commonJS({
         leaseId1
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var renewLeaseOperationSpec = {
+    var renewLeaseOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -53002,9 +43623,9 @@ var require_dist9 = __commonJS({
         action2
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var breakLeaseOperationSpec = {
+    var breakLeaseOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -53032,9 +43653,9 @@ var require_dist9 = __commonJS({
         breakPeriod
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
-    var changeLeaseOperationSpec = {
+    var changeLeaseOperationSpec$1 = {
       path: "/{containerName}",
       httpMethod: "PUT",
       responses: {
@@ -53063,7 +43684,7 @@ var require_dist9 = __commonJS({
         proposedLeaseId1
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var listBlobFlatSegmentOperationSpec = {
       path: "/{containerName}",
@@ -53094,7 +43715,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var listBlobHierarchySegmentOperationSpec = {
       path: "/{containerName}",
@@ -53126,7 +43747,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var getAccountInfoOperationSpec$1 = {
       path: "/{containerName}",
@@ -53144,7 +43765,7 @@ var require_dist9 = __commonJS({
       urlParameters: [url],
       headerParameters: [version, accept1],
       isXML: true,
-      serializer: xmlSerializer$1
+      serializer: xmlSerializer$4
     };
     var Blob$1 = class {
       constructor(client) {
@@ -53152,161 +43773,161 @@ var require_dist9 = __commonJS({
       }
       download(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, downloadOperationSpec);
       }
       getProperties(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec$2);
+        return this.client.sendOperationRequest(operationArguments, getPropertiesOperationSpec);
       }
       delete(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, deleteOperationSpec);
       }
       undelete(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, undeleteOperationSpec);
       }
       setExpiry(expiryOptions2, options) {
         const operationArguments = {
           expiryOptions: expiryOptions2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setExpiryOperationSpec);
       }
       setHttpHeaders(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setHttpHeadersOperationSpec);
       }
       setImmutabilityPolicy(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setImmutabilityPolicyOperationSpec);
       }
       deleteImmutabilityPolicy(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, deleteImmutabilityPolicyOperationSpec);
       }
       setLegalHold(legalHold2, options) {
         const operationArguments = {
           legalHold: legalHold2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setLegalHoldOperationSpec);
       }
       setMetadata(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, setMetadataOperationSpec);
       }
       acquireLease(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, acquireLeaseOperationSpec);
       }
       releaseLease(leaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, releaseLeaseOperationSpec);
       }
       renewLease(leaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, renewLeaseOperationSpec);
       }
       changeLease(leaseId2, proposedLeaseId2, options) {
         const operationArguments = {
           leaseId: leaseId2,
           proposedLeaseId: proposedLeaseId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, changeLeaseOperationSpec);
       }
       breakLease(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec$1);
+        return this.client.sendOperationRequest(operationArguments, breakLeaseOperationSpec);
       }
       createSnapshot(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, createSnapshotOperationSpec);
       }
       startCopyFromURL(copySource2, options) {
         const operationArguments = {
           copySource: copySource2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, startCopyFromURLOperationSpec);
       }
       copyFromURL(copySource2, options) {
         const operationArguments = {
           copySource: copySource2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, copyFromURLOperationSpec);
       }
       abortCopyFromURL(copyId2, options) {
         const operationArguments = {
           copyId: copyId2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, abortCopyFromURLOperationSpec);
       }
       setTier(tier2, options) {
         const operationArguments = {
           tier: tier2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setTierOperationSpec);
       }
       getAccountInfo(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec$2);
+        return this.client.sendOperationRequest(operationArguments, getAccountInfoOperationSpec);
       }
       query(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, queryOperationSpec);
       }
       getTags(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getTagsOperationSpec);
       }
       setTags(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, setTagsOperationSpec);
       }
     };
     __name(Blob$1, "Blob$1");
-    var xmlSerializer$2 = new coreHttp.Serializer(Mappers, true);
+    var xmlSerializer$3 = new coreHttp__namespace.Serializer(Mappers, true);
     var downloadOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "GET",
@@ -53354,9 +43975,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var getPropertiesOperationSpec$2 = {
+    var getPropertiesOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "HEAD",
       responses: {
@@ -53389,9 +44010,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var deleteOperationSpec$1 = {
+    var deleteOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "DELETE",
       responses: {
@@ -53423,7 +44044,7 @@ var require_dist9 = __commonJS({
         deleteSnapshots
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var undeleteOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53445,7 +44066,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setExpiryOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53469,7 +44090,7 @@ var require_dist9 = __commonJS({
         expiresOn
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setHttpHeadersOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53503,7 +44124,7 @@ var require_dist9 = __commonJS({
         blobContentDisposition
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setImmutabilityPolicyOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53528,7 +44149,7 @@ var require_dist9 = __commonJS({
         immutabilityPolicyMode
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var deleteImmutabilityPolicyOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53550,7 +44171,7 @@ var require_dist9 = __commonJS({
         accept1
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setLegalHoldOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53573,9 +44194,9 @@ var require_dist9 = __commonJS({
         legalHold
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var setMetadataOperationSpec$1 = {
+    var setMetadataOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53606,9 +44227,9 @@ var require_dist9 = __commonJS({
         encryptionScope
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var acquireLeaseOperationSpec$1 = {
+    var acquireLeaseOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53636,9 +44257,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var releaseLeaseOperationSpec$1 = {
+    var releaseLeaseOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53665,9 +44286,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var renewLeaseOperationSpec$1 = {
+    var renewLeaseOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53694,9 +44315,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var changeLeaseOperationSpec$1 = {
+    var changeLeaseOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53724,9 +44345,9 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var breakLeaseOperationSpec$1 = {
+    var breakLeaseOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -53753,7 +44374,7 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var createSnapshotOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53786,7 +44407,7 @@ var require_dist9 = __commonJS({
         encryptionScope
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var startCopyFromURLOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53828,7 +44449,7 @@ var require_dist9 = __commonJS({
         legalHold1
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var copyFromURLOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53857,6 +44478,7 @@ var require_dist9 = __commonJS({
         ifTags,
         immutabilityPolicyExpiry,
         immutabilityPolicyMode,
+        encryptionScope,
         tier,
         sourceIfModifiedSince,
         sourceIfUnmodifiedSince,
@@ -53867,10 +44489,11 @@ var require_dist9 = __commonJS({
         legalHold1,
         xMsRequiresSync,
         sourceContentMD5,
-        copySourceAuthorization
+        copySourceAuthorization,
+        copySourceTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var abortCopyFromURLOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53898,7 +44521,7 @@ var require_dist9 = __commonJS({
         copyActionAbortConstant
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setTierOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -53932,9 +44555,9 @@ var require_dist9 = __commonJS({
         tier1
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
-    var getAccountInfoOperationSpec$2 = {
+    var getAccountInfoOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "GET",
       responses: {
@@ -53950,7 +44573,7 @@ var require_dist9 = __commonJS({
       urlParameters: [url],
       headerParameters: [version, accept1],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var queryOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54000,7 +44623,7 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var getTagsOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54030,7 +44653,7 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var setTagsOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54064,7 +44687,7 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer$2
+      serializer: xmlSerializer$3
     };
     var PageBlob = class {
       constructor(client) {
@@ -54074,7 +44697,7 @@ var require_dist9 = __commonJS({
         const operationArguments = {
           contentLength: contentLength2,
           blobContentLength: blobContentLength2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, createOperationSpec$1);
       }
@@ -54082,14 +44705,14 @@ var require_dist9 = __commonJS({
         const operationArguments = {
           contentLength: contentLength2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, uploadPagesOperationSpec);
       }
       clearPages(contentLength2, options) {
         const operationArguments = {
           contentLength: contentLength2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, clearPagesOperationSpec);
       }
@@ -54099,47 +44722,47 @@ var require_dist9 = __commonJS({
           sourceRange: sourceRange2,
           contentLength: contentLength2,
           range: range2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, uploadPagesFromURLOperationSpec);
       }
       getPageRanges(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getPageRangesOperationSpec);
       }
       getPageRangesDiff(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getPageRangesDiffOperationSpec);
       }
       resize(blobContentLength2, options) {
         const operationArguments = {
           blobContentLength: blobContentLength2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, resizeOperationSpec);
       }
       updateSequenceNumber(sequenceNumberAction2, options) {
         const operationArguments = {
           sequenceNumberAction: sequenceNumberAction2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, updateSequenceNumberOperationSpec);
       }
       copyIncremental(copySource2, options) {
         const operationArguments = {
           copySource: copySource2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, copyIncrementalOperationSpec);
       }
     };
     __name(PageBlob, "PageBlob");
-    var xmlSerializer$3 = new coreHttp.Serializer(Mappers, true);
-    var serializer = new coreHttp.Serializer(Mappers, false);
+    var xmlSerializer$2 = new coreHttp__namespace.Serializer(Mappers, true);
+    var serializer$2 = new coreHttp__namespace.Serializer(Mappers, false);
     var createOperationSpec$1 = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
@@ -54186,7 +44809,7 @@ var require_dist9 = __commonJS({
         blobSequenceNumber
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var uploadPagesOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54228,7 +44851,7 @@ var require_dist9 = __commonJS({
         ifSequenceNumberEqualTo
       ],
       mediaType: "binary",
-      serializer
+      serializer: serializer$2
     };
     var clearPagesOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54266,7 +44889,7 @@ var require_dist9 = __commonJS({
         pageWrite1
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var uploadPagesFromURLOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54313,7 +44936,7 @@ var require_dist9 = __commonJS({
         range1
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var getPageRangesOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54330,6 +44953,8 @@ var require_dist9 = __commonJS({
       },
       queryParameters: [
         timeoutInSeconds,
+        marker,
+        maxPageSize,
         snapshot,
         comp20
       ],
@@ -54347,7 +44972,7 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var getPageRangesDiffOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54364,6 +44989,8 @@ var require_dist9 = __commonJS({
       },
       queryParameters: [
         timeoutInSeconds,
+        marker,
+        maxPageSize,
         snapshot,
         comp20,
         prevsnapshot
@@ -54383,7 +45010,7 @@ var require_dist9 = __commonJS({
         prevSnapshotUrl
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var resizeOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54416,7 +45043,7 @@ var require_dist9 = __commonJS({
         blobContentLength
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var updateSequenceNumberOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54446,7 +45073,7 @@ var require_dist9 = __commonJS({
         sequenceNumberAction
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var copyIncrementalOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54474,7 +45101,7 @@ var require_dist9 = __commonJS({
         copySource
       ],
       isXML: true,
-      serializer: xmlSerializer$3
+      serializer: xmlSerializer$2
     };
     var AppendBlob = class {
       constructor(client) {
@@ -54483,15 +45110,15 @@ var require_dist9 = __commonJS({
       create(contentLength2, options) {
         const operationArguments = {
           contentLength: contentLength2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
-        return this.client.sendOperationRequest(operationArguments, createOperationSpec$2);
+        return this.client.sendOperationRequest(operationArguments, createOperationSpec);
       }
       appendBlock(contentLength2, body2, options) {
         const operationArguments = {
           contentLength: contentLength2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, appendBlockOperationSpec);
       }
@@ -54499,21 +45126,21 @@ var require_dist9 = __commonJS({
         const operationArguments = {
           sourceUrl: sourceUrl2,
           contentLength: contentLength2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, appendBlockFromUrlOperationSpec);
       }
       seal(options) {
         const operationArguments = {
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, sealOperationSpec);
       }
     };
     __name(AppendBlob, "AppendBlob");
-    var xmlSerializer$4 = new coreHttp.Serializer(Mappers, true);
-    var serializer$1 = new coreHttp.Serializer(Mappers, false);
-    var createOperationSpec$2 = {
+    var xmlSerializer$1 = new coreHttp__namespace.Serializer(Mappers, true);
+    var serializer$1 = new coreHttp__namespace.Serializer(Mappers, false);
+    var createOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
       responses: {
@@ -54556,7 +45183,7 @@ var require_dist9 = __commonJS({
         blobType1
       ],
       isXML: true,
-      serializer: xmlSerializer$4
+      serializer: xmlSerializer$1
     };
     var appendBlockOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54640,7 +45267,7 @@ var require_dist9 = __commonJS({
         sourceRange1
       ],
       isXML: true,
-      serializer: xmlSerializer$4
+      serializer: xmlSerializer$1
     };
     var sealOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54668,7 +45295,7 @@ var require_dist9 = __commonJS({
         appendPosition
       ],
       isXML: true,
-      serializer: xmlSerializer$4
+      serializer: xmlSerializer$1
     };
     var BlockBlob = class {
       constructor(client) {
@@ -54678,7 +45305,7 @@ var require_dist9 = __commonJS({
         const operationArguments = {
           contentLength: contentLength2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, uploadOperationSpec);
       }
@@ -54686,7 +45313,7 @@ var require_dist9 = __commonJS({
         const operationArguments = {
           contentLength: contentLength2,
           copySource: copySource2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, putBlobFromUrlOperationSpec);
       }
@@ -54695,7 +45322,7 @@ var require_dist9 = __commonJS({
           blockId: blockId2,
           contentLength: contentLength2,
           body: body2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, stageBlockOperationSpec);
       }
@@ -54704,28 +45331,28 @@ var require_dist9 = __commonJS({
           blockId: blockId2,
           contentLength: contentLength2,
           sourceUrl: sourceUrl2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, stageBlockFromURLOperationSpec);
       }
       commitBlockList(blocks2, options) {
         const operationArguments = {
           blocks: blocks2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, commitBlockListOperationSpec);
       }
       getBlockList(listType2, options) {
         const operationArguments = {
           listType: listType2,
-          options: coreHttp.operationOptionsToRequestOptionsBase(options || {})
+          options: coreHttp__namespace.operationOptionsToRequestOptionsBase(options || {})
         };
         return this.client.sendOperationRequest(operationArguments, getBlockListOperationSpec);
       }
     };
     __name(BlockBlob, "BlockBlob");
-    var xmlSerializer$5 = new coreHttp.Serializer(Mappers, true);
-    var serializer$2 = new coreHttp.Serializer(Mappers, false);
+    var xmlSerializer = new coreHttp__namespace.Serializer(Mappers, true);
+    var serializer = new coreHttp__namespace.Serializer(Mappers, false);
     var uploadOperationSpec = {
       path: "/{containerName}/{blob}",
       httpMethod: "PUT",
@@ -54768,12 +45395,13 @@ var require_dist9 = __commonJS({
         blobTagsString,
         legalHold1,
         transactionalContentMD5,
+        transactionalContentCrc64,
         contentType1,
         accept2,
         blobType2
       ],
       mediaType: "binary",
-      serializer: serializer$2
+      serializer
     };
     var putBlobFromUrlOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54821,12 +45449,13 @@ var require_dist9 = __commonJS({
         blobTagsString,
         sourceContentMD5,
         copySourceAuthorization,
+        copySourceTags,
         transactionalContentMD5,
         blobType2,
         copySourceBlobProperties
       ],
       isXML: true,
-      serializer: xmlSerializer$5
+      serializer: xmlSerializer
     };
     var stageBlockOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54862,7 +45491,7 @@ var require_dist9 = __commonJS({
         accept2
       ],
       mediaType: "binary",
-      serializer: serializer$2
+      serializer
     };
     var stageBlockFromURLOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54903,7 +45532,7 @@ var require_dist9 = __commonJS({
         sourceRange1
       ],
       isXML: true,
-      serializer: xmlSerializer$5
+      serializer: xmlSerializer
     };
     var commitBlockListOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54953,7 +45582,7 @@ var require_dist9 = __commonJS({
       isXML: true,
       contentType: "application/xml; charset=utf-8",
       mediaType: "xml",
-      serializer: xmlSerializer$5
+      serializer: xmlSerializer
     };
     var getBlockListOperationSpec = {
       path: "/{containerName}/{blob}",
@@ -54983,17 +45612,18 @@ var require_dist9 = __commonJS({
         ifTags
       ],
       isXML: true,
-      serializer: xmlSerializer$5
+      serializer: xmlSerializer
     };
     var logger = logger$1.createClientLogger("storage-blob");
-    var SDK_VERSION = "12.8.0";
-    var SERVICE_VERSION = "2020-10-02";
+    var SDK_VERSION = "12.14.0";
+    var SERVICE_VERSION = "2022-11-02";
     var BLOCK_BLOB_MAX_UPLOAD_BLOB_BYTES = 256 * 1024 * 1024;
     var BLOCK_BLOB_MAX_STAGE_BLOCK_BYTES = 4e3 * 1024 * 1024;
     var BLOCK_BLOB_MAX_BLOCKS = 5e4;
     var DEFAULT_BLOCK_BUFFER_SIZE_BYTES = 8 * 1024 * 1024;
     var DEFAULT_BLOB_DOWNLOAD_BLOCK_BYTES = 4 * 1024 * 1024;
     var DEFAULT_MAX_DOWNLOAD_RETRY_REQUESTS = 5;
+    var REQUEST_TIMEOUT = 100 * 1e3;
     var StorageOAuthScopes = "https://storage.azure.com/.default";
     var URLConstants = {
       Parameters: {
@@ -55176,6 +45806,30 @@ var require_dist9 = __commonJS({
       "skv",
       "snapshot"
     ];
+    var BlobUsesCustomerSpecifiedEncryptionMsg = "BlobUsesCustomerSpecifiedEncryption";
+    var BlobDoesNotUseCustomerSpecifiedEncryption = "BlobDoesNotUseCustomerSpecifiedEncryption";
+    var PathStylePorts = [
+      "10000",
+      "10001",
+      "10002",
+      "10003",
+      "10004",
+      "10100",
+      "10101",
+      "10102",
+      "10103",
+      "10104",
+      "11000",
+      "11001",
+      "11002",
+      "11003",
+      "11004",
+      "11100",
+      "11101",
+      "11102",
+      "11103",
+      "11104"
+    ];
     function escapeURLPath(url2) {
       const urlParsed = coreHttp.URLBuilder.parse(url2);
       let path3 = urlParsed.getPath();
@@ -55268,7 +45922,8 @@ var require_dist9 = __commonJS({
       let path3 = urlParsed.getPath();
       path3 = path3 ? path3.endsWith("/") ? `${path3}${name}` : `${path3}/${name}` : name;
       urlParsed.setPath(path3);
-      return urlParsed.toString();
+      const normalizedUrl = new URL(urlParsed.toString());
+      return normalizedUrl.toString();
     }
     __name(appendToURLPath, "appendToURLPath");
     function setURLParameter(url2, name, value) {
@@ -55431,7 +46086,7 @@ var require_dist9 = __commonJS({
         return false;
       }
       const host = parsedUrl.getHost() + (parsedUrl.getPort() === void 0 ? "" : ":" + parsedUrl.getPort());
-      return /^.*:.*:.*$|^localhost(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(host);
+      return /^.*:.*:.*$|^localhost(:[0-9]+)?$|^(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])){3}(:[0-9]+)?$/.test(host) || parsedUrl.getPort() !== void 0 && PathStylePorts.includes(parsedUrl.getPort());
     }
     __name(isIpEndpointStyle, "isIpEndpointStyle");
     function toBlobTagsString(tags2) {
@@ -55565,14 +46220,103 @@ var require_dist9 = __commonJS({
       return httpAuthorization ? httpAuthorization.scheme + " " + httpAuthorization.value : void 0;
     }
     __name(httpAuthorizationToString, "httpAuthorizationToString");
+    function BlobNameToString(name) {
+      if (name.encoded) {
+        return decodeURIComponent(name.content);
+      } else {
+        return name.content;
+      }
+    }
+    __name(BlobNameToString, "BlobNameToString");
+    function ConvertInternalResponseOfListBlobFlat(internalResponse) {
+      return Object.assign(Object.assign({}, internalResponse), { segment: {
+        blobItems: internalResponse.segment.blobItems.map((blobItemInteral) => {
+          const blobItem = Object.assign(Object.assign({}, blobItemInteral), { name: BlobNameToString(blobItemInteral.name) });
+          return blobItem;
+        })
+      } });
+    }
+    __name(ConvertInternalResponseOfListBlobFlat, "ConvertInternalResponseOfListBlobFlat");
+    function ConvertInternalResponseOfListBlobHierarchy(internalResponse) {
+      var _a;
+      return Object.assign(Object.assign({}, internalResponse), { segment: {
+        blobPrefixes: (_a = internalResponse.segment.blobPrefixes) === null || _a === void 0 ? void 0 : _a.map((blobPrefixInternal) => {
+          const blobPrefix = {
+            name: BlobNameToString(blobPrefixInternal.name)
+          };
+          return blobPrefix;
+        }),
+        blobItems: internalResponse.segment.blobItems.map((blobItemInteral) => {
+          const blobItem = Object.assign(Object.assign({}, blobItemInteral), { name: BlobNameToString(blobItemInteral.name) });
+          return blobItem;
+        })
+      } });
+    }
+    __name(ConvertInternalResponseOfListBlobHierarchy, "ConvertInternalResponseOfListBlobHierarchy");
+    function* ExtractPageRangeInfoItems(getPageRangesSegment) {
+      let pageRange = [];
+      let clearRange = [];
+      if (getPageRangesSegment.pageRange)
+        pageRange = getPageRangesSegment.pageRange;
+      if (getPageRangesSegment.clearRange)
+        clearRange = getPageRangesSegment.clearRange;
+      let pageRangeIndex = 0;
+      let clearRangeIndex = 0;
+      while (pageRangeIndex < pageRange.length && clearRangeIndex < clearRange.length) {
+        if (pageRange[pageRangeIndex].start < clearRange[clearRangeIndex].start) {
+          yield {
+            start: pageRange[pageRangeIndex].start,
+            end: pageRange[pageRangeIndex].end,
+            isClear: false
+          };
+          ++pageRangeIndex;
+        } else {
+          yield {
+            start: clearRange[clearRangeIndex].start,
+            end: clearRange[clearRangeIndex].end,
+            isClear: true
+          };
+          ++clearRangeIndex;
+        }
+      }
+      for (; pageRangeIndex < pageRange.length; ++pageRangeIndex) {
+        yield {
+          start: pageRange[pageRangeIndex].start,
+          end: pageRange[pageRangeIndex].end,
+          isClear: false
+        };
+      }
+      for (; clearRangeIndex < clearRange.length; ++clearRangeIndex) {
+        yield {
+          start: clearRange[clearRangeIndex].start,
+          end: clearRange[clearRangeIndex].end,
+          isClear: true
+        };
+      }
+    }
+    __name(ExtractPageRangeInfoItems, "ExtractPageRangeInfoItems");
+    function EscapePath(blobName) {
+      const split = blobName.split("/");
+      for (let i = 0; i < split.length; i++) {
+        split[i] = encodeURIComponent(split[i]);
+      }
+      return split.join("/");
+    }
+    __name(EscapePath, "EscapePath");
     var StorageBrowserPolicy = class extends coreHttp.BaseRequestPolicy {
       constructor(nextPolicy, options) {
         super(nextPolicy, options);
       }
       async sendRequest(request) {
-        {
+        if (coreHttp.isNode) {
           return this._nextPolicy.sendRequest(request);
         }
+        if (request.method.toUpperCase() === "GET" || request.method.toUpperCase() === "HEAD") {
+          request.url = setURLParameter(request.url, URLConstants.Parameters.FORCE_BROWSER_NO_CACHE, new Date().getTime().toString());
+        }
+        request.headers.remove(HeaderConstants.COOKIE);
+        request.headers.remove(HeaderConstants.CONTENT_LENGTH);
+        return this._nextPolicy.sendRequest(request);
       }
     };
     __name(StorageBrowserPolicy, "StorageBrowserPolicy");
@@ -55582,6 +46326,7 @@ var require_dist9 = __commonJS({
       }
     };
     __name(StorageBrowserPolicyFactory, "StorageBrowserPolicyFactory");
+    exports2.StorageRetryPolicyType = void 0;
     (function(StorageRetryPolicyType) {
       StorageRetryPolicyType[StorageRetryPolicyType["EXPONENTIAL"] = 0] = "EXPONENTIAL";
       StorageRetryPolicyType[StorageRetryPolicyType["FIXED"] = 1] = "FIXED";
@@ -55738,7 +46483,7 @@ var require_dist9 = __commonJS({
         this.telemetry = telemetry;
       }
       async sendRequest(request) {
-        {
+        if (coreHttp.isNode) {
           if (!request.headers) {
             request.headers = new coreHttp.HttpHeaders();
           }
@@ -55753,7 +46498,7 @@ var require_dist9 = __commonJS({
     var TelemetryPolicyFactory = class {
       constructor(telemetry) {
         const userAgentInfo = [];
-        {
+        if (coreHttp.isNode) {
           if (telemetry) {
             const telemetryString = telemetry.userAgentPrefix || "";
             if (telemetryString.length > 0 && userAgentInfo.indexOf(telemetryString) === -1) {
@@ -55764,7 +46509,10 @@ var require_dist9 = __commonJS({
           if (userAgentInfo.indexOf(libInfo) === -1) {
             userAgentInfo.push(libInfo);
           }
-          const runtimeInfo = `(NODE-VERSION ${process.version}; ${os2.type()} ${os2.release()})`;
+          let runtimeInfo = `(NODE-VERSION ${process.version})`;
+          if (os__namespace) {
+            runtimeInfo = `(NODE-VERSION ${process.version}; ${os__namespace.type()} ${os__namespace.release()})`;
+          }
           if (userAgentInfo.indexOf(runtimeInfo) === -1) {
             userAgentInfo.push(runtimeInfo);
           }
@@ -55781,6 +46529,151 @@ var require_dist9 = __commonJS({
       return _defaultHttpClient;
     }
     __name(getCachedDefaultHttpClient, "getCachedDefaultHttpClient");
+    var Constants = {
+      DefaultScope: "/.default",
+      HeaderConstants: {
+        AUTHORIZATION: "authorization"
+      }
+    };
+    var DEFAULT_CYCLER_OPTIONS = {
+      forcedRefreshWindowInMs: 1e3,
+      retryIntervalInMs: 3e3,
+      refreshWindowInMs: 1e3 * 60 * 2
+    };
+    async function beginRefresh(getAccessToken, retryIntervalInMs, timeoutInMs) {
+      async function tryGetAccessToken() {
+        if (Date.now() < timeoutInMs) {
+          try {
+            return await getAccessToken();
+          } catch (_a) {
+            return null;
+          }
+        } else {
+          const finalToken = await getAccessToken();
+          if (finalToken === null) {
+            throw new Error("Failed to refresh access token.");
+          }
+          return finalToken;
+        }
+      }
+      __name(tryGetAccessToken, "tryGetAccessToken");
+      let token2 = await tryGetAccessToken();
+      while (token2 === null) {
+        await coreHttp.delay(retryIntervalInMs);
+        token2 = await tryGetAccessToken();
+      }
+      return token2;
+    }
+    __name(beginRefresh, "beginRefresh");
+    function createTokenCycler(credential, scopes, tokenCyclerOptions) {
+      let refreshWorker = null;
+      let token2 = null;
+      const options = Object.assign(Object.assign({}, DEFAULT_CYCLER_OPTIONS), tokenCyclerOptions);
+      const cycler = {
+        get isRefreshing() {
+          return refreshWorker !== null;
+        },
+        get shouldRefresh() {
+          var _a;
+          return !cycler.isRefreshing && ((_a = token2 === null || token2 === void 0 ? void 0 : token2.expiresOnTimestamp) !== null && _a !== void 0 ? _a : 0) - options.refreshWindowInMs < Date.now();
+        },
+        get mustRefresh() {
+          return token2 === null || token2.expiresOnTimestamp - options.forcedRefreshWindowInMs < Date.now();
+        }
+      };
+      function refresh(getTokenOptions) {
+        var _a;
+        if (!cycler.isRefreshing) {
+          const tryGetAccessToken = /* @__PURE__ */ __name(() => credential.getToken(scopes, getTokenOptions), "tryGetAccessToken");
+          refreshWorker = beginRefresh(tryGetAccessToken, options.retryIntervalInMs, (_a = token2 === null || token2 === void 0 ? void 0 : token2.expiresOnTimestamp) !== null && _a !== void 0 ? _a : Date.now()).then((_token) => {
+            refreshWorker = null;
+            token2 = _token;
+            return token2;
+          }).catch((reason) => {
+            refreshWorker = null;
+            token2 = null;
+            throw reason;
+          });
+        }
+        return refreshWorker;
+      }
+      __name(refresh, "refresh");
+      return async (tokenOptions) => {
+        if (cycler.mustRefresh)
+          return refresh(tokenOptions);
+        if (cycler.shouldRefresh) {
+          refresh(tokenOptions);
+        }
+        return token2;
+      };
+    }
+    __name(createTokenCycler, "createTokenCycler");
+    function getChallenge(response) {
+      const challenge = response.headers.get("WWW-Authenticate");
+      if (response.status === 401 && challenge) {
+        return challenge;
+      }
+      return;
+    }
+    __name(getChallenge, "getChallenge");
+    function parseChallenge(challenge) {
+      const bearerChallenge = challenge.slice("Bearer ".length);
+      const challengeParts = `${bearerChallenge.trim()} `.split(" ").filter((x) => x);
+      const keyValuePairs = challengeParts.map((keyValue) => (([key, value]) => ({ [key]: value }))(keyValue.trim().split("=")));
+      return keyValuePairs.reduce((a, b) => Object.assign(Object.assign({}, a), b), {});
+    }
+    __name(parseChallenge, "parseChallenge");
+    function storageBearerTokenChallengeAuthenticationPolicy(credential, scopes) {
+      let getToken = createTokenCycler(credential, scopes);
+      class StorageBearerTokenChallengeAuthenticationPolicy extends coreHttp.BaseRequestPolicy {
+        constructor(nextPolicy, options) {
+          super(nextPolicy, options);
+        }
+        async sendRequest(webResource) {
+          if (!webResource.url.toLowerCase().startsWith("https://")) {
+            throw new Error("Bearer token authentication is not permitted for non-TLS protected (non-https) URLs.");
+          }
+          const getTokenInternal = getToken;
+          const token2 = (await getTokenInternal({
+            abortSignal: webResource.abortSignal,
+            tracingOptions: {
+              tracingContext: webResource.tracingContext
+            }
+          })).token;
+          webResource.headers.set(Constants.HeaderConstants.AUTHORIZATION, `Bearer ${token2}`);
+          const response = await this._nextPolicy.sendRequest(webResource);
+          if ((response === null || response === void 0 ? void 0 : response.status) === 401) {
+            const challenge = getChallenge(response);
+            if (challenge) {
+              const challengeInfo = parseChallenge(challenge);
+              const challengeScopes = challengeInfo.resource_id + Constants.DefaultScope;
+              const parsedAuthUri = coreHttp.URLBuilder.parse(challengeInfo.authorization_uri);
+              const pathSegments = parsedAuthUri.getPath().split("/");
+              const tenantId = pathSegments[1];
+              const getTokenForChallenge = createTokenCycler(credential, challengeScopes);
+              const tokenForChallenge = (await getTokenForChallenge({
+                abortSignal: webResource.abortSignal,
+                tracingOptions: {
+                  tracingContext: webResource.tracingContext
+                },
+                tenantId
+              })).token;
+              getToken = getTokenForChallenge;
+              webResource.headers.set(Constants.HeaderConstants.AUTHORIZATION, `Bearer ${tokenForChallenge}`);
+              return this._nextPolicy.sendRequest(webResource);
+            }
+          }
+          return response;
+        }
+      }
+      __name(StorageBearerTokenChallengeAuthenticationPolicy, "StorageBearerTokenChallengeAuthenticationPolicy");
+      return {
+        create: (nextPolicy, options) => {
+          return new StorageBearerTokenChallengeAuthenticationPolicy(nextPolicy, options);
+        }
+      };
+    }
+    __name(storageBearerTokenChallengeAuthenticationPolicy, "storageBearerTokenChallengeAuthenticationPolicy");
     function isPipelineLike(pipeline) {
       if (!pipeline || typeof pipeline !== "object") {
         return false;
@@ -55803,6 +46696,7 @@ var require_dist9 = __commonJS({
     };
     __name(Pipeline, "Pipeline");
     function newPipeline(credential, pipelineOptions = {}) {
+      var _a;
       if (credential === void 0) {
         credential = new AnonymousCredential();
       }
@@ -55821,11 +46715,11 @@ var require_dist9 = __commonJS({
           allowedQueryParameters: StorageBlobLoggingAllowedQueryParameters
         })
       ];
-      {
+      if (coreHttp.isNode) {
         factories.push(coreHttp.proxyPolicy(pipelineOptions.proxyOptions));
         factories.push(coreHttp.disableResponseDecompressionPolicy());
       }
-      factories.push(coreHttp.isTokenCredential(credential) ? attachCredential(coreHttp.bearerTokenAuthenticationPolicy(credential, StorageOAuthScopes), credential) : credential);
+      factories.push(coreHttp.isTokenCredential(credential) ? attachCredential(storageBearerTokenChallengeAuthenticationPolicy(credential, (_a = pipelineOptions.audience) !== null && _a !== void 0 ? _a : StorageOAuthScopes), credential) : credential);
       return new Pipeline(factories, pipelineOptions);
     }
     __name(newPipeline, "newPipeline");
@@ -55836,7 +46730,7 @@ var require_dist9 = __commonJS({
       }
       signRequest(request) {
         request.headers.set(HeaderConstants.X_MS_DATE, new Date().toUTCString());
-        if (request.body && typeof request.body === "string" && request.body.length > 0) {
+        if (request.body && (typeof request.body === "string" || request.body !== void 0) && request.body.length > 0) {
           request.headers.set(HeaderConstants.CONTENT_LENGTH, Buffer.byteLength(request.body));
         }
         const stringToSign = [
@@ -55927,8 +46821,8 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
     };
     __name(StorageSharedKeyCredential, "StorageSharedKeyCredential");
     var packageName = "azure-storage-blob";
-    var packageVersion = "12.8.0";
-    var StorageClientContext = class extends coreHttp.ServiceClient {
+    var packageVersion = "12.14.0";
+    var StorageClientContext = class extends coreHttp__namespace.ServiceClient {
       constructor(url2, options) {
         if (url2 === void 0) {
           throw new Error("'url' cannot be null");
@@ -55937,14 +46831,14 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           options = {};
         }
         if (!options.userAgent) {
-          const defaultUserAgent = coreHttp.getDefaultUserAgentValue();
+          const defaultUserAgent = coreHttp__namespace.getDefaultUserAgentValue();
           options.userAgent = `${packageName}/${packageVersion} ${defaultUserAgent}`;
         }
         super(void 0, options);
         this.requestContentType = "application/json; charset=utf-8";
         this.baseUri = options.endpoint || "{url}";
         this.url = url2;
-        this.version = options.version || "2020-10-02";
+        this.version = options.version || "2022-11-02";
       }
     };
     __name(StorageClientContext, "StorageClientContext");
@@ -55992,6 +46886,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         this.move = false;
         this.execute = false;
         this.setImmutabilityPolicy = false;
+        this.permanentDelete = false;
       }
       static parse(permissions) {
         const blobSASPermissions = new BlobSASPermissions();
@@ -56026,6 +46921,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
               break;
             case "i":
               blobSASPermissions.setImmutabilityPolicy = true;
+              break;
+            case "y":
+              blobSASPermissions.permanentDelete = true;
               break;
             default:
               throw new RangeError(`Invalid permission: ${char}`);
@@ -56065,6 +46963,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (permissionLike.setImmutabilityPolicy) {
           blobSASPermissions.setImmutabilityPolicy = true;
         }
+        if (permissionLike.permanentDelete) {
+          blobSASPermissions.permanentDelete = true;
+        }
         return blobSASPermissions;
       }
       toString() {
@@ -56099,6 +47000,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (this.setImmutabilityPolicy) {
           permissions.push("i");
         }
+        if (this.permanentDelete) {
+          permissions.push("y");
+        }
         return permissions.join("");
       }
     };
@@ -56116,6 +47020,8 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         this.move = false;
         this.execute = false;
         this.setImmutabilityPolicy = false;
+        this.permanentDelete = false;
+        this.filterByTags = false;
       }
       static parse(permissions) {
         const containerSASPermissions = new ContainerSASPermissions();
@@ -56153,6 +47059,12 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
               break;
             case "i":
               containerSASPermissions.setImmutabilityPolicy = true;
+              break;
+            case "y":
+              containerSASPermissions.permanentDelete = true;
+              break;
+            case "f":
+              containerSASPermissions.filterByTags = true;
               break;
             default:
               throw new RangeError(`Invalid permission ${char}`);
@@ -56195,6 +47107,12 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (permissionLike.setImmutabilityPolicy) {
           containerSASPermissions.setImmutabilityPolicy = true;
         }
+        if (permissionLike.permanentDelete) {
+          containerSASPermissions.permanentDelete = true;
+        }
+        if (permissionLike.filterByTags) {
+          containerSASPermissions.filterByTags = true;
+        }
         return containerSASPermissions;
       }
       toString() {
@@ -56232,6 +47150,12 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (this.setImmutabilityPolicy) {
           permissions.push("i");
         }
+        if (this.permanentDelete) {
+          permissions.push("y");
+        }
+        if (this.filterByTags) {
+          permissions.push("f");
+        }
         return permissions.join("");
       }
     };
@@ -56251,12 +47175,13 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       return ipRange.end ? `${ipRange.start}-${ipRange.end}` : ipRange.start;
     }
     __name(ipRangeToString, "ipRangeToString");
+    exports2.SASProtocol = void 0;
     (function(SASProtocol) {
       SASProtocol["Https"] = "https";
       SASProtocol["HttpsAndHttp"] = "https,http";
     })(exports2.SASProtocol || (exports2.SASProtocol = {}));
     var SASQueryParameters = class {
-      constructor(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl, contentDisposition, contentEncoding, contentLanguage, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId) {
+      constructor(version2, signature, permissionsOrOptions, services, resourceTypes, protocol, startsOn, expiresOn2, ipRange, identifier, resource, cacheControl, contentDisposition, contentEncoding, contentLanguage, contentType2, userDelegationKey, preauthorizedAgentObjectId, correlationId, encryptionScope2) {
         this.version = version2;
         this.signature = signature;
         if (permissionsOrOptions !== void 0 && typeof permissionsOrOptions !== "string") {
@@ -56268,6 +47193,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           this.expiresOn = permissionsOrOptions.expiresOn;
           this.ipRangeInner = permissionsOrOptions.ipRange;
           this.identifier = permissionsOrOptions.identifier;
+          this.encryptionScope = permissionsOrOptions.encryptionScope;
           this.resource = permissionsOrOptions.resource;
           this.cacheControl = permissionsOrOptions.cacheControl;
           this.contentDisposition = permissionsOrOptions.contentDisposition;
@@ -56292,6 +47218,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           this.protocol = protocol;
           this.startsOn = startsOn;
           this.ipRangeInner = ipRange;
+          this.encryptionScope = encryptionScope2;
           this.identifier = identifier;
           this.resource = resource;
           this.cacheControl = cacheControl;
@@ -56330,6 +47257,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           "se",
           "sip",
           "si",
+          "ses",
           "skoid",
           "sktid",
           "skt",
@@ -56373,6 +47301,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
               break;
             case "si":
               this.tryAppendQueryParameter(queries, param, this.identifier);
+              break;
+            case "ses":
+              this.tryAppendQueryParameter(queries, param, this.encryptionScope);
               break;
             case "skoid":
               this.tryAppendQueryParameter(queries, param, this.signedOid);
@@ -56447,6 +47378,13 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
       if (sharedKeyCredential === void 0 && userDelegationKeyCredential === void 0) {
         throw TypeError("Invalid sharedKeyCredential, userDelegationKey or accountName.");
+      }
+      if (version2 >= "2020-12-06") {
+        if (sharedKeyCredential !== void 0) {
+          return generateBlobSASQueryParameters20201206(blobSASSignatureValues, sharedKeyCredential);
+        } else {
+          return generateBlobSASQueryParametersUDK20201206(blobSASSignatureValues, userDelegationKeyCredential);
+        }
       }
       if (version2 >= "2018-11-09") {
         if (sharedKeyCredential !== void 0) {
@@ -56550,6 +47488,52 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType);
     }
     __name(generateBlobSASQueryParameters20181109, "generateBlobSASQueryParameters20181109");
+    function generateBlobSASQueryParameters20201206(blobSASSignatureValues, sharedKeyCredential) {
+      blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues);
+      if (!blobSASSignatureValues.identifier && !(blobSASSignatureValues.permissions && blobSASSignatureValues.expiresOn)) {
+        throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when 'identifier' is not provided.");
+      }
+      let resource = "c";
+      let timestamp = blobSASSignatureValues.snapshotTime;
+      if (blobSASSignatureValues.blobName) {
+        resource = "b";
+        if (blobSASSignatureValues.snapshotTime) {
+          resource = "bs";
+        } else if (blobSASSignatureValues.versionId) {
+          resource = "bv";
+          timestamp = blobSASSignatureValues.versionId;
+        }
+      }
+      let verifiedPermissions;
+      if (blobSASSignatureValues.permissions) {
+        if (blobSASSignatureValues.blobName) {
+          verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString();
+        } else {
+          verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString();
+        }
+      }
+      const stringToSign = [
+        verifiedPermissions ? verifiedPermissions : "",
+        blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, false) : "",
+        blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, false) : "",
+        getCanonicalName(sharedKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+        blobSASSignatureValues.identifier,
+        blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+        blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+        blobSASSignatureValues.version,
+        resource,
+        timestamp,
+        blobSASSignatureValues.encryptionScope,
+        blobSASSignatureValues.cacheControl ? blobSASSignatureValues.cacheControl : "",
+        blobSASSignatureValues.contentDisposition ? blobSASSignatureValues.contentDisposition : "",
+        blobSASSignatureValues.contentEncoding ? blobSASSignatureValues.contentEncoding : "",
+        blobSASSignatureValues.contentLanguage ? blobSASSignatureValues.contentLanguage : "",
+        blobSASSignatureValues.contentType ? blobSASSignatureValues.contentType : ""
+      ].join("\n");
+      const signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
+      return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, void 0, void 0, void 0, blobSASSignatureValues.encryptionScope);
+    }
+    __name(generateBlobSASQueryParameters20201206, "generateBlobSASQueryParameters20201206");
     function generateBlobSASQueryParametersUDK20181109(blobSASSignatureValues, userDelegationKeyCredential) {
       blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues);
       if (!blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn) {
@@ -56653,6 +47637,60 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey, blobSASSignatureValues.preauthorizedAgentObjectId, blobSASSignatureValues.correlationId);
     }
     __name(generateBlobSASQueryParametersUDK20200210, "generateBlobSASQueryParametersUDK20200210");
+    function generateBlobSASQueryParametersUDK20201206(blobSASSignatureValues, userDelegationKeyCredential) {
+      blobSASSignatureValues = SASSignatureValuesSanityCheckAndAutofill(blobSASSignatureValues);
+      if (!blobSASSignatureValues.permissions || !blobSASSignatureValues.expiresOn) {
+        throw new RangeError("Must provide 'permissions' and 'expiresOn' for Blob SAS generation when generating user delegation SAS.");
+      }
+      let resource = "c";
+      let timestamp = blobSASSignatureValues.snapshotTime;
+      if (blobSASSignatureValues.blobName) {
+        resource = "b";
+        if (blobSASSignatureValues.snapshotTime) {
+          resource = "bs";
+        } else if (blobSASSignatureValues.versionId) {
+          resource = "bv";
+          timestamp = blobSASSignatureValues.versionId;
+        }
+      }
+      let verifiedPermissions;
+      if (blobSASSignatureValues.permissions) {
+        if (blobSASSignatureValues.blobName) {
+          verifiedPermissions = BlobSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString();
+        } else {
+          verifiedPermissions = ContainerSASPermissions.parse(blobSASSignatureValues.permissions.toString()).toString();
+        }
+      }
+      const stringToSign = [
+        verifiedPermissions ? verifiedPermissions : "",
+        blobSASSignatureValues.startsOn ? truncatedISO8061Date(blobSASSignatureValues.startsOn, false) : "",
+        blobSASSignatureValues.expiresOn ? truncatedISO8061Date(blobSASSignatureValues.expiresOn, false) : "",
+        getCanonicalName(userDelegationKeyCredential.accountName, blobSASSignatureValues.containerName, blobSASSignatureValues.blobName),
+        userDelegationKeyCredential.userDelegationKey.signedObjectId,
+        userDelegationKeyCredential.userDelegationKey.signedTenantId,
+        userDelegationKeyCredential.userDelegationKey.signedStartsOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedStartsOn, false) : "",
+        userDelegationKeyCredential.userDelegationKey.signedExpiresOn ? truncatedISO8061Date(userDelegationKeyCredential.userDelegationKey.signedExpiresOn, false) : "",
+        userDelegationKeyCredential.userDelegationKey.signedService,
+        userDelegationKeyCredential.userDelegationKey.signedVersion,
+        blobSASSignatureValues.preauthorizedAgentObjectId,
+        void 0,
+        blobSASSignatureValues.correlationId,
+        blobSASSignatureValues.ipRange ? ipRangeToString(blobSASSignatureValues.ipRange) : "",
+        blobSASSignatureValues.protocol ? blobSASSignatureValues.protocol : "",
+        blobSASSignatureValues.version,
+        resource,
+        timestamp,
+        blobSASSignatureValues.encryptionScope,
+        blobSASSignatureValues.cacheControl,
+        blobSASSignatureValues.contentDisposition,
+        blobSASSignatureValues.contentEncoding,
+        blobSASSignatureValues.contentLanguage,
+        blobSASSignatureValues.contentType
+      ].join("\n");
+      const signature = userDelegationKeyCredential.computeHMACSHA256(stringToSign);
+      return new SASQueryParameters(blobSASSignatureValues.version, signature, verifiedPermissions, void 0, void 0, blobSASSignatureValues.protocol, blobSASSignatureValues.startsOn, blobSASSignatureValues.expiresOn, blobSASSignatureValues.ipRange, blobSASSignatureValues.identifier, resource, blobSASSignatureValues.cacheControl, blobSASSignatureValues.contentDisposition, blobSASSignatureValues.contentEncoding, blobSASSignatureValues.contentLanguage, blobSASSignatureValues.contentType, userDelegationKeyCredential.userDelegationKey, blobSASSignatureValues.preauthorizedAgentObjectId, blobSASSignatureValues.correlationId, blobSASSignatureValues.encryptionScope);
+    }
+    __name(generateBlobSASQueryParametersUDK20201206, "generateBlobSASQueryParametersUDK20201206");
     function getCanonicalName(accountName, containerName, blobName) {
       const elements = [`/blob/${accountName}/${containerName}`];
       if (blobName) {
@@ -56681,14 +47719,23 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10") {
         throw RangeError("'version' must be >= '2019-10-10' when providing 'x' permission.");
       }
+      if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.permanentDelete && version2 < "2019-10-10") {
+        throw RangeError("'version' must be >= '2019-10-10' when providing 'y' permission.");
+      }
       if (blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.tag && version2 < "2019-12-12") {
         throw RangeError("'version' must be >= '2019-12-12' when providing 't' permission.");
       }
       if (version2 < "2020-02-10" && blobSASSignatureValues.permissions && (blobSASSignatureValues.permissions.move || blobSASSignatureValues.permissions.execute)) {
         throw RangeError("'version' must be >= '2020-02-10' when providing the 'm' or 'e' permission.");
       }
+      if (version2 < "2021-04-10" && blobSASSignatureValues.permissions && blobSASSignatureValues.permissions.filterByTags) {
+        throw RangeError("'version' must be >= '2021-04-10' when providing the 'f' permission.");
+      }
       if (version2 < "2020-02-10" && (blobSASSignatureValues.preauthorizedAgentObjectId || blobSASSignatureValues.correlationId)) {
         throw RangeError("'version' must be >= '2020-02-10' when providing 'preauthorizedAgentObjectId' or 'correlationId'.");
+      }
+      if (blobSASSignatureValues.encryptionScope && version2 < "2020-12-06") {
+        throw RangeError("'version' must be >= '2020-12-06' when provided 'encryptionScope' in SAS.");
       }
       blobSASSignatureValues.version = version2;
       return blobSASSignatureValues;
@@ -56978,6 +48025,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       get lastAccessed() {
         return this.originalResponse.lastAccessed;
       }
+      get createdOn() {
+        return this.originalResponse.createdOn;
+      }
       get metadata() {
         return this.originalResponse.metadata;
       }
@@ -57035,24 +48085,10 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
     var AVRO_INIT_BYTES = new Uint8Array([79, 98, 106, 1]);
     var AVRO_CODEC_KEY = "avro.codec";
     var AVRO_SCHEMA_KEY = "avro.schema";
-    function arraysEqual(a, b) {
-      if (a === b)
-        return true;
-      if (a == null || b == null)
-        return false;
-      if (a.length != b.length)
-        return false;
-      for (let i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i])
-          return false;
-      }
-      return true;
-    }
-    __name(arraysEqual, "arraysEqual");
     var AvroParser = class {
       static async readFixedBytes(stream2, length, options = {}) {
         const bytes = await stream2.read(length, { abortSignal: options.abortSignal });
-        if (bytes.length != length) {
+        if (bytes.length !== length) {
           throw new Error("Hit stream end.");
         }
         return bytes;
@@ -57098,9 +48134,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
       static async readBoolean(stream2, options = {}) {
         const b = await AvroParser.readByte(stream2, options);
-        if (b == 1) {
+        if (b === 1) {
           return true;
-        } else if (b == 0) {
+        } else if (b === 0) {
           return false;
         } else {
           throw new Error("Byte was not a boolean.");
@@ -57121,13 +48157,10 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (size < 0) {
           throw new Error("Bytes size was negative.");
         }
-        return await stream2.read(size, { abortSignal: options.abortSignal });
+        return stream2.read(size, { abortSignal: options.abortSignal });
       }
       static async readString(stream2, options = {}) {
         const u8arr = await AvroParser.readBytes(stream2, options);
-        if (typeof TextDecoder === "undefined" && typeof require !== "undefined") {
-          global.TextDecoder = require("util").TextDecoder;
-        }
         const utf8decoder = new TextDecoder();
         return utf8decoder.decode(u8arr);
       }
@@ -57137,8 +48170,8 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         return { key, value };
       }
       static async readMap(stream2, readItemMethod, options = {}) {
-        const readPairMethod = /* @__PURE__ */ __name(async (stream3, options2 = {}) => {
-          return await AvroParser.readMapPair(stream3, readItemMethod, options2);
+        const readPairMethod = /* @__PURE__ */ __name((s, opts = {}) => {
+          return AvroParser.readMapPair(s, readItemMethod, opts);
         }, "readPairMethod");
         const pairs = await AvroParser.readArray(stream2, readPairMethod, options);
         const dict = {};
@@ -57149,7 +48182,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
       static async readArray(stream2, readItemMethod, options = {}) {
         const items = [];
-        for (let count = await AvroParser.readLong(stream2, options); count != 0; count = await AvroParser.readLong(stream2, options)) {
+        for (let count = await AvroParser.readLong(stream2, options); count !== 0; count = await AvroParser.readLong(stream2, options)) {
           if (count < 0) {
             await AvroParser.readLong(stream2, options);
             count = -count;
@@ -57172,6 +48205,17 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       AvroComplex2["UNION"] = "union";
       AvroComplex2["FIXED"] = "fixed";
     })(AvroComplex || (AvroComplex = {}));
+    var AvroPrimitive;
+    (function(AvroPrimitive2) {
+      AvroPrimitive2["NULL"] = "null";
+      AvroPrimitive2["BOOLEAN"] = "boolean";
+      AvroPrimitive2["INT"] = "int";
+      AvroPrimitive2["LONG"] = "long";
+      AvroPrimitive2["FLOAT"] = "float";
+      AvroPrimitive2["DOUBLE"] = "double";
+      AvroPrimitive2["BYTES"] = "bytes";
+      AvroPrimitive2["STRING"] = "string";
+    })(AvroPrimitive || (AvroPrimitive = {}));
     var AvroType = class {
       static fromSchema(schema) {
         if (typeof schema === "string") {
@@ -57243,40 +48287,29 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
     };
     __name(AvroType, "AvroType");
-    var AvroPrimitive;
-    (function(AvroPrimitive2) {
-      AvroPrimitive2["NULL"] = "null";
-      AvroPrimitive2["BOOLEAN"] = "boolean";
-      AvroPrimitive2["INT"] = "int";
-      AvroPrimitive2["LONG"] = "long";
-      AvroPrimitive2["FLOAT"] = "float";
-      AvroPrimitive2["DOUBLE"] = "double";
-      AvroPrimitive2["BYTES"] = "bytes";
-      AvroPrimitive2["STRING"] = "string";
-    })(AvroPrimitive || (AvroPrimitive = {}));
     var AvroPrimitiveType = class extends AvroType {
       constructor(primitive) {
         super();
         this._primitive = primitive;
       }
-      async read(stream2, options = {}) {
+      read(stream2, options = {}) {
         switch (this._primitive) {
           case AvroPrimitive.NULL:
-            return await AvroParser.readNull();
+            return AvroParser.readNull();
           case AvroPrimitive.BOOLEAN:
-            return await AvroParser.readBoolean(stream2, options);
+            return AvroParser.readBoolean(stream2, options);
           case AvroPrimitive.INT:
-            return await AvroParser.readInt(stream2, options);
+            return AvroParser.readInt(stream2, options);
           case AvroPrimitive.LONG:
-            return await AvroParser.readLong(stream2, options);
+            return AvroParser.readLong(stream2, options);
           case AvroPrimitive.FLOAT:
-            return await AvroParser.readFloat(stream2, options);
+            return AvroParser.readFloat(stream2, options);
           case AvroPrimitive.DOUBLE:
-            return await AvroParser.readDouble(stream2, options);
+            return AvroParser.readDouble(stream2, options);
           case AvroPrimitive.BYTES:
-            return await AvroParser.readBytes(stream2, options);
+            return AvroParser.readBytes(stream2, options);
           case AvroPrimitive.STRING:
-            return await AvroParser.readString(stream2, options);
+            return AvroParser.readString(stream2, options);
           default:
             throw new Error("Unknown Avro Primitive");
         }
@@ -57301,7 +48334,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
       async read(stream2, options = {}) {
         const typeIndex = await AvroParser.readInt(stream2, options);
-        return await this._types[typeIndex].read(stream2, options);
+        return this._types[typeIndex].read(stream2, options);
       }
     };
     __name(AvroUnionType, "AvroUnionType");
@@ -57310,11 +48343,11 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         super();
         this._itemType = itemType;
       }
-      async read(stream2, options = {}) {
-        const readItemMethod = /* @__PURE__ */ __name(async (s, options2) => {
-          return await this._itemType.read(s, options2);
+      read(stream2, options = {}) {
+        const readItemMethod = /* @__PURE__ */ __name((s, opts) => {
+          return this._itemType.read(s, opts);
         }, "readItemMethod");
-        return await AvroParser.readMap(stream2, readItemMethod, options);
+        return AvroParser.readMap(stream2, readItemMethod, options);
       }
     };
     __name(AvroMapType, "AvroMapType");
@@ -57328,7 +48361,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const record = {};
         record["$schema"] = this._name;
         for (const key in this._fields) {
-          if (this._fields.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(this._fields, key)) {
             record[key] = await this._fields[key].read(stream2, options);
           }
         }
@@ -57336,6 +48369,20 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
     };
     __name(AvroRecordType, "AvroRecordType");
+    function arraysEqual(a, b) {
+      if (a === b)
+        return true;
+      if (a == null || b == null)
+        return false;
+      if (a.length !== b.length)
+        return false;
+      for (let i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i])
+          return false;
+      }
+      return true;
+    }
+    __name(arraysEqual, "arraysEqual");
     var AvroReader = class {
       constructor(dataStream, headerStream, currentBlockOffset, indexWithinCurrentBlock) {
         this._dataStream = dataStream;
@@ -57362,7 +48409,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           abortSignal: options.abortSignal
         });
         const codec = this._metadata[AVRO_CODEC_KEY];
-        if (!(codec == void 0 || codec == "null")) {
+        if (!(codec === void 0 || codec === null || codec === "null")) {
           throw new Error("Codecs are not supported");
         }
         this._syncMarker = await AvroParser.readFixedBytes(this._headerStream, AVRO_SYNC_MARKER_SIZE, {
@@ -57370,7 +48417,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         });
         const schema = JSON.parse(this._metadata[AVRO_SCHEMA_KEY]);
         this._itemType = AvroType.fromSchema(schema);
-        if (this._blockOffset == 0) {
+        if (this._blockOffset === 0) {
           this._blockOffset = this._initialBlockOffset + this._dataStream.position;
         }
         this._itemsRemainingInBlock = await AvroParser.readLong(this._dataStream, {
@@ -57399,7 +48446,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
             }));
             this._itemsRemainingInBlock--;
             this._objectIndex++;
-            if (this._itemsRemainingInBlock == 0) {
+            if (this._itemsRemainingInBlock === 0) {
               const marker2 = yield tslib.__await(AvroParser.readFixedBytes(this._dataStream, AVRO_SYNC_MARKER_SIZE, {
                 abortSignal: options.abortSignal
               }));
@@ -57474,11 +48521,11 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
               }
             }, "cleanUp");
             const readableCallback = /* @__PURE__ */ __name(() => {
-              const chunk2 = this._readable.read(size);
-              if (chunk2) {
-                this._position += chunk2.length;
+              const callbackChunk = this._readable.read(size);
+              if (callbackChunk) {
+                this._position += callbackChunk.length;
                 cleanUp();
-                resolve(this.toUint8Array(chunk2));
+                resolve(this.toUint8Array(callbackChunk));
               }
             }, "readableCallback");
             const rejectCallback = /* @__PURE__ */ __name(() => {
@@ -57712,11 +48759,14 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
     };
     __name(BlobQueryResponse, "BlobQueryResponse");
+    exports2.BlockBlobTier = void 0;
     (function(BlockBlobTier) {
       BlockBlobTier["Hot"] = "Hot";
       BlockBlobTier["Cool"] = "Cool";
+      BlockBlobTier["Cold"] = "Cold";
       BlockBlobTier["Archive"] = "Archive";
     })(exports2.BlockBlobTier || (exports2.BlockBlobTier = {}));
+    exports2.PremiumPageBlobTier = void 0;
     (function(PremiumPageBlobTier) {
       PremiumPageBlobTier["P4"] = "P4";
       PremiumPageBlobTier["P6"] = "P6";
@@ -57746,6 +48796,11 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
     }
     __name(ensureCpkIfSpecified, "ensureCpkIfSpecified");
+    exports2.StorageBlobAudience = void 0;
+    (function(StorageBlobAudience) {
+      StorageBlobAudience["StorageOAuthScopes"] = "https://storage.azure.com/.default";
+      StorageBlobAudience["DiskComputeOAuthScopes"] = "https://disk.compute.azure.com/.default";
+    })(exports2.StorageBlobAudience || (exports2.StorageBlobAudience = {}));
     function rangeResponseFromModel(response) {
       const pageRange = (response._response.parsedBody.pageRange || []).map((x) => ({
         offset: x.start,
@@ -58179,8 +49234,10 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       let pos = 0;
       const count = end - offset;
       return new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error(`The operation cannot be completed in timeout.`)), REQUEST_TIMEOUT);
         stream2.on("readable", () => {
           if (pos >= count) {
+            clearTimeout(timeout);
             resolve();
             return;
           }
@@ -58196,12 +49253,16 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           pos += chunkLength;
         });
         stream2.on("end", () => {
+          clearTimeout(timeout);
           if (pos < count) {
             reject(new Error(`Stream drains before getting enough data needed. Data read: ${pos}, data need: ${count}`));
           }
           resolve();
         });
-        stream2.on("error", reject);
+        stream2.on("error", (msg) => {
+          clearTimeout(timeout);
+          reject(msg);
+        });
       });
     }
     __name(streamToBuffer, "streamToBuffer");
@@ -58233,7 +49294,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
     __name(streamToBuffer2, "streamToBuffer2");
     async function readStreamToLocalFile(rs, file) {
       return new Promise((resolve, reject) => {
-        const ws = fs3.createWriteStream(file);
+        const ws = fs__namespace.createWriteStream(file);
         rs.on("error", (err) => {
           reject(err);
         });
@@ -58245,8 +49306,8 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       });
     }
     __name(readStreamToLocalFile, "readStreamToLocalFile");
-    var fsStat = util.promisify(fs3.stat);
-    var fsCreateReadStream = fs3.createReadStream;
+    var fsStat = util__namespace.promisify(fs__namespace.stat);
+    var fsCreateReadStream = fs__namespace.createReadStream;
     var BlobClient = class extends StorageClient {
       constructor(urlOrConnectionString, credentialOrPipelineOrContainerName, blobNameOrOptions, options) {
         options = options || {};
@@ -58261,17 +49322,24 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           pipeline = newPipeline(credentialOrPipelineOrContainerName, options);
         } else if (!credentialOrPipelineOrContainerName && typeof credentialOrPipelineOrContainerName !== "string") {
           url2 = urlOrConnectionString;
+          if (blobNameOrOptions && typeof blobNameOrOptions !== "string") {
+            options = blobNameOrOptions;
+          }
           pipeline = newPipeline(new AnonymousCredential(), options);
         } else if (credentialOrPipelineOrContainerName && typeof credentialOrPipelineOrContainerName === "string" && blobNameOrOptions && typeof blobNameOrOptions === "string") {
           const containerName = credentialOrPipelineOrContainerName;
           const blobName = blobNameOrOptions;
           const extractedCreds = extractConnectionStringParts(urlOrConnectionString);
           if (extractedCreds.kind === "AccountConnString") {
-            {
+            if (coreHttp.isNode) {
               const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
               url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName));
-              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              if (!options.proxyOptions) {
+                options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              }
               pipeline = newPipeline(sharedKeyCredential, options);
+            } else {
+              throw new Error("Account connection string is only supported in Node.js environment");
             }
           } else if (extractedCreds.kind === "SASConnString") {
             url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName)) + "?" + extractedCreds.accountSas;
@@ -58283,10 +49351,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           throw new Error("Expecting non-empty strings for containerName and blobName parameters");
         }
         super(url2, pipeline);
-        ({
-          blobName: this._name,
-          containerName: this._containerName
-        } = this.getBlobAndContainerNamesFromUrl());
+        ({ blobName: this._name, containerName: this._containerName } = this.getBlobAndContainerNamesFromUrl());
         this.blobContext = new Blob$1(this.storageClientContext);
         this._snapshot = getURLParameter(this.url, URLConstants.Parameters.SNAPSHOT);
         this._versionId = getURLParameter(this.url, URLConstants.Parameters.VERSIONID);
@@ -58323,7 +49388,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
             onDownloadProgress: coreHttp.isNode ? void 0 : options.onProgress
           }, range: offset === 0 && !count ? void 0 : rangeToString({ offset, count }), rangeGetContentMD5: options.rangeGetContentMD5, rangeGetContentCRC64: options.rangeGetContentCrc64, snapshot: options.snapshot, cpkInfo: options.customerProvidedKey }, convertTracingToRequestOptionsBase(updatedOptions)));
           const wrappedRes = Object.assign(Object.assign({}, res), { _response: res._response, objectReplicationDestinationPolicyId: res.objectReplicationPolicyId, objectReplicationSourceProperties: parseObjectReplicationRecord(res.objectReplicationRules) });
-          if (false) {
+          if (!coreHttp.isNode) {
             return wrappedRes;
           }
           if (options.maxRetryRequests === void 0 || options.maxRetryRequests < 0) {
@@ -58383,11 +49448,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           return true;
         } catch (e) {
           if (e.statusCode === 404) {
-            span.setStatus({
-              code: coreTracing.SpanStatusCode.ERROR,
-              message: "Expected exception when checking blob existence"
-            });
             return false;
+          } else if (e.statusCode === 409 && (e.details.errorCode === BlobUsesCustomerSpecifiedEncryptionMsg || e.details.errorCode === BlobDoesNotUseCustomerSpecifiedEncryption)) {
+            return true;
           }
           span.setStatus({
             code: coreTracing.SpanStatusCode.ERROR,
@@ -58437,9 +49500,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const { span, updatedOptions } = createSpan("BlobClient-deleteIfExists", options);
         try {
           const res = await this.delete(updatedOptions);
-          return Object.assign(Object.assign({ succeeded: true }, res), {
-            _response: res._response
-          });
+          return Object.assign(Object.assign({ succeeded: true }, res), { _response: res._response });
         } catch (e) {
           if (((_a = e.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobNotFound") {
             span.setStatus({
@@ -58599,7 +49660,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
             sourceIfModifiedSince: options.sourceConditions.ifModifiedSince,
             sourceIfNoneMatch: options.sourceConditions.ifNoneMatch,
             sourceIfUnmodifiedSince: options.sourceConditions.ifUnmodifiedSince
-          }, sourceContentMD5: options.sourceContentMD5, copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization), blobTagsString: toBlobTagsString(options.tags), immutabilityPolicyExpiry: (_b = options.immutabilityPolicy) === null || _b === void 0 ? void 0 : _b.expiriesOn, immutabilityPolicyMode: (_c = options.immutabilityPolicy) === null || _c === void 0 ? void 0 : _c.policyMode, legalHold: options.legalHold }, convertTracingToRequestOptionsBase(updatedOptions)));
+          }, sourceContentMD5: options.sourceContentMD5, copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization), tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags), immutabilityPolicyExpiry: (_b = options.immutabilityPolicy) === null || _b === void 0 ? void 0 : _b.expiriesOn, immutabilityPolicyMode: (_c = options.immutabilityPolicy) === null || _c === void 0 ? void 0 : _c.policyMode, legalHold: options.legalHold, encryptionScope: options.encryptionScope, copySourceTags: options.copySourceTags }, convertTracingToRequestOptionsBase(updatedOptions)));
         } catch (e) {
           span.setStatus({
             code: coreTracing.SpanStatusCode.ERROR,
@@ -58855,11 +49916,15 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           const blobName = blobNameOrOptions;
           const extractedCreds = extractConnectionStringParts(urlOrConnectionString);
           if (extractedCreds.kind === "AccountConnString") {
-            {
+            if (coreHttp.isNode) {
               const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
               url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName));
-              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              if (!options.proxyOptions) {
+                options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              }
               pipeline = newPipeline(sharedKeyCredential, options);
+            } else {
+              throw new Error("Account connection string is only supported in Node.js environment");
             }
           } else if (extractedCreds.kind === "SASConnString") {
             url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName)) + "?" + extractedCreds.accountSas;
@@ -58899,9 +49964,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const conditions = { ifNoneMatch: ETagAny };
         try {
           const res = await this.create(Object.assign(Object.assign({}, updatedOptions), { conditions }));
-          return Object.assign(Object.assign({ succeeded: true }, res), {
-            _response: res._response
-          });
+          return Object.assign(Object.assign({ succeeded: true }, res), { _response: res._response });
         } catch (e) {
           if (((_a = e.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists") {
             span.setStatus({
@@ -58993,17 +50056,24 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           pipeline = newPipeline(credentialOrPipelineOrContainerName, options);
         } else if (!credentialOrPipelineOrContainerName && typeof credentialOrPipelineOrContainerName !== "string") {
           url2 = urlOrConnectionString;
+          if (blobNameOrOptions && typeof blobNameOrOptions !== "string") {
+            options = blobNameOrOptions;
+          }
           pipeline = newPipeline(new AnonymousCredential(), options);
         } else if (credentialOrPipelineOrContainerName && typeof credentialOrPipelineOrContainerName === "string" && blobNameOrOptions && typeof blobNameOrOptions === "string") {
           const containerName = credentialOrPipelineOrContainerName;
           const blobName = blobNameOrOptions;
           const extractedCreds = extractConnectionStringParts(urlOrConnectionString);
           if (extractedCreds.kind === "AccountConnString") {
-            {
+            if (coreHttp.isNode) {
               const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
               url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName));
-              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              if (!options.proxyOptions) {
+                options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              }
               pipeline = newPipeline(sharedKeyCredential, options);
+            } else {
+              throw new Error("Account connection string is only supported in Node.js environment");
             }
           } else if (extractedCreds.kind === "SASConnString") {
             url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName)) + "?" + extractedCreds.accountSas;
@@ -59026,15 +50096,16 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
         const { span, updatedOptions } = createSpan("BlockBlobClient-query", options);
         try {
-          if (false) {
+          if (!coreHttp.isNode) {
             throw new Error("This operation currently is only supported in Node.js.");
           }
+          ensureCpkIfSpecified(options.customerProvidedKey, this.isHttps);
           const response = await this._blobContext.query(Object.assign({ abortSignal: options.abortSignal, queryRequest: {
             queryType: "SQL",
             expression: query,
             inputSerialization: toQuerySerialization(options.inputTextConfiguration),
             outputSerialization: toQuerySerialization(options.outputTextConfiguration)
-          }, leaseAccessConditions: options.conditions, modifiedAccessConditions: Object.assign(Object.assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }) }, convertTracingToRequestOptionsBase(updatedOptions)));
+          }, leaseAccessConditions: options.conditions, modifiedAccessConditions: Object.assign(Object.assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), cpkInfo: options.customerProvidedKey }, convertTracingToRequestOptionsBase(updatedOptions)));
           return new BlobQueryResponse(response, {
             abortSignal: options.abortSignal,
             onProgress: options.onProgress,
@@ -59081,7 +50152,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
             sourceIfNoneMatch: (_c = options.sourceConditions) === null || _c === void 0 ? void 0 : _c.ifNoneMatch,
             sourceIfUnmodifiedSince: (_d = options.sourceConditions) === null || _d === void 0 ? void 0 : _d.ifUnmodifiedSince,
             sourceIfTags: (_e = options.sourceConditions) === null || _e === void 0 ? void 0 : _e.tagConditions
-          }, cpkInfo: options.customerProvidedKey, copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization), tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags) }), convertTracingToRequestOptionsBase(updatedOptions)));
+          }, cpkInfo: options.customerProvidedKey, copySourceAuthorization: httpAuthorizationToString(options.sourceAuthorization), tier: toAccessTier(options.tier), blobTagsString: toBlobTagsString(options.tags), copySourceTags: options.copySourceTags }), convertTracingToRequestOptionsBase(updatedOptions)));
         } catch (e) {
           span.setStatus({
             code: coreTracing.SpanStatusCode.ERROR,
@@ -59166,7 +50237,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       async uploadData(data, options = {}) {
         const { span, updatedOptions } = createSpan("BlockBlobClient-uploadData", options);
         try {
-          if (true) {
+          if (coreHttp.isNode) {
             let buffer;
             if (data instanceof Buffer) {
               buffer = data;
@@ -59364,11 +50435,15 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           const blobName = blobNameOrOptions;
           const extractedCreds = extractConnectionStringParts(urlOrConnectionString);
           if (extractedCreds.kind === "AccountConnString") {
-            {
+            if (coreHttp.isNode) {
               const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
               url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName));
-              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              if (!options.proxyOptions) {
+                options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              }
               pipeline = newPipeline(sharedKeyCredential, options);
+            } else {
+              throw new Error("Account connection string is only supported in Node.js environment");
             }
           } else if (extractedCreds.kind === "SASConnString") {
             url2 = appendToURLPath(appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)), encodeURIComponent(blobName)) + "?" + extractedCreds.accountSas;
@@ -59408,9 +50483,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         try {
           const conditions = { ifNoneMatch: ETagAny };
           const res = await this.create(size, Object.assign(Object.assign({}, options), { conditions, tracingOptions: updatedOptions.tracingOptions }));
-          return Object.assign(Object.assign({ succeeded: true }, res), {
-            _response: res._response
-          });
+          return Object.assign(Object.assign({ succeeded: true }, res), { _response: res._response });
         } catch (e) {
           if (((_a = e.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "BlobAlreadyExists") {
             span.setStatus({
@@ -59502,6 +50575,70 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           span.end();
         }
       }
+      async listPageRangesSegment(offset = 0, count, marker2, options = {}) {
+        var _a;
+        const { span, updatedOptions } = createSpan("PageBlobClient-getPageRangesSegment", options);
+        try {
+          return await this.pageBlobContext.getPageRanges(Object.assign({ abortSignal: options.abortSignal, leaseAccessConditions: options.conditions, modifiedAccessConditions: Object.assign(Object.assign({}, options.conditions), { ifTags: (_a = options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), range: rangeToString({ offset, count }), marker: marker2, maxPageSize: options.maxPageSize }, convertTracingToRequestOptionsBase(updatedOptions)));
+        } catch (e) {
+          span.setStatus({
+            code: coreTracing.SpanStatusCode.ERROR,
+            message: e.message
+          });
+          throw e;
+        } finally {
+          span.end();
+        }
+      }
+      listPageRangeItemSegments(offset = 0, count, marker2, options = {}) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* listPageRangeItemSegments_1() {
+          let getPageRangeItemSegmentsResponse;
+          if (!!marker2 || marker2 === void 0) {
+            do {
+              getPageRangeItemSegmentsResponse = yield tslib.__await(this.listPageRangesSegment(offset, count, marker2, options));
+              marker2 = getPageRangeItemSegmentsResponse.continuationToken;
+              yield yield tslib.__await(yield tslib.__await(getPageRangeItemSegmentsResponse));
+            } while (marker2);
+          }
+        }, "listPageRangeItemSegments_1"));
+      }
+      listPageRangeItems(offset = 0, count, options = {}) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* listPageRangeItems_1() {
+          var e_1, _a;
+          let marker2;
+          try {
+            for (var _b = tslib.__asyncValues(this.listPageRangeItemSegments(offset, count, marker2, options)), _c; _c = yield tslib.__await(_b.next()), !_c.done; ) {
+              const getPageRangesSegment = _c.value;
+              yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(ExtractPageRangeInfoItems(getPageRangesSegment))));
+            }
+          } catch (e_1_1) {
+            e_1 = { error: e_1_1 };
+          } finally {
+            try {
+              if (_c && !_c.done && (_a = _b.return))
+                yield tslib.__await(_a.call(_b));
+            } finally {
+              if (e_1)
+                throw e_1.error;
+            }
+          }
+        }, "listPageRangeItems_1"));
+      }
+      listPageRanges(offset = 0, count, options = {}) {
+        options.conditions = options.conditions || {};
+        const iter = this.listPageRangeItems(offset, count, options);
+        return {
+          next() {
+            return iter.next();
+          },
+          [Symbol.asyncIterator]() {
+            return this;
+          },
+          byPage: (settings = {}) => {
+            return this.listPageRangeItemSegments(offset, count, settings.continuationToken, Object.assign({ maxPageSize: settings.maxPageSize }, options));
+          }
+        };
+      }
       async getPageRangesDiff(offset, count, prevSnapshot, options = {}) {
         var _a;
         options.conditions = options.conditions || {};
@@ -59517,6 +50654,73 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         } finally {
           span.end();
         }
+      }
+      async listPageRangesDiffSegment(offset, count, prevSnapshotOrUrl, marker2, options) {
+        var _a;
+        const { span, updatedOptions } = createSpan("PageBlobClient-getPageRangesDiffSegment", options);
+        try {
+          return await this.pageBlobContext.getPageRangesDiff(Object.assign({ abortSignal: options === null || options === void 0 ? void 0 : options.abortSignal, leaseAccessConditions: options === null || options === void 0 ? void 0 : options.conditions, modifiedAccessConditions: Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.conditions), { ifTags: (_a = options === null || options === void 0 ? void 0 : options.conditions) === null || _a === void 0 ? void 0 : _a.tagConditions }), prevsnapshot: prevSnapshotOrUrl, range: rangeToString({
+            offset,
+            count
+          }), marker: marker2, maxPageSize: options === null || options === void 0 ? void 0 : options.maxPageSize }, convertTracingToRequestOptionsBase(updatedOptions)));
+        } catch (e) {
+          span.setStatus({
+            code: coreTracing.SpanStatusCode.ERROR,
+            message: e.message
+          });
+          throw e;
+        } finally {
+          span.end();
+        }
+      }
+      listPageRangeDiffItemSegments(offset, count, prevSnapshotOrUrl, marker2, options) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* listPageRangeDiffItemSegments_1() {
+          let getPageRangeItemSegmentsResponse;
+          if (!!marker2 || marker2 === void 0) {
+            do {
+              getPageRangeItemSegmentsResponse = yield tslib.__await(this.listPageRangesDiffSegment(offset, count, prevSnapshotOrUrl, marker2, options));
+              marker2 = getPageRangeItemSegmentsResponse.continuationToken;
+              yield yield tslib.__await(yield tslib.__await(getPageRangeItemSegmentsResponse));
+            } while (marker2);
+          }
+        }, "listPageRangeDiffItemSegments_1"));
+      }
+      listPageRangeDiffItems(offset, count, prevSnapshotOrUrl, options) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* listPageRangeDiffItems_1() {
+          var e_2, _a;
+          let marker2;
+          try {
+            for (var _b = tslib.__asyncValues(this.listPageRangeDiffItemSegments(offset, count, prevSnapshotOrUrl, marker2, options)), _c; _c = yield tslib.__await(_b.next()), !_c.done; ) {
+              const getPageRangesSegment = _c.value;
+              yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(ExtractPageRangeInfoItems(getPageRangesSegment))));
+            }
+          } catch (e_2_1) {
+            e_2 = { error: e_2_1 };
+          } finally {
+            try {
+              if (_c && !_c.done && (_a = _b.return))
+                yield tslib.__await(_a.call(_b));
+            } finally {
+              if (e_2)
+                throw e_2.error;
+            }
+          }
+        }, "listPageRangeDiffItems_1"));
+      }
+      listPageRangesDiff(offset, count, prevSnapshot, options = {}) {
+        options.conditions = options.conditions || {};
+        const iter = this.listPageRangeDiffItems(offset, count, prevSnapshot, Object.assign({}, options));
+        return {
+          next() {
+            return iter.next();
+          },
+          [Symbol.asyncIterator]() {
+            return this;
+          },
+          byPage: (settings = {}) => {
+            return this.listPageRangeDiffItemSegments(offset, count, prevSnapshot, settings.continuationToken, Object.assign({ maxPageSize: settings.maxPageSize }, options));
+          }
+        };
       }
       async getPageRangesDiffForManagedDisks(offset, count, prevSnapshotUrl2, options = {}) {
         var _a;
@@ -60046,11 +51250,15 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           const containerName = credentialOrPipelineOrContainerName;
           const extractedCreds = extractConnectionStringParts(urlOrConnectionString);
           if (extractedCreds.kind === "AccountConnString") {
-            {
+            if (coreHttp.isNode) {
               const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
               url2 = appendToURLPath(extractedCreds.url, encodeURIComponent(containerName));
-              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              if (!options.proxyOptions) {
+                options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+              }
               pipeline = newPipeline(sharedKeyCredential, options);
+            } else {
+              throw new Error("Account connection string is only supported in Node.js environment");
             }
           } else if (extractedCreds.kind === "SASConnString") {
             url2 = appendToURLPath(extractedCreds.url, encodeURIComponent(containerName)) + "?" + extractedCreds.accountSas;
@@ -60087,9 +51295,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const { span, updatedOptions } = createSpan("ContainerClient-createIfNotExists", options);
         try {
           const res = await this.create(updatedOptions);
-          return Object.assign(Object.assign({ succeeded: true }, res), {
-            _response: res._response
-          });
+          return Object.assign(Object.assign({ succeeded: true }, res), { _response: res._response });
         } catch (e) {
           if (((_a = e.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerAlreadyExists") {
             span.setStatus({
@@ -60133,16 +51339,16 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         }
       }
       getBlobClient(blobName) {
-        return new BlobClient(appendToURLPath(this.url, encodeURIComponent(blobName)), this.pipeline);
+        return new BlobClient(appendToURLPath(this.url, EscapePath(blobName)), this.pipeline);
       }
       getAppendBlobClient(blobName) {
-        return new AppendBlobClient(appendToURLPath(this.url, encodeURIComponent(blobName)), this.pipeline);
+        return new AppendBlobClient(appendToURLPath(this.url, EscapePath(blobName)), this.pipeline);
       }
       getBlockBlobClient(blobName) {
-        return new BlockBlobClient(appendToURLPath(this.url, encodeURIComponent(blobName)), this.pipeline);
+        return new BlockBlobClient(appendToURLPath(this.url, EscapePath(blobName)), this.pipeline);
       }
       getPageBlobClient(blobName) {
-        return new PageBlobClient(appendToURLPath(this.url, encodeURIComponent(blobName)), this.pipeline);
+        return new PageBlobClient(appendToURLPath(this.url, EscapePath(blobName)), this.pipeline);
       }
       async getProperties(options = {}) {
         if (!options.conditions) {
@@ -60183,9 +51389,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const { span, updatedOptions } = createSpan("ContainerClient-deleteIfExists", options);
         try {
           const res = await this.delete(updatedOptions);
-          return Object.assign(Object.assign({ succeeded: true }, res), {
-            _response: res._response
-          });
+          return Object.assign(Object.assign({ succeeded: true }, res), { _response: res._response });
         } catch (e) {
           if (((_a = e.details) === null || _a === void 0 ? void 0 : _a.errorCode) === "ContainerNotFound") {
             span.setStatus({
@@ -60341,8 +51545,8 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         const { span, updatedOptions } = createSpan("ContainerClient-listBlobFlatSegment", options);
         try {
           const response = await this.containerContext.listBlobFlatSegment(Object.assign(Object.assign({ marker: marker2 }, options), convertTracingToRequestOptionsBase(updatedOptions)));
-          const wrappedResponse = Object.assign(Object.assign({}, response), { _response: response._response, segment: Object.assign(Object.assign({}, response.segment), { blobItems: response.segment.blobItems.map((blobItemInteral) => {
-            const blobItem = Object.assign(Object.assign({}, blobItemInteral), { tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata) });
+          const wrappedResponse = Object.assign(Object.assign({}, response), { _response: Object.assign(Object.assign({}, response._response), { parsedBody: ConvertInternalResponseOfListBlobFlat(response._response.parsedBody) }), segment: Object.assign(Object.assign({}, response.segment), { blobItems: response.segment.blobItems.map((blobItemInteral) => {
+            const blobItem = Object.assign(Object.assign({}, blobItemInteral), { name: BlobNameToString(blobItemInteral.name), tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata) });
             return blobItem;
           }) }) });
           return wrappedResponse;
@@ -60357,12 +51561,18 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         }
       }
       async listBlobHierarchySegment(delimiter2, marker2, options = {}) {
+        var _a;
         const { span, updatedOptions } = createSpan("ContainerClient-listBlobHierarchySegment", options);
         try {
           const response = await this.containerContext.listBlobHierarchySegment(delimiter2, Object.assign(Object.assign({ marker: marker2 }, options), convertTracingToRequestOptionsBase(updatedOptions)));
-          const wrappedResponse = Object.assign(Object.assign({}, response), { _response: response._response, segment: Object.assign(Object.assign({}, response.segment), { blobItems: response.segment.blobItems.map((blobItemInteral) => {
-            const blobItem = Object.assign(Object.assign({}, blobItemInteral), { tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata) });
+          const wrappedResponse = Object.assign(Object.assign({}, response), { _response: Object.assign(Object.assign({}, response._response), { parsedBody: ConvertInternalResponseOfListBlobHierarchy(response._response.parsedBody) }), segment: Object.assign(Object.assign({}, response.segment), { blobItems: response.segment.blobItems.map((blobItemInteral) => {
+            const blobItem = Object.assign(Object.assign({}, blobItemInteral), { name: BlobNameToString(blobItemInteral.name), tags: toTags(blobItemInteral.blobTags), objectReplicationSourceProperties: parseObjectReplicationRecord(blobItemInteral.objectReplicationMetadata) });
             return blobItem;
+          }), blobPrefixes: (_a = response.segment.blobPrefixes) === null || _a === void 0 ? void 0 : _a.map((blobPrefixInternal) => {
+            const blobPrefix = {
+              name: BlobNameToString(blobPrefixInternal.name)
+            };
+            return blobPrefix;
           }) }) });
           return wrappedResponse;
         } catch (e) {
@@ -60552,6 +51762,79 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
           }
         };
       }
+      async findBlobsByTagsSegment(tagFilterSqlExpression, marker2, options = {}) {
+        const { span, updatedOptions } = createSpan("ContainerClient-findBlobsByTagsSegment", options);
+        try {
+          const response = await this.containerContext.filterBlobs(Object.assign({ abortSignal: options.abortSignal, where: tagFilterSqlExpression, marker: marker2, maxPageSize: options.maxPageSize }, convertTracingToRequestOptionsBase(updatedOptions)));
+          const wrappedResponse = Object.assign(Object.assign({}, response), { _response: response._response, blobs: response.blobs.map((blob) => {
+            var _a;
+            let tagValue = "";
+            if (((_a = blob.tags) === null || _a === void 0 ? void 0 : _a.blobTagSet.length) === 1) {
+              tagValue = blob.tags.blobTagSet[0].value;
+            }
+            return Object.assign(Object.assign({}, blob), { tags: toTags(blob.tags), tagValue });
+          }) });
+          return wrappedResponse;
+        } catch (e) {
+          span.setStatus({
+            code: coreTracing.SpanStatusCode.ERROR,
+            message: e.message
+          });
+          throw e;
+        } finally {
+          span.end();
+        }
+      }
+      findBlobsByTagsSegments(tagFilterSqlExpression, marker2, options = {}) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* findBlobsByTagsSegments_1() {
+          let response;
+          if (!!marker2 || marker2 === void 0) {
+            do {
+              response = yield tslib.__await(this.findBlobsByTagsSegment(tagFilterSqlExpression, marker2, options));
+              response.blobs = response.blobs || [];
+              marker2 = response.continuationToken;
+              yield yield tslib.__await(response);
+            } while (marker2);
+          }
+        }, "findBlobsByTagsSegments_1"));
+      }
+      findBlobsByTagsItems(tagFilterSqlExpression, options = {}) {
+        return tslib.__asyncGenerator(this, arguments, /* @__PURE__ */ __name(function* findBlobsByTagsItems_1() {
+          var e_3, _a;
+          let marker2;
+          try {
+            for (var _b = tslib.__asyncValues(this.findBlobsByTagsSegments(tagFilterSqlExpression, marker2, options)), _c; _c = yield tslib.__await(_b.next()), !_c.done; ) {
+              const segment = _c.value;
+              yield tslib.__await(yield* tslib.__asyncDelegator(tslib.__asyncValues(segment.blobs)));
+            }
+          } catch (e_3_1) {
+            e_3 = { error: e_3_1 };
+          } finally {
+            try {
+              if (_c && !_c.done && (_a = _b.return))
+                yield tslib.__await(_a.call(_b));
+            } finally {
+              if (e_3)
+                throw e_3.error;
+            }
+          }
+        }, "findBlobsByTagsItems_1"));
+      }
+      findBlobsByTags(tagFilterSqlExpression, options = {}) {
+        const listSegmentOptions = Object.assign({}, options);
+        const iter = this.findBlobsByTagsItems(tagFilterSqlExpression, listSegmentOptions);
+        return {
+          next() {
+            return iter.next();
+          },
+          [Symbol.asyncIterator]() {
+            return this;
+          },
+          byPage: (settings = {}) => {
+            return this.findBlobsByTagsSegments(tagFilterSqlExpression, settings.continuationToken, Object.assign({ maxPageSize: settings.maxPageSize }, listSegmentOptions));
+          }
+        };
+      }
       getContainerNameFromUrl() {
         let containerName;
         try {
@@ -60600,6 +51883,7 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         this.tag = false;
         this.filter = false;
         this.setImmutabilityPolicy = false;
+        this.permanentDelete = false;
       }
       static parse(permissions) {
         const accountSASPermissions = new AccountSASPermissions();
@@ -60640,6 +51924,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
               break;
             case "i":
               accountSASPermissions.setImmutabilityPolicy = true;
+              break;
+            case "y":
+              accountSASPermissions.permanentDelete = true;
               break;
             default:
               throw new RangeError(`Invalid permission character: ${c}`);
@@ -60685,6 +51972,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (permissionLike.setImmutabilityPolicy) {
           accountSASPermissions.setImmutabilityPolicy = true;
         }
+        if (permissionLike.permanentDelete) {
+          accountSASPermissions.permanentDelete = true;
+        }
         return accountSASPermissions;
       }
       toString() {
@@ -60724,6 +52014,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         }
         if (this.setImmutabilityPolicy) {
           permissions.push("i");
+        }
+        if (this.permanentDelete) {
+          permissions.push("y");
         }
         return permissions.join("");
       }
@@ -60824,29 +52117,52 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.deleteVersion && version2 < "2019-10-10") {
         throw RangeError("'version' must be >= '2019-10-10' when provided 'x' permission.");
       }
+      if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.permanentDelete && version2 < "2019-10-10") {
+        throw RangeError("'version' must be >= '2019-10-10' when provided 'y' permission.");
+      }
       if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.tag && version2 < "2019-12-12") {
         throw RangeError("'version' must be >= '2019-12-12' when provided 't' permission.");
       }
       if (accountSASSignatureValues.permissions && accountSASSignatureValues.permissions.filter && version2 < "2019-12-12") {
         throw RangeError("'version' must be >= '2019-12-12' when provided 'f' permission.");
       }
+      if (accountSASSignatureValues.encryptionScope && version2 < "2020-12-06") {
+        throw RangeError("'version' must be >= '2020-12-06' when provided 'encryptionScope' in SAS.");
+      }
       const parsedPermissions = AccountSASPermissions.parse(accountSASSignatureValues.permissions.toString());
       const parsedServices = AccountSASServices.parse(accountSASSignatureValues.services).toString();
       const parsedResourceTypes = AccountSASResourceTypes.parse(accountSASSignatureValues.resourceTypes).toString();
-      const stringToSign = [
-        sharedKeyCredential.accountName,
-        parsedPermissions,
-        parsedServices,
-        parsedResourceTypes,
-        accountSASSignatureValues.startsOn ? truncatedISO8061Date(accountSASSignatureValues.startsOn, false) : "",
-        truncatedISO8061Date(accountSASSignatureValues.expiresOn, false),
-        accountSASSignatureValues.ipRange ? ipRangeToString(accountSASSignatureValues.ipRange) : "",
-        accountSASSignatureValues.protocol ? accountSASSignatureValues.protocol : "",
-        version2,
-        ""
-      ].join("\n");
+      let stringToSign;
+      if (version2 >= "2020-12-06") {
+        stringToSign = [
+          sharedKeyCredential.accountName,
+          parsedPermissions,
+          parsedServices,
+          parsedResourceTypes,
+          accountSASSignatureValues.startsOn ? truncatedISO8061Date(accountSASSignatureValues.startsOn, false) : "",
+          truncatedISO8061Date(accountSASSignatureValues.expiresOn, false),
+          accountSASSignatureValues.ipRange ? ipRangeToString(accountSASSignatureValues.ipRange) : "",
+          accountSASSignatureValues.protocol ? accountSASSignatureValues.protocol : "",
+          version2,
+          accountSASSignatureValues.encryptionScope ? accountSASSignatureValues.encryptionScope : "",
+          ""
+        ].join("\n");
+      } else {
+        stringToSign = [
+          sharedKeyCredential.accountName,
+          parsedPermissions,
+          parsedServices,
+          parsedResourceTypes,
+          accountSASSignatureValues.startsOn ? truncatedISO8061Date(accountSASSignatureValues.startsOn, false) : "",
+          truncatedISO8061Date(accountSASSignatureValues.expiresOn, false),
+          accountSASSignatureValues.ipRange ? ipRangeToString(accountSASSignatureValues.ipRange) : "",
+          accountSASSignatureValues.protocol ? accountSASSignatureValues.protocol : "",
+          version2,
+          ""
+        ].join("\n");
+      }
       const signature = sharedKeyCredential.computeHMACSHA256(stringToSign);
-      return new SASQueryParameters(version2, signature, parsedPermissions.toString(), parsedServices, parsedResourceTypes, accountSASSignatureValues.protocol, accountSASSignatureValues.startsOn, accountSASSignatureValues.expiresOn, accountSASSignatureValues.ipRange);
+      return new SASQueryParameters(version2, signature, parsedPermissions.toString(), parsedServices, parsedResourceTypes, accountSASSignatureValues.protocol, accountSASSignatureValues.startsOn, accountSASSignatureValues.expiresOn, accountSASSignatureValues.ipRange, void 0, void 0, void 0, void 0, void 0, void 0, void 0, void 0, void 0, void 0, accountSASSignatureValues.encryptionScope);
     }
     __name(generateAccountSASQueryParameters, "generateAccountSASQueryParameters");
     var BlobServiceClient = class extends StorageClient {
@@ -60866,11 +52182,15 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         options = options || {};
         const extractedCreds = extractConnectionStringParts(connectionString);
         if (extractedCreds.kind === "AccountConnString") {
-          {
+          if (coreHttp.isNode) {
             const sharedKeyCredential = new StorageSharedKeyCredential(extractedCreds.accountName, extractedCreds.accountKey);
-            options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+            if (!options.proxyOptions) {
+              options.proxyOptions = coreHttp.getDefaultProxySettings(extractedCreds.proxyUri);
+            }
             const pipeline = newPipeline(sharedKeyCredential, options);
             return new BlobServiceClient(extractedCreds.url, pipeline);
+          } else {
+            throw new Error("Account connection string is only supported in Node.js environment");
           }
         } else if (extractedCreds.kind === "SASConnString") {
           const pipeline = newPipeline(new AnonymousCredential(), options);
@@ -61143,6 +52463,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
         if (options.includeMetadata) {
           include2.push("metadata");
         }
+        if (options.includeSystem) {
+          include2.push("system");
+        }
         const listSegmentOptions = Object.assign(Object.assign({}, options), include2.length > 0 ? { include: include2 } : {});
         const iter = this.listItems(listSegmentOptions);
         return {
@@ -61206,6 +52529,10 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
       }
     };
     __name(BlobServiceClient, "BlobServiceClient");
+    exports2.KnownEncryptionAlgorithmType = void 0;
+    (function(KnownEncryptionAlgorithmType) {
+      KnownEncryptionAlgorithmType["AES256"] = "AES256";
+    })(exports2.KnownEncryptionAlgorithmType || (exports2.KnownEncryptionAlgorithmType = {}));
     Object.defineProperty(exports2, "BaseRequestPolicy", {
       enumerable: true,
       get: function() {
@@ -61481,7 +52808,7 @@ var require_downloadUtils = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
     var http_client_1 = require_lib();
-    var storage_blob_1 = require_dist9();
+    var storage_blob_1 = require_dist10();
     var buffer = __importStar(require("buffer"));
     var fs3 = __importStar(require("fs"));
     var stream = __importStar(require("stream"));
@@ -62406,7 +53733,7 @@ var require_context3 = __commonJS({
 });
 
 // node_modules/@actions/github/lib/internal/utils.js
-var require_utils4 = __commonJS({
+var require_utils5 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -63293,23 +54620,27 @@ var require_dist_node6 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     var request = require_dist_node5();
     var universalUserAgent = require_dist_node();
-    var VERSION = "4.6.4";
-    var GraphqlError = class extends Error {
-      constructor(request2, response) {
-        const message = response.data.errors[0].message;
-        super(message);
-        Object.assign(this, response.data);
-        Object.assign(this, {
-          headers: response.headers
-        });
-        this.name = "GraphqlError";
+    var VERSION = "4.8.0";
+    function _buildMessageForResponseErrors(data) {
+      return `Request failed due to following response errors:
+` + data.errors.map((e) => ` - ${e.message}`).join("\n");
+    }
+    __name(_buildMessageForResponseErrors, "_buildMessageForResponseErrors");
+    var GraphqlResponseError = class extends Error {
+      constructor(request2, headers, response) {
+        super(_buildMessageForResponseErrors(response));
         this.request = request2;
+        this.headers = headers;
+        this.response = response;
+        this.name = "GraphqlResponseError";
+        this.errors = response.errors;
+        this.data = response.data;
         if (Error.captureStackTrace) {
           Error.captureStackTrace(this, this.constructor);
         }
       }
     };
-    __name(GraphqlError, "GraphqlError");
+    __name(GraphqlResponseError, "GraphqlResponseError");
     var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
     var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
     var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
@@ -63348,10 +54679,7 @@ var require_dist_node6 = __commonJS({
           for (const key of Object.keys(response.headers)) {
             headers[key] = response.headers[key];
           }
-          throw new GraphqlError(requestOptions, {
-            headers,
-            data: response.data
-          });
+          throw new GraphqlResponseError(requestOptions, headers, response.data);
         }
         return response.data.data;
       });
@@ -63382,6 +54710,7 @@ var require_dist_node6 = __commonJS({
       });
     }
     __name(withCustomRequest, "withCustomRequest");
+    exports2.GraphqlResponseError = GraphqlResponseError;
     exports2.graphql = graphql$1;
     exports2.withCustomRequest = withCustomRequest;
   }
@@ -63392,8 +54721,14 @@ var require_dist_node7 = __commonJS({
   "node_modules/@octokit/auth-token/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
+    var REGEX_IS_INSTALLATION_LEGACY = /^v1\./;
+    var REGEX_IS_INSTALLATION = /^ghs_/;
+    var REGEX_IS_USER_TO_SERVER = /^ghu_/;
     async function auth(token2) {
-      const tokenType = token2.split(/\./).length === 3 ? "app" : /^v\d+\./.test(token2) ? "installation" : "oauth";
+      const isApp = token2.split(/\./).length === 3;
+      const isInstallation = REGEX_IS_INSTALLATION_LEGACY.test(token2) || REGEX_IS_INSTALLATION.test(token2);
+      const isUserToServer = REGEX_IS_USER_TO_SERVER.test(token2);
+      const tokenType = isApp ? "app" : isInstallation ? "installation" : isUserToServer ? "user-to-server" : "oauth";
       return {
         type: "token",
         token: token2,
@@ -63622,6 +54957,8 @@ var require_dist_node9 = __commonJS({
     __name(_defineProperty, "_defineProperty");
     var Endpoints = {
       actions: {
+        addCustomLabelsToSelfHostedRunnerForOrg: ["POST /orgs/{org}/actions/runners/{runner_id}/labels"],
+        addCustomLabelsToSelfHostedRunnerForRepo: ["POST /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
         addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
         approveWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/approve"],
         cancelWorkflowRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/cancel"],
@@ -63633,6 +54970,8 @@ var require_dist_node9 = __commonJS({
         createRemoveTokenForOrg: ["POST /orgs/{org}/actions/runners/remove-token"],
         createRemoveTokenForRepo: ["POST /repos/{owner}/{repo}/actions/runners/remove-token"],
         createWorkflowDispatch: ["POST /repos/{owner}/{repo}/actions/workflows/{workflow_id}/dispatches"],
+        deleteActionsCacheById: ["DELETE /repos/{owner}/{repo}/actions/caches/{cache_id}"],
+        deleteActionsCacheByKey: ["DELETE /repos/{owner}/{repo}/actions/caches{?key,ref}"],
         deleteArtifact: ["DELETE /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
         deleteEnvironmentSecret: ["DELETE /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
         deleteOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}"],
@@ -63649,11 +54988,19 @@ var require_dist_node9 = __commonJS({
         downloadWorkflowRunLogs: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/logs"],
         enableSelectedRepositoryGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories/{repository_id}"],
         enableWorkflow: ["PUT /repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable"],
+        getActionsCacheList: ["GET /repos/{owner}/{repo}/actions/caches"],
+        getActionsCacheUsage: ["GET /repos/{owner}/{repo}/actions/cache/usage"],
+        getActionsCacheUsageByRepoForOrg: ["GET /orgs/{org}/actions/cache/usage-by-repository"],
+        getActionsCacheUsageForEnterprise: ["GET /enterprises/{enterprise}/actions/cache/usage"],
+        getActionsCacheUsageForOrg: ["GET /orgs/{org}/actions/cache/usage"],
         getAllowedActionsOrganization: ["GET /orgs/{org}/actions/permissions/selected-actions"],
         getAllowedActionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/selected-actions"],
         getArtifact: ["GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}"],
         getEnvironmentPublicKey: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/public-key"],
         getEnvironmentSecret: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets/{secret_name}"],
+        getGithubActionsDefaultWorkflowPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/workflow"],
+        getGithubActionsDefaultWorkflowPermissionsOrganization: ["GET /orgs/{org}/actions/permissions/workflow"],
+        getGithubActionsDefaultWorkflowPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions/workflow"],
         getGithubActionsPermissionsOrganization: ["GET /orgs/{org}/actions/permissions"],
         getGithubActionsPermissionsRepository: ["GET /repos/{owner}/{repo}/actions/permissions"],
         getJobForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/jobs/{job_id}"],
@@ -63669,6 +55016,7 @@ var require_dist_node9 = __commonJS({
         getSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}"],
         getSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}"],
         getWorkflow: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}"],
+        getWorkflowAccessToRepository: ["GET /repos/{owner}/{repo}/actions/permissions/access"],
         getWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}"],
         getWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}"],
         getWorkflowRunUsage: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/timing"],
@@ -63677,6 +55025,8 @@ var require_dist_node9 = __commonJS({
         listEnvironmentSecrets: ["GET /repositories/{repository_id}/environments/{environment_name}/secrets"],
         listJobsForWorkflowRun: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs"],
         listJobsForWorkflowRunAttempt: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs"],
+        listLabelsForSelfHostedRunnerForOrg: ["GET /orgs/{org}/actions/runners/{runner_id}/labels"],
+        listLabelsForSelfHostedRunnerForRepo: ["GET /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
         listOrgSecrets: ["GET /orgs/{org}/actions/secrets"],
         listRepoSecrets: ["GET /repos/{owner}/{repo}/actions/secrets"],
         listRepoWorkflows: ["GET /repos/{owner}/{repo}/actions/workflows"],
@@ -63689,14 +55039,27 @@ var require_dist_node9 = __commonJS({
         listWorkflowRunArtifacts: ["GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts"],
         listWorkflowRuns: ["GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs"],
         listWorkflowRunsForRepo: ["GET /repos/{owner}/{repo}/actions/runs"],
+        reRunJobForWorkflowRun: ["POST /repos/{owner}/{repo}/actions/jobs/{job_id}/rerun"],
+        reRunWorkflow: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun"],
+        reRunWorkflowFailedJobs: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs"],
+        removeAllCustomLabelsFromSelfHostedRunnerForOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}/labels"],
+        removeAllCustomLabelsFromSelfHostedRunnerForRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
+        removeCustomLabelFromSelfHostedRunnerForOrg: ["DELETE /orgs/{org}/actions/runners/{runner_id}/labels/{name}"],
+        removeCustomLabelFromSelfHostedRunnerForRepo: ["DELETE /repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}"],
         removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/actions/secrets/{secret_name}/repositories/{repository_id}"],
         reviewPendingDeploymentsForRun: ["POST /repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments"],
         setAllowedActionsOrganization: ["PUT /orgs/{org}/actions/permissions/selected-actions"],
         setAllowedActionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/selected-actions"],
+        setCustomLabelsForSelfHostedRunnerForOrg: ["PUT /orgs/{org}/actions/runners/{runner_id}/labels"],
+        setCustomLabelsForSelfHostedRunnerForRepo: ["PUT /repos/{owner}/{repo}/actions/runners/{runner_id}/labels"],
+        setGithubActionsDefaultWorkflowPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/workflow"],
+        setGithubActionsDefaultWorkflowPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions/workflow"],
+        setGithubActionsDefaultWorkflowPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/workflow"],
         setGithubActionsPermissionsOrganization: ["PUT /orgs/{org}/actions/permissions"],
         setGithubActionsPermissionsRepository: ["PUT /repos/{owner}/{repo}/actions/permissions"],
         setSelectedReposForOrgSecret: ["PUT /orgs/{org}/actions/secrets/{secret_name}/repositories"],
-        setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"]
+        setSelectedRepositoriesEnabledGithubActionsOrganization: ["PUT /orgs/{org}/actions/permissions/repositories"],
+        setWorkflowAccessToRepository: ["PUT /repos/{owner}/{repo}/actions/permissions/access"]
       },
       activity: {
         checkRepoIsStarredByAuthenticatedUser: ["GET /user/starred/{owner}/{repo}"],
@@ -63737,16 +55100,6 @@ var require_dist_node9 = __commonJS({
         }],
         addRepoToInstallationForAuthenticatedUser: ["PUT /user/installations/{installation_id}/repositories/{repository_id}"],
         checkToken: ["POST /applications/{client_id}/token"],
-        createContentAttachment: ["POST /content_references/{content_reference_id}/attachments", {
-          mediaType: {
-            previews: ["corsair"]
-          }
-        }],
-        createContentAttachmentForRepo: ["POST /repos/{owner}/{repo}/content_references/{content_reference_id}/attachments", {
-          mediaType: {
-            previews: ["corsair"]
-          }
-        }],
         createFromManifest: ["POST /app-manifests/{code}/conversions"],
         createInstallationAccessToken: ["POST /app/installations/{installation_id}/access_tokens"],
         deleteAuthorization: ["DELETE /applications/{client_id}/grant"],
@@ -63788,6 +55141,8 @@ var require_dist_node9 = __commonJS({
       billing: {
         getGithubActionsBillingOrg: ["GET /orgs/{org}/settings/billing/actions"],
         getGithubActionsBillingUser: ["GET /users/{username}/settings/billing/actions"],
+        getGithubAdvancedSecurityBillingGhe: ["GET /enterprises/{enterprise}/settings/billing/advanced-security"],
+        getGithubAdvancedSecurityBillingOrg: ["GET /orgs/{org}/settings/billing/advanced-security"],
         getGithubPackagesBillingOrg: ["GET /orgs/{org}/settings/billing/packages"],
         getGithubPackagesBillingUser: ["GET /users/{username}/settings/billing/packages"],
         getSharedStorageBillingOrg: ["GET /orgs/{org}/settings/billing/shared-storage"],
@@ -63817,6 +55172,7 @@ var require_dist_node9 = __commonJS({
         getAnalysis: ["GET /repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}"],
         getSarif: ["GET /repos/{owner}/{repo}/code-scanning/sarifs/{sarif_id}"],
         listAlertInstances: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances"],
+        listAlertsForOrg: ["GET /orgs/{org}/code-scanning/alerts"],
         listAlertsForRepo: ["GET /repos/{owner}/{repo}/code-scanning/alerts"],
         listAlertsInstances: ["GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", {}, {
           renamed: ["codeScanning", "listAlertInstances"]
@@ -63829,16 +55185,80 @@ var require_dist_node9 = __commonJS({
         getAllCodesOfConduct: ["GET /codes_of_conduct"],
         getConductCode: ["GET /codes_of_conduct/{key}"]
       },
+      codespaces: {
+        addRepositoryForSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"],
+        codespaceMachinesForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}/machines"],
+        createForAuthenticatedUser: ["POST /user/codespaces"],
+        createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+        createOrUpdateSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}"],
+        createWithPrForAuthenticatedUser: ["POST /repos/{owner}/{repo}/pulls/{pull_number}/codespaces"],
+        createWithRepoForAuthenticatedUser: ["POST /repos/{owner}/{repo}/codespaces"],
+        deleteForAuthenticatedUser: ["DELETE /user/codespaces/{codespace_name}"],
+        deleteFromOrganization: ["DELETE /orgs/{org}/members/{username}/codespaces/{codespace_name}"],
+        deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+        deleteSecretForAuthenticatedUser: ["DELETE /user/codespaces/secrets/{secret_name}"],
+        exportForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/exports"],
+        getExportDetailsForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}/exports/{export_id}"],
+        getForAuthenticatedUser: ["GET /user/codespaces/{codespace_name}"],
+        getPublicKeyForAuthenticatedUser: ["GET /user/codespaces/secrets/public-key"],
+        getRepoPublicKey: ["GET /repos/{owner}/{repo}/codespaces/secrets/public-key"],
+        getRepoSecret: ["GET /repos/{owner}/{repo}/codespaces/secrets/{secret_name}"],
+        getSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}"],
+        listDevcontainersInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces/devcontainers"],
+        listForAuthenticatedUser: ["GET /user/codespaces"],
+        listInOrganization: ["GET /orgs/{org}/codespaces", {}, {
+          renamedParameters: {
+            org_id: "org"
+          }
+        }],
+        listInRepositoryForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces"],
+        listRepoSecrets: ["GET /repos/{owner}/{repo}/codespaces/secrets"],
+        listRepositoriesForSecretForAuthenticatedUser: ["GET /user/codespaces/secrets/{secret_name}/repositories"],
+        listSecretsForAuthenticatedUser: ["GET /user/codespaces/secrets"],
+        removeRepositoryForSecretForAuthenticatedUser: ["DELETE /user/codespaces/secrets/{secret_name}/repositories/{repository_id}"],
+        repoMachinesForAuthenticatedUser: ["GET /repos/{owner}/{repo}/codespaces/machines"],
+        setRepositoriesForSecretForAuthenticatedUser: ["PUT /user/codespaces/secrets/{secret_name}/repositories"],
+        startForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/start"],
+        stopForAuthenticatedUser: ["POST /user/codespaces/{codespace_name}/stop"],
+        stopInOrganization: ["POST /orgs/{org}/members/{username}/codespaces/{codespace_name}/stop"],
+        updateForAuthenticatedUser: ["PATCH /user/codespaces/{codespace_name}"]
+      },
+      dependabot: {
+        addSelectedRepoToOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"],
+        createOrUpdateOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}"],
+        createOrUpdateRepoSecret: ["PUT /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+        deleteOrgSecret: ["DELETE /orgs/{org}/dependabot/secrets/{secret_name}"],
+        deleteRepoSecret: ["DELETE /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+        getOrgPublicKey: ["GET /orgs/{org}/dependabot/secrets/public-key"],
+        getOrgSecret: ["GET /orgs/{org}/dependabot/secrets/{secret_name}"],
+        getRepoPublicKey: ["GET /repos/{owner}/{repo}/dependabot/secrets/public-key"],
+        getRepoSecret: ["GET /repos/{owner}/{repo}/dependabot/secrets/{secret_name}"],
+        listOrgSecrets: ["GET /orgs/{org}/dependabot/secrets"],
+        listRepoSecrets: ["GET /repos/{owner}/{repo}/dependabot/secrets"],
+        listSelectedReposForOrgSecret: ["GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories"],
+        removeSelectedRepoFromOrgSecret: ["DELETE /orgs/{org}/dependabot/secrets/{secret_name}/repositories/{repository_id}"],
+        setSelectedReposForOrgSecret: ["PUT /orgs/{org}/dependabot/secrets/{secret_name}/repositories"]
+      },
+      dependencyGraph: {
+        createRepositorySnapshot: ["POST /repos/{owner}/{repo}/dependency-graph/snapshots"],
+        diffRange: ["GET /repos/{owner}/{repo}/dependency-graph/compare/{basehead}"]
+      },
       emojis: {
         get: ["GET /emojis"]
       },
       enterpriseAdmin: {
+        addCustomLabelsToSelfHostedRunnerForEnterprise: ["POST /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
         disableSelectedOrganizationGithubActionsEnterprise: ["DELETE /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
         enableSelectedOrganizationGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations/{org_id}"],
         getAllowedActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/selected-actions"],
         getGithubActionsPermissionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions"],
+        getServerStatistics: ["GET /enterprise-installation/{enterprise_or_org}/server-statistics"],
+        listLabelsForSelfHostedRunnerForEnterprise: ["GET /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
         listSelectedOrganizationsEnabledGithubActionsEnterprise: ["GET /enterprises/{enterprise}/actions/permissions/organizations"],
+        removeAllCustomLabelsFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
+        removeCustomLabelFromSelfHostedRunnerForEnterprise: ["DELETE /enterprises/{enterprise}/actions/runners/{runner_id}/labels/{name}"],
         setAllowedActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/selected-actions"],
+        setCustomLabelsForSelfHostedRunnerForEnterprise: ["PUT /enterprises/{enterprise}/actions/runners/{runner_id}/labels"],
         setGithubActionsPermissionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions"],
         setSelectedOrganizationsEnabledGithubActionsEnterprise: ["PUT /enterprises/{enterprise}/actions/permissions/organizations"]
       },
@@ -64009,6 +55429,7 @@ var require_dist_node9 = __commonJS({
         list: ["GET /organizations"],
         listAppInstallations: ["GET /orgs/{org}/installations"],
         listBlockedUsers: ["GET /orgs/{org}/blocks"],
+        listCustomRoles: ["GET /organizations/{organization_id}/custom_roles"],
         listFailedInvitations: ["GET /orgs/{org}/failed_invitations"],
         listForAuthenticatedUser: ["GET /user/orgs"],
         listForUser: ["GET /users/{username}/orgs"],
@@ -64137,12 +55558,14 @@ var require_dist_node9 = __commonJS({
         deleteForIssue: ["DELETE /repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}"],
         deleteForIssueComment: ["DELETE /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}"],
         deleteForPullRequestComment: ["DELETE /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}"],
+        deleteForRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}"],
         deleteForTeamDiscussion: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions/{reaction_id}"],
         deleteForTeamDiscussionComment: ["DELETE /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions/{reaction_id}"],
         listForCommitComment: ["GET /repos/{owner}/{repo}/comments/{comment_id}/reactions"],
         listForIssue: ["GET /repos/{owner}/{repo}/issues/{issue_number}/reactions"],
         listForIssueComment: ["GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions"],
         listForPullRequestReviewComment: ["GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions"],
+        listForRelease: ["GET /repos/{owner}/{repo}/releases/{release_id}/reactions"],
         listForTeamDiscussionCommentInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions"],
         listForTeamDiscussionInOrg: ["GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions"]
       },
@@ -64166,6 +55589,7 @@ var require_dist_node9 = __commonJS({
         }],
         checkCollaborator: ["GET /repos/{owner}/{repo}/collaborators/{username}"],
         checkVulnerabilityAlerts: ["GET /repos/{owner}/{repo}/vulnerability-alerts"],
+        codeownersErrors: ["GET /repos/{owner}/{repo}/codeowners/errors"],
         compareCommits: ["GET /repos/{owner}/{repo}/compare/{base}...{head}"],
         compareCommitsWithBasehead: ["GET /repos/{owner}/{repo}/compare/{basehead}"],
         createAutolink: ["POST /repos/{owner}/{repo}/autolinks"],
@@ -64183,6 +55607,7 @@ var require_dist_node9 = __commonJS({
         createOrUpdateFileContents: ["PUT /repos/{owner}/{repo}/contents/{path}"],
         createPagesSite: ["POST /repos/{owner}/{repo}/pages"],
         createRelease: ["POST /repos/{owner}/{repo}/releases"],
+        createTagProtection: ["POST /repos/{owner}/{repo}/tags/protection"],
         createUsingTemplate: ["POST /repos/{template_owner}/{template_repo}/generate"],
         createWebhook: ["POST /repos/{owner}/{repo}/hooks"],
         declineInvitation: ["DELETE /user/repository_invitations/{invitation_id}", {}, {
@@ -64205,6 +55630,7 @@ var require_dist_node9 = __commonJS({
         deletePullRequestReviewProtection: ["DELETE /repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews"],
         deleteRelease: ["DELETE /repos/{owner}/{repo}/releases/{release_id}"],
         deleteReleaseAsset: ["DELETE /repos/{owner}/{repo}/releases/assets/{asset_id}"],
+        deleteTagProtection: ["DELETE /repos/{owner}/{repo}/tags/protection/{tag_protection_id}"],
         deleteWebhook: ["DELETE /repos/{owner}/{repo}/hooks/{hook_id}"],
         disableAutomatedSecurityFixes: ["DELETE /repos/{owner}/{repo}/automated-security-fixes"],
         disableLfsForRepo: ["DELETE /repos/{owner}/{repo}/lfs"],
@@ -64223,11 +55649,7 @@ var require_dist_node9 = __commonJS({
         getAdminBranchProtection: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
         getAllEnvironments: ["GET /repos/{owner}/{repo}/environments"],
         getAllStatusCheckContexts: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts"],
-        getAllTopics: ["GET /repos/{owner}/{repo}/topics", {
-          mediaType: {
-            previews: ["mercy"]
-          }
-        }],
+        getAllTopics: ["GET /repos/{owner}/{repo}/topics"],
         getAppsWithAccessToProtectedBranch: ["GET /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps"],
         getAutolink: ["GET /repos/{owner}/{repo}/autolinks/{autolink_id}"],
         getBranch: ["GET /repos/{owner}/{repo}/branches/{branch}"],
@@ -64293,6 +55715,7 @@ var require_dist_node9 = __commonJS({
         listPullRequestsAssociatedWithCommit: ["GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls"],
         listReleaseAssets: ["GET /repos/{owner}/{repo}/releases/{release_id}/assets"],
         listReleases: ["GET /repos/{owner}/{repo}/releases"],
+        listTagProtection: ["GET /repos/{owner}/{repo}/tags/protection"],
         listTags: ["GET /repos/{owner}/{repo}/tags"],
         listTeams: ["GET /repos/{owner}/{repo}/teams"],
         listWebhookDeliveries: ["GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries"],
@@ -64316,11 +55739,7 @@ var require_dist_node9 = __commonJS({
           mapToData: "users"
         }],
         renameBranch: ["POST /repos/{owner}/{repo}/branches/{branch}/rename"],
-        replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics", {
-          mediaType: {
-            previews: ["mercy"]
-          }
-        }],
+        replaceAllTopics: ["PUT /repos/{owner}/{repo}/topics"],
         requestPagesBuild: ["POST /repos/{owner}/{repo}/pages/builds"],
         setAdminBranchProtection: ["POST /repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins"],
         setAppAccessRestrictions: ["PUT /repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps", {}, {
@@ -64361,17 +55780,15 @@ var require_dist_node9 = __commonJS({
         issuesAndPullRequests: ["GET /search/issues"],
         labels: ["GET /search/labels"],
         repos: ["GET /search/repositories"],
-        topics: ["GET /search/topics", {
-          mediaType: {
-            previews: ["mercy"]
-          }
-        }],
+        topics: ["GET /search/topics"],
         users: ["GET /search/users"]
       },
       secretScanning: {
         getAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"],
+        listAlertsForEnterprise: ["GET /enterprises/{enterprise}/secret-scanning/alerts"],
         listAlertsForOrg: ["GET /orgs/{org}/secret-scanning/alerts"],
         listAlertsForRepo: ["GET /repos/{owner}/{repo}/secret-scanning/alerts"],
+        listLocationsForAlert: ["GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations"],
         updateAlert: ["PATCH /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}"]
       },
       teams: {
@@ -64486,7 +55903,7 @@ var require_dist_node9 = __commonJS({
         updateAuthenticated: ["PATCH /user"]
       }
     };
-    var VERSION = "5.13.0";
+    var VERSION = "5.16.2";
     function endpointsToMethods(octokit, endpointsMap) {
       const newMethods = {};
       for (const [scope, endpoints] of Object.entries(endpointsMap)) {
@@ -64574,17 +55991,14 @@ var require_dist_node10 = __commonJS({
   "node_modules/@octokit/plugin-paginate-rest/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var VERSION = "2.17.0";
+    var VERSION = "2.21.3";
     function ownKeys(object, enumerableOnly) {
       var keys = Object.keys(object);
       if (Object.getOwnPropertySymbols) {
         var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) {
-          symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-          });
-        }
-        keys.push.apply(keys, symbols);
+        enumerableOnly && (symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        })), keys.push.apply(keys, symbols);
       }
       return keys;
     }
@@ -64592,17 +56006,11 @@ var require_dist_node10 = __commonJS({
     function _objectSpread2(target) {
       for (var i = 1; i < arguments.length; i++) {
         var source = arguments[i] != null ? arguments[i] : {};
-        if (i % 2) {
-          ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-          });
-        } else if (Object.getOwnPropertyDescriptors) {
-          Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        } else {
-          ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-          });
-        }
+        i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+          _defineProperty(target, key, source[key]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
       }
       return target;
     }
@@ -64719,7 +56127,7 @@ var require_dist_node10 = __commonJS({
     var composePaginateRest = Object.assign(paginate, {
       iterator
     });
-    var paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/actions/runners/downloads", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/runners/downloads", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/blocks", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/events", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/team-sync/group-mappings", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runners/downloads", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/autolinks", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/branches-where-head", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /scim/v2/enterprises/{enterprise}/Groups", "GET /scim/v2/enterprises/{enterprise}/Users", "GET /scim/v2/organizations/{org}/Users", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/team-sync/group-mappings", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
+    var paginatingEndpoints = ["GET /app/hook/deliveries", "GET /app/installations", "GET /applications/grants", "GET /authorizations", "GET /enterprises/{enterprise}/actions/permissions/organizations", "GET /enterprises/{enterprise}/actions/runner-groups", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/organizations", "GET /enterprises/{enterprise}/actions/runner-groups/{runner_group_id}/runners", "GET /enterprises/{enterprise}/actions/runners", "GET /enterprises/{enterprise}/audit-log", "GET /enterprises/{enterprise}/secret-scanning/alerts", "GET /enterprises/{enterprise}/settings/billing/advanced-security", "GET /events", "GET /gists", "GET /gists/public", "GET /gists/starred", "GET /gists/{gist_id}/comments", "GET /gists/{gist_id}/commits", "GET /gists/{gist_id}/forks", "GET /installation/repositories", "GET /issues", "GET /licenses", "GET /marketplace_listing/plans", "GET /marketplace_listing/plans/{plan_id}/accounts", "GET /marketplace_listing/stubbed/plans", "GET /marketplace_listing/stubbed/plans/{plan_id}/accounts", "GET /networks/{owner}/{repo}/events", "GET /notifications", "GET /organizations", "GET /orgs/{org}/actions/cache/usage-by-repository", "GET /orgs/{org}/actions/permissions/repositories", "GET /orgs/{org}/actions/runner-groups", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/repositories", "GET /orgs/{org}/actions/runner-groups/{runner_group_id}/runners", "GET /orgs/{org}/actions/runners", "GET /orgs/{org}/actions/secrets", "GET /orgs/{org}/actions/secrets/{secret_name}/repositories", "GET /orgs/{org}/audit-log", "GET /orgs/{org}/blocks", "GET /orgs/{org}/code-scanning/alerts", "GET /orgs/{org}/codespaces", "GET /orgs/{org}/credential-authorizations", "GET /orgs/{org}/dependabot/secrets", "GET /orgs/{org}/dependabot/secrets/{secret_name}/repositories", "GET /orgs/{org}/events", "GET /orgs/{org}/external-groups", "GET /orgs/{org}/failed_invitations", "GET /orgs/{org}/hooks", "GET /orgs/{org}/hooks/{hook_id}/deliveries", "GET /orgs/{org}/installations", "GET /orgs/{org}/invitations", "GET /orgs/{org}/invitations/{invitation_id}/teams", "GET /orgs/{org}/issues", "GET /orgs/{org}/members", "GET /orgs/{org}/migrations", "GET /orgs/{org}/migrations/{migration_id}/repositories", "GET /orgs/{org}/outside_collaborators", "GET /orgs/{org}/packages", "GET /orgs/{org}/packages/{package_type}/{package_name}/versions", "GET /orgs/{org}/projects", "GET /orgs/{org}/public_members", "GET /orgs/{org}/repos", "GET /orgs/{org}/secret-scanning/alerts", "GET /orgs/{org}/settings/billing/advanced-security", "GET /orgs/{org}/team-sync/groups", "GET /orgs/{org}/teams", "GET /orgs/{org}/teams/{team_slug}/discussions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/discussions/{discussion_number}/reactions", "GET /orgs/{org}/teams/{team_slug}/invitations", "GET /orgs/{org}/teams/{team_slug}/members", "GET /orgs/{org}/teams/{team_slug}/projects", "GET /orgs/{org}/teams/{team_slug}/repos", "GET /orgs/{org}/teams/{team_slug}/teams", "GET /projects/columns/{column_id}/cards", "GET /projects/{project_id}/collaborators", "GET /projects/{project_id}/columns", "GET /repos/{owner}/{repo}/actions/artifacts", "GET /repos/{owner}/{repo}/actions/caches", "GET /repos/{owner}/{repo}/actions/runners", "GET /repos/{owner}/{repo}/actions/runs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/attempts/{attempt_number}/jobs", "GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs", "GET /repos/{owner}/{repo}/actions/secrets", "GET /repos/{owner}/{repo}/actions/workflows", "GET /repos/{owner}/{repo}/actions/workflows/{workflow_id}/runs", "GET /repos/{owner}/{repo}/assignees", "GET /repos/{owner}/{repo}/branches", "GET /repos/{owner}/{repo}/check-runs/{check_run_id}/annotations", "GET /repos/{owner}/{repo}/check-suites/{check_suite_id}/check-runs", "GET /repos/{owner}/{repo}/code-scanning/alerts", "GET /repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/instances", "GET /repos/{owner}/{repo}/code-scanning/analyses", "GET /repos/{owner}/{repo}/codespaces", "GET /repos/{owner}/{repo}/codespaces/devcontainers", "GET /repos/{owner}/{repo}/codespaces/secrets", "GET /repos/{owner}/{repo}/collaborators", "GET /repos/{owner}/{repo}/comments", "GET /repos/{owner}/{repo}/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/commits", "GET /repos/{owner}/{repo}/commits/{commit_sha}/comments", "GET /repos/{owner}/{repo}/commits/{commit_sha}/pulls", "GET /repos/{owner}/{repo}/commits/{ref}/check-runs", "GET /repos/{owner}/{repo}/commits/{ref}/check-suites", "GET /repos/{owner}/{repo}/commits/{ref}/status", "GET /repos/{owner}/{repo}/commits/{ref}/statuses", "GET /repos/{owner}/{repo}/contributors", "GET /repos/{owner}/{repo}/dependabot/secrets", "GET /repos/{owner}/{repo}/deployments", "GET /repos/{owner}/{repo}/deployments/{deployment_id}/statuses", "GET /repos/{owner}/{repo}/environments", "GET /repos/{owner}/{repo}/events", "GET /repos/{owner}/{repo}/forks", "GET /repos/{owner}/{repo}/git/matching-refs/{ref}", "GET /repos/{owner}/{repo}/hooks", "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries", "GET /repos/{owner}/{repo}/invitations", "GET /repos/{owner}/{repo}/issues", "GET /repos/{owner}/{repo}/issues/comments", "GET /repos/{owner}/{repo}/issues/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/issues/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/comments", "GET /repos/{owner}/{repo}/issues/{issue_number}/events", "GET /repos/{owner}/{repo}/issues/{issue_number}/labels", "GET /repos/{owner}/{repo}/issues/{issue_number}/reactions", "GET /repos/{owner}/{repo}/issues/{issue_number}/timeline", "GET /repos/{owner}/{repo}/keys", "GET /repos/{owner}/{repo}/labels", "GET /repos/{owner}/{repo}/milestones", "GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels", "GET /repos/{owner}/{repo}/notifications", "GET /repos/{owner}/{repo}/pages/builds", "GET /repos/{owner}/{repo}/projects", "GET /repos/{owner}/{repo}/pulls", "GET /repos/{owner}/{repo}/pulls/comments", "GET /repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions", "GET /repos/{owner}/{repo}/pulls/{pull_number}/comments", "GET /repos/{owner}/{repo}/pulls/{pull_number}/commits", "GET /repos/{owner}/{repo}/pulls/{pull_number}/files", "GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews", "GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews/{review_id}/comments", "GET /repos/{owner}/{repo}/releases", "GET /repos/{owner}/{repo}/releases/{release_id}/assets", "GET /repos/{owner}/{repo}/releases/{release_id}/reactions", "GET /repos/{owner}/{repo}/secret-scanning/alerts", "GET /repos/{owner}/{repo}/secret-scanning/alerts/{alert_number}/locations", "GET /repos/{owner}/{repo}/stargazers", "GET /repos/{owner}/{repo}/subscribers", "GET /repos/{owner}/{repo}/tags", "GET /repos/{owner}/{repo}/teams", "GET /repos/{owner}/{repo}/topics", "GET /repositories", "GET /repositories/{repository_id}/environments/{environment_name}/secrets", "GET /search/code", "GET /search/commits", "GET /search/issues", "GET /search/labels", "GET /search/repositories", "GET /search/topics", "GET /search/users", "GET /teams/{team_id}/discussions", "GET /teams/{team_id}/discussions/{discussion_number}/comments", "GET /teams/{team_id}/discussions/{discussion_number}/comments/{comment_number}/reactions", "GET /teams/{team_id}/discussions/{discussion_number}/reactions", "GET /teams/{team_id}/invitations", "GET /teams/{team_id}/members", "GET /teams/{team_id}/projects", "GET /teams/{team_id}/repos", "GET /teams/{team_id}/teams", "GET /user/blocks", "GET /user/codespaces", "GET /user/codespaces/secrets", "GET /user/emails", "GET /user/followers", "GET /user/following", "GET /user/gpg_keys", "GET /user/installations", "GET /user/installations/{installation_id}/repositories", "GET /user/issues", "GET /user/keys", "GET /user/marketplace_purchases", "GET /user/marketplace_purchases/stubbed", "GET /user/memberships/orgs", "GET /user/migrations", "GET /user/migrations/{migration_id}/repositories", "GET /user/orgs", "GET /user/packages", "GET /user/packages/{package_type}/{package_name}/versions", "GET /user/public_emails", "GET /user/repos", "GET /user/repository_invitations", "GET /user/starred", "GET /user/subscriptions", "GET /user/teams", "GET /users", "GET /users/{username}/events", "GET /users/{username}/events/orgs/{org}", "GET /users/{username}/events/public", "GET /users/{username}/followers", "GET /users/{username}/following", "GET /users/{username}/gists", "GET /users/{username}/gpg_keys", "GET /users/{username}/keys", "GET /users/{username}/orgs", "GET /users/{username}/packages", "GET /users/{username}/projects", "GET /users/{username}/received_events", "GET /users/{username}/received_events/public", "GET /users/{username}/repos", "GET /users/{username}/starred", "GET /users/{username}/subscriptions"];
     function isPaginatingEndpoint(arg) {
       if (typeof arg === "string") {
         return paginatingEndpoints.includes(arg);
@@ -64745,7 +56153,7 @@ var require_dist_node10 = __commonJS({
 });
 
 // node_modules/@actions/github/lib/utils.js
-var require_utils5 = __commonJS({
+var require_utils6 = __commonJS({
   "node_modules/@actions/github/lib/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
@@ -64779,7 +56187,7 @@ var require_utils5 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getOctokitOptions = exports2.GitHub = exports2.defaults = exports2.context = void 0;
     var Context = __importStar(require_context3());
-    var Utils = __importStar(require_utils4());
+    var Utils = __importStar(require_utils5());
     var core_1 = require_dist_node8();
     var plugin_rest_endpoint_methods_1 = require_dist_node9();
     var plugin_paginate_rest_1 = require_dist_node10();
@@ -64840,7 +56248,7 @@ var require_github = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getOctokit = exports2.context = void 0;
     var Context = __importStar(require_context3());
-    var utils_1 = require_utils5();
+    var utils_1 = require_utils6();
     exports2.context = new Context.Context();
     function getOctokit2(token2, options, ...additionalPlugins) {
       const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
@@ -66306,66 +57714,6 @@ ${JSON.stringify(previousSizes, null, 2)}`);
 __name(main, "main");
 main().catch(import_core3.setFailed);
 /*!
- * Copyright (c) 2015, Salesforce.com, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Salesforce.com nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-/*!
- * Copyright (c) 2018, Salesforce.com, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice,
- * this list of conditions and the following disclaimer.
- *
- * 2. Redistributions in binary form must reproduce the above copyright notice,
- * this list of conditions and the following disclaimer in the documentation
- * and/or other materials provided with the distribution.
- *
- * 3. Neither the name of Salesforce.com nor the names of its contributors may
- * be used to endorse or promote products derived from this software without
- * specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-/*!
  * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
  *
  * Copyright (c) 2014-2017, Jon Schlinkert.
@@ -66374,6 +57722,7 @@ main().catch(import_core3.setFailed);
 /*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
  * MIT Licensed
  */
 /*!
@@ -66382,18 +57731,4 @@ main().catch(import_core3.setFailed);
  * Copyright(c) 2015 Douglas Christopher Wilson
  * MIT Licensed
  */
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
 /*! http://mths.be/fromcodepoint v0.1.0 by @mathias */
