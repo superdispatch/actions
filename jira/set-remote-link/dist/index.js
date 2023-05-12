@@ -761,10 +761,6 @@ var require_proxy = __commonJS({
       if (!reqUrl.hostname) {
         return false;
       }
-      const reqHost = reqUrl.hostname;
-      if (isLoopbackAddress(reqHost)) {
-        return true;
-      }
       const noProxy = process.env["no_proxy"] || process.env["NO_PROXY"] || "";
       if (!noProxy) {
         return false;
@@ -782,7 +778,7 @@ var require_proxy = __commonJS({
         upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
       }
       for (const upperNoProxyItem of noProxy.split(",").map((x) => x.trim().toUpperCase()).filter((x) => x)) {
-        if (upperNoProxyItem === "*" || upperReqHosts.some((x) => x === upperNoProxyItem || x.endsWith(`.${upperNoProxyItem}`) || upperNoProxyItem.startsWith(".") && x.endsWith(`${upperNoProxyItem}`))) {
+        if (upperReqHosts.some((x) => x === upperNoProxyItem)) {
           return true;
         }
       }
@@ -790,11 +786,6 @@ var require_proxy = __commonJS({
     }
     __name(checkBypass, "checkBypass");
     exports2.checkBypass = checkBypass;
-    function isLoopbackAddress(host) {
-      const hostLower = host.toLowerCase();
-      return hostLower === "localhost" || hostLower.startsWith("127.") || hostLower.startsWith("[::1]") || hostLower.startsWith("[0:0:0:0:0:0:0:1]");
-    }
-    __name(isLoopbackAddress, "isLoopbackAddress");
   }
 });
 
@@ -2299,76 +2290,61 @@ var require_interopRequireDefault = __commonJS({
       };
     }
     __name(_interopRequireDefault, "_interopRequireDefault");
-    module2.exports = _interopRequireDefault, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
+    module2.exports = _interopRequireDefault;
+    module2.exports["default"] = module2.exports, module2.exports.__esModule = true;
   }
 });
 
-// node_modules/@babel/runtime/helpers/typeof.js
-var require_typeof = __commonJS({
-  "node_modules/@babel/runtime/helpers/typeof.js"(exports2, module2) {
-    function _typeof(obj2) {
-      "@babel/helpers - typeof";
-      return module2.exports = _typeof = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj3) {
-        return typeof obj3;
-      } : function(obj3) {
-        return obj3 && typeof Symbol == "function" && obj3.constructor === Symbol && obj3 !== Symbol.prototype ? "symbol" : typeof obj3;
-      }, module2.exports.__esModule = true, module2.exports["default"] = module2.exports, _typeof(obj2);
-    }
-    __name(_typeof, "_typeof");
-    module2.exports = _typeof, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
-  }
-});
-
-// node_modules/@babel/runtime/helpers/regeneratorRuntime.js
-var require_regeneratorRuntime = __commonJS({
-  "node_modules/@babel/runtime/helpers/regeneratorRuntime.js"(exports2, module2) {
-    var _typeof = require_typeof()["default"];
-    function _regeneratorRuntime() {
+// node_modules/regenerator-runtime/runtime.js
+var require_runtime = __commonJS({
+  "node_modules/regenerator-runtime/runtime.js"(exports2, module2) {
+    var runtime = function(exports3) {
       "use strict";
-      module2.exports = _regeneratorRuntime = /* @__PURE__ */ __name(function _regeneratorRuntime2() {
-        return exports3;
-      }, "_regeneratorRuntime"), module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
-      var exports3 = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function(obj2, key, desc) {
-        obj2[key] = desc.value;
-      }, $Symbol = typeof Symbol == "function" ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+      var Op = Object.prototype;
+      var hasOwn = Op.hasOwnProperty;
+      var undefined2;
+      var $Symbol = typeof Symbol === "function" ? Symbol : {};
+      var iteratorSymbol = $Symbol.iterator || "@@iterator";
+      var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+      var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
       function define2(obj2, key, value) {
-        return Object.defineProperty(obj2, key, {
+        Object.defineProperty(obj2, key, {
           value,
           enumerable: true,
           configurable: true,
           writable: true
-        }), obj2[key];
+        });
+        return obj2[key];
       }
       __name(define2, "define");
       try {
         define2({}, "");
       } catch (err) {
-        define2 = /* @__PURE__ */ __name(function define3(obj2, key, value) {
+        define2 = /* @__PURE__ */ __name(function(obj2, key, value) {
           return obj2[key] = value;
         }, "define");
       }
       function wrap(innerFn, outerFn, self2, tryLocsList) {
-        var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []);
-        return defineProperty(generator, "_invoke", {
-          value: makeInvokeMethod(innerFn, self2, context)
-        }), generator;
+        var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+        var generator = Object.create(protoGenerator.prototype);
+        var context = new Context(tryLocsList || []);
+        generator._invoke = makeInvokeMethod(innerFn, self2, context);
+        return generator;
       }
       __name(wrap, "wrap");
+      exports3.wrap = wrap;
       function tryCatch2(fn, obj2, arg) {
         try {
-          return {
-            type: "normal",
-            arg: fn.call(obj2, arg)
-          };
+          return { type: "normal", arg: fn.call(obj2, arg) };
         } catch (err) {
-          return {
-            type: "throw",
-            arg: err
-          };
+          return { type: "throw", arg: err };
         }
       }
       __name(tryCatch2, "tryCatch");
-      exports3.wrap = wrap;
+      var GenStateSuspendedStart = "suspendedStart";
+      var GenStateSuspendedYield = "suspendedYield";
+      var GenStateExecuting = "executing";
+      var GenStateCompleted = "completed";
       var ContinueSentinel = {};
       function Generator() {
       }
@@ -2380,12 +2356,18 @@ var require_regeneratorRuntime = __commonJS({
       }
       __name(GeneratorFunctionPrototype, "GeneratorFunctionPrototype");
       var IteratorPrototype = {};
-      define2(IteratorPrototype, iteratorSymbol, function() {
+      IteratorPrototype[iteratorSymbol] = function() {
         return this;
-      });
-      var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-      NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
+      };
+      var getProto = Object.getPrototypeOf;
+      var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+      if (NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+        IteratorPrototype = NativeIteratorPrototype;
+      }
       var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+      GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+      GeneratorFunctionPrototype.constructor = GeneratorFunction;
+      GeneratorFunction.displayName = define2(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction");
       function defineIteratorMethods(prototype) {
         ["next", "throw", "return"].forEach(function(method) {
           define2(prototype, method, function(arg) {
@@ -2394,49 +2376,89 @@ var require_regeneratorRuntime = __commonJS({
         });
       }
       __name(defineIteratorMethods, "defineIteratorMethods");
+      exports3.isGeneratorFunction = function(genFun) {
+        var ctor = typeof genFun === "function" && genFun.constructor;
+        return ctor ? ctor === GeneratorFunction || (ctor.displayName || ctor.name) === "GeneratorFunction" : false;
+      };
+      exports3.mark = function(genFun) {
+        if (Object.setPrototypeOf) {
+          Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+        } else {
+          genFun.__proto__ = GeneratorFunctionPrototype;
+          define2(genFun, toStringTagSymbol, "GeneratorFunction");
+        }
+        genFun.prototype = Object.create(Gp);
+        return genFun;
+      };
+      exports3.awrap = function(arg) {
+        return { __await: arg };
+      };
       function AsyncIterator(generator, PromiseImpl) {
         function invoke(method, arg, resolve, reject) {
           var record = tryCatch2(generator[method], generator, arg);
-          if (record.type !== "throw") {
-            var result = record.arg, value = result.value;
-            return value && _typeof(value) == "object" && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function(value2) {
-              invoke("next", value2, resolve, reject);
-            }, function(err) {
-              invoke("throw", err, resolve, reject);
-            }) : PromiseImpl.resolve(value).then(function(unwrapped) {
-              result.value = unwrapped, resolve(result);
+          if (record.type === "throw") {
+            reject(record.arg);
+          } else {
+            var result = record.arg;
+            var value = result.value;
+            if (value && typeof value === "object" && hasOwn.call(value, "__await")) {
+              return PromiseImpl.resolve(value.__await).then(function(value2) {
+                invoke("next", value2, resolve, reject);
+              }, function(err) {
+                invoke("throw", err, resolve, reject);
+              });
+            }
+            return PromiseImpl.resolve(value).then(function(unwrapped) {
+              result.value = unwrapped;
+              resolve(result);
             }, function(error) {
               return invoke("throw", error, resolve, reject);
             });
           }
-          reject(record.arg);
         }
         __name(invoke, "invoke");
         var previousPromise;
-        defineProperty(this, "_invoke", {
-          value: /* @__PURE__ */ __name(function value(method, arg) {
-            function callInvokeWithMethodAndArg() {
-              return new PromiseImpl(function(resolve, reject) {
-                invoke(method, arg, resolve, reject);
-              });
-            }
-            __name(callInvokeWithMethodAndArg, "callInvokeWithMethodAndArg");
-            return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-          }, "value")
-        });
+        function enqueue(method, arg) {
+          function callInvokeWithMethodAndArg() {
+            return new PromiseImpl(function(resolve, reject) {
+              invoke(method, arg, resolve, reject);
+            });
+          }
+          __name(callInvokeWithMethodAndArg, "callInvokeWithMethodAndArg");
+          return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+        }
+        __name(enqueue, "enqueue");
+        this._invoke = enqueue;
       }
       __name(AsyncIterator, "AsyncIterator");
+      defineIteratorMethods(AsyncIterator.prototype);
+      AsyncIterator.prototype[asyncIteratorSymbol] = function() {
+        return this;
+      };
+      exports3.AsyncIterator = AsyncIterator;
+      exports3.async = function(innerFn, outerFn, self2, tryLocsList, PromiseImpl) {
+        if (PromiseImpl === void 0)
+          PromiseImpl = Promise;
+        var iter = new AsyncIterator(wrap(innerFn, outerFn, self2, tryLocsList), PromiseImpl);
+        return exports3.isGeneratorFunction(outerFn) ? iter : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+      };
       function makeInvokeMethod(innerFn, self2, context) {
-        var state = "suspendedStart";
-        return function(method, arg) {
-          if (state === "executing")
+        var state = GenStateSuspendedStart;
+        return /* @__PURE__ */ __name(function invoke(method, arg) {
+          if (state === GenStateExecuting) {
             throw new Error("Generator is already running");
-          if (state === "completed") {
-            if (method === "throw")
+          }
+          if (state === GenStateCompleted) {
+            if (method === "throw") {
               throw arg;
+            }
             return doneResult();
           }
-          for (context.method = method, context.arg = arg; ; ) {
+          context.method = method;
+          context.arg = arg;
+          while (true) {
             var delegate = context.delegate;
             if (delegate) {
               var delegateResult = maybeInvokeDelegate(delegate, context);
@@ -2446,172 +2468,242 @@ var require_regeneratorRuntime = __commonJS({
                 return delegateResult;
               }
             }
-            if (context.method === "next")
+            if (context.method === "next") {
               context.sent = context._sent = context.arg;
-            else if (context.method === "throw") {
-              if (state === "suspendedStart")
-                throw state = "completed", context.arg;
+            } else if (context.method === "throw") {
+              if (state === GenStateSuspendedStart) {
+                state = GenStateCompleted;
+                throw context.arg;
+              }
               context.dispatchException(context.arg);
-            } else
-              context.method === "return" && context.abrupt("return", context.arg);
-            state = "executing";
+            } else if (context.method === "return") {
+              context.abrupt("return", context.arg);
+            }
+            state = GenStateExecuting;
             var record = tryCatch2(innerFn, self2, context);
             if (record.type === "normal") {
-              if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel)
+              state = context.done ? GenStateCompleted : GenStateSuspendedYield;
+              if (record.arg === ContinueSentinel) {
                 continue;
+              }
               return {
                 value: record.arg,
                 done: context.done
               };
+            } else if (record.type === "throw") {
+              state = GenStateCompleted;
+              context.method = "throw";
+              context.arg = record.arg;
             }
-            record.type === "throw" && (state = "completed", context.method = "throw", context.arg = record.arg);
           }
-        };
+        }, "invoke");
       }
       __name(makeInvokeMethod, "makeInvokeMethod");
       function maybeInvokeDelegate(delegate, context) {
-        var methodName = context.method, method = delegate.iterator[methodName];
-        if (method === void 0)
-          return context.delegate = null, methodName === "throw" && delegate.iterator["return"] && (context.method = "return", context.arg = void 0, maybeInvokeDelegate(delegate, context), context.method === "throw") || methodName !== "return" && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
+        var method = delegate.iterator[context.method];
+        if (method === undefined2) {
+          context.delegate = null;
+          if (context.method === "throw") {
+            if (delegate.iterator["return"]) {
+              context.method = "return";
+              context.arg = undefined2;
+              maybeInvokeDelegate(delegate, context);
+              if (context.method === "throw") {
+                return ContinueSentinel;
+              }
+            }
+            context.method = "throw";
+            context.arg = new TypeError("The iterator does not provide a 'throw' method");
+          }
+          return ContinueSentinel;
+        }
         var record = tryCatch2(method, delegate.iterator, context.arg);
-        if (record.type === "throw")
-          return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
+        if (record.type === "throw") {
+          context.method = "throw";
+          context.arg = record.arg;
+          context.delegate = null;
+          return ContinueSentinel;
+        }
         var info = record.arg;
-        return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, context.method !== "return" && (context.method = "next", context.arg = void 0), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
+        if (!info) {
+          context.method = "throw";
+          context.arg = new TypeError("iterator result is not an object");
+          context.delegate = null;
+          return ContinueSentinel;
+        }
+        if (info.done) {
+          context[delegate.resultName] = info.value;
+          context.next = delegate.nextLoc;
+          if (context.method !== "return") {
+            context.method = "next";
+            context.arg = undefined2;
+          }
+        } else {
+          return info;
+        }
+        context.delegate = null;
+        return ContinueSentinel;
       }
       __name(maybeInvokeDelegate, "maybeInvokeDelegate");
+      defineIteratorMethods(Gp);
+      define2(Gp, toStringTagSymbol, "Generator");
+      Gp[iteratorSymbol] = function() {
+        return this;
+      };
+      Gp.toString = function() {
+        return "[object Generator]";
+      };
       function pushTryEntry(locs) {
-        var entry = {
-          tryLoc: locs[0]
-        };
-        1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
+        var entry = { tryLoc: locs[0] };
+        if (1 in locs) {
+          entry.catchLoc = locs[1];
+        }
+        if (2 in locs) {
+          entry.finallyLoc = locs[2];
+          entry.afterLoc = locs[3];
+        }
+        this.tryEntries.push(entry);
       }
       __name(pushTryEntry, "pushTryEntry");
       function resetTryEntry(entry) {
         var record = entry.completion || {};
-        record.type = "normal", delete record.arg, entry.completion = record;
+        record.type = "normal";
+        delete record.arg;
+        entry.completion = record;
       }
       __name(resetTryEntry, "resetTryEntry");
       function Context(tryLocsList) {
-        this.tryEntries = [{
-          tryLoc: "root"
-        }], tryLocsList.forEach(pushTryEntry, this), this.reset(true);
+        this.tryEntries = [{ tryLoc: "root" }];
+        tryLocsList.forEach(pushTryEntry, this);
+        this.reset(true);
       }
       __name(Context, "Context");
+      exports3.keys = function(object) {
+        var keys = [];
+        for (var key in object) {
+          keys.push(key);
+        }
+        keys.reverse();
+        return /* @__PURE__ */ __name(function next() {
+          while (keys.length) {
+            var key2 = keys.pop();
+            if (key2 in object) {
+              next.value = key2;
+              next.done = false;
+              return next;
+            }
+          }
+          next.done = true;
+          return next;
+        }, "next");
+      };
       function values(iterable) {
         if (iterable) {
           var iteratorMethod = iterable[iteratorSymbol];
-          if (iteratorMethod)
+          if (iteratorMethod) {
             return iteratorMethod.call(iterable);
-          if (typeof iterable.next == "function")
+          }
+          if (typeof iterable.next === "function") {
             return iterable;
+          }
           if (!isNaN(iterable.length)) {
             var i = -1, next = /* @__PURE__ */ __name(function next2() {
-              for (; ++i < iterable.length; )
-                if (hasOwn.call(iterable, i))
-                  return next2.value = iterable[i], next2.done = false, next2;
-              return next2.value = void 0, next2.done = true, next2;
+              while (++i < iterable.length) {
+                if (hasOwn.call(iterable, i)) {
+                  next2.value = iterable[i];
+                  next2.done = false;
+                  return next2;
+                }
+              }
+              next2.value = undefined2;
+              next2.done = true;
+              return next2;
             }, "next");
             return next.next = next;
           }
         }
-        return {
-          next: doneResult
-        };
+        return { next: doneResult };
       }
       __name(values, "values");
+      exports3.values = values;
       function doneResult() {
-        return {
-          value: void 0,
-          done: true
-        };
+        return { value: undefined2, done: true };
       }
       __name(doneResult, "doneResult");
-      return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
-        value: GeneratorFunctionPrototype,
-        configurable: true
-      }), defineProperty(GeneratorFunctionPrototype, "constructor", {
-        value: GeneratorFunction,
-        configurable: true
-      }), GeneratorFunction.displayName = define2(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports3.isGeneratorFunction = function(genFun) {
-        var ctor = typeof genFun == "function" && genFun.constructor;
-        return !!ctor && (ctor === GeneratorFunction || (ctor.displayName || ctor.name) === "GeneratorFunction");
-      }, exports3.mark = function(genFun) {
-        return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define2(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-      }, exports3.awrap = function(arg) {
-        return {
-          __await: arg
-        };
-      }, defineIteratorMethods(AsyncIterator.prototype), define2(AsyncIterator.prototype, asyncIteratorSymbol, function() {
-        return this;
-      }), exports3.AsyncIterator = AsyncIterator, exports3.async = function(innerFn, outerFn, self2, tryLocsList, PromiseImpl) {
-        PromiseImpl === void 0 && (PromiseImpl = Promise);
-        var iter = new AsyncIterator(wrap(innerFn, outerFn, self2, tryLocsList), PromiseImpl);
-        return exports3.isGeneratorFunction(outerFn) ? iter : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-      }, defineIteratorMethods(Gp), define2(Gp, toStringTagSymbol, "Generator"), define2(Gp, iteratorSymbol, function() {
-        return this;
-      }), define2(Gp, "toString", function() {
-        return "[object Generator]";
-      }), exports3.keys = function(val) {
-        var object = Object(val), keys = [];
-        for (var key in object)
-          keys.push(key);
-        return keys.reverse(), /* @__PURE__ */ __name(function next() {
-          for (; keys.length; ) {
-            var key2 = keys.pop();
-            if (key2 in object)
-              return next.value = key2, next.done = false, next;
-          }
-          return next.done = true, next;
-        }, "next");
-      }, exports3.values = values, Context.prototype = {
+      Context.prototype = {
         constructor: Context,
-        reset: /* @__PURE__ */ __name(function reset(skipTempReset) {
-          if (this.prev = 0, this.next = 0, this.sent = this._sent = void 0, this.done = false, this.delegate = null, this.method = "next", this.arg = void 0, this.tryEntries.forEach(resetTryEntry), !skipTempReset)
-            for (var name in this)
-              name.charAt(0) === "t" && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = void 0);
-        }, "reset"),
-        stop: /* @__PURE__ */ __name(function stop() {
-          this.done = true;
-          var rootRecord = this.tryEntries[0].completion;
-          if (rootRecord.type === "throw")
-            throw rootRecord.arg;
-          return this.rval;
-        }, "stop"),
-        dispatchException: /* @__PURE__ */ __name(function dispatchException(exception) {
-          if (this.done)
-            throw exception;
-          var context = this;
-          function handle(loc, caught) {
-            return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = void 0), !!caught;
-          }
-          __name(handle, "handle");
-          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-            var entry = this.tryEntries[i], record = entry.completion;
-            if (entry.tryLoc === "root")
-              return handle("end");
-            if (entry.tryLoc <= this.prev) {
-              var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc");
-              if (hasCatch && hasFinally) {
-                if (this.prev < entry.catchLoc)
-                  return handle(entry.catchLoc, true);
-                if (this.prev < entry.finallyLoc)
-                  return handle(entry.finallyLoc);
-              } else if (hasCatch) {
-                if (this.prev < entry.catchLoc)
-                  return handle(entry.catchLoc, true);
-              } else {
-                if (!hasFinally)
-                  throw new Error("try statement without catch or finally");
-                if (this.prev < entry.finallyLoc)
-                  return handle(entry.finallyLoc);
+        reset: function(skipTempReset) {
+          this.prev = 0;
+          this.next = 0;
+          this.sent = this._sent = undefined2;
+          this.done = false;
+          this.delegate = null;
+          this.method = "next";
+          this.arg = undefined2;
+          this.tryEntries.forEach(resetTryEntry);
+          if (!skipTempReset) {
+            for (var name in this) {
+              if (name.charAt(0) === "t" && hasOwn.call(this, name) && !isNaN(+name.slice(1))) {
+                this[name] = undefined2;
               }
             }
           }
-        }, "dispatchException"),
-        abrupt: /* @__PURE__ */ __name(function abrupt(type, arg) {
+        },
+        stop: function() {
+          this.done = true;
+          var rootEntry = this.tryEntries[0];
+          var rootRecord = rootEntry.completion;
+          if (rootRecord.type === "throw") {
+            throw rootRecord.arg;
+          }
+          return this.rval;
+        },
+        dispatchException: function(exception) {
+          if (this.done) {
+            throw exception;
+          }
+          var context = this;
+          function handle(loc, caught) {
+            record.type = "throw";
+            record.arg = exception;
+            context.next = loc;
+            if (caught) {
+              context.method = "next";
+              context.arg = undefined2;
+            }
+            return !!caught;
+          }
+          __name(handle, "handle");
+          for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+            var entry = this.tryEntries[i];
+            var record = entry.completion;
+            if (entry.tryLoc === "root") {
+              return handle("end");
+            }
+            if (entry.tryLoc <= this.prev) {
+              var hasCatch = hasOwn.call(entry, "catchLoc");
+              var hasFinally = hasOwn.call(entry, "finallyLoc");
+              if (hasCatch && hasFinally) {
+                if (this.prev < entry.catchLoc) {
+                  return handle(entry.catchLoc, true);
+                } else if (this.prev < entry.finallyLoc) {
+                  return handle(entry.finallyLoc);
+                }
+              } else if (hasCatch) {
+                if (this.prev < entry.catchLoc) {
+                  return handle(entry.catchLoc, true);
+                }
+              } else if (hasFinally) {
+                if (this.prev < entry.finallyLoc) {
+                  return handle(entry.finallyLoc);
+                }
+              } else {
+                throw new Error("try statement without catch or finally");
+              }
+            }
+          }
+        },
+        abrupt: function(type, arg) {
           for (var i = this.tryEntries.length - 1; i >= 0; --i) {
             var entry = this.tryEntries[i];
             if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
@@ -2619,23 +2711,45 @@ var require_regeneratorRuntime = __commonJS({
               break;
             }
           }
-          finallyEntry && (type === "break" || type === "continue") && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
+          if (finallyEntry && (type === "break" || type === "continue") && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc) {
+            finallyEntry = null;
+          }
           var record = finallyEntry ? finallyEntry.completion : {};
-          return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
-        }, "abrupt"),
-        complete: /* @__PURE__ */ __name(function complete(record, afterLoc) {
-          if (record.type === "throw")
+          record.type = type;
+          record.arg = arg;
+          if (finallyEntry) {
+            this.method = "next";
+            this.next = finallyEntry.finallyLoc;
+            return ContinueSentinel;
+          }
+          return this.complete(record);
+        },
+        complete: function(record, afterLoc) {
+          if (record.type === "throw") {
             throw record.arg;
-          return record.type === "break" || record.type === "continue" ? this.next = record.arg : record.type === "return" ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : record.type === "normal" && afterLoc && (this.next = afterLoc), ContinueSentinel;
-        }, "complete"),
-        finish: /* @__PURE__ */ __name(function finish(finallyLoc) {
+          }
+          if (record.type === "break" || record.type === "continue") {
+            this.next = record.arg;
+          } else if (record.type === "return") {
+            this.rval = this.arg = record.arg;
+            this.method = "return";
+            this.next = "end";
+          } else if (record.type === "normal" && afterLoc) {
+            this.next = afterLoc;
+          }
+          return ContinueSentinel;
+        },
+        finish: function(finallyLoc) {
           for (var i = this.tryEntries.length - 1; i >= 0; --i) {
             var entry = this.tryEntries[i];
-            if (entry.finallyLoc === finallyLoc)
-              return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
+            if (entry.finallyLoc === finallyLoc) {
+              this.complete(entry.completion, entry.afterLoc);
+              resetTryEntry(entry);
+              return ContinueSentinel;
+            }
           }
-        }, "finish"),
-        "catch": /* @__PURE__ */ __name(function _catch(tryLoc) {
+        },
+        "catch": function(tryLoc) {
           for (var i = this.tryEntries.length - 1; i >= 0; --i) {
             var entry = this.tryEntries[i];
             if (entry.tryLoc === tryLoc) {
@@ -2648,35 +2762,33 @@ var require_regeneratorRuntime = __commonJS({
             }
           }
           throw new Error("illegal catch attempt");
-        }, "_catch"),
-        delegateYield: /* @__PURE__ */ __name(function delegateYield(iterable, resultName, nextLoc) {
-          return this.delegate = {
+        },
+        delegateYield: function(iterable, resultName, nextLoc) {
+          this.delegate = {
             iterator: values(iterable),
             resultName,
             nextLoc
-          }, this.method === "next" && (this.arg = void 0), ContinueSentinel;
-        }, "delegateYield")
-      }, exports3;
+          };
+          if (this.method === "next") {
+            this.arg = undefined2;
+          }
+          return ContinueSentinel;
+        }
+      };
+      return exports3;
+    }(typeof module2 === "object" ? module2.exports : {});
+    try {
+      regeneratorRuntime = runtime;
+    } catch (accidentalStrictMode) {
+      Function("r", "regeneratorRuntime = r")(runtime);
     }
-    __name(_regeneratorRuntime, "_regeneratorRuntime");
-    module2.exports = _regeneratorRuntime, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
   }
 });
 
 // node_modules/@babel/runtime/regenerator/index.js
 var require_regenerator = __commonJS({
   "node_modules/@babel/runtime/regenerator/index.js"(exports2, module2) {
-    var runtime = require_regeneratorRuntime()();
-    module2.exports = runtime;
-    try {
-      regeneratorRuntime = runtime;
-    } catch (accidentalStrictMode) {
-      if (typeof globalThis === "object") {
-        globalThis.regeneratorRuntime = runtime;
-      } else {
-        Function("r", "regeneratorRuntime = r")(runtime);
-      }
-    }
+    module2.exports = require_runtime();
   }
 });
 
@@ -2716,51 +2828,15 @@ var require_asyncToGenerator = __commonJS({
       };
     }
     __name(_asyncToGenerator, "_asyncToGenerator");
-    module2.exports = _asyncToGenerator, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
-  }
-});
-
-// node_modules/@babel/runtime/helpers/toPrimitive.js
-var require_toPrimitive = __commonJS({
-  "node_modules/@babel/runtime/helpers/toPrimitive.js"(exports2, module2) {
-    var _typeof = require_typeof()["default"];
-    function _toPrimitive(input, hint) {
-      if (_typeof(input) !== "object" || input === null)
-        return input;
-      var prim = input[Symbol.toPrimitive];
-      if (prim !== void 0) {
-        var res = prim.call(input, hint || "default");
-        if (_typeof(res) !== "object")
-          return res;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return (hint === "string" ? String : Number)(input);
-    }
-    __name(_toPrimitive, "_toPrimitive");
-    module2.exports = _toPrimitive, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
-  }
-});
-
-// node_modules/@babel/runtime/helpers/toPropertyKey.js
-var require_toPropertyKey = __commonJS({
-  "node_modules/@babel/runtime/helpers/toPropertyKey.js"(exports2, module2) {
-    var _typeof = require_typeof()["default"];
-    var toPrimitive = require_toPrimitive();
-    function _toPropertyKey(arg) {
-      var key = toPrimitive(arg, "string");
-      return _typeof(key) === "symbol" ? key : String(key);
-    }
-    __name(_toPropertyKey, "_toPropertyKey");
-    module2.exports = _toPropertyKey, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
+    module2.exports = _asyncToGenerator;
+    module2.exports["default"] = module2.exports, module2.exports.__esModule = true;
   }
 });
 
 // node_modules/@babel/runtime/helpers/defineProperty.js
 var require_defineProperty = __commonJS({
   "node_modules/@babel/runtime/helpers/defineProperty.js"(exports2, module2) {
-    var toPropertyKey = require_toPropertyKey();
     function _defineProperty(obj2, key, value) {
-      key = toPropertyKey(key);
       if (key in obj2) {
         Object.defineProperty(obj2, key, {
           value,
@@ -2774,7 +2850,8 @@ var require_defineProperty = __commonJS({
       return obj2;
     }
     __name(_defineProperty, "_defineProperty");
-    module2.exports = _defineProperty, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
+    module2.exports = _defineProperty;
+    module2.exports["default"] = module2.exports, module2.exports.__esModule = true;
   }
 });
 
@@ -2787,14 +2864,14 @@ var require_classCallCheck = __commonJS({
       }
     }
     __name(_classCallCheck, "_classCallCheck");
-    module2.exports = _classCallCheck, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
+    module2.exports = _classCallCheck;
+    module2.exports["default"] = module2.exports, module2.exports.__esModule = true;
   }
 });
 
 // node_modules/@babel/runtime/helpers/createClass.js
 var require_createClass = __commonJS({
   "node_modules/@babel/runtime/helpers/createClass.js"(exports2, module2) {
-    var toPropertyKey = require_toPropertyKey();
     function _defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
         var descriptor = props[i];
@@ -2802,7 +2879,7 @@ var require_createClass = __commonJS({
         descriptor.configurable = true;
         if ("value" in descriptor)
           descriptor.writable = true;
-        Object.defineProperty(target, toPropertyKey(descriptor.key), descriptor);
+        Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
     __name(_defineProperties, "_defineProperties");
@@ -2811,13 +2888,11 @@ var require_createClass = __commonJS({
         _defineProperties(Constructor.prototype, protoProps);
       if (staticProps)
         _defineProperties(Constructor, staticProps);
-      Object.defineProperty(Constructor, "prototype", {
-        writable: false
-      });
       return Constructor;
     }
     __name(_createClass, "_createClass");
-    module2.exports = _createClass, module2.exports.__esModule = true, module2.exports["default"] = module2.exports;
+    module2.exports = _createClass;
+    module2.exports["default"] = module2.exports, module2.exports.__esModule = true;
   }
 });
 
@@ -8641,6 +8716,7 @@ var require_rules = __commonJS({
       "express.aero",
       "federation.aero",
       "flight.aero",
+      "freight.aero",
       "fuel.aero",
       "gliding.aero",
       "government.aero",
@@ -8722,19 +8798,15 @@ var require_rules = __commonJS({
       "it.ao",
       "aq",
       "ar",
-      "bet.ar",
       "com.ar",
-      "coop.ar",
       "edu.ar",
       "gob.ar",
       "gov.ar",
       "int.ar",
       "mil.ar",
       "musica.ar",
-      "mutual.ar",
       "net.ar",
       "org.ar",
-      "senasa.ar",
       "tur.ar",
       "arpa",
       "e164.arpa",
@@ -8751,7 +8823,6 @@ var require_rules = __commonJS({
       "co.at",
       "gv.at",
       "or.at",
-      "sth.ac.at",
       "au",
       "com.au",
       "net.au",
@@ -8785,6 +8856,7 @@ var require_rules = __commonJS({
       "tas.gov.au",
       "vic.gov.au",
       "wa.gov.au",
+      "education.tas.edu.au",
       "schools.nsw.edu.au",
       "aw",
       "com.aw",
@@ -8943,7 +9015,6 @@ var require_rules = __commonJS({
       "am.br",
       "anani.br",
       "aparecida.br",
-      "app.br",
       "arq.br",
       "art.br",
       "ato.br",
@@ -8951,7 +9022,6 @@ var require_rules = __commonJS({
       "barueri.br",
       "belem.br",
       "bhz.br",
-      "bib.br",
       "bio.br",
       "blog.br",
       "bmd.br",
@@ -8966,19 +9036,14 @@ var require_rules = __commonJS({
       "com.br",
       "contagem.br",
       "coop.br",
-      "coz.br",
       "cri.br",
       "cuiaba.br",
       "curitiba.br",
       "def.br",
-      "des.br",
-      "det.br",
-      "dev.br",
       "ecn.br",
       "eco.br",
       "edu.br",
       "emp.br",
-      "enf.br",
       "eng.br",
       "esp.br",
       "etc.br",
@@ -8994,7 +9059,6 @@ var require_rules = __commonJS({
       "foz.br",
       "fst.br",
       "g12.br",
-      "geo.br",
       "ggf.br",
       "goiania.br",
       "gov.br",
@@ -9037,7 +9101,6 @@ var require_rules = __commonJS({
       "jus.br",
       "leg.br",
       "lel.br",
-      "log.br",
       "londrina.br",
       "macapa.br",
       "maceio.br",
@@ -9070,7 +9133,6 @@ var require_rules = __commonJS({
       "radio.br",
       "rec.br",
       "recife.br",
-      "rep.br",
       "ribeirao.br",
       "rio.br",
       "riobranco.br",
@@ -9081,7 +9143,6 @@ var require_rules = __commonJS({
       "santoandre.br",
       "saobernardo.br",
       "saogonca.br",
-      "seg.br",
       "sjc.br",
       "slg.br",
       "slz.br",
@@ -9089,7 +9150,6 @@ var require_rules = __commonJS({
       "srv.br",
       "taxi.br",
       "tc.br",
-      "tec.br",
       "teo.br",
       "the.br",
       "tmp.br",
@@ -9171,6 +9231,7 @@ var require_rules = __commonJS({
       "*.ck",
       "!www.ck",
       "cl",
+      "aprendemas.cl",
       "co.cl",
       "gob.cl",
       "gov.cl",
@@ -9257,11 +9318,6 @@ var require_rules = __commonJS({
       "gov.cu",
       "inf.cu",
       "cv",
-      "com.cv",
-      "edu.cv",
-      "int.cv",
-      "nome.cv",
-      "org.cv",
       "cw",
       "com.cw",
       "edu.cw",
@@ -9276,9 +9332,10 @@ var require_rules = __commonJS({
       "ekloges.cy",
       "gov.cy",
       "ltd.cy",
-      "mil.cy",
+      "name.cy",
       "net.cy",
       "org.cy",
+      "parliament.cy",
       "press.cy",
       "pro.cy",
       "tm.cy",
@@ -9304,16 +9361,14 @@ var require_rules = __commonJS({
       "sld.do",
       "web.do",
       "dz",
-      "art.dz",
-      "asso.dz",
       "com.dz",
-      "edu.dz",
-      "gov.dz",
       "org.dz",
       "net.dz",
+      "gov.dz",
+      "edu.dz",
+      "asso.dz",
       "pol.dz",
-      "soc.dz",
-      "tm.dz",
+      "art.dz",
       "ec",
       "com.ec",
       "info.ec",
@@ -9380,10 +9435,6 @@ var require_rules = __commonJS({
       "org.fj",
       "pro.fj",
       "*.fk",
-      "com.fm",
-      "edu.fm",
-      "net.fm",
-      "org.fm",
       "fm",
       "fo",
       "fr",
@@ -9410,8 +9461,6 @@ var require_rules = __commonJS({
       "veterinaire.fr",
       "ga",
       "gb",
-      "edu.gd",
-      "gov.gd",
       "gd",
       "ge",
       "com.ge",
@@ -9506,7 +9555,7 @@ var require_rules = __commonJS({
       "\u654E\u80B2.hk",
       "\u653F\u5E9C.hk",
       "\u500B\u4EBA.hk",
-      "\u4E2A\uFFFD\uFFFD.hk",
+      "\u4E2A\u4EBA.hk",
       "\u7B87\u4EBA.hk",
       "\u7DB2\u7EDC.hk",
       "\u7F51\u7EDC.hk",
@@ -11963,10 +12012,11 @@ var require_rules = __commonJS({
       "net.kw",
       "org.kw",
       "ky",
-      "com.ky",
       "edu.ky",
-      "net.ky",
+      "gov.ky",
+      "com.ky",
       "org.ky",
+      "net.ky",
       "kz",
       "org.kz",
       "edu.kz",
@@ -12716,14 +12766,13 @@ var require_rules = __commonJS({
       "edu.mx",
       "net.mx",
       "my",
-      "biz.my",
       "com.my",
-      "edu.my",
-      "gov.my",
-      "mil.my",
-      "name.my",
       "net.my",
       "org.my",
+      "gov.my",
+      "edu.my",
+      "mil.my",
+      "name.my",
       "mz",
       "ac.mz",
       "adv.mz",
@@ -14059,16 +14108,15 @@ var require_rules = __commonJS({
       "com.ss",
       "edu.ss",
       "gov.ss",
-      "me.ss",
       "net.ss",
       "org.ss",
-      "sch.ss",
       "st",
       "co.st",
       "com.st",
       "consulado.st",
       "edu.st",
       "embaixada.st",
+      "gov.st",
       "mil.st",
       "net.st",
       "org.st",
@@ -14142,14 +14190,21 @@ var require_rules = __commonJS({
       "fin.tn",
       "gov.tn",
       "ind.tn",
-      "info.tn",
       "intl.tn",
-      "mincom.tn",
       "nat.tn",
       "net.tn",
       "org.tn",
+      "info.tn",
       "perso.tn",
       "tourism.tn",
+      "edunet.tn",
+      "rnrt.tn",
+      "rns.tn",
+      "rnu.tn",
+      "mincom.tn",
+      "agrinet.tn",
+      "defense.tn",
+      "turen.tn",
       "to",
       "com.to",
       "gov.to",
@@ -14248,6 +14303,7 @@ var require_rules = __commonJS({
       "dn.ua",
       "dnepropetrovsk.ua",
       "dnipropetrovsk.ua",
+      "dominic.ua",
       "donetsk.ua",
       "dp.ua",
       "if.ua",
@@ -14425,6 +14481,7 @@ var require_rules = __commonJS({
       "k12.or.us",
       "k12.pa.us",
       "k12.pr.us",
+      "k12.ri.us",
       "k12.sc.us",
       "k12.tn.us",
       "k12.tx.us",
@@ -14576,7 +14633,6 @@ var require_rules = __commonJS({
       "edu.vc",
       "ve",
       "arts.ve",
-      "bib.ve",
       "co.ve",
       "com.ve",
       "e12.ve",
@@ -14588,9 +14644,7 @@ var require_rules = __commonJS({
       "int.ve",
       "mil.ve",
       "net.ve",
-      "nom.ve",
       "org.ve",
-      "rar.ve",
       "rec.ve",
       "store.ve",
       "tec.ve",
@@ -14632,7 +14686,6 @@ var require_rules = __commonJS({
       "\u0570\u0561\u0575",
       "\u09AC\u09BE\u0982\u09B2\u09BE",
       "\u0431\u0433",
-      "\u0627\u0644\u0628\u062D\u0631\u064A\u0646",
       "\u0431\u0435\u043B",
       "\u4E2D\u56FD",
       "\u4E2D\u570B",
@@ -14671,7 +14724,6 @@ var require_rules = __commonJS({
       "\u0627\u0644\u0627\u0631\u062F\u0646",
       "\uD55C\uAD6D",
       "\u049B\u0430\u0437",
-      "\u0EA5\u0EB2\u0EA7",
       "\u0DBD\u0D82\u0D9A\u0DCF",
       "\u0B87\u0BB2\u0B99\u0BCD\u0B95\u0BC8",
       "\u0627\u0644\u0645\u063A\u0631\u0628",
@@ -14716,13 +14768,7 @@ var require_rules = __commonJS({
       "\u0443\u043A\u0440",
       "\u0627\u0644\u064A\u0645\u0646",
       "xxx",
-      "ye",
-      "com.ye",
-      "edu.ye",
-      "gov.ye",
-      "net.ye",
-      "mil.ye",
-      "org.ye",
+      "*.ye",
       "ac.za",
       "agric.za",
       "alt.za",
@@ -14780,11 +14826,13 @@ var require_rules = __commonJS({
       "adult",
       "aeg",
       "aetna",
+      "afamilycompany",
       "afl",
       "africa",
       "agakhan",
       "agency",
       "aig",
+      "aigo",
       "airbus",
       "airforce",
       "airtel",
@@ -14900,6 +14948,7 @@ var require_rules = __commonJS({
       "broker",
       "brother",
       "brussels",
+      "budapest",
       "bugatti",
       "build",
       "builders",
@@ -14929,6 +14978,7 @@ var require_rules = __commonJS({
       "cars",
       "casa",
       "case",
+      "caseih",
       "cash",
       "casino",
       "catering",
@@ -14937,6 +14987,7 @@ var require_rules = __commonJS({
       "cbn",
       "cbre",
       "cbs",
+      "ceb",
       "center",
       "ceo",
       "cern",
@@ -15003,6 +15054,7 @@ var require_rules = __commonJS({
       "crs",
       "cruise",
       "cruises",
+      "csc",
       "cuisinella",
       "cymru",
       "cyou",
@@ -15050,6 +15102,7 @@ var require_rules = __commonJS({
       "drive",
       "dtv",
       "dubai",
+      "duck",
       "dunlop",
       "dupont",
       "durban",
@@ -15072,6 +15125,7 @@ var require_rules = __commonJS({
       "erni",
       "esq",
       "estate",
+      "esurance",
       "etisalat",
       "eurovision",
       "eus",
@@ -15134,6 +15188,7 @@ var require_rules = __commonJS({
       "frontier",
       "ftr",
       "fujitsu",
+      "fujixerox",
       "fun",
       "fund",
       "furniture",
@@ -15159,6 +15214,7 @@ var require_rules = __commonJS({
       "gifts",
       "gives",
       "giving",
+      "glade",
       "glass",
       "gle",
       "global",
@@ -15250,6 +15306,7 @@ var require_rules = __commonJS({
       "institute",
       "insurance",
       "insure",
+      "intel",
       "international",
       "intuit",
       "investments",
@@ -15260,9 +15317,11 @@ var require_rules = __commonJS({
       "istanbul",
       "itau",
       "itv",
+      "iveco",
       "jaguar",
       "java",
       "jcb",
+      "jcp",
       "jeep",
       "jetzt",
       "jewelry",
@@ -15284,7 +15343,6 @@ var require_rules = __commonJS({
       "kerryproperties",
       "kfh",
       "kia",
-      "kids",
       "kim",
       "kinder",
       "kindle",
@@ -15336,6 +15394,7 @@ var require_rules = __commonJS({
       "lipsy",
       "live",
       "living",
+      "lixil",
       "llc",
       "llp",
       "loan",
@@ -15353,6 +15412,7 @@ var require_rules = __commonJS({
       "ltd",
       "ltda",
       "lundbeck",
+      "lupin",
       "luxe",
       "luxury",
       "macys",
@@ -15382,6 +15442,7 @@ var require_rules = __commonJS({
       "men",
       "menu",
       "merckmsd",
+      "metlife",
       "miami",
       "microsoft",
       "mini",
@@ -15409,10 +15470,11 @@ var require_rules = __commonJS({
       "msd",
       "mtn",
       "mtr",
-      "music",
       "mutual",
       "nab",
+      "nadex",
       "nagoya",
+      "nationwide",
       "natura",
       "navy",
       "nba",
@@ -15422,6 +15484,7 @@ var require_rules = __commonJS({
       "network",
       "neustar",
       "new",
+      "newholland",
       "news",
       "next",
       "nextdirect",
@@ -15447,6 +15510,7 @@ var require_rules = __commonJS({
       "nyc",
       "obi",
       "observer",
+      "off",
       "office",
       "okinawa",
       "olayan",
@@ -15458,6 +15522,7 @@ var require_rules = __commonJS({
       "ong",
       "onl",
       "online",
+      "onyourside",
       "ooo",
       "open",
       "oracle",
@@ -15526,8 +15591,10 @@ var require_rules = __commonJS({
       "qpon",
       "quebec",
       "quest",
+      "qvc",
       "racing",
       "radio",
+      "raid",
       "read",
       "realestate",
       "realtor",
@@ -15555,9 +15622,11 @@ var require_rules = __commonJS({
       "rich",
       "richardli",
       "ricoh",
+      "rightathome",
       "ril",
       "rio",
       "rip",
+      "rmit",
       "rocher",
       "rocks",
       "rodeo",
@@ -15596,6 +15665,8 @@ var require_rules = __commonJS({
       "schule",
       "schwarz",
       "science",
+      "scjohnson",
+      "scor",
       "scot",
       "search",
       "seat",
@@ -15623,6 +15694,7 @@ var require_rules = __commonJS({
       "shouji",
       "show",
       "showtime",
+      "shriram",
       "silk",
       "sina",
       "singles",
@@ -15649,6 +15721,7 @@ var require_rules = __commonJS({
       "space",
       "sport",
       "spot",
+      "spreadbetting",
       "srl",
       "stada",
       "staples",
@@ -15672,8 +15745,10 @@ var require_rules = __commonJS({
       "surgery",
       "suzuki",
       "swatch",
+      "swiftcover",
       "swiss",
       "sydney",
+      "symantec",
       "systems",
       "tab",
       "taipei",
@@ -15780,6 +15855,7 @@ var require_rules = __commonJS({
       "webcam",
       "weber",
       "website",
+      "wed",
       "wedding",
       "weibo",
       "weir",
@@ -15811,6 +15887,7 @@ var require_rules = __commonJS({
       "\u6148\u5584",
       "\u96C6\u56E2",
       "\u5728\u7EBF",
+      "\u5927\u4F17\u6C7D\u8F66",
       "\u70B9\u770B",
       "\u0E04\u0E2D\u0E21",
       "\u516B\u5366",
@@ -15842,6 +15919,7 @@ var require_rules = __commonJS({
       "\u0434\u0435\u0442\u0438",
       "\u30DD\u30A4\u30F3\u30C8",
       "\u65B0\u95FB",
+      "\u5DE5\u884C",
       "\u5BB6\u96FB",
       "\u0643\u0648\u0645",
       "\u4E2D\u6587\u7F51",
@@ -15861,6 +15939,7 @@ var require_rules = __commonJS({
       "\u8BFA\u57FA\u4E9A",
       "\u98DF\u54C1",
       "\u98DE\u5229\u6D66",
+      "\u624B\u8868",
       "\u624B\u673A",
       "\u0627\u0631\u0627\u0645\u0643\u0648",
       "\u0627\u0644\u0639\u0644\u064A\u0627\u0646",
@@ -15879,6 +15958,7 @@ var require_rules = __commonJS({
       "\u5065\u5EB7",
       "\u62DB\u8058",
       "\u0440\u0443\u0441",
+      "\u73E0\u5B9D",
       "\u5927\u62FF",
       "\u307F\u3093\u306A",
       "\u30B0\u30FC\u30B0\u30EB",
@@ -15917,24 +15997,13 @@ var require_rules = __commonJS({
       "cc.ua",
       "inf.ua",
       "ltd.ua",
-      "611.to",
-      "graphox.us",
-      "*.devcdnaccesso.com",
       "adobeaemcloud.com",
-      "*.dev.adobeaemcloud.com",
-      "hlx.live",
       "adobeaemcloud.net",
-      "hlx.page",
-      "hlx3.page",
+      "*.dev.adobeaemcloud.com",
       "beep.pl",
-      "airkitapps.com",
-      "airkitapps-au.com",
-      "airkitapps.eu",
-      "aivencloud.com",
       "barsy.ca",
       "*.compute.estate",
       "*.alces.network",
-      "kasserver.com",
       "altervista.org",
       "alwaysdata.net",
       "cloudfront.net",
@@ -15964,7 +16033,6 @@ var require_rules = __commonJS({
       "us-west-2.elasticbeanstalk.com",
       "*.elb.amazonaws.com",
       "*.elb.amazonaws.com.cn",
-      "awsglobalaccelerator.com",
       "s3.amazonaws.com",
       "s3-ap-northeast-1.amazonaws.com",
       "s3-ap-northeast-2.amazonaws.com",
@@ -16019,13 +16087,10 @@ var require_rules = __commonJS({
       "s3-website.eu-west-2.amazonaws.com",
       "s3-website.eu-west-3.amazonaws.com",
       "s3-website.us-east-2.amazonaws.com",
+      "amsw.nl",
       "t3l3p0rt.net",
       "tele.amune.org",
       "apigee.io",
-      "siiites.com",
-      "appspacehosted.com",
-      "appspaceusercontent.com",
-      "appudo.net",
       "on-aptible.com",
       "user.aseinet.ne.jp",
       "gv.vc",
@@ -16036,39 +16101,17 @@ var require_rules = __commonJS({
       "potager.org",
       "sweetpepper.org",
       "myasustor.com",
-      "cdn.prod.atlassian-dev.net",
-      "translated.page",
       "myfritz.net",
-      "onavstack.net",
       "*.awdev.ca",
       "*.advisor.ws",
-      "ecommerce-shop.pl",
       "b-data.io",
       "backplaneapp.io",
       "balena-devices.com",
-      "rs.ba",
-      "*.banzai.cloud",
       "app.banzaicloud.io",
-      "*.backyards.banzaicloud.io",
-      "base.ec",
-      "official.ec",
-      "buyshop.jp",
-      "fashionstore.jp",
-      "handcrafted.jp",
-      "kawaiishop.jp",
-      "supersale.jp",
-      "theshop.jp",
-      "shopselect.net",
-      "base.shop",
-      "*.beget.app",
       "betainabox.com",
       "bnr.la",
-      "bitbucket.io",
       "blackbaudcdn.net",
-      "of.je",
-      "bluebite.io",
       "boomla.net",
-      "boutir.com",
       "boxfuse.io",
       "square7.ch",
       "bplaced.com",
@@ -16076,67 +16119,55 @@ var require_rules = __commonJS({
       "square7.de",
       "bplaced.net",
       "square7.net",
-      "shop.brendly.rs",
       "browsersafetymark.io",
       "uk0.bigv.io",
       "dh.bytemark.co.uk",
       "vm.bytemark.co.uk",
-      "cafjs.com",
       "mycd.eu",
-      "drr.ac",
-      "uwu.ai",
       "carrd.co",
       "crd.co",
-      "ju.mp",
+      "uwu.ai",
       "ae.org",
+      "ar.com",
       "br.com",
       "cn.com",
       "com.de",
       "com.se",
       "de.com",
       "eu.com",
+      "gb.com",
       "gb.net",
+      "hu.com",
       "hu.net",
       "jp.net",
       "jpn.com",
+      "kr.com",
       "mex.com",
+      "no.com",
+      "qc.com",
       "ru.com",
       "sa.com",
       "se.net",
       "uk.com",
       "uk.net",
       "us.com",
+      "uy.com",
       "za.bz",
       "za.com",
-      "ar.com",
-      "hu.com",
-      "kr.com",
-      "no.com",
-      "qc.com",
-      "uy.com",
       "africa.com",
       "gr.com",
       "in.net",
-      "web.in",
       "us.org",
       "co.com",
-      "aus.basketball",
-      "nz.basketball",
-      "radio.am",
-      "radio.fm",
       "c.la",
       "certmgr.org",
-      "cx.ua",
+      "xenapponazure.com",
       "discourse.group",
       "discourse.team",
+      "virtueeldomein.nl",
       "cleverapps.io",
-      "clerk.app",
-      "clerkstage.app",
       "*.lcl.dev",
-      "*.lclstage.dev",
       "*.stg.dev",
-      "*.stgstage.dev",
-      "clickrising.net",
       "c66.me",
       "cloud66.ws",
       "cloud66.zone",
@@ -16147,8 +16178,7 @@ var require_rules = __commonJS({
       "cloudaccess.net",
       "cloudcontrolled.com",
       "cloudcontrolapp.com",
-      "*.cloudera.site",
-      "pages.dev",
+      "cloudera.site",
       "trycloudflare.com",
       "workers.dev",
       "wnext.app",
@@ -16171,8 +16201,8 @@ var require_rules = __commonJS({
       "cloudns.pro",
       "cloudns.pw",
       "cloudns.us",
+      "cloudeity.net",
       "cnpy.gdn",
-      "codeberg.page",
       "co.nl",
       "co.no",
       "webhosting.be",
@@ -16195,16 +16225,12 @@ var require_rules = __commonJS({
       "realm.cz",
       "*.cryptonomic.net",
       "cupcake.is",
-      "curv.dev",
       "*.customer-oci.com",
       "*.oci.customer-oci.com",
       "*.ocp.customer-oci.com",
       "*.ocs.customer-oci.com",
       "cyon.link",
       "cyon.site",
-      "fnwk.site",
-      "folionetwork.site",
-      "platform0.app",
       "daplie.me",
       "localhost.daplie.me",
       "dattolocal.com",
@@ -16218,37 +16244,21 @@ var require_rules = __commonJS({
       "firm.dk",
       "reg.dk",
       "store.dk",
-      "dyndns.dappnode.io",
       "*.dapps.earth",
       "*.bzz.dapps.earth",
       "builtwithdark.com",
-      "demo.datadetect.com",
-      "instance.datadetect.com",
       "edgestack.me",
-      "ddns5.com",
       "debian.net",
-      "deno.dev",
-      "deno-staging.dev",
       "dedyn.io",
-      "deta.app",
-      "deta.dev",
-      "*.rss.my.id",
-      "*.diher.solutions",
-      "discordsays.com",
-      "discordsez.com",
-      "jozi.biz",
       "dnshome.de",
       "online.th",
       "shop.th",
       "drayddns.com",
-      "shoparena.pl",
       "dreamhosters.com",
       "mydrobo.com",
       "drud.io",
       "drud.us",
       "duckdns.org",
-      "bip.sh",
-      "bitbridge.net",
       "dy.fi",
       "tunk.org",
       "dyndns-at-home.com",
@@ -16541,8 +16551,6 @@ var require_rules = __commonJS({
       "ddnss.org",
       "definima.net",
       "definima.io",
-      "ondigitalocean.app",
-      "*.digitaloceanspaces.com",
       "bci.dnstrace.pro",
       "ddnsfree.com",
       "ddnsgeek.com",
@@ -16563,18 +16571,12 @@ var require_rules = __commonJS({
       "blogsite.xyz",
       "dynv6.net",
       "e4.cz",
-      "eero.online",
-      "eero-stage.online",
-      "elementor.cloud",
-      "elementor.cool",
       "en-root.fr",
       "mytuleap.com",
-      "tuleap-partners.com",
-      "encr.app",
-      "encoreapi.com",
       "onred.one",
       "staging.onred.one",
-      "eu.encoway.cloud",
+      "enonic.io",
+      "customer.enonic.io",
       "eu.org",
       "al.eu.org",
       "asso.eu.org",
@@ -16631,7 +16633,6 @@ var require_rules = __commonJS({
       "tr.eu.org",
       "uk.eu.org",
       "us.eu.org",
-      "eurodir.ru",
       "eu-1.evennode.com",
       "eu-2.evennode.com",
       "eu-3.evennode.com",
@@ -16645,7 +16646,6 @@ var require_rules = __commonJS({
       "twmail.org",
       "mymailer.com.tw",
       "url.tw",
-      "onfabrica.com",
       "apps.fbsbx.com",
       "ru.net",
       "adygeya.ru",
@@ -16721,7 +16721,6 @@ var require_rules = __commonJS({
       "vologda.su",
       "channelsdvr.net",
       "u.channelsdvr.net",
-      "edgecompute.app",
       "fastly-terrarium.com",
       "fastlylb.net",
       "map.fastlylb.net",
@@ -16732,21 +16731,15 @@ var require_rules = __commonJS({
       "a.ssl.fastly.net",
       "b.ssl.fastly.net",
       "global.ssl.fastly.net",
+      "fastpanel.direct",
       "fastvps-server.com",
-      "fastvps.host",
-      "myfast.host",
-      "fastvps.site",
-      "myfast.space",
+      "fhapp.xyz",
       "fedorainfracloud.org",
       "fedorapeople.org",
       "cloud.fedoraproject.org",
       "app.os.fedoraproject.org",
       "app.os.stg.fedoraproject.org",
-      "conn.uk",
-      "copro.uk",
-      "hosp.uk",
       "mydobiss.com",
-      "fh-muenster.io",
       "filegear.me",
       "filegear-au.me",
       "filegear-de.me",
@@ -16755,20 +16748,8 @@ var require_rules = __commonJS({
       "filegear-jp.me",
       "filegear-sg.me",
       "firebaseapp.com",
-      "fireweb.app",
-      "flap.id",
-      "onflashdrive.app",
-      "fldrv.com",
-      "fly.dev",
-      "edgeapp.net",
-      "shw.io",
+      "flynnhub.com",
       "flynnhosting.net",
-      "forgeblocks.com",
-      "id.forgerock.io",
-      "framer.app",
-      "framercanvas.com",
-      "*.frusky.de",
-      "ravpage.co.il",
       "0e.vc",
       "freebox-os.com",
       "freeboxos.com",
@@ -16777,8 +16758,6 @@ var require_rules = __commonJS({
       "freebox-os.fr",
       "freeboxos.fr",
       "freedesktop.org",
-      "freemyip.com",
-      "wien.funkfeuer.at",
       "*.futurecms.at",
       "*.ex.futurecms.at",
       "*.in.futurecms.at",
@@ -16787,146 +16766,21 @@ var require_rules = __commonJS({
       "*.ex.ortsinfo.at",
       "*.kunden.ortsinfo.at",
       "*.statics.cloud",
-      "independent-commission.uk",
-      "independent-inquest.uk",
-      "independent-inquiry.uk",
-      "independent-panel.uk",
-      "independent-review.uk",
-      "public-inquiry.uk",
-      "royal-commission.uk",
-      "campaign.gov.uk",
       "service.gov.uk",
-      "api.gov.uk",
       "gehirn.ne.jp",
       "usercontent.jp",
       "gentapps.com",
-      "gentlentapis.com",
       "lab.ms",
-      "cdn-edges.net",
-      "ghost.io",
-      "gsj.bz",
-      "githubusercontent.com",
-      "githubpreview.dev",
       "github.io",
+      "githubusercontent.com",
       "gitlab.io",
-      "gitapp.si",
-      "gitpage.si",
       "glitch.me",
-      "nog.community",
-      "co.ro",
-      "shop.ro",
       "lolipop.io",
-      "angry.jp",
-      "babyblue.jp",
-      "babymilk.jp",
-      "backdrop.jp",
-      "bambina.jp",
-      "bitter.jp",
-      "blush.jp",
-      "boo.jp",
-      "boy.jp",
-      "boyfriend.jp",
-      "but.jp",
-      "candypop.jp",
-      "capoo.jp",
-      "catfood.jp",
-      "cheap.jp",
-      "chicappa.jp",
-      "chillout.jp",
-      "chips.jp",
-      "chowder.jp",
-      "chu.jp",
-      "ciao.jp",
-      "cocotte.jp",
-      "coolblog.jp",
-      "cranky.jp",
-      "cutegirl.jp",
-      "daa.jp",
-      "deca.jp",
-      "deci.jp",
-      "digick.jp",
-      "egoism.jp",
-      "fakefur.jp",
-      "fem.jp",
-      "flier.jp",
-      "floppy.jp",
-      "fool.jp",
-      "frenchkiss.jp",
-      "girlfriend.jp",
-      "girly.jp",
-      "gloomy.jp",
-      "gonna.jp",
-      "greater.jp",
-      "hacca.jp",
-      "heavy.jp",
-      "her.jp",
-      "hiho.jp",
-      "hippy.jp",
-      "holy.jp",
-      "hungry.jp",
-      "icurus.jp",
-      "itigo.jp",
-      "jellybean.jp",
-      "kikirara.jp",
-      "kill.jp",
-      "kilo.jp",
-      "kuron.jp",
-      "littlestar.jp",
-      "lolipopmc.jp",
-      "lolitapunk.jp",
-      "lomo.jp",
-      "lovepop.jp",
-      "lovesick.jp",
-      "main.jp",
-      "mods.jp",
-      "mond.jp",
-      "mongolian.jp",
-      "moo.jp",
-      "namaste.jp",
-      "nikita.jp",
-      "nobushi.jp",
-      "noor.jp",
-      "oops.jp",
-      "parallel.jp",
-      "parasite.jp",
-      "pecori.jp",
-      "peewee.jp",
-      "penne.jp",
-      "pepper.jp",
-      "perma.jp",
-      "pigboat.jp",
-      "pinoko.jp",
-      "punyu.jp",
-      "pupu.jp",
-      "pussycat.jp",
-      "pya.jp",
-      "raindrop.jp",
-      "readymade.jp",
-      "sadist.jp",
-      "schoolbus.jp",
-      "secret.jp",
-      "staba.jp",
-      "stripper.jp",
-      "sub.jp",
-      "sunnyday.jp",
-      "thick.jp",
-      "tonkotsu.jp",
-      "under.jp",
-      "upper.jp",
-      "velvet.jp",
-      "verse.jp",
-      "versus.jp",
-      "vivian.jp",
-      "watson.jp",
-      "weblike.jp",
-      "whitesnow.jp",
-      "zombie.jp",
-      "heteml.net",
       "cloudapps.digital",
       "london.cloudapps.digital",
-      "pymnt.uk",
       "homeoffice.gov.uk",
       "ro.im",
+      "shop.ro",
       "goip.de",
       "run.app",
       "a.run.app",
@@ -16934,18 +16788,6 @@ var require_rules = __commonJS({
       "*.0emm.com",
       "appspot.com",
       "*.r.appspot.com",
-      "codespot.com",
-      "googleapis.com",
-      "googlecode.com",
-      "pagespeedmobilizer.com",
-      "publishproxy.com",
-      "withgoogle.com",
-      "withyoutube.com",
-      "*.gateway.dev",
-      "cloud.goog",
-      "translate.goog",
-      "*.usercontent.goog",
-      "cloudfunctions.net",
       "blogspot.ae",
       "blogspot.al",
       "blogspot.am",
@@ -17020,11 +16862,16 @@ var require_rules = __commonJS({
       "blogspot.tw",
       "blogspot.ug",
       "blogspot.vn",
-      "goupile.fr",
-      "gov.nl",
+      "cloudfunctions.net",
+      "cloud.goog",
+      "codespot.com",
+      "googleapis.com",
+      "googlecode.com",
+      "pagespeedmobilizer.com",
+      "publishproxy.com",
+      "withgoogle.com",
+      "withyoutube.com",
       "awsmppl.com",
-      "g\xFCnstigbestellen.de",
-      "g\xFCnstigliefern.de",
       "fin.ci",
       "free.hr",
       "caa.li",
@@ -17035,42 +16882,30 @@ var require_rules = __commonJS({
       "hashbang.sh",
       "hasura.app",
       "hasura-app.io",
-      "pages.it.hs-heilbronn.de",
       "hepforge.org",
       "herokuapp.com",
       "herokussl.com",
-      "ravendb.cloud",
       "myravendb.com",
       "ravendb.community",
       "ravendb.me",
       "development.run",
       "ravendb.run",
-      "homesklep.pl",
-      "secaas.hk",
-      "hoplix.shop",
+      "bpl.biz",
       "orx.biz",
+      "ng.city",
       "biz.gl",
+      "ng.ink",
       "col.ng",
       "firm.ng",
       "gen.ng",
       "ltd.ng",
       "ngo.ng",
-      "edu.scot",
+      "ng.school",
       "sch.so",
-      "hostyhosting.io",
       "h\xE4kkinen.fi",
       "*.moonscale.io",
       "moonscale.net",
       "iki.fi",
-      "ibxos.it",
-      "iliadboxos.it",
-      "impertrixcdn.com",
-      "impertrix.com",
-      "smushcdn.com",
-      "wphostedmail.com",
-      "wpmucdn.com",
-      "tempurl.host",
-      "wpmudev.host",
       "dyn-berlin.de",
       "in-berlin.de",
       "in-brb.de",
@@ -17112,124 +16947,28 @@ var require_rules = __commonJS({
       "sp.leg.br",
       "to.leg.br",
       "pixolino.com",
-      "na4u.ru",
-      "iopsys.se",
       "ipifony.net",
-      "iservschule.de",
       "mein-iserv.de",
-      "schulplattform.de",
-      "schulserver.de",
       "test-iserv.de",
       "iserv.dev",
       "iobb.net",
-      "mel.cloudlets.com.au",
-      "cloud.interhostsolutions.be",
-      "users.scale.virtualcloud.com.br",
-      "mycloud.by",
-      "alp1.ae.flow.ch",
-      "appengine.flow.ch",
-      "es-1.axarnet.cloud",
-      "diadem.cloud",
-      "vip.jelastic.cloud",
-      "jele.cloud",
-      "it1.eur.aruba.jenv-aruba.cloud",
-      "it1.jenv-aruba.cloud",
-      "keliweb.cloud",
-      "cs.keliweb.cloud",
-      "oxa.cloud",
-      "tn.oxa.cloud",
-      "uk.oxa.cloud",
-      "primetel.cloud",
-      "uk.primetel.cloud",
-      "ca.reclaim.cloud",
-      "uk.reclaim.cloud",
-      "us.reclaim.cloud",
-      "ch.trendhosting.cloud",
-      "de.trendhosting.cloud",
-      "jele.club",
-      "amscompute.com",
-      "clicketcloud.com",
-      "dopaas.com",
-      "hidora.com",
-      "paas.hosted-by-previder.com",
-      "rag-cloud.hosteur.com",
-      "rag-cloud-ch.hosteur.com",
-      "jcloud.ik-server.com",
-      "jcloud-ver-jpc.ik-server.com",
-      "demo.jelastic.com",
-      "kilatiron.com",
-      "paas.massivegrid.com",
-      "jed.wafaicloud.com",
-      "lon.wafaicloud.com",
-      "ryd.wafaicloud.com",
-      "j.scaleforce.com.cy",
-      "jelastic.dogado.eu",
-      "fi.cloudplatform.fi",
-      "demo.datacenter.fi",
-      "paas.datacenter.fi",
-      "jele.host",
-      "mircloud.host",
-      "paas.beebyte.io",
-      "sekd1.beebyteapp.io",
-      "jele.io",
-      "cloud-fr1.unispace.io",
-      "jc.neen.it",
-      "cloud.jelastic.open.tim.it",
-      "jcloud.kz",
-      "upaas.kazteleport.kz",
-      "cloudjiffy.net",
-      "fra1-de.cloudjiffy.net",
-      "west1-us.cloudjiffy.net",
-      "jls-sto1.elastx.net",
-      "jls-sto2.elastx.net",
-      "jls-sto3.elastx.net",
-      "faststacks.net",
-      "fr-1.paas.massivegrid.net",
-      "lon-1.paas.massivegrid.net",
-      "lon-2.paas.massivegrid.net",
-      "ny-1.paas.massivegrid.net",
-      "ny-2.paas.massivegrid.net",
-      "sg-1.paas.massivegrid.net",
-      "jelastic.saveincloud.net",
-      "nordeste-idc.saveincloud.net",
-      "j.scaleforce.net",
-      "jelastic.tsukaeru.net",
-      "sdscloud.pl",
-      "unicloud.pl",
-      "mircloud.ru",
-      "jelastic.regruhosting.ru",
-      "enscaled.sg",
-      "jele.site",
-      "jelastic.team",
-      "orangecloud.tn",
-      "j.layershift.co.uk",
-      "phx.enscaled.us",
-      "mircloud.us",
       "myjino.ru",
       "*.hosting.myjino.ru",
       "*.landing.myjino.ru",
       "*.spectrum.myjino.ru",
       "*.vps.myjino.ru",
-      "jotelulu.cloud",
       "*.triton.zone",
       "*.cns.joyent.com",
       "js.org",
       "kaas.gg",
       "khplay.nl",
-      "ktistory.com",
-      "kapsi.fi",
       "keymachine.de",
       "kinghost.net",
       "uni5.net",
       "knightpoint.systems",
-      "koobin.events",
       "oya.to",
-      "kuleuven.cloud",
-      "ezproxy.kuleuven.be",
       "co.krd",
       "edu.krd",
-      "krellian.net",
-      "webthings.io",
       "git-repos.de",
       "lcube-server.de",
       "svn-repos.de",
@@ -17245,28 +16984,24 @@ var require_rules = __commonJS({
       "co.place",
       "co.technology",
       "app.lmpm.com",
+      "linkitools.space",
       "linkyard.cloud",
       "linkyard-cloud.ch",
       "members.linode.com",
-      "*.nodebalancer.linode.com",
-      "*.linodeobjects.com",
-      "ip.linodeusercontent.com",
+      "nodebalancer.linode.com",
       "we.bs",
-      "*.user.localcert.dev",
-      "localzone.xyz",
       "loginline.app",
       "loginline.dev",
       "loginline.io",
       "loginline.services",
       "loginline.site",
-      "servers.run",
-      "lohmus.me",
       "krasnik.pl",
       "leczna.pl",
       "lubartow.pl",
       "lublin.pl",
       "poniatowa.pl",
       "swidnik.pl",
+      "uklugs.org",
       "glug.org.uk",
       "lug.org.uk",
       "lugs.org.uk",
@@ -17289,7 +17024,6 @@ var require_rules = __commonJS({
       "barsy.org",
       "barsy.pro",
       "barsy.pub",
-      "barsy.ro",
       "barsy.shop",
       "barsy.site",
       "barsy.support",
@@ -17298,89 +17032,45 @@ var require_rules = __commonJS({
       "mayfirst.info",
       "mayfirst.org",
       "hb.cldmail.ru",
-      "cn.vu",
-      "mazeplay.com",
-      "mcpe.me",
-      "mcdir.me",
-      "mcdir.ru",
-      "mcpre.ru",
-      "vps.mcdir.ru",
-      "mediatech.by",
-      "mediatech.dev",
-      "hra.health",
       "miniserver.com",
       "memset.net",
-      "messerli.app",
-      "*.cloud.metacentrum.cz",
+      "cloud.metacentrum.cz",
       "custom.metacentrum.cz",
       "flt.cloud.muni.cz",
       "usr.cloud.muni.cz",
       "meteorapp.com",
       "eu.meteorapp.com",
       "co.pl",
-      "*.azurecontainer.io",
+      "azurecontainer.io",
       "azurewebsites.net",
       "azure-mobile.net",
       "cloudapp.net",
-      "azurestaticapps.net",
-      "1.azurestaticapps.net",
-      "centralus.azurestaticapps.net",
-      "eastasia.azurestaticapps.net",
-      "eastus2.azurestaticapps.net",
-      "westeurope.azurestaticapps.net",
-      "westus2.azurestaticapps.net",
-      "csx.cc",
-      "mintere.site",
-      "forte.id",
       "mozilla-iot.org",
       "bmoattachments.org",
       "net.ru",
       "org.ru",
       "pp.ru",
-      "hostedpi.com",
-      "customer.mythic-beasts.com",
-      "caracal.mythic-beasts.com",
-      "fentiger.mythic-beasts.com",
-      "lynx.mythic-beasts.com",
-      "ocelot.mythic-beasts.com",
-      "oncilla.mythic-beasts.com",
-      "onza.mythic-beasts.com",
-      "sphinx.mythic-beasts.com",
-      "vs.mythic-beasts.com",
-      "x.mythic-beasts.com",
-      "yali.mythic-beasts.com",
-      "cust.retrosnub.co.uk",
       "ui.nabu.casa",
       "pony.club",
       "of.fashion",
+      "on.fashion",
+      "of.football",
       "in.london",
       "of.london",
-      "from.marketing",
-      "with.marketing",
       "for.men",
-      "repair.men",
       "and.mom",
       "for.mom",
       "for.one",
-      "under.one",
       "for.sale",
-      "that.win",
-      "from.work",
+      "of.work",
       "to.work",
-      "cloud.nospamproxy.com",
-      "netlify.app",
+      "nctu.me",
+      "bitballoon.com",
+      "netlify.com",
       "4u.com",
       "ngrok.io",
       "nh-serv.co.uk",
       "nfshost.com",
-      "*.developer.app",
-      "noop.app",
-      "*.northflank.app",
-      "*.build.run",
-      "*.code.run",
-      "*.database.run",
-      "*.migration.run",
-      "noticeable.news",
       "dnsking.ch",
       "mypi.co",
       "n4t.co",
@@ -17494,39 +17184,75 @@ var require_rules = __commonJS({
       "webhop.me",
       "zapto.org",
       "stage.nodeart.io",
+      "nodum.co",
+      "nodum.io",
       "pcloud.host",
       "nyc.mn",
+      "nom.ae",
+      "nom.af",
+      "nom.ai",
+      "nom.al",
+      "nym.by",
+      "nom.bz",
+      "nym.bz",
+      "nom.cl",
+      "nym.ec",
+      "nom.gd",
+      "nom.ge",
+      "nom.gl",
+      "nym.gr",
+      "nom.gt",
+      "nym.gy",
+      "nym.hk",
+      "nom.hn",
+      "nym.ie",
+      "nom.im",
+      "nom.ke",
+      "nym.kz",
+      "nym.la",
+      "nym.lc",
+      "nom.li",
+      "nym.li",
+      "nym.lt",
+      "nym.lu",
+      "nom.lv",
+      "nym.me",
+      "nom.mk",
+      "nym.mn",
+      "nym.mx",
+      "nom.nu",
+      "nym.nz",
+      "nym.pe",
+      "nym.pt",
+      "nom.pw",
+      "nom.qa",
+      "nym.ro",
+      "nom.rs",
+      "nom.si",
+      "nym.sk",
+      "nom.st",
+      "nym.su",
+      "nym.sx",
+      "nom.tj",
+      "nym.tw",
+      "nom.ug",
+      "nom.uy",
+      "nom.vc",
+      "nom.vg",
       "static.observableusercontent.com",
       "cya.gg",
-      "omg.lol",
       "cloudycluster.net",
-      "omniwe.site",
-      "service.one",
       "nid.io",
-      "opensocial.site",
       "opencraft.hosting",
-      "orsites.com",
       "operaunite.com",
-      "tech.orange",
-      "authgear-staging.com",
-      "authgearapps.com",
       "skygearapp.com",
       "outsystemscloud.com",
-      "*.webpaas.ovh.net",
-      "*.hosting.ovh.net",
       "ownprovider.com",
       "own.pm",
-      "*.owo.codes",
       "ox.rs",
       "oy.lc",
       "pgfog.com",
       "pagefrontapp.com",
-      "pagexl.com",
-      "*.paywhirl.com",
-      "bar0.net",
-      "bar1.net",
-      "bar2.net",
-      "rdv.to",
       "art.pl",
       "gliwice.pl",
       "krakow.pl",
@@ -17537,28 +17263,11 @@ var require_rules = __commonJS({
       "gotpantheon.com",
       "mypep.link",
       "perspecta.cloud",
-      "lk3.ru",
       "on-web.fr",
-      "bc.platform.sh",
-      "ent.platform.sh",
-      "eu.platform.sh",
-      "us.platform.sh",
+      "*.platform.sh",
       "*.platformsh.site",
-      "*.tst.site",
-      "platter-app.com",
-      "platter-app.dev",
-      "platterp.us",
-      "pdns.page",
-      "plesk.page",
-      "pleskns.com",
       "dyn53.io",
-      "onporter.run",
       "co.bn",
-      "postman-echo.com",
-      "pstmn.io",
-      "mock.pstmn.io",
-      "httpbin.org",
-      "prequalifyme.today",
       "xen.prgmr.com",
       "priv.at",
       "prvcy.page",
@@ -17567,13 +17276,8 @@ var require_rules = __commonJS({
       "chirurgiens-dentistes-en-france.fr",
       "byen.site",
       "pubtls.org",
-      "pythonanywhere.com",
-      "eu.pythonanywhere.com",
-      "qoto.io",
       "qualifioapp.com",
       "qbuser.com",
-      "cloudsite.builders",
-      "instances.spawn.cc",
       "instantcloud.cn",
       "ras.ru",
       "qa2.com",
@@ -17587,7 +17291,6 @@ var require_rules = __commonJS({
       "vaporcloud.io",
       "rackmaze.com",
       "rackmaze.net",
-      "g.vbrplsbx.io",
       "*.on-k3s.io",
       "*.on-rancher.cloud",
       "*.on-rio.io",
@@ -17596,61 +17299,19 @@ var require_rules = __commonJS({
       "app.render.com",
       "onrender.com",
       "repl.co",
-      "id.repl.co",
       "repl.run",
       "resindevice.io",
       "devices.resinstaging.io",
       "hzc.io",
       "wellbeingzone.eu",
+      "ptplus.fit",
       "wellbeingzone.co.uk",
-      "adimo.co.uk",
-      "itcouldbewor.se",
       "git-pages.rit.edu",
-      "rocky.page",
-      "\u0431\u0438\u0437.\u0440\u0443\u0441",
-      "\u043A\u043E\u043C.\u0440\u0443\u0441",
-      "\u043A\u0440\u044B\u043C.\u0440\u0443\u0441",
-      "\u043C\u0438\u0440.\u0440\u0443\u0441",
-      "\u043C\u0441\u043A.\u0440\u0443\u0441",
-      "\u043E\u0440\u0433.\u0440\u0443\u0441",
-      "\u0441\u0430\u043C\u0430\u0440\u0430.\u0440\u0443\u0441",
-      "\u0441\u043E\u0447\u0438.\u0440\u0443\u0441",
-      "\u0441\u043F\u0431.\u0440\u0443\u0441",
-      "\u044F.\u0440\u0443\u0441",
-      "*.builder.code.com",
-      "*.dev-builder.code.com",
-      "*.stg-builder.code.com",
       "sandcats.io",
       "logoip.de",
       "logoip.com",
-      "fr-par-1.baremetal.scw.cloud",
-      "fr-par-2.baremetal.scw.cloud",
-      "nl-ams-1.baremetal.scw.cloud",
-      "fnc.fr-par.scw.cloud",
-      "functions.fnc.fr-par.scw.cloud",
-      "k8s.fr-par.scw.cloud",
-      "nodes.k8s.fr-par.scw.cloud",
-      "s3.fr-par.scw.cloud",
-      "s3-website.fr-par.scw.cloud",
-      "whm.fr-par.scw.cloud",
-      "priv.instances.scw.cloud",
-      "pub.instances.scw.cloud",
-      "k8s.scw.cloud",
-      "k8s.nl-ams.scw.cloud",
-      "nodes.k8s.nl-ams.scw.cloud",
-      "s3.nl-ams.scw.cloud",
-      "s3-website.nl-ams.scw.cloud",
-      "whm.nl-ams.scw.cloud",
-      "k8s.pl-waw.scw.cloud",
-      "nodes.k8s.pl-waw.scw.cloud",
-      "s3.pl-waw.scw.cloud",
-      "s3-website.pl-waw.scw.cloud",
-      "scalebook.scw.cloud",
-      "smartlabeling.scw.cloud",
-      "dedibox.fr",
       "schokokeks.net",
       "gov.scot",
-      "service.gov.scot",
       "scrysec.com",
       "firewall-gateway.com",
       "firewall-gateway.de",
@@ -17662,21 +17323,13 @@ var require_rules = __commonJS({
       "my-firewall.org",
       "myfirewall.org",
       "spdns.org",
-      "seidat.net",
-      "sellfy.store",
       "senseering.net",
-      "minisite.ms",
-      "magnet.page",
       "biz.ua",
       "co.ua",
       "pp.ua",
-      "shiftcrypto.dev",
-      "shiftcrypto.io",
       "shiftedit.io",
       "myshopblocks.com",
-      "myshopify.com",
       "shopitsite.com",
-      "shopware.store",
       "mo-siemens.io",
       "1kapp.com",
       "appchizi.com",
@@ -17687,110 +17340,60 @@ var require_rules = __commonJS({
       "bounty-full.com",
       "alpha.bounty-full.com",
       "beta.bounty-full.com",
-      "small-web.org",
-      "vp4.me",
-      "try-snowplow.com",
-      "srht.site",
       "stackhero-network.com",
-      "musician.io",
-      "novecore.site",
       "static.land",
       "dev.static.land",
       "sites.static.land",
-      "storebase.store",
-      "vps-host.net",
-      "atl.jelastic.vps-host.net",
-      "njs.jelastic.vps-host.net",
-      "ric.jelastic.vps-host.net",
-      "playstation-cloud.com",
       "apps.lair.io",
       "*.stolos.io",
       "spacekit.io",
       "customer.speedpartner.de",
-      "myspreadshop.at",
-      "myspreadshop.com.au",
-      "myspreadshop.be",
-      "myspreadshop.ca",
-      "myspreadshop.ch",
-      "myspreadshop.com",
-      "myspreadshop.de",
-      "myspreadshop.dk",
-      "myspreadshop.es",
-      "myspreadshop.fi",
-      "myspreadshop.fr",
-      "myspreadshop.ie",
-      "myspreadshop.it",
-      "myspreadshop.net",
-      "myspreadshop.nl",
-      "myspreadshop.no",
-      "myspreadshop.pl",
-      "myspreadshop.se",
-      "myspreadshop.co.uk",
       "api.stdlib.com",
       "storj.farm",
       "utwente.io",
       "soc.srcf.net",
       "user.srcf.net",
       "temp-dns.com",
-      "supabase.co",
-      "supabase.in",
-      "supabase.net",
-      "su.paba.se",
+      "applicationcloud.io",
+      "scapp.io",
       "*.s5y.io",
       "*.sensiosite.cloud",
       "syncloud.it",
-      "dscloud.biz",
-      "direct.quickconnect.cn",
-      "dsmynas.com",
-      "familyds.com",
       "diskstation.me",
+      "dscloud.biz",
       "dscloud.me",
+      "dscloud.mobi",
+      "dsmynas.com",
+      "dsmynas.net",
+      "dsmynas.org",
+      "familyds.com",
+      "familyds.net",
+      "familyds.org",
       "i234.me",
       "myds.me",
       "synology.me",
-      "dscloud.mobi",
-      "dsmynas.net",
-      "familyds.net",
-      "dsmynas.org",
-      "familyds.org",
       "vpnplus.to",
       "direct.quickconnect.to",
-      "tabitorder.co.il",
       "taifun-dns.de",
-      "beta.tailscale.net",
-      "ts.net",
       "gda.pl",
       "gdansk.pl",
       "gdynia.pl",
       "med.pl",
       "sopot.pl",
-      "site.tb-hosting.com",
-      "edugit.io",
-      "s3.teckids.org",
+      "edugit.org",
       "telebit.app",
       "telebit.io",
       "*.telebit.xyz",
       "gwiddle.co.uk",
-      "*.firenet.ch",
-      "*.svc.firenet.ch",
-      "reservd.com",
       "thingdustdata.com",
       "cust.dev.thingdust.io",
       "cust.disrec.thingdust.io",
       "cust.prod.thingdust.io",
       "cust.testing.thingdust.io",
-      "reservd.dev.thingdust.io",
-      "reservd.disrec.thingdust.io",
-      "reservd.testing.thingdust.io",
-      "tickets.io",
       "arvo.network",
       "azimuth.network",
-      "tlon.network",
-      "torproject.net",
-      "pages.torproject.net",
       "bloxcms.com",
       "townnews-staging.com",
-      "tbits.me",
       "12hp.at",
       "2ix.at",
       "4lima.at",
@@ -17813,7 +17416,6 @@ var require_rules = __commonJS({
       "*.transurl.be",
       "*.transurl.eu",
       "*.transurl.nl",
-      "site.transip.me",
       "tuxfamily.org",
       "dd-dns.de",
       "diskstation.eu",
@@ -17828,103 +17430,34 @@ var require_rules = __commonJS({
       "syno-ds.de",
       "synology-diskstation.de",
       "synology-ds.de",
-      "typedream.app",
-      "pro.typeform.com",
       "uber.space",
       "*.uberspace.de",
       "hk.com",
       "hk.org",
       "ltd.hk",
       "inc.hk",
-      "name.pm",
-      "sch.tf",
-      "biz.wf",
-      "sch.wf",
-      "org.yt",
       "virtualuser.de",
       "virtual-user.de",
-      "upli.io",
       "urown.cloud",
       "dnsupdate.info",
       "lib.de.us",
       "2038.io",
-      "vercel.app",
-      "vercel.dev",
-      "now.sh",
       "router.management",
       "v-info.info",
       "voorloper.cloud",
-      "neko.am",
-      "nyaa.am",
-      "be.ax",
-      "cat.ax",
-      "es.ax",
-      "eu.ax",
-      "gg.ax",
-      "mc.ax",
-      "us.ax",
-      "xy.ax",
-      "nl.ci",
-      "xx.gl",
-      "app.gp",
-      "blog.gt",
-      "de.gt",
-      "to.gt",
-      "be.gy",
-      "cc.hn",
-      "blog.kg",
-      "io.kg",
-      "jp.kg",
-      "tv.kg",
-      "uk.kg",
-      "us.kg",
-      "de.ls",
-      "at.md",
-      "de.md",
-      "jp.md",
-      "to.md",
-      "indie.porn",
-      "vxl.sh",
-      "ch.tc",
-      "me.tc",
-      "we.tc",
-      "nyan.to",
-      "at.vg",
-      "blog.vu",
-      "dev.vu",
-      "me.vu",
       "v.ua",
-      "*.vultrobjects.com",
       "wafflecell.com",
       "*.webhare.dev",
-      "reserve-online.net",
-      "reserve-online.com",
-      "bookonline.app",
-      "hotelwithflight.com",
       "wedeploy.io",
       "wedeploy.me",
       "wedeploy.sh",
       "remotewd.com",
-      "pages.wiardweb.com",
       "wmflabs.org",
-      "toolforge.org",
-      "wmcloud.org",
-      "panel.gg",
-      "daemon.panel.gg",
-      "messwithdns.com",
-      "woltlab-demo.com",
       "myforum.community",
       "community-pro.de",
       "diskussionsbereich.de",
       "community-pro.net",
       "meinforum.net",
-      "affinitylottery.org.uk",
-      "raffleentry.org.uk",
-      "weeklylottery.org.uk",
-      "wpenginepowered.com",
-      "js.wpenginepowered.com",
-      "wixsite.com",
-      "editorx.io",
       "half.host",
       "xnbay.com",
       "u2.xnbay.com",
@@ -17944,11 +17477,11 @@ var require_rules = __commonJS({
       "ybo.review",
       "ybo.science",
       "ybo.trade",
-      "ynh.fr",
       "nohost.me",
       "noho.st",
       "za.net",
       "za.org",
+      "now.sh",
       "bss.design",
       "basicserver.io",
       "virtualserver.io",
@@ -19810,14 +19343,12 @@ var require_aws4 = __commonJS({
       if (!request.hostname && !request.host)
         request.hostname = headers.Host || headers.host;
       this.isCodeCommitGit = this.service === "codecommit" && request.method === "GIT";
-      this.extraHeadersToIgnore = request.extraHeadersToIgnore || Object.create(null);
-      this.extraHeadersToInclude = request.extraHeadersToInclude || Object.create(null);
     }
     __name(RequestSigner, "RequestSigner");
     RequestSigner.prototype.matchHost = function(host) {
       var match = (host || "").match(/([^\.]+)\.(?:([^\.]*)\.)?amazonaws\.com(\.cn)?$/);
       var hostParts = (match || []).slice(1, 3);
-      if (hostParts[1] === "es" || hostParts[1] === "aoss")
+      if (hostParts[1] === "es")
         hostParts = hostParts.reverse();
       if (hostParts[1] == "s3") {
         hostParts[0] = "s3";
@@ -19998,11 +19529,10 @@ var require_aws4 = __commonJS({
       }).join("\n");
     };
     RequestSigner.prototype.signedHeaders = function() {
-      var extraHeadersToInclude = this.extraHeadersToInclude, extraHeadersToIgnore = this.extraHeadersToIgnore;
       return Object.keys(this.request.headers).map(function(key) {
         return key.toLowerCase();
       }).filter(function(key) {
-        return extraHeadersToInclude[key] || HEADERS_TO_IGNORE[key] == null && !extraHeadersToIgnore[key];
+        return HEADERS_TO_IGNORE[key] == null;
       }).sort().join(";");
     };
     RequestSigner.prototype.credentialString = function() {
@@ -29694,27 +29224,17 @@ var require_putty = __commonJS({
     var Buffer2 = require_safer().Buffer;
     var rfc4253 = require_rfc4253();
     var Key = require_key();
-    var SSHBuffer = require_ssh_buffer();
-    var crypto = require("crypto");
-    var PrivateKey = require_private_key();
     var errors = require_errors3();
     function read(buf, options) {
       var lines = buf.toString("ascii").split(/[\r\n]+/);
       var found = false;
       var parts;
       var si = 0;
-      var formatVersion;
       while (si < lines.length) {
         parts = splitHeader(lines[si++]);
-        if (parts) {
-          formatVersion = {
-            "putty-user-key-file-2": 2,
-            "putty-user-key-file-3": 3
-          }[parts[0].toLowerCase()];
-          if (formatVersion) {
-            found = true;
-            break;
-          }
+        if (parts && parts[0].toLowerCase() === "putty-user-key-file-2") {
+          found = true;
+          break;
         }
       }
       if (!found) {
@@ -29723,7 +29243,6 @@ var require_putty = __commonJS({
       var alg = parts[1];
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "encryption");
-      var encryption = parts[1];
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "comment");
       var comment = parts[1];
@@ -29739,82 +29258,10 @@ var require_putty = __commonJS({
       if (key.type !== keyType) {
         throw new Error("Outer key algorithm mismatch");
       }
-      si += publicLines;
-      if (lines[si]) {
-        parts = splitHeader(lines[si++]);
-        assert.equal(parts[0].toLowerCase(), "private-lines");
-        var privateLines = parseInt(parts[1], 10);
-        if (!isFinite(privateLines) || privateLines < 0 || privateLines > lines.length) {
-          throw new Error("Invalid private-lines count");
-        }
-        var privateBuf = Buffer2.from(lines.slice(si, si + privateLines).join(""), "base64");
-        if (encryption !== "none" && formatVersion === 3) {
-          throw new Error("Encrypted keys arenot supported for PuTTY format version 3");
-        }
-        if (encryption === "aes256-cbc") {
-          if (!options.passphrase) {
-            throw new errors.KeyEncryptedError(options.filename, "PEM");
-          }
-          var iv = Buffer2.alloc(16, 0);
-          var decipher = crypto.createDecipheriv("aes-256-cbc", derivePPK2EncryptionKey(options.passphrase), iv);
-          decipher.setAutoPadding(false);
-          privateBuf = Buffer2.concat([
-            decipher.update(privateBuf),
-            decipher.final()
-          ]);
-        }
-        key = new PrivateKey(key);
-        if (key.type !== keyType) {
-          throw new Error("Outer key algorithm mismatch");
-        }
-        var sshbuf = new SSHBuffer({ buffer: privateBuf });
-        var privateKeyParts;
-        if (alg === "ssh-dss") {
-          privateKeyParts = [{
-            name: "x",
-            data: sshbuf.readBuffer()
-          }];
-        } else if (alg === "ssh-rsa") {
-          privateKeyParts = [
-            { name: "d", data: sshbuf.readBuffer() },
-            { name: "p", data: sshbuf.readBuffer() },
-            { name: "q", data: sshbuf.readBuffer() },
-            { name: "iqmp", data: sshbuf.readBuffer() }
-          ];
-        } else if (alg.match(/^ecdsa-sha2-nistp/)) {
-          privateKeyParts = [{
-            name: "d",
-            data: sshbuf.readBuffer()
-          }];
-        } else if (alg === "ssh-ed25519") {
-          privateKeyParts = [{
-            name: "k",
-            data: sshbuf.readBuffer()
-          }];
-        } else {
-          throw new Error("Unsupported PPK key type: " + alg);
-        }
-        key = new PrivateKey({
-          type: key.type,
-          parts: key.parts.concat(privateKeyParts)
-        });
-      }
       key.comment = comment;
       return key;
     }
     __name(read, "read");
-    function derivePPK2EncryptionKey(passphrase) {
-      var hash1 = crypto.createHash("sha1").update(Buffer2.concat([
-        Buffer2.from([0, 0, 0, 0]),
-        Buffer2.from(passphrase)
-      ])).digest();
-      var hash2 = crypto.createHash("sha1").update(Buffer2.concat([
-        Buffer2.from([0, 0, 0, 1]),
-        Buffer2.from(passphrase)
-      ])).digest();
-      return Buffer2.concat([hash1, hash2]).slice(0, 32);
-    }
-    __name(derivePPK2EncryptionKey, "derivePPK2EncryptionKey");
     function splitHeader(line) {
       var idx = line.indexOf(":");
       if (idx === -1)
@@ -29997,7 +29444,6 @@ var require_private_key = __commonJS({
     formats["openssh"] = formats["ssh-private"];
     formats["ssh"] = formats["ssh-private"];
     formats["dnssec"] = require_dnssec();
-    formats["putty"] = require_putty();
     function PrivateKey(opts) {
       assert.object(opts, "options");
       Key.call(this, opts);
@@ -33202,7 +32648,7 @@ var require_validate2 = __commonJS({
           function checkType(type, value2) {
             if (type) {
               if (typeof type == "string" && type != "any" && (type == "null" ? value2 !== null : typeof value2 != type) && !(value2 instanceof Array && type == "array") && !(value2 instanceof Date && type == "date") && !(type == "integer" && value2 % 1 === 0)) {
-                return [{ property: path, message: value2 + " - " + typeof value2 + " value found, but a " + type + " is required" }];
+                return [{ property: path, message: typeof value2 + " value found, but a " + type + " is required" }];
               }
               if (type instanceof Array) {
                 var unionErrors = [];
@@ -33266,10 +32712,10 @@ var require_validate2 = __commonJS({
               if (schema2.minLength && typeof value == "string" && value.length < schema2.minLength) {
                 addError("must be at least " + schema2.minLength + " characters long");
               }
-              if (typeof schema2.minimum !== "undefined" && typeof value == typeof schema2.minimum && schema2.minimum > value) {
+              if (typeof schema2.minimum !== void 0 && typeof value == typeof schema2.minimum && schema2.minimum > value) {
                 addError("must have a minimum value of " + schema2.minimum);
               }
-              if (typeof schema2.maximum !== "undefined" && typeof value == typeof schema2.maximum && schema2.maximum < value) {
+              if (typeof schema2.maximum !== void 0 && typeof value == typeof schema2.maximum && schema2.maximum < value) {
                 addError("must have a maximum value of " + schema2.maximum);
               }
               if (schema2["enum"]) {
@@ -33300,8 +32746,8 @@ var require_validate2 = __commonJS({
               errors.push({ property: path, message: "an object is required" });
             }
             for (var i in objTypeDef) {
-              if (objTypeDef.hasOwnProperty(i) && i != "__proto__" && i != "constructor") {
-                var value = instance2.hasOwnProperty(i) ? instance2[i] : void 0;
+              if (objTypeDef.hasOwnProperty(i)) {
+                var value = instance2[i];
                 if (value === void 0 && options.existingOnly)
                   continue;
                 var propDef = objTypeDef[i];
@@ -33321,7 +32767,7 @@ var require_validate2 = __commonJS({
                 delete instance2[i];
                 continue;
               } else {
-                errors.push({ property: path, message: "The property " + i + " is not defined in the schema and the schema does not allow additional properties" });
+                errors.push({ property: path, message: typeof value + "The property " + i + " is not defined in the schema and the schema does not allow additional properties" });
               }
             }
             var requires = objTypeDef && objTypeDef[i] && objTypeDef[i].requires;
@@ -34384,10 +33830,6 @@ var require_db = __commonJS({
       "application/cfw": {
         source: "iana"
       },
-      "application/city+json": {
-        source: "iana",
-        compressible: true
-      },
       "application/clr": {
         source: "iana"
       },
@@ -34431,8 +33873,7 @@ var require_db = __commonJS({
       },
       "application/cpl+xml": {
         source: "iana",
-        compressible: true,
-        extensions: ["cpl"]
+        compressible: true
       },
       "application/csrattrs": {
         source: "iana"
@@ -34466,11 +33907,6 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["mpd"]
-      },
-      "application/dash-patch+xml": {
-        source: "iana",
-        compressible: true,
-        extensions: ["mpp"]
       },
       "application/dashdelta": {
         source: "iana"
@@ -35012,8 +34448,7 @@ var require_db = __commonJS({
       },
       "application/media-policy-dataset+xml": {
         source: "iana",
-        compressible: true,
-        extensions: ["mpf"]
+        compressible: true
       },
       "application/media_control+xml": {
         source: "iana",
@@ -35169,9 +34604,6 @@ var require_db = __commonJS({
       "application/oauth-authz-req+jwt": {
         source: "iana"
       },
-      "application/oblivious-dns-message": {
-        source: "iana"
-      },
       "application/ocsp-request": {
         source: "iana"
       },
@@ -35264,8 +34696,7 @@ var require_db = __commonJS({
         extensions: ["pgp"]
       },
       "application/pgp-keys": {
-        source: "iana",
-        extensions: ["asc"]
+        source: "iana"
       },
       "application/pgp-signature": {
         source: "iana",
@@ -35684,10 +35115,6 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["srx"]
-      },
-      "application/spdx+json": {
-        source: "iana",
-        compressible: true
       },
       "application/spirits-event+xml": {
         source: "iana",
@@ -36169,10 +35596,6 @@ var require_db = __commonJS({
       },
       "application/vnd.afpc.modca-pagesegment": {
         source: "iana"
-      },
-      "application/vnd.age": {
-        source: "iana",
-        extensions: ["age"]
       },
       "application/vnd.ah-barcode": {
         source: "iana"
@@ -36796,10 +36219,6 @@ var require_db = __commonJS({
       "application/vnd.ecip.rlp": {
         source: "iana"
       },
-      "application/vnd.eclipse.ditto+json": {
-        source: "iana",
-        compressible: true
-      },
       "application/vnd.ecowin.chart": {
         source: "iana",
         extensions: ["mag"]
@@ -36957,10 +36376,6 @@ var require_db = __commonJS({
       "application/vnd.etsi.tsl.der": {
         source: "iana"
       },
-      "application/vnd.eu.kasparian.car+json": {
-        source: "iana",
-        compressible: true
-      },
       "application/vnd.eudora.data": {
         source: "iana"
       },
@@ -36990,10 +36405,6 @@ var require_db = __commonJS({
       },
       "application/vnd.f-secure.mobile": {
         source: "iana"
-      },
-      "application/vnd.familysearch.gedcom+zip": {
-        source: "iana",
-        compressible: false
       },
       "application/vnd.fastcopy-disk-image": {
         source: "iana"
@@ -37284,16 +36695,6 @@ var require_db = __commonJS({
       "application/vnd.hhe.lesson-player": {
         source: "iana",
         extensions: ["les"]
-      },
-      "application/vnd.hl7cda+xml": {
-        source: "iana",
-        charset: "UTF-8",
-        compressible: true
-      },
-      "application/vnd.hl7v2+xml": {
-        source: "iana",
-        charset: "UTF-8",
-        compressible: true
       },
       "application/vnd.hp-hpgl": {
         source: "iana",
@@ -37708,10 +37109,6 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
-      "application/vnd.maxar.archive.3tz+zip": {
-        source: "iana",
-        compressible: false
-      },
       "application/vnd.maxmind.maxmind-db": {
         source: "iana"
       },
@@ -38040,10 +37437,6 @@ var require_db = __commonJS({
       "application/vnd.mynfc": {
         source: "iana",
         extensions: ["taglet"]
-      },
-      "application/vnd.nacamar.ybrid+json": {
-        source: "iana",
-        compressible: true
       },
       "application/vnd.ncd.control": {
         source: "iana"
@@ -39332,10 +38725,6 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
-      "application/vnd.syft+json": {
-        source: "iana",
-        compressible: true
-      },
       "application/vnd.symbian.install": {
         source: "apache",
         extensions: ["sis", "sisx"]
@@ -39726,8 +39115,7 @@ var require_db = __commonJS({
       },
       "application/watcherinfo+xml": {
         source: "iana",
-        compressible: true,
-        extensions: ["wif"]
+        compressible: true
       },
       "application/webpush-options+json": {
         source: "iana",
@@ -41147,12 +40535,10 @@ var require_db = __commonJS({
         extensions: ["apng"]
       },
       "image/avci": {
-        source: "iana",
-        extensions: ["avci"]
+        source: "iana"
       },
       "image/avcs": {
-        source: "iana",
-        extensions: ["avcs"]
+        source: "iana"
       },
       "image/avif": {
         source: "iana",
@@ -41386,7 +40772,6 @@ var require_db = __commonJS({
       },
       "image/vnd.microsoft.icon": {
         source: "iana",
-        compressible: true,
         extensions: ["ico"]
       },
       "image/vnd.mix": {
@@ -41396,7 +40781,6 @@ var require_db = __commonJS({
         source: "iana"
       },
       "image/vnd.ms-dds": {
-        compressible: true,
         extensions: ["dds"]
       },
       "image/vnd.ms-modi": {
@@ -42085,10 +41469,6 @@ var require_db = __commonJS({
       "text/vnd.esmertec.theme-descriptor": {
         source: "iana",
         charset: "UTF-8"
-      },
-      "text/vnd.familysearch.gedcom": {
-        source: "iana",
-        extensions: ["ged"]
       },
       "text/vnd.ficlab.flt": {
         source: "iana"
@@ -43896,8 +43276,8 @@ var require_utils4 = __commonJS({
       if (typeof source !== "object") {
         if (Array.isArray(target)) {
           target.push(source);
-        } else if (target && typeof target === "object") {
-          if (options && (options.plainObjects || options.allowPrototypes) || !has.call(Object.prototype, source)) {
+        } else if (typeof target === "object") {
+          if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
             target[source] = true;
           }
         } else {
@@ -43905,7 +43285,7 @@ var require_utils4 = __commonJS({
         }
         return target;
       }
-      if (!target || typeof target !== "object") {
+      if (typeof target !== "object") {
         return [target].concat(source);
       }
       var mergeTarget = target;
@@ -43915,9 +43295,8 @@ var require_utils4 = __commonJS({
       if (Array.isArray(target) && Array.isArray(source)) {
         source.forEach(function(item, i) {
           if (has.call(target, i)) {
-            var targetItem = target[i];
-            if (targetItem && typeof targetItem === "object" && item && typeof item === "object") {
-              target[i] = merge2(targetItem, item, options);
+            if (target[i] && typeof target[i] === "object") {
+              target[i] = merge2(target[i], item, options);
             } else {
               target.push(item);
             }
@@ -44033,7 +43412,7 @@ var require_formats = __commonJS({
           return replace.call(value, percentTwenties, "+");
         },
         RFC3986: function(value) {
-          return String(value);
+          return value;
         }
       },
       RFC1738: "RFC1738",
@@ -44059,11 +43438,6 @@ var require_stringify3 = __commonJS({
         return prefix;
       }, "repeat")
     };
-    var isArray = Array.isArray;
-    var push = Array.prototype.push;
-    var pushToArray = /* @__PURE__ */ __name(function(arr, valueOrArray) {
-      push.apply(arr, isArray(valueOrArray) ? valueOrArray : [valueOrArray]);
-    }, "pushToArray");
     var toISO = Date.prototype.toISOString;
     var defaults = {
       delimiter: "&",
@@ -44082,8 +43456,7 @@ var require_stringify3 = __commonJS({
         obj2 = filter(prefix, obj2);
       } else if (obj2 instanceof Date) {
         obj2 = serializeDate(obj2);
-      }
-      if (obj2 === null) {
+      } else if (obj2 === null) {
         if (strictNullHandling) {
           return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder) : prefix;
         }
@@ -44101,7 +43474,7 @@ var require_stringify3 = __commonJS({
         return values;
       }
       var objKeys;
-      if (isArray(filter)) {
+      if (Array.isArray(filter)) {
         objKeys = filter;
       } else {
         var keys = Object.keys(obj2);
@@ -44112,10 +43485,10 @@ var require_stringify3 = __commonJS({
         if (skipNulls && obj2[key] === null) {
           continue;
         }
-        if (isArray(obj2)) {
-          pushToArray(values, stringify2(obj2[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        if (Array.isArray(obj2)) {
+          values = values.concat(stringify2(obj2[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         } else {
-          pushToArray(values, stringify2(obj2[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+          values = values.concat(stringify2(obj2[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         }
       }
       return values;
@@ -44123,7 +43496,7 @@ var require_stringify3 = __commonJS({
     module2.exports = function(object, opts) {
       var obj2 = object;
       var options = opts ? utils.assign({}, opts) : {};
-      if (options.encoder !== null && typeof options.encoder !== "undefined" && typeof options.encoder !== "function") {
+      if (options.encoder !== null && options.encoder !== void 0 && typeof options.encoder !== "function") {
         throw new TypeError("Encoder has to be a function.");
       }
       var delimiter = typeof options.delimiter === "undefined" ? defaults.delimiter : options.delimiter;
@@ -44146,7 +43519,7 @@ var require_stringify3 = __commonJS({
       if (typeof options.filter === "function") {
         filter = options.filter;
         obj2 = filter("", obj2);
-      } else if (isArray(options.filter)) {
+      } else if (Array.isArray(options.filter)) {
         filter = options.filter;
         objKeys = filter;
       }
@@ -44174,7 +43547,7 @@ var require_stringify3 = __commonJS({
         if (skipNulls && obj2[key] === null) {
           continue;
         }
-        pushToArray(keys, stringify(obj2[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        keys = keys.concat(stringify(obj2[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
       }
       var joined = keys.join(delimiter);
       var prefix = options.addQueryPrefix === true ? "?" : "";
@@ -44230,18 +43603,17 @@ var require_parse2 = __commonJS({
       for (var i = chain.length - 1; i >= 0; --i) {
         var obj2;
         var root = chain[i];
-        if (root === "[]" && options.parseArrays) {
-          obj2 = [].concat(leaf);
+        if (root === "[]") {
+          obj2 = [];
+          obj2 = obj2.concat(leaf);
         } else {
           obj2 = options.plainObjects ? Object.create(null) : {};
           var cleanRoot = root.charAt(0) === "[" && root.charAt(root.length - 1) === "]" ? root.slice(1, -1) : root;
           var index = parseInt(cleanRoot, 10);
-          if (!options.parseArrays && cleanRoot === "") {
-            obj2 = { 0: leaf };
-          } else if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
+          if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
             obj2 = [];
             obj2[index] = leaf;
-          } else if (cleanRoot !== "__proto__") {
+          } else {
             obj2[cleanRoot] = leaf;
           }
         }
@@ -56124,7 +55496,6 @@ __name(main, "main");
 /*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2015-2022 Douglas Christopher Wilson
  * MIT Licensed
  */
 /*!
@@ -56133,6 +55504,5 @@ __name(main, "main");
  * Copyright(c) 2015 Douglas Christopher Wilson
  * MIT Licensed
  */
-/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /** @license URI.js v4.4.1 (c) 2011 Gary Court. License: http://github.com/garycourt/uri-js */
