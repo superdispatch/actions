@@ -1,0 +1,19 @@
+name: 'Jira PR Review'
+description: 'Transition Jira issues based on PR review states'
+author: 'superdispatch'
+
+inputs:
+  token:
+    description: 'GitHub token'
+    required: true
+    default: '${{ github.token }}'
+  seniors:
+    description: 'Comma-separated list of senior developers'
+    required: false
+  projects:
+    description: 'Comma-separated list of Jira project keys to apply the action to'
+    required: false
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
