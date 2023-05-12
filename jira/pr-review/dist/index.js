@@ -60868,18 +60868,17 @@ __name(findIssue, "findIssue");
 var token = (0, import_core.getInput)("token", { required: true });
 var seniors = (0, import_core.getInput)("seniors");
 var projects = (0, import_core.getInput)("projects");
-var HEAD_REF = process.env.GITHUB_HEAD_REF;
+var HEAD_REF = process.env.GITHUB_REF;
 var PR_NUMBER = import_github.context.payload.pull_request?.number;
 async function main() {
   (0, import_core.info)(`HEAD_REF ${HEAD_REF}, PR_NUMBER ${PR_NUMBER}`);
-  (0, import_core.info)(JSON.stringify(process.env, null, 2));
-  (0, import_core.info)(JSON.stringify(import_github.context.payload.pull_request, null, 2));
   if (!PR_NUMBER || !HEAD_REF) {
     (0, import_core.info)("Skipping... This action runs in PR only");
     return;
   }
   const octokit = (0, import_github.getOctokit)(token);
   const issue = await findIssue(HEAD_REF);
+  (0, import_core.info)(`issue ${issue}`);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;
