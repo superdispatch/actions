@@ -85,21 +85,23 @@ async function main() {
     // Check if there are any remaining 'CHANGES_REQUESTED' entries
     if (filteredChangesRequested.size > 0) {
       await transitionCard(issue, 'Changes Required in PR');
-    } else {
-      let states: Map<string, string> = new Map();
-      // Iterate through the PR reviews and store the review states in the Map
-      for (const x of pr_reviews) {
-        if (x.user?.login) {
-          states.set(x.user.login, x.state);
-        }
-      }
-
-      // Check if at least one senior has approved the PR
-      senior_approvals = seniors
-        .split(',')
-        .some((senior) => states.get(senior) === 'APPROVED');
+      return;
     }
+
+    let states: Map<string, string> = new Map();
+    // Iterate through the PR reviews and store the review states in the Map
+    for (const x of pr_reviews) {
+      if (x.user?.login) {
+        states.set(x.user.login, x.state);
+      }
+    }
+
+    // Check if at least one senior has approved the PR
+    senior_approvals = seniors
+      .split(',')
+      .some((senior) => states.get(senior) === 'APPROVED');
   }
+
   if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, 'Finish Development');
   }

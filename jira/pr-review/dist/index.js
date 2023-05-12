@@ -60907,15 +60907,15 @@ async function main() {
     });
     if (filteredChangesRequested.size > 0) {
       await transitionCard(issue, "Changes Required in PR");
-    } else {
-      let states = new Map();
-      for (const x of pr_reviews) {
-        if (x.user?.login) {
-          states.set(x.user.login, x.state);
-        }
-      }
-      senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
+      return;
     }
+    let states = new Map();
+    for (const x of pr_reviews) {
+      if (x.user?.login) {
+        states.set(x.user.login, x.state);
+      }
+    }
+    senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
   }
   if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, "Finish Development");
