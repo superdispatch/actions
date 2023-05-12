@@ -12,6 +12,10 @@ const HEAD_REF = process.env.GITHUB_HEAD_REF;
 const PR_NUMBER = context.payload.pull_request?.number;
 
 async function main() {
+  info(`HEAD_REF ${HEAD_REF}, PR_NUMBER ${PR_NUMBER}`);
+  info(JSON.stringify(process.env, null, 2));
+  info(JSON.stringify(context.payload.pull_request, null, 2));
+
   if (!PR_NUMBER || !HEAD_REF) {
     info('Skipping... This action runs in PR only');
     return;

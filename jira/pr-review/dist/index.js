@@ -60871,6 +60871,9 @@ var projects = (0, import_core.getInput)("projects");
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
 var PR_NUMBER = import_github.context.payload.pull_request?.number;
 async function main() {
+  (0, import_core.info)(`HEAD_REF ${HEAD_REF}, PR_NUMBER ${PR_NUMBER}`);
+  (0, import_core.info)(JSON.stringify(process.env, null, 2));
+  (0, import_core.info)(JSON.stringify(import_github.context.payload.pull_request, null, 2));
   if (!PR_NUMBER || !HEAD_REF) {
     (0, import_core.info)("Skipping... This action runs in PR only");
     return;
