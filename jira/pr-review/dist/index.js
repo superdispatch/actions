@@ -60879,7 +60879,7 @@ async function main() {
   }
   const octokit = (0, import_github.getOctokit)(token);
   const issue = await findIssue(HEAD_REF);
-  (0, import_core.info)(`issue ${issue}`);
+  (0, import_core.info)(`issue ${issue?.key} is in status ${issue?.fields.status}`);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;

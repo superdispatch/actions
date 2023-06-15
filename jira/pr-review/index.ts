@@ -22,7 +22,7 @@ async function main() {
 
   const octokit = getOctokit(token);
   const issue = await findIssue(HEAD_REF);
-  info(`issue ${issue}`);
+  info(`issue ${issue?.key} is in status ${issue?.fields.status}`);
 
   if (!issue) {
     info('Skipping... Could not find issue');
