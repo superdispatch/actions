@@ -60919,6 +60919,8 @@ async function main() {
   }
   if (pr.mergeable_state === "clean" && pr.mergeable && senior_approvals) {
     await transitionCard(issue, "Finish Development");
+  } else {
+    (0, import_core.info)(`pr.mergeable_state = ${pr.mergeable_state}`);
   }
   (0, import_core.setOutput)("issue", issue.key);
 }
