@@ -60917,7 +60917,7 @@ async function main() {
     }
     senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
   }
-  if (pr.mergeable_state === "clean" && pr.mergeable && senior_approvals) {
+  if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, "Finish Development");
   } else {
     (0, import_core.info)(`pr.mergeable_state = ${pr.mergeable_state}`);
