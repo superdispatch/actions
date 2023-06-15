@@ -106,6 +106,7 @@ async function main() {
     await transitionCard(issue, 'Finish Development');
   } else {
     info(`pr.mergeable_state = ${pr.mergeable_state}`);
+    info(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
 
   setOutput('issue', issue.key);

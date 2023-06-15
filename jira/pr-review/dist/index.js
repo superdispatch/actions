@@ -60921,6 +60921,7 @@ async function main() {
     await transitionCard(issue, "Finish Development");
   } else {
     (0, import_core.info)(`pr.mergeable_state = ${pr.mergeable_state}`);
+    (0, import_core.info)(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
   (0, import_core.setOutput)("issue", issue.key);
 }
