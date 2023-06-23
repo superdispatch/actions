@@ -97,6 +97,15 @@ export interface JIRAIssue {
         name: 'Done';
       };
     };
+    issuetype: {
+      name:
+        | 'Change Request'
+        | 'Production Defect'
+        | 'Maintenance'
+        | 'Technical Debt'
+        | 'Sub-task'
+        | 'Epic';
+    };
   };
 }
 

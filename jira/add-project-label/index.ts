@@ -44,16 +44,39 @@ async function main() {
     });
   }
 
+  const issueTypeName = issue.fields.issuetype.name;
+  const labelMap = new Map([
+    ['Change Request', 'feature'],
+    ['Production Defect', 'bugfix'],
+    ['Maintenance', 'maintenance'],
+    ['Technical Debt', 'enhancement'],
+    ['Sub-task', 'feature'],
+    ['Epic', 'feature'],
+  ]);
+  const hasIssueTypeLabelExists = labels.find(
+    (x) => x.name === labelMap.get(issueTypeName),
+  );
+  const hasIssueTypeLabelExistsInPR = pr.labels.find(
+    (x) => x.name === labelMap.get(issueTypeName),
+  );
+
   const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
 
   if (!hasPRLabel) {
+    let labelsToAdd = [projectLabel];
+    if (hasIssueTypeLabelExists && !hasIssueTypeLabelExistsInPR) {
+      const labelName = labelMap.get(issueTypeName);
+      if (labelName) {
+        labelsToAdd.push(labelName);
+      }
+    }
     info(`Adding label "${projectLabel}"`);
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/labels',
       {
         ...context.repo,
         issue_number: pr.number,
-        labels: [projectLabel],
+        labels: labelsToAdd,
       },
     );
     info('Added label');
