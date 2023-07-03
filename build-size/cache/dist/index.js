@@ -147,9 +147,9 @@ var require_command = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/rng.js
+// node_modules/uuid/dist/rng.js
 var require_rng = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/rng.js"(exports2) {
+  "node_modules/uuid/dist/rng.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -173,9 +173,9 @@ var require_rng = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/regex.js
+// node_modules/uuid/dist/regex.js
 var require_regex = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/regex.js"(exports2) {
+  "node_modules/uuid/dist/regex.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -186,9 +186,9 @@ var require_regex = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/validate.js
+// node_modules/uuid/dist/validate.js
 var require_validate = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/validate.js"(exports2) {
+  "node_modules/uuid/dist/validate.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -208,9 +208,9 @@ var require_validate = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/stringify.js
+// node_modules/uuid/dist/stringify.js
 var require_stringify = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/stringify.js"(exports2) {
+  "node_modules/uuid/dist/stringify.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -238,9 +238,9 @@ var require_stringify = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/v1.js
+// node_modules/uuid/dist/v1.js
 var require_v1 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/v1.js"(exports2) {
+  "node_modules/uuid/dist/v1.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -310,9 +310,9 @@ var require_v1 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/parse.js
+// node_modules/uuid/dist/parse.js
 var require_parse = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/parse.js"(exports2) {
+  "node_modules/uuid/dist/parse.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -353,9 +353,9 @@ var require_parse = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/v35.js
+// node_modules/uuid/dist/v35.js
 var require_v35 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/v35.js"(exports2) {
+  "node_modules/uuid/dist/v35.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -420,9 +420,9 @@ var require_v35 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/md5.js
+// node_modules/uuid/dist/md5.js
 var require_md5 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/md5.js"(exports2) {
+  "node_modules/uuid/dist/md5.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -447,9 +447,9 @@ var require_md5 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/v3.js
+// node_modules/uuid/dist/v3.js
 var require_v3 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/v3.js"(exports2) {
+  "node_modules/uuid/dist/v3.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -467,9 +467,9 @@ var require_v3 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/v4.js
+// node_modules/uuid/dist/v4.js
 var require_v4 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/v4.js"(exports2) {
+  "node_modules/uuid/dist/v4.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -501,9 +501,9 @@ var require_v4 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/sha1.js
+// node_modules/uuid/dist/sha1.js
 var require_sha1 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/sha1.js"(exports2) {
+  "node_modules/uuid/dist/sha1.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -528,9 +528,9 @@ var require_sha1 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/v5.js
+// node_modules/uuid/dist/v5.js
 var require_v5 = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/v5.js"(exports2) {
+  "node_modules/uuid/dist/v5.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -548,9 +548,9 @@ var require_v5 = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/nil.js
+// node_modules/uuid/dist/nil.js
 var require_nil = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/nil.js"(exports2) {
+  "node_modules/uuid/dist/nil.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -561,9 +561,9 @@ var require_nil = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/version.js
+// node_modules/uuid/dist/version.js
 var require_version = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/version.js"(exports2) {
+  "node_modules/uuid/dist/version.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -586,9 +586,9 @@ var require_version = __commonJS({
   }
 });
 
-// node_modules/@actions/core/node_modules/uuid/dist/index.js
+// node_modules/uuid/dist/index.js
 var require_dist = __commonJS({
-  "node_modules/@actions/core/node_modules/uuid/dist/index.js"(exports2) {
+  "node_modules/uuid/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", {
       value: true
@@ -5129,9 +5129,9 @@ var require_glob = __commonJS({
   }
 });
 
-// node_modules/semver/semver.js
+// node_modules/@actions/cache/node_modules/semver/semver.js
 var require_semver = __commonJS({
-  "node_modules/semver/semver.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/semver/semver.js"(exports2, module2) {
     exports2 = module2.exports = SemVer;
     var debug;
     if (typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG)) {
@@ -6308,9 +6308,9 @@ var require_semver = __commonJS({
   }
 });
 
-// node_modules/uuid/lib/rng.js
+// node_modules/@actions/cache/node_modules/uuid/lib/rng.js
 var require_rng2 = __commonJS({
-  "node_modules/uuid/lib/rng.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/uuid/lib/rng.js"(exports2, module2) {
     var crypto = require("crypto");
     module2.exports = /* @__PURE__ */ __name(function nodeRNG() {
       return crypto.randomBytes(16);
@@ -6318,9 +6318,9 @@ var require_rng2 = __commonJS({
   }
 });
 
-// node_modules/uuid/lib/bytesToUuid.js
+// node_modules/@actions/cache/node_modules/uuid/lib/bytesToUuid.js
 var require_bytesToUuid = __commonJS({
-  "node_modules/uuid/lib/bytesToUuid.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/uuid/lib/bytesToUuid.js"(exports2, module2) {
     var byteToHex = [];
     for (i = 0; i < 256; ++i) {
       byteToHex[i] = (i + 256).toString(16).substr(1);
@@ -6357,9 +6357,9 @@ var require_bytesToUuid = __commonJS({
   }
 });
 
-// node_modules/uuid/v1.js
+// node_modules/@actions/cache/node_modules/uuid/v1.js
 var require_v12 = __commonJS({
-  "node_modules/uuid/v1.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/uuid/v1.js"(exports2, module2) {
     var rng = require_rng2();
     var bytesToUuid = require_bytesToUuid();
     var _nodeId;
@@ -6426,9 +6426,9 @@ var require_v12 = __commonJS({
   }
 });
 
-// node_modules/uuid/v4.js
+// node_modules/@actions/cache/node_modules/uuid/v4.js
 var require_v42 = __commonJS({
-  "node_modules/uuid/v4.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/uuid/v4.js"(exports2, module2) {
     var rng = require_rng2();
     var bytesToUuid = require_bytesToUuid();
     function v4(options, buf, offset) {
@@ -6453,9 +6453,9 @@ var require_v42 = __commonJS({
   }
 });
 
-// node_modules/uuid/index.js
+// node_modules/@actions/cache/node_modules/uuid/index.js
 var require_uuid = __commonJS({
-  "node_modules/uuid/index.js"(exports2, module2) {
+  "node_modules/@actions/cache/node_modules/uuid/index.js"(exports2, module2) {
     var v1 = require_v12();
     var v4 = require_v42();
     var uuid = v4;
@@ -6706,522 +6706,6 @@ var require_cacheUtils = __commonJS({
     }
     __name(isGhes, "isGhes");
     exports2.isGhes = isGhes;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/rng.js
-var require_rng3 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/rng.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = rng;
-    var _crypto = _interopRequireDefault(require("crypto"));
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var rnds8Pool = new Uint8Array(256);
-    var poolPtr = rnds8Pool.length;
-    function rng() {
-      if (poolPtr > rnds8Pool.length - 16) {
-        _crypto.default.randomFillSync(rnds8Pool);
-        poolPtr = 0;
-      }
-      return rnds8Pool.slice(poolPtr, poolPtr += 16);
-    }
-    __name(rng, "rng");
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/regex.js
-var require_regex2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/regex.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/validate.js
-var require_validate2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/validate.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _regex = _interopRequireDefault(require_regex2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function validate(uuid) {
-      return typeof uuid === "string" && _regex.default.test(uuid);
-    }
-    __name(validate, "validate");
-    var _default = validate;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/stringify.js
-var require_stringify2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/stringify.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _validate = _interopRequireDefault(require_validate2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var byteToHex = [];
-    for (let i = 0; i < 256; ++i) {
-      byteToHex.push((i + 256).toString(16).substr(1));
-    }
-    function stringify(arr, offset = 0) {
-      const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
-      if (!(0, _validate.default)(uuid)) {
-        throw TypeError("Stringified UUID is invalid");
-      }
-      return uuid;
-    }
-    __name(stringify, "stringify");
-    var _default = stringify;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/v1.js
-var require_v13 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/v1.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _rng = _interopRequireDefault(require_rng3());
-    var _stringify = _interopRequireDefault(require_stringify2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var _nodeId;
-    var _clockseq;
-    var _lastMSecs = 0;
-    var _lastNSecs = 0;
-    function v1(options, buf, offset) {
-      let i = buf && offset || 0;
-      const b = buf || new Array(16);
-      options = options || {};
-      let node = options.node || _nodeId;
-      let clockseq = options.clockseq !== void 0 ? options.clockseq : _clockseq;
-      if (node == null || clockseq == null) {
-        const seedBytes = options.random || (options.rng || _rng.default)();
-        if (node == null) {
-          node = _nodeId = [seedBytes[0] | 1, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-        }
-        if (clockseq == null) {
-          clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 16383;
-        }
-      }
-      let msecs = options.msecs !== void 0 ? options.msecs : Date.now();
-      let nsecs = options.nsecs !== void 0 ? options.nsecs : _lastNSecs + 1;
-      const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 1e4;
-      if (dt < 0 && options.clockseq === void 0) {
-        clockseq = clockseq + 1 & 16383;
-      }
-      if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === void 0) {
-        nsecs = 0;
-      }
-      if (nsecs >= 1e4) {
-        throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-      }
-      _lastMSecs = msecs;
-      _lastNSecs = nsecs;
-      _clockseq = clockseq;
-      msecs += 122192928e5;
-      const tl = ((msecs & 268435455) * 1e4 + nsecs) % 4294967296;
-      b[i++] = tl >>> 24 & 255;
-      b[i++] = tl >>> 16 & 255;
-      b[i++] = tl >>> 8 & 255;
-      b[i++] = tl & 255;
-      const tmh = msecs / 4294967296 * 1e4 & 268435455;
-      b[i++] = tmh >>> 8 & 255;
-      b[i++] = tmh & 255;
-      b[i++] = tmh >>> 24 & 15 | 16;
-      b[i++] = tmh >>> 16 & 255;
-      b[i++] = clockseq >>> 8 | 128;
-      b[i++] = clockseq & 255;
-      for (let n = 0; n < 6; ++n) {
-        b[i + n] = node[n];
-      }
-      return buf || (0, _stringify.default)(b);
-    }
-    __name(v1, "v1");
-    var _default = v1;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/parse.js
-var require_parse2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/parse.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _validate = _interopRequireDefault(require_validate2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function parse(uuid) {
-      if (!(0, _validate.default)(uuid)) {
-        throw TypeError("Invalid UUID");
-      }
-      let v;
-      const arr = new Uint8Array(16);
-      arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-      arr[1] = v >>> 16 & 255;
-      arr[2] = v >>> 8 & 255;
-      arr[3] = v & 255;
-      arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-      arr[5] = v & 255;
-      arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-      arr[7] = v & 255;
-      arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-      arr[9] = v & 255;
-      arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 1099511627776 & 255;
-      arr[11] = v / 4294967296 & 255;
-      arr[12] = v >>> 24 & 255;
-      arr[13] = v >>> 16 & 255;
-      arr[14] = v >>> 8 & 255;
-      arr[15] = v & 255;
-      return arr;
-    }
-    __name(parse, "parse");
-    var _default = parse;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/v35.js
-var require_v352 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/v35.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = _default;
-    exports2.URL = exports2.DNS = void 0;
-    var _stringify = _interopRequireDefault(require_stringify2());
-    var _parse = _interopRequireDefault(require_parse2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function stringToBytes(str) {
-      str = unescape(encodeURIComponent(str));
-      const bytes = [];
-      for (let i = 0; i < str.length; ++i) {
-        bytes.push(str.charCodeAt(i));
-      }
-      return bytes;
-    }
-    __name(stringToBytes, "stringToBytes");
-    var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
-    exports2.DNS = DNS;
-    var URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
-    exports2.URL = URL2;
-    function _default(name, version, hashfunc) {
-      function generateUUID(value, namespace, buf, offset) {
-        if (typeof value === "string") {
-          value = stringToBytes(value);
-        }
-        if (typeof namespace === "string") {
-          namespace = (0, _parse.default)(namespace);
-        }
-        if (namespace.length !== 16) {
-          throw TypeError("Namespace must be array-like (16 iterable integer values, 0-255)");
-        }
-        let bytes = new Uint8Array(16 + value.length);
-        bytes.set(namespace);
-        bytes.set(value, namespace.length);
-        bytes = hashfunc(bytes);
-        bytes[6] = bytes[6] & 15 | version;
-        bytes[8] = bytes[8] & 63 | 128;
-        if (buf) {
-          offset = offset || 0;
-          for (let i = 0; i < 16; ++i) {
-            buf[offset + i] = bytes[i];
-          }
-          return buf;
-        }
-        return (0, _stringify.default)(bytes);
-      }
-      __name(generateUUID, "generateUUID");
-      try {
-        generateUUID.name = name;
-      } catch (err) {
-      }
-      generateUUID.DNS = DNS;
-      generateUUID.URL = URL2;
-      return generateUUID;
-    }
-    __name(_default, "_default");
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/md5.js
-var require_md52 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/md5.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _crypto = _interopRequireDefault(require("crypto"));
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function md5(bytes) {
-      if (Array.isArray(bytes)) {
-        bytes = Buffer.from(bytes);
-      } else if (typeof bytes === "string") {
-        bytes = Buffer.from(bytes, "utf8");
-      }
-      return _crypto.default.createHash("md5").update(bytes).digest();
-    }
-    __name(md5, "md5");
-    var _default = md5;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/v3.js
-var require_v32 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/v3.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _v = _interopRequireDefault(require_v352());
-    var _md = _interopRequireDefault(require_md52());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var v3 = (0, _v.default)("v3", 48, _md.default);
-    var _default = v3;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/v4.js
-var require_v43 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/v4.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _rng = _interopRequireDefault(require_rng3());
-    var _stringify = _interopRequireDefault(require_stringify2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function v4(options, buf, offset) {
-      options = options || {};
-      const rnds = options.random || (options.rng || _rng.default)();
-      rnds[6] = rnds[6] & 15 | 64;
-      rnds[8] = rnds[8] & 63 | 128;
-      if (buf) {
-        offset = offset || 0;
-        for (let i = 0; i < 16; ++i) {
-          buf[offset + i] = rnds[i];
-        }
-        return buf;
-      }
-      return (0, _stringify.default)(rnds);
-    }
-    __name(v4, "v4");
-    var _default = v4;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/sha1.js
-var require_sha12 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/sha1.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _crypto = _interopRequireDefault(require("crypto"));
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function sha1(bytes) {
-      if (Array.isArray(bytes)) {
-        bytes = Buffer.from(bytes);
-      } else if (typeof bytes === "string") {
-        bytes = Buffer.from(bytes, "utf8");
-      }
-      return _crypto.default.createHash("sha1").update(bytes).digest();
-    }
-    __name(sha1, "sha1");
-    var _default = sha1;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/v5.js
-var require_v52 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/v5.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _v = _interopRequireDefault(require_v352());
-    var _sha = _interopRequireDefault(require_sha12());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    var v5 = (0, _v.default)("v5", 80, _sha.default);
-    var _default = v5;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/nil.js
-var require_nil2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/nil.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _default = "00000000-0000-0000-0000-000000000000";
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/version.js
-var require_version2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/version.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    exports2.default = void 0;
-    var _validate = _interopRequireDefault(require_validate2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
-    function version(uuid) {
-      if (!(0, _validate.default)(uuid)) {
-        throw TypeError("Invalid UUID");
-      }
-      return parseInt(uuid.substr(14, 1), 16);
-    }
-    __name(version, "version");
-    var _default = version;
-    exports2.default = _default;
-  }
-});
-
-// node_modules/@azure/core-http/node_modules/uuid/dist/index.js
-var require_dist2 = __commonJS({
-  "node_modules/@azure/core-http/node_modules/uuid/dist/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", {
-      value: true
-    });
-    Object.defineProperty(exports2, "v1", {
-      enumerable: true,
-      get: function() {
-        return _v.default;
-      }
-    });
-    Object.defineProperty(exports2, "v3", {
-      enumerable: true,
-      get: function() {
-        return _v2.default;
-      }
-    });
-    Object.defineProperty(exports2, "v4", {
-      enumerable: true,
-      get: function() {
-        return _v3.default;
-      }
-    });
-    Object.defineProperty(exports2, "v5", {
-      enumerable: true,
-      get: function() {
-        return _v4.default;
-      }
-    });
-    Object.defineProperty(exports2, "NIL", {
-      enumerable: true,
-      get: function() {
-        return _nil.default;
-      }
-    });
-    Object.defineProperty(exports2, "version", {
-      enumerable: true,
-      get: function() {
-        return _version.default;
-      }
-    });
-    Object.defineProperty(exports2, "validate", {
-      enumerable: true,
-      get: function() {
-        return _validate.default;
-      }
-    });
-    Object.defineProperty(exports2, "stringify", {
-      enumerable: true,
-      get: function() {
-        return _stringify.default;
-      }
-    });
-    Object.defineProperty(exports2, "parse", {
-      enumerable: true,
-      get: function() {
-        return _parse.default;
-      }
-    });
-    var _v = _interopRequireDefault(require_v13());
-    var _v2 = _interopRequireDefault(require_v32());
-    var _v3 = _interopRequireDefault(require_v43());
-    var _v4 = _interopRequireDefault(require_v52());
-    var _nil = _interopRequireDefault(require_nil2());
-    var _version = _interopRequireDefault(require_version2());
-    var _validate = _interopRequireDefault(require_validate2());
-    var _stringify = _interopRequireDefault(require_stringify2());
-    var _parse = _interopRequireDefault(require_parse2());
-    function _interopRequireDefault(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
-    }
-    __name(_interopRequireDefault, "_interopRequireDefault");
   }
 });
 
@@ -13612,7 +13096,7 @@ var require_xml2js = __commonJS({
 });
 
 // node_modules/@azure/abort-controller/dist/index.js
-var require_dist3 = __commonJS({
+var require_dist2 = __commonJS({
   "node_modules/@azure/abort-controller/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -13720,7 +13204,7 @@ var require_dist3 = __commonJS({
 });
 
 // node_modules/@azure/logger/dist/index.js
-var require_dist4 = __commonJS({
+var require_dist3 = __commonJS({
   "node_modules/@azure/logger/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -14004,7 +13488,7 @@ var require_dist4 = __commonJS({
 });
 
 // node_modules/@azure/core-auth/dist/index.js
-var require_dist5 = __commonJS({
+var require_dist4 = __commonJS({
   "node_modules/@azure/core-auth/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -23417,7 +22901,7 @@ var require_memstore = __commonJS({
 });
 
 // node_modules/@azure/core-http/node_modules/tough-cookie/lib/version.js
-var require_version3 = __commonJS({
+var require_version2 = __commonJS({
   "node_modules/@azure/core-http/node_modules/tough-cookie/lib/version.js"(exports2, module2) {
     module2.exports = "4.0.0";
   }
@@ -23434,7 +22918,7 @@ var require_cookie = __commonJS({
     var Store = require_store().Store;
     var MemoryCookieStore = require_memstore().MemoryCookieStore;
     var pathMatch = require_pathMatch().pathMatch;
-    var VERSION = require_version3();
+    var VERSION = require_version2();
     var { fromCallback } = require_universalify();
     var COOKIE_OCTETS = /^[\x21\x23-\x2B\x2D-\x3A\x3C-\x5B\x5D-\x7E]+$/;
     var CONTROL_CHARS = /[\x00-\x1F]/;
@@ -36874,7 +36358,7 @@ var require_platform = __commonJS({
 });
 
 // node_modules/@opentelemetry/api/build/src/version.js
-var require_version4 = __commonJS({
+var require_version3 = __commonJS({
   "node_modules/@opentelemetry/api/build/src/version.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -36889,7 +36373,7 @@ var require_semver2 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.isCompatible = exports2._makeCompatibilityCheck = void 0;
-    var version_1 = require_version4();
+    var version_1 = require_version3();
     var re = /^(\d+)\.(\d+)\.(\d+)(-(.+))?$/;
     function _makeCompatibilityCheck(ownVersion) {
       var acceptedVersions = new Set([ownVersion]);
@@ -36969,7 +36453,7 @@ var require_global_utils = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.unregisterGlobal = exports2.getGlobal = exports2.registerGlobal = void 0;
     var platform_1 = require_platform();
-    var version_1 = require_version4();
+    var version_1 = require_version3();
     var semver_1 = require_semver2();
     var major = version_1.VERSION.split(".")[0];
     var GLOBAL_OPENTELEMETRY_API_KEY = Symbol.for("opentelemetry.js.api." + major);
@@ -38231,7 +37715,7 @@ var require_src = __commonJS({
 });
 
 // node_modules/@azure/core-tracing/dist/index.js
-var require_dist6 = __commonJS({
+var require_dist5 = __commonJS({
   "node_modules/@azure/core-tracing/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -38373,17 +37857,17 @@ var require_dist_esm = __commonJS({
 });
 
 // node_modules/@azure/core-http/dist/index.js
-var require_dist7 = __commonJS({
+var require_dist6 = __commonJS({
   "node_modules/@azure/core-http/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var uuid = require_dist2();
+    var uuid = require_dist();
     var util = require("util");
     var tslib = require_tslib();
     var xml2js = require_xml2js();
-    var abortController = require_dist3();
-    var logger$1 = require_dist4();
-    var coreAuth = require_dist5();
+    var abortController = require_dist2();
+    var logger$1 = require_dist3();
+    var coreAuth = require_dist4();
     var os2 = require("os");
     var http = require("http");
     var https = require("https");
@@ -38392,7 +37876,7 @@ var require_dist7 = __commonJS({
     var stream = require("stream");
     var FormData = require_form_data();
     var node_fetch = require_lib4();
-    var coreTracing = require_dist6();
+    var coreTracing = require_dist5();
     var url = require("url");
     require_dist_esm();
     function _interopDefaultLegacy(e) {
@@ -42439,7 +41923,7 @@ var require_dist7 = __commonJS({
 });
 
 // node_modules/@azure/core-paging/dist/index.js
-var require_dist8 = __commonJS({
+var require_dist7 = __commonJS({
   "node_modules/@azure/core-paging/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -42448,11 +41932,11 @@ var require_dist8 = __commonJS({
 });
 
 // node_modules/@azure/core-lro/dist/index.js
-var require_dist9 = __commonJS({
+var require_dist8 = __commonJS({
   "node_modules/@azure/core-lro/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var logger$1 = require_dist4();
+    var logger$1 = require_dist3();
     var PollerStoppedError = class extends Error {
       constructor(message) {
         super(message);
@@ -42865,20 +42349,20 @@ var require_dist9 = __commonJS({
 });
 
 // node_modules/@azure/storage-blob/dist/index.js
-var require_dist10 = __commonJS({
+var require_dist9 = __commonJS({
   "node_modules/@azure/storage-blob/dist/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var coreHttp = require_dist7();
+    var coreHttp = require_dist6();
     var tslib = require_tslib();
-    var coreTracing = require_dist6();
-    var logger$1 = require_dist4();
-    var abortController = require_dist3();
+    var coreTracing = require_dist5();
+    var logger$1 = require_dist3();
+    var abortController = require_dist2();
     var os2 = require("os");
     var crypto = require("crypto");
     var stream = require("stream");
-    require_dist8();
-    var coreLro = require_dist9();
+    require_dist7();
+    var coreLro = require_dist8();
     var events = require("events");
     var fs3 = require("fs");
     var util = require("util");
@@ -61980,7 +61464,7 @@ var require_downloadUtils = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     var core = __importStar(require_core());
     var http_client_1 = require_lib();
-    var storage_blob_1 = require_dist10();
+    var storage_blob_1 = require_dist9();
     var buffer = __importStar(require("buffer"));
     var fs3 = __importStar(require("fs"));
     var stream = __importStar(require("stream"));
@@ -61988,7 +61472,7 @@ var require_downloadUtils = __commonJS({
     var utils = __importStar(require_cacheUtils());
     var constants_1 = require_constants();
     var requestUtils_1 = require_requestUtils();
-    var abort_controller_1 = require_dist3();
+    var abort_controller_1 = require_dist2();
     function pipeResponseToStream(response, output) {
       return __awaiter(this, void 0, void 0, function* () {
         const pipeline = util.promisify(stream.pipeline);
