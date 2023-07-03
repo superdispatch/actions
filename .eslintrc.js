@@ -16,8 +16,7 @@ module.exports = {
       rules: {
         'import/no-extraneous-dependencies': 'off',
         'node/no-unpublished-import': 'off',
-        '@typescript-eslint/restrict-template-expressions': 'off',
-        '@typescript-eslint/no-unsafe-member-access': 'off',
+        'eslint-comments/no-use': 'off',
       },
     },
 

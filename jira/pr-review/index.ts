@@ -8,6 +8,7 @@ const token = getInput('token', { required: true });
 const seniors = getInput('seniors');
 const projects = getInput('projects');
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const HEAD_REF = context.payload.pull_request?.head?.ref as string | undefined;
 const PR_NUMBER = context.payload.pull_request?.number;
 
@@ -19,7 +20,11 @@ async function main() {
 
   const octokit = getOctokit(token);
   const issue = await findIssue(HEAD_REF);
-  info(`issue ${issue?.key} is in status ${issue?.fields.status}`);
+  info(
+    `issue ${issue?.key ?? 'unknown'} is in status ${
+      issue?.fields.status.name ?? 'unknown'
+    }`,
+  );
 
   if (!issue) {
     info('Skipping... Could not find issue');
