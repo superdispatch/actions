@@ -90,7 +90,7 @@ async function main() {
       return;
     }
 
-    let states: Map<string, string> = new Map();
+    const states: Map<string, string> = new Map();
     // Iterate through the PR reviews and store the review states in the Map
     for (const x of pr_reviews) {
       if (x.user?.login) {

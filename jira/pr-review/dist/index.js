@@ -60907,7 +60907,7 @@ async function main() {
       await transitionCard(issue, "Changes Required in PR");
       return;
     }
-    let states = new Map();
+    const states = new Map();
     for (const x of pr_reviews) {
       if (x.user?.login) {
         states.set(x.user.login, x.state);
