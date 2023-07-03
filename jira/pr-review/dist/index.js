@@ -60877,7 +60877,7 @@ async function main() {
   }
   const octokit = (0, import_github.getOctokit)(token);
   const issue = await findIssue(HEAD_REF);
-  (0, import_core.info)(`issue ${issue}`);
+  (0, import_core.info)(`issue ${issue?.key} is in status ${issue?.fields.status}`);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;
@@ -60915,8 +60915,11 @@ async function main() {
     }
     senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
   }
-  if (pr.mergeable_state === "clean" && pr.mergeable && senior_approvals) {
+  if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, "Finish Development");
+  } else {
+    (0, import_core.info)(`pr.mergeable_state = ${pr.mergeable_state}`);
+    (0, import_core.info)(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
   (0, import_core.setOutput)("issue", issue.key);
 }

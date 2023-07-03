@@ -19,7 +19,7 @@ async function main() {
 
   const octokit = getOctokit(token);
   const issue = await findIssue(HEAD_REF);
-  info(`issue ${issue}`);
+  info(`issue ${issue?.key} is in status ${issue?.fields.status}`);
 
   if (!issue) {
     info('Skipping... Could not find issue');
@@ -99,8 +99,11 @@ async function main() {
       .some((senior) => states.get(senior) === 'APPROVED');
   }
 
-  if (pr.mergeable_state === 'clean' && pr.mergeable && senior_approvals) {
+  if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, 'Finish Development');
+  } else {
+    info(`pr.mergeable_state = ${pr.mergeable_state}`);
+    info(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
 
   setOutput('issue', issue.key);
