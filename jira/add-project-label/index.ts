@@ -1,6 +1,7 @@
 import { getInput, info, setFailed, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import { findIssue } from '../utils/JiraIssue';
+import { IssueLabelMap } from './github-labels';
 
 const token = getInput('token', { required: true });
 
@@ -45,30 +46,34 @@ async function main() {
   }
 
   const issueTypeName = issue.fields.issuetype.name;
-  const labelMap = new Map([
-    ['Change Request', 'feature'],
-    ['Production Defect', 'bugfix'],
-    ['Maintenance', 'maintenance'],
-    ['Technical Debt', 'enhancement'],
-    ['Sub-task', 'feature'],
-    ['Epic', 'feature'],
-  ]);
-  const hasIssueTypeLabelExists = labels.find(
-    (x) => x.name === labelMap.get(issueTypeName),
-  );
-  const hasIssueTypeLabelExistsInPR = pr.labels.find(
-    (x) => x.name === labelMap.get(issueTypeName),
-  );
+  const issueLabel = IssueLabelMap.get(issueTypeName);
+  let issueLabelToAdd = undefined;
+  if (issueLabel !== undefined) {
+    const hasIssueTypeLabelExists = labels.find(
+      (x) => x.name === issueLabel.name,
+    );
+    if (!hasIssueTypeLabelExists) {
+      await octokit.request('POST /repos/{owner}/{repo}/labels', {
+        ...context.repo,
+        name: issueLabel.name,
+        description: issueLabel.description,
+        color: issueLabel.color,
+      });
+    }
+    const hasIssueTypeLabelExistsInPR = pr.labels.find(
+      (x) => x.name === issueLabel.name,
+    );
+    if (!hasIssueTypeLabelExistsInPR) {
+      issueLabelToAdd = issueLabel.name;
+    }
+  }
 
   const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
 
   if (!hasPRLabel) {
     let labelsToAdd = [projectLabel];
-    if (hasIssueTypeLabelExists && !hasIssueTypeLabelExistsInPR) {
-      const labelName = labelMap.get(issueTypeName);
-      if (labelName) {
-        labelsToAdd.push(labelName);
-      }
+    if (issueLabelToAdd !== undefined) {
+      labelsToAdd.push(issueLabelToAdd);
     }
     info(`Adding label "${projectLabel}"`);
     await octokit.request(
