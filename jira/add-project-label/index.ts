@@ -1,7 +1,11 @@
 import { getInput, info, setFailed, setOutput } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import { findIssue } from '../utils/JiraIssue';
-import { IssueLabelMap } from './github-labels';
+import {
+  createLabelIfNotExists,
+  GithubLabel,
+  IssueLabelMap,
+} from './github-labels';
 
 const token = getInput('token', { required: true });
 
@@ -29,53 +33,31 @@ async function main() {
 
   info(`Found issue: ${issue.key}`);
 
-  const projectLabel = issue.fields.project.key;
-  const { data: labels } = await octokit.request(
-    'GET /repos/{owner}/{repo}/labels',
-    context.repo,
+  const projectLabel = new GithubLabel(
+    issue.fields.project.key,
+    'f29513',
+    'Project label',
   );
-  const hasRepLabel = labels.find((x) => x.name === projectLabel);
-
-  if (!hasRepLabel) {
-    await octokit.request('POST /repos/{owner}/{repo}/labels', {
-      ...context.repo,
-      name: projectLabel,
-      description: 'Project label',
-      color: 'f29513',
-    });
-  }
+  await createLabelIfNotExists(octokit, projectLabel);
 
   const issueTypeName = issue.fields.issuetype.name;
   const issueLabel = IssueLabelMap.get(issueTypeName);
-  let issueLabelToAdd = undefined;
   if (issueLabel !== undefined) {
-    const hasIssueTypeLabelExists = labels.find(
-      (x) => x.name === issueLabel.name,
-    );
-    if (!hasIssueTypeLabelExists) {
-      await octokit.request('POST /repos/{owner}/{repo}/labels', {
-        ...context.repo,
-        name: issueLabel.name,
-        description: issueLabel.description,
-        color: issueLabel.color,
-      });
-    }
-    const hasIssueTypeLabelExistsInPR = pr.labels.find(
-      (x) => x.name === issueLabel.name,
-    );
-    if (!hasIssueTypeLabelExistsInPR) {
-      issueLabelToAdd = issueLabel.name;
-    }
+    await createLabelIfNotExists(octokit, issueLabel);
   }
 
-  const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
+  const labelsToAdd = ([projectLabel, issueLabel] as GithubLabel[])
+    .reduce<GithubLabel[]>((items, label) => {
+      const isLabelExists = pr.labels.find((x) => x.name === label.name);
+      if (isLabelExists) {
+        items.push(label);
+      }
+      return items;
+    }, [])
+    .map((githubLabel) => githubLabel.name);
 
-  if (!hasPRLabel) {
-    let labelsToAdd = [projectLabel];
-    if (issueLabelToAdd !== undefined) {
-      labelsToAdd.push(issueLabelToAdd);
-    }
-    info(`Adding label "${projectLabel}"`);
+  if (labelsToAdd.length !== 0) {
+    info(`Adding label "${labelsToAdd.toString()}"`);
     await octokit.request(
       'POST /repos/{owner}/{repo}/issues/{issue_number}/labels',
       {

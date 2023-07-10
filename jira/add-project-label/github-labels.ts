@@ -1,3 +1,6 @@
+import { context } from '@actions/github';
+import { GitHub } from '@actions/github/lib/utils';
+
 export class GithubLabel {
   name: string;
   color: string;
@@ -33,3 +36,24 @@ export const IssueLabelMap = new Map([
     new GithubLabel('feature', '248213', 'New feature or change request'),
   ],
 ]);
+
+export async function createLabelIfNotExists(
+  octokit: InstanceType<typeof GitHub>,
+  githubLabel: GithubLabel,
+) {
+  const { data: labels } = await octokit.request(
+    'GET /repos/{owner}/{repo}/labels',
+    context.repo,
+  );
+
+  const hasLabel = labels.find((x) => x.name === githubLabel.name);
+
+  if (!hasLabel) {
+    await octokit.request('POST /repos/{owner}/{repo}/labels', {
+      ...context.repo,
+      name: githubLabel.name,
+      description: githubLabel.description,
+      color: githubLabel.color,
+    });
+  }
+}
