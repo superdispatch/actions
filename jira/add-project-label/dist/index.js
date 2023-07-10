@@ -2740,8 +2740,8 @@ var require_dist_node2 = __commonJS({
       return operator === ";" || operator === "&" || operator === "?";
     }
     __name(isKeyOperator, "isKeyOperator");
-    function getValues(context2, operator, key, modifier) {
-      var value = context2[key], result = [];
+    function getValues(context3, operator, key, modifier) {
+      var value = context3[key], result = [];
       if (isDefined(value) && value !== "") {
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
           value = value.toString();
@@ -2803,7 +2803,7 @@ var require_dist_node2 = __commonJS({
       };
     }
     __name(parseUrl, "parseUrl");
-    function expand(template, context2) {
+    function expand(template, context3) {
       var operators = ["+", "#", ".", "/", ";", "?", "&"];
       return template.replace(/\{([^\{\}]+)\}|([^\{\}]+)/g, function(_, expression, literal) {
         if (expression) {
@@ -2815,7 +2815,7 @@ var require_dist_node2 = __commonJS({
           }
           expression.split(/,/g).forEach(function(variable) {
             var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-            values.push(getValues(context2, operator, tmp[1], tmp[2] || tmp[3]));
+            values.push(getValues(context3, operator, tmp[1], tmp[2] || tmp[3]));
           });
           if (operator && operator !== "+") {
             var separator = ",";
@@ -7771,8 +7771,8 @@ var require_runtime = __commonJS({
       function wrap(innerFn, outerFn, self2, tryLocsList) {
         var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
         var generator = Object.create(protoGenerator.prototype);
-        var context2 = new Context(tryLocsList || []);
-        generator._invoke = makeInvokeMethod(innerFn, self2, context2);
+        var context3 = new Context(tryLocsList || []);
+        generator._invoke = makeInvokeMethod(innerFn, self2, context3);
         return generator;
       }
       __name(wrap, "wrap");
@@ -7888,7 +7888,7 @@ var require_runtime = __commonJS({
           return result.done ? result.value : iter.next();
         });
       };
-      function makeInvokeMethod(innerFn, self2, context2) {
+      function makeInvokeMethod(innerFn, self2, context3) {
         var state = GenStateSuspendedStart;
         return /* @__PURE__ */ __name(function invoke(method, arg) {
           if (state === GenStateExecuting) {
@@ -7900,92 +7900,92 @@ var require_runtime = __commonJS({
             }
             return doneResult();
           }
-          context2.method = method;
-          context2.arg = arg;
+          context3.method = method;
+          context3.arg = arg;
           while (true) {
-            var delegate = context2.delegate;
+            var delegate = context3.delegate;
             if (delegate) {
-              var delegateResult = maybeInvokeDelegate(delegate, context2);
+              var delegateResult = maybeInvokeDelegate(delegate, context3);
               if (delegateResult) {
                 if (delegateResult === ContinueSentinel)
                   continue;
                 return delegateResult;
               }
             }
-            if (context2.method === "next") {
-              context2.sent = context2._sent = context2.arg;
-            } else if (context2.method === "throw") {
+            if (context3.method === "next") {
+              context3.sent = context3._sent = context3.arg;
+            } else if (context3.method === "throw") {
               if (state === GenStateSuspendedStart) {
                 state = GenStateCompleted;
-                throw context2.arg;
+                throw context3.arg;
               }
-              context2.dispatchException(context2.arg);
-            } else if (context2.method === "return") {
-              context2.abrupt("return", context2.arg);
+              context3.dispatchException(context3.arg);
+            } else if (context3.method === "return") {
+              context3.abrupt("return", context3.arg);
             }
             state = GenStateExecuting;
-            var record = tryCatch2(innerFn, self2, context2);
+            var record = tryCatch2(innerFn, self2, context3);
             if (record.type === "normal") {
-              state = context2.done ? GenStateCompleted : GenStateSuspendedYield;
+              state = context3.done ? GenStateCompleted : GenStateSuspendedYield;
               if (record.arg === ContinueSentinel) {
                 continue;
               }
               return {
                 value: record.arg,
-                done: context2.done
+                done: context3.done
               };
             } else if (record.type === "throw") {
               state = GenStateCompleted;
-              context2.method = "throw";
-              context2.arg = record.arg;
+              context3.method = "throw";
+              context3.arg = record.arg;
             }
           }
         }, "invoke");
       }
       __name(makeInvokeMethod, "makeInvokeMethod");
-      function maybeInvokeDelegate(delegate, context2) {
-        var method = delegate.iterator[context2.method];
+      function maybeInvokeDelegate(delegate, context3) {
+        var method = delegate.iterator[context3.method];
         if (method === undefined2) {
-          context2.delegate = null;
-          if (context2.method === "throw") {
+          context3.delegate = null;
+          if (context3.method === "throw") {
             if (delegate.iterator["return"]) {
-              context2.method = "return";
-              context2.arg = undefined2;
-              maybeInvokeDelegate(delegate, context2);
-              if (context2.method === "throw") {
+              context3.method = "return";
+              context3.arg = undefined2;
+              maybeInvokeDelegate(delegate, context3);
+              if (context3.method === "throw") {
                 return ContinueSentinel;
               }
             }
-            context2.method = "throw";
-            context2.arg = new TypeError("The iterator does not provide a 'throw' method");
+            context3.method = "throw";
+            context3.arg = new TypeError("The iterator does not provide a 'throw' method");
           }
           return ContinueSentinel;
         }
-        var record = tryCatch2(method, delegate.iterator, context2.arg);
+        var record = tryCatch2(method, delegate.iterator, context3.arg);
         if (record.type === "throw") {
-          context2.method = "throw";
-          context2.arg = record.arg;
-          context2.delegate = null;
+          context3.method = "throw";
+          context3.arg = record.arg;
+          context3.delegate = null;
           return ContinueSentinel;
         }
         var info2 = record.arg;
         if (!info2) {
-          context2.method = "throw";
-          context2.arg = new TypeError("iterator result is not an object");
-          context2.delegate = null;
+          context3.method = "throw";
+          context3.arg = new TypeError("iterator result is not an object");
+          context3.delegate = null;
           return ContinueSentinel;
         }
         if (info2.done) {
-          context2[delegate.resultName] = info2.value;
-          context2.next = delegate.nextLoc;
-          if (context2.method !== "return") {
-            context2.method = "next";
-            context2.arg = undefined2;
+          context3[delegate.resultName] = info2.value;
+          context3.next = delegate.nextLoc;
+          if (context3.method !== "return") {
+            context3.method = "next";
+            context3.arg = undefined2;
           }
         } else {
           return info2;
         }
-        context2.delegate = null;
+        context3.delegate = null;
         return ContinueSentinel;
       }
       __name(maybeInvokeDelegate, "maybeInvokeDelegate");
@@ -8106,14 +8106,14 @@ var require_runtime = __commonJS({
           if (this.done) {
             throw exception;
           }
-          var context2 = this;
+          var context3 = this;
           function handle(loc, caught) {
             record.type = "throw";
             record.arg = exception;
-            context2.next = loc;
+            context3.next = loc;
             if (caught) {
-              context2.method = "next";
-              context2.arg = undefined2;
+              context3.method = "next";
+              context3.arg = undefined2;
             }
             return !!caught;
           }
@@ -9215,17 +9215,17 @@ var require_thenables = __commonJS({
       var util = require_util();
       var errorObj2 = util.errorObj;
       var isObject2 = util.isObject;
-      function tryConvertToPromise(obj2, context2) {
+      function tryConvertToPromise(obj2, context3) {
         if (isObject2(obj2)) {
           if (obj2 instanceof Promise2)
             return obj2;
           var then = getThen(obj2);
           if (then === errorObj2) {
-            if (context2)
-              context2._pushContext();
+            if (context3)
+              context3._pushContext();
             var ret2 = Promise2.reject(then.e);
-            if (context2)
-              context2._popContext();
+            if (context3)
+              context3._popContext();
             return ret2;
           } else if (typeof then === "function") {
             if (isAnyBluebirdPromise(obj2)) {
@@ -9233,7 +9233,7 @@ var require_thenables = __commonJS({
               obj2._then(ret2._fulfill, ret2._reject, void 0, ret2, null);
               return ret2;
             }
-            return doThenable(obj2, then, context2);
+            return doThenable(obj2, then, context3);
           }
         }
         return obj2;
@@ -9261,14 +9261,14 @@ var require_thenables = __commonJS({
         }
       }
       __name(isAnyBluebirdPromise, "isAnyBluebirdPromise");
-      function doThenable(x, then, context2) {
+      function doThenable(x, then, context3) {
         var promise = new Promise2(INTERNAL);
         var ret2 = promise;
-        if (context2)
-          context2._pushContext();
+        if (context3)
+          context3._pushContext();
         promise._captureStackTrace();
-        if (context2)
-          context2._popContext();
+        if (context3)
+          context3._popContext();
         var synchronous = true;
         var result = util.tryCatch(then).call(x, resolve, reject);
         synchronous = false;
@@ -9649,12 +9649,12 @@ var require_debuggability = __commonJS({
         return warn(message, shouldUseOwnTrace, promise || this);
       };
       Promise2.onPossiblyUnhandledRejection = function(fn) {
-        var context2 = Promise2._getContext();
-        possiblyUnhandledRejection = util.contextBind(context2, fn);
+        var context3 = Promise2._getContext();
+        possiblyUnhandledRejection = util.contextBind(context3, fn);
       };
       Promise2.onUnhandledRejectionHandled = function(fn) {
-        var context2 = Promise2._getContext();
-        unhandledRejectionHandled = util.contextBind(context2, fn);
+        var context3 = Promise2._getContext();
+        unhandledRejectionHandled = util.contextBind(context3, fn);
       };
       var disableLongStackTraces = /* @__PURE__ */ __name(function() {
       }, "disableLongStackTraces");
@@ -10779,17 +10779,17 @@ var require_bind = __commonJS({
       var rejectThis = /* @__PURE__ */ __name(function(_, e) {
         this._reject(e);
       }, "rejectThis");
-      var targetRejected = /* @__PURE__ */ __name(function(e, context2) {
-        context2.promiseRejectionQueued = true;
-        context2.bindingPromise._then(rejectThis, rejectThis, null, this, e);
+      var targetRejected = /* @__PURE__ */ __name(function(e, context3) {
+        context3.promiseRejectionQueued = true;
+        context3.bindingPromise._then(rejectThis, rejectThis, null, this, e);
       }, "targetRejected");
-      var bindingResolved = /* @__PURE__ */ __name(function(thisArg, context2) {
+      var bindingResolved = /* @__PURE__ */ __name(function(thisArg, context3) {
         if ((this._bitField & 50397184) === 0) {
-          this._resolveCallback(context2.target);
+          this._resolveCallback(context3.target);
         }
       }, "bindingResolved");
-      var bindingRejected = /* @__PURE__ */ __name(function(e, context2) {
-        if (!context2.promiseRejectionQueued)
+      var bindingRejected = /* @__PURE__ */ __name(function(e, context3) {
+        if (!context3.promiseRejectionQueued)
           this._reject(e);
       }, "bindingRejected");
       Promise2.prototype.bind = function(thisArg) {
@@ -10804,14 +10804,14 @@ var require_bind = __commonJS({
         var target = this._target();
         ret2._setBoundTo(maybePromise);
         if (maybePromise instanceof Promise2) {
-          var context2 = {
+          var context3 = {
             promiseRejectionQueued: false,
             promise: ret2,
             target,
             bindingPromise: maybePromise
           };
-          target._then(INTERNAL, targetRejected, void 0, ret2, context2);
-          maybePromise._then(bindingResolved, bindingRejected, void 0, ret2, context2);
+          target._then(INTERNAL, targetRejected, void 0, ret2, context3);
+          maybePromise._then(bindingResolved, bindingRejected, void 0, ret2, context3);
           ret2._setOnCancel(maybePromise);
         } else {
           ret2._resolveCallback(target);
@@ -11176,8 +11176,8 @@ var require_join = __commonJS({
               }
               if (!ret2._isFateSealed()) {
                 if (holder.asyncNeeded) {
-                  var context2 = Promise2._getContext();
-                  holder.fn = util.contextBind(context2, holder.fn);
+                  var context3 = Promise2._getContext();
+                  holder.fn = util.contextBind(context3, holder.fn);
                 }
                 ret2._setAsyncGuaranteed();
                 ret2._setOnCancel(holder);
@@ -11519,8 +11519,8 @@ var require_map = __commonJS({
       function MappingPromiseArray(promises, fn, limit, _filter) {
         this.constructor$(promises);
         this._promise._captureStackTrace();
-        var context2 = Promise2._getContext();
-        this._callback = util.contextBind(context2, fn);
+        var context3 = Promise2._getContext();
+        this._callback = util.contextBind(context3, fn);
         this._preservedValues = _filter === INTERNAL ? new Array(this.length()) : null;
         this._limit = limit;
         this._inFlight = 0;
@@ -12121,8 +12121,8 @@ var require_reduce = __commonJS({
       var tryCatch2 = util.tryCatch;
       function ReductionPromiseArray(promises, fn, initialValue, _each) {
         this.constructor$(promises);
-        var context2 = Promise2._getContext();
-        this._fn = util.contextBind(context2, fn);
+        var context3 = Promise2._getContext();
+        this._fn = util.contextBind(context3, fn);
         if (initialValue !== void 0) {
           initialValue = Promise2.resolve(initialValue);
           initialValue._attachCancellationCallback(this);
@@ -12590,10 +12590,10 @@ var require_using = __commonJS({
         return ret2;
       }
       __name(dispose, "dispose");
-      function Disposer(data, promise, context2) {
+      function Disposer(data, promise, context3) {
         this._data = data;
         this._promise = promise;
-        this._context = context2;
+        this._context = context3;
       }
       __name(Disposer, "Disposer");
       Disposer.prototype.data = function() {
@@ -12610,12 +12610,12 @@ var require_using = __commonJS({
       };
       Disposer.prototype.tryDispose = function(inspection) {
         var resource = this.resource();
-        var context2 = this._context;
-        if (context2 !== void 0)
-          context2._pushContext();
+        var context3 = this._context;
+        if (context3 !== void 0)
+          context3._pushContext();
         var ret2 = resource !== NULL ? this.doDispose(resource, inspection) : null;
-        if (context2 !== void 0)
-          context2._popContext();
+        if (context3 !== void 0)
+          context3._popContext();
         this._promise._unsetDisposable();
         this._data = null;
         return ret2;
@@ -12623,8 +12623,8 @@ var require_using = __commonJS({
       Disposer.isDisposer = function(d) {
         return d != null && typeof d.resource === "function" && typeof d.tryDispose === "function";
       };
-      function FunctionDisposer(fn, promise, context2) {
-        this.constructor$(fn, promise, context2);
+      function FunctionDisposer(fn, promise, context3) {
+        this.constructor$(fn, promise, context3);
       }
       __name(FunctionDisposer, "FunctionDisposer");
       inherits2(FunctionDisposer, Disposer);
@@ -13050,7 +13050,7 @@ var require_promise = __commonJS({
           }
           this._fireEvent("promiseChained", this, promise);
         }
-        var context2 = getContext();
+        var context3 = getContext();
         if (!((bitField & 50397184) === 0)) {
           var handler, value, settler = target._settlePromiseCtx;
           if ((bitField & 33554432) !== 0) {
@@ -13067,13 +13067,13 @@ var require_promise = __commonJS({
             handler = didReject;
           }
           async.invoke(settler, target, {
-            handler: util.contextBind(context2, handler),
+            handler: util.contextBind(context3, handler),
             promise,
             receiver: receiver2,
             value
           });
         } else {
-          target._addCallbacks(didFulfill, didReject, promise, receiver2, context2);
+          target._addCallbacks(didFulfill, didReject, promise, receiver2, context3);
         }
         return promise;
       };
@@ -13165,7 +13165,7 @@ var require_promise = __commonJS({
           receiver2 = UNDEFINED_BINDING;
         this._addCallbacks(fulfill, reject, promise, receiver2, null);
       };
-      Promise2.prototype._addCallbacks = function(fulfill, reject, promise, receiver2, context2) {
+      Promise2.prototype._addCallbacks = function(fulfill, reject, promise, receiver2, context3) {
         var index = this._length();
         if (index >= 65535 - 4) {
           index = 0;
@@ -13175,20 +13175,20 @@ var require_promise = __commonJS({
           this._promise0 = promise;
           this._receiver0 = receiver2;
           if (typeof fulfill === "function") {
-            this._fulfillmentHandler0 = util.contextBind(context2, fulfill);
+            this._fulfillmentHandler0 = util.contextBind(context3, fulfill);
           }
           if (typeof reject === "function") {
-            this._rejectionHandler0 = util.contextBind(context2, reject);
+            this._rejectionHandler0 = util.contextBind(context3, reject);
           }
         } else {
           var base = index * 4 - 4;
           this[base + 2] = promise;
           this[base + 3] = receiver2;
           if (typeof fulfill === "function") {
-            this[base + 0] = util.contextBind(context2, fulfill);
+            this[base + 0] = util.contextBind(context3, fulfill);
           }
           if (typeof reject === "function") {
-            this[base + 1] = util.contextBind(context2, reject);
+            this[base + 1] = util.contextBind(context3, reject);
           }
         }
         this._setLength(index + 1);
@@ -23995,12 +23995,12 @@ var require_cookie = __commonJS({
     CAN_BE_SYNC.push("setCookie");
     CookieJar.prototype.setCookie = function(cookie, url, options, cb) {
       var err;
-      var context2 = getCookieContext(url);
+      var context3 = getCookieContext(url);
       if (options instanceof Function) {
         cb = options;
         options = {};
       }
-      var host = canonicalDomain(context2.hostname);
+      var host = canonicalDomain(context3.hostname);
       var loose = this.enableLooseMode;
       if (options.loose != null) {
         loose = options.loose;
@@ -24033,7 +24033,7 @@ var require_cookie = __commonJS({
         cookie.domain = host;
       }
       if (!cookie.path || cookie.path[0] !== "/") {
-        cookie.path = defaultPath(context2.pathname);
+        cookie.path = defaultPath(context3.pathname);
         cookie.pathIsDefault = true;
       }
       if (options.http === false && cookie.httpOnly) {
@@ -24076,15 +24076,15 @@ var require_cookie = __commonJS({
     };
     CAN_BE_SYNC.push("getCookies");
     CookieJar.prototype.getCookies = function(url, options, cb) {
-      var context2 = getCookieContext(url);
+      var context3 = getCookieContext(url);
       if (options instanceof Function) {
         cb = options;
         options = {};
       }
-      var host = canonicalDomain(context2.hostname);
-      var path = context2.pathname || "/";
+      var host = canonicalDomain(context3.hostname);
+      var path = context3.pathname || "/";
       var secure = options.secure;
-      if (secure == null && context2.protocol && (context2.protocol == "https:" || context2.protocol == "wss:")) {
+      if (secure == null && context3.protocol && (context3.protocol == "https:" || context3.protocol == "wss:")) {
         secure = true;
       }
       var http = options.http;
@@ -60784,7 +60784,7 @@ var require_jira = __commonJS({
 
 // jira/add-project-label/index.ts
 var import_core = __toModule(require_core());
-var import_github = __toModule(require_github());
+var import_github2 = __toModule(require_github());
 
 // jira/utils/JiraClient.ts
 var import_jira_client = __toModule(require_jira());
@@ -60864,39 +60864,88 @@ async function findIssue(input) {
 }
 __name(findIssue, "findIssue");
 
+// jira/add-project-label/github-labels.ts
+var import_github = __toModule(require_github());
+var GithubLabel = class {
+  constructor(name, color, description) {
+    this.name = name;
+    this.color = color;
+    this.description = description;
+  }
+};
+__name(GithubLabel, "GithubLabel");
+var IssueLabelMap = new Map([
+  [
+    "Change Request",
+    new GithubLabel("feature", "248213", "New feature or change request")
+  ],
+  [
+    "Production Defect",
+    new GithubLabel("bugfix", "d73a4a", "Something isn't working")
+  ],
+  ["Maintenance", new GithubLabel("maintenance", "ffaf1a", "Maintenance")],
+  [
+    "Technical Debt",
+    new GithubLabel("tech-debt", "a2eeef", "New feature or request")
+  ],
+  [
+    "Sub-task",
+    new GithubLabel("feature", "248213", "New feature or change request")
+  ],
+  [
+    "Epic",
+    new GithubLabel("feature", "248213", "New feature or change request")
+  ]
+]);
+async function createLabelIfNotExists(octokit, githubLabel) {
+  const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", import_github.context.repo);
+  const hasLabel = labels.find((x) => x.name === githubLabel.name);
+  if (!hasLabel) {
+    await octokit.request("POST /repos/{owner}/{repo}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
+      name: githubLabel.name,
+      description: githubLabel.description,
+      color: githubLabel.color
+    }));
+  }
+}
+__name(createLabelIfNotExists, "createLabelIfNotExists");
+
 // jira/add-project-label/index.ts
 var token = (0, import_core.getInput)("token", { required: true });
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
-var PR_NUMBER = import_github.context.payload.pull_request?.number;
+var PR_NUMBER = import_github2.context.payload.pull_request?.number;
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
     (0, import_core.info)("Skipping... This action runs in PR only");
     return;
   }
-  const octokit = (0, import_github.getOctokit)(token);
-  const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github.context.repo), { pull_number: PR_NUMBER }));
+  const octokit = (0, import_github2.getOctokit)(token);
+  const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github2.context.repo), { pull_number: PR_NUMBER }));
   const issue = await findIssue(HEAD_REF) || await findIssue(pr.title);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;
   }
   (0, import_core.info)(`Found issue: ${issue.key}`);
-  const projectLabel = issue.fields.project.key;
-  const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", import_github.context.repo);
-  const hasRepLabel = labels.find((x) => x.name === projectLabel);
-  if (!hasRepLabel) {
-    await octokit.request("POST /repos/{owner}/{repo}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
-      name: projectLabel,
-      description: "Project label",
-      color: "f29513"
-    }));
+  const projectLabel = new GithubLabel(issue.fields.project.key, "f29513", "Project label");
+  await createLabelIfNotExists(octokit, projectLabel);
+  const issueTypeName = issue.fields.issuetype.name;
+  const issueLabel = IssueLabelMap.get(issueTypeName);
+  if (issueLabel !== void 0) {
+    await createLabelIfNotExists(octokit, issueLabel);
   }
-  const hasPRLabel = pr.labels.find((x) => x.name === projectLabel);
-  if (!hasPRLabel) {
-    (0, import_core.info)(`Adding label "${projectLabel}"`);
-    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
+  const labelsToAdd = [projectLabel, issueLabel].reduce((items, label) => {
+    const isLabelExists = pr.labels.find((x) => x.name === label.name);
+    if (isLabelExists) {
+      items.push(label);
+    }
+    return items;
+  }, []).map((githubLabel) => githubLabel.name);
+  if (labelsToAdd.length !== 0) {
+    (0, import_core.info)(`Adding label "${labelsToAdd.toString()}"`);
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", __spreadProps(__spreadValues({}, import_github2.context.repo), {
       issue_number: pr.number,
-      labels: [projectLabel]
+      labels: labelsToAdd
     }));
     (0, import_core.info)("Added label");
   } else {
