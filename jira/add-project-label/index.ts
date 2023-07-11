@@ -49,7 +49,7 @@ async function main() {
   const labelsToAdd = ([projectLabel, issueLabel] as GithubLabel[])
     .reduce<GithubLabel[]>((items, label) => {
       const isLabelExists = pr.labels.find((x) => x.name === label.name);
-      if (isLabelExists) {
+      if (!isLabelExists) {
         items.push(label);
       }
       return items;

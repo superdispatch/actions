@@ -1333,12 +1333,12 @@ var require_lib = __commonJS({
             throw new Error("Client has already been disposed.");
           }
           const parsedUrl = new URL(requestUrl);
-          let info2 = this._prepareRequest(verb, parsedUrl, headers);
+          let info3 = this._prepareRequest(verb, parsedUrl, headers);
           const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
           let numTries = 0;
           let response;
           do {
-            response = yield this.requestRaw(info2, data);
+            response = yield this.requestRaw(info3, data);
             if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
               let authenticationHandler;
               for (const handler of this.handlers) {
@@ -1348,7 +1348,7 @@ var require_lib = __commonJS({
                 }
               }
               if (authenticationHandler) {
-                return authenticationHandler.handleAuthentication(this, info2, data);
+                return authenticationHandler.handleAuthentication(this, info3, data);
               } else {
                 return response;
               }
@@ -1371,8 +1371,8 @@ var require_lib = __commonJS({
                   }
                 }
               }
-              info2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-              response = yield this.requestRaw(info2, data);
+              info3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+              response = yield this.requestRaw(info3, data);
               redirectsRemaining--;
             }
             if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) {
@@ -1393,7 +1393,7 @@ var require_lib = __commonJS({
         }
         this._disposed = true;
       }
-      requestRaw(info2, data) {
+      requestRaw(info3, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
@@ -1406,16 +1406,16 @@ var require_lib = __commonJS({
               }
             }
             __name(callbackForResult, "callbackForResult");
-            this.requestRawWithCallback(info2, data, callbackForResult);
+            this.requestRawWithCallback(info3, data, callbackForResult);
           });
         });
       }
-      requestRawWithCallback(info2, data, onResult) {
+      requestRawWithCallback(info3, data, onResult) {
         if (typeof data === "string") {
-          if (!info2.options.headers) {
-            info2.options.headers = {};
+          if (!info3.options.headers) {
+            info3.options.headers = {};
           }
-          info2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+          info3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
         }
         let callbackCalled = false;
         function handleResult(err, res) {
@@ -1425,7 +1425,7 @@ var require_lib = __commonJS({
           }
         }
         __name(handleResult, "handleResult");
-        const req = info2.httpModule.request(info2.options, (msg) => {
+        const req = info3.httpModule.request(info3.options, (msg) => {
           const res = new HttpClientResponse(msg);
           handleResult(void 0, res);
         });
@@ -1437,7 +1437,7 @@ var require_lib = __commonJS({
           if (socket) {
             socket.end();
           }
-          handleResult(new Error(`Request timeout: ${info2.options.path}`));
+          handleResult(new Error(`Request timeout: ${info3.options.path}`));
         });
         req.on("error", function(err) {
           handleResult(err);
@@ -1459,27 +1459,27 @@ var require_lib = __commonJS({
         return this._getAgent(parsedUrl);
       }
       _prepareRequest(method, requestUrl, headers) {
-        const info2 = {};
-        info2.parsedUrl = requestUrl;
-        const usingSsl = info2.parsedUrl.protocol === "https:";
-        info2.httpModule = usingSsl ? https : http;
+        const info3 = {};
+        info3.parsedUrl = requestUrl;
+        const usingSsl = info3.parsedUrl.protocol === "https:";
+        info3.httpModule = usingSsl ? https : http;
         const defaultPort = usingSsl ? 443 : 80;
-        info2.options = {};
-        info2.options.host = info2.parsedUrl.hostname;
-        info2.options.port = info2.parsedUrl.port ? parseInt(info2.parsedUrl.port) : defaultPort;
-        info2.options.path = (info2.parsedUrl.pathname || "") + (info2.parsedUrl.search || "");
-        info2.options.method = method;
-        info2.options.headers = this._mergeHeaders(headers);
+        info3.options = {};
+        info3.options.host = info3.parsedUrl.hostname;
+        info3.options.port = info3.parsedUrl.port ? parseInt(info3.parsedUrl.port) : defaultPort;
+        info3.options.path = (info3.parsedUrl.pathname || "") + (info3.parsedUrl.search || "");
+        info3.options.method = method;
+        info3.options.headers = this._mergeHeaders(headers);
         if (this.userAgent != null) {
-          info2.options.headers["user-agent"] = this.userAgent;
+          info3.options.headers["user-agent"] = this.userAgent;
         }
-        info2.options.agent = this._getAgent(info2.parsedUrl);
+        info3.options.agent = this._getAgent(info3.parsedUrl);
         if (this.handlers) {
           for (const handler of this.handlers) {
-            handler.prepareRequest(info2.options);
+            handler.prepareRequest(info3.options);
           }
         }
-        return info2;
+        return info3;
       }
       _mergeHeaders(headers) {
         if (this.requestOptions && this.requestOptions.headers) {
@@ -2227,11 +2227,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(notice, "notice");
     exports2.notice = notice;
-    function info2(message) {
+    function info3(message) {
       process.stdout.write(message + os.EOL);
     }
-    __name(info2, "info");
-    exports2.info = info2;
+    __name(info3, "info");
+    exports2.info = info3;
     function startGroup(name) {
       command_1.issue("group", name);
     }
@@ -7968,22 +7968,22 @@ var require_runtime = __commonJS({
           context3.delegate = null;
           return ContinueSentinel;
         }
-        var info2 = record.arg;
-        if (!info2) {
+        var info3 = record.arg;
+        if (!info3) {
           context3.method = "throw";
           context3.arg = new TypeError("iterator result is not an object");
           context3.delegate = null;
           return ContinueSentinel;
         }
-        if (info2.done) {
-          context3[delegate.resultName] = info2.value;
+        if (info3.done) {
+          context3[delegate.resultName] = info3.value;
           context3.next = delegate.nextLoc;
           if (context3.method !== "return") {
             context3.method = "next";
             context3.arg = undefined2;
           }
         } else {
-          return info2;
+          return info3;
         }
         context3.delegate = null;
         return ContinueSentinel;
@@ -8241,13 +8241,13 @@ var require_asyncToGenerator = __commonJS({
   "node_modules/@babel/runtime/helpers/asyncToGenerator.js"(exports2, module2) {
     function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
       try {
-        var info2 = gen[key](arg);
-        var value = info2.value;
+        var info3 = gen[key](arg);
+        var value = info3.value;
       } catch (error) {
         reject(error);
         return;
       }
-      if (info2.done) {
+      if (info3.done) {
         resolve(value);
       } else {
         Promise.resolve(value).then(_next, _throw);
@@ -10284,9 +10284,9 @@ var require_debuggability = __commonJS({
         shouldIgnore = /* @__PURE__ */ __name(function(line) {
           if (bluebirdFramePattern.test(line))
             return true;
-          var info2 = parseLineInfo(line);
-          if (info2) {
-            if (info2.fileName === firstFileName && (firstIndex <= info2.line && info2.line <= lastIndex)) {
+          var info3 = parseLineInfo(line);
+          if (info3) {
+            if (info3.fileName === firstFileName && (firstIndex <= info3.line && info3.line <= lastIndex)) {
               return true;
             }
           }
@@ -60783,7 +60783,7 @@ var require_jira = __commonJS({
 });
 
 // jira/add-project-label/index.ts
-var import_core = __toModule(require_core());
+var import_core2 = __toModule(require_core());
 var import_github2 = __toModule(require_github());
 
 // jira/utils/JiraClient.ts
@@ -60865,6 +60865,7 @@ async function findIssue(input) {
 __name(findIssue, "findIssue");
 
 // jira/add-project-label/github-labels.ts
+var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
 var GithubLabel = class {
   constructor(name, color, description) {
@@ -60900,33 +60901,36 @@ var IssueLabelMap = new Map([
 async function createLabelIfNotExists(octokit, githubLabel) {
   const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", import_github.context.repo);
   const hasLabel = labels.find((x) => x.name === githubLabel.name);
+  (0, import_core.info)("{githubLabel.name} label {hasLabel ? '' : 'not'} found");
   if (!hasLabel) {
+    (0, import_core.info)("Creating {githubLabel.name} label...");
     await octokit.request("POST /repos/{owner}/{repo}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
       name: githubLabel.name,
       description: githubLabel.description,
       color: githubLabel.color
     }));
+    (0, import_core.info)("The label created");
   }
 }
 __name(createLabelIfNotExists, "createLabelIfNotExists");
 
 // jira/add-project-label/index.ts
-var token = (0, import_core.getInput)("token", { required: true });
+var token = (0, import_core2.getInput)("token", { required: true });
 var HEAD_REF = process.env.GITHUB_HEAD_REF;
 var PR_NUMBER = import_github2.context.payload.pull_request?.number;
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
-    (0, import_core.info)("Skipping... This action runs in PR only");
+    (0, import_core2.info)("Skipping... This action runs in PR only");
     return;
   }
   const octokit = (0, import_github2.getOctokit)(token);
   const { data: pr } = await octokit.request("GET /repos/{owner}/{repo}/pulls/{pull_number}", __spreadProps(__spreadValues({}, import_github2.context.repo), { pull_number: PR_NUMBER }));
   const issue = await findIssue(HEAD_REF) || await findIssue(pr.title);
   if (!issue) {
-    (0, import_core.info)("Skipping... Could not find issue");
+    (0, import_core2.info)("Skipping... Could not find issue");
     return;
   }
-  (0, import_core.info)(`Found issue: ${issue.key}`);
+  (0, import_core2.info)(`Found issue: ${issue.key}`);
   const projectLabel = new GithubLabel(issue.fields.project.key, "f29513", "Project label");
   await createLabelIfNotExists(octokit, projectLabel);
   const issueTypeName = issue.fields.issuetype.name;
@@ -60936,26 +60940,26 @@ async function main() {
   }
   const labelsToAdd = [projectLabel, issueLabel].reduce((items, label) => {
     const isLabelExists = pr.labels.find((x) => x.name === label.name);
-    if (isLabelExists) {
+    if (!isLabelExists) {
       items.push(label);
     }
     return items;
   }, []).map((githubLabel) => githubLabel.name);
   if (labelsToAdd.length !== 0) {
-    (0, import_core.info)(`Adding label "${labelsToAdd.toString()}"`);
+    (0, import_core2.info)(`Adding label "${labelsToAdd.toString()}"`);
     await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/labels", __spreadProps(__spreadValues({}, import_github2.context.repo), {
       issue_number: pr.number,
       labels: labelsToAdd
     }));
-    (0, import_core.info)("Added label");
+    (0, import_core2.info)("Added label");
   } else {
-    (0, import_core.info)("Skipping update. PR has already label.");
+    (0, import_core2.info)("Skipping update. PR has already label.");
   }
-  (0, import_core.setOutput)("issue", issue.key);
-  (0, import_core.setOutput)("label", projectLabel);
+  (0, import_core2.setOutput)("issue", issue.key);
+  (0, import_core2.setOutput)("label", projectLabel);
 }
 __name(main, "main");
-main().catch(import_core.setFailed);
+main().catch(import_core2.setFailed);
 /*!
  *  Copyright 2010 LearnBoost <dev@learnboost.com>
  *
