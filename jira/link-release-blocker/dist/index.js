@@ -916,7 +916,7 @@ var require_tunnel = __commonJS({
         connectOptions.headers = connectOptions.headers || {};
         connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
       }
-      debug("making CONNECT request");
+      debug2("making CONNECT request");
       var connectReq = self2.request(connectOptions);
       connectReq.useChunkedEncodingByDefault = false;
       connectReq.once("response", onResponse);
@@ -938,7 +938,7 @@ var require_tunnel = __commonJS({
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
-          debug("tunneling socket could not be established, statusCode=%d", res.statusCode);
+          debug2("tunneling socket could not be established, statusCode=%d", res.statusCode);
           socket.destroy();
           var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
           error.code = "ECONNRESET";
@@ -947,7 +947,7 @@ var require_tunnel = __commonJS({
           return;
         }
         if (head.length > 0) {
-          debug("got illegal response body from proxy");
+          debug2("got illegal response body from proxy");
           socket.destroy();
           var error = new Error("got illegal response body from proxy");
           error.code = "ECONNRESET";
@@ -955,14 +955,14 @@ var require_tunnel = __commonJS({
           self2.removeSocket(placeholder);
           return;
         }
-        debug("tunneling connection has established");
+        debug2("tunneling connection has established");
         self2.sockets[self2.sockets.indexOf(placeholder)] = socket;
         return cb(socket);
       }
       __name(onConnect, "onConnect");
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+        debug2("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
         var error = new Error("tunneling socket could not be established, cause=" + cause.message);
         error.code = "ECONNRESET";
         options.request.emit("error", error);
@@ -1024,9 +1024,9 @@ var require_tunnel = __commonJS({
       return target;
     }
     __name(mergeOptions, "mergeOptions");
-    var debug;
+    var debug2;
     if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-      debug = /* @__PURE__ */ __name(function() {
+      debug2 = /* @__PURE__ */ __name(function() {
         var args = Array.prototype.slice.call(arguments);
         if (typeof args[0] === "string") {
           args[0] = "TUNNEL: " + args[0];
@@ -1036,10 +1036,10 @@ var require_tunnel = __commonJS({
         console.error.apply(console, args);
       }, "debug");
     } else {
-      debug = /* @__PURE__ */ __name(function() {
+      debug2 = /* @__PURE__ */ __name(function() {
       }, "debug");
     }
-    exports2.debug = debug;
+    exports2.debug = debug2;
   }
 });
 
@@ -2207,11 +2207,11 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     __name(isDebug, "isDebug");
     exports2.isDebug = isDebug;
-    function debug(message) {
+    function debug2(message) {
       command_1.issueCommand("debug", {}, message);
     }
-    __name(debug, "debug");
-    exports2.debug = debug;
+    __name(debug2, "debug");
+    exports2.debug = debug2;
     function error(message, properties = {}) {
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -10720,7 +10720,7 @@ var require_nodeback = __commonJS({
 var require_method = __commonJS({
   "node_modules/bluebird/js/release/method.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, INTERNAL, tryConvertToPromise, apiRejection, debug) {
+    module2.exports = function(Promise2, INTERNAL, tryConvertToPromise, apiRejection, debug2) {
       var util = require_util();
       var tryCatch2 = util.tryCatch;
       Promise2.method = function(fn) {
@@ -10733,7 +10733,7 @@ var require_method = __commonJS({
           ret2._pushContext();
           var value = tryCatch2(fn).apply(this, arguments);
           var promiseCreated = ret2._popContext();
-          debug.checkForgottenReturns(value, promiseCreated, "Promise.method", ret2);
+          debug2.checkForgottenReturns(value, promiseCreated, "Promise.method", ret2);
           ret2._resolveFromSyncValue(value);
           return ret2;
         };
@@ -10747,7 +10747,7 @@ var require_method = __commonJS({
         ret2._pushContext();
         var value;
         if (arguments.length > 1) {
-          debug.deprecated("calling Promise.try with more than 1 argument");
+          debug2.deprecated("calling Promise.try with more than 1 argument");
           var arg = arguments[1];
           var ctx = arguments[2];
           value = util.isArray(arg) ? tryCatch2(fn).apply(ctx, arg) : tryCatch2(fn).call(ctx, arg);
@@ -10755,7 +10755,7 @@ var require_method = __commonJS({
           value = tryCatch2(fn)();
         }
         var promiseCreated = ret2._popContext();
-        debug.checkForgottenReturns(value, promiseCreated, "Promise.try", ret2);
+        debug2.checkForgottenReturns(value, promiseCreated, "Promise.try", ret2);
         ret2._resolveFromSyncValue(value);
         return ret2;
       };
@@ -10774,7 +10774,7 @@ var require_method = __commonJS({
 var require_bind = __commonJS({
   "node_modules/bluebird/js/release/bind.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, INTERNAL, tryConvertToPromise, debug) {
+    module2.exports = function(Promise2, INTERNAL, tryConvertToPromise, debug2) {
       var calledBind = false;
       var rejectThis = /* @__PURE__ */ __name(function(_, e) {
         this._reject(e);
@@ -10795,8 +10795,8 @@ var require_bind = __commonJS({
       Promise2.prototype.bind = function(thisArg) {
         if (!calledBind) {
           calledBind = true;
-          Promise2.prototype._propagateFrom = debug.propagateFromFunction();
-          Promise2.prototype._boundValue = debug.boundValueFunction();
+          Promise2.prototype._propagateFrom = debug2.propagateFromFunction();
+          Promise2.prototype._boundValue = debug2.boundValueFunction();
         }
         var maybePromise = tryConvertToPromise(thisArg);
         var ret2 = new Promise2(INTERNAL);
@@ -10840,13 +10840,13 @@ var require_bind = __commonJS({
 var require_cancel = __commonJS({
   "node_modules/bluebird/js/release/cancel.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, PromiseArray, apiRejection, debug) {
+    module2.exports = function(Promise2, PromiseArray, apiRejection, debug2) {
       var util = require_util();
       var tryCatch2 = util.tryCatch;
       var errorObj2 = util.errorObj;
       var async = Promise2._async;
       Promise2.prototype["break"] = Promise2.prototype.cancel = function() {
-        if (!debug.cancellation())
+        if (!debug2.cancellation())
           return this._warn("cancellation is disabled");
         var promise = this;
         var child = promise;
@@ -11320,7 +11320,7 @@ var require_call_get = __commonJS({
 var require_generators = __commonJS({
   "node_modules/bluebird/js/release/generators.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug) {
+    module2.exports = function(Promise2, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug2) {
       var errors = require_errors();
       var TypeError2 = errors.TypeError;
       var util = require_util();
@@ -11346,7 +11346,7 @@ var require_generators = __commonJS({
       }
       __name(promiseFromYieldHandler, "promiseFromYieldHandler");
       function PromiseSpawn(generatorFunction, receiver2, yieldHandler, stack) {
-        if (debug.cancellation()) {
+        if (debug2.cancellation()) {
           var internal = new Promise2(INTERNAL);
           var _finallyPromise = this._finallyPromise = new Promise2(INTERNAL);
           this._promise = internal.lastly(function() {
@@ -11373,7 +11373,7 @@ var require_generators = __commonJS({
       };
       PromiseSpawn.prototype._cleanup = function() {
         this._promise = this._generator = null;
-        if (debug.cancellation() && this._finallyPromise !== null) {
+        if (debug2.cancellation() && this._finallyPromise !== null) {
           this._finallyPromise._fulfill();
           this._finallyPromise = null;
         }
@@ -11494,7 +11494,7 @@ var require_generators = __commonJS({
         yieldHandlers.push(fn);
       };
       Promise2.spawn = function(generatorFunction) {
-        debug.deprecated("Promise.spawn()", "Promise.coroutine()");
+        debug2.deprecated("Promise.spawn()", "Promise.coroutine()");
         if (typeof generatorFunction !== "function") {
           return apiRejection("generatorFunction must be a function\n\n    See http://goo.gl/MqrFmX\n");
         }
@@ -11511,7 +11511,7 @@ var require_generators = __commonJS({
 var require_map = __commonJS({
   "node_modules/bluebird/js/release/map.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
+    module2.exports = function(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug2) {
       var util = require_util();
       var tryCatch2 = util.tryCatch;
       var errorObj2 = util.errorObj;
@@ -11570,7 +11570,7 @@ var require_map = __commonJS({
           promise._pushContext();
           var ret2 = tryCatch2(callback).call(receiver2, value, index, length);
           var promiseCreated = promise._popContext();
-          debug.checkForgottenReturns(ret2, promiseCreated, preservedValues !== null ? "Promise.filter" : "Promise.map", promise);
+          debug2.checkForgottenReturns(ret2, promiseCreated, preservedValues !== null ? "Promise.filter" : "Promise.map", promise);
           if (ret2 === errorObj2) {
             this._reject(ret2.e);
             return true;
@@ -12116,7 +12116,7 @@ var require_race = __commonJS({
 var require_reduce = __commonJS({
   "node_modules/bluebird/js/release/reduce.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug) {
+    module2.exports = function(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug2) {
       var util = require_util();
       var tryCatch2 = util.tryCatch;
       function ReductionPromiseArray(promises, fn, initialValue, _each) {
@@ -12265,7 +12265,7 @@ var require_reduce = __commonJS({
           array._currentCancellable = ret2;
         }
         var promiseCreated = promise._popContext();
-        debug.checkForgottenReturns(ret2, promiseCreated, array._eachValues !== void 0 ? "Promise.each" : "Promise.reduce", promise);
+        debug2.checkForgottenReturns(ret2, promiseCreated, array._eachValues !== void 0 ? "Promise.each" : "Promise.reduce", promise);
         return ret2;
       }
       __name(gotValue, "gotValue");
@@ -12277,7 +12277,7 @@ var require_reduce = __commonJS({
 var require_settle = __commonJS({
   "node_modules/bluebird/js/release/settle.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, PromiseArray, debug) {
+    module2.exports = function(Promise2, PromiseArray, debug2) {
       var PromiseInspection = Promise2.PromiseInspection;
       var util = require_util();
       function SettledPromiseArray(values) {
@@ -12307,7 +12307,7 @@ var require_settle = __commonJS({
         return this._promiseResolved(index, ret2);
       };
       Promise2.settle = function(promises) {
-        debug.deprecated(".settle()", ".reflect()");
+        debug2.deprecated(".settle()", ".reflect()");
         return new SettledPromiseArray(promises).promise();
       };
       Promise2.allSettled = function(promises) {
@@ -12454,7 +12454,7 @@ var require_some = __commonJS({
 var require_timers = __commonJS({
   "node_modules/bluebird/js/release/timers.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, INTERNAL, debug) {
+    module2.exports = function(Promise2, INTERNAL, debug2) {
       var util = require_util();
       var TimeoutError = Promise2.TimeoutError;
       function HandleWrapper(handle) {
@@ -12472,7 +12472,7 @@ var require_timers = __commonJS({
         var handle;
         if (value !== void 0) {
           ret2 = Promise2.resolve(value)._then(afterValue, null, null, ms, void 0);
-          if (debug.cancellation() && value instanceof Promise2) {
+          if (debug2.cancellation() && value instanceof Promise2) {
             ret2._setOnCancel(value);
           }
         } else {
@@ -12480,7 +12480,7 @@ var require_timers = __commonJS({
           handle = setTimeout(function() {
             ret2._fulfill();
           }, +ms);
-          if (debug.cancellation()) {
+          if (debug2.cancellation()) {
             ret2._setOnCancel(new HandleWrapper(handle));
           }
           ret2._captureStackTrace();
@@ -12527,7 +12527,7 @@ var require_timers = __commonJS({
             afterTimeout(ret2, message, parent);
           }
         }, "timeoutTimeout"), ms));
-        if (debug.cancellation()) {
+        if (debug2.cancellation()) {
           parent = this.then();
           ret2 = parent._then(successClear, failureClear, void 0, handleWrapper, void 0);
           ret2._setOnCancel(handleWrapper);
@@ -12544,7 +12544,7 @@ var require_timers = __commonJS({
 var require_using = __commonJS({
   "node_modules/bluebird/js/release/using.js"(exports2, module2) {
     "use strict";
-    module2.exports = function(Promise2, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug) {
+    module2.exports = function(Promise2, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug2) {
       var util = require_util();
       var TypeError2 = require_errors().TypeError;
       var inherits2 = require_util().inherits;
@@ -12711,7 +12711,7 @@ var require_using = __commonJS({
           fn = tryCatch2(fn);
           var ret2 = spreadArgs ? fn.apply(void 0, inspections) : fn(inspections);
           var promiseCreated = promise._popContext();
-          debug.checkForgottenReturns(ret2, promiseCreated, "Promise.using", promise);
+          debug2.checkForgottenReturns(ret2, promiseCreated, "Promise.using", promise);
           return ret2;
         });
         var promise = resultPromise.lastly(function() {
@@ -12889,8 +12889,8 @@ var require_promise = __commonJS({
       var PromiseArray = require_promise_array()(Promise2, INTERNAL, tryConvertToPromise, apiRejection, Proxyable);
       var Context = require_context2()(Promise2);
       var createContext = Context.create;
-      var debug = require_debuggability()(Promise2, Context, enableAsyncHooks, disableAsyncHooks);
-      var CapturedTrace = debug.CapturedTrace;
+      var debug2 = require_debuggability()(Promise2, Context, enableAsyncHooks, disableAsyncHooks);
+      var CapturedTrace = debug2.CapturedTrace;
       var PassThroughHandlerContext = require_finally()(Promise2, tryConvertToPromise, NEXT_FILTER);
       var catchFilter = require_catch_filter()(NEXT_FILTER);
       var nodebackForPromise = require_nodeback();
@@ -12947,7 +12947,7 @@ var require_promise = __commonJS({
         return this._then(reflectHandler2, reflectHandler2, void 0, this, void 0);
       };
       Promise2.prototype.then = function(didFulfill, didReject) {
-        if (debug.warnings() && arguments.length > 0 && typeof didFulfill !== "function" && typeof didReject !== "function") {
+        if (debug2.warnings() && arguments.length > 0 && typeof didFulfill !== "function" && typeof didReject !== "function") {
           var msg = ".then() only accepts functions but was passed: " + util.classString(didFulfill);
           if (arguments.length > 1) {
             msg += ", " + util.classString(didReject);
@@ -13236,7 +13236,7 @@ var require_promise = __commonJS({
       Promise2.prototype._rejectCallback = function(reason, synchronous, ignoreNonErrorWarnings) {
         var trace = util.ensureErrorObject(reason);
         var hasStack = trace === reason;
-        if (!hasStack && !ignoreNonErrorWarnings && debug.warnings()) {
+        if (!hasStack && !ignoreNonErrorWarnings && debug2.warnings()) {
           var message = "a promise was rejected with a non-error: " + util.classString(reason);
           this._warn(message, true);
         }
@@ -13286,7 +13286,7 @@ var require_promise = __commonJS({
         } else if (x === errorObj2) {
           promise._rejectCallback(x.e, false);
         } else {
-          debug.checkForgottenReturns(x, promiseCreated, "", promise, this);
+          debug2.checkForgottenReturns(x, promiseCreated, "", promise, this);
           promise._resolveCallback(x);
         }
       };
@@ -13472,7 +13472,7 @@ var require_promise = __commonJS({
       }
       __name(deferReject, "deferReject");
       Promise2.defer = Promise2.pending = function() {
-        debug.deprecated("Promise.defer", "new Promise");
+        debug2.deprecated("Promise.defer", "new Promise");
         var promise = new Promise2(INTERNAL);
         return {
           promise,
@@ -13481,26 +13481,26 @@ var require_promise = __commonJS({
         };
       };
       util.notEnumerableProp(Promise2, "_makeSelfResolutionError", makeSelfResolutionError);
-      require_method()(Promise2, INTERNAL, tryConvertToPromise, apiRejection, debug);
-      require_bind()(Promise2, INTERNAL, tryConvertToPromise, debug);
-      require_cancel()(Promise2, PromiseArray, apiRejection, debug);
+      require_method()(Promise2, INTERNAL, tryConvertToPromise, apiRejection, debug2);
+      require_bind()(Promise2, INTERNAL, tryConvertToPromise, debug2);
+      require_cancel()(Promise2, PromiseArray, apiRejection, debug2);
       require_direct_resolve()(Promise2);
       require_synchronous_inspection()(Promise2);
       require_join()(Promise2, PromiseArray, tryConvertToPromise, INTERNAL, async);
       Promise2.Promise = Promise2;
       Promise2.version = "3.7.2";
       require_call_get()(Promise2);
-      require_generators()(Promise2, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug);
-      require_map()(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
+      require_generators()(Promise2, apiRejection, INTERNAL, tryConvertToPromise, Proxyable, debug2);
+      require_map()(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug2);
       require_nodeify()(Promise2);
       require_promisify()(Promise2, INTERNAL);
       require_props()(Promise2, PromiseArray, tryConvertToPromise, apiRejection);
       require_race()(Promise2, INTERNAL, tryConvertToPromise, apiRejection);
-      require_reduce()(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug);
-      require_settle()(Promise2, PromiseArray, debug);
+      require_reduce()(Promise2, PromiseArray, apiRejection, tryConvertToPromise, INTERNAL, debug2);
+      require_settle()(Promise2, PromiseArray, debug2);
       require_some()(Promise2, PromiseArray, apiRejection);
-      require_timers()(Promise2, INTERNAL, debug);
-      require_using()(Promise2, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug);
+      require_timers()(Promise2, INTERNAL, debug2);
+      require_using()(Promise2, apiRejection, tryConvertToPromise, createContext, INTERNAL, debug2);
       require_any()(Promise2);
       require_each()(Promise2, INTERNAL);
       require_filter()(Promise2, INTERNAL);
@@ -13523,7 +13523,7 @@ var require_promise = __commonJS({
       fillTypes(void 0);
       fillTypes(false);
       fillTypes(new Promise2(INTERNAL));
-      debug.setBounds(Async.firstLineError, util.lastLineError);
+      debug2.setBounds(Async.firstLineError, util.lastLineError);
       return Promise2;
     };
   }
@@ -57625,7 +57625,7 @@ var require_tunnel_agent = __commonJS({
         connectOptions.headers = connectOptions.headers || {};
         connectOptions.headers["Proxy-Authorization"] = "Basic " + Buffer2.from(connectOptions.proxyAuth).toString("base64");
       }
-      debug("making CONNECT request");
+      debug2("making CONNECT request");
       var connectReq = self2.request(connectOptions);
       connectReq.useChunkedEncodingByDefault = false;
       connectReq.once("response", onResponse);
@@ -57648,11 +57648,11 @@ var require_tunnel_agent = __commonJS({
         socket.removeAllListeners();
         if (res.statusCode === 200) {
           assert.equal(head.length, 0);
-          debug("tunneling connection has established");
+          debug2("tunneling connection has established");
           self2.sockets[self2.sockets.indexOf(placeholder)] = socket;
           cb(socket);
         } else {
-          debug("tunneling socket could not be established, statusCode=%d", res.statusCode);
+          debug2("tunneling socket could not be established, statusCode=%d", res.statusCode);
           var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
           error.code = "ECONNRESET";
           options.request.emit("error", error);
@@ -57662,7 +57662,7 @@ var require_tunnel_agent = __commonJS({
       __name(onConnect, "onConnect");
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+        debug2("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
         var error = new Error("tunneling socket could not be established, cause=" + cause.message);
         error.code = "ECONNRESET";
         options.request.emit("error", error);
@@ -57708,9 +57708,9 @@ var require_tunnel_agent = __commonJS({
       return target;
     }
     __name(mergeOptions, "mergeOptions");
-    var debug;
+    var debug2;
     if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
-      debug = /* @__PURE__ */ __name(function() {
+      debug2 = /* @__PURE__ */ __name(function() {
         var args = Array.prototype.slice.call(arguments);
         if (typeof args[0] === "string") {
           args[0] = "TUNNEL: " + args[0];
@@ -57720,10 +57720,10 @@ var require_tunnel_agent = __commonJS({
         console.error.apply(console, args);
       }, "debug");
     } else {
-      debug = /* @__PURE__ */ __name(function() {
+      debug2 = /* @__PURE__ */ __name(function() {
       }, "debug");
     }
-    exports2.debug = debug;
+    exports2.debug = debug2;
   }
 });
 
@@ -58021,13 +58021,13 @@ var require_request3 = __commonJS({
     __name(Request, "Request");
     util.inherits(Request, stream.Stream);
     Request.debug = process.env.NODE_DEBUG && /\brequest\b/.test(process.env.NODE_DEBUG);
-    function debug() {
+    function debug2() {
       if (Request.debug) {
         console.error("REQUEST %s", util.format.apply(util, arguments));
       }
     }
-    __name(debug, "debug");
-    Request.prototype.debug = debug;
+    __name(debug2, "debug");
+    Request.prototype.debug = debug2;
     Request.prototype.init = function(options) {
       var self2 = this;
       if (!options) {
@@ -58047,7 +58047,7 @@ var require_request3 = __commonJS({
         self2.localAddress = options.localAddress;
       }
       self2._qs.init(options);
-      debug(options);
+      debug2(options);
       if (!self2.pool && self2.pool !== false) {
         self2.pool = globalPool;
       }
@@ -58506,7 +58506,7 @@ var require_request3 = __commonJS({
       }
       var reqOptions = copy(self2);
       delete reqOptions.auth;
-      debug("make request", self2.uri.href);
+      debug2("make request", self2.uri.href);
       delete reqOptions.timeout;
       try {
         self2.req = self2.httpModule.request(reqOptions);
@@ -58608,7 +58608,7 @@ var require_request3 = __commonJS({
       if (self2.timing) {
         self2.timings.response = now() - self2.startTimeNow;
       }
-      debug("onRequestResponse", self2.uri.href, response.statusCode, response.headers);
+      debug2("onRequestResponse", self2.uri.href, response.statusCode, response.headers);
       response.on("end", function() {
         if (self2.timing) {
           self2.timings.end = now() - self2.startTimeNow;
@@ -58625,7 +58625,7 @@ var require_request3 = __commonJS({
           if (!self2.timings.response) {
             self2.timings.response = self2.timings.connect;
           }
-          debug("elapsed time", self2.timings.end);
+          debug2("elapsed time", self2.timings.end);
           self2.elapsedTime += Math.round(self2.timings.end);
           response.elapsedTime = self2.elapsedTime;
           response.timings = self2.timings;
@@ -58638,10 +58638,10 @@ var require_request3 = __commonJS({
             total: self2.timings.end
           };
         }
-        debug("response end", self2.uri.href, response.statusCode, response.headers);
+        debug2("response end", self2.uri.href, response.statusCode, response.headers);
       });
       if (self2._aborted) {
-        debug("aborted", self2.uri.href);
+        debug2("aborted", self2.uri.href);
         response.resume();
         return;
       }
@@ -58649,7 +58649,7 @@ var require_request3 = __commonJS({
       response.request = self2;
       response.toJSON = responseToJSON;
       if (self2.httpModule === https && self2.strictSSL && (!response.hasOwnProperty("socket") || !response.socket.authorized)) {
-        debug("strict ssl error", self2.uri.href);
+        debug2("strict ssl error", self2.uri.href);
         var sslErr = response.hasOwnProperty("socket") ? response.socket.authorizationError : self2.uri.href + " does not support SSL";
         self2.emit("error", new Error("SSL Error: " + sslErr));
         return;
@@ -58709,7 +58709,7 @@ var require_request3 = __commonJS({
             response.pipe(responseContent);
           } else {
             if (contentEncoding !== "identity") {
-              debug("ignoring unrecognized Content-Encoding " + contentEncoding);
+              debug2("ignoring unrecognized Content-Encoding " + contentEncoding);
             }
             responseContent = response;
           }
@@ -58753,18 +58753,18 @@ var require_request3 = __commonJS({
         } else {
           self2.on("end", function() {
             if (self2._aborted) {
-              debug("aborted", self2.uri.href);
+              debug2("aborted", self2.uri.href);
               return;
             }
             self2.emit("complete", response);
           });
         }
       }
-      debug("finish init function", self2.uri.href);
+      debug2("finish init function", self2.uri.href);
     };
     Request.prototype.readResponseBody = function(response) {
       var self2 = this;
-      debug("reading response's body");
+      debug2("reading response's body");
       var buffers = [];
       var bufferLength = 0;
       var strings = [];
@@ -58777,15 +58777,15 @@ var require_request3 = __commonJS({
         }
       });
       self2.on("end", function() {
-        debug("end event", self2.uri.href);
+        debug2("end event", self2.uri.href);
         if (self2._aborted) {
-          debug("aborted", self2.uri.href);
+          debug2("aborted", self2.uri.href);
           buffers = [];
           bufferLength = 0;
           return;
         }
         if (bufferLength) {
-          debug("has body", self2.uri.href, bufferLength);
+          debug2("has body", self2.uri.href, bufferLength);
           response.body = Buffer2.concat(buffers, bufferLength);
           if (self2.encoding !== null) {
             response.body = response.body.toString(self2.encoding);
@@ -58802,10 +58802,10 @@ var require_request3 = __commonJS({
           try {
             response.body = JSON.parse(response.body, self2._jsonReviver);
           } catch (e) {
-            debug("invalid JSON received", self2.uri.href);
+            debug2("invalid JSON received", self2.uri.href);
           }
         }
-        debug("emitting complete", self2.uri.href);
+        debug2("emitting complete", self2.uri.href);
         if (typeof response.body === "undefined" && !self2._json) {
           response.body = self2.encoding === null ? Buffer2.alloc(0) : "";
         }
@@ -59035,7 +59035,7 @@ var require_request3 = __commonJS({
         method: self2.method,
         path: self2.path
       }, opts);
-      debug("httpSignature authorization", self2.getHeader("authorization"));
+      debug2("httpSignature authorization", self2.getHeader("authorization"));
       return self2;
     };
     Request.prototype.hawk = function(opts) {
@@ -59266,8 +59266,8 @@ var require_request4 = __commonJS({
       get: function() {
         return request.Request.debug;
       },
-      set: function(debug) {
-        request.Request.debug = debug;
+      set: function(debug2) {
+        request.Request.debug = debug2;
       }
     });
   }
@@ -60909,11 +60909,19 @@ __name(main, "main");
 async function findBlockersFromCommits(targetIssue, commits) {
   const blockers = [];
   for (const item of commits) {
+    (0, import_core.debug)(`Checking commit "${item.commit.message}"`);
     const blockerIssue = await findIssue(item.commit.message);
-    if (!blockerIssue || blockerIssue.key === targetIssue.key) {
+    if (!blockerIssue) {
+      (0, import_core.debug)("No JIRA issue found for given commit");
+      continue;
+    }
+    (0, import_core.debug)(`Found issue key "${blockerIssue.key}" for given commit`);
+    if (blockerIssue.key === targetIssue.key) {
+      (0, import_core.debug)("Skipping same issue with target issue");
       continue;
     }
     if (blockerIssue.fields.status.name === "Released") {
+      (0, import_core.debug)("Skipping released jira issue");
       break;
     }
     (0, import_core.info)(`Found blocker issue: "${blockerIssue.key}"`);

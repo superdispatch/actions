@@ -1,4 +1,4 @@
-import { getInput, info, setFailed } from '@actions/core';
+import { debug, getInput, info, setFailed } from '@actions/core';
 import { context, getOctokit } from '@actions/github';
 import { components } from '@octokit/openapi-types';
 import { createClient } from '../utils/JiraAPI';
@@ -87,13 +87,24 @@ async function findBlockersFromCommits(
   const blockers: JIRAIssue[] = [];
 
   for (const item of commits) {
+    debug(`Checking commit "${item.commit.message}"`);
+
     const blockerIssue = await findIssue(item.commit.message);
 
-    if (!blockerIssue || blockerIssue.key === targetIssue.key) {
+    if (!blockerIssue) {
+      debug('No JIRA issue found for given commit');
+      continue;
+    }
+
+    debug(`Found issue key "${blockerIssue.key}" for given commit`);
+
+    if (blockerIssue.key === targetIssue.key) {
+      debug('Skipping same issue with target issue');
       continue;
     }
 
     if (blockerIssue.fields.status.name === 'Released') {
+      debug('Skipping released jira issue');
       break;
     }
 
