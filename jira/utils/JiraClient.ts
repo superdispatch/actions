@@ -97,7 +97,7 @@ export interface JIRAIssue {
         name: 'Done';
       };
     };
-    issuetype: {
+    issuetype?: {
       name:
         | 'Change Request'
         | 'Production Defect'

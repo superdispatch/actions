@@ -48,9 +48,10 @@ export async function createLabelIfNotExists(
   );
 
   const hasLabel = labels.find((x) => x.name === githubLabel.name);
-  info("{githubLabel.name} label {hasLabel ? '' : 'not'} found");
+  info(`${githubLabel.name} label ${hasLabel ? '' : 'not'} found`);
+
   if (!hasLabel) {
-    info('Creating {githubLabel.name} label...');
+    info(`Creating ${githubLabel.name} label...`);
     await octokit.request('POST /repos/{owner}/{repo}/labels', {
       ...context.repo,
       name: githubLabel.name,

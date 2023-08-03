@@ -33,20 +33,27 @@ async function main() {
 
   info(`Found issue: ${issue.key}`);
 
+  const labels: GithubLabel[] = [];
+
   const projectLabel = new GithubLabel(
     issue.fields.project.key,
     'f29513',
     'Project label',
   );
   await createLabelIfNotExists(octokit, projectLabel);
+  labels.push(projectLabel);
 
-  const issueTypeName = issue.fields.issuetype.name;
-  const issueLabel = IssueLabelMap.get(issueTypeName);
-  if (issueLabel !== undefined) {
-    await createLabelIfNotExists(octokit, issueLabel);
+  if (issue.fields.issuetype) {
+    const issueTypeName = issue.fields.issuetype.name;
+    const issueLabel = IssueLabelMap.get(issueTypeName);
+
+    if (issueLabel !== undefined) {
+      await createLabelIfNotExists(octokit, issueLabel);
+      labels.push(issueLabel);
+    }
   }
 
-  const labelsToAdd = ([projectLabel, issueLabel] as GithubLabel[])
+  const labelsToAdd = labels
     .reduce<GithubLabel[]>((items, label) => {
       const isLabelExists = pr.labels.find((x) => x.name === label.name);
       if (!isLabelExists) {

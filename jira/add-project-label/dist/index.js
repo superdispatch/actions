@@ -60901,9 +60901,9 @@ var IssueLabelMap = new Map([
 async function createLabelIfNotExists(octokit, githubLabel) {
   const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", import_github.context.repo);
   const hasLabel = labels.find((x) => x.name === githubLabel.name);
-  (0, import_core.info)("{githubLabel.name} label {hasLabel ? '' : 'not'} found");
+  (0, import_core.info)(`${githubLabel.name} label ${hasLabel ? "" : "not"} found`);
   if (!hasLabel) {
-    (0, import_core.info)("Creating {githubLabel.name} label...");
+    (0, import_core.info)(`Creating ${githubLabel.name} label...`);
     await octokit.request("POST /repos/{owner}/{repo}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
       name: githubLabel.name,
       description: githubLabel.description,
@@ -60931,14 +60931,19 @@ async function main() {
     return;
   }
   (0, import_core2.info)(`Found issue: ${issue.key}`);
+  const labels = [];
   const projectLabel = new GithubLabel(issue.fields.project.key, "f29513", "Project label");
   await createLabelIfNotExists(octokit, projectLabel);
-  const issueTypeName = issue.fields.issuetype.name;
-  const issueLabel = IssueLabelMap.get(issueTypeName);
-  if (issueLabel !== void 0) {
-    await createLabelIfNotExists(octokit, issueLabel);
+  labels.push(projectLabel);
+  if (issue.fields.issuetype) {
+    const issueTypeName = issue.fields.issuetype.name;
+    const issueLabel = IssueLabelMap.get(issueTypeName);
+    if (issueLabel !== void 0) {
+      await createLabelIfNotExists(octokit, issueLabel);
+      labels.push(issueLabel);
+    }
   }
-  const labelsToAdd = [projectLabel, issueLabel].reduce((items, label) => {
+  const labelsToAdd = labels.reduce((items, label) => {
     const isLabelExists = pr.labels.find((x) => x.name === label.name);
     if (!isLabelExists) {
       items.push(label);
