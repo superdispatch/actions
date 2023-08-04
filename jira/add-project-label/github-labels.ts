@@ -44,7 +44,10 @@ export async function createLabelIfNotExists(
 ) {
   const { data: labels } = await octokit.request(
     'GET /repos/{owner}/{repo}/labels',
-    context.repo,
+    {
+      ...context.repo,
+      per_page: 100,
+    },
   );
 
   const hasLabel = labels.find((x) => x.name === githubLabel.name);

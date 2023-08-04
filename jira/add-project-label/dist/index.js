@@ -60899,7 +60899,9 @@ var IssueLabelMap = new Map([
   ]
 ]);
 async function createLabelIfNotExists(octokit, githubLabel) {
-  const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", import_github.context.repo);
+  const { data: labels } = await octokit.request("GET /repos/{owner}/{repo}/labels", __spreadProps(__spreadValues({}, import_github.context.repo), {
+    per_page: 100
+  }));
   const hasLabel = labels.find((x) => x.name === githubLabel.name);
   (0, import_core.info)(`${githubLabel.name} label ${hasLabel ? "" : "not"} found`);
   if (!hasLabel) {
