@@ -89,11 +89,10 @@ async function main() {
           states.set(x.user.login, x.state);
         }
       }
-
       // Check if at least one senior has approved the PR
-      senior_approvals = seniors
-        .split(',')
-        .some((senior) => states.get(senior) === 'APPROVED');
+      // senior_approvals = seniors
+      //   .split(',')
+      //   .some((senior) => states.get(senior) === 'APPROVED');
     }
   }
   if (pr.mergeable && senior_approvals) {
