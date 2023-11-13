@@ -30,7 +30,7 @@
     "esbuild": "0.12.29",
     "eslint": "7.32.0",
     "husky": "7.0.4",
-    "jira-client": "8.2.1",
+    "jira-client": "7.2.0",
     "lint-staged": "11.2.6",
     "np": "7.6.1",
     "prettier": "2.5.1",
