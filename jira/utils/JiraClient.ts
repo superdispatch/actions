@@ -1,4 +1,14 @@
-import JiraApi from 'jira-client';
+import NativeJiraApi, { JsonResponse as NativeJsonResponse } from 'jira-client';
+
+declare class JiraApi extends NativeJiraApi {
+  deleteRemoteLink(issueNumber: string, id: string): void;
+}
+
+/* eslint eslint-comments/no-use: off */
+// eslint-disable-next-line @typescript-eslint/no-namespace
+declare namespace JiraApi {
+  type JsonResponse = NativeJsonResponse;
+}
 
 interface Transition {
   id: string;
@@ -173,6 +183,10 @@ export class JiraClient extends JiraApi {
 
   getRemoteLinks(issueNumber: string) {
     return super.getRemoteLinks(issueNumber) as Promise<RemoteLinkResponse[]>;
+  }
+
+  removeRemoteLink(issueNumber: string, title: string) {
+    super.deleteRemoteLink(issueNumber, title);
   }
 
   createRemoteLink(issueNumber: string, remoteLink: RemoteLink) {

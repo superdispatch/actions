@@ -25,12 +25,12 @@
     "@superdispatch/js-tools": "0.3.0",
     "@superdispatch/prettier-config": "0.3.0",
     "@superdispatch/tsconfig": "0.3.0",
-    "@types/jira-client": "7.1.4",
+    "@types/jira-client": "^7.1.9",
     "@types/pretty-bytes": "5.2.0",
     "esbuild": "0.12.29",
     "eslint": "7.32.0",
     "husky": "7.0.4",
-    "jira-client": "6.23.0",
+    "jira-client": "8.2.1",
     "lint-staged": "11.2.6",
     "np": "7.6.1",
     "prettier": "2.5.1",
@@ -39,6 +39,6 @@
     "zlib": "1.0.5"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=16"
   }
 }
