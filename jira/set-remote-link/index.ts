@@ -13,9 +13,11 @@ async function main() {
   const remoteLinks = await jira.getRemoteLinks(issue);
   const hasRemoteLink = remoteLinks.some((link) => link.object.title === title);
 
-  if (!hasRemoteLink) {
-    await jira.createRemoteLink(issue, {
-      object: { title, url },
-    });
+  if (hasRemoteLink) {
+    await jira.deleteRemoteLink(issue, title);
   }
+
+  await jira.createRemoteLink(issue, {
+    object: { title, url },
+  });
 }

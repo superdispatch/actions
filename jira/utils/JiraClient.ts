@@ -1,7 +1,7 @@
 import NativeJiraApi, { JsonResponse as NativeJsonResponse } from 'jira-client';
 
 declare class JiraApi extends NativeJiraApi {
-  deleteRemoteLink(issueNumber: string, id: string): void;
+  deleteRemoteLink(issueNumber: string, id: string): Promise<void>;
 }
 
 /* eslint eslint-comments/no-use: off */
@@ -186,7 +186,7 @@ export class JiraClient extends JiraApi {
   }
 
   removeRemoteLink(issueNumber: string, title: string) {
-    super.deleteRemoteLink(issueNumber, title);
+    return super.deleteRemoteLink(issueNumber, title);
   }
 
   createRemoteLink(issueNumber: string, remoteLink: RemoteLink) {
