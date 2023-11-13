@@ -1,13 +1,9 @@
-import NativeJiraApi, { JsonResponse as NativeJsonResponse } from 'jira-client';
+import * as NativeJiraApi from 'jira-client';
 
-declare class JiraApi extends NativeJiraApi {
-  deleteRemoteLink(issueNumber: string, id: string): Promise<void>;
-}
+class JiraApi extends NativeJiraApi.default {}
 
-/* eslint eslint-comments/no-use: off */
-// eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace JiraApi {
-  type JsonResponse = NativeJsonResponse;
+interface JiraApi {
+  deleteRemoteLink: (issueNumber: string, id: string) => Promise<void>;
 }
 
 interface Transition {
@@ -177,7 +173,7 @@ export class JiraClient extends JiraApi {
     issueTransition: {
       transition: { id: string };
     },
-  ): Promise<JiraApi.JsonResponse> {
+  ): Promise<NativeJiraApi.JsonResponse> {
     return super.transitionIssue(issueId, issueTransition);
   }
 
