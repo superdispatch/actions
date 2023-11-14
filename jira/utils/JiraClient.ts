@@ -1,4 +1,10 @@
-import JiraApi from 'jira-client';
+import * as NativeJiraApi from 'jira-client';
+
+class JiraApi extends NativeJiraApi.default {}
+
+interface JiraApi {
+  deleteRemoteLink: (issueNumber: string, id: string) => Promise<void>;
+}
 
 interface Transition {
   id: string;
@@ -6,6 +12,7 @@ interface Transition {
 }
 
 interface RemoteLinkResponse {
+  id: string;
   object: {
     title: string;
     url: string;
@@ -167,12 +174,16 @@ export class JiraClient extends JiraApi {
     issueTransition: {
       transition: { id: string };
     },
-  ): Promise<JiraApi.JsonResponse> {
+  ): Promise<NativeJiraApi.JsonResponse> {
     return super.transitionIssue(issueId, issueTransition);
   }
 
   getRemoteLinks(issueNumber: string) {
     return super.getRemoteLinks(issueNumber) as Promise<RemoteLinkResponse[]>;
+  }
+
+  removeRemoteLink(issueNumber: string, id: string) {
+    return super.deleteRemoteLink(issueNumber, id);
   }
 
   createRemoteLink(issueNumber: string, remoteLink: RemoteLink) {

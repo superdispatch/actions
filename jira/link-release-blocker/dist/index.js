@@ -24787,12 +24787,14 @@ var require_aws4 = __commonJS({
       if (!request.hostname && !request.host)
         request.hostname = headers.Host || headers.host;
       this.isCodeCommitGit = this.service === "codecommit" && request.method === "GIT";
+      this.extraHeadersToIgnore = request.extraHeadersToIgnore || Object.create(null);
+      this.extraHeadersToInclude = request.extraHeadersToInclude || Object.create(null);
     }
     __name(RequestSigner, "RequestSigner");
     RequestSigner.prototype.matchHost = function(host) {
       var match = (host || "").match(/([^\.]+)\.(?:([^\.]*)\.)?amazonaws\.com(\.cn)?$/);
       var hostParts = (match || []).slice(1, 3);
-      if (hostParts[1] === "es")
+      if (hostParts[1] === "es" || hostParts[1] === "aoss")
         hostParts = hostParts.reverse();
       if (hostParts[1] == "s3") {
         hostParts[0] = "s3";
@@ -24973,10 +24975,11 @@ var require_aws4 = __commonJS({
       }).join("\n");
     };
     RequestSigner.prototype.signedHeaders = function() {
+      var extraHeadersToInclude = this.extraHeadersToInclude, extraHeadersToIgnore = this.extraHeadersToIgnore;
       return Object.keys(this.request.headers).map(function(key) {
         return key.toLowerCase();
       }).filter(function(key) {
-        return HEADERS_TO_IGNORE[key] == null;
+        return extraHeadersToInclude[key] || HEADERS_TO_IGNORE[key] == null && !extraHeadersToIgnore[key];
       }).sort().join(";");
     };
     RequestSigner.prototype.credentialString = function() {
@@ -31950,13 +31953,17 @@ var require_pkcs8 = __commonJS({
       der.readSequence(asn1.Ber.OctetString);
       var k = der.readString(asn1.Ber.OctetString, true);
       k = utils.zeroPadToLength(k, 32);
-      var A;
-      if (der.peek() === asn1.Ber.BitString) {
-        A = utils.readBitString(der);
-        A = utils.zeroPadToLength(A, 32);
-      } else {
-        A = utils.calculateED25519Public(k);
+      var A, tag;
+      while ((tag = der.peek()) !== null) {
+        if (tag === (asn1.Ber.Context | 1)) {
+          A = utils.readBitString(der, tag);
+        } else {
+          der.readSequence(tag);
+          der._offset += der.length;
+        }
       }
+      if (A === void 0)
+        A = utils.calculateED25519Public(k);
       var key = {
         type: "ed25519",
         parts: [
@@ -31993,8 +32000,11 @@ var require_pkcs8 = __commonJS({
     function writePkcs8(der, key) {
       der.startSequence();
       if (PrivateKey.isPrivateKey(key)) {
-        var sillyInt = Buffer2.from([0]);
-        der.writeBuffer(sillyInt, asn1.Ber.Integer);
+        var version = 0;
+        if (key.type === "ed25519")
+          version = 1;
+        var vbuf = Buffer2.from([version]);
+        der.writeBuffer(vbuf, asn1.Ber.Integer);
       }
       der.startSequence();
       switch (key.type) {
@@ -32022,8 +32032,9 @@ var require_pkcs8 = __commonJS({
         case "ed25519":
           der.writeOID("1.3.101.112");
           if (PrivateKey.isPrivateKey(key))
-            throw new Error("Ed25519 private keys in pkcs8 format are not supported");
-          writePkcs8EdDSAPublic(key, der);
+            writePkcs8EdDSAPrivate(key, der);
+          else
+            writePkcs8EdDSAPublic(key, der);
           break;
         default:
           throw new Error("Unsupported key type: " + key.type);
@@ -32148,6 +32159,17 @@ var require_pkcs8 = __commonJS({
       utils.writeBitString(der, key.part.A.data);
     }
     __name(writePkcs8EdDSAPublic, "writePkcs8EdDSAPublic");
+    function writePkcs8EdDSAPrivate(key, der) {
+      der.endSequence();
+      der.startSequence(asn1.Ber.OctetString);
+      var k = utils.mpNormalize(key.part.k.data);
+      while (k.length > 32 && k[0] === 0)
+        k = k.slice(1);
+      der.writeBuffer(k, asn1.Ber.OctetString);
+      der.endSequence();
+      utils.writeBitString(der, key.part.A.data, asn1.Ber.Context | 1);
+    }
+    __name(writePkcs8EdDSAPrivate, "writePkcs8EdDSAPrivate");
   }
 });
 
@@ -34668,17 +34690,27 @@ var require_putty = __commonJS({
     var Buffer2 = require_safer().Buffer;
     var rfc4253 = require_rfc4253();
     var Key = require_key();
+    var SSHBuffer = require_ssh_buffer();
+    var crypto = require("crypto");
+    var PrivateKey = require_private_key();
     var errors = require_errors3();
     function read(buf, options) {
       var lines = buf.toString("ascii").split(/[\r\n]+/);
       var found = false;
       var parts;
       var si = 0;
+      var formatVersion;
       while (si < lines.length) {
         parts = splitHeader(lines[si++]);
-        if (parts && parts[0].toLowerCase() === "putty-user-key-file-2") {
-          found = true;
-          break;
+        if (parts) {
+          formatVersion = {
+            "putty-user-key-file-2": 2,
+            "putty-user-key-file-3": 3
+          }[parts[0].toLowerCase()];
+          if (formatVersion) {
+            found = true;
+            break;
+          }
         }
       }
       if (!found) {
@@ -34687,6 +34719,7 @@ var require_putty = __commonJS({
       var alg = parts[1];
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "encryption");
+      var encryption = parts[1];
       parts = splitHeader(lines[si++]);
       assert.equal(parts[0].toLowerCase(), "comment");
       var comment = parts[1];
@@ -34702,10 +34735,82 @@ var require_putty = __commonJS({
       if (key.type !== keyType) {
         throw new Error("Outer key algorithm mismatch");
       }
+      si += publicLines;
+      if (lines[si]) {
+        parts = splitHeader(lines[si++]);
+        assert.equal(parts[0].toLowerCase(), "private-lines");
+        var privateLines = parseInt(parts[1], 10);
+        if (!isFinite(privateLines) || privateLines < 0 || privateLines > lines.length) {
+          throw new Error("Invalid private-lines count");
+        }
+        var privateBuf = Buffer2.from(lines.slice(si, si + privateLines).join(""), "base64");
+        if (encryption !== "none" && formatVersion === 3) {
+          throw new Error("Encrypted keys arenot supported for PuTTY format version 3");
+        }
+        if (encryption === "aes256-cbc") {
+          if (!options.passphrase) {
+            throw new errors.KeyEncryptedError(options.filename, "PEM");
+          }
+          var iv = Buffer2.alloc(16, 0);
+          var decipher = crypto.createDecipheriv("aes-256-cbc", derivePPK2EncryptionKey(options.passphrase), iv);
+          decipher.setAutoPadding(false);
+          privateBuf = Buffer2.concat([
+            decipher.update(privateBuf),
+            decipher.final()
+          ]);
+        }
+        key = new PrivateKey(key);
+        if (key.type !== keyType) {
+          throw new Error("Outer key algorithm mismatch");
+        }
+        var sshbuf = new SSHBuffer({ buffer: privateBuf });
+        var privateKeyParts;
+        if (alg === "ssh-dss") {
+          privateKeyParts = [{
+            name: "x",
+            data: sshbuf.readBuffer()
+          }];
+        } else if (alg === "ssh-rsa") {
+          privateKeyParts = [
+            { name: "d", data: sshbuf.readBuffer() },
+            { name: "p", data: sshbuf.readBuffer() },
+            { name: "q", data: sshbuf.readBuffer() },
+            { name: "iqmp", data: sshbuf.readBuffer() }
+          ];
+        } else if (alg.match(/^ecdsa-sha2-nistp/)) {
+          privateKeyParts = [{
+            name: "d",
+            data: sshbuf.readBuffer()
+          }];
+        } else if (alg === "ssh-ed25519") {
+          privateKeyParts = [{
+            name: "k",
+            data: sshbuf.readBuffer()
+          }];
+        } else {
+          throw new Error("Unsupported PPK key type: " + alg);
+        }
+        key = new PrivateKey({
+          type: key.type,
+          parts: key.parts.concat(privateKeyParts)
+        });
+      }
       key.comment = comment;
       return key;
     }
     __name(read, "read");
+    function derivePPK2EncryptionKey(passphrase) {
+      var hash1 = crypto.createHash("sha1").update(Buffer2.concat([
+        Buffer2.from([0, 0, 0, 0]),
+        Buffer2.from(passphrase)
+      ])).digest();
+      var hash2 = crypto.createHash("sha1").update(Buffer2.concat([
+        Buffer2.from([0, 0, 0, 1]),
+        Buffer2.from(passphrase)
+      ])).digest();
+      return Buffer2.concat([hash1, hash2]).slice(0, 32);
+    }
+    __name(derivePPK2EncryptionKey, "derivePPK2EncryptionKey");
     function splitHeader(line) {
       var idx = line.indexOf(":");
       if (idx === -1)
@@ -34888,6 +34993,7 @@ var require_private_key = __commonJS({
     formats["openssh"] = formats["ssh-private"];
     formats["ssh"] = formats["ssh-private"];
     formats["dnssec"] = require_dnssec();
+    formats["putty"] = require_putty();
     function PrivateKey(opts) {
       assert.object(opts, "options");
       Key.call(this, opts);
@@ -38092,7 +38198,7 @@ var require_validate2 = __commonJS({
           function checkType(type, value2) {
             if (type) {
               if (typeof type == "string" && type != "any" && (type == "null" ? value2 !== null : typeof value2 != type) && !(value2 instanceof Array && type == "array") && !(value2 instanceof Date && type == "date") && !(type == "integer" && value2 % 1 === 0)) {
-                return [{ property: path, message: typeof value2 + " value found, but a " + type + " is required" }];
+                return [{ property: path, message: value2 + " - " + typeof value2 + " value found, but a " + type + " is required" }];
               }
               if (type instanceof Array) {
                 var unionErrors = [];
@@ -38156,10 +38262,10 @@ var require_validate2 = __commonJS({
               if (schema2.minLength && typeof value == "string" && value.length < schema2.minLength) {
                 addError("must be at least " + schema2.minLength + " characters long");
               }
-              if (typeof schema2.minimum !== void 0 && typeof value == typeof schema2.minimum && schema2.minimum > value) {
+              if (typeof schema2.minimum !== "undefined" && typeof value == typeof schema2.minimum && schema2.minimum > value) {
                 addError("must have a minimum value of " + schema2.minimum);
               }
-              if (typeof schema2.maximum !== void 0 && typeof value == typeof schema2.maximum && schema2.maximum < value) {
+              if (typeof schema2.maximum !== "undefined" && typeof value == typeof schema2.maximum && schema2.maximum < value) {
                 addError("must have a maximum value of " + schema2.maximum);
               }
               if (schema2["enum"]) {
@@ -38190,8 +38296,8 @@ var require_validate2 = __commonJS({
               errors.push({ property: path, message: "an object is required" });
             }
             for (var i in objTypeDef) {
-              if (objTypeDef.hasOwnProperty(i)) {
-                var value = instance2[i];
+              if (objTypeDef.hasOwnProperty(i) && i != "__proto__" && i != "constructor") {
+                var value = instance2.hasOwnProperty(i) ? instance2[i] : void 0;
                 if (value === void 0 && options.existingOnly)
                   continue;
                 var propDef = objTypeDef[i];
@@ -38211,7 +38317,7 @@ var require_validate2 = __commonJS({
                 delete instance2[i];
                 continue;
               } else {
-                errors.push({ property: path, message: typeof value + "The property " + i + " is not defined in the schema and the schema does not allow additional properties" });
+                errors.push({ property: path, message: "The property " + i + " is not defined in the schema and the schema does not allow additional properties" });
               }
             }
             var requires = objTypeDef && objTypeDef[i] && objTypeDef[i].requires;
@@ -39274,6 +39380,10 @@ var require_db = __commonJS({
       "application/cfw": {
         source: "iana"
       },
+      "application/city+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/clr": {
         source: "iana"
       },
@@ -39317,7 +39427,8 @@ var require_db = __commonJS({
       },
       "application/cpl+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["cpl"]
       },
       "application/csrattrs": {
         source: "iana"
@@ -39351,6 +39462,11 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["mpd"]
+      },
+      "application/dash-patch+xml": {
+        source: "iana",
+        compressible: true,
+        extensions: ["mpp"]
       },
       "application/dashdelta": {
         source: "iana"
@@ -39892,7 +40008,8 @@ var require_db = __commonJS({
       },
       "application/media-policy-dataset+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["mpf"]
       },
       "application/media_control+xml": {
         source: "iana",
@@ -40048,6 +40165,9 @@ var require_db = __commonJS({
       "application/oauth-authz-req+jwt": {
         source: "iana"
       },
+      "application/oblivious-dns-message": {
+        source: "iana"
+      },
       "application/ocsp-request": {
         source: "iana"
       },
@@ -40140,7 +40260,8 @@ var require_db = __commonJS({
         extensions: ["pgp"]
       },
       "application/pgp-keys": {
-        source: "iana"
+        source: "iana",
+        extensions: ["asc"]
       },
       "application/pgp-signature": {
         source: "iana",
@@ -40559,6 +40680,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["srx"]
+      },
+      "application/spdx+json": {
+        source: "iana",
+        compressible: true
       },
       "application/spirits-event+xml": {
         source: "iana",
@@ -41040,6 +41165,10 @@ var require_db = __commonJS({
       },
       "application/vnd.afpc.modca-pagesegment": {
         source: "iana"
+      },
+      "application/vnd.age": {
+        source: "iana",
+        extensions: ["age"]
       },
       "application/vnd.ah-barcode": {
         source: "iana"
@@ -41663,6 +41792,10 @@ var require_db = __commonJS({
       "application/vnd.ecip.rlp": {
         source: "iana"
       },
+      "application/vnd.eclipse.ditto+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.ecowin.chart": {
         source: "iana",
         extensions: ["mag"]
@@ -41820,6 +41953,10 @@ var require_db = __commonJS({
       "application/vnd.etsi.tsl.der": {
         source: "iana"
       },
+      "application/vnd.eu.kasparian.car+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.eudora.data": {
         source: "iana"
       },
@@ -41849,6 +41986,10 @@ var require_db = __commonJS({
       },
       "application/vnd.f-secure.mobile": {
         source: "iana"
+      },
+      "application/vnd.familysearch.gedcom+zip": {
+        source: "iana",
+        compressible: false
       },
       "application/vnd.fastcopy-disk-image": {
         source: "iana"
@@ -42139,6 +42280,16 @@ var require_db = __commonJS({
       "application/vnd.hhe.lesson-player": {
         source: "iana",
         extensions: ["les"]
+      },
+      "application/vnd.hl7cda+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
+      },
+      "application/vnd.hl7v2+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
       },
       "application/vnd.hp-hpgl": {
         source: "iana",
@@ -42553,6 +42704,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.maxar.archive.3tz+zip": {
+        source: "iana",
+        compressible: false
+      },
       "application/vnd.maxmind.maxmind-db": {
         source: "iana"
       },
@@ -42881,6 +43036,10 @@ var require_db = __commonJS({
       "application/vnd.mynfc": {
         source: "iana",
         extensions: ["taglet"]
+      },
+      "application/vnd.nacamar.ybrid+json": {
+        source: "iana",
+        compressible: true
       },
       "application/vnd.ncd.control": {
         source: "iana"
@@ -44169,6 +44328,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.syft+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.symbian.install": {
         source: "apache",
         extensions: ["sis", "sisx"]
@@ -44559,7 +44722,8 @@ var require_db = __commonJS({
       },
       "application/watcherinfo+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["wif"]
       },
       "application/webpush-options+json": {
         source: "iana",
@@ -45979,10 +46143,12 @@ var require_db = __commonJS({
         extensions: ["apng"]
       },
       "image/avci": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avci"]
       },
       "image/avcs": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avcs"]
       },
       "image/avif": {
         source: "iana",
@@ -46216,6 +46382,7 @@ var require_db = __commonJS({
       },
       "image/vnd.microsoft.icon": {
         source: "iana",
+        compressible: true,
         extensions: ["ico"]
       },
       "image/vnd.mix": {
@@ -46225,6 +46392,7 @@ var require_db = __commonJS({
         source: "iana"
       },
       "image/vnd.ms-dds": {
+        compressible: true,
         extensions: ["dds"]
       },
       "image/vnd.ms-modi": {
@@ -46913,6 +47081,10 @@ var require_db = __commonJS({
       "text/vnd.esmertec.theme-descriptor": {
         source: "iana",
         charset: "UTF-8"
+      },
+      "text/vnd.familysearch.gedcom": {
+        source: "iana",
+        extensions: ["ged"]
       },
       "text/vnd.ficlab.flt": {
         source: "iana"
@@ -48720,8 +48892,8 @@ var require_utils7 = __commonJS({
       if (typeof source !== "object") {
         if (Array.isArray(target)) {
           target.push(source);
-        } else if (typeof target === "object") {
-          if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
+        } else if (target && typeof target === "object") {
+          if (options && (options.plainObjects || options.allowPrototypes) || !has.call(Object.prototype, source)) {
             target[source] = true;
           }
         } else {
@@ -48729,7 +48901,7 @@ var require_utils7 = __commonJS({
         }
         return target;
       }
-      if (typeof target !== "object") {
+      if (!target || typeof target !== "object") {
         return [target].concat(source);
       }
       var mergeTarget = target;
@@ -48739,8 +48911,9 @@ var require_utils7 = __commonJS({
       if (Array.isArray(target) && Array.isArray(source)) {
         source.forEach(function(item, i) {
           if (has.call(target, i)) {
-            if (target[i] && typeof target[i] === "object") {
-              target[i] = merge2(target[i], item, options);
+            var targetItem = target[i];
+            if (targetItem && typeof targetItem === "object" && item && typeof item === "object") {
+              target[i] = merge2(targetItem, item, options);
             } else {
               target.push(item);
             }
@@ -48856,7 +49029,7 @@ var require_formats = __commonJS({
           return replace.call(value, percentTwenties, "+");
         },
         RFC3986: function(value) {
-          return value;
+          return String(value);
         }
       },
       RFC1738: "RFC1738",
@@ -48882,6 +49055,11 @@ var require_stringify3 = __commonJS({
         return prefix;
       }, "repeat")
     };
+    var isArray = Array.isArray;
+    var push = Array.prototype.push;
+    var pushToArray = /* @__PURE__ */ __name(function(arr, valueOrArray) {
+      push.apply(arr, isArray(valueOrArray) ? valueOrArray : [valueOrArray]);
+    }, "pushToArray");
     var toISO = Date.prototype.toISOString;
     var defaults = {
       delimiter: "&",
@@ -48900,7 +49078,8 @@ var require_stringify3 = __commonJS({
         obj2 = filter(prefix, obj2);
       } else if (obj2 instanceof Date) {
         obj2 = serializeDate(obj2);
-      } else if (obj2 === null) {
+      }
+      if (obj2 === null) {
         if (strictNullHandling) {
           return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder) : prefix;
         }
@@ -48918,7 +49097,7 @@ var require_stringify3 = __commonJS({
         return values;
       }
       var objKeys;
-      if (Array.isArray(filter)) {
+      if (isArray(filter)) {
         objKeys = filter;
       } else {
         var keys = Object.keys(obj2);
@@ -48929,10 +49108,10 @@ var require_stringify3 = __commonJS({
         if (skipNulls && obj2[key] === null) {
           continue;
         }
-        if (Array.isArray(obj2)) {
-          values = values.concat(stringify2(obj2[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        if (isArray(obj2)) {
+          pushToArray(values, stringify2(obj2[key], generateArrayPrefix(prefix, key), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         } else {
-          values = values.concat(stringify2(obj2[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+          pushToArray(values, stringify2(obj2[key], prefix + (allowDots ? "." + key : "[" + key + "]"), generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
         }
       }
       return values;
@@ -48940,7 +49119,7 @@ var require_stringify3 = __commonJS({
     module2.exports = function(object, opts) {
       var obj2 = object;
       var options = opts ? utils.assign({}, opts) : {};
-      if (options.encoder !== null && options.encoder !== void 0 && typeof options.encoder !== "function") {
+      if (options.encoder !== null && typeof options.encoder !== "undefined" && typeof options.encoder !== "function") {
         throw new TypeError("Encoder has to be a function.");
       }
       var delimiter = typeof options.delimiter === "undefined" ? defaults.delimiter : options.delimiter;
@@ -48963,7 +49142,7 @@ var require_stringify3 = __commonJS({
       if (typeof options.filter === "function") {
         filter = options.filter;
         obj2 = filter("", obj2);
-      } else if (Array.isArray(options.filter)) {
+      } else if (isArray(options.filter)) {
         filter = options.filter;
         objKeys = filter;
       }
@@ -48991,7 +49170,7 @@ var require_stringify3 = __commonJS({
         if (skipNulls && obj2[key] === null) {
           continue;
         }
-        keys = keys.concat(stringify(obj2[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
+        pushToArray(keys, stringify(obj2[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode ? encoder : null, filter, sort, allowDots, serializeDate, formatter, encodeValuesOnly));
       }
       var joined = keys.join(delimiter);
       var prefix = options.addQueryPrefix === true ? "?" : "";
@@ -49047,17 +49226,18 @@ var require_parse2 = __commonJS({
       for (var i = chain.length - 1; i >= 0; --i) {
         var obj2;
         var root = chain[i];
-        if (root === "[]") {
-          obj2 = [];
-          obj2 = obj2.concat(leaf);
+        if (root === "[]" && options.parseArrays) {
+          obj2 = [].concat(leaf);
         } else {
           obj2 = options.plainObjects ? Object.create(null) : {};
           var cleanRoot = root.charAt(0) === "[" && root.charAt(root.length - 1) === "]" ? root.slice(1, -1) : root;
           var index = parseInt(cleanRoot, 10);
-          if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
+          if (!options.parseArrays && cleanRoot === "") {
+            obj2 = { 0: leaf };
+          } else if (!isNaN(index) && root !== cleanRoot && String(index) === cleanRoot && index >= 0 && (options.parseArrays && index <= options.arrayLimit)) {
             obj2 = [];
             obj2[index] = leaf;
-          } else {
+          } else if (cleanRoot !== "__proto__") {
             obj2[cleanRoot] = leaf;
           }
         }
@@ -59699,15 +59879,21 @@ var require_jira = __commonJS({
           })));
         }, "listSprints")
       }, {
+        key: "getSprint",
+        value: /* @__PURE__ */ __name(function getSprint(sprintId) {
+          return this.doRequest(this.makeRequestHeader(this.makeAgileUri({
+            pathname: "/sprint/".concat(sprintId)
+          })));
+        }, "getSprint")
+      }, {
         key: "addIssueToSprint",
         value: /* @__PURE__ */ __name(function addIssueToSprint(issueId, sprintId) {
-          return this.doRequest(this.makeRequestHeader(this.makeUri({
-            pathname: "/sprint/".concat(sprintId, "/issues/add")
+          return this.doRequest(this.makeRequestHeader(this.makeAgileUri({
+            pathname: "/sprint/".concat(sprintId, "/issue")
           }), {
-            method: "PUT",
-            followAllRedirects: true,
+            method: "POST",
             body: {
-              issueKeys: [issueId]
+              issues: [issueId]
             }
           }));
         }, "addIssueToSprint")
@@ -59746,6 +59932,16 @@ var require_jira = __commonJS({
             body: remoteLink
           }));
         }, "createRemoteLink")
+      }, {
+        key: "deleteRemoteLink",
+        value: /* @__PURE__ */ __name(function deleteRemoteLink(issueNumber, id) {
+          return this.doRequest(this.makeRequestHeader(this.makeUri({
+            pathname: "/issue/".concat(issueNumber, "/remotelink/").concat(id)
+          }), {
+            method: "DELETE",
+            followAllRedirects: true
+          }));
+        }, "deleteRemoteLink")
       }, {
         key: "getVersions",
         value: /* @__PURE__ */ __name(function getVersions(project) {
@@ -60774,6 +60970,13 @@ var require_jira = __commonJS({
             pathname: "/".concat(endpoint)
           })));
         }, "genericGet")
+      }, {
+        key: "genericAgileGet",
+        value: /* @__PURE__ */ __name(function genericAgileGet(endpoint) {
+          return this.doRequest(this.makeRequestHeader(this.makeAgileUri({
+            pathname: "/".concat(endpoint)
+          })));
+        }, "genericAgileGet")
       }]);
       return JiraApi3;
     }();
@@ -60787,8 +60990,11 @@ var import_core = __toModule(require_core());
 var import_github = __toModule(require_github());
 
 // jira/utils/JiraClient.ts
-var import_jira_client = __toModule(require_jira());
-var JiraClient = class extends import_jira_client.default {
+var NativeJiraApi = __toModule(require_jira());
+var JiraApi = class extends NativeJiraApi.default {
+};
+__name(JiraApi, "JiraApi");
+var JiraClient = class extends JiraApi {
   listTransitions(issueId) {
     return super.listTransitions(issueId);
   }
@@ -60797,6 +61003,9 @@ var JiraClient = class extends import_jira_client.default {
   }
   getRemoteLinks(issueNumber) {
     return super.getRemoteLinks(issueNumber);
+  }
+  removeRemoteLink(issueNumber, id) {
+    return super.deleteRemoteLink(issueNumber, id);
   }
   createRemoteLink(issueNumber, remoteLink) {
     return super.createRemoteLink(issueNumber, remoteLink);
@@ -61015,6 +61224,7 @@ main().catch(import_core.setFailed);
 /*!
  * mime-db
  * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
  * MIT Licensed
  */
 /*!
