@@ -55559,8 +55559,8 @@ var JiraClient = class extends JiraApi {
   getRemoteLinks(issueNumber) {
     return super.getRemoteLinks(issueNumber);
   }
-  removeRemoteLink(issueNumber, title) {
-    return super.deleteRemoteLink(issueNumber, title);
+  removeRemoteLink(issueNumber, id) {
+    return super.deleteRemoteLink(issueNumber, id);
   }
   createRemoteLink(issueNumber, remoteLink) {
     return super.createRemoteLink(issueNumber, remoteLink);

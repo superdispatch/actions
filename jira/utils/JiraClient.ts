@@ -12,6 +12,7 @@ interface Transition {
 }
 
 interface RemoteLinkResponse {
+  id: string;
   object: {
     title: string;
     url: string;
@@ -181,8 +182,8 @@ export class JiraClient extends JiraApi {
     return super.getRemoteLinks(issueNumber) as Promise<RemoteLinkResponse[]>;
   }
 
-  removeRemoteLink(issueNumber: string, title: string) {
-    return super.deleteRemoteLink(issueNumber, title);
+  removeRemoteLink(issueNumber: string, id: string) {
+    return super.deleteRemoteLink(issueNumber, id);
   }
 
   createRemoteLink(issueNumber: string, remoteLink: RemoteLink) {

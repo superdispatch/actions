@@ -55559,8 +55559,8 @@ var JiraClient = class extends JiraApi {
   getRemoteLinks(issueNumber) {
     return super.getRemoteLinks(issueNumber);
   }
-  removeRemoteLink(issueNumber, title2) {
-    return super.deleteRemoteLink(issueNumber, title2);
+  removeRemoteLink(issueNumber, id) {
+    return super.deleteRemoteLink(issueNumber, id);
   }
   createRemoteLink(issueNumber, remoteLink) {
     return super.createRemoteLink(issueNumber, remoteLink);
@@ -55621,8 +55621,7 @@ async function main() {
   const remoteLinks = await jira.getRemoteLinks(issue);
   const remoteLink = remoteLinks.find((link) => link.object.title === title);
   if (remoteLink) {
-    console.log("REMOTE LINK:", remoteLink);
-    await jira.deleteRemoteLink(issue, title);
+    await jira.deleteRemoteLink(issue, remoteLink.id);
   }
   await jira.createRemoteLink(issue, {
     object: { title, url }
