@@ -11,9 +11,10 @@ async function main() {
   const jira = createClient();
 
   const remoteLinks = await jira.getRemoteLinks(issue);
-  const hasRemoteLink = remoteLinks.some((link) => link.object.title === title);
+  const remoteLink = remoteLinks.find((link) => link.object.title === title);
 
-  if (hasRemoteLink) {
+  if (remoteLink) {
+    console.log('REMOTE LINK:', remoteLink);
     await jira.deleteRemoteLink(issue, title);
   }
 

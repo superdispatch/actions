@@ -55619,8 +55619,9 @@ main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
   const remoteLinks = await jira.getRemoteLinks(issue);
-  const hasRemoteLink = remoteLinks.some((link) => link.object.title === title);
-  if (hasRemoteLink) {
+  const remoteLink = remoteLinks.find((link) => link.object.title === title);
+  if (remoteLink) {
+    console.log("REMOTE LINK:", remoteLink);
     await jira.deleteRemoteLink(issue, title);
   }
   await jira.createRemoteLink(issue, {
