@@ -13,7 +13,7 @@ async function main() {
   const jira = createClient();
   const jiraIssue = await jira.getIssue(issue);
 
-  console.log('JIRA Issue:', jiraIssue);
+  console.log('JIRA Issue attachemnts:', jiraIssue.attachment);
 
   const destination = filename;
   const destinationStream = fs.createWriteStream(destination);

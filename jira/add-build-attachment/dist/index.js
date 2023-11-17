@@ -72627,7 +72627,7 @@ main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
   const jiraIssue = await jira.getIssue(issue);
-  console.log("JIRA Issue:", jiraIssue);
+  console.log("JIRA Issue attachemnts:", jiraIssue.attachment);
   const destination = filename;
   const destinationStream = import_fs.default.createWriteStream(destination);
   const archive = (0, import_archiver.default)("zip");

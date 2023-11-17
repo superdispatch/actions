@@ -114,6 +114,7 @@ export interface JIRAIssue {
         | 'Epic';
     };
   };
+  attachment: [unknown];
 }
 
 export interface JIRAComment {
