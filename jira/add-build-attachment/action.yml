@@ -1,0 +1,19 @@
+name: 'Add build attachment to JIRA issue'
+description: 'Add build attachment to JIRA issue'
+author: superdispatch
+inputs:
+  issue:
+    description: 'JIRA issue'
+    required: true
+
+  path:
+    description: 'Build directory'
+    required: true
+
+  filename:
+    description: 'File name'
+    default: 'build.zip'
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
