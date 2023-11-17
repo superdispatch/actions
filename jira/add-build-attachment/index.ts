@@ -29,8 +29,6 @@ async function main() {
   });
 
   archive.on('end', () => {
-    console.log('Archive', archive);
-
     const readStream = fs.createReadStream(filename);
     void jira.addAttachmentOnIssue(jiraIssue.id, readStream);
   });

@@ -72637,7 +72637,6 @@ async function main() {
     console.error("Error while zipping", err);
   });
   archive.on("end", () => {
-    console.log("Archive", archive);
     const readStream = import_fs.default.createReadStream(filename);
     void jira.addAttachmentOnIssue(jiraIssue.id, readStream);
   });
