@@ -72627,20 +72627,22 @@ main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
   const jiraIssue = await jira.getIssue(issue);
-  console.log("JIRA Issue attachemnts:", jiraIssue.fields.attachment);
-  const destination = filename;
-  const destinationStream = import_fs.default.createWriteStream(destination);
+  const previousAttachment = jiraIssue.fields.attachment.find((attachment) => attachment.filename === filename);
+  if (previousAttachment) {
+    await jira.deleteAttachment(previousAttachment.id);
+  }
+  const destinationStream = import_fs.default.createWriteStream(filename);
   const archive = (0, import_archiver.default)("zip");
   archive.on("error", (err) => {
     console.error("Error while zipping", err);
   });
   archive.on("end", () => {
     console.log("Archive", archive);
-    const readStream = import_fs.default.createReadStream(destination);
+    const readStream = import_fs.default.createReadStream(filename);
     void jira.addAttachmentOnIssue(jiraIssue.id, readStream);
   });
   archive.pipe(destinationStream);
-  archive.directory(path, destination);
+  archive.directory(path, filename);
   void archive.finalize();
 }
 __name(main, "main");

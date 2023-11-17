@@ -13,10 +13,15 @@ async function main() {
   const jira = createClient();
   const jiraIssue = await jira.getIssue(issue);
 
-  console.log('JIRA Issue attachemnts:', jiraIssue.fields.attachment);
+  const previousAttachment = jiraIssue.fields.attachment.find(
+    (attachment) => attachment.filename === filename,
+  );
 
-  const destination = filename;
-  const destinationStream = fs.createWriteStream(destination);
+  if (previousAttachment) {
+    await jira.deleteAttachment(previousAttachment.id);
+  }
+
+  const destinationStream = fs.createWriteStream(filename);
 
   const archive = archiver('zip');
   archive.on('error', (err) => {
@@ -26,11 +31,11 @@ async function main() {
   archive.on('end', () => {
     console.log('Archive', archive);
 
-    const readStream = fs.createReadStream(destination);
+    const readStream = fs.createReadStream(filename);
     void jira.addAttachmentOnIssue(jiraIssue.id, readStream);
   });
 
   archive.pipe(destinationStream);
-  archive.directory(path, destination);
+  archive.directory(path, filename);
   void archive.finalize();
 }
