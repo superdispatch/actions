@@ -31,6 +31,7 @@ export interface JIRAIssue {
   self: string; // jira link
   key: string;
   fields: {
+    attachment: [unknown];
     issuelinks: [
       {
         id: string;
@@ -114,7 +115,6 @@ export interface JIRAIssue {
         | 'Epic';
     };
   };
-  attachment: [unknown];
 }
 
 export interface JIRAComment {
