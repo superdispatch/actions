@@ -1,5 +1,5 @@
-name: 'Add build attachment to JIRA issue'
-description: 'Add build attachment to JIRA issue'
+name: 'Add attachment to JIRA issue'
+description: 'Add attachment to JIRA issue'
 author: superdispatch
 inputs:
   issue:
@@ -7,11 +7,11 @@ inputs:
     required: true
 
   path:
-    description: 'Build directory'
+    description: 'Path'
     required: true
 
   filename:
-    description: 'File name'
+    description: 'Output filename'
     required: true
 
 runs:

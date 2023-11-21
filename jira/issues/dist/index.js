@@ -32360,9 +32360,9 @@ var require_extsprintf2 = __commonJS({
   }
 });
 
-// node_modules/verror/node_modules/core-util-is/lib/util.js
+// node_modules/core-util-is/lib/util.js
 var require_util2 = __commonJS({
-  "node_modules/verror/node_modules/core-util-is/lib/util.js"(exports2) {
+  "node_modules/core-util-is/lib/util.js"(exports2) {
     function isArray(arg) {
       if (Array.isArray) {
         return Array.isArray(arg);
