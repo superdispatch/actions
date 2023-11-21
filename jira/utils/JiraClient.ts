@@ -4,6 +4,7 @@ class JiraApi extends NativeJiraApi.default {}
 
 interface JiraApi {
   deleteRemoteLink: (issueNumber: string, id: string) => Promise<void>;
+  deleteAttachment: (attachmentId: string) => Promise<void>;
 }
 
 interface Transition {
@@ -31,6 +32,12 @@ export interface JIRAIssue {
   self: string; // jira link
   key: string;
   fields: {
+    attachment: [
+      {
+        id: string;
+        filename: string;
+      },
+    ];
     issuelinks: [
       {
         id: string;

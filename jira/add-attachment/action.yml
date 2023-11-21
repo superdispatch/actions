@@ -1,0 +1,19 @@
+name: 'Add attachment to JIRA issue'
+description: 'Add attachment to JIRA issue'
+author: superdispatch
+inputs:
+  issue:
+    description: 'JIRA issue'
+    required: true
+
+  path:
+    description: 'Path'
+    required: true
+
+  filename:
+    description: 'Output filename'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
