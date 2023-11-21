@@ -5,7 +5,7 @@ import { createClient } from '../utils/JiraAPI';
 
 const path = getInput('path', { required: true });
 const issue = getInput('issue', { required: true });
-const filename = getInput('filename');
+const filename = getInput('filename', { required: true });
 
 main().catch(setFailed);
 

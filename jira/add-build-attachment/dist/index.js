@@ -72622,7 +72622,7 @@ __name(getEnv, "getEnv");
 // jira/add-build-attachment/index.ts
 var path = (0, import_core.getInput)("path", { required: true });
 var issue = (0, import_core.getInput)("issue", { required: true });
-var filename = (0, import_core.getInput)("filename");
+var filename = (0, import_core.getInput)("filename", { required: true });
 main().catch(import_core.setFailed);
 async function main() {
   const jira = createClient();
