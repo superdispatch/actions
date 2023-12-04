@@ -61077,7 +61077,7 @@ __name(findIssue, "findIssue");
 var token = (0, import_core.getInput)("token", { required: true });
 var seniors = (0, import_core.getInput)("seniors");
 var projects = (0, import_core.getInput)("projects");
-var HEAD_REF = process.env.GITHUB_HEAD_REF;
+var HEAD_REF = import_github.context.payload.pull_request?.head?.ref;
 var PR_NUMBER = import_github.context.payload.pull_request?.number;
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
@@ -61086,6 +61086,7 @@ async function main() {
   }
   const octokit = (0, import_github.getOctokit)(token);
   const issue = await findIssue(HEAD_REF);
+  (0, import_core.info)(`issue ${issue?.key ?? "unknown"} is in status ${issue?.fields.status.name ?? "unknown"}`);
   if (!issue) {
     (0, import_core.info)("Skipping... Could not find issue");
     return;
@@ -61113,18 +61114,21 @@ async function main() {
     });
     if (filteredChangesRequested.size > 0) {
       await transitionCard(issue, "Changes Required in PR");
-    } else {
-      let states = new Map();
-      for (const x of pr_reviews) {
-        if (x.user?.login) {
-          states.set(x.user.login, x.state);
-        }
-      }
-      senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
+      return;
     }
+    const states = new Map();
+    for (const x of pr_reviews) {
+      if (x.user?.login) {
+        states.set(x.user.login, x.state);
+      }
+    }
+    senior_approvals = seniors.split(",").some((senior) => states.get(senior) === "APPROVED");
   }
   if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, "Finish Development");
+  } else {
+    (0, import_core.info)(`pr.mergeable_state = ${pr.mergeable_state}`);
+    (0, import_core.info)(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
   (0, import_core.setOutput)("issue", issue.key);
 }

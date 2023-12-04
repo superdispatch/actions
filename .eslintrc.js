@@ -16,6 +16,7 @@ module.exports = {
       rules: {
         'import/no-extraneous-dependencies': 'off',
         'node/no-unpublished-import': 'off',
+        'eslint-comments/no-use': 'off',
       },
     },
 

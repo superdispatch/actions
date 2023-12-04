@@ -8,7 +8,8 @@ const token = getInput('token', { required: true });
 const seniors = getInput('seniors');
 const projects = getInput('projects');
 
-const HEAD_REF = process.env.GITHUB_HEAD_REF;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+const HEAD_REF = context.payload.pull_request?.head?.ref as string | undefined;
 const PR_NUMBER = context.payload.pull_request?.number;
 
 async function main() {
@@ -19,6 +20,11 @@ async function main() {
 
   const octokit = getOctokit(token);
   const issue = await findIssue(HEAD_REF);
+  info(
+    `issue ${issue?.key ?? 'unknown'} is in status ${
+      issue?.fields.status.name ?? 'unknown'
+    }`,
+  );
 
   if (!issue) {
     info('Skipping... Could not find issue');
@@ -81,23 +87,28 @@ async function main() {
     // Check if there are any remaining 'CHANGES_REQUESTED' entries
     if (filteredChangesRequested.size > 0) {
       await transitionCard(issue, 'Changes Required in PR');
-    } else {
-      let states: Map<string, string> = new Map();
-      // Iterate through the PR reviews and store the review states in the Map
-      for (const x of pr_reviews) {
-        if (x.user?.login) {
-          states.set(x.user.login, x.state);
-        }
-      }
-
-      // Check if at least one senior has approved the PR
-      senior_approvals = seniors
-        .split(',')
-        .some((senior) => states.get(senior) === 'APPROVED');
+      return;
     }
+
+    const states: Map<string, string> = new Map();
+    // Iterate through the PR reviews and store the review states in the Map
+    for (const x of pr_reviews) {
+      if (x.user?.login) {
+        states.set(x.user.login, x.state);
+      }
+    }
+
+    // Check if at least one senior has approved the PR
+    senior_approvals = seniors
+      .split(',')
+      .some((senior) => states.get(senior) === 'APPROVED');
   }
+
   if (pr.mergeable && senior_approvals) {
     await transitionCard(issue, 'Finish Development');
+  } else {
+    info(`pr.mergeable_state = ${pr.mergeable_state}`);
+    info(`pr as JSON: ${JSON.stringify(pr, null, 2)}`);
   }
 
   setOutput('issue', issue.key);
