@@ -30,5 +30,5 @@ inputs:
     description: 'size limit target file'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
