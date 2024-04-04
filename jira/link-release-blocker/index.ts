@@ -38,8 +38,6 @@ async function main() {
   );
 
   if (!blockers.length) {
-    await jira.addComment(mainIssue.key, 'Release is not blocked 🎉');
-
     info('Issue is not blocked');
     return;
   }
