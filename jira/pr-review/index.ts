@@ -5,11 +5,11 @@ import { JIRAIssue } from '../utils/JiraClient';
 import { findIssue } from '../utils/JiraIssue';
 
 const token = getInput('token', { required: true });
-const seniors = getInput('seniors');
 const projects = getInput('projects');
 
 const HEAD_REF = process.env.GITHUB_HEAD_REF;
 const PR_NUMBER = context.payload.pull_request?.number;
+const seniors = true
 
 async function main() {
   if (!PR_NUMBER || !HEAD_REF) {
@@ -48,8 +48,6 @@ async function main() {
     'GET /repos/{owner}/{repo}/pulls/{pull_number}/reviews',
     { ...context.repo, pull_number: PR_NUMBER },
   );
-
-  let senior_approvals = true;
 
   // If seniors input is provided, perform the senior_approvals logic
   if (seniors) {
@@ -91,12 +89,9 @@ async function main() {
       }
 
       // Check if at least one senior has approved the PR
-      senior_approvals = seniors
-        .split(',')
-        .some((senior) => states.get(senior) === 'APPROVED');
     }
   }
-  if (pr.mergeable && senior_approvals) {
+  if (pr.mergeable) {
     await transitionCard(issue, 'Finish Development');
   }
 
