@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs');
 const esbuild = require('esbuild');
 const glob = require('@actions/glob');
 const { exec } = require('@actions/exec');
@@ -18,6 +19,10 @@ async function main() {
     const entryPath = path.join(actionDir, 'index.ts');
     const outDir = path.join(actionDir, 'dist');
     const outPath = path.join(outDir, 'index.js');
+
+    if (!fs.existsSync(entryPath)) {
+      return;
+    }
 
     console.log('Installing: %s', path.relative(ROOT_DIR, actionDir));
 

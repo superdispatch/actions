@@ -1,0 +1,117 @@
+name: 'NPM Install'
+description: 'Zero config NPM package installer with caching'
+author: 'superdispatch'
+
+inputs:
+  working-directory:
+    required: false
+    default: '${{ github.workspace }}'
+    description: 'The default working directory'
+
+  cache-key:
+    required: false
+    default: 'npm-install-'
+    description: 'An explicit key for restoring and saving the cache'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Getting package managers info'
+      id: vars
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        NPM_LOCK_HASH="${{ hashFiles(format('{0}/package-lock.json', inputs.working-directory)) }}"
+        YARN_LOCK_HASH="${{ hashFiles(format('{0}/yarn.lock', inputs.working-directory)) }}" 
+        PNPM_LOCK_HASH="${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}" 
+        PACKAGE_JSON_HASH="${{ hashFiles(format('{0}/package.json', inputs.working-directory)) }}"
+
+        if [[ $YARN_LOCK_HASH != "" ]] 
+        then
+          AGENT_VERSION=$(yarn --version)        
+          AGENT_LOCK_HASH=$YARN_LOCK_HASH
+
+          if [[ $AGENT_VERSION =~ ^1.* ]] 
+          then
+            AGENT="yarn"
+            AGENT_CACHE_DIR=$(yarn cache dir)
+          else
+            AGENT="yarn@berry"
+            AGENT_CACHE_DIR="${{ format('{0}/.yarn', inputs.working-directory) }}"
+          fi        
+        elif [[ $PNPM_LOCK_HASH != "" ]] 
+        then
+          AGENT="pnpm"
+          AGENT_VERSION=$(pnpm --version)    
+          AGENT_LOCK_HASH=$PNPM_LOCK_HASH
+          AGENT_CACHE_DIR=$(pnpm store path)      
+        else
+          AGENT="npm"
+          AGENT_VERSION=$(npm --version)
+          AGENT_LOCK_HASH=$NPM_LOCK_HASH
+          AGENT_CACHE_DIR=$(npm config get cache)
+        fi
+
+        CACHE_KEY=${{ inputs.cache-key }}os@${{ runner.os }}-node@$(node --version)-$AGENT@$AGENT_VERSION-
+
+        echo "::group::Detected agent"
+        echo "Agent: $AGENT@$AGENT_VERSION"
+        echo "Cache directory: $AGENT_CACHE_DIR"
+        echo "Cache key: $CACHE_KEY"
+        echo "::endgroup::"
+
+        echo "agent=$AGENT" >> $GITHUB_OUTPUT
+        echo "agent-cache-dir=$AGENT_CACHE_DIR" >> $GITHUB_OUTPUT
+        echo "agent-lock-hash=$AGENT_LOCK_HASH" >> $GITHUB_OUTPUT
+        echo "package-json-hash=$PACKAGE_JSON_HASH" >> $GITHUB_OUTPUT
+        echo "cache-key=$CACHE_KEY" >> $GITHUB_OUTPUT
+
+    - name: 'Restoring cache'
+      id: cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ${{ steps.vars.outputs.agent-cache-dir }}
+          ${{ inputs.working-directory }}/node_modules
+        key: ${{ steps.vars.outputs.cache-key }}${{ steps.vars.outputs.agent-lock-hash }}-${{ steps.vars.outputs.package-json-hash }}
+        restore-keys: |
+          ${{ steps.vars.outputs.cache-key }}${{ steps.vars.outputs.agent-lock-hash }}-
+          ${{ steps.vars.outputs.cache-key }}
+
+    - name: 'Installing with NPM'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.vars.outputs.agent == 'npm' }}
+      run: |
+        echo "::group::Installing dependencies"
+        npm ci
+        echo "::endgroup::"
+
+    - name: 'Installing with Yarn'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.vars.outputs.agent == 'yarn' }}
+      run: |
+        echo "::group::Installing dependencies"
+        yarn install --frozen-lockfile
+        echo "::endgroup::"
+
+    - name: 'Installing with Yarn (Berry)'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.vars.outputs.agent == 'yarn@berry' }}
+      env:
+        YARN_CACHE_FOLDER: ${{ steps.vars.outputs.agent-cache-dir }}
+      run: |
+        echo "::group::Installing dependencies"
+        yarn install --immutable
+        echo "::endgroup::"
+
+    - name: 'Installing with pNPM'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.vars.outputs.agent == 'pnpm' }}
+      run: |
+        echo "::group::Installing dependencies"
+        pnpm i --frozen-lockfile
+        echo "::endgroup::"

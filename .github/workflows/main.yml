@@ -9,7 +9,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: umidbekk/actions/prepare-node-repo@v2
+      - uses: ./prepare-node-repo@main
         with:
           node-version: 20
       - run: yarn tsc
