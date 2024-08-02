@@ -8,7 +8,7 @@
     "postinstall": "husky install",
     "lint": "js-tools lint",
     "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
-    "release": "np --no-publish --no-release-draft",
+    "release": "np --no-publish --no-release-draft --no-tests",
     "postrelease": "node scripts/post-release.js"
   },
   "lint-staged": {
@@ -40,8 +40,5 @@
   },
   "engines": {
     "node": ">=20"
-  },
-  "np": {
-    "tests": false
   }
 }
