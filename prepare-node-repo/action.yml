@@ -35,7 +35,7 @@ runs:
         cache-dependency-path: ${{ inputs.package-manager-dependency-path }}
 
     - name: 'Installing dependencies'
-      uses: superdispatch/actions/npm/install@v2
+      uses: superdispatch/actions/npm/install@v1
       with:
         cache-key: ${{ inputs.cache-key }}
         working-directory: ${{ inputs.working-directory }}
