@@ -155,3 +155,103 @@ jobs:
 ### PR limit
 
 Limit PRs per user [see more details](pr-limit/README.md)
+
+## npm/install
+
+#### Features:
+
+- Install packages using `npm`, `yarn` or `pnpm`
+- Caches whole `node_modules` directory
+- Skips installation step when lockfile cache is hit
+- Automatically appends OS and Node version to the `cache-key`
+
+#### Options:
+
+- `working-directory` – the default working directory
+- `cache-key` – an explicit key for restoring and saving the cache
+
+#### Usage:
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: superdispatch/actions/npm/install@v2
+      - run: npm test
+```
+
+Passing `cache-key`
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: superdispatch/actions/npm/install@v2
+        with:
+          cache-key: ${{ github.sha }}-
+      - run: npm test
+```
+
+## prepare-node-repo
+
+#### Features:
+
+- Disables `autocrlf` in `git config`
+- Checks out repository
+- Downloads required Node version (see `node-version` option)
+- Installs packages (see [superdispatch/actions/npm/install](https://github.com/superdispatch/actions#npminstall))
+
+#### Options:
+
+- `working-directory` – the default working directory
+- `node-version` – Node version specifier
+- `cache-key` – an explicit key for restoring and saving the cache
+
+#### Usage:
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: superdispatch/actions/setup-node-repo@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm test
+```
+
+Passing `cache-key`
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: superdispatch/actions/setup-node-repo@v2
+        with:
+          cache-key: ${{ github.sha }}-
+          node-version: ${{ matrix.node }}
+      - run: npm test
+```

@@ -1,0 +1,41 @@
+name: 'Prepare Node package repository'
+description: 'Setup and prepare Node package repository'
+author: 'superdispatch'
+
+inputs:
+  working-directory:
+    required: false
+    default: '${{ github.workspace }}'
+    description: 'The default working directory'
+
+  node-version:
+    required: false
+    default: 'lts/*'
+    description: 'Node version specifier.'
+
+  cache-key:
+    required: false
+    description: 'An explicit key for restoring and saving the cache'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Disable automatic line-end conversion'
+      shell: bash
+      run: git config --global core.autocrlf false
+
+    - name: 'Checking out the repository'
+      uses: actions/checkout@v3
+
+    - name: 'Setting up Node'
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: ${{ inputs.package-manager }}
+        cache-dependency-path: ${{ inputs.package-manager-dependency-path }}
+
+    - name: 'Installing dependencies'
+      uses: superdispatch/actions/npm/install@v2
+      with:
+        cache-key: ${{ inputs.cache-key }}
+        working-directory: ${{ inputs.working-directory }}
