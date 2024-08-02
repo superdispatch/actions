@@ -9,8 +9,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ./prepare-node-repo@main
+      - uses: superdispatch/actions/prepare-node-repo@main
         with:
           node-version: 20
       - run: yarn tsc
