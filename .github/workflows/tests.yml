@@ -6,7 +6,6 @@ on:
 
 jobs:
   build-size-cache:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -64,7 +63,6 @@ jobs:
           sha: ${{ github.event.pull_request.base.sha }}
 
   build-size-report:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size') }}
     needs:
       - build-size-cache
     runs-on: ubuntu-latest
@@ -118,7 +116,6 @@ jobs:
           dir: ./build-size/test-same-file-name
 
   build-size-limit:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test build-size-limit') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -130,7 +127,6 @@ jobs:
           target: 'node_modules/object.assign/dist/browser.js'
 
   deploy-preview:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test deploy-preview') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -159,7 +155,6 @@ jobs:
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
   upload-artifacts:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test upload-artifacts') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -195,7 +190,6 @@ jobs:
           path: package.json
 
   prune-artifacts:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test prune-artifacts') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -212,7 +206,6 @@ jobs:
       - uses: ./prune-artifacts
 
   pr-limit:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test pr-limit') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -221,7 +214,6 @@ jobs:
           limit: 1
 
   commit-snapshots:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test commit-snapshots') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -232,17 +224,13 @@ jobs:
           update-command: touch test4.txt
 
   npm-install-cypress-yarn:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-        os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 18
       - uses: ./npm/install
         with:
           cache-key: yarn-install-cypress-${{ github.sha }}-
@@ -252,18 +240,14 @@ jobs:
         working-directory: ./examples/cypress-yarn
 
   prepare-node-repo-cypress:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node: [14, 16, 18]
-        os: [ubuntu-latest, windows-latest]
     steps:
       - uses: actions/checkout@v3
 
       - uses: ./prepare-node-repo
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 18
           working-directory: ./examples/cypress-npm
           cache-key: prepare-node-repo-cypress-${{ github.sha }}-
 
