@@ -230,3 +230,42 @@ jobs:
           dry-run: true
           command: exit 1
           update-command: touch test4.txt
+
+  npm-install-cypress-yarn:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: ./npm/install
+        with:
+          cache-key: yarn-install-cypress-${{ github.sha }}-
+          working-directory: ./examples/cypress-yarn
+
+      - run: yarn test
+        working-directory: ./examples/cypress-yarn
+
+  prepare-node-repo-cypress:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        node: [14, 16, 18]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./prepare-node-repo
+        with:
+          node-version: ${{ matrix.node }}
+          working-directory: ./examples/cypress-npm
+          cache-key: prepare-node-repo-cypress-${{ github.sha }}-
+
+      - run: npm test
+        working-directory: ./examples/cypress-npm

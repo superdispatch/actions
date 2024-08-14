@@ -1,0 +1,12 @@
+{
+  "name": "npm-install-cypress",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress install && cypress verify"
+  },
+  "dependencies": {
+    "cypress": "^8.5.0"
+  }
+}
