@@ -84,15 +84,14 @@ runs:
       if: runner.environment == 'self-hosted'
       uses: corca-ai/local-cache@v3
       with:
-        path: |
-          ${{ steps.vars.outputs.agent-cache-dir }}
-          ${{ inputs.working-directory }}/node_modules
+        path: node_modules
         key: ${{ steps.vars.outputs.cache-key }}${{ steps.vars.outputs.agent-lock-hash }}-${{ steps.vars.outputs.package-json-hash }}
         base: '${{ runner.tool_cache }}/cache'
 
     - id: cache
       shell: bash
-      run: echo "::set-output name=cache-hit::${{ steps.github-cache.outputs.cache-hit || steps.self-hosted-cache.outputs.cache-hit }}"
+      run: |
+        echo "cache-hit=${{ steps.github-cache.outputs.cache-hit == 'true' || steps.self-hosted-cache.outputs.cache-hit == 'true' }}" >> $GITHUB_OUTPUT
 
     - name: 'Installing with NPM'
       shell: bash
