@@ -9,9 +9,11 @@ async function main() {
   const latestTags = [`v${major}`, `v${major}.${minor}`];
 
   for (const latestTag of latestTags) {
-    await exec('git', ['push', '--delete', 'origin', latestTag], {
-      failOnStdErr: false,
-    });
+    try {
+      await exec('git', ['push', '--delete', 'origin', latestTag], {
+        failOnStdErr: false,
+      });
+    } catch (error) {}
     await exec('git', ['tag', '--force', latestTag, tag]);
   }
 
