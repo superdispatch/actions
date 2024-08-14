@@ -1,46 +1,55 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __typeError = (msg) => {
-  throw TypeError(msg);
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
 };
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __esm = (fn, res) => function __init() {
-  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+var __restKey = (key) => typeof key === "symbol" ? key : key + "";
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
 };
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+var __reExport = (target, module2, desc) => {
+  if (module2 && typeof module2 === "object" || typeof module2 === "function") {
+    for (let key of __getOwnPropNames(module2))
+      if (!__hasOwnProp.call(target, key) && key !== "default")
+        __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
-  return to;
+  return target;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
-var __privateGet = (obj, member, getter) => (__accessCheck(obj, member, "read from private field"), getter ? getter.call(obj) : member.get(obj));
-var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
-var __privateSet = (obj, member, value, setter) => (__accessCheck(obj, member, "write to private field"), setter ? setter.call(obj, value) : member.set(obj, value), value);
-var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
+var __toModule = (module2) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", module2 && module2.__esModule && "default" in module2 ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
+};
 
 // node_modules/@actions/core/lib/utils.js
 var require_utils = __commonJS({
@@ -81,12 +90,14 @@ var require_command = __commonJS({
   "node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -95,10 +106,13 @@ var require_command = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -119,7 +133,7 @@ var require_command = __commonJS({
     __name(issue, "issue");
     exports2.issue = issue;
     var CMD_STRING = "::";
-    var _Command = class _Command {
+    var Command = class {
       constructor(command, properties, message) {
         if (!command) {
           command = "missing.command";
@@ -151,8 +165,7 @@ var require_command = __commonJS({
         return cmdStr;
       }
     };
-    __name(_Command, "Command");
-    var Command = _Command;
+    __name(Command, "Command");
     function escapeData(s) {
       return utils_1.toCommandValue(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
     }
@@ -164,348 +177,519 @@ var require_command = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/esm-node/rng.js
-function rng() {
-  if (poolPtr > rnds8Pool.length - 16) {
-    import_crypto.default.randomFillSync(rnds8Pool);
-    poolPtr = 0;
-  }
-  return rnds8Pool.slice(poolPtr, poolPtr += 16);
-}
-var import_crypto, rnds8Pool, poolPtr;
-var init_rng = __esm({
-  "node_modules/uuid/dist/esm-node/rng.js"() {
-    import_crypto = __toESM(require("crypto"));
-    rnds8Pool = new Uint8Array(256);
-    poolPtr = rnds8Pool.length;
+// node_modules/uuid/dist/rng.js
+var require_rng = __commonJS({
+  "node_modules/uuid/dist/rng.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = rng;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var rnds8Pool = new Uint8Array(256);
+    var poolPtr = rnds8Pool.length;
+    function rng() {
+      if (poolPtr > rnds8Pool.length - 16) {
+        _crypto.default.randomFillSync(rnds8Pool);
+        poolPtr = 0;
+      }
+      return rnds8Pool.slice(poolPtr, poolPtr += 16);
+    }
     __name(rng, "rng");
   }
 });
 
-// node_modules/uuid/dist/esm-node/regex.js
-var regex_default;
-var init_regex = __esm({
-  "node_modules/uuid/dist/esm-node/regex.js"() {
-    regex_default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+// node_modules/uuid/dist/regex.js
+var require_regex = __commonJS({
+  "node_modules/uuid/dist/regex.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/validate.js
-function validate(uuid) {
-  return typeof uuid === "string" && regex_default.test(uuid);
-}
-var validate_default;
-var init_validate = __esm({
-  "node_modules/uuid/dist/esm-node/validate.js"() {
-    init_regex();
+// node_modules/uuid/dist/validate.js
+var require_validate = __commonJS({
+  "node_modules/uuid/dist/validate.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _regex = _interopRequireDefault(require_regex());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function validate(uuid) {
+      return typeof uuid === "string" && _regex.default.test(uuid);
+    }
     __name(validate, "validate");
-    validate_default = validate;
+    var _default = validate;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/stringify.js
-function stringify(arr, offset = 0) {
-  const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
-  if (!validate_default(uuid)) {
-    throw TypeError("Stringified UUID is invalid");
-  }
-  return uuid;
-}
-var byteToHex, stringify_default;
-var init_stringify = __esm({
-  "node_modules/uuid/dist/esm-node/stringify.js"() {
-    init_validate();
-    byteToHex = [];
+// node_modules/uuid/dist/stringify.js
+var require_stringify = __commonJS({
+  "node_modules/uuid/dist/stringify.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var byteToHex = [];
     for (let i = 0; i < 256; ++i) {
       byteToHex.push((i + 256).toString(16).substr(1));
     }
-    __name(stringify, "stringify");
-    stringify_default = stringify;
-  }
-});
-
-// node_modules/uuid/dist/esm-node/v1.js
-function v1(options, buf, offset) {
-  let i = buf && offset || 0;
-  const b = buf || new Array(16);
-  options = options || {};
-  let node = options.node || _nodeId;
-  let clockseq = options.clockseq !== void 0 ? options.clockseq : _clockseq;
-  if (node == null || clockseq == null) {
-    const seedBytes = options.random || (options.rng || rng)();
-    if (node == null) {
-      node = _nodeId = [seedBytes[0] | 1, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-    if (clockseq == null) {
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 16383;
-    }
-  }
-  let msecs = options.msecs !== void 0 ? options.msecs : Date.now();
-  let nsecs = options.nsecs !== void 0 ? options.nsecs : _lastNSecs + 1;
-  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 1e4;
-  if (dt < 0 && options.clockseq === void 0) {
-    clockseq = clockseq + 1 & 16383;
-  }
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === void 0) {
-    nsecs = 0;
-  }
-  if (nsecs >= 1e4) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-  }
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq;
-  msecs += 122192928e5;
-  const tl = ((msecs & 268435455) * 1e4 + nsecs) % 4294967296;
-  b[i++] = tl >>> 24 & 255;
-  b[i++] = tl >>> 16 & 255;
-  b[i++] = tl >>> 8 & 255;
-  b[i++] = tl & 255;
-  const tmh = msecs / 4294967296 * 1e4 & 268435455;
-  b[i++] = tmh >>> 8 & 255;
-  b[i++] = tmh & 255;
-  b[i++] = tmh >>> 24 & 15 | 16;
-  b[i++] = tmh >>> 16 & 255;
-  b[i++] = clockseq >>> 8 | 128;
-  b[i++] = clockseq & 255;
-  for (let n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-  return buf || stringify_default(b);
-}
-var _nodeId, _clockseq, _lastMSecs, _lastNSecs, v1_default;
-var init_v1 = __esm({
-  "node_modules/uuid/dist/esm-node/v1.js"() {
-    init_rng();
-    init_stringify();
-    _lastMSecs = 0;
-    _lastNSecs = 0;
-    __name(v1, "v1");
-    v1_default = v1;
-  }
-});
-
-// node_modules/uuid/dist/esm-node/parse.js
-function parse(uuid) {
-  if (!validate_default(uuid)) {
-    throw TypeError("Invalid UUID");
-  }
-  let v;
-  const arr = new Uint8Array(16);
-  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-  arr[1] = v >>> 16 & 255;
-  arr[2] = v >>> 8 & 255;
-  arr[3] = v & 255;
-  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-  arr[5] = v & 255;
-  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-  arr[7] = v & 255;
-  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-  arr[9] = v & 255;
-  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 1099511627776 & 255;
-  arr[11] = v / 4294967296 & 255;
-  arr[12] = v >>> 24 & 255;
-  arr[13] = v >>> 16 & 255;
-  arr[14] = v >>> 8 & 255;
-  arr[15] = v & 255;
-  return arr;
-}
-var parse_default;
-var init_parse = __esm({
-  "node_modules/uuid/dist/esm-node/parse.js"() {
-    init_validate();
-    __name(parse, "parse");
-    parse_default = parse;
-  }
-});
-
-// node_modules/uuid/dist/esm-node/v35.js
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str));
-  const bytes = [];
-  for (let i = 0; i < str.length; ++i) {
-    bytes.push(str.charCodeAt(i));
-  }
-  return bytes;
-}
-function v35_default(name, version2, hashfunc) {
-  function generateUUID(value, namespace, buf, offset) {
-    if (typeof value === "string") {
-      value = stringToBytes(value);
-    }
-    if (typeof namespace === "string") {
-      namespace = parse_default(namespace);
-    }
-    if (namespace.length !== 16) {
-      throw TypeError("Namespace must be array-like (16 iterable integer values, 0-255)");
-    }
-    let bytes = new Uint8Array(16 + value.length);
-    bytes.set(namespace);
-    bytes.set(value, namespace.length);
-    bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 15 | version2;
-    bytes[8] = bytes[8] & 63 | 128;
-    if (buf) {
-      offset = offset || 0;
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = bytes[i];
+    function stringify(arr, offset = 0) {
+      const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Stringified UUID is invalid");
       }
-      return buf;
+      return uuid;
     }
-    return stringify_default(bytes);
+    __name(stringify, "stringify");
+    var _default = stringify;
+    exports2.default = _default;
   }
-  __name(generateUUID, "generateUUID");
-  try {
-    generateUUID.name = name;
-  } catch (err) {
+});
+
+// node_modules/uuid/dist/v1.js
+var require_v1 = __commonJS({
+  "node_modules/uuid/dist/v1.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _rng = _interopRequireDefault(require_rng());
+    var _stringify = _interopRequireDefault(require_stringify());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var _nodeId;
+    var _clockseq;
+    var _lastMSecs = 0;
+    var _lastNSecs = 0;
+    function v1(options, buf, offset) {
+      let i = buf && offset || 0;
+      const b = buf || new Array(16);
+      options = options || {};
+      let node = options.node || _nodeId;
+      let clockseq = options.clockseq !== void 0 ? options.clockseq : _clockseq;
+      if (node == null || clockseq == null) {
+        const seedBytes = options.random || (options.rng || _rng.default)();
+        if (node == null) {
+          node = _nodeId = [seedBytes[0] | 1, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
+        }
+        if (clockseq == null) {
+          clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 16383;
+        }
+      }
+      let msecs = options.msecs !== void 0 ? options.msecs : Date.now();
+      let nsecs = options.nsecs !== void 0 ? options.nsecs : _lastNSecs + 1;
+      const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 1e4;
+      if (dt < 0 && options.clockseq === void 0) {
+        clockseq = clockseq + 1 & 16383;
+      }
+      if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === void 0) {
+        nsecs = 0;
+      }
+      if (nsecs >= 1e4) {
+        throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
+      }
+      _lastMSecs = msecs;
+      _lastNSecs = nsecs;
+      _clockseq = clockseq;
+      msecs += 122192928e5;
+      const tl = ((msecs & 268435455) * 1e4 + nsecs) % 4294967296;
+      b[i++] = tl >>> 24 & 255;
+      b[i++] = tl >>> 16 & 255;
+      b[i++] = tl >>> 8 & 255;
+      b[i++] = tl & 255;
+      const tmh = msecs / 4294967296 * 1e4 & 268435455;
+      b[i++] = tmh >>> 8 & 255;
+      b[i++] = tmh & 255;
+      b[i++] = tmh >>> 24 & 15 | 16;
+      b[i++] = tmh >>> 16 & 255;
+      b[i++] = clockseq >>> 8 | 128;
+      b[i++] = clockseq & 255;
+      for (let n = 0; n < 6; ++n) {
+        b[i + n] = node[n];
+      }
+      return buf || (0, _stringify.default)(b);
+    }
+    __name(v1, "v1");
+    var _default = v1;
+    exports2.default = _default;
   }
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL2;
-  return generateUUID;
-}
-var DNS, URL2;
-var init_v35 = __esm({
-  "node_modules/uuid/dist/esm-node/v35.js"() {
-    init_stringify();
-    init_parse();
+});
+
+// node_modules/uuid/dist/parse.js
+var require_parse = __commonJS({
+  "node_modules/uuid/dist/parse.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function parse(uuid) {
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Invalid UUID");
+      }
+      let v;
+      const arr = new Uint8Array(16);
+      arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
+      arr[1] = v >>> 16 & 255;
+      arr[2] = v >>> 8 & 255;
+      arr[3] = v & 255;
+      arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
+      arr[5] = v & 255;
+      arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
+      arr[7] = v & 255;
+      arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
+      arr[9] = v & 255;
+      arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 1099511627776 & 255;
+      arr[11] = v / 4294967296 & 255;
+      arr[12] = v >>> 24 & 255;
+      arr[13] = v >>> 16 & 255;
+      arr[14] = v >>> 8 & 255;
+      arr[15] = v & 255;
+      return arr;
+    }
+    __name(parse, "parse");
+    var _default = parse;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v35.js
+var require_v35 = __commonJS({
+  "node_modules/uuid/dist/v35.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = _default;
+    exports2.URL = exports2.DNS = void 0;
+    var _stringify = _interopRequireDefault(require_stringify());
+    var _parse = _interopRequireDefault(require_parse());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function stringToBytes(str) {
+      str = unescape(encodeURIComponent(str));
+      const bytes = [];
+      for (let i = 0; i < str.length; ++i) {
+        bytes.push(str.charCodeAt(i));
+      }
+      return bytes;
+    }
     __name(stringToBytes, "stringToBytes");
-    DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
-    URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
-    __name(v35_default, "default");
-  }
-});
-
-// node_modules/uuid/dist/esm-node/md5.js
-function md5(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === "string") {
-    bytes = Buffer.from(bytes, "utf8");
-  }
-  return import_crypto2.default.createHash("md5").update(bytes).digest();
-}
-var import_crypto2, md5_default;
-var init_md5 = __esm({
-  "node_modules/uuid/dist/esm-node/md5.js"() {
-    import_crypto2 = __toESM(require("crypto"));
-    __name(md5, "md5");
-    md5_default = md5;
-  }
-});
-
-// node_modules/uuid/dist/esm-node/v3.js
-var v3, v3_default;
-var init_v3 = __esm({
-  "node_modules/uuid/dist/esm-node/v3.js"() {
-    init_v35();
-    init_md5();
-    v3 = v35_default("v3", 48, md5_default);
-    v3_default = v3;
-  }
-});
-
-// node_modules/uuid/dist/esm-node/v4.js
-function v4(options, buf, offset) {
-  options = options || {};
-  const rnds = options.random || (options.rng || rng)();
-  rnds[6] = rnds[6] & 15 | 64;
-  rnds[8] = rnds[8] & 63 | 128;
-  if (buf) {
-    offset = offset || 0;
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
+    var DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+    exports2.DNS = DNS;
+    var URL2 = "6ba7b811-9dad-11d1-80b4-00c04fd430c8";
+    exports2.URL = URL2;
+    function _default(name, version, hashfunc) {
+      function generateUUID(value, namespace, buf, offset) {
+        if (typeof value === "string") {
+          value = stringToBytes(value);
+        }
+        if (typeof namespace === "string") {
+          namespace = (0, _parse.default)(namespace);
+        }
+        if (namespace.length !== 16) {
+          throw TypeError("Namespace must be array-like (16 iterable integer values, 0-255)");
+        }
+        let bytes = new Uint8Array(16 + value.length);
+        bytes.set(namespace);
+        bytes.set(value, namespace.length);
+        bytes = hashfunc(bytes);
+        bytes[6] = bytes[6] & 15 | version;
+        bytes[8] = bytes[8] & 63 | 128;
+        if (buf) {
+          offset = offset || 0;
+          for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = bytes[i];
+          }
+          return buf;
+        }
+        return (0, _stringify.default)(bytes);
+      }
+      __name(generateUUID, "generateUUID");
+      try {
+        generateUUID.name = name;
+      } catch (err) {
+      }
+      generateUUID.DNS = DNS;
+      generateUUID.URL = URL2;
+      return generateUUID;
     }
-    return buf;
+    __name(_default, "_default");
   }
-  return stringify_default(rnds);
-}
-var v4_default;
-var init_v4 = __esm({
-  "node_modules/uuid/dist/esm-node/v4.js"() {
-    init_rng();
-    init_stringify();
+});
+
+// node_modules/uuid/dist/md5.js
+var require_md5 = __commonJS({
+  "node_modules/uuid/dist/md5.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function md5(bytes) {
+      if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+      } else if (typeof bytes === "string") {
+        bytes = Buffer.from(bytes, "utf8");
+      }
+      return _crypto.default.createHash("md5").update(bytes).digest();
+    }
+    __name(md5, "md5");
+    var _default = md5;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v3.js
+var require_v3 = __commonJS({
+  "node_modules/uuid/dist/v3.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _v = _interopRequireDefault(require_v35());
+    var _md = _interopRequireDefault(require_md5());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var v3 = (0, _v.default)("v3", 48, _md.default);
+    var _default = v3;
+    exports2.default = _default;
+  }
+});
+
+// node_modules/uuid/dist/v4.js
+var require_v4 = __commonJS({
+  "node_modules/uuid/dist/v4.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _rng = _interopRequireDefault(require_rng());
+    var _stringify = _interopRequireDefault(require_stringify());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function v4(options, buf, offset) {
+      options = options || {};
+      const rnds = options.random || (options.rng || _rng.default)();
+      rnds[6] = rnds[6] & 15 | 64;
+      rnds[8] = rnds[8] & 63 | 128;
+      if (buf) {
+        offset = offset || 0;
+        for (let i = 0; i < 16; ++i) {
+          buf[offset + i] = rnds[i];
+        }
+        return buf;
+      }
+      return (0, _stringify.default)(rnds);
+    }
     __name(v4, "v4");
-    v4_default = v4;
+    var _default = v4;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/sha1.js
-function sha1(bytes) {
-  if (Array.isArray(bytes)) {
-    bytes = Buffer.from(bytes);
-  } else if (typeof bytes === "string") {
-    bytes = Buffer.from(bytes, "utf8");
-  }
-  return import_crypto3.default.createHash("sha1").update(bytes).digest();
-}
-var import_crypto3, sha1_default;
-var init_sha1 = __esm({
-  "node_modules/uuid/dist/esm-node/sha1.js"() {
-    import_crypto3 = __toESM(require("crypto"));
+// node_modules/uuid/dist/sha1.js
+var require_sha1 = __commonJS({
+  "node_modules/uuid/dist/sha1.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _crypto = _interopRequireDefault(require("crypto"));
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function sha1(bytes) {
+      if (Array.isArray(bytes)) {
+        bytes = Buffer.from(bytes);
+      } else if (typeof bytes === "string") {
+        bytes = Buffer.from(bytes, "utf8");
+      }
+      return _crypto.default.createHash("sha1").update(bytes).digest();
+    }
     __name(sha1, "sha1");
-    sha1_default = sha1;
+    var _default = sha1;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/v5.js
-var v5, v5_default;
-var init_v5 = __esm({
-  "node_modules/uuid/dist/esm-node/v5.js"() {
-    init_v35();
-    init_sha1();
-    v5 = v35_default("v5", 80, sha1_default);
-    v5_default = v5;
+// node_modules/uuid/dist/v5.js
+var require_v5 = __commonJS({
+  "node_modules/uuid/dist/v5.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _v = _interopRequireDefault(require_v35());
+    var _sha = _interopRequireDefault(require_sha1());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    var v5 = (0, _v.default)("v5", 80, _sha.default);
+    var _default = v5;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/nil.js
-var nil_default;
-var init_nil = __esm({
-  "node_modules/uuid/dist/esm-node/nil.js"() {
-    nil_default = "00000000-0000-0000-0000-000000000000";
+// node_modules/uuid/dist/nil.js
+var require_nil = __commonJS({
+  "node_modules/uuid/dist/nil.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _default = "00000000-0000-0000-0000-000000000000";
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/version.js
-function version(uuid) {
-  if (!validate_default(uuid)) {
-    throw TypeError("Invalid UUID");
-  }
-  return parseInt(uuid.substr(14, 1), 16);
-}
-var version_default;
-var init_version = __esm({
-  "node_modules/uuid/dist/esm-node/version.js"() {
-    init_validate();
+// node_modules/uuid/dist/version.js
+var require_version = __commonJS({
+  "node_modules/uuid/dist/version.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    exports2.default = void 0;
+    var _validate = _interopRequireDefault(require_validate());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
+    function version(uuid) {
+      if (!(0, _validate.default)(uuid)) {
+        throw TypeError("Invalid UUID");
+      }
+      return parseInt(uuid.substr(14, 1), 16);
+    }
     __name(version, "version");
-    version_default = version;
+    var _default = version;
+    exports2.default = _default;
   }
 });
 
-// node_modules/uuid/dist/esm-node/index.js
-var esm_node_exports = {};
-__export(esm_node_exports, {
-  NIL: () => nil_default,
-  parse: () => parse_default,
-  stringify: () => stringify_default,
-  v1: () => v1_default,
-  v3: () => v3_default,
-  v4: () => v4_default,
-  v5: () => v5_default,
-  validate: () => validate_default,
-  version: () => version_default
-});
-var init_esm_node = __esm({
-  "node_modules/uuid/dist/esm-node/index.js"() {
-    init_v1();
-    init_v3();
-    init_v4();
-    init_v5();
-    init_nil();
-    init_version();
-    init_validate();
-    init_stringify();
-    init_parse();
+// node_modules/uuid/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/uuid/dist/index.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", {
+      value: true
+    });
+    Object.defineProperty(exports2, "v1", {
+      enumerable: true,
+      get: function() {
+        return _v.default;
+      }
+    });
+    Object.defineProperty(exports2, "v3", {
+      enumerable: true,
+      get: function() {
+        return _v2.default;
+      }
+    });
+    Object.defineProperty(exports2, "v4", {
+      enumerable: true,
+      get: function() {
+        return _v3.default;
+      }
+    });
+    Object.defineProperty(exports2, "v5", {
+      enumerable: true,
+      get: function() {
+        return _v4.default;
+      }
+    });
+    Object.defineProperty(exports2, "NIL", {
+      enumerable: true,
+      get: function() {
+        return _nil.default;
+      }
+    });
+    Object.defineProperty(exports2, "version", {
+      enumerable: true,
+      get: function() {
+        return _version.default;
+      }
+    });
+    Object.defineProperty(exports2, "validate", {
+      enumerable: true,
+      get: function() {
+        return _validate.default;
+      }
+    });
+    Object.defineProperty(exports2, "stringify", {
+      enumerable: true,
+      get: function() {
+        return _stringify.default;
+      }
+    });
+    Object.defineProperty(exports2, "parse", {
+      enumerable: true,
+      get: function() {
+        return _parse.default;
+      }
+    });
+    var _v = _interopRequireDefault(require_v1());
+    var _v2 = _interopRequireDefault(require_v3());
+    var _v3 = _interopRequireDefault(require_v4());
+    var _v4 = _interopRequireDefault(require_v5());
+    var _nil = _interopRequireDefault(require_nil());
+    var _version = _interopRequireDefault(require_version());
+    var _validate = _interopRequireDefault(require_validate());
+    var _stringify = _interopRequireDefault(require_stringify());
+    var _parse = _interopRequireDefault(require_parse());
+    function _interopRequireDefault(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    __name(_interopRequireDefault, "_interopRequireDefault");
   }
 });
 
@@ -514,12 +698,14 @@ var require_file_command = __commonJS({
   "node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -528,10 +714,13 @@ var require_file_command = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -540,7 +729,7 @@ var require_file_command = __commonJS({
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
     var fs = __importStar(require("fs"));
     var os = __importStar(require("os"));
-    var uuid_1 = (init_esm_node(), __toCommonJS(esm_node_exports));
+    var uuid_1 = require_dist();
     var utils_1 = require_utils();
     function issueFileCommand(command, message) {
       const filePath = process.env[`GITHUB_${command}`];
@@ -776,10 +965,7 @@ var require_tunnel = __commonJS({
         connectReq.removeAllListeners();
         socket.removeAllListeners();
         if (res.statusCode !== 200) {
-          debug(
-            "tunneling socket could not be established, statusCode=%d",
-            res.statusCode
-          );
+          debug("tunneling socket could not be established, statusCode=%d", res.statusCode);
           socket.destroy();
           var error = new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
           error.code = "ECONNRESET";
@@ -803,11 +989,7 @@ var require_tunnel = __commonJS({
       __name(onConnect, "onConnect");
       function onError(cause) {
         connectReq.removeAllListeners();
-        debug(
-          "tunneling socket could not be established, cause=%s\n",
-          cause.message,
-          cause.stack
-        );
+        debug("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
         var error = new Error("tunneling socket could not be established, cause=" + cause.message);
         error.code = "ECONNRESET";
         options.request.emit("error", error);
@@ -968,63 +1150,58 @@ var require_symbols = __commonJS({
 var require_errors = __commonJS({
   "node_modules/undici/lib/core/errors.js"(exports2, module2) {
     "use strict";
-    var _UndiciError = class _UndiciError extends Error {
+    var UndiciError = class extends Error {
       constructor(message) {
         super(message);
         this.name = "UndiciError";
         this.code = "UND_ERR";
       }
     };
-    __name(_UndiciError, "UndiciError");
-    var UndiciError = _UndiciError;
-    var _ConnectTimeoutError = class _ConnectTimeoutError extends UndiciError {
+    __name(UndiciError, "UndiciError");
+    var ConnectTimeoutError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _ConnectTimeoutError);
+        Error.captureStackTrace(this, ConnectTimeoutError);
         this.name = "ConnectTimeoutError";
         this.message = message || "Connect Timeout Error";
         this.code = "UND_ERR_CONNECT_TIMEOUT";
       }
     };
-    __name(_ConnectTimeoutError, "ConnectTimeoutError");
-    var ConnectTimeoutError = _ConnectTimeoutError;
-    var _HeadersTimeoutError = class _HeadersTimeoutError extends UndiciError {
+    __name(ConnectTimeoutError, "ConnectTimeoutError");
+    var HeadersTimeoutError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _HeadersTimeoutError);
+        Error.captureStackTrace(this, HeadersTimeoutError);
         this.name = "HeadersTimeoutError";
         this.message = message || "Headers Timeout Error";
         this.code = "UND_ERR_HEADERS_TIMEOUT";
       }
     };
-    __name(_HeadersTimeoutError, "HeadersTimeoutError");
-    var HeadersTimeoutError = _HeadersTimeoutError;
-    var _HeadersOverflowError = class _HeadersOverflowError extends UndiciError {
+    __name(HeadersTimeoutError, "HeadersTimeoutError");
+    var HeadersOverflowError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _HeadersOverflowError);
+        Error.captureStackTrace(this, HeadersOverflowError);
         this.name = "HeadersOverflowError";
         this.message = message || "Headers Overflow Error";
         this.code = "UND_ERR_HEADERS_OVERFLOW";
       }
     };
-    __name(_HeadersOverflowError, "HeadersOverflowError");
-    var HeadersOverflowError = _HeadersOverflowError;
-    var _BodyTimeoutError = class _BodyTimeoutError extends UndiciError {
+    __name(HeadersOverflowError, "HeadersOverflowError");
+    var BodyTimeoutError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _BodyTimeoutError);
+        Error.captureStackTrace(this, BodyTimeoutError);
         this.name = "BodyTimeoutError";
         this.message = message || "Body Timeout Error";
         this.code = "UND_ERR_BODY_TIMEOUT";
       }
     };
-    __name(_BodyTimeoutError, "BodyTimeoutError");
-    var BodyTimeoutError = _BodyTimeoutError;
-    var _ResponseStatusCodeError = class _ResponseStatusCodeError extends UndiciError {
+    __name(BodyTimeoutError, "BodyTimeoutError");
+    var ResponseStatusCodeError = class extends UndiciError {
       constructor(message, statusCode, headers, body) {
         super(message);
-        Error.captureStackTrace(this, _ResponseStatusCodeError);
+        Error.captureStackTrace(this, ResponseStatusCodeError);
         this.name = "ResponseStatusCodeError";
         this.message = message || "Response Status Code Error";
         this.code = "UND_ERR_RESPONSE_STATUS_CODE";
@@ -1034,120 +1211,109 @@ var require_errors = __commonJS({
         this.headers = headers;
       }
     };
-    __name(_ResponseStatusCodeError, "ResponseStatusCodeError");
-    var ResponseStatusCodeError = _ResponseStatusCodeError;
-    var _InvalidArgumentError = class _InvalidArgumentError extends UndiciError {
+    __name(ResponseStatusCodeError, "ResponseStatusCodeError");
+    var InvalidArgumentError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _InvalidArgumentError);
+        Error.captureStackTrace(this, InvalidArgumentError);
         this.name = "InvalidArgumentError";
         this.message = message || "Invalid Argument Error";
         this.code = "UND_ERR_INVALID_ARG";
       }
     };
-    __name(_InvalidArgumentError, "InvalidArgumentError");
-    var InvalidArgumentError = _InvalidArgumentError;
-    var _InvalidReturnValueError = class _InvalidReturnValueError extends UndiciError {
+    __name(InvalidArgumentError, "InvalidArgumentError");
+    var InvalidReturnValueError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _InvalidReturnValueError);
+        Error.captureStackTrace(this, InvalidReturnValueError);
         this.name = "InvalidReturnValueError";
         this.message = message || "Invalid Return Value Error";
         this.code = "UND_ERR_INVALID_RETURN_VALUE";
       }
     };
-    __name(_InvalidReturnValueError, "InvalidReturnValueError");
-    var InvalidReturnValueError = _InvalidReturnValueError;
-    var _RequestAbortedError = class _RequestAbortedError extends UndiciError {
+    __name(InvalidReturnValueError, "InvalidReturnValueError");
+    var RequestAbortedError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _RequestAbortedError);
+        Error.captureStackTrace(this, RequestAbortedError);
         this.name = "AbortError";
         this.message = message || "Request aborted";
         this.code = "UND_ERR_ABORTED";
       }
     };
-    __name(_RequestAbortedError, "RequestAbortedError");
-    var RequestAbortedError = _RequestAbortedError;
-    var _InformationalError = class _InformationalError extends UndiciError {
+    __name(RequestAbortedError, "RequestAbortedError");
+    var InformationalError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _InformationalError);
+        Error.captureStackTrace(this, InformationalError);
         this.name = "InformationalError";
         this.message = message || "Request information";
         this.code = "UND_ERR_INFO";
       }
     };
-    __name(_InformationalError, "InformationalError");
-    var InformationalError = _InformationalError;
-    var _RequestContentLengthMismatchError = class _RequestContentLengthMismatchError extends UndiciError {
+    __name(InformationalError, "InformationalError");
+    var RequestContentLengthMismatchError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _RequestContentLengthMismatchError);
+        Error.captureStackTrace(this, RequestContentLengthMismatchError);
         this.name = "RequestContentLengthMismatchError";
         this.message = message || "Request body length does not match content-length header";
         this.code = "UND_ERR_REQ_CONTENT_LENGTH_MISMATCH";
       }
     };
-    __name(_RequestContentLengthMismatchError, "RequestContentLengthMismatchError");
-    var RequestContentLengthMismatchError = _RequestContentLengthMismatchError;
-    var _ResponseContentLengthMismatchError = class _ResponseContentLengthMismatchError extends UndiciError {
+    __name(RequestContentLengthMismatchError, "RequestContentLengthMismatchError");
+    var ResponseContentLengthMismatchError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _ResponseContentLengthMismatchError);
+        Error.captureStackTrace(this, ResponseContentLengthMismatchError);
         this.name = "ResponseContentLengthMismatchError";
         this.message = message || "Response body length does not match content-length header";
         this.code = "UND_ERR_RES_CONTENT_LENGTH_MISMATCH";
       }
     };
-    __name(_ResponseContentLengthMismatchError, "ResponseContentLengthMismatchError");
-    var ResponseContentLengthMismatchError = _ResponseContentLengthMismatchError;
-    var _ClientDestroyedError = class _ClientDestroyedError extends UndiciError {
+    __name(ResponseContentLengthMismatchError, "ResponseContentLengthMismatchError");
+    var ClientDestroyedError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _ClientDestroyedError);
+        Error.captureStackTrace(this, ClientDestroyedError);
         this.name = "ClientDestroyedError";
         this.message = message || "The client is destroyed";
         this.code = "UND_ERR_DESTROYED";
       }
     };
-    __name(_ClientDestroyedError, "ClientDestroyedError");
-    var ClientDestroyedError = _ClientDestroyedError;
-    var _ClientClosedError = class _ClientClosedError extends UndiciError {
+    __name(ClientDestroyedError, "ClientDestroyedError");
+    var ClientClosedError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _ClientClosedError);
+        Error.captureStackTrace(this, ClientClosedError);
         this.name = "ClientClosedError";
         this.message = message || "The client is closed";
         this.code = "UND_ERR_CLOSED";
       }
     };
-    __name(_ClientClosedError, "ClientClosedError");
-    var ClientClosedError = _ClientClosedError;
-    var _SocketError = class _SocketError extends UndiciError {
+    __name(ClientClosedError, "ClientClosedError");
+    var SocketError = class extends UndiciError {
       constructor(message, socket) {
         super(message);
-        Error.captureStackTrace(this, _SocketError);
+        Error.captureStackTrace(this, SocketError);
         this.name = "SocketError";
         this.message = message || "Socket error";
         this.code = "UND_ERR_SOCKET";
         this.socket = socket;
       }
     };
-    __name(_SocketError, "SocketError");
-    var SocketError = _SocketError;
-    var _NotSupportedError = class _NotSupportedError extends UndiciError {
+    __name(SocketError, "SocketError");
+    var NotSupportedError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _NotSupportedError);
+        Error.captureStackTrace(this, NotSupportedError);
         this.name = "NotSupportedError";
         this.message = message || "Not supported error";
         this.code = "UND_ERR_NOT_SUPPORTED";
       }
     };
-    __name(_NotSupportedError, "NotSupportedError");
-    var NotSupportedError = _NotSupportedError;
-    var _BalancedPoolMissingUpstreamError = class _BalancedPoolMissingUpstreamError extends UndiciError {
+    __name(NotSupportedError, "NotSupportedError");
+    var BalancedPoolMissingUpstreamError = class extends UndiciError {
       constructor(message) {
         super(message);
         Error.captureStackTrace(this, NotSupportedError);
@@ -1156,34 +1322,31 @@ var require_errors = __commonJS({
         this.code = "UND_ERR_BPL_MISSING_UPSTREAM";
       }
     };
-    __name(_BalancedPoolMissingUpstreamError, "BalancedPoolMissingUpstreamError");
-    var BalancedPoolMissingUpstreamError = _BalancedPoolMissingUpstreamError;
-    var _HTTPParserError = class _HTTPParserError extends Error {
+    __name(BalancedPoolMissingUpstreamError, "BalancedPoolMissingUpstreamError");
+    var HTTPParserError = class extends Error {
       constructor(message, code, data) {
         super(message);
-        Error.captureStackTrace(this, _HTTPParserError);
+        Error.captureStackTrace(this, HTTPParserError);
         this.name = "HTTPParserError";
         this.code = code ? `HPE_${code}` : void 0;
         this.data = data ? data.toString() : void 0;
       }
     };
-    __name(_HTTPParserError, "HTTPParserError");
-    var HTTPParserError = _HTTPParserError;
-    var _ResponseExceededMaxSizeError = class _ResponseExceededMaxSizeError extends UndiciError {
+    __name(HTTPParserError, "HTTPParserError");
+    var ResponseExceededMaxSizeError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _ResponseExceededMaxSizeError);
+        Error.captureStackTrace(this, ResponseExceededMaxSizeError);
         this.name = "ResponseExceededMaxSizeError";
         this.message = message || "Response content exceeded max size";
         this.code = "UND_ERR_RES_EXCEEDED_MAX_SIZE";
       }
     };
-    __name(_ResponseExceededMaxSizeError, "ResponseExceededMaxSizeError");
-    var ResponseExceededMaxSizeError = _ResponseExceededMaxSizeError;
-    var _RequestRetryError = class _RequestRetryError extends UndiciError {
+    __name(ResponseExceededMaxSizeError, "ResponseExceededMaxSizeError");
+    var RequestRetryError = class extends UndiciError {
       constructor(message, code, { headers, data }) {
         super(message);
-        Error.captureStackTrace(this, _RequestRetryError);
+        Error.captureStackTrace(this, RequestRetryError);
         this.name = "RequestRetryError";
         this.message = message || "Request retry error";
         this.code = "UND_ERR_REQ_RETRY";
@@ -1192,8 +1355,7 @@ var require_errors = __commonJS({
         this.headers = headers;
       }
     };
-    __name(_RequestRetryError, "RequestRetryError");
-    var RequestRetryError = _RequestRetryError;
+    __name(RequestRetryError, "RequestRetryError");
     module2.exports = {
       HTTPParserError,
       UndiciError,
@@ -1231,7 +1393,7 @@ var require_util = __commonJS({
     var { InvalidArgumentError } = require_errors();
     var { Blob: Blob2 } = require("buffer");
     var nodeUtil = require("util");
-    var { stringify: stringify2 } = require("querystring");
+    var { stringify } = require("querystring");
     var [nodeMajor, nodeMinor] = process.versions.node.split(".").map((v) => Number(v));
     function nop() {
     }
@@ -1248,7 +1410,7 @@ var require_util = __commonJS({
       if (url.includes("?") || url.includes("#")) {
         throw new Error('Query params cannot be passed when url already contains "?" or "#".');
       }
-      const stringified = stringify2(queryParams);
+      const stringified = stringify(queryParams);
       if (stringified) {
         url += "?" + stringified;
       }
@@ -1314,7 +1476,8 @@ var require_util = __commonJS({
         return host.substring(1, idx2);
       }
       const idx = host.indexOf(":");
-      if (idx === -1) return host;
+      if (idx === -1)
+        return host;
       return host.substring(0, idx);
     }
     __name(getHostname, "getHostname");
@@ -1391,7 +1554,8 @@ var require_util = __commonJS({
     }
     __name(parseKeepAliveTimeout, "parseKeepAliveTimeout");
     function parseHeaders(headers, obj = {}) {
-      if (!Array.isArray(headers)) return headers;
+      if (!Array.isArray(headers))
+        return headers;
       for (let i = 0; i < headers.length; i += 2) {
         const key = headers[i].toString().toLowerCase();
         let val = obj[key];
@@ -1476,15 +1640,11 @@ var require_util = __commonJS({
     }
     __name(isDisturbed, "isDisturbed");
     function isErrored(body) {
-      return !!(body && (stream.isErrored ? stream.isErrored(body) : /state: 'errored'/.test(
-        nodeUtil.inspect(body)
-      )));
+      return !!(body && (stream.isErrored ? stream.isErrored(body) : /state: 'errored'/.test(nodeUtil.inspect(body))));
     }
     __name(isErrored, "isErrored");
     function isReadable(body) {
-      return !!(body && (stream.isReadable ? stream.isReadable(body) : /state: 'readable'/.test(
-        nodeUtil.inspect(body)
-      )));
+      return !!(body && (stream.isReadable ? stream.isReadable(body) : /state: 'readable'/.test(nodeUtil.inspect(body))));
     }
     __name(isReadable, "isReadable");
     function getSocketInfo(socket) {
@@ -1515,29 +1675,26 @@ var require_util = __commonJS({
         return ReadableStream.from(convertIterableToBuffer(iterable));
       }
       let iterator;
-      return new ReadableStream(
-        {
-          async start() {
-            iterator = iterable[Symbol.asyncIterator]();
-          },
-          async pull(controller) {
-            const { done, value } = await iterator.next();
-            if (done) {
-              queueMicrotask(() => {
-                controller.close();
-              });
-            } else {
-              const buf = Buffer.isBuffer(value) ? value : Buffer.from(value);
-              controller.enqueue(new Uint8Array(buf));
-            }
-            return controller.desiredSize > 0;
-          },
-          async cancel(reason) {
-            await iterator.return();
-          }
+      return new ReadableStream({
+        async start() {
+          iterator = iterable[Symbol.asyncIterator]();
         },
-        0
-      );
+        async pull(controller) {
+          const { done, value } = await iterator.next();
+          if (done) {
+            queueMicrotask(() => {
+              controller.close();
+            });
+          } else {
+            const buf = Buffer.isBuffer(value) ? value : Buffer.from(value);
+            controller.enqueue(new Uint8Array(buf));
+          }
+          return controller.desiredSize > 0;
+        },
+        async cancel(reason) {
+          await iterator.return();
+        }
+      }, 0);
     }
     __name(ReadableStreamFrom, "ReadableStreamFrom");
     function isFormDataLike(object) {
@@ -1579,7 +1736,8 @@ var require_util = __commonJS({
     }
     __name(toUSVString, "toUSVString");
     function parseRangeHeader(range) {
-      if (range == null || range === "") return { start: 0, end: null, size: null };
+      if (range == null || range === "")
+        return { start: 0, end: null, size: null };
       const m = range ? range.match(/^bytes (\d+)-(\d+)\/(\d+)?$/) : null;
       return m ? {
         start: parseInt(m[1]),
@@ -1588,7 +1746,7 @@ var require_util = __commonJS({
       } : null;
     }
     __name(parseRangeHeader, "parseRangeHeader");
-    var kEnumerableProperty = /* @__PURE__ */ Object.create(null);
+    var kEnumerableProperty = Object.create(null);
     kEnumerableProperty.enumerable = true;
     module2.exports = {
       kEnumerableProperty,
@@ -1677,7 +1835,7 @@ var require_timers = __commonJS({
       }
     }
     __name(refreshTimeout, "refreshTimeout");
-    var _Timeout = class _Timeout {
+    var Timeout = class {
       constructor(callback, delay, opaque) {
         this.callback = callback;
         this.delay = delay;
@@ -1698,8 +1856,7 @@ var require_timers = __commonJS({
         this.state = -1;
       }
     };
-    __name(_Timeout, "Timeout");
-    var Timeout = _Timeout;
+    __name(Timeout, "Timeout");
     module2.exports = {
       setTimeout(callback, delay, opaque) {
         return delay < 1e3 ? setTimeout(callback, delay, opaque) : new Timeout(callback, delay, opaque);
@@ -1796,12 +1953,7 @@ var require_sbmh = __commonJS({
           if (bytesToCutOff > 0) {
             this.emit("info", false, this._lookbehind, 0, bytesToCutOff);
           }
-          this._lookbehind.copy(
-            this._lookbehind,
-            0,
-            bytesToCutOff,
-            this._lookbehind_size - bytesToCutOff
-          );
+          this._lookbehind.copy(this._lookbehind, 0, bytesToCutOff, this._lookbehind_size - bytesToCutOff);
           this._lookbehind_size -= bytesToCutOff;
           data.copy(this._lookbehind, this._lookbehind_size);
           this._lookbehind_size += len;
@@ -1822,10 +1974,7 @@ var require_sbmh = __commonJS({
       } else {
         pos = len - needleLength;
       }
-      while (pos < len && (data[pos] !== needle[0] || Buffer.compare(
-        data.subarray(pos, pos + len - pos),
-        needle.subarray(0, len - pos)
-      ) !== 0)) {
+      while (pos < len && (data[pos] !== needle[0] || Buffer.compare(data.subarray(pos, pos + len - pos), needle.subarray(0, len - pos)) !== 0)) {
         ++pos;
       }
       if (pos < len) {
@@ -2233,7 +2382,7 @@ var require_decodeText = __commonJS({
   "node_modules/@fastify/busboy/lib/utils/decodeText.js"(exports2, module2) {
     "use strict";
     var utf8Decoder = new TextDecoder("utf-8");
-    var textDecoders = /* @__PURE__ */ new Map([
+    var textDecoders = new Map([
       ["utf-8", utf8Decoder],
       ["utf8", utf8Decoder]
     ]);
@@ -2275,7 +2424,7 @@ var require_decodeText = __commonJS({
     }
     __name(getDecoder, "getDecoder");
     var decoders = {
-      utf8: /* @__PURE__ */ __name((data, sourceEncoding) => {
+      utf8: (data, sourceEncoding) => {
         if (data.length === 0) {
           return "";
         }
@@ -2283,8 +2432,8 @@ var require_decodeText = __commonJS({
           data = Buffer.from(data, sourceEncoding);
         }
         return data.utf8Slice(0, data.length);
-      }, "utf8"),
-      latin1: /* @__PURE__ */ __name((data, sourceEncoding) => {
+      },
+      latin1: (data, sourceEncoding) => {
         if (data.length === 0) {
           return "";
         }
@@ -2292,8 +2441,8 @@ var require_decodeText = __commonJS({
           return data;
         }
         return data.latin1Slice(0, data.length);
-      }, "latin1"),
-      utf16le: /* @__PURE__ */ __name((data, sourceEncoding) => {
+      },
+      utf16le: (data, sourceEncoding) => {
         if (data.length === 0) {
           return "";
         }
@@ -2301,8 +2450,8 @@ var require_decodeText = __commonJS({
           data = Buffer.from(data, sourceEncoding);
         }
         return data.ucs2Slice(0, data.length);
-      }, "utf16le"),
-      base64: /* @__PURE__ */ __name((data, sourceEncoding) => {
+      },
+      base64: (data, sourceEncoding) => {
         if (data.length === 0) {
           return "";
         }
@@ -2310,8 +2459,8 @@ var require_decodeText = __commonJS({
           data = Buffer.from(data, sourceEncoding);
         }
         return data.base64Slice(0, data.length);
-      }, "base64"),
-      other: /* @__PURE__ */ __name((data, sourceEncoding) => {
+      },
+      other: (data, sourceEncoding) => {
         if (data.length === 0) {
           return "";
         }
@@ -2325,7 +2474,7 @@ var require_decodeText = __commonJS({
           }
         }
         return typeof data === "string" ? data : data.toString();
-      }, "other")
+      }
     };
     function decodeText(text, sourceEncoding, destEncoding) {
       if (text) {
@@ -2379,8 +2528,8 @@ var require_parseParams = __commonJS({
       "%19": "",
       "%1a": "",
       "%1A": "",
-      "%1b": "\x1B",
-      "%1B": "\x1B",
+      "%1b": "",
+      "%1B": "",
       "%1c": "",
       "%1C": "",
       "%1d": "",
@@ -2891,11 +3040,7 @@ var require_parseParams = __commonJS({
             state = STATE_KEY;
             if (charset) {
               if (tmp.length) {
-                tmp = decodeText(
-                  tmp.replace(RE_ENCODED, encodedReplacer),
-                  "binary",
-                  charset
-                );
+                tmp = decodeText(tmp.replace(RE_ENCODED, encodedReplacer), "binary", charset);
               }
               charset = "";
             } else if (tmp.length) {
@@ -2916,11 +3061,7 @@ var require_parseParams = __commonJS({
         tmp += char;
       }
       if (charset && tmp.length) {
-        tmp = decodeText(
-          tmp.replace(RE_ENCODED, encodedReplacer),
-          "binary",
-          charset
-        );
+        tmp = decodeText(tmp.replace(RE_ENCODED, encodedReplacer), "binary", charset);
       } else if (tmp) {
         tmp = decodeText(tmp, "binary", "utf8");
       }
@@ -3525,13 +3666,7 @@ var require_urlencoded = __commonJS({
             this._keyTrunc = false;
             this.decoder.reset();
             if (key.length) {
-              this.boy.emit(
-                "field",
-                decodeText(key, "binary", this.charset),
-                "",
-                keyTrunc,
-                false
-              );
+              this.boy.emit("field", decodeText(key, "binary", this.charset), "", keyTrunc, false);
             }
             p = idxamp + 1;
             if (this._fields === this.fieldsLimit) {
@@ -3574,13 +3709,7 @@ var require_urlencoded = __commonJS({
             if (idxamp > p) {
               this._val += this.decoder.write(data.toString("binary", p, idxamp));
             }
-            this.boy.emit(
-              "field",
-              decodeText(this._key, "binary", this.charset),
-              decodeText(this._val, "binary", this.charset),
-              this._keyTrunc,
-              this._valTrunc
-            );
+            this.boy.emit("field", decodeText(this._key, "binary", this.charset), decodeText(this._val, "binary", this.charset), this._keyTrunc, this._valTrunc);
             this._state = "key";
             this._hitLimit = false;
             this._checkingBytes = true;
@@ -3616,21 +3745,9 @@ var require_urlencoded = __commonJS({
         return;
       }
       if (this._state === "key" && this._key.length > 0) {
-        this.boy.emit(
-          "field",
-          decodeText(this._key, "binary", this.charset),
-          "",
-          this._keyTrunc,
-          false
-        );
+        this.boy.emit("field", decodeText(this._key, "binary", this.charset), "", this._keyTrunc, false);
       } else if (this._state === "val") {
-        this.boy.emit(
-          "field",
-          decodeText(this._key, "binary", this.charset),
-          decodeText(this._val, "binary", this.charset),
-          this._keyTrunc,
-          this._valTrunc
-        );
+        this.boy.emit("field", decodeText(this._key, "binary", this.charset), decodeText(this._val, "binary", this.charset), this._keyTrunc, this._valTrunc);
       }
       this.boy._done = true;
       this.boy.emit("finish");
@@ -3662,14 +3779,14 @@ var require_main = __commonJS({
       if (typeof opts.headers["content-type"] !== "string") {
         throw new TypeError("Missing Content-Type-header.");
       }
-      const {
-        headers,
-        ...streamOptions
-      } = opts;
-      this.opts = {
-        autoDestroy: false,
-        ...streamOptions
-      };
+      const _a = opts, {
+        headers
+      } = _a, streamOptions = __objRest(_a, [
+        "headers"
+      ]);
+      this.opts = __spreadValues({
+        autoDestroy: false
+      }, streamOptions);
       WritableStream.call(this, this.opts);
       this._done = false;
       this._parser = this.getParserByHeaders(headers);
@@ -3678,10 +3795,9 @@ var require_main = __commonJS({
     __name(Busboy, "Busboy");
     inherits(Busboy, WritableStream);
     Busboy.prototype.emit = function(ev) {
-      var _a;
       if (ev === "finish") {
         if (!this._done) {
-          (_a = this._parser) == null ? void 0 : _a.end();
+          this._parser?.end();
           return;
         } else if (this._finished) {
           return;
@@ -3843,10 +3959,6 @@ var require_constants = __commonJS({
       "content-language",
       "content-location",
       "content-type",
-      // See https://github.com/nodejs/undici/issues/2021
-      // 'Content-Length' is a forbidden header name, which is typically
-      // removed in the Headers implementation. However, undici doesn't
-      // filter out headers, so we add it here.
       "content-length"
     ];
     var requestDuplex = [
@@ -3877,9 +3989,7 @@ var require_constants = __commonJS({
       }
     })();
     var channel;
-    var structuredClone = globalThis.structuredClone ?? // https://github.com/nodejs/node/blob/b27ae24dcc4251bad726d9d84baf678d1f707fed/lib/internal/structured_clone.js
-    // structuredClone was added in v17.0.0, but fetch supports v16.8
-    /* @__PURE__ */ __name(function structuredClone2(value, options = void 0) {
+    var structuredClone = globalThis.structuredClone ?? /* @__PURE__ */ __name(function structuredClone2(value, options = void 0) {
       if (arguments.length === 0) {
         throw new TypeError("missing argument");
       }
@@ -3888,7 +3998,7 @@ var require_constants = __commonJS({
       }
       channel.port1.unref();
       channel.port2.unref();
-      channel.port1.postMessage(value, options == null ? void 0 : options.transfer);
+      channel.port1.postMessage(value, options?.transfer);
       return receiveMessageOnPort(channel.port2).message;
     }, "structuredClone");
     module2.exports = {
@@ -3967,9 +4077,9 @@ var require_util2 = __commonJS({
     var { isBlobLike, toUSVString, ReadableStreamFrom } = require_util();
     var assert = require("assert");
     var { isUint8Array } = require("util/types");
-    var crypto4;
+    var crypto;
     try {
-      crypto4 = require("crypto");
+      crypto = require("crypto");
     } catch {
     }
     function responseURL(response) {
@@ -4005,16 +4115,13 @@ var require_util2 = __commonJS({
     }
     __name(requestBadPort, "requestBadPort");
     function isErrorLike(object) {
-      var _a, _b;
-      return object instanceof Error || (((_a = object == null ? void 0 : object.constructor) == null ? void 0 : _a.name) === "Error" || ((_b = object == null ? void 0 : object.constructor) == null ? void 0 : _b.name) === "DOMException");
+      return object instanceof Error || (object?.constructor?.name === "Error" || object?.constructor?.name === "DOMException");
     }
     __name(isErrorLike, "isErrorLike");
     function isValidReasonPhrase(statusText) {
       for (let i = 0; i < statusText.length; ++i) {
         const c = statusText.charCodeAt(i);
-        if (!(c === 9 || // HTAB
-        c >= 32 && c <= 126 || // SP / VCHAR
-        c >= 128 && c <= 255)) {
+        if (!(c === 9 || c >= 32 && c <= 126 || c >= 128 && c <= 255)) {
           return false;
         }
       }
@@ -4239,11 +4346,14 @@ var require_util2 = __commonJS({
       if (url.href === "about:blank" || url.href === "about:srcdoc") {
         return true;
       }
-      if (url.protocol === "data:") return true;
-      if (url.protocol === "file:") return true;
+      if (url.protocol === "data:")
+        return true;
+      if (url.protocol === "file:")
+        return true;
       return isOriginPotentiallyTrustworthy(url.origin);
       function isOriginPotentiallyTrustworthy(origin) {
-        if (origin == null || origin === "null") return false;
+        if (origin == null || origin === "null")
+          return false;
         const originAsURL = new URL(origin);
         if (originAsURL.protocol === "https:" || originAsURL.protocol === "wss:") {
           return true;
@@ -4257,7 +4367,7 @@ var require_util2 = __commonJS({
     }
     __name(isURLPotentiallyTrustworthy, "isURLPotentiallyTrustworthy");
     function bytesMatch(bytes, metadataList) {
-      if (crypto4 === void 0) {
+      if (crypto === void 0) {
         return true;
       }
       const parsedMetadata = parseMetadata(metadataList);
@@ -4276,14 +4386,14 @@ var require_util2 = __commonJS({
         if (expectedValue.endsWith("==")) {
           expectedValue = expectedValue.slice(0, -2);
         }
-        let actualValue = crypto4.createHash(algorithm).update(bytes).digest("base64");
+        let actualValue = crypto.createHash(algorithm).update(bytes).digest("base64");
         if (actualValue.endsWith("==")) {
           actualValue = actualValue.slice(0, -2);
         }
         if (actualValue === expectedValue) {
           return true;
         }
-        let actualBase64URL = crypto4.createHash(algorithm).update(bytes).digest("base64url");
+        let actualBase64URL = crypto.createHash(algorithm).update(bytes).digest("base64url");
         if (actualBase64URL.endsWith("==")) {
           actualBase64URL = actualBase64URL.slice(0, -2);
         }
@@ -4298,7 +4408,7 @@ var require_util2 = __commonJS({
     function parseMetadata(metadata) {
       const result = [];
       let empty = true;
-      const supportedHashes = crypto4.getHashes();
+      const supportedHashes = crypto.getHashes();
       for (const token2 of metadata.split(" ")) {
         empty = false;
         const parsedToken = parseHashWithOptions.exec(token2);
@@ -4385,9 +4495,7 @@ var require_util2 = __commonJS({
       const i = {
         next() {
           if (Object.getPrototypeOf(this) !== i) {
-            throw new TypeError(
-              `'next' called on an object that does not implement interface ${name} Iterator.`
-            );
+            throw new TypeError(`'next' called on an object that does not implement interface ${name} Iterator.`);
           }
           const { index, kind: kind2, target } = object;
           const values = target();
@@ -4399,8 +4507,6 @@ var require_util2 = __commonJS({
           object.index = index + 1;
           return iteratorResult(pair, kind2);
         },
-        // The class string of an iterator prototype object for a given interface is the
-        // result of concatenating the identifier of the interface and the string " Iterator".
         [Symbol.toStringTag]: `${name} Iterator`
       };
       Object.setPrototypeOf(i, esIteratorPrototype);
@@ -4605,18 +4711,17 @@ var require_webidl = __commonJS({
       });
     };
     webidl.brandCheck = function(V, I, opts = void 0) {
-      if ((opts == null ? void 0 : opts.strict) !== false && !(V instanceof I)) {
+      if (opts?.strict !== false && !(V instanceof I)) {
         throw new TypeError("Illegal invocation");
       } else {
-        return (V == null ? void 0 : V[Symbol.toStringTag]) === I.prototype[Symbol.toStringTag];
+        return V?.[Symbol.toStringTag] === I.prototype[Symbol.toStringTag];
       }
     };
     webidl.argumentLengthCheck = function({ length }, min, ctx) {
       if (length < min) {
-        throw webidl.errors.exception({
-          message: `${min} argument${min !== 1 ? "s" : ""} required, but${length ? " only" : ""} ${length} found.`,
-          ...ctx
-        });
+        throw webidl.errors.exception(__spreadValues({
+          message: `${min} argument${min !== 1 ? "s" : ""} required, but${length ? " only" : ""} ${length} found.`
+        }, ctx));
       }
     };
     webidl.illegalConstructor = function() {
@@ -4713,14 +4818,13 @@ var require_webidl = __commonJS({
     };
     webidl.sequenceConverter = function(converter) {
       return (V) => {
-        var _a;
         if (webidl.util.Type(V) !== "Object") {
           throw webidl.errors.exception({
             header: "Sequence",
             message: `Value of type ${webidl.util.Type(V)} is not an Object.`
           });
         }
-        const method = (_a = V == null ? void 0 : V[Symbol.iterator]) == null ? void 0 : _a.call(V);
+        const method = V?.[Symbol.iterator]?.();
         const seq = [];
         if (method === void 0 || typeof method.next !== "function") {
           throw webidl.errors.exception({
@@ -4759,7 +4863,7 @@ var require_webidl = __commonJS({
         const keys = Reflect.ownKeys(O);
         for (const key of keys) {
           const desc = Reflect.getOwnPropertyDescriptor(O, key);
-          if (desc == null ? void 0 : desc.enumerable) {
+          if (desc?.enumerable) {
             const typedKey = keyConverter(key);
             const typedValue = valueConverter(O[key]);
             result[typedKey] = typedValue;
@@ -4841,9 +4945,7 @@ var require_webidl = __commonJS({
       const x = webidl.converters.DOMString(V);
       for (let index = 0; index < x.length; index++) {
         if (x.charCodeAt(index) > 255) {
-          throw new TypeError(
-            `Cannot convert argument to a ByteString because the character at index ${index} has a value of ${x.charCodeAt(index)} which is greater than 255.`
-          );
+          throw new TypeError(`Cannot convert argument to a ByteString because the character at index ${index} has a value of ${x.charCodeAt(index)} which is greater than 255.`);
         }
       }
       return x;
@@ -4931,16 +5033,9 @@ var require_webidl = __commonJS({
       }
       throw new TypeError(`Could not convert ${V} to a BufferSource.`);
     };
-    webidl.converters["sequence<ByteString>"] = webidl.sequenceConverter(
-      webidl.converters.ByteString
-    );
-    webidl.converters["sequence<sequence<ByteString>>"] = webidl.sequenceConverter(
-      webidl.converters["sequence<ByteString>"]
-    );
-    webidl.converters["record<ByteString, ByteString>"] = webidl.recordConverter(
-      webidl.converters.ByteString,
-      webidl.converters.ByteString
-    );
+    webidl.converters["sequence<ByteString>"] = webidl.sequenceConverter(webidl.converters.ByteString);
+    webidl.converters["sequence<sequence<ByteString>>"] = webidl.sequenceConverter(webidl.converters["sequence<ByteString>"]);
+    webidl.converters["record<ByteString, ByteString>"] = webidl.recordConverter(webidl.converters.ByteString, webidl.converters.ByteString);
     module2.exports = {
       webidl
     };
@@ -4962,11 +5057,7 @@ var require_dataURL = __commonJS({
       let input = URLSerializer(dataURL, true);
       input = input.slice(5);
       const position = { position: 0 };
-      let mimeType = collectASequenceOfCodePointsFast(
-        ",",
-        input,
-        position
-      );
+      let mimeType = collectASequenceOfCodePointsFast(",", input, position);
       const mimeTypeLength = mimeType.length;
       mimeType = removeASCIIWhitespace(mimeType, true, true);
       if (position.position >= input.length) {
@@ -5050,11 +5141,7 @@ var require_dataURL = __commonJS({
     function parseMIMEType(input) {
       input = removeHTTPWhitespace(input, true, true);
       const position = { position: 0 };
-      const type = collectASequenceOfCodePointsFast(
-        "/",
-        input,
-        position
-      );
+      const type = collectASequenceOfCodePointsFast("/", input, position);
       if (type.length === 0 || !HTTP_TOKEN_CODEPOINTS.test(type)) {
         return "failure";
       }
@@ -5062,11 +5149,7 @@ var require_dataURL = __commonJS({
         return "failure";
       }
       position.position++;
-      let subtype = collectASequenceOfCodePointsFast(
-        ";",
-        input,
-        position
-      );
+      let subtype = collectASequenceOfCodePointsFast(";", input, position);
       subtype = removeHTTPWhitespace(subtype, false, true);
       if (subtype.length === 0 || !HTTP_TOKEN_CODEPOINTS.test(subtype)) {
         return "failure";
@@ -5076,24 +5159,13 @@ var require_dataURL = __commonJS({
       const mimeType = {
         type: typeLowercase,
         subtype: subtypeLowercase,
-        /** @type {Map<string, string>} */
-        parameters: /* @__PURE__ */ new Map(),
-        // https://mimesniff.spec.whatwg.org/#mime-type-essence
+        parameters: new Map(),
         essence: `${typeLowercase}/${subtypeLowercase}`
       };
       while (position.position < input.length) {
         position.position++;
-        collectASequenceOfCodePoints(
-          // https://fetch.spec.whatwg.org/#http-whitespace
-          (char) => HTTP_WHITESPACE_REGEX.test(char),
-          input,
-          position
-        );
-        let parameterName = collectASequenceOfCodePoints(
-          (char) => char !== ";" && char !== "=",
-          input,
-          position
-        );
+        collectASequenceOfCodePoints((char) => HTTP_WHITESPACE_REGEX.test(char), input, position);
+        let parameterName = collectASequenceOfCodePoints((char) => char !== ";" && char !== "=", input, position);
         parameterName = parameterName.toLowerCase();
         if (position.position < input.length) {
           if (input[position.position] === ";") {
@@ -5107,17 +5179,9 @@ var require_dataURL = __commonJS({
         let parameterValue = null;
         if (input[position.position] === '"') {
           parameterValue = collectAnHTTPQuotedString(input, position, true);
-          collectASequenceOfCodePointsFast(
-            ";",
-            input,
-            position
-          );
+          collectASequenceOfCodePointsFast(";", input, position);
         } else {
-          parameterValue = collectASequenceOfCodePointsFast(
-            ";",
-            input,
-            position
-          );
+          parameterValue = collectASequenceOfCodePointsFast(";", input, position);
           parameterValue = removeHTTPWhitespace(parameterValue, false, true);
           if (parameterValue.length === 0) {
             continue;
@@ -5155,11 +5219,7 @@ var require_dataURL = __commonJS({
       assert(input[position.position] === '"');
       position.position++;
       while (true) {
-        value += collectASequenceOfCodePoints(
-          (char) => char !== '"' && char !== "\\",
-          input,
-          position
-        );
+        value += collectASequenceOfCodePoints((char) => char !== '"' && char !== "\\", input, position);
         if (position.position >= input.length) {
           break;
         }
@@ -5209,10 +5269,12 @@ var require_dataURL = __commonJS({
       let lead = 0;
       let trail = str.length - 1;
       if (leading) {
-        for (; lead < str.length && isHTTPWhiteSpace(str[lead]); lead++) ;
+        for (; lead < str.length && isHTTPWhiteSpace(str[lead]); lead++)
+          ;
       }
       if (trailing) {
-        for (; trail > 0 && isHTTPWhiteSpace(str[trail]); trail--) ;
+        for (; trail > 0 && isHTTPWhiteSpace(str[trail]); trail--)
+          ;
       }
       return str.slice(lead, trail + 1);
     }
@@ -5225,10 +5287,12 @@ var require_dataURL = __commonJS({
       let lead = 0;
       let trail = str.length - 1;
       if (leading) {
-        for (; lead < str.length && isASCIIWhitespace(str[lead]); lead++) ;
+        for (; lead < str.length && isASCIIWhitespace(str[lead]); lead++)
+          ;
       }
       if (trailing) {
-        for (; trail > 0 && isASCIIWhitespace(str[trail]); trail--) ;
+        for (; trail > 0 && isASCIIWhitespace(str[trail]); trail--)
+          ;
       }
       return str.slice(lead, trail + 1);
     }
@@ -5258,7 +5322,7 @@ var require_file = __commonJS({
     var { parseMIMEType, serializeAMimeType } = require_dataURL();
     var { kEnumerableProperty } = require_util();
     var encoder = new TextEncoder();
-    var _File = class _File extends Blob2 {
+    var File = class extends Blob2 {
       constructor(fileBits, fileName, options = {}) {
         webidl.argumentLengthCheck(arguments, 2, { header: "File constructor" });
         fileBits = webidl.converters["sequence<BlobPart>"](fileBits);
@@ -5286,21 +5350,20 @@ var require_file = __commonJS({
         };
       }
       get name() {
-        webidl.brandCheck(this, _File);
+        webidl.brandCheck(this, File);
         return this[kState].name;
       }
       get lastModified() {
-        webidl.brandCheck(this, _File);
+        webidl.brandCheck(this, File);
         return this[kState].lastModified;
       }
       get type() {
-        webidl.brandCheck(this, _File);
+        webidl.brandCheck(this, File);
         return this[kState].type;
       }
     };
-    __name(_File, "File");
-    var File = _File;
-    var _FileLike = class _FileLike {
+    __name(File, "File");
+    var FileLike = class {
       constructor(blobLike, fileName, options = {}) {
         const n = fileName;
         const t = options.type;
@@ -5313,43 +5376,42 @@ var require_file = __commonJS({
         };
       }
       stream(...args) {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.stream(...args);
       }
       arrayBuffer(...args) {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.arrayBuffer(...args);
       }
       slice(...args) {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.slice(...args);
       }
       text(...args) {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.text(...args);
       }
       get size() {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.size;
       }
       get type() {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].blobLike.type;
       }
       get name() {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].name;
       }
       get lastModified() {
-        webidl.brandCheck(this, _FileLike);
+        webidl.brandCheck(this, FileLike);
         return this[kState].lastModified;
       }
       get [Symbol.toStringTag]() {
         return "File";
       }
     };
-    __name(_FileLike, "FileLike");
-    var FileLike = _FileLike;
+    __name(FileLike, "FileLike");
     Object.defineProperties(File.prototype, {
       [Symbol.toStringTag]: {
         value: "File",
@@ -5370,9 +5432,7 @@ var require_file = __commonJS({
       }
       return webidl.converters.USVString(V, opts);
     };
-    webidl.converters["sequence<BlobPart>"] = webidl.sequenceConverter(
-      webidl.converters.BlobPart
-    );
+    webidl.converters["sequence<BlobPart>"] = webidl.sequenceConverter(webidl.converters.BlobPart);
     webidl.converters.FilePropertyBag = webidl.dictionaryConverter([
       {
         key: "lastModified",
@@ -5388,14 +5448,14 @@ var require_file = __commonJS({
       },
       {
         key: "endings",
-        converter: /* @__PURE__ */ __name((value) => {
+        converter: (value) => {
           value = webidl.converters.DOMString(value);
           value = value.toLowerCase();
           if (value !== "native") {
             value = "transparent";
           }
           return value;
-        }, "converter"),
+        },
         defaultValue: "transparent"
       }
     ]);
@@ -5412,9 +5472,7 @@ var require_file = __commonJS({
           if (!element.buffer) {
             bytes.push(new Uint8Array(element));
           } else {
-            bytes.push(
-              new Uint8Array(element.buffer, element.byteOffset, element.byteLength)
-            );
+            bytes.push(new Uint8Array(element.buffer, element.byteOffset, element.byteLength));
           }
         } else if (isBlobLike(element)) {
           bytes.push(element);
@@ -5449,7 +5507,7 @@ var require_formdata = __commonJS({
     var { webidl } = require_webidl();
     var { Blob: Blob2, File: NativeFile } = require("buffer");
     var File = NativeFile ?? UndiciFile;
-    var _FormData = class _FormData {
+    var FormData = class {
       constructor(form) {
         if (form !== void 0) {
           throw webidl.errors.conversionFailed({
@@ -5461,12 +5519,10 @@ var require_formdata = __commonJS({
         this[kState] = [];
       }
       append(name, value, filename = void 0) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 2, { header: "FormData.append" });
         if (arguments.length === 3 && !isBlobLike(value)) {
-          throw new TypeError(
-            "Failed to execute 'append' on 'FormData': parameter 2 is not of type 'Blob'"
-          );
+          throw new TypeError("Failed to execute 'append' on 'FormData': parameter 2 is not of type 'Blob'");
         }
         name = webidl.converters.USVString(name);
         value = isBlobLike(value) ? webidl.converters.Blob(value, { strict: false }) : webidl.converters.USVString(value);
@@ -5475,13 +5531,13 @@ var require_formdata = __commonJS({
         this[kState].push(entry);
       }
       delete(name) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 1, { header: "FormData.delete" });
         name = webidl.converters.USVString(name);
         this[kState] = this[kState].filter((entry) => entry.name !== name);
       }
       get(name) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 1, { header: "FormData.get" });
         name = webidl.converters.USVString(name);
         const idx = this[kState].findIndex((entry) => entry.name === name);
@@ -5491,24 +5547,22 @@ var require_formdata = __commonJS({
         return this[kState][idx].value;
       }
       getAll(name) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 1, { header: "FormData.getAll" });
         name = webidl.converters.USVString(name);
         return this[kState].filter((entry) => entry.name === name).map((entry) => entry.value);
       }
       has(name) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 1, { header: "FormData.has" });
         name = webidl.converters.USVString(name);
         return this[kState].findIndex((entry) => entry.name === name) !== -1;
       }
       set(name, value, filename = void 0) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 2, { header: "FormData.set" });
         if (arguments.length === 3 && !isBlobLike(value)) {
-          throw new TypeError(
-            "Failed to execute 'set' on 'FormData': parameter 2 is not of type 'Blob'"
-          );
+          throw new TypeError("Failed to execute 'set' on 'FormData': parameter 2 is not of type 'Blob'");
         }
         name = webidl.converters.USVString(name);
         value = isBlobLike(value) ? webidl.converters.Blob(value, { strict: false }) : webidl.converters.USVString(value);
@@ -5526,48 +5580,29 @@ var require_formdata = __commonJS({
         }
       }
       entries() {
-        webidl.brandCheck(this, _FormData);
-        return makeIterator(
-          () => this[kState].map((pair) => [pair.name, pair.value]),
-          "FormData",
-          "key+value"
-        );
+        webidl.brandCheck(this, FormData);
+        return makeIterator(() => this[kState].map((pair) => [pair.name, pair.value]), "FormData", "key+value");
       }
       keys() {
-        webidl.brandCheck(this, _FormData);
-        return makeIterator(
-          () => this[kState].map((pair) => [pair.name, pair.value]),
-          "FormData",
-          "key"
-        );
+        webidl.brandCheck(this, FormData);
+        return makeIterator(() => this[kState].map((pair) => [pair.name, pair.value]), "FormData", "key");
       }
       values() {
-        webidl.brandCheck(this, _FormData);
-        return makeIterator(
-          () => this[kState].map((pair) => [pair.name, pair.value]),
-          "FormData",
-          "value"
-        );
+        webidl.brandCheck(this, FormData);
+        return makeIterator(() => this[kState].map((pair) => [pair.name, pair.value]), "FormData", "value");
       }
-      /**
-       * @param {(value: string, key: string, self: FormData) => void} callbackFn
-       * @param {unknown} thisArg
-       */
       forEach(callbackFn, thisArg = globalThis) {
-        webidl.brandCheck(this, _FormData);
+        webidl.brandCheck(this, FormData);
         webidl.argumentLengthCheck(arguments, 1, { header: "FormData.forEach" });
         if (typeof callbackFn !== "function") {
-          throw new TypeError(
-            "Failed to execute 'forEach' on 'FormData': parameter 1 is not of type 'Function'."
-          );
+          throw new TypeError("Failed to execute 'forEach' on 'FormData': parameter 1 is not of type 'Function'.");
         }
         for (const [key, value] of this) {
           callbackFn.apply(thisArg, [value, key, this]);
         }
       }
     };
-    __name(_FormData, "FormData");
-    var FormData = _FormData;
+    __name(FormData, "FormData");
     FormData.prototype[Symbol.iterator] = FormData.prototype.entries;
     Object.defineProperties(FormData.prototype, {
       [Symbol.toStringTag]: {
@@ -5639,9 +5674,7 @@ var require_body = __commonJS({
       } else {
         stream = new ReadableStream({
           async pull(controller) {
-            controller.enqueue(
-              typeof source === "string" ? textEncoder.encode(source) : source
-            );
+            controller.enqueue(typeof source === "string" ? textEncoder.encode(source) : source);
             queueMicrotask(() => readableStreamClose(controller));
           },
           start() {
@@ -5723,9 +5756,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           throw new TypeError("keepalive");
         }
         if (util.isDisturbed(object) || object.locked) {
-          throw new TypeError(
-            "Response body object should not be disturbed or locked"
-          );
+          throw new TypeError("Response body object should not be disturbed or locked");
         }
         stream = object instanceof ReadableStream ? object : ReadableStreamFrom(object);
       }
@@ -5838,7 +5869,8 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           const contentType = this.headers.get("Content-Type");
           if (/multipart\/form-data/.test(contentType)) {
             const headers = {};
-            for (const [key, value] of this.headers) headers[key.toLowerCase()] = value;
+            for (const [key, value] of this.headers)
+              headers[key.toLowerCase()] = value;
             const responseFormData = new FormData();
             let busboy;
             try {
@@ -5879,7 +5911,9 @@ Content-Type: ${value.type || "application/octet-stream"}\r
               busboy.on("finish", resolve);
               busboy.on("error", (err) => reject(new TypeError(err)));
             });
-            if (this.body !== null) for await (const chunk of consumeBody(this[kState].body)) busboy.write(chunk);
+            if (this.body !== null)
+              for await (const chunk of consumeBody(this[kState].body))
+                busboy.write(chunk);
             busboy.end();
             await busboyResolve;
             return responseFormData;
@@ -6012,7 +6046,7 @@ var require_request = __commonJS({
       channels.trailers = { hasSubscribers: false };
       channels.error = { hasSubscribers: false };
     }
-    var _Request = class _Request {
+    var Request = class {
       constructor(origin, {
         path,
         method,
@@ -6240,18 +6274,17 @@ var require_request = __commonJS({
           this.endHandler = null;
         }
       }
-      // TODO: adjust to support H2
       addHeader(key, value) {
         processHeader(this, key, value);
         return this;
       }
       static [kHTTP1BuildRequest](origin, opts, handler) {
-        return new _Request(origin, opts, handler);
+        return new Request(origin, opts, handler);
       }
       static [kHTTP2BuildRequest](origin, opts, handler) {
         const headers = opts.headers;
-        opts = { ...opts, headers: null };
-        const request = new _Request(origin, opts, handler);
+        opts = __spreadProps(__spreadValues({}, opts), { headers: null });
+        const request = new Request(origin, opts, handler);
         request.headers = {};
         if (Array.isArray(headers)) {
           if (headers.length % 2 !== 0) {
@@ -6276,15 +6309,17 @@ var require_request = __commonJS({
         const headers = {};
         for (const header of rawHeaders) {
           const [key, value] = header.split(": ");
-          if (value == null || value.length === 0) continue;
-          if (headers[key]) headers[key] += `,${value}`;
-          else headers[key] = value;
+          if (value == null || value.length === 0)
+            continue;
+          if (headers[key])
+            headers[key] += `,${value}`;
+          else
+            headers[key] = value;
         }
         return headers;
       }
     };
-    __name(_Request, "Request");
-    var Request = _Request;
+    __name(Request, "Request");
     function processHeaderValue(key, val, skipAppend) {
       if (val && typeof val === "object") {
         throw new InvalidArgumentError(`invalid ${key} header`);
@@ -6315,8 +6350,10 @@ var require_request = __commonJS({
         }
       } else if (request.contentType === null && key.length === 12 && key.toLowerCase() === "content-type") {
         request.contentType = val;
-        if (skipAppend) request.headers[key] = processHeaderValue(key, val, skipAppend);
-        else request.headers += processHeaderValue(key, val);
+        if (skipAppend)
+          request.headers[key] = processHeaderValue(key, val, skipAppend);
+        else
+          request.headers += processHeaderValue(key, val);
       } else if (key.length === 17 && key.toLowerCase() === "transfer-encoding") {
         throw new InvalidArgumentError("invalid transfer-encoding header");
       } else if (key.length === 10 && key.toLowerCase() === "connection") {
@@ -6338,15 +6375,19 @@ var require_request = __commonJS({
         if (Array.isArray(val)) {
           for (let i = 0; i < val.length; i++) {
             if (skipAppend) {
-              if (request.headers[key]) request.headers[key] += `,${processHeaderValue(key, val[i], skipAppend)}`;
-              else request.headers[key] = processHeaderValue(key, val[i], skipAppend);
+              if (request.headers[key])
+                request.headers[key] += `,${processHeaderValue(key, val[i], skipAppend)}`;
+              else
+                request.headers[key] = processHeaderValue(key, val[i], skipAppend);
             } else {
               request.headers += processHeaderValue(key, val[i]);
             }
           }
         } else {
-          if (skipAppend) request.headers[key] = processHeaderValue(key, val, skipAppend);
-          else request.headers += processHeaderValue(key, val);
+          if (skipAppend)
+            request.headers[key] = processHeaderValue(key, val, skipAppend);
+          else
+            request.headers += processHeaderValue(key, val);
         }
       }
     }
@@ -6360,7 +6401,7 @@ var require_dispatcher = __commonJS({
   "node_modules/undici/lib/dispatcher.js"(exports2, module2) {
     "use strict";
     var EventEmitter = require("events");
-    var _Dispatcher = class _Dispatcher extends EventEmitter {
+    var Dispatcher = class extends EventEmitter {
       dispatch() {
         throw new Error("not implemented");
       }
@@ -6371,8 +6412,7 @@ var require_dispatcher = __commonJS({
         throw new Error("not implemented");
       }
     };
-    __name(_Dispatcher, "Dispatcher");
-    var Dispatcher = _Dispatcher;
+    __name(Dispatcher, "Dispatcher");
     module2.exports = Dispatcher;
   }
 });
@@ -6393,7 +6433,7 @@ var require_dispatcher_base = __commonJS({
     var kOnDestroyed = Symbol("onDestroyed");
     var kOnClosed = Symbol("onClosed");
     var kInterceptedDispatch = Symbol("Intercepted Dispatch");
-    var _DispatcherBase = class _DispatcherBase extends Dispatcher {
+    var DispatcherBase = class extends Dispatcher {
       constructor() {
         super();
         this[kDestroyed] = false;
@@ -6465,10 +6505,7 @@ var require_dispatcher_base = __commonJS({
         if (callback === void 0) {
           return new Promise((resolve, reject) => {
             this.destroy(err, (err2, data) => {
-              return err2 ? (
-                /* istanbul ignore next: should never error */
-                reject(err2)
-              ) : resolve(data);
+              return err2 ? reject(err2) : resolve(data);
             });
           });
         }
@@ -6536,8 +6573,7 @@ var require_dispatcher_base = __commonJS({
         }
       }
     };
-    __name(_DispatcherBase, "DispatcherBase");
-    var DispatcherBase = _DispatcherBase;
+    __name(DispatcherBase, "DispatcherBase");
     module2.exports = DispatcherBase;
   }
 });
@@ -6552,12 +6588,11 @@ var require_connect = __commonJS({
     var { InvalidArgumentError, ConnectTimeoutError } = require_errors();
     var tls;
     var SessionCache;
-    var _a, _b;
     if (global.FinalizationRegistry && !process.env.NODE_V8_COVERAGE) {
-      SessionCache = (_a = class {
+      SessionCache = /* @__PURE__ */ __name(class WeakSessionCache {
         constructor(maxCachedSessions) {
           this._maxCachedSessions = maxCachedSessions;
-          this._sessionCache = /* @__PURE__ */ new Map();
+          this._sessionCache = new Map();
           this._sessionRegistry = new global.FinalizationRegistry((key) => {
             if (this._sessionCache.size < this._maxCachedSessions) {
               return;
@@ -6579,12 +6614,12 @@ var require_connect = __commonJS({
           this._sessionCache.set(sessionKey, new WeakRef(session));
           this._sessionRegistry.register(session, sessionKey);
         }
-      }, __name(_a, "WeakSessionCache"), _a);
+      }, "WeakSessionCache");
     } else {
-      SessionCache = (_b = class {
+      SessionCache = /* @__PURE__ */ __name(class SimpleSessionCache {
         constructor(maxCachedSessions) {
           this._maxCachedSessions = maxCachedSessions;
-          this._sessionCache = /* @__PURE__ */ new Map();
+          this._sessionCache = new Map();
         }
         get(sessionKey) {
           return this._sessionCache.get(sessionKey);
@@ -6599,13 +6634,14 @@ var require_connect = __commonJS({
           }
           this._sessionCache.set(sessionKey, session);
         }
-      }, __name(_b, "SimpleSessionCache"), _b);
+      }, "SimpleSessionCache");
     }
-    function buildConnector({ allowH2, maxCachedSessions, socketPath, timeout, ...opts }) {
+    function buildConnector(_a) {
+      var _b = _a, { allowH2, maxCachedSessions, socketPath, timeout } = _b, opts = __objRest(_b, ["allowH2", "maxCachedSessions", "socketPath", "timeout"]);
       if (maxCachedSessions != null && (!Number.isInteger(maxCachedSessions) || maxCachedSessions < 0)) {
         throw new InvalidArgumentError("maxCachedSessions must be a positive integer or zero");
       }
-      const options = { path: socketPath, ...opts };
+      const options = __spreadValues({ path: socketPath }, opts);
       const sessionCache = new SessionCache(maxCachedSessions == null ? 100 : maxCachedSessions);
       timeout = timeout == null ? 1e4 : timeout;
       allowH2 = allowH2 != null ? allowH2 : false;
@@ -6619,33 +6655,29 @@ var require_connect = __commonJS({
           const sessionKey = servername || hostname;
           const session = sessionCache.get(sessionKey) || null;
           assert(sessionKey);
-          socket = tls.connect({
-            highWaterMark: 16384,
-            // TLS in node can't have bigger HWM anyway...
-            ...options,
+          socket = tls.connect(__spreadProps(__spreadValues({
+            highWaterMark: 16384
+          }, options), {
             servername,
             session,
             localAddress,
-            // TODO(HTTP/2): Add support for h2c
             ALPNProtocols: allowH2 ? ["http/1.1", "h2"] : ["http/1.1"],
             socket: httpSocket,
-            // upgrade socket connection
             port: port || 443,
             host: hostname
-          });
+          }));
           socket.on("session", function(session2) {
             sessionCache.set(sessionKey, session2);
           });
         } else {
           assert(!httpSocket, "httpSocket can only be sent on TLS update");
-          socket = net.connect({
-            highWaterMark: 64 * 1024,
-            // Same as nodejs fs streams.
-            ...options,
+          socket = net.connect(__spreadProps(__spreadValues({
+            highWaterMark: 64 * 1024
+          }, options), {
             localAddress,
             port: port || 80,
             host: hostname
-          });
+          }));
         }
         if (options.keepAlive == null || options.keepAlive) {
           const keepAliveInitialDelay = options.keepAliveInitialDelay === void 0 ? 6e4 : options.keepAliveInitialDelay;
@@ -6866,7 +6898,6 @@ var require_constants2 = __commonJS({
       METHODS.LINK,
       METHODS.UNLINK,
       METHODS.PRI,
-      // TODO(indutny): should we allow it with HTTP?
       METHODS.SOURCE
     ];
     exports2.METHODS_ICE = [
@@ -6885,7 +6916,6 @@ var require_constants2 = __commonJS({
       METHODS.REDIRECT,
       METHODS.RECORD,
       METHODS.FLUSH,
-      // For AirPlay
       METHODS.GET,
       METHODS.POST
     ];
@@ -7055,7 +7085,7 @@ var require_RedirectHandler = __commonJS({
     var EE = require("events");
     var redirectableStatusCodes = [300, 301, 302, 303, 307, 308];
     var kBody = Symbol("body");
-    var _BodyAsyncIterable = class _BodyAsyncIterable {
+    var BodyAsyncIterable = class {
       constructor(body) {
         this[kBody] = body;
         this[kBodyUsed] = false;
@@ -7066,9 +7096,8 @@ var require_RedirectHandler = __commonJS({
         yield* this[kBody];
       }
     };
-    __name(_BodyAsyncIterable, "BodyAsyncIterable");
-    var BodyAsyncIterable = _BodyAsyncIterable;
-    var _RedirectHandler = class _RedirectHandler {
+    __name(BodyAsyncIterable, "BodyAsyncIterable");
+    var RedirectHandler = class {
       constructor(dispatch, maxRedirections, opts, handler) {
         if (maxRedirections != null && (!Number.isInteger(maxRedirections) || maxRedirections < 0)) {
           throw new InvalidArgumentError("maxRedirections must be a positive number");
@@ -7077,7 +7106,7 @@ var require_RedirectHandler = __commonJS({
         this.dispatch = dispatch;
         this.location = null;
         this.abort = null;
-        this.opts = { ...opts, maxRedirections: 0 };
+        this.opts = __spreadProps(__spreadValues({}, opts), { maxRedirections: 0 });
         this.maxRedirections = maxRedirections;
         this.handler = handler;
         this.history = [];
@@ -7150,8 +7179,7 @@ var require_RedirectHandler = __commonJS({
         }
       }
     };
-    __name(_RedirectHandler, "RedirectHandler");
-    var RedirectHandler = _RedirectHandler;
+    __name(RedirectHandler, "RedirectHandler");
     function parseLocation(statusCode, headers) {
       if (redirectableStatusCodes.indexOf(statusCode) === -1) {
         return null;
@@ -7204,7 +7232,7 @@ var require_redirectInterceptor = __commonJS({
             return dispatch(opts, handler);
           }
           const redirectHandler = new RedirectHandler(dispatch, maxRedirections, opts, handler);
-          opts = { ...opts, maxRedirections: 0 };
+          opts = __spreadProps(__spreadValues({}, opts), { maxRedirections: 0 });
           return dispatch(opts, redirectHandler);
         }, "Intercept");
       };
@@ -7299,7 +7327,6 @@ var require_client = __commonJS({
       kLocalAddress,
       kMaxResponseSize,
       kHTTPConnVersion,
-      // HTTP2
       kHost,
       kHTTP2Session,
       kHTTP2SessionState,
@@ -7340,12 +7367,7 @@ var require_client = __commonJS({
       channels.connectError = { hasSubscribers: false };
       channels.connected = { hasSubscribers: false };
     }
-    var _Client = class _Client extends DispatcherBase {
-      /**
-       *
-       * @param {string|URL} url
-       * @param {import('../types/client').Client.Options} options
-       */
+    var Client = class extends DispatcherBase {
       constructor(url, {
         interceptors,
         maxHeaderSize,
@@ -7372,7 +7394,6 @@ var require_client = __commonJS({
         maxResponseSize,
         autoSelectFamily,
         autoSelectFamilyAttemptTimeout,
-        // h2
         allowH2,
         maxConcurrentStreams
       } = {}) {
@@ -7441,15 +7462,12 @@ var require_client = __commonJS({
           throw new InvalidArgumentError("maxConcurrentStreams must be a possitive integer, greater than 0");
         }
         if (typeof connect2 !== "function") {
-          connect2 = buildConnector({
-            ...tls,
+          connect2 = buildConnector(__spreadValues(__spreadValues(__spreadProps(__spreadValues({}, tls), {
             maxCachedSessions,
             allowH2,
             socketPath,
-            timeout: connectTimeout,
-            ...util.nodeHasAutoSelectFamily && autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0,
-            ...connect2
-          });
+            timeout: connectTimeout
+          }), util.nodeHasAutoSelectFamily && autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0), connect2));
         }
         this[kInterceptors] = interceptors && interceptors.Client && Array.isArray(interceptors.Client) ? interceptors.Client : [createRedirectInterceptor({ maxRedirections })];
         this[kUrl] = util.parseOrigin(url);
@@ -7477,11 +7495,8 @@ var require_client = __commonJS({
         this[kHTTPConnVersion] = "h1";
         this[kHTTP2Session] = null;
         this[kHTTP2SessionState] = !allowH2 ? null : {
-          // streams: null, // Fixed queue of streams - For future support of `push`
           openStreams: 0,
-          // Keep track of them to decide wether or not unref the session
           maxConcurrentStreams: maxConcurrentStreams != null ? maxConcurrentStreams : 100
-          // Max peerConcurrentStreams for a Node h2 server
         };
         this[kHost] = `${this[kUrl].hostname}${this[kUrl].port ? `:${this[kUrl].port}` : ""}`;
         this[kQueue] = [];
@@ -7511,7 +7526,6 @@ var require_client = __commonJS({
         const socket = this[kSocket];
         return socket && (socket[kReset] || socket[kWriting] || socket[kBlocking]) || this[kSize] >= (this[kPipelining] || 1) || this[kPending] > 0;
       }
-      /* istanbul ignore: only used for test */
       [kConnect](cb) {
         connect(this);
         this.once("connect", cb);
@@ -7569,8 +7583,7 @@ var require_client = __commonJS({
         });
       }
     };
-    __name(_Client, "Client");
-    var Client = _Client;
+    __name(Client, "Client");
     function onHttp2SessionError(err) {
       assert(err.code !== "ERR_TLS_CERT_ALTNAME_INVALID");
       this[kSocket][kError] = err;
@@ -7609,12 +7622,7 @@ var require_client = __commonJS({
       }
       client[kPendingIdx] = client[kRunningIdx];
       assert(client[kRunning] === 0);
-      client.emit(
-        "disconnect",
-        client[kUrl],
-        [client],
-        err
-      );
+      client.emit("disconnect", client[kUrl], [client], err);
       resume(client);
     }
     __name(onHTTP2GoAway, "onHTTP2GoAway");
@@ -7631,43 +7639,41 @@ var require_client = __commonJS({
       }
       return await WebAssembly.instantiate(mod, {
         env: {
-          /* eslint-disable camelcase */
-          wasm_on_url: /* @__PURE__ */ __name((p, at, len) => {
+          wasm_on_url: (p, at, len) => {
             return 0;
-          }, "wasm_on_url"),
-          wasm_on_status: /* @__PURE__ */ __name((p, at, len) => {
+          },
+          wasm_on_status: (p, at, len) => {
             assert.strictEqual(currentParser.ptr, p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onStatus(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          }, "wasm_on_status"),
-          wasm_on_message_begin: /* @__PURE__ */ __name((p) => {
+          },
+          wasm_on_message_begin: (p) => {
             assert.strictEqual(currentParser.ptr, p);
             return currentParser.onMessageBegin() || 0;
-          }, "wasm_on_message_begin"),
-          wasm_on_header_field: /* @__PURE__ */ __name((p, at, len) => {
+          },
+          wasm_on_header_field: (p, at, len) => {
             assert.strictEqual(currentParser.ptr, p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onHeaderField(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          }, "wasm_on_header_field"),
-          wasm_on_header_value: /* @__PURE__ */ __name((p, at, len) => {
+          },
+          wasm_on_header_value: (p, at, len) => {
             assert.strictEqual(currentParser.ptr, p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onHeaderValue(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          }, "wasm_on_header_value"),
-          wasm_on_headers_complete: /* @__PURE__ */ __name((p, statusCode, upgrade, shouldKeepAlive) => {
+          },
+          wasm_on_headers_complete: (p, statusCode, upgrade, shouldKeepAlive) => {
             assert.strictEqual(currentParser.ptr, p);
             return currentParser.onHeadersComplete(statusCode, Boolean(upgrade), Boolean(shouldKeepAlive)) || 0;
-          }, "wasm_on_headers_complete"),
-          wasm_on_body: /* @__PURE__ */ __name((p, at, len) => {
+          },
+          wasm_on_body: (p, at, len) => {
             assert.strictEqual(currentParser.ptr, p);
             const start = at - currentBufferPtr + currentBufferRef.byteOffset;
             return currentParser.onBody(new FastBuffer(currentBufferRef.buffer, start, len)) || 0;
-          }, "wasm_on_body"),
-          wasm_on_message_complete: /* @__PURE__ */ __name((p) => {
+          },
+          wasm_on_message_complete: (p) => {
             assert.strictEqual(currentParser.ptr, p);
             return currentParser.onMessageComplete() || 0;
-          }, "wasm_on_message_complete")
-          /* eslint-enable camelcase */
+          }
         }
       });
     }
@@ -7682,7 +7688,7 @@ var require_client = __commonJS({
     var TIMEOUT_HEADERS = 1;
     var TIMEOUT_BODY = 2;
     var TIMEOUT_IDLE = 3;
-    var _Parser = class _Parser {
+    var Parser = class {
       constructor(client, socket, { exports: exports3 }) {
         assert(Number.isFinite(client[kMaxHeadersSize]) && client[kMaxHeadersSize] > 0);
         this.llhttp = exports3;
@@ -7905,8 +7911,7 @@ var require_client = __commonJS({
         }
         assert.strictEqual(this.timeoutType, TIMEOUT_HEADERS);
         this.statusCode = statusCode;
-        this.shouldKeepAlive = shouldKeepAlive || // Override llhttp value which does not allow keepAlive for HEAD.
-        request.method === "HEAD" && !socket[kReset] && this.connection.toLowerCase() === "keep-alive";
+        this.shouldKeepAlive = shouldKeepAlive || request.method === "HEAD" && !socket[kReset] && this.connection.toLowerCase() === "keep-alive";
         if (this.statusCode >= 200) {
           const bodyTimeout = request.bodyTimeout != null ? request.bodyTimeout : client[kBodyTimeout];
           this.setTimeout(bodyTimeout, TIMEOUT_BODY);
@@ -7931,10 +7936,7 @@ var require_client = __commonJS({
         if (this.shouldKeepAlive && client[kPipelining]) {
           const keepAliveTimeout = this.keepAlive ? util.parseKeepAliveTimeout(this.keepAlive) : null;
           if (keepAliveTimeout != null) {
-            const timeout = Math.min(
-              keepAliveTimeout - client[kKeepAliveTimeoutThreshold],
-              client[kKeepAliveMaxTimeout]
-            );
+            const timeout = Math.min(keepAliveTimeout - client[kKeepAliveTimeoutThreshold], client[kKeepAliveMaxTimeout]);
             if (timeout <= 0) {
               socket[kReset] = true;
             } else {
@@ -8031,8 +8033,7 @@ var require_client = __commonJS({
         }
       }
     };
-    __name(_Parser, "Parser");
-    var Parser = _Parser;
+    __name(Parser, "Parser");
     function onParserTimeout(parser) {
       const { socket, timeoutType, client } = parser;
       if (timeoutType === TIMEOUT_HEADERS) {
@@ -8180,7 +8181,7 @@ var require_client = __commonJS({
             });
           }
           const session = http2.connect(client[kUrl], {
-            createConnection: /* @__PURE__ */ __name(() => socket, "createConnection"),
+            createConnection: () => socket,
             peerMaxConcurrentStreams: client[kHTTP2SessionState].maxConcurrentStreams
           });
           client[kHTTPConnVersion] = "h2";
@@ -8492,8 +8493,10 @@ upgrade: ${upgrade}\r
     function writeH2(client, session, request) {
       const { body, method, path, host, upgrade, expectContinue, signal, headers: reqHeaders } = request;
       let headers;
-      if (typeof reqHeaders === "string") headers = Request[kHTTP2CopyHeaders](reqHeaders.trim());
-      else headers = reqHeaders;
+      if (typeof reqHeaders === "string")
+        headers = Request[kHTTP2CopyHeaders](reqHeaders.trim());
+      else
+        headers = reqHeaders;
       if (upgrade) {
         errorRequest(client, request, new Error("Upgrade not supported for H2"));
         return false;
@@ -8529,7 +8532,8 @@ upgrade: ${upgrade}\r
         }
         stream.once("close", () => {
           h2State.openStreams -= 1;
-          if (h2State.openStreams === 0) session.unref();
+          if (h2State.openStreams === 0)
+            session.unref();
         });
         return true;
       }
@@ -8572,7 +8576,7 @@ upgrade: ${upgrade}\r
       }
       ++h2State.openStreams;
       stream.once("response", (headers2) => {
-        const { [HTTP2_HEADER_STATUS]: statusCode, ...realHeaders } = headers2;
+        const _a = headers2, { [HTTP2_HEADER_STATUS]: statusCode } = _a, realHeaders = __objRest(_a, [__restKey(HTTP2_HEADER_STATUS)]);
         if (request.onHeaders(Number(statusCode), realHeaders, stream.resume.bind(stream), "") === false) {
           stream.pause();
         }
@@ -8677,18 +8681,14 @@ upgrade: ${upgrade}\r
           request.onBodySent(chunk);
         };
         __name(onPipeData, "onPipeData");
-        const pipe = pipeline(
-          body,
-          h2stream,
-          (err) => {
-            if (err) {
-              util.destroy(body, err);
-              util.destroy(h2stream, err);
-            } else {
-              request.onRequestSent();
-            }
+        const pipe = pipeline(body, h2stream, (err) => {
+          if (err) {
+            util.destroy(body, err);
+            util.destroy(h2stream, err);
+          } else {
+            request.onRequestSent();
           }
-        );
+        });
         pipe.on("data", onPipeData);
         pipe.once("end", () => {
           pipe.removeListener("data", onPipeData);
@@ -8845,7 +8845,7 @@ upgrade: ${upgrade}\r
       }
     }
     __name(writeIterable, "writeIterable");
-    var _AsyncWriter = class _AsyncWriter {
+    var AsyncWriter = class {
       constructor({ socket, request, contentLength, client, expectsPayload, header }) {
         this.socket = socket;
         this.request = request;
@@ -8951,8 +8951,7 @@ ${len.toString(16)}\r
         }
       }
     };
-    __name(_AsyncWriter, "AsyncWriter");
-    var AsyncWriter = _AsyncWriter;
+    __name(AsyncWriter, "AsyncWriter");
     function errorRequest(client, request, err) {
       try {
         request.onError(err);
@@ -8972,7 +8971,7 @@ var require_fixed_queue = __commonJS({
     "use strict";
     var kSize = 2048;
     var kMask = kSize - 1;
-    var _FixedCircularBuffer = class _FixedCircularBuffer {
+    var FixedCircularBuffer = class {
       constructor() {
         this.bottom = 0;
         this.top = 0;
@@ -8998,10 +8997,8 @@ var require_fixed_queue = __commonJS({
         return nextItem;
       }
     };
-    __name(_FixedCircularBuffer, "FixedCircularBuffer");
-    var FixedCircularBuffer = _FixedCircularBuffer;
-    var _a;
-    module2.exports = (_a = class {
+    __name(FixedCircularBuffer, "FixedCircularBuffer");
+    module2.exports = /* @__PURE__ */ __name(class FixedQueue {
       constructor() {
         this.head = this.tail = new FixedCircularBuffer();
       }
@@ -9022,7 +9019,7 @@ var require_fixed_queue = __commonJS({
         }
         return next;
       }
-    }, __name(_a, "FixedQueue"), _a);
+    }, "FixedQueue");
   }
 });
 
@@ -9031,7 +9028,7 @@ var require_pool_stats = __commonJS({
   "node_modules/undici/lib/pool-stats.js"(exports2, module2) {
     var { kFree, kConnected, kPending, kQueued, kRunning, kSize } = require_symbols();
     var kPool = Symbol("pool");
-    var _PoolStats = class _PoolStats {
+    var PoolStats = class {
       constructor(pool) {
         this[kPool] = pool;
       }
@@ -9054,8 +9051,7 @@ var require_pool_stats = __commonJS({
         return this[kPool][kSize];
       }
     };
-    __name(_PoolStats, "PoolStats");
-    var PoolStats = _PoolStats;
+    __name(PoolStats, "PoolStats");
     module2.exports = PoolStats;
   }
 });
@@ -9080,7 +9076,7 @@ var require_pool_base = __commonJS({
     var kAddClient = Symbol("add client");
     var kRemoveClient = Symbol("remove client");
     var kStats = Symbol("stats");
-    var _PoolBase = class _PoolBase extends DispatcherBase {
+    var PoolBase = class extends DispatcherBase {
       constructor() {
         super();
         this[kQueue] = new FixedQueue();
@@ -9204,8 +9200,7 @@ var require_pool_base = __commonJS({
         this[kNeedDrain] = this[kClients].some((dispatcher) => !dispatcher[kNeedDrain] && dispatcher.closed !== true && dispatcher.destroyed !== true);
       }
     };
-    __name(_PoolBase, "PoolBase");
-    var PoolBase = _PoolBase;
+    __name(PoolBase, "PoolBase");
     module2.exports = {
       PoolBase,
       kClients,
@@ -9242,20 +9237,31 @@ var require_pool = __commonJS({
       return new Client(origin, opts);
     }
     __name(defaultFactory, "defaultFactory");
-    var _Pool = class _Pool extends PoolBase {
-      constructor(origin, {
-        connections,
-        factory = defaultFactory,
-        connect,
-        connectTimeout,
-        tls,
-        maxCachedSessions,
-        socketPath,
-        autoSelectFamily,
-        autoSelectFamilyAttemptTimeout,
-        allowH2,
-        ...options
-      } = {}) {
+    var Pool = class extends PoolBase {
+      constructor(origin, _a = {}) {
+        var _b = _a, {
+          connections,
+          factory = defaultFactory,
+          connect,
+          connectTimeout,
+          tls,
+          maxCachedSessions,
+          socketPath,
+          autoSelectFamily,
+          autoSelectFamilyAttemptTimeout,
+          allowH2
+        } = _b, options = __objRest(_b, [
+          "connections",
+          "factory",
+          "connect",
+          "connectTimeout",
+          "tls",
+          "maxCachedSessions",
+          "socketPath",
+          "autoSelectFamily",
+          "autoSelectFamilyAttemptTimeout",
+          "allowH2"
+        ]);
         super();
         if (connections != null && (!Number.isFinite(connections) || connections < 0)) {
           throw new InvalidArgumentError("invalid connections");
@@ -9267,21 +9273,18 @@ var require_pool = __commonJS({
           throw new InvalidArgumentError("connect must be a function or an object");
         }
         if (typeof connect !== "function") {
-          connect = buildConnector({
-            ...tls,
+          connect = buildConnector(__spreadValues(__spreadValues(__spreadProps(__spreadValues({}, tls), {
             maxCachedSessions,
             allowH2,
             socketPath,
-            timeout: connectTimeout,
-            ...util.nodeHasAutoSelectFamily && autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0,
-            ...connect
-          });
+            timeout: connectTimeout
+          }), util.nodeHasAutoSelectFamily && autoSelectFamily ? { autoSelectFamily, autoSelectFamilyAttemptTimeout } : void 0), connect));
         }
         this[kInterceptors] = options.interceptors && options.interceptors.Pool && Array.isArray(options.interceptors.Pool) ? options.interceptors.Pool : [];
         this[kConnections] = connections || null;
         this[kUrl] = util.parseOrigin(origin);
-        this[kOptions] = { ...util.deepClone(options), connect, allowH2 };
-        this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
+        this[kOptions] = __spreadProps(__spreadValues({}, util.deepClone(options)), { connect, allowH2 });
+        this[kOptions].interceptors = options.interceptors ? __spreadValues({}, options.interceptors) : void 0;
         this[kFactory] = factory;
       }
       [kGetDispatcher]() {
@@ -9296,8 +9299,7 @@ var require_pool = __commonJS({
         return dispatcher;
       }
     };
-    __name(_Pool, "Pool");
-    var Pool = _Pool;
+    __name(Pool, "Pool");
     module2.exports = Pool;
   }
 });
@@ -9330,7 +9332,8 @@ var require_balanced_pool = __commonJS({
     var kMaxWeightPerServer = Symbol("kMaxWeightPerServer");
     var kErrorPenalty = Symbol("kErrorPenalty");
     function getGreatestCommonDivisor(a, b) {
-      if (b === 0) return a;
+      if (b === 0)
+        return a;
       return getGreatestCommonDivisor(b, a % b);
     }
     __name(getGreatestCommonDivisor, "getGreatestCommonDivisor");
@@ -9338,8 +9341,9 @@ var require_balanced_pool = __commonJS({
       return new Pool(origin, opts);
     }
     __name(defaultFactory, "defaultFactory");
-    var _BalancedPool = class _BalancedPool extends PoolBase {
-      constructor(upstreams = [], { factory = defaultFactory, ...opts } = {}) {
+    var BalancedPool = class extends PoolBase {
+      constructor(upstreams = [], _a = {}) {
+        var _b = _a, { factory = defaultFactory } = _b, opts = __objRest(_b, ["factory"]);
         super();
         this[kOptions] = opts;
         this[kIndex] = -1;
@@ -9435,8 +9439,7 @@ var require_balanced_pool = __commonJS({
         return this[kClients][maxWeightIndex];
       }
     };
-    __name(_BalancedPool, "BalancedPool");
-    var BalancedPool = _BalancedPool;
+    __name(BalancedPool, "BalancedPool");
     module2.exports = BalancedPool;
   }
 });
@@ -9446,7 +9449,7 @@ var require_dispatcher_weakref = __commonJS({
   "node_modules/undici/lib/compat/dispatcher-weakref.js"(exports2, module2) {
     "use strict";
     var { kConnected, kSize } = require_symbols();
-    var _CompatWeakRef = class _CompatWeakRef {
+    var CompatWeakRef = class {
       constructor(value) {
         this.value = value;
       }
@@ -9454,9 +9457,8 @@ var require_dispatcher_weakref = __commonJS({
         return this.value[kConnected] === 0 && this.value[kSize] === 0 ? void 0 : this.value;
       }
     };
-    __name(_CompatWeakRef, "CompatWeakRef");
-    var CompatWeakRef = _CompatWeakRef;
-    var _CompatFinalizer = class _CompatFinalizer {
+    __name(CompatWeakRef, "CompatWeakRef");
+    var CompatFinalizer = class {
       constructor(finalizer) {
         this.finalizer = finalizer;
       }
@@ -9470,8 +9472,7 @@ var require_dispatcher_weakref = __commonJS({
         }
       }
     };
-    __name(_CompatFinalizer, "CompatFinalizer");
-    var CompatFinalizer = _CompatFinalizer;
+    __name(CompatFinalizer, "CompatFinalizer");
     module2.exports = function() {
       if (process.env.NODE_V8_COVERAGE) {
         return {
@@ -9511,8 +9512,9 @@ var require_agent = __commonJS({
       return opts && opts.connections === 1 ? new Client(origin, opts) : new Pool(origin, opts);
     }
     __name(defaultFactory, "defaultFactory");
-    var _Agent = class _Agent extends DispatcherBase {
-      constructor({ factory = defaultFactory, maxRedirections = 0, connect, ...options } = {}) {
+    var Agent = class extends DispatcherBase {
+      constructor(_a = {}) {
+        var _b = _a, { factory = defaultFactory, maxRedirections = 0, connect } = _b, options = __objRest(_b, ["factory", "maxRedirections", "connect"]);
         super();
         if (typeof factory !== "function") {
           throw new InvalidArgumentError("factory must be a function.");
@@ -9524,23 +9526,20 @@ var require_agent = __commonJS({
           throw new InvalidArgumentError("maxRedirections must be a positive number");
         }
         if (connect && typeof connect !== "function") {
-          connect = { ...connect };
+          connect = __spreadValues({}, connect);
         }
         this[kInterceptors] = options.interceptors && options.interceptors.Agent && Array.isArray(options.interceptors.Agent) ? options.interceptors.Agent : [createRedirectInterceptor({ maxRedirections })];
-        this[kOptions] = { ...util.deepClone(options), connect };
-        this[kOptions].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
+        this[kOptions] = __spreadProps(__spreadValues({}, util.deepClone(options)), { connect });
+        this[kOptions].interceptors = options.interceptors ? __spreadValues({}, options.interceptors) : void 0;
         this[kMaxRedirections] = maxRedirections;
         this[kFactory] = factory;
-        this[kClients] = /* @__PURE__ */ new Map();
-        this[kFinalizer] = new FinalizationRegistry(
-          /* istanbul ignore next: gc is undeterministic */
-          (key) => {
-            const ref = this[kClients].get(key);
-            if (ref !== void 0 && ref.deref() === void 0) {
-              this[kClients].delete(key);
-            }
+        this[kClients] = new Map();
+        this[kFinalizer] = new FinalizationRegistry((key) => {
+          const ref = this[kClients].get(key);
+          if (ref !== void 0 && ref.deref() === void 0) {
+            this[kClients].delete(key);
           }
-        );
+        });
         const agent = this;
         this[kOnDrain] = (origin, targets) => {
           agent.emit("drain", origin, [agent, ...targets]);
@@ -9602,8 +9601,7 @@ var require_agent = __commonJS({
         await Promise.all(destroyPromises);
       }
     };
-    __name(_Agent, "Agent");
-    var Agent = _Agent;
+    __name(Agent, "Agent");
     module2.exports = Agent;
   }
 });
@@ -9625,14 +9623,12 @@ var require_readable = __commonJS({
     var kContentType = Symbol("kContentType");
     var noop = /* @__PURE__ */ __name(() => {
     }, "noop");
-    var _a;
-    module2.exports = (_a = class extends Readable {
+    module2.exports = /* @__PURE__ */ __name(class BodyReadable extends Readable {
       constructor({
         resume,
         abort,
         contentType = "",
         highWaterMark = 64 * 1024
-        // Same as nodejs fs streams.
       }) {
         super({
           autoDestroy: true,
@@ -9692,31 +9688,24 @@ var require_readable = __commonJS({
         }
         return super.push(chunk);
       }
-      // https://fetch.spec.whatwg.org/#dom-body-text
       async text() {
         return consume(this, "text");
       }
-      // https://fetch.spec.whatwg.org/#dom-body-json
       async json() {
         return consume(this, "json");
       }
-      // https://fetch.spec.whatwg.org/#dom-body-blob
       async blob() {
         return consume(this, "blob");
       }
-      // https://fetch.spec.whatwg.org/#dom-body-arraybuffer
       async arrayBuffer() {
         return consume(this, "arrayBuffer");
       }
-      // https://fetch.spec.whatwg.org/#dom-body-formdata
       async formData() {
         throw new NotSupportedError();
       }
-      // https://fetch.spec.whatwg.org/#dom-body-bodyused
       get bodyUsed() {
         return util.isDisturbed(this);
       }
-      // https://fetch.spec.whatwg.org/#dom-body-body
       get body() {
         if (!this[kBody]) {
           this[kBody] = ReadableStreamFrom(this);
@@ -9762,7 +9751,7 @@ var require_readable = __commonJS({
           }).resume();
         });
       }
-    }, __name(_a, "BodyReadable"), _a);
+    }, "BodyReadable");
     function isLocked(self) {
       return self[kBody] && self[kBody].locked === true || self[kConsume];
     }
@@ -9977,7 +9966,7 @@ var require_api_request = __commonJS({
     var { getResolveErrorBodyCallback } = require_util3();
     var { AsyncResource } = require("async_hooks");
     var { addSignal, removeSignal } = require_abort_signal();
-    var _RequestHandler = class _RequestHandler extends AsyncResource {
+    var RequestHandler = class extends AsyncResource {
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10047,11 +10036,7 @@ var require_api_request = __commonJS({
         this.res = body;
         if (callback !== null) {
           if (this.throwOnError && statusCode >= 400) {
-            this.runInAsyncScope(
-              getResolveErrorBodyCallback,
-              null,
-              { callback, body, contentType, statusCode, statusMessage, headers }
-            );
+            this.runInAsyncScope(getResolveErrorBodyCallback, null, { callback, body, contentType, statusCode, statusMessage, headers });
           } else {
             this.runInAsyncScope(callback, null, null, {
               statusCode,
@@ -10095,8 +10080,7 @@ var require_api_request = __commonJS({
         }
       }
     };
-    __name(_RequestHandler, "RequestHandler");
-    var RequestHandler = _RequestHandler;
+    __name(RequestHandler, "RequestHandler");
     function request(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
@@ -10135,7 +10119,7 @@ var require_api_stream = __commonJS({
     var { getResolveErrorBodyCallback } = require_util3();
     var { AsyncResource } = require("async_hooks");
     var { addSignal, removeSignal } = require_abort_signal();
-    var _StreamHandler = class _StreamHandler extends AsyncResource {
+    var StreamHandler = class extends AsyncResource {
       constructor(opts, factory, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10205,11 +10189,7 @@ var require_api_stream = __commonJS({
           const contentType = parsedHeaders["content-type"];
           res = new PassThrough();
           this.callback = null;
-          this.runInAsyncScope(
-            getResolveErrorBodyCallback,
-            null,
-            { callback, body: res, contentType, statusCode, statusMessage, headers }
-          );
+          this.runInAsyncScope(getResolveErrorBodyCallback, null, { callback, body: res, contentType, statusCode, statusMessage, headers });
         } else {
           if (factory === null) {
             return;
@@ -10273,8 +10253,7 @@ var require_api_stream = __commonJS({
         }
       }
     };
-    __name(_StreamHandler, "StreamHandler");
-    var StreamHandler = _StreamHandler;
+    __name(StreamHandler, "StreamHandler");
     function stream(opts, factory, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
@@ -10317,7 +10296,7 @@ var require_api_pipeline = __commonJS({
     var { addSignal, removeSignal } = require_abort_signal();
     var assert = require("assert");
     var kResume = Symbol("resume");
-    var _PipelineRequest = class _PipelineRequest extends Readable {
+    var PipelineRequest = class extends Readable {
       constructor() {
         super({ autoDestroy: true });
         this[kResume] = null;
@@ -10334,9 +10313,8 @@ var require_api_pipeline = __commonJS({
         callback(err);
       }
     };
-    __name(_PipelineRequest, "PipelineRequest");
-    var PipelineRequest = _PipelineRequest;
-    var _PipelineResponse = class _PipelineResponse extends Readable {
+    __name(PipelineRequest, "PipelineRequest");
+    var PipelineResponse = class extends Readable {
       constructor(resume) {
         super({ autoDestroy: true });
         this[kResume] = resume;
@@ -10351,9 +10329,8 @@ var require_api_pipeline = __commonJS({
         callback(err);
       }
     };
-    __name(_PipelineResponse, "PipelineResponse");
-    var PipelineResponse = _PipelineResponse;
-    var _PipelineHandler = class _PipelineHandler extends AsyncResource {
+    __name(PipelineResponse, "PipelineResponse");
+    var PipelineHandler = class extends AsyncResource {
       constructor(opts, handler) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10382,21 +10359,21 @@ var require_api_pipeline = __commonJS({
         this.ret = new Duplex({
           readableObjectMode: opts.objectMode,
           autoDestroy: true,
-          read: /* @__PURE__ */ __name(() => {
+          read: () => {
             const { body } = this;
             if (body && body.resume) {
               body.resume();
             }
-          }, "read"),
-          write: /* @__PURE__ */ __name((chunk, encoding, callback) => {
+          },
+          write: (chunk, encoding, callback) => {
             const { req } = this;
             if (req.push(chunk, encoding) || req._readableState.destroyed) {
               callback();
             } else {
               req[kResume] = callback;
             }
-          }, "write"),
-          destroy: /* @__PURE__ */ __name((err, callback) => {
+          },
+          destroy: (err, callback) => {
             const { body, req, res, ret, abort } = this;
             if (!err && !ret._readableState.endEmitted) {
               err = new RequestAbortedError();
@@ -10409,7 +10386,7 @@ var require_api_pipeline = __commonJS({
             util.destroy(res, err);
             removeSignal(this);
             callback(err);
-          }, "destroy")
+          }
         }).on("prefinish", () => {
           const { req } = this;
           req.push(null);
@@ -10487,12 +10464,11 @@ var require_api_pipeline = __commonJS({
         util.destroy(ret, err);
       }
     };
-    __name(_PipelineHandler, "PipelineHandler");
-    var PipelineHandler = _PipelineHandler;
+    __name(PipelineHandler, "PipelineHandler");
     function pipeline(opts, handler) {
       try {
         const pipelineHandler = new PipelineHandler(opts, handler);
-        this.dispatch({ ...opts, body: pipelineHandler.req }, pipelineHandler);
+        this.dispatch(__spreadProps(__spreadValues({}, opts), { body: pipelineHandler.req }), pipelineHandler);
         return pipelineHandler.ret;
       } catch (err) {
         return new PassThrough().destroy(err);
@@ -10512,7 +10488,7 @@ var require_api_upgrade = __commonJS({
     var util = require_util();
     var { addSignal, removeSignal } = require_abort_signal();
     var assert = require("assert");
-    var _UpgradeHandler = class _UpgradeHandler extends AsyncResource {
+    var UpgradeHandler = class extends AsyncResource {
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10566,8 +10542,7 @@ var require_api_upgrade = __commonJS({
         }
       }
     };
-    __name(_UpgradeHandler, "UpgradeHandler");
-    var UpgradeHandler = _UpgradeHandler;
+    __name(UpgradeHandler, "UpgradeHandler");
     function upgrade(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
@@ -10578,11 +10553,10 @@ var require_api_upgrade = __commonJS({
       }
       try {
         const upgradeHandler = new UpgradeHandler(opts, callback);
-        this.dispatch({
-          ...opts,
+        this.dispatch(__spreadProps(__spreadValues({}, opts), {
           method: opts.method || "GET",
           upgrade: opts.protocol || "Websocket"
-        }, upgradeHandler);
+        }), upgradeHandler);
       } catch (err) {
         if (typeof callback !== "function") {
           throw err;
@@ -10604,7 +10578,7 @@ var require_api_connect = __commonJS({
     var { InvalidArgumentError, RequestAbortedError, SocketError } = require_errors();
     var util = require_util();
     var { addSignal, removeSignal } = require_abort_signal();
-    var _ConnectHandler = class _ConnectHandler extends AsyncResource {
+    var ConnectHandler = class extends AsyncResource {
       constructor(opts, callback) {
         if (!opts || typeof opts !== "object") {
           throw new InvalidArgumentError("invalid opts");
@@ -10660,8 +10634,7 @@ var require_api_connect = __commonJS({
         }
       }
     };
-    __name(_ConnectHandler, "ConnectHandler");
-    var ConnectHandler = _ConnectHandler;
+    __name(ConnectHandler, "ConnectHandler");
     function connect(opts, callback) {
       if (callback === void 0) {
         return new Promise((resolve, reject) => {
@@ -10672,7 +10645,7 @@ var require_api_connect = __commonJS({
       }
       try {
         const connectHandler = new ConnectHandler(opts, callback);
-        this.dispatch({ ...opts, method: "CONNECT" }, connectHandler);
+        this.dispatch(__spreadProps(__spreadValues({}, opts), { method: "CONNECT" }), connectHandler);
       } catch (err) {
         if (typeof callback !== "function") {
           throw err;
@@ -10703,17 +10676,16 @@ var require_mock_errors = __commonJS({
   "node_modules/undici/lib/mock/mock-errors.js"(exports2, module2) {
     "use strict";
     var { UndiciError } = require_errors();
-    var _MockNotMatchedError = class _MockNotMatchedError extends UndiciError {
+    var MockNotMatchedError = class extends UndiciError {
       constructor(message) {
         super(message);
-        Error.captureStackTrace(this, _MockNotMatchedError);
+        Error.captureStackTrace(this, MockNotMatchedError);
         this.name = "MockNotMatchedError";
         this.message = message || "The request does not match any registered mock dispatches";
         this.code = "UND_MOCK_ERR_MOCK_NOT_MATCHED";
       }
     };
-    __name(_MockNotMatchedError, "MockNotMatchedError");
-    var MockNotMatchedError = _MockNotMatchedError;
+    __name(MockNotMatchedError, "MockNotMatchedError");
     module2.exports = {
       MockNotMatchedError
     };
@@ -10781,11 +10753,9 @@ var require_mock_utils = __commonJS({
     }
     __name(matchValue, "matchValue");
     function lowerCaseEntries(headers) {
-      return Object.fromEntries(
-        Object.entries(headers).map(([headerName, headerValue]) => {
-          return [headerName.toLocaleLowerCase(), headerValue];
-        })
-      );
+      return Object.fromEntries(Object.entries(headers).map(([headerName, headerValue]) => {
+        return [headerName.toLocaleLowerCase(), headerValue];
+      }));
     }
     __name(lowerCaseEntries, "lowerCaseEntries");
     function getHeaderByName(headers, key) {
@@ -10889,8 +10859,8 @@ var require_mock_utils = __commonJS({
     __name(getMockDispatch, "getMockDispatch");
     function addMockDispatch(mockDispatches, key, data) {
       const baseData = { timesInvoked: 0, times: 1, persist: false, consumed: false };
-      const replyData = typeof data === "function" ? { callback: data } : { ...data };
-      const newMockDispatch = { ...baseData, ...key, pending: true, data: { error: null, ...replyData } };
+      const replyData = typeof data === "function" ? { callback: data } : __spreadValues({}, data);
+      const newMockDispatch = __spreadProps(__spreadValues(__spreadValues({}, baseData), key), { pending: true, data: __spreadValues({ error: null }, replyData) });
       mockDispatches.push(newMockDispatch);
       return newMockDispatch;
     }
@@ -10943,7 +10913,7 @@ var require_mock_utils = __commonJS({
       const mockDispatch2 = getMockDispatch(this[kDispatches], key);
       mockDispatch2.timesInvoked++;
       if (mockDispatch2.data.callback) {
-        mockDispatch2.data = { ...mockDispatch2.data, ...mockDispatch2.data.callback(opts) };
+        mockDispatch2.data = __spreadValues(__spreadValues({}, mockDispatch2.data), mockDispatch2.data.callback(opts));
       }
       const { data: { statusCode, data, headers, trailers, error }, delay, persist } = mockDispatch2;
       const { timesInvoked, times } = mockDispatch2;
@@ -10963,7 +10933,7 @@ var require_mock_utils = __commonJS({
       }
       function handleReply(mockDispatches, _data = data) {
         const optsHeaders = Array.isArray(opts.headers) ? buildHeadersFromArray(opts.headers) : opts.headers;
-        const body = typeof _data === "function" ? _data({ ...opts, headers: optsHeaders }) : _data;
+        const body = typeof _data === "function" ? _data(__spreadProps(__spreadValues({}, opts), { headers: optsHeaders })) : _data;
         if (isPromise(body)) {
           body.then((newData) => handleReply(mockDispatches, newData));
           return;
@@ -11025,7 +10995,7 @@ var require_mock_utils = __commonJS({
     __name(checkNetConnect, "checkNetConnect");
     function buildMockOptions(opts) {
       if (opts) {
-        const { agent, ...mockOptions } = opts;
+        const _a = opts, { agent } = _a, mockOptions = __objRest(_a, ["agent"]);
         return mockOptions;
       }
     }
@@ -11064,13 +11034,10 @@ var require_mock_interceptor = __commonJS({
     } = require_mock_symbols();
     var { InvalidArgumentError } = require_errors();
     var { buildURL } = require_util();
-    var _MockScope = class _MockScope {
+    var MockScope = class {
       constructor(mockDispatch) {
         this[kMockDispatch] = mockDispatch;
       }
-      /**
-       * Delay a reply by a set amount in ms.
-       */
       delay(waitInMs) {
         if (typeof waitInMs !== "number" || !Number.isInteger(waitInMs) || waitInMs <= 0) {
           throw new InvalidArgumentError("waitInMs must be a valid integer > 0");
@@ -11078,16 +11045,10 @@ var require_mock_interceptor = __commonJS({
         this[kMockDispatch].delay = waitInMs;
         return this;
       }
-      /**
-       * For a defined reply, never mark as consumed.
-       */
       persist() {
         this[kMockDispatch].persist = true;
         return this;
       }
-      /**
-       * Allow one to define a reply for a set amount of matching requests.
-       */
       times(repeatTimes) {
         if (typeof repeatTimes !== "number" || !Number.isInteger(repeatTimes) || repeatTimes <= 0) {
           throw new InvalidArgumentError("repeatTimes must be a valid integer > 0");
@@ -11096,9 +11057,8 @@ var require_mock_interceptor = __commonJS({
         return this;
       }
     };
-    __name(_MockScope, "MockScope");
-    var MockScope = _MockScope;
-    var _MockInterceptor = class _MockInterceptor {
+    __name(MockScope, "MockScope");
+    var MockInterceptor = class {
       constructor(opts, mockDispatches) {
         if (typeof opts !== "object") {
           throw new InvalidArgumentError("opts must be an object");
@@ -11129,8 +11089,8 @@ var require_mock_interceptor = __commonJS({
       createMockScopeDispatchData(statusCode, data, responseOptions = {}) {
         const responseData = getResponseData(data);
         const contentLength = this[kContentLength] ? { "content-length": responseData.length } : {};
-        const headers = { ...this[kDefaultHeaders], ...contentLength, ...responseOptions.headers };
-        const trailers = { ...this[kDefaultTrailers], ...responseOptions.trailers };
+        const headers = __spreadValues(__spreadValues(__spreadValues({}, this[kDefaultHeaders]), contentLength), responseOptions.headers);
+        const trailers = __spreadValues(__spreadValues({}, this[kDefaultTrailers]), responseOptions.trailers);
         return { statusCode, data, headers, trailers };
       }
       validateReplyParameters(statusCode, data, responseOptions) {
@@ -11144,9 +11104,6 @@ var require_mock_interceptor = __commonJS({
           throw new InvalidArgumentError("responseOptions must be an object");
         }
       }
-      /**
-       * Mock an undici request with a defined reply.
-       */
       reply(replyData) {
         if (typeof replyData === "function") {
           const wrappedDefaultsCallback = /* @__PURE__ */ __name((opts) => {
@@ -11156,9 +11113,7 @@ var require_mock_interceptor = __commonJS({
             }
             const { statusCode: statusCode2, data: data2 = "", responseOptions: responseOptions2 = {} } = resolvedData;
             this.validateReplyParameters(statusCode2, data2, responseOptions2);
-            return {
-              ...this.createMockScopeDispatchData(statusCode2, data2, responseOptions2)
-            };
+            return __spreadValues({}, this.createMockScopeDispatchData(statusCode2, data2, responseOptions2));
           }, "wrappedDefaultsCallback");
           const newMockDispatch2 = addMockDispatch(this[kDispatches], this[kDispatchKey], wrappedDefaultsCallback);
           return new MockScope(newMockDispatch2);
@@ -11169,9 +11124,6 @@ var require_mock_interceptor = __commonJS({
         const newMockDispatch = addMockDispatch(this[kDispatches], this[kDispatchKey], dispatchData);
         return new MockScope(newMockDispatch);
       }
-      /**
-       * Mock an undici request with a defined error.
-       */
       replyWithError(error) {
         if (typeof error === "undefined") {
           throw new InvalidArgumentError("error must be defined");
@@ -11179,9 +11131,6 @@ var require_mock_interceptor = __commonJS({
         const newMockDispatch = addMockDispatch(this[kDispatches], this[kDispatchKey], { error });
         return new MockScope(newMockDispatch);
       }
-      /**
-       * Set default reply headers on the interceptor for subsequent replies
-       */
       defaultReplyHeaders(headers) {
         if (typeof headers === "undefined") {
           throw new InvalidArgumentError("headers must be defined");
@@ -11189,9 +11138,6 @@ var require_mock_interceptor = __commonJS({
         this[kDefaultHeaders] = headers;
         return this;
       }
-      /**
-       * Set default reply trailers on the interceptor for subsequent replies
-       */
       defaultReplyTrailers(trailers) {
         if (typeof trailers === "undefined") {
           throw new InvalidArgumentError("trailers must be defined");
@@ -11199,16 +11145,12 @@ var require_mock_interceptor = __commonJS({
         this[kDefaultTrailers] = trailers;
         return this;
       }
-      /**
-       * Set reply content length header for replies on the interceptor
-       */
       replyContentLength() {
         this[kContentLength] = true;
         return this;
       }
     };
-    __name(_MockInterceptor, "MockInterceptor");
-    var MockInterceptor = _MockInterceptor;
+    __name(MockInterceptor, "MockInterceptor");
     module2.exports.MockInterceptor = MockInterceptor;
     module2.exports.MockScope = MockScope;
   }
@@ -11233,7 +11175,7 @@ var require_mock_client = __commonJS({
     var { MockInterceptor } = require_mock_interceptor();
     var Symbols = require_symbols();
     var { InvalidArgumentError } = require_errors();
-    var _MockClient = class _MockClient extends Client {
+    var MockClient = class extends Client {
       constructor(origin, opts) {
         super(origin, opts);
         if (!opts || !opts.agent || typeof opts.agent.dispatch !== "function") {
@@ -11251,9 +11193,6 @@ var require_mock_client = __commonJS({
       get [Symbols.kConnected]() {
         return this[kConnected];
       }
-      /**
-       * Sets up the base interceptor for mocking replies from undici.
-       */
       intercept(opts) {
         return new MockInterceptor(opts, this[kDispatches]);
       }
@@ -11263,8 +11202,7 @@ var require_mock_client = __commonJS({
         this[kMockAgent][Symbols.kClients].delete(this[kOrigin]);
       }
     };
-    __name(_MockClient, "MockClient");
-    var MockClient = _MockClient;
+    __name(MockClient, "MockClient");
     module2.exports = MockClient;
   }
 });
@@ -11288,7 +11226,7 @@ var require_mock_pool = __commonJS({
     var { MockInterceptor } = require_mock_interceptor();
     var Symbols = require_symbols();
     var { InvalidArgumentError } = require_errors();
-    var _MockPool = class _MockPool extends Pool {
+    var MockPool = class extends Pool {
       constructor(origin, opts) {
         super(origin, opts);
         if (!opts || !opts.agent || typeof opts.agent.dispatch !== "function") {
@@ -11306,9 +11244,6 @@ var require_mock_pool = __commonJS({
       get [Symbols.kConnected]() {
         return this[kConnected];
       }
-      /**
-       * Sets up the base interceptor for mocking replies from undici.
-       */
       intercept(opts) {
         return new MockInterceptor(opts, this[kDispatches]);
       }
@@ -11318,8 +11253,7 @@ var require_mock_pool = __commonJS({
         this[kMockAgent][Symbols.kClients].delete(this[kOrigin]);
       }
     };
-    __name(_MockPool, "MockPool");
-    var MockPool = _MockPool;
+    __name(MockPool, "MockPool");
     module2.exports = MockPool;
   }
 });
@@ -11340,8 +11274,7 @@ var require_pluralizer = __commonJS({
       was: "were",
       this: "these"
     };
-    var _a;
-    module2.exports = (_a = class {
+    module2.exports = /* @__PURE__ */ __name(class Pluralizer {
       constructor(singular, plural) {
         this.singular = singular;
         this.plural = plural;
@@ -11350,9 +11283,9 @@ var require_pluralizer = __commonJS({
         const one = count === 1;
         const keys = one ? singulars : plurals;
         const noun = one ? this.singular : this.plural;
-        return { ...keys, count, noun };
+        return __spreadProps(__spreadValues({}, keys), { count, noun });
       }
-    }, __name(_a, "Pluralizer"), _a);
+    }, "Pluralizer");
   }
 });
 
@@ -11362,8 +11295,7 @@ var require_pending_interceptors_formatter = __commonJS({
     "use strict";
     var { Transform } = require("stream");
     var { Console } = require("console");
-    var _a;
-    module2.exports = (_a = class {
+    module2.exports = /* @__PURE__ */ __name(class PendingInterceptorsFormatter {
       constructor({ disableColors } = {}) {
         this.transform = new Transform({
           transform(chunk, _enc, cb) {
@@ -11378,21 +11310,19 @@ var require_pending_interceptors_formatter = __commonJS({
         });
       }
       format(pendingInterceptors) {
-        const withPrettyHeaders = pendingInterceptors.map(
-          ({ method, path, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
-            Method: method,
-            Origin: origin,
-            Path: path,
-            "Status code": statusCode,
-            Persistent: persist ? "\u2705" : "\u274C",
-            Invocations: timesInvoked,
-            Remaining: persist ? Infinity : times - timesInvoked
-          })
-        );
+        const withPrettyHeaders = pendingInterceptors.map(({ method, path, data: { statusCode }, persist, times, timesInvoked, origin }) => ({
+          Method: method,
+          Origin: origin,
+          Path: path,
+          "Status code": statusCode,
+          Persistent: persist ? "\u2705" : "\u274C",
+          Invocations: timesInvoked,
+          Remaining: persist ? Infinity : times - timesInvoked
+        }));
         this.logger.table(withPrettyHeaders);
         return this.transform.read().toString();
       }
-    }, __name(_a, "PendingInterceptorsFormatter"), _a);
+    }, "PendingInterceptorsFormatter");
   }
 });
 
@@ -11420,7 +11350,7 @@ var require_mock_agent = __commonJS({
     var Dispatcher = require_dispatcher();
     var Pluralizer = require_pluralizer();
     var PendingInterceptorsFormatter = require_pending_interceptors_formatter();
-    var _FakeWeakRef = class _FakeWeakRef {
+    var FakeWeakRef = class {
       constructor(value) {
         this.value = value;
       }
@@ -11428,9 +11358,8 @@ var require_mock_agent = __commonJS({
         return this.value;
       }
     };
-    __name(_FakeWeakRef, "FakeWeakRef");
-    var FakeWeakRef = _FakeWeakRef;
-    var _MockAgent = class _MockAgent extends Dispatcher {
+    __name(FakeWeakRef, "FakeWeakRef");
+    var MockAgent = class extends Dispatcher {
       constructor(opts) {
         super(opts);
         this[kNetConnect] = true;
@@ -11481,8 +11410,6 @@ var require_mock_agent = __commonJS({
       disableNetConnect() {
         this[kNetConnect] = false;
       }
-      // This is required to bypass issues caused by using global symbols - see:
-      // https://github.com/nodejs/undici/issues/1447
       get isMockActive() {
         return this[kIsMockActive];
       }
@@ -11518,7 +11445,7 @@ var require_mock_agent = __commonJS({
       }
       pendingInterceptors() {
         const mockAgentClients = this[kClients];
-        return Array.from(mockAgentClients.entries()).flatMap(([origin, scope]) => scope.deref()[kDispatches].map((dispatch) => ({ ...dispatch, origin }))).filter(({ pending }) => pending);
+        return Array.from(mockAgentClients.entries()).flatMap(([origin, scope]) => scope.deref()[kDispatches].map((dispatch) => __spreadProps(__spreadValues({}, dispatch), { origin }))).filter(({ pending }) => pending);
       }
       assertNoPendingInterceptors({ pendingInterceptorsFormatter = new PendingInterceptorsFormatter() } = {}) {
         const pending = this.pendingInterceptors();
@@ -11533,8 +11460,7 @@ ${pendingInterceptorsFormatter.format(pending)}
 `.trim());
       }
     };
-    __name(_MockAgent, "MockAgent");
-    var MockAgent = _MockAgent;
+    __name(MockAgent, "MockAgent");
     module2.exports = MockAgent;
   }
 });
@@ -11544,7 +11470,7 @@ var require_proxy_agent = __commonJS({
   "node_modules/undici/lib/proxy-agent.js"(exports2, module2) {
     "use strict";
     var { kProxy, kClose, kDestroy, kInterceptors } = require_symbols();
-    var { URL: URL3 } = require("url");
+    var { URL: URL2 } = require("url");
     var Agent = require_agent();
     var Pool = require_pool();
     var DispatcherBase = require_dispatcher_base();
@@ -11577,7 +11503,7 @@ var require_proxy_agent = __commonJS({
       return new Pool(origin, opts);
     }
     __name(defaultFactory, "defaultFactory");
-    var _ProxyAgent = class _ProxyAgent extends DispatcherBase {
+    var ProxyAgent = class extends DispatcherBase {
       constructor(opts) {
         super(opts);
         this[kProxy] = buildProxyOptions(opts);
@@ -11596,7 +11522,7 @@ var require_proxy_agent = __commonJS({
         this[kRequestTls] = opts.requestTls;
         this[kProxyTls] = opts.proxyTls;
         this[kProxyHeaders] = opts.headers || {};
-        const resolvedUrl = new URL3(opts.uri);
+        const resolvedUrl = new URL2(opts.uri);
         const { origin, port, host, username, password } = resolvedUrl;
         if (opts.auth && opts.token) {
           throw new InvalidArgumentError("opts.auth cannot be used in combination with opts.token");
@@ -11607,12 +11533,11 @@ var require_proxy_agent = __commonJS({
         } else if (username && password) {
           this[kProxyHeaders]["proxy-authorization"] = `Basic ${Buffer.from(`${decodeURIComponent(username)}:${decodeURIComponent(password)}`).toString("base64")}`;
         }
-        const connect = buildConnector({ ...opts.proxyTls });
-        this[kConnectEndpoint] = buildConnector({ ...opts.requestTls });
+        const connect = buildConnector(__spreadValues({}, opts.proxyTls));
+        this[kConnectEndpoint] = buildConnector(__spreadValues({}, opts.requestTls));
         this[kClient] = clientFactory(resolvedUrl, { connect });
-        this[kAgent] = new Agent({
-          ...opts,
-          connect: /* @__PURE__ */ __name(async (opts2, callback) => {
+        this[kAgent] = new Agent(__spreadProps(__spreadValues({}, opts), {
+          connect: async (opts2, callback) => {
             let requestedHost = opts2.host;
             if (!opts2.port) {
               requestedHost += `:${defaultProtocolPort(opts2.protocol)}`;
@@ -11623,10 +11548,9 @@ var require_proxy_agent = __commonJS({
                 port,
                 path: requestedHost,
                 signal: opts2.signal,
-                headers: {
-                  ...this[kProxyHeaders],
+                headers: __spreadProps(__spreadValues({}, this[kProxyHeaders]), {
                   host
-                }
+                })
               });
               if (statusCode !== 200) {
                 socket.on("error", () => {
@@ -11643,27 +11567,22 @@ var require_proxy_agent = __commonJS({
               } else {
                 servername = opts2.servername;
               }
-              this[kConnectEndpoint]({ ...opts2, servername, httpSocket: socket }, callback);
+              this[kConnectEndpoint](__spreadProps(__spreadValues({}, opts2), { servername, httpSocket: socket }), callback);
             } catch (err) {
               callback(err);
             }
-          }, "connect")
-        });
+          }
+        }));
       }
       dispatch(opts, handler) {
-        const { host } = new URL3(opts.origin);
+        const { host } = new URL2(opts.origin);
         const headers = buildHeaders(opts.headers);
         throwIfProxyAuthIsSent(headers);
-        return this[kAgent].dispatch(
-          {
-            ...opts,
-            headers: {
-              ...headers,
-              host
-            }
-          },
-          handler
-        );
+        return this[kAgent].dispatch(__spreadProps(__spreadValues({}, opts), {
+          headers: __spreadProps(__spreadValues({}, headers), {
+            host
+          })
+        }), handler);
       }
       async [kClose]() {
         await this[kAgent].close();
@@ -11674,8 +11593,7 @@ var require_proxy_agent = __commonJS({
         await this[kClient].destroy();
       }
     };
-    __name(_ProxyAgent, "ProxyAgent");
-    var ProxyAgent = _ProxyAgent;
+    __name(ProxyAgent, "ProxyAgent");
     function buildHeaders(headers) {
       if (Array.isArray(headers)) {
         const headersPair = {};
@@ -11711,17 +11629,15 @@ var require_RetryHandler = __commonJS({
       return diff;
     }
     __name(calculateRetryAfterHeader, "calculateRetryAfterHeader");
-    var _RetryHandler = class _RetryHandler {
+    var RetryHandler = class {
       constructor(opts, handlers) {
-        const { retryOptions, ...dispatchOpts } = opts;
+        const _a = opts, { retryOptions } = _a, dispatchOpts = __objRest(_a, ["retryOptions"]);
         const {
-          // Retry scoped
           retry: retryFn,
           maxRetries,
           maxTimeout,
           minTimeout,
           timeoutFactor,
-          // Response scoped
           methods,
           errorCodes,
           retryAfter,
@@ -11733,19 +11649,14 @@ var require_RetryHandler = __commonJS({
         this.abort = null;
         this.aborted = false;
         this.retryOpts = {
-          retry: retryFn ?? _RetryHandler[kRetryHandlerDefaultRetry],
+          retry: retryFn ?? RetryHandler[kRetryHandlerDefaultRetry],
           retryAfter: retryAfter ?? true,
           maxTimeout: maxTimeout ?? 30 * 1e3,
-          // 30s,
           timeout: minTimeout ?? 500,
-          // .5s
           timeoutFactor: timeoutFactor ?? 2,
           maxRetries: maxRetries ?? 5,
-          // What errors we should retry
           methods: methods ?? ["GET", "HEAD", "OPTIONS", "PUT", "DELETE", "TRACE"],
-          // Indicates which errors to retry
           statusCodes: statusCodes ?? [500, 502, 503, 504, 429],
-          // List of errors to retry
           errorCodes: errorCodes ?? [
             "ECONNRESET",
             "ECONNREFUSED",
@@ -11789,7 +11700,8 @@ var require_RetryHandler = __commonJS({
         }
       }
       onBodySent(chunk) {
-        if (this.handler.onBodySent) return this.handler.onBodySent(chunk);
+        if (this.handler.onBodySent)
+          return this.handler.onBodySent(chunk);
       }
       static [kRetryHandlerDefaultRetry](err, { state, opts }, cb) {
         const { statusCode, code, headers } = err;
@@ -11834,12 +11746,10 @@ var require_RetryHandler = __commonJS({
         const headers = parseHeaders(rawHeaders);
         this.retryCount += 1;
         if (statusCode >= 300) {
-          this.abort(
-            new RequestRetryError("Request failed", statusCode, {
-              headers,
-              count: this.retryCount
-            })
-          );
+          this.abort(new RequestRetryError("Request failed", statusCode, {
+            headers,
+            count: this.retryCount
+          }));
           return false;
         }
         if (this.resume != null) {
@@ -11849,21 +11759,17 @@ var require_RetryHandler = __commonJS({
           }
           const contentRange = parseRangeHeader(headers["content-range"]);
           if (!contentRange) {
-            this.abort(
-              new RequestRetryError("Content-Range mismatch", statusCode, {
-                headers,
-                count: this.retryCount
-              })
-            );
+            this.abort(new RequestRetryError("Content-Range mismatch", statusCode, {
+              headers,
+              count: this.retryCount
+            }));
             return false;
           }
           if (this.etag != null && this.etag !== headers.etag) {
-            this.abort(
-              new RequestRetryError("ETag mismatch", statusCode, {
-                headers,
-                count: this.retryCount
-              })
-            );
+            this.abort(new RequestRetryError("ETag mismatch", statusCode, {
+              headers,
+              count: this.retryCount
+            }));
             return false;
           }
           const { start, size, end = size } = contentRange;
@@ -11876,23 +11782,12 @@ var require_RetryHandler = __commonJS({
           if (statusCode === 206) {
             const range = parseRangeHeader(headers["content-range"]);
             if (range == null) {
-              return this.handler.onHeaders(
-                statusCode,
-                rawHeaders,
-                resume,
-                statusMessage
-              );
+              return this.handler.onHeaders(statusCode, rawHeaders, resume, statusMessage);
             }
             const { start, size, end = size } = range;
-            assert(
-              start != null && Number.isFinite(start) && this.start !== start,
-              "content-range mismatch"
-            );
+            assert(start != null && Number.isFinite(start) && this.start !== start, "content-range mismatch");
             assert(Number.isFinite(start));
-            assert(
-              end != null && Number.isFinite(end) && this.end !== end,
-              "invalid content-length"
-            );
+            assert(end != null && Number.isFinite(end) && this.end !== end, "invalid content-length");
             this.start = start;
             this.end = end;
           }
@@ -11901,18 +11796,10 @@ var require_RetryHandler = __commonJS({
             this.end = contentLength != null ? Number(contentLength) : null;
           }
           assert(Number.isFinite(this.start));
-          assert(
-            this.end == null || Number.isFinite(this.end),
-            "invalid content-length"
-          );
+          assert(this.end == null || Number.isFinite(this.end), "invalid content-length");
           this.resume = resume;
           this.etag = headers.etag != null ? headers.etag : null;
-          return this.handler.onHeaders(
-            statusCode,
-            rawHeaders,
-            resume,
-            statusMessage
-          );
+          return this.handler.onHeaders(statusCode, rawHeaders, resume, statusMessage);
         }
         const err = new RequestRetryError("Request failed", statusCode, {
           headers,
@@ -11933,26 +11820,20 @@ var require_RetryHandler = __commonJS({
         if (this.aborted || isDisturbed(this.opts.body)) {
           return this.handler.onError(err);
         }
-        this.retryOpts.retry(
-          err,
-          {
-            state: { counter: this.retryCount++, currentTimeout: this.retryAfter },
-            opts: { retryOptions: this.retryOpts, ...this.opts }
-          },
-          onRetry.bind(this)
-        );
+        this.retryOpts.retry(err, {
+          state: { counter: this.retryCount++, currentTimeout: this.retryAfter },
+          opts: __spreadValues({ retryOptions: this.retryOpts }, this.opts)
+        }, onRetry.bind(this));
         function onRetry(err2) {
           if (err2 != null || this.aborted || isDisturbed(this.opts.body)) {
             return this.handler.onError(err2);
           }
           if (this.start !== 0) {
-            this.opts = {
-              ...this.opts,
-              headers: {
-                ...this.opts.headers,
+            this.opts = __spreadProps(__spreadValues({}, this.opts), {
+              headers: __spreadProps(__spreadValues({}, this.opts.headers), {
                 range: `bytes=${this.start}-${this.end ?? ""}`
-              }
-            };
+              })
+            });
           }
           try {
             this.dispatch(this.opts, this);
@@ -11963,8 +11844,7 @@ var require_RetryHandler = __commonJS({
         __name(onRetry, "onRetry");
       }
     };
-    __name(_RetryHandler, "RetryHandler");
-    var RetryHandler = _RetryHandler;
+    __name(RetryHandler, "RetryHandler");
     module2.exports = RetryHandler;
   }
 });
@@ -12006,8 +11886,7 @@ var require_global2 = __commonJS({
 var require_DecoratorHandler = __commonJS({
   "node_modules/undici/lib/handler/DecoratorHandler.js"(exports2, module2) {
     "use strict";
-    var _a;
-    module2.exports = (_a = class {
+    module2.exports = /* @__PURE__ */ __name(class DecoratorHandler {
       constructor(handler) {
         this.handler = handler;
       }
@@ -12032,7 +11911,7 @@ var require_DecoratorHandler = __commonJS({
       onBodySent(...args) {
         return this.handler.onBodySent(...args);
       }
-    }, __name(_a, "DecoratorHandler"), _a);
+    }, "DecoratorHandler");
   }
 });
 
@@ -12059,8 +11938,10 @@ var require_headers = __commonJS({
     function headerValueNormalize(potentialValue) {
       let i = 0;
       let j = potentialValue.length;
-      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(j - 1))) --j;
-      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i))) ++i;
+      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(j - 1)))
+        --j;
+      while (j > i && isHTTPWhiteSpaceCharCode(potentialValue.charCodeAt(i)))
+        ++i;
       return i === 0 && j === potentialValue.length ? potentialValue : potentialValue.substring(i, j);
     }
     __name(headerValueNormalize, "headerValueNormalize");
@@ -12112,11 +11993,10 @@ var require_headers = __commonJS({
       return headers[kHeadersList].append(name, value);
     }
     __name(appendHeader, "appendHeader");
-    var _HeadersList = class _HeadersList {
-      /** @type {[string, string][]|null} */
+    var HeadersList = class {
       cookies = null;
       constructor(init) {
-        if (init instanceof _HeadersList) {
+        if (init instanceof HeadersList) {
           this[kHeadersMap] = new Map(init[kHeadersMap]);
           this[kHeadersSortedMap] = init[kHeadersSortedMap];
           this.cookies = init.cookies === null ? null : [...init.cookies];
@@ -12125,7 +12005,6 @@ var require_headers = __commonJS({
           this[kHeadersSortedMap] = null;
         }
       }
-      // https://fetch.spec.whatwg.org/#header-list-contains
       contains(name) {
         name = name.toLowerCase();
         return this[kHeadersMap].has(name);
@@ -12135,7 +12014,6 @@ var require_headers = __commonJS({
         this[kHeadersSortedMap] = null;
         this.cookies = null;
       }
-      // https://fetch.spec.whatwg.org/#concept-header-list-append
       append(name, value) {
         this[kHeadersSortedMap] = null;
         const lowercaseName = name.toLowerCase();
@@ -12154,7 +12032,6 @@ var require_headers = __commonJS({
           this.cookies.push(value);
         }
       }
-      // https://fetch.spec.whatwg.org/#concept-header-list-set
       set(name, value) {
         this[kHeadersSortedMap] = null;
         const lowercaseName = name.toLowerCase();
@@ -12163,7 +12040,6 @@ var require_headers = __commonJS({
         }
         this[kHeadersMap].set(lowercaseName, { name, value });
       }
-      // https://fetch.spec.whatwg.org/#concept-header-list-delete
       delete(name) {
         this[kHeadersSortedMap] = null;
         name = name.toLowerCase();
@@ -12172,7 +12048,6 @@ var require_headers = __commonJS({
         }
         this[kHeadersMap].delete(name);
       }
-      // https://fetch.spec.whatwg.org/#concept-header-list-get
       get(name) {
         const value = this[kHeadersMap].get(name.toLowerCase());
         return value === void 0 ? null : value.value;
@@ -12192,9 +12067,8 @@ var require_headers = __commonJS({
         return headers;
       }
     };
-    __name(_HeadersList, "HeadersList");
-    var HeadersList = _HeadersList;
-    var _Headers = class _Headers {
+    __name(HeadersList, "HeadersList");
+    var Headers = class {
       constructor(init = void 0) {
         if (init === kConstruct) {
           return;
@@ -12206,17 +12080,15 @@ var require_headers = __commonJS({
           fill(this, init);
         }
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-append
       append(name, value) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 2, { header: "Headers.append" });
         name = webidl.converters.ByteString(name);
         value = webidl.converters.ByteString(value);
         return appendHeader(this, name, value);
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-delete
       delete(name) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 1, { header: "Headers.delete" });
         name = webidl.converters.ByteString(name);
         if (!isValidHeaderName(name)) {
@@ -12235,9 +12107,8 @@ var require_headers = __commonJS({
         }
         this[kHeadersList].delete(name);
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-get
       get(name) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 1, { header: "Headers.get" });
         name = webidl.converters.ByteString(name);
         if (!isValidHeaderName(name)) {
@@ -12249,9 +12120,8 @@ var require_headers = __commonJS({
         }
         return this[kHeadersList].get(name);
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-has
       has(name) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 1, { header: "Headers.has" });
         name = webidl.converters.ByteString(name);
         if (!isValidHeaderName(name)) {
@@ -12263,9 +12133,8 @@ var require_headers = __commonJS({
         }
         return this[kHeadersList].contains(name);
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-set
       set(name, value) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 2, { header: "Headers.set" });
         name = webidl.converters.ByteString(name);
         value = webidl.converters.ByteString(value);
@@ -12289,16 +12158,14 @@ var require_headers = __commonJS({
         }
         this[kHeadersList].set(name, value);
       }
-      // https://fetch.spec.whatwg.org/#dom-headers-getsetcookie
       getSetCookie() {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         const list = this[kHeadersList].cookies;
         if (list) {
           return [...list];
         }
         return [];
       }
-      // https://fetch.spec.whatwg.org/#concept-header-list-sort-and-combine
       get [kHeadersSortedMap]() {
         if (this[kHeadersList][kHeadersSortedMap]) {
           return this[kHeadersList][kHeadersSortedMap];
@@ -12321,76 +12188,45 @@ var require_headers = __commonJS({
         return headers;
       }
       keys() {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         if (this[kGuard] === "immutable") {
           const value = this[kHeadersSortedMap];
-          return makeIterator(
-            () => value,
-            "Headers",
-            "key"
-          );
+          return makeIterator(() => value, "Headers", "key");
         }
-        return makeIterator(
-          () => [...this[kHeadersSortedMap].values()],
-          "Headers",
-          "key"
-        );
+        return makeIterator(() => [...this[kHeadersSortedMap].values()], "Headers", "key");
       }
       values() {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         if (this[kGuard] === "immutable") {
           const value = this[kHeadersSortedMap];
-          return makeIterator(
-            () => value,
-            "Headers",
-            "value"
-          );
+          return makeIterator(() => value, "Headers", "value");
         }
-        return makeIterator(
-          () => [...this[kHeadersSortedMap].values()],
-          "Headers",
-          "value"
-        );
+        return makeIterator(() => [...this[kHeadersSortedMap].values()], "Headers", "value");
       }
       entries() {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         if (this[kGuard] === "immutable") {
           const value = this[kHeadersSortedMap];
-          return makeIterator(
-            () => value,
-            "Headers",
-            "key+value"
-          );
+          return makeIterator(() => value, "Headers", "key+value");
         }
-        return makeIterator(
-          () => [...this[kHeadersSortedMap].values()],
-          "Headers",
-          "key+value"
-        );
+        return makeIterator(() => [...this[kHeadersSortedMap].values()], "Headers", "key+value");
       }
-      /**
-       * @param {(value: string, key: string, self: Headers) => void} callbackFn
-       * @param {unknown} thisArg
-       */
       forEach(callbackFn, thisArg = globalThis) {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         webidl.argumentLengthCheck(arguments, 1, { header: "Headers.forEach" });
         if (typeof callbackFn !== "function") {
-          throw new TypeError(
-            "Failed to execute 'forEach' on 'Headers': parameter 1 is not of type 'Function'."
-          );
+          throw new TypeError("Failed to execute 'forEach' on 'Headers': parameter 1 is not of type 'Function'.");
         }
         for (const [key, value] of this) {
           callbackFn.apply(thisArg, [value, key, this]);
         }
       }
       [Symbol.for("nodejs.util.inspect.custom")]() {
-        webidl.brandCheck(this, _Headers);
+        webidl.brandCheck(this, Headers);
         return this[kHeadersList];
       }
     };
-    __name(_Headers, "Headers");
-    var Headers = _Headers;
+    __name(Headers, "Headers");
     Headers.prototype[Symbol.iterator] = Headers.prototype.entries;
     Object.defineProperties(Headers.prototype, {
       append: kEnumerableProperty,
@@ -12462,11 +12298,10 @@ var require_response = __commonJS({
     var { types } = require("util");
     var ReadableStream = globalThis.ReadableStream || require("stream/web").ReadableStream;
     var textEncoder = new TextEncoder("utf-8");
-    var _Response = class _Response {
-      // Creates network error Response.
+    var Response = class {
       static error() {
         const relevantRealm = { settingsObject: {} };
-        const responseObject = new _Response();
+        const responseObject = new Response();
         responseObject[kState] = makeNetworkError();
         responseObject[kRealm] = relevantRealm;
         responseObject[kHeaders][kHeadersList] = responseObject[kState].headersList;
@@ -12474,25 +12309,21 @@ var require_response = __commonJS({
         responseObject[kHeaders][kRealm] = relevantRealm;
         return responseObject;
       }
-      // https://fetch.spec.whatwg.org/#dom-response-json
       static json(data, init = {}) {
         webidl.argumentLengthCheck(arguments, 1, { header: "Response.json" });
         if (init !== null) {
           init = webidl.converters.ResponseInit(init);
         }
-        const bytes = textEncoder.encode(
-          serializeJavascriptValueToJSONString(data)
-        );
+        const bytes = textEncoder.encode(serializeJavascriptValueToJSONString(data));
         const body = extractBody(bytes);
         const relevantRealm = { settingsObject: {} };
-        const responseObject = new _Response();
+        const responseObject = new Response();
         responseObject[kRealm] = relevantRealm;
         responseObject[kHeaders][kGuard] = "response";
         responseObject[kHeaders][kRealm] = relevantRealm;
         initializeResponse(responseObject, init, { body: body[0], type: "application/json" });
         return responseObject;
       }
-      // Creates a redirect Response that redirects to url with status status.
       static redirect(url, status = 302) {
         const relevantRealm = { settingsObject: {} };
         webidl.argumentLengthCheck(arguments, 1, { header: "Response.redirect" });
@@ -12509,7 +12340,7 @@ var require_response = __commonJS({
         if (!redirectStatusSet.has(status)) {
           throw new RangeError("Invalid status code " + status);
         }
-        const responseObject = new _Response();
+        const responseObject = new Response();
         responseObject[kRealm] = relevantRealm;
         responseObject[kHeaders][kGuard] = "immutable";
         responseObject[kHeaders][kRealm] = relevantRealm;
@@ -12518,7 +12349,6 @@ var require_response = __commonJS({
         responseObject[kState].headersList.append("location", value);
         return responseObject;
       }
-      // https://fetch.spec.whatwg.org/#dom-response
       constructor(body = null, init = {}) {
         if (body !== null) {
           body = webidl.converters.BodyInit(body);
@@ -12537,14 +12367,12 @@ var require_response = __commonJS({
         }
         initializeResponse(this, init, bodyWithType);
       }
-      // Returns response’s type, e.g., "cors".
       get type() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].type;
       }
-      // Returns response’s URL, if it has one; otherwise the empty string.
       get url() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         const urlList = this[kState].urlList;
         const url = urlList[urlList.length - 1] ?? null;
         if (url === null) {
@@ -12552,42 +12380,36 @@ var require_response = __commonJS({
         }
         return URLSerializer(url, true);
       }
-      // Returns whether response was obtained through a redirect.
       get redirected() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].urlList.length > 1;
       }
-      // Returns response’s status.
       get status() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].status;
       }
-      // Returns whether response’s status is an ok status.
       get ok() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].status >= 200 && this[kState].status <= 299;
       }
-      // Returns response’s status message.
       get statusText() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].statusText;
       }
-      // Returns response’s headers as Headers.
       get headers() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kHeaders];
       }
       get body() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return this[kState].body ? this[kState].body.stream : null;
       }
       get bodyUsed() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         return !!this[kState].body && util.isDisturbed(this[kState].body.stream);
       }
-      // Returns a clone of response.
       clone() {
-        webidl.brandCheck(this, _Response);
+        webidl.brandCheck(this, Response);
         if (this.bodyUsed || this.body && this.body.locked) {
           throw webidl.errors.exception({
             header: "Response.clone",
@@ -12595,7 +12417,7 @@ var require_response = __commonJS({
           });
         }
         const clonedResponse = cloneResponse(this[kState]);
-        const clonedResponseObject = new _Response();
+        const clonedResponseObject = new Response();
         clonedResponseObject[kState] = clonedResponse;
         clonedResponseObject[kRealm] = this[kRealm];
         clonedResponseObject[kHeaders][kHeadersList] = clonedResponse.headersList;
@@ -12604,8 +12426,7 @@ var require_response = __commonJS({
         return clonedResponseObject;
       }
     };
-    __name(_Response, "Response");
-    var Response = _Response;
+    __name(Response, "Response");
     mixinBody(Response);
     Object.defineProperties(Response.prototype, {
       type: kEnumerableProperty,
@@ -12630,12 +12451,9 @@ var require_response = __commonJS({
     });
     function cloneResponse(response) {
       if (response.internalResponse) {
-        return filterResponse(
-          cloneResponse(response.internalResponse),
-          response.type
-        );
+        return filterResponse(cloneResponse(response.internalResponse), response.type);
       }
-      const newResponse = makeResponse({ ...response, body: null });
+      const newResponse = makeResponse(__spreadProps(__spreadValues({}, response), { body: null }));
       if (response.body != null) {
         newResponse.body = cloneBody(response.body);
       }
@@ -12643,7 +12461,7 @@ var require_response = __commonJS({
     }
     __name(cloneResponse, "cloneResponse");
     function makeResponse(init) {
-      return {
+      return __spreadProps(__spreadValues({
         aborted: false,
         rangeRequested: false,
         timingAllowPassed: false,
@@ -12652,11 +12470,11 @@ var require_response = __commonJS({
         status: 200,
         timingInfo: null,
         cacheState: "",
-        statusText: "",
-        ...init,
+        statusText: ""
+      }, init), {
         headersList: init.headersList ? new HeadersList(init.headersList) : new HeadersList(),
         urlList: init.urlList ? [...init.urlList] : []
-      };
+      });
     }
     __name(makeResponse, "makeResponse");
     function makeNetworkError(reason) {
@@ -12670,10 +12488,9 @@ var require_response = __commonJS({
     }
     __name(makeNetworkError, "makeNetworkError");
     function makeFilteredResponse(response, state) {
-      state = {
-        internalResponse: response,
-        ...state
-      };
+      state = __spreadValues({
+        internalResponse: response
+      }, state);
       return new Proxy(response, {
         get(target, p) {
           return p in state ? state[p] : target[p];
@@ -12755,15 +12572,9 @@ var require_response = __commonJS({
       }
     }
     __name(initializeResponse, "initializeResponse");
-    webidl.converters.ReadableStream = webidl.interfaceConverter(
-      ReadableStream
-    );
-    webidl.converters.FormData = webidl.interfaceConverter(
-      FormData
-    );
-    webidl.converters.URLSearchParams = webidl.interfaceConverter(
-      URLSearchParams
-    );
+    webidl.converters.ReadableStream = webidl.interfaceConverter(ReadableStream);
+    webidl.converters.FormData = webidl.interfaceConverter(FormData);
+    webidl.converters.URLSearchParams = webidl.interfaceConverter(URLSearchParams);
     webidl.converters.XMLHttpRequestBodyInit = function(V) {
       if (typeof V === "string") {
         return webidl.converters.USVString(V);
@@ -12786,7 +12597,7 @@ var require_response = __commonJS({
       if (V instanceof ReadableStream) {
         return webidl.converters.ReadableStream(V);
       }
-      if (V == null ? void 0 : V[Symbol.asyncIterator]) {
+      if (V?.[Symbol.asyncIterator]) {
         return V;
       }
       return webidl.converters.XMLHttpRequestBodyInit(V);
@@ -12856,10 +12667,8 @@ var require_request2 = __commonJS({
     var requestFinalizer = new FinalizationRegistry(({ signal, abort }) => {
       signal.removeEventListener("abort", abort);
     });
-    var _Request = class _Request {
-      // https://fetch.spec.whatwg.org/#dom-request
+    var Request = class {
       constructor(input, init = {}) {
-        var _a, _b;
         if (input === kConstruct) {
           return;
         }
@@ -12870,8 +12679,7 @@ var require_request2 = __commonJS({
           settingsObject: {
             baseUrl: getGlobalOrigin(),
             get origin() {
-              var _a2;
-              return (_a2 = this.baseUrl) == null ? void 0 : _a2.origin;
+              return this.baseUrl?.origin;
             },
             policyContainer: makePolicyContainer()
           }
@@ -12888,20 +12696,18 @@ var require_request2 = __commonJS({
             throw new TypeError("Failed to parse URL from " + input, { cause: err });
           }
           if (parsedURL.username || parsedURL.password) {
-            throw new TypeError(
-              "Request cannot be constructed from a URL that includes credentials: " + input
-            );
+            throw new TypeError("Request cannot be constructed from a URL that includes credentials: " + input);
           }
           request = makeRequest({ urlList: [parsedURL] });
           fallbackMode = "cors";
         } else {
-          assert(input instanceof _Request);
+          assert(input instanceof Request);
           request = input[kState];
           signal = input[kSignal];
         }
         const origin = this[kRealm].settingsObject.origin;
         let window = "client";
-        if (((_b = (_a = request.window) == null ? void 0 : _a.constructor) == null ? void 0 : _b.name) === "EnvironmentSettingsObject" && sameOrigin(request.window, origin)) {
+        if (request.window?.constructor?.name === "EnvironmentSettingsObject" && sameOrigin(request.window, origin)) {
           window = request.window;
         }
         if (init.window != null) {
@@ -12911,46 +12717,23 @@ var require_request2 = __commonJS({
           window = "no-window";
         }
         request = makeRequest({
-          // URL request’s URL.
-          // undici implementation note: this is set as the first item in request's urlList in makeRequest
-          // method request’s method.
           method: request.method,
-          // header list A copy of request’s header list.
-          // undici implementation note: headersList is cloned in makeRequest
           headersList: request.headersList,
-          // unsafe-request flag Set.
           unsafeRequest: request.unsafeRequest,
-          // client This’s relevant settings object.
           client: this[kRealm].settingsObject,
-          // window window.
           window,
-          // priority request’s priority.
           priority: request.priority,
-          // origin request’s origin. The propagation of the origin is only significant for navigation requests
-          // being handled by a service worker. In this scenario a request can have an origin that is different
-          // from the current client.
           origin: request.origin,
-          // referrer request’s referrer.
           referrer: request.referrer,
-          // referrer policy request’s referrer policy.
           referrerPolicy: request.referrerPolicy,
-          // mode request’s mode.
           mode: request.mode,
-          // credentials mode request’s credentials mode.
           credentials: request.credentials,
-          // cache mode request’s cache mode.
           cache: request.cache,
-          // redirect mode request’s redirect mode.
           redirect: request.redirect,
-          // integrity metadata request’s integrity metadata.
           integrity: request.integrity,
-          // keepalive request’s keepalive.
           keepalive: request.keepalive,
-          // reload-navigation flag request’s reload-navigation flag.
           reloadNavigation: request.reloadNavigation,
-          // history-navigation flag request’s history-navigation flag.
           historyNavigation: request.historyNavigation,
-          // URL list A clone of request’s URL list.
           urlList: [...request.urlList]
         });
         const initHasKey = Object.keys(init).length !== 0;
@@ -13009,9 +12792,7 @@ var require_request2 = __commonJS({
           request.cache = init.cache;
         }
         if (request.cache === "only-if-cached" && request.mode !== "same-origin") {
-          throw new TypeError(
-            "'only-if-cached' can be set only with 'same-origin' mode"
-          );
+          throw new TypeError("'only-if-cached' can be set only with 'same-origin' mode");
         }
         if (init.redirect !== void 0) {
           request.redirect = init.redirect;
@@ -13042,9 +12823,7 @@ var require_request2 = __commonJS({
         this[kSignal][kRealm] = this[kRealm];
         if (signal != null) {
           if (!signal || typeof signal.aborted !== "boolean" || typeof signal.addEventListener !== "function") {
-            throw new TypeError(
-              "Failed to construct 'Request': member signal is not of type AbortSignal."
-            );
+            throw new TypeError("Failed to construct 'Request': member signal is not of type AbortSignal.");
           }
           if (signal.aborted) {
             ac.abort(signal.reason);
@@ -13075,9 +12854,7 @@ var require_request2 = __commonJS({
         this[kHeaders][kRealm] = this[kRealm];
         if (mode === "no-cors") {
           if (!corsSafeListedMethodsSet.has(request.method)) {
-            throw new TypeError(
-              `'${request.method} is unsupported in no-cors mode.`
-            );
+            throw new TypeError(`'${request.method} is unsupported in no-cors mode.`);
           }
           this[kHeaders][kGuard] = "request-no-cors";
         }
@@ -13094,16 +12871,13 @@ var require_request2 = __commonJS({
             fillHeaders(this[kHeaders], headers);
           }
         }
-        const inputBody = input instanceof _Request ? input[kState].body : null;
+        const inputBody = input instanceof Request ? input[kState].body : null;
         if ((init.body != null || inputBody != null) && (request.method === "GET" || request.method === "HEAD")) {
           throw new TypeError("Request with GET/HEAD method cannot have body.");
         }
         let initBody = null;
         if (init.body != null) {
-          const [extractedBody, contentType] = extractBody(
-            init.body,
-            request.keepalive
-          );
+          const [extractedBody, contentType] = extractBody(init.body, request.keepalive);
           initBody = extractedBody;
           if (contentType && !this[kHeaders][kHeadersList].contains("content-type")) {
             this[kHeaders].append("content-type", contentType);
@@ -13115,18 +12889,14 @@ var require_request2 = __commonJS({
             throw new TypeError("RequestInit: duplex option is required when sending a body.");
           }
           if (request.mode !== "same-origin" && request.mode !== "cors") {
-            throw new TypeError(
-              'If request is made from ReadableStream, mode should be "same-origin" or "cors"'
-            );
+            throw new TypeError('If request is made from ReadableStream, mode should be "same-origin" or "cors"');
           }
           request.useCORSPreflightFlag = true;
         }
         let finalBody = inputOrInitBody;
         if (initBody == null && inputBody != null) {
           if (util.isDisturbed(inputBody.stream) || inputBody.stream.locked) {
-            throw new TypeError(
-              "Cannot construct a Request with a Request object that has already been used."
-            );
+            throw new TypeError("Cannot construct a Request with a Request object that has already been used.");
           }
           if (!TransformStream) {
             TransformStream = require("stream/web").TransformStream;
@@ -13141,36 +12911,24 @@ var require_request2 = __commonJS({
         }
         this[kState].body = finalBody;
       }
-      // Returns request’s HTTP method, which is "GET" by default.
       get method() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].method;
       }
-      // Returns the URL of request as a string.
       get url() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return URLSerializer(this[kState].url);
       }
-      // Returns a Headers object consisting of the headers associated with request.
-      // Note that headers added in the network layer by the user agent will not
-      // be accounted for in this object, e.g., the "Host" header.
       get headers() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kHeaders];
       }
-      // Returns the kind of resource requested by request, e.g., "document"
-      // or "script".
       get destination() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].destination;
       }
-      // Returns the referrer of request. Its value can be a same-origin URL if
-      // explicitly set in init, the empty string to indicate no referrer, and
-      // "about:client" when defaulting to the global’s default. This is used
-      // during fetching to determine the value of the `Referer` header of the
-      // request being made.
       get referrer() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         if (this[kState].referrer === "no-referrer") {
           return "";
         }
@@ -13179,94 +12937,64 @@ var require_request2 = __commonJS({
         }
         return this[kState].referrer.toString();
       }
-      // Returns the referrer policy associated with request.
-      // This is used during fetching to compute the value of the request’s
-      // referrer.
       get referrerPolicy() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].referrerPolicy;
       }
-      // Returns the mode associated with request, which is a string indicating
-      // whether the request will use CORS, or will be restricted to same-origin
-      // URLs.
       get mode() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].mode;
       }
-      // Returns the credentials mode associated with request,
-      // which is a string indicating whether credentials will be sent with the
-      // request always, never, or only when sent to a same-origin URL.
       get credentials() {
         return this[kState].credentials;
       }
-      // Returns the cache mode associated with request,
-      // which is a string indicating how the request will
-      // interact with the browser’s cache when fetching.
       get cache() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].cache;
       }
-      // Returns the redirect mode associated with request,
-      // which is a string indicating how redirects for the
-      // request will be handled during fetching. A request
-      // will follow redirects by default.
       get redirect() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].redirect;
       }
-      // Returns request’s subresource integrity metadata, which is a
-      // cryptographic hash of the resource being fetched. Its value
-      // consists of multiple hashes separated by whitespace. [SRI]
       get integrity() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].integrity;
       }
-      // Returns a boolean indicating whether or not request can outlive the
-      // global in which it was created.
       get keepalive() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].keepalive;
       }
-      // Returns a boolean indicating whether or not request is for a reload
-      // navigation.
       get isReloadNavigation() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].reloadNavigation;
       }
-      // Returns a boolean indicating whether or not request is for a history
-      // navigation (a.k.a. back-foward navigation).
       get isHistoryNavigation() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].historyNavigation;
       }
-      // Returns the signal associated with request, which is an AbortSignal
-      // object indicating whether or not request has been aborted, and its
-      // abort event handler.
       get signal() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kSignal];
       }
       get body() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return this[kState].body ? this[kState].body.stream : null;
       }
       get bodyUsed() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return !!this[kState].body && util.isDisturbed(this[kState].body.stream);
       }
       get duplex() {
-        webidl.brandCheck(this, _Request);
+        webidl.brandCheck(this, Request);
         return "half";
       }
-      // Returns a clone of request.
       clone() {
-        var _a;
-        webidl.brandCheck(this, _Request);
-        if (this.bodyUsed || ((_a = this.body) == null ? void 0 : _a.locked)) {
+        webidl.brandCheck(this, Request);
+        if (this.bodyUsed || this.body?.locked) {
           throw new TypeError("unusable");
         }
         const clonedRequest = cloneRequest(this[kState]);
-        const clonedRequestObject = new _Request(kConstruct);
+        const clonedRequestObject = new Request(kConstruct);
         clonedRequestObject[kState] = clonedRequest;
         clonedRequestObject[kRealm] = this[kRealm];
         clonedRequestObject[kHeaders] = new Headers(kConstruct);
@@ -13277,22 +13005,18 @@ var require_request2 = __commonJS({
         if (this.signal.aborted) {
           ac.abort(this.signal.reason);
         } else {
-          util.addAbortListener(
-            this.signal,
-            () => {
-              ac.abort(this.signal.reason);
-            }
-          );
+          util.addAbortListener(this.signal, () => {
+            ac.abort(this.signal.reason);
+          });
         }
         clonedRequestObject[kSignal] = ac.signal;
         return clonedRequestObject;
       }
     };
-    __name(_Request, "Request");
-    var Request = _Request;
+    __name(Request, "Request");
     mixinBody(Request);
     function makeRequest(init) {
-      const request = {
+      const request = __spreadProps(__spreadValues({
         method: "GET",
         localURLsOnly: false,
         unsafeRequest: false,
@@ -13327,16 +13051,16 @@ var require_request2 = __commonJS({
         responseTainting: "basic",
         preventNoCacheCacheControlHeaderModification: false,
         done: false,
-        timingAllowFailed: false,
-        ...init,
+        timingAllowFailed: false
+      }, init), {
         headersList: init.headersList ? new HeadersList(init.headersList) : new HeadersList()
-      };
+      });
       request.url = request.urlList[0];
       return request;
     }
     __name(makeRequest, "makeRequest");
     function cloneRequest(request) {
-      const newRequest = makeRequest({ ...request, body: null });
+      const newRequest = makeRequest(__spreadProps(__spreadValues({}, request), { body: null }));
       if (request.body != null) {
         newRequest.body = cloneBody(request.body);
       }
@@ -13369,9 +13093,7 @@ var require_request2 = __commonJS({
         configurable: true
       }
     });
-    webidl.converters.Request = webidl.interfaceConverter(
-      Request
-    );
+    webidl.converters.Request = webidl.interfaceConverter(Request);
     webidl.converters.RequestInfo = function(V) {
       if (typeof V === "string") {
         return webidl.converters.USVString(V);
@@ -13381,9 +13103,7 @@ var require_request2 = __commonJS({
       }
       return webidl.converters.USVString(V);
     };
-    webidl.converters.AbortSignal = webidl.interfaceConverter(
-      AbortSignal
-    );
+    webidl.converters.AbortSignal = webidl.interfaceConverter(AbortSignal);
     webidl.converters.RequestInit = webidl.dictionaryConverter([
       {
         key: "method",
@@ -13395,9 +13115,7 @@ var require_request2 = __commonJS({
       },
       {
         key: "body",
-        converter: webidl.nullableConverter(
-          webidl.converters.BodyInit
-        )
+        converter: webidl.nullableConverter(webidl.converters.BodyInit)
       },
       {
         key: "referrer",
@@ -13406,31 +13124,26 @@ var require_request2 = __commonJS({
       {
         key: "referrerPolicy",
         converter: webidl.converters.DOMString,
-        // https://w3c.github.io/webappsec-referrer-policy/#referrer-policy
         allowedValues: referrerPolicy
       },
       {
         key: "mode",
         converter: webidl.converters.DOMString,
-        // https://fetch.spec.whatwg.org/#concept-request-mode
         allowedValues: requestMode
       },
       {
         key: "credentials",
         converter: webidl.converters.DOMString,
-        // https://fetch.spec.whatwg.org/#requestcredentials
         allowedValues: requestCredentials
       },
       {
         key: "cache",
         converter: webidl.converters.DOMString,
-        // https://fetch.spec.whatwg.org/#requestcache
         allowedValues: requestCache
       },
       {
         key: "redirect",
         converter: webidl.converters.DOMString,
-        // https://fetch.spec.whatwg.org/#requestredirect
         allowedValues: requestRedirect
       },
       {
@@ -13443,12 +13156,7 @@ var require_request2 = __commonJS({
       },
       {
         key: "signal",
-        converter: webidl.nullableConverter(
-          (signal) => webidl.converters.AbortSignal(
-            signal,
-            { strict: false }
-          )
-        )
+        converter: webidl.nullableConverter((signal) => webidl.converters.AbortSignal(signal, { strict: false }))
       },
       {
         key: "window",
@@ -13531,7 +13239,7 @@ var require_fetch = __commonJS({
     var GET_OR_HEAD = ["GET", "HEAD"];
     var resolveObjectURL;
     var ReadableStream = globalThis.ReadableStream;
-    var _Fetch = class _Fetch extends EE {
+    var Fetch = class extends EE {
       constructor(dispatcher) {
         super();
         this.dispatcher = dispatcher;
@@ -13541,17 +13249,14 @@ var require_fetch = __commonJS({
         this.setMaxListeners(21);
       }
       terminate(reason) {
-        var _a;
         if (this.state !== "ongoing") {
           return;
         }
         this.state = "terminated";
-        (_a = this.connection) == null ? void 0 : _a.destroy(reason);
+        this.connection?.destroy(reason);
         this.emit("terminated", reason);
       }
-      // https://fetch.spec.whatwg.org/#fetch-controller-abort
       abort(error) {
-        var _a;
         if (this.state !== "ongoing") {
           return;
         }
@@ -13560,14 +13265,12 @@ var require_fetch = __commonJS({
           error = new DOMException2("The operation was aborted.", "AbortError");
         }
         this.serializedAbortReason = error;
-        (_a = this.connection) == null ? void 0 : _a.destroy(error);
+        this.connection?.destroy(error);
         this.emit("terminated", error);
       }
     };
-    __name(_Fetch, "Fetch");
-    var Fetch = _Fetch;
+    __name(Fetch, "Fetch");
     function fetch(input, init = {}) {
-      var _a;
       webidl.argumentLengthCheck(arguments, 1, { header: "globalThis.fetch" });
       const p = createDeferredPromise();
       let requestObject;
@@ -13583,22 +13286,19 @@ var require_fetch = __commonJS({
         return p.promise;
       }
       const globalObject = request.client.globalObject;
-      if (((_a = globalObject == null ? void 0 : globalObject.constructor) == null ? void 0 : _a.name) === "ServiceWorkerGlobalScope") {
+      if (globalObject?.constructor?.name === "ServiceWorkerGlobalScope") {
         request.serviceWorkers = "none";
       }
       let responseObject = null;
       const relevantRealm = null;
       let locallyAborted = false;
       let controller = null;
-      addAbortListener(
-        requestObject.signal,
-        () => {
-          locallyAborted = true;
-          assert(controller != null);
-          controller.abort(requestObject.signal.reason);
-          abortFetch(p, request, responseObject, requestObject.signal.reason);
-        }
-      );
+      addAbortListener(requestObject.signal, () => {
+        locallyAborted = true;
+        assert(controller != null);
+        controller.abort(requestObject.signal.reason);
+        abortFetch(p, request, responseObject, requestObject.signal.reason);
+      });
       const handleFetchDone = /* @__PURE__ */ __name((response) => finalizeAndReportTiming(response, "fetch"), "handleFetchDone");
       const processResponse = /* @__PURE__ */ __name((response) => {
         if (locallyAborted) {
@@ -13609,9 +13309,7 @@ var require_fetch = __commonJS({
           return Promise.resolve();
         }
         if (response.type === "error") {
-          p.reject(
-            Object.assign(new TypeError("fetch failed"), { cause: response.error })
-          );
+          p.reject(Object.assign(new TypeError("fetch failed"), { cause: response.error }));
           return Promise.resolve();
         }
         responseObject = new Response();
@@ -13627,17 +13325,15 @@ var require_fetch = __commonJS({
         processResponseEndOfBody: handleFetchDone,
         processResponse,
         dispatcher: init.dispatcher ?? getGlobalDispatcher()
-        // undici
       });
       return p.promise;
     }
     __name(fetch, "fetch");
     function finalizeAndReportTiming(response, initiatorType = "other") {
-      var _a;
       if (response.type === "error" && response.aborted) {
         return;
       }
-      if (!((_a = response.urlList) == null ? void 0 : _a.length)) {
+      if (!response.urlList?.length) {
         return;
       }
       const originalURL = response.urlList[0];
@@ -13657,13 +13353,7 @@ var require_fetch = __commonJS({
       }
       timingInfo.endTime = coarsenedSharedCurrentTime();
       response.timingInfo = timingInfo;
-      markResourceTiming(
-        timingInfo,
-        originalURL,
-        initiatorType,
-        globalThis,
-        cacheState
-      );
+      markResourceTiming(timingInfo, originalURL, initiatorType, globalThis, cacheState);
     }
     __name(finalizeAndReportTiming, "finalizeAndReportTiming");
     function markResourceTiming(timingInfo, originalURL, initiatorType, globalThis2, cacheState) {
@@ -13673,12 +13363,11 @@ var require_fetch = __commonJS({
     }
     __name(markResourceTiming, "markResourceTiming");
     function abortFetch(p, request, responseObject, error) {
-      var _a, _b;
       if (!error) {
         error = new DOMException2("The operation was aborted.", "AbortError");
       }
       p.reject(error);
-      if (request.body != null && isReadable((_a = request.body) == null ? void 0 : _a.stream)) {
+      if (request.body != null && isReadable(request.body?.stream)) {
         request.body.stream.cancel(error).catch((err) => {
           if (err.code === "ERR_INVALID_STATE") {
             return;
@@ -13690,7 +13379,7 @@ var require_fetch = __commonJS({
         return;
       }
       const response = responseObject[kState];
-      if (response.body != null && isReadable((_b = response.body) == null ? void 0 : _b.stream)) {
+      if (response.body != null && isReadable(response.body?.stream)) {
         response.body.stream.cancel(error).catch((err) => {
           if (err.code === "ERR_INVALID_STATE") {
             return;
@@ -13709,9 +13398,7 @@ var require_fetch = __commonJS({
       processResponseConsumeBody,
       useParallelQueue = false,
       dispatcher
-      // undici
     }) {
-      var _a, _b, _c, _d;
       let taskDestination = null;
       let crossOriginIsolatedCapability = false;
       if (request.client != null) {
@@ -13736,16 +13423,14 @@ var require_fetch = __commonJS({
       };
       assert(!request.body || request.body.stream);
       if (request.window === "client") {
-        request.window = ((_c = (_b = (_a = request.client) == null ? void 0 : _a.globalObject) == null ? void 0 : _b.constructor) == null ? void 0 : _c.name) === "Window" ? request.client : "no-window";
+        request.window = request.client?.globalObject?.constructor?.name === "Window" ? request.client : "no-window";
       }
       if (request.origin === "client") {
-        request.origin = (_d = request.client) == null ? void 0 : _d.origin;
+        request.origin = request.client?.origin;
       }
       if (request.policyContainer === "client") {
         if (request.client != null) {
-          request.policyContainer = clonePolicyContainer(
-            request.client.policyContainer
-          );
+          request.policyContainer = clonePolicyContainer(request.client.policyContainer);
         } else {
           request.policyContainer = makePolicyContainer();
         }
@@ -13786,13 +13471,7 @@ var require_fetch = __commonJS({
       if (response === null) {
         response = await (async () => {
           const currentURL = requestCurrentURL(request);
-          if (
-            // - request’s current URL’s origin is same origin with request’s origin,
-            //   and request’s response tainting is "basic"
-            sameOrigin(currentURL, request.url) && request.responseTainting === "basic" || // request’s current URL’s scheme is "data"
-            currentURL.protocol === "data:" || // - request’s mode is "navigate" or "websocket"
-            (request.mode === "navigate" || request.mode === "websocket")
-          ) {
+          if (sameOrigin(currentURL, request.url) && request.responseTainting === "basic" || currentURL.protocol === "data:" || (request.mode === "navigate" || request.mode === "websocket")) {
             request.responseTainting = "basic";
             return await schemeFetch(fetchParams);
           }
@@ -13801,9 +13480,7 @@ var require_fetch = __commonJS({
           }
           if (request.mode === "no-cors") {
             if (request.redirect !== "follow") {
-              return makeNetworkError(
-                'redirect mode cannot be "follow" for "no-cors" request'
-              );
+              return makeNetworkError('redirect mode cannot be "follow" for "no-cors" request');
             }
             request.responseTainting = "opaque";
             return await schemeFetch(fetchParams);
@@ -14005,12 +13682,7 @@ var require_fetch = __commonJS({
           request.timingAllowFailed = true;
         }
       }
-      if ((request.responseTainting === "opaque" || response.type === "opaque") && crossOriginResourcePolicyCheck(
-        request.origin,
-        request.client,
-        request.destination,
-        actualResponse
-      ) === "blocked") {
+      if ((request.responseTainting === "opaque" || response.type === "opaque") && crossOriginResourcePolicyCheck(request.origin, request.client, request.destination, actualResponse) === "blocked") {
         return makeNetworkError("blocked");
       }
       if (redirectStatusSet.has(actualResponse.status)) {
@@ -14036,10 +13708,7 @@ var require_fetch = __commonJS({
       const actualResponse = response.internalResponse ? response.internalResponse : response;
       let locationURL;
       try {
-        locationURL = responseLocationURL(
-          actualResponse,
-          requestCurrentURL(request).hash
-        );
+        locationURL = responseLocationURL(actualResponse, requestCurrentURL(request).hash);
         if (locationURL == null) {
           return response;
         }
@@ -14057,9 +13726,7 @@ var require_fetch = __commonJS({
         return Promise.resolve(makeNetworkError('cross origin not allowed for request mode "cors"'));
       }
       if (request.responseTainting === "cors" && (locationURL.username || locationURL.password)) {
-        return Promise.resolve(makeNetworkError(
-          'URL cannot contain credentials for request mode "cors"'
-        ));
+        return Promise.resolve(makeNetworkError('URL cannot contain credentials for request mode "cors"'));
       }
       if (actualResponse.status !== 303 && request.body != null && request.body.source == null) {
         return Promise.resolve(makeNetworkError());
@@ -14102,7 +13769,7 @@ var require_fetch = __commonJS({
         httpRequest = request;
       } else {
         httpRequest = makeRequest(request);
-        httpFetchParams = { ...fetchParams };
+        httpFetchParams = __spreadValues({}, fetchParams);
         httpFetchParams.request = httpRequest;
       }
       const includeCredentials = request.credentials === "include" || request.credentials === "same-origin" && request.responseTainting === "basic";
@@ -14163,11 +13830,7 @@ var require_fetch = __commonJS({
         if (httpRequest.mode === "only-if-cached") {
           return makeNetworkError("only if cached");
         }
-        const forwardResponse = await httpNetworkFetch(
-          httpFetchParams,
-          includeCredentials,
-          isNewConnectionFetch
-        );
+        const forwardResponse = await httpNetworkFetch(httpFetchParams, includeCredentials, isNewConnectionFetch);
         if (!safeMethodsSet.has(httpRequest.method) && forwardResponse.status >= 200 && forwardResponse.status <= 399) {
         }
         if (revalidatingFlag && forwardResponse.status === 304) {
@@ -14190,21 +13853,12 @@ var require_fetch = __commonJS({
         }
         return makeNetworkError("proxy authentication required");
       }
-      if (
-        // response’s status is 421
-        response.status === 421 && // isNewConnectionFetch is false
-        !isNewConnectionFetch && // request’s body is null, or request’s body is non-null and request’s body’s source is non-null
-        (request.body == null || request.body.source != null)
-      ) {
+      if (response.status === 421 && !isNewConnectionFetch && (request.body == null || request.body.source != null)) {
         if (isCancelled(fetchParams)) {
           return makeAppropriateNetworkError(fetchParams);
         }
         fetchParams.controller.connection.destroy();
-        response = await httpNetworkOrCacheFetch(
-          fetchParams,
-          isAuthenticationFetch,
-          true
-        );
+        response = await httpNetworkOrCacheFetch(fetchParams, isAuthenticationFetch, true);
       }
       if (isAuthenticationFetch) {
       }
@@ -14217,10 +13871,9 @@ var require_fetch = __commonJS({
         abort: null,
         destroyed: false,
         destroy(err) {
-          var _a;
           if (!this.destroyed) {
             this.destroyed = true;
-            (_a = this.abort) == null ? void 0 : _a.call(this, err ?? new DOMException2("The operation was aborted.", "AbortError"));
+            this.abort?.(err ?? new DOMException2("The operation was aborted.", "AbortError"));
           }
         }
       };
@@ -14240,12 +13893,11 @@ var require_fetch = __commonJS({
         queueMicrotask(() => fetchParams.processRequestEndOfBody());
       } else if (request.body != null) {
         const processBodyChunk = /* @__PURE__ */ __name(async function* (bytes) {
-          var _a;
           if (isCancelled(fetchParams)) {
             return;
           }
           yield bytes;
-          (_a = fetchParams.processRequestBodyChunkLength) == null ? void 0 : _a.call(fetchParams, bytes.byteLength);
+          fetchParams.processRequestBodyChunkLength?.(bytes.byteLength);
         }, "processBodyChunk");
         const processEndOfBody = /* @__PURE__ */ __name(() => {
           if (isCancelled(fetchParams)) {
@@ -14301,25 +13953,22 @@ var require_fetch = __commonJS({
       if (!ReadableStream) {
         ReadableStream = require("stream/web").ReadableStream;
       }
-      const stream = new ReadableStream(
-        {
-          async start(controller) {
-            fetchParams.controller.controller = controller;
-          },
-          async pull(controller) {
-            await pullAlgorithm(controller);
-          },
-          async cancel(reason) {
-            await cancelAlgorithm(reason);
-          }
+      const stream = new ReadableStream({
+        async start(controller) {
+          fetchParams.controller.controller = controller;
         },
-        {
-          highWaterMark: 0,
-          size() {
-            return 1;
-          }
+        async pull(controller) {
+          await pullAlgorithm(controller);
+        },
+        async cancel(reason) {
+          await cancelAlgorithm(reason);
         }
-      );
+      }, {
+        highWaterMark: 0,
+        size() {
+          return 1;
+        }
+      });
       response.body = { stream };
       fetchParams.controller.on("terminated", onAborted);
       fetchParams.controller.resume = async () => {
@@ -14345,7 +13994,7 @@ var require_fetch = __commonJS({
             finalizeResponse(fetchParams, response);
             return;
           }
-          timingInfo.decodedBodySize += (bytes == null ? void 0 : bytes.byteLength) ?? 0;
+          timingInfo.decodedBodySize += bytes?.byteLength ?? 0;
           if (isFailure) {
             fetchParams.controller.terminate(bytes);
             return;
@@ -14364,9 +14013,7 @@ var require_fetch = __commonJS({
         if (isAborted(fetchParams)) {
           response.aborted = true;
           if (isReadable(stream)) {
-            fetchParams.controller.controller.error(
-              fetchParams.controller.serializedAbortReason
-            );
+            fetchParams.controller.controller.error(fetchParams.controller.serializedAbortReason);
           }
         } else {
           if (isReadable(stream)) {
@@ -14382,136 +14029,128 @@ var require_fetch = __commonJS({
       async function dispatch({ body }) {
         const url = requestCurrentURL(request);
         const agent = fetchParams.controller.dispatcher;
-        return new Promise((resolve, reject) => agent.dispatch(
-          {
-            path: url.pathname + url.search,
-            origin: url.origin,
-            method: request.method,
-            body: fetchParams.controller.dispatcher.isMockActive ? request.body && (request.body.source || request.body.stream) : body,
-            headers: request.headersList.entries,
-            maxRedirections: 0,
-            upgrade: request.mode === "websocket" ? "websocket" : void 0
+        return new Promise((resolve, reject) => agent.dispatch({
+          path: url.pathname + url.search,
+          origin: url.origin,
+          method: request.method,
+          body: fetchParams.controller.dispatcher.isMockActive ? request.body && (request.body.source || request.body.stream) : body,
+          headers: request.headersList.entries,
+          maxRedirections: 0,
+          upgrade: request.mode === "websocket" ? "websocket" : void 0
+        }, {
+          body: null,
+          abort: null,
+          onConnect(abort) {
+            const { connection } = fetchParams.controller;
+            if (connection.destroyed) {
+              abort(new DOMException2("The operation was aborted.", "AbortError"));
+            } else {
+              fetchParams.controller.on("terminated", abort);
+              this.abort = connection.abort = abort;
+            }
           },
-          {
-            body: null,
-            abort: null,
-            onConnect(abort) {
-              const { connection } = fetchParams.controller;
-              if (connection.destroyed) {
-                abort(new DOMException2("The operation was aborted.", "AbortError"));
-              } else {
-                fetchParams.controller.on("terminated", abort);
-                this.abort = connection.abort = abort;
-              }
-            },
-            onHeaders(status, headersList, resume, statusText) {
-              if (status < 200) {
-                return;
-              }
-              let codings = [];
-              let location = "";
-              const headers = new Headers();
-              if (Array.isArray(headersList)) {
-                for (let n = 0; n < headersList.length; n += 2) {
-                  const key = headersList[n + 0].toString("latin1");
-                  const val = headersList[n + 1].toString("latin1");
-                  if (key.toLowerCase() === "content-encoding") {
-                    codings = val.toLowerCase().split(",").map((x) => x.trim());
-                  } else if (key.toLowerCase() === "location") {
-                    location = val;
-                  }
-                  headers[kHeadersList].append(key, val);
-                }
-              } else {
-                const keys = Object.keys(headersList);
-                for (const key of keys) {
-                  const val = headersList[key];
-                  if (key.toLowerCase() === "content-encoding") {
-                    codings = val.toLowerCase().split(",").map((x) => x.trim()).reverse();
-                  } else if (key.toLowerCase() === "location") {
-                    location = val;
-                  }
-                  headers[kHeadersList].append(key, val);
-                }
-              }
-              this.body = new Readable({ read: resume });
-              const decoders = [];
-              const willFollow = request.redirect === "follow" && location && redirectStatusSet.has(status);
-              if (request.method !== "HEAD" && request.method !== "CONNECT" && !nullBodyStatus.includes(status) && !willFollow) {
-                for (const coding of codings) {
-                  if (coding === "x-gzip" || coding === "gzip") {
-                    decoders.push(zlib.createGunzip({
-                      // Be less strict when decoding compressed responses, since sometimes
-                      // servers send slightly invalid responses that are still accepted
-                      // by common browsers.
-                      // Always using Z_SYNC_FLUSH is what cURL does.
-                      flush: zlib.constants.Z_SYNC_FLUSH,
-                      finishFlush: zlib.constants.Z_SYNC_FLUSH
-                    }));
-                  } else if (coding === "deflate") {
-                    decoders.push(zlib.createInflate());
-                  } else if (coding === "br") {
-                    decoders.push(zlib.createBrotliDecompress());
-                  } else {
-                    decoders.length = 0;
-                    break;
-                  }
-                }
-              }
-              resolve({
-                status,
-                statusText,
-                headersList: headers[kHeadersList],
-                body: decoders.length ? pipeline(this.body, ...decoders, () => {
-                }) : this.body.on("error", () => {
-                })
-              });
-              return true;
-            },
-            onData(chunk) {
-              if (fetchParams.controller.dump) {
-                return;
-              }
-              const bytes = chunk;
-              timingInfo.encodedBodySize += bytes.byteLength;
-              return this.body.push(bytes);
-            },
-            onComplete() {
-              if (this.abort) {
-                fetchParams.controller.off("terminated", this.abort);
-              }
-              fetchParams.controller.ended = true;
-              this.body.push(null);
-            },
-            onError(error) {
-              var _a;
-              if (this.abort) {
-                fetchParams.controller.off("terminated", this.abort);
-              }
-              (_a = this.body) == null ? void 0 : _a.destroy(error);
-              fetchParams.controller.terminate(error);
-              reject(error);
-            },
-            onUpgrade(status, headersList, socket) {
-              if (status !== 101) {
-                return;
-              }
-              const headers = new Headers();
+          onHeaders(status, headersList, resume, statusText) {
+            if (status < 200) {
+              return;
+            }
+            let codings = [];
+            let location = "";
+            const headers = new Headers();
+            if (Array.isArray(headersList)) {
               for (let n = 0; n < headersList.length; n += 2) {
                 const key = headersList[n + 0].toString("latin1");
                 const val = headersList[n + 1].toString("latin1");
+                if (key.toLowerCase() === "content-encoding") {
+                  codings = val.toLowerCase().split(",").map((x) => x.trim());
+                } else if (key.toLowerCase() === "location") {
+                  location = val;
+                }
                 headers[kHeadersList].append(key, val);
               }
-              resolve({
-                status,
-                statusText: STATUS_CODES[status],
-                headersList: headers[kHeadersList],
-                socket
-              });
-              return true;
+            } else {
+              const keys = Object.keys(headersList);
+              for (const key of keys) {
+                const val = headersList[key];
+                if (key.toLowerCase() === "content-encoding") {
+                  codings = val.toLowerCase().split(",").map((x) => x.trim()).reverse();
+                } else if (key.toLowerCase() === "location") {
+                  location = val;
+                }
+                headers[kHeadersList].append(key, val);
+              }
             }
+            this.body = new Readable({ read: resume });
+            const decoders = [];
+            const willFollow = request.redirect === "follow" && location && redirectStatusSet.has(status);
+            if (request.method !== "HEAD" && request.method !== "CONNECT" && !nullBodyStatus.includes(status) && !willFollow) {
+              for (const coding of codings) {
+                if (coding === "x-gzip" || coding === "gzip") {
+                  decoders.push(zlib.createGunzip({
+                    flush: zlib.constants.Z_SYNC_FLUSH,
+                    finishFlush: zlib.constants.Z_SYNC_FLUSH
+                  }));
+                } else if (coding === "deflate") {
+                  decoders.push(zlib.createInflate());
+                } else if (coding === "br") {
+                  decoders.push(zlib.createBrotliDecompress());
+                } else {
+                  decoders.length = 0;
+                  break;
+                }
+              }
+            }
+            resolve({
+              status,
+              statusText,
+              headersList: headers[kHeadersList],
+              body: decoders.length ? pipeline(this.body, ...decoders, () => {
+              }) : this.body.on("error", () => {
+              })
+            });
+            return true;
+          },
+          onData(chunk) {
+            if (fetchParams.controller.dump) {
+              return;
+            }
+            const bytes = chunk;
+            timingInfo.encodedBodySize += bytes.byteLength;
+            return this.body.push(bytes);
+          },
+          onComplete() {
+            if (this.abort) {
+              fetchParams.controller.off("terminated", this.abort);
+            }
+            fetchParams.controller.ended = true;
+            this.body.push(null);
+          },
+          onError(error) {
+            if (this.abort) {
+              fetchParams.controller.off("terminated", this.abort);
+            }
+            this.body?.destroy(error);
+            fetchParams.controller.terminate(error);
+            reject(error);
+          },
+          onUpgrade(status, headersList, socket) {
+            if (status !== 101) {
+              return;
+            }
+            const headers = new Headers();
+            for (let n = 0; n < headersList.length; n += 2) {
+              const key = headersList[n + 0].toString("latin1");
+              const val = headersList[n + 1].toString("latin1");
+              headers[kHeadersList].append(key, val);
+            }
+            resolve({
+              status,
+              statusText: STATUS_CODES[status],
+              headersList: headers[kHeadersList],
+              socket
+            });
+            return true;
           }
-        ));
+        }));
       }
       __name(dispatch, "dispatch");
     }
@@ -14546,7 +14185,7 @@ var require_progressevent = __commonJS({
     "use strict";
     var { webidl } = require_webidl();
     var kState = Symbol("ProgressEvent state");
-    var _ProgressEvent = class _ProgressEvent extends Event {
+    var ProgressEvent = class extends Event {
       constructor(type, eventInitDict = {}) {
         type = webidl.converters.DOMString(type);
         eventInitDict = webidl.converters.ProgressEventInit(eventInitDict ?? {});
@@ -14558,20 +14197,19 @@ var require_progressevent = __commonJS({
         };
       }
       get lengthComputable() {
-        webidl.brandCheck(this, _ProgressEvent);
+        webidl.brandCheck(this, ProgressEvent);
         return this[kState].lengthComputable;
       }
       get loaded() {
-        webidl.brandCheck(this, _ProgressEvent);
+        webidl.brandCheck(this, ProgressEvent);
         return this[kState].loaded;
       }
       get total() {
-        webidl.brandCheck(this, _ProgressEvent);
+        webidl.brandCheck(this, ProgressEvent);
         return this[kState].total;
       }
     };
-    __name(_ProgressEvent, "ProgressEvent");
-    var ProgressEvent = _ProgressEvent;
+    __name(ProgressEvent, "ProgressEvent");
     webidl.converters.ProgressEventInit = webidl.dictionaryConverter([
       {
         key: "lengthComputable",
@@ -15107,7 +14745,7 @@ var require_filereader = __commonJS({
     } = require_symbols3();
     var { webidl } = require_webidl();
     var { kEnumerableProperty } = require_util();
-    var _FileReader = class _FileReader extends EventTarget {
+    var FileReader = class extends EventTarget {
       constructor() {
         super();
         this[kState] = "empty";
@@ -15122,33 +14760,20 @@ var require_filereader = __commonJS({
           loadstart: null
         };
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dfn-readAsArrayBuffer
-       * @param {import('buffer').Blob} blob
-       */
       readAsArrayBuffer(blob) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         webidl.argumentLengthCheck(arguments, 1, { header: "FileReader.readAsArrayBuffer" });
         blob = webidl.converters.Blob(blob, { strict: false });
         readOperation(this, blob, "ArrayBuffer");
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#readAsBinaryString
-       * @param {import('buffer').Blob} blob
-       */
       readAsBinaryString(blob) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         webidl.argumentLengthCheck(arguments, 1, { header: "FileReader.readAsBinaryString" });
         blob = webidl.converters.Blob(blob, { strict: false });
         readOperation(this, blob, "BinaryString");
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#readAsDataText
-       * @param {import('buffer').Blob} blob
-       * @param {string?} encoding
-       */
       readAsText(blob, encoding = void 0) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         webidl.argumentLengthCheck(arguments, 1, { header: "FileReader.readAsText" });
         blob = webidl.converters.Blob(blob, { strict: false });
         if (encoding !== void 0) {
@@ -15156,19 +14781,12 @@ var require_filereader = __commonJS({
         }
         readOperation(this, blob, "Text", encoding);
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dfn-readAsDataURL
-       * @param {import('buffer').Blob} blob
-       */
       readAsDataURL(blob) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         webidl.argumentLengthCheck(arguments, 1, { header: "FileReader.readAsDataURL" });
         blob = webidl.converters.Blob(blob, { strict: false });
         readOperation(this, blob, "DataURL");
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dfn-abort
-       */
       abort() {
         if (this[kState] === "empty" || this[kState] === "done") {
           this[kResult] = null;
@@ -15184,11 +14802,8 @@ var require_filereader = __commonJS({
           fireAProgressEvent("loadend", this);
         }
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dom-filereader-readystate
-       */
       get readyState() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         switch (this[kState]) {
           case "empty":
             return this.EMPTY;
@@ -15198,26 +14813,20 @@ var require_filereader = __commonJS({
             return this.DONE;
         }
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dom-filereader-result
-       */
       get result() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kResult];
       }
-      /**
-       * @see https://w3c.github.io/FileAPI/#dom-filereader-error
-       */
       get error() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kError];
       }
       get onloadend() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].loadend;
       }
       set onloadend(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].loadend) {
           this.removeEventListener("loadend", this[kEvents].loadend);
         }
@@ -15229,11 +14838,11 @@ var require_filereader = __commonJS({
         }
       }
       get onerror() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].error;
       }
       set onerror(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].error) {
           this.removeEventListener("error", this[kEvents].error);
         }
@@ -15245,11 +14854,11 @@ var require_filereader = __commonJS({
         }
       }
       get onloadstart() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].loadstart;
       }
       set onloadstart(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].loadstart) {
           this.removeEventListener("loadstart", this[kEvents].loadstart);
         }
@@ -15261,11 +14870,11 @@ var require_filereader = __commonJS({
         }
       }
       get onprogress() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].progress;
       }
       set onprogress(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].progress) {
           this.removeEventListener("progress", this[kEvents].progress);
         }
@@ -15277,11 +14886,11 @@ var require_filereader = __commonJS({
         }
       }
       get onload() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].load;
       }
       set onload(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].load) {
           this.removeEventListener("load", this[kEvents].load);
         }
@@ -15293,11 +14902,11 @@ var require_filereader = __commonJS({
         }
       }
       get onabort() {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         return this[kEvents].abort;
       }
       set onabort(fn) {
-        webidl.brandCheck(this, _FileReader);
+        webidl.brandCheck(this, FileReader);
         if (this[kEvents].abort) {
           this.removeEventListener("abort", this[kEvents].abort);
         }
@@ -15309,8 +14918,7 @@ var require_filereader = __commonJS({
         }
       }
     };
-    __name(_FileReader, "FileReader");
-    var FileReader = _FileReader;
+    __name(FileReader, "FileReader");
     FileReader.EMPTY = FileReader.prototype.EMPTY = 0;
     FileReader.LOADING = FileReader.prototype.LOADING = 1;
     FileReader.DONE = FileReader.prototype.DONE = 2;
@@ -15411,22 +15019,16 @@ var require_cache = __commonJS({
     var { urlIsHttpHttpsScheme, createDeferredPromise, readAllBytes } = require_util2();
     var assert = require("assert");
     var { getGlobalDispatcher } = require_global2();
-    var _relevantRequestResponseList, _Cache_instances, batchCacheOperations_fn, queryCache_fn, requestMatchesCachedItem_fn;
-    var _Cache = class _Cache {
+    var Cache = class {
+      #relevantRequestResponseList;
       constructor() {
-        __privateAdd(this, _Cache_instances);
-        /**
-         * @see https://w3c.github.io/ServiceWorker/#dfn-relevant-request-response-list
-         * @type {requestResponseList}
-         */
-        __privateAdd(this, _relevantRequestResponseList);
         if (arguments[0] !== kConstruct) {
           webidl.illegalConstructor();
         }
-        __privateSet(this, _relevantRequestResponseList, arguments[1]);
+        this.#relevantRequestResponseList = arguments[1];
       }
       async match(request, options = {}) {
-        webidl.brandCheck(this, _Cache);
+        webidl.brandCheck(this, Cache);
         webidl.argumentLengthCheck(arguments, 1, { header: "Cache.match" });
         request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
@@ -15437,9 +15039,9 @@ var require_cache = __commonJS({
         return p[0];
       }
       async matchAll(request = void 0, options = {}) {
-        var _a;
-        webidl.brandCheck(this, _Cache);
-        if (request !== void 0) request = webidl.converters.RequestInfo(request);
+        webidl.brandCheck(this, Cache);
+        if (request !== void 0)
+          request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
@@ -15454,18 +15056,18 @@ var require_cache = __commonJS({
         }
         const responses = [];
         if (request === void 0) {
-          for (const requestResponse of __privateGet(this, _relevantRequestResponseList)) {
+          for (const requestResponse of this.#relevantRequestResponseList) {
             responses.push(requestResponse[1]);
           }
         } else {
-          const requestResponses = __privateMethod(this, _Cache_instances, queryCache_fn).call(this, r, options);
+          const requestResponses = this.#queryCache(r, options);
           for (const requestResponse of requestResponses) {
             responses.push(requestResponse[1]);
           }
         }
         const responseList = [];
         for (const response of responses) {
-          const responseObject = new Response(((_a = response.body) == null ? void 0 : _a.source) ?? null);
+          const responseObject = new Response(response.body?.source ?? null);
           const body = responseObject[kState].body;
           responseObject[kState] = response;
           responseObject[kState].body = body;
@@ -15476,7 +15078,7 @@ var require_cache = __commonJS({
         return Object.freeze(responseList);
       }
       async add(request) {
-        webidl.brandCheck(this, _Cache);
+        webidl.brandCheck(this, Cache);
         webidl.argumentLengthCheck(arguments, 1, { header: "Cache.add" });
         request = webidl.converters.RequestInfo(request);
         const requests = [request];
@@ -15484,7 +15086,7 @@ var require_cache = __commonJS({
         return await responseArrayPromise;
       }
       async addAll(requests) {
-        webidl.brandCheck(this, _Cache);
+        webidl.brandCheck(this, Cache);
         webidl.argumentLengthCheck(arguments, 1, { header: "Cache.addAll" });
         requests = webidl.converters["sequence<RequestInfo>"](requests);
         const responsePromises = [];
@@ -15556,11 +15158,8 @@ var require_cache = __commonJS({
         for (const response of responses) {
           const operation = {
             type: "put",
-            // 7.3.2
             request: requestList[index],
-            // 7.3.3
             response
-            // 7.3.4
           };
           operations.push(operation);
           index++;
@@ -15568,7 +15167,7 @@ var require_cache = __commonJS({
         const cacheJobPromise = createDeferredPromise();
         let errorData = null;
         try {
-          __privateMethod(this, _Cache_instances, batchCacheOperations_fn).call(this, operations);
+          this.#batchCacheOperations(operations);
         } catch (e) {
           errorData = e;
         }
@@ -15582,7 +15181,7 @@ var require_cache = __commonJS({
         return cacheJobPromise.promise;
       }
       async put(request, response) {
-        webidl.brandCheck(this, _Cache);
+        webidl.brandCheck(this, Cache);
         webidl.argumentLengthCheck(arguments, 2, { header: "Cache.put" });
         request = webidl.converters.RequestInfo(request);
         response = webidl.converters.Response(response);
@@ -15634,11 +15233,8 @@ var require_cache = __commonJS({
         const operations = [];
         const operation = {
           type: "put",
-          // 14.
           request: innerRequest,
-          // 15.
           response: clonedResponse
-          // 16.
         };
         operations.push(operation);
         const bytes = await bodyReadPromise.promise;
@@ -15648,7 +15244,7 @@ var require_cache = __commonJS({
         const cacheJobPromise = createDeferredPromise();
         let errorData = null;
         try {
-          __privateMethod(this, _Cache_instances, batchCacheOperations_fn).call(this, operations);
+          this.#batchCacheOperations(operations);
         } catch (e) {
           errorData = e;
         }
@@ -15662,7 +15258,7 @@ var require_cache = __commonJS({
         return cacheJobPromise.promise;
       }
       async delete(request, options = {}) {
-        webidl.brandCheck(this, _Cache);
+        webidl.brandCheck(this, Cache);
         webidl.argumentLengthCheck(arguments, 1, { header: "Cache.delete" });
         request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
@@ -15687,28 +15283,23 @@ var require_cache = __commonJS({
         let errorData = null;
         let requestResponses;
         try {
-          requestResponses = __privateMethod(this, _Cache_instances, batchCacheOperations_fn).call(this, operations);
+          requestResponses = this.#batchCacheOperations(operations);
         } catch (e) {
           errorData = e;
         }
         queueMicrotask(() => {
           if (errorData === null) {
-            cacheJobPromise.resolve(!!(requestResponses == null ? void 0 : requestResponses.length));
+            cacheJobPromise.resolve(!!requestResponses?.length);
           } else {
             cacheJobPromise.reject(errorData);
           }
         });
         return cacheJobPromise.promise;
       }
-      /**
-       * @see https://w3c.github.io/ServiceWorker/#dom-cache-keys
-       * @param {any} request
-       * @param {import('../../types/cache').CacheQueryOptions} options
-       * @returns {readonly Request[]}
-       */
       async keys(request = void 0, options = {}) {
-        webidl.brandCheck(this, _Cache);
-        if (request !== void 0) request = webidl.converters.RequestInfo(request);
+        webidl.brandCheck(this, Cache);
+        if (request !== void 0)
+          request = webidl.converters.RequestInfo(request);
         options = webidl.converters.CacheQueryOptions(options);
         let r = null;
         if (request !== void 0) {
@@ -15724,11 +15315,11 @@ var require_cache = __commonJS({
         const promise = createDeferredPromise();
         const requests = [];
         if (request === void 0) {
-          for (const requestResponse of __privateGet(this, _relevantRequestResponseList)) {
+          for (const requestResponse of this.#relevantRequestResponseList) {
             requests.push(requestResponse[0]);
           }
         } else {
-          const requestResponses = __privateMethod(this, _Cache_instances, queryCache_fn).call(this, r, options);
+          const requestResponses = this.#queryCache(r, options);
           for (const requestResponse of requestResponses) {
             requests.push(requestResponse[0]);
           }
@@ -15747,145 +15338,122 @@ var require_cache = __commonJS({
         });
         return promise.promise;
       }
-    };
-    _relevantRequestResponseList = new WeakMap();
-    _Cache_instances = new WeakSet();
-    /**
-     * @see https://w3c.github.io/ServiceWorker/#batch-cache-operations-algorithm
-     * @param {CacheBatchOperation[]} operations
-     * @returns {requestResponseList}
-     */
-    batchCacheOperations_fn = /* @__PURE__ */ __name(function(operations) {
-      const cache = __privateGet(this, _relevantRequestResponseList);
-      const backupCache = [...cache];
-      const addedItems = [];
-      const resultList = [];
-      try {
-        for (const operation of operations) {
-          if (operation.type !== "delete" && operation.type !== "put") {
-            throw webidl.errors.exception({
-              header: "Cache.#batchCacheOperations",
-              message: 'operation type does not match "delete" or "put"'
-            });
-          }
-          if (operation.type === "delete" && operation.response != null) {
-            throw webidl.errors.exception({
-              header: "Cache.#batchCacheOperations",
-              message: "delete operation should not have an associated response"
-            });
-          }
-          if (__privateMethod(this, _Cache_instances, queryCache_fn).call(this, operation.request, operation.options, addedItems).length) {
-            throw new DOMException("???", "InvalidStateError");
-          }
-          let requestResponses;
-          if (operation.type === "delete") {
-            requestResponses = __privateMethod(this, _Cache_instances, queryCache_fn).call(this, operation.request, operation.options);
-            if (requestResponses.length === 0) {
-              return [];
-            }
-            for (const requestResponse of requestResponses) {
-              const idx = cache.indexOf(requestResponse);
-              assert(idx !== -1);
-              cache.splice(idx, 1);
-            }
-          } else if (operation.type === "put") {
-            if (operation.response == null) {
+      #batchCacheOperations(operations) {
+        const cache = this.#relevantRequestResponseList;
+        const backupCache = [...cache];
+        const addedItems = [];
+        const resultList = [];
+        try {
+          for (const operation of operations) {
+            if (operation.type !== "delete" && operation.type !== "put") {
               throw webidl.errors.exception({
                 header: "Cache.#batchCacheOperations",
-                message: "put operation should have an associated response"
+                message: 'operation type does not match "delete" or "put"'
               });
             }
-            const r = operation.request;
-            if (!urlIsHttpHttpsScheme(r.url)) {
+            if (operation.type === "delete" && operation.response != null) {
               throw webidl.errors.exception({
                 header: "Cache.#batchCacheOperations",
-                message: "expected http or https scheme"
+                message: "delete operation should not have an associated response"
               });
             }
-            if (r.method !== "GET") {
-              throw webidl.errors.exception({
-                header: "Cache.#batchCacheOperations",
-                message: "not get method"
-              });
+            if (this.#queryCache(operation.request, operation.options, addedItems).length) {
+              throw new DOMException("???", "InvalidStateError");
             }
-            if (operation.options != null) {
-              throw webidl.errors.exception({
-                header: "Cache.#batchCacheOperations",
-                message: "options must not be defined"
-              });
+            let requestResponses;
+            if (operation.type === "delete") {
+              requestResponses = this.#queryCache(operation.request, operation.options);
+              if (requestResponses.length === 0) {
+                return [];
+              }
+              for (const requestResponse of requestResponses) {
+                const idx = cache.indexOf(requestResponse);
+                assert(idx !== -1);
+                cache.splice(idx, 1);
+              }
+            } else if (operation.type === "put") {
+              if (operation.response == null) {
+                throw webidl.errors.exception({
+                  header: "Cache.#batchCacheOperations",
+                  message: "put operation should have an associated response"
+                });
+              }
+              const r = operation.request;
+              if (!urlIsHttpHttpsScheme(r.url)) {
+                throw webidl.errors.exception({
+                  header: "Cache.#batchCacheOperations",
+                  message: "expected http or https scheme"
+                });
+              }
+              if (r.method !== "GET") {
+                throw webidl.errors.exception({
+                  header: "Cache.#batchCacheOperations",
+                  message: "not get method"
+                });
+              }
+              if (operation.options != null) {
+                throw webidl.errors.exception({
+                  header: "Cache.#batchCacheOperations",
+                  message: "options must not be defined"
+                });
+              }
+              requestResponses = this.#queryCache(operation.request);
+              for (const requestResponse of requestResponses) {
+                const idx = cache.indexOf(requestResponse);
+                assert(idx !== -1);
+                cache.splice(idx, 1);
+              }
+              cache.push([operation.request, operation.response]);
+              addedItems.push([operation.request, operation.response]);
             }
-            requestResponses = __privateMethod(this, _Cache_instances, queryCache_fn).call(this, operation.request);
-            for (const requestResponse of requestResponses) {
-              const idx = cache.indexOf(requestResponse);
-              assert(idx !== -1);
-              cache.splice(idx, 1);
-            }
-            cache.push([operation.request, operation.response]);
-            addedItems.push([operation.request, operation.response]);
+            resultList.push([operation.request, operation.response]);
           }
-          resultList.push([operation.request, operation.response]);
+          return resultList;
+        } catch (e) {
+          this.#relevantRequestResponseList.length = 0;
+          this.#relevantRequestResponseList = backupCache;
+          throw e;
+        }
+      }
+      #queryCache(requestQuery, options, targetStorage) {
+        const resultList = [];
+        const storage = targetStorage ?? this.#relevantRequestResponseList;
+        for (const requestResponse of storage) {
+          const [cachedRequest, cachedResponse] = requestResponse;
+          if (this.#requestMatchesCachedItem(requestQuery, cachedRequest, cachedResponse, options)) {
+            resultList.push(requestResponse);
+          }
         }
         return resultList;
-      } catch (e) {
-        __privateGet(this, _relevantRequestResponseList).length = 0;
-        __privateSet(this, _relevantRequestResponseList, backupCache);
-        throw e;
       }
-    }, "#batchCacheOperations");
-    /**
-     * @see https://w3c.github.io/ServiceWorker/#query-cache
-     * @param {any} requestQuery
-     * @param {import('../../types/cache').CacheQueryOptions} options
-     * @param {requestResponseList} targetStorage
-     * @returns {requestResponseList}
-     */
-    queryCache_fn = /* @__PURE__ */ __name(function(requestQuery, options, targetStorage) {
-      const resultList = [];
-      const storage = targetStorage ?? __privateGet(this, _relevantRequestResponseList);
-      for (const requestResponse of storage) {
-        const [cachedRequest, cachedResponse] = requestResponse;
-        if (__privateMethod(this, _Cache_instances, requestMatchesCachedItem_fn).call(this, requestQuery, cachedRequest, cachedResponse, options)) {
-          resultList.push(requestResponse);
+      #requestMatchesCachedItem(requestQuery, request, response = null, options) {
+        const queryURL = new URL(requestQuery.url);
+        const cachedURL = new URL(request.url);
+        if (options?.ignoreSearch) {
+          cachedURL.search = "";
+          queryURL.search = "";
         }
-      }
-      return resultList;
-    }, "#queryCache");
-    /**
-     * @see https://w3c.github.io/ServiceWorker/#request-matches-cached-item-algorithm
-     * @param {any} requestQuery
-     * @param {any} request
-     * @param {any | null} response
-     * @param {import('../../types/cache').CacheQueryOptions | undefined} options
-     * @returns {boolean}
-     */
-    requestMatchesCachedItem_fn = /* @__PURE__ */ __name(function(requestQuery, request, response = null, options) {
-      const queryURL = new URL(requestQuery.url);
-      const cachedURL = new URL(request.url);
-      if (options == null ? void 0 : options.ignoreSearch) {
-        cachedURL.search = "";
-        queryURL.search = "";
-      }
-      if (!urlEquals(queryURL, cachedURL, true)) {
-        return false;
-      }
-      if (response == null || (options == null ? void 0 : options.ignoreVary) || !response.headersList.contains("vary")) {
+        if (!urlEquals(queryURL, cachedURL, true)) {
+          return false;
+        }
+        if (response == null || options?.ignoreVary || !response.headersList.contains("vary")) {
+          return true;
+        }
+        const fieldValues = getFieldValues(response.headersList.get("vary"));
+        for (const fieldValue of fieldValues) {
+          if (fieldValue === "*") {
+            return false;
+          }
+          const requestValue = request.headersList.get(fieldValue);
+          const queryValue = requestQuery.headersList.get(fieldValue);
+          if (requestValue !== queryValue) {
+            return false;
+          }
+        }
         return true;
       }
-      const fieldValues = getFieldValues(response.headersList.get("vary"));
-      for (const fieldValue of fieldValues) {
-        if (fieldValue === "*") {
-          return false;
-        }
-        const requestValue = request.headersList.get(fieldValue);
-        const queryValue = requestQuery.headersList.get(fieldValue);
-        if (requestValue !== queryValue) {
-          return false;
-        }
-      }
-      return true;
-    }, "#requestMatchesCachedItem");
-    __name(_Cache, "Cache");
-    var Cache = _Cache;
+    };
+    __name(Cache, "Cache");
     Object.defineProperties(Cache.prototype, {
       [Symbol.toStringTag]: {
         value: "Cache",
@@ -15925,9 +15493,7 @@ var require_cache = __commonJS({
       }
     ]);
     webidl.converters.Response = webidl.interfaceConverter(Response);
-    webidl.converters["sequence<RequestInfo>"] = webidl.sequenceConverter(
-      webidl.converters.RequestInfo
-    );
+    webidl.converters["sequence<RequestInfo>"] = webidl.sequenceConverter(webidl.converters.RequestInfo);
     module2.exports = {
       Cache
     };
@@ -15942,31 +15508,26 @@ var require_cachestorage = __commonJS({
     var { Cache } = require_cache();
     var { webidl } = require_webidl();
     var { kEnumerableProperty } = require_util();
-    var _caches;
-    var _CacheStorage = class _CacheStorage {
+    var CacheStorage = class {
+      #caches = new Map();
       constructor() {
-        /**
-         * @see https://w3c.github.io/ServiceWorker/#dfn-relevant-name-to-cache-map
-         * @type {Map<string, import('./cache').requestResponseList}
-         */
-        __privateAdd(this, _caches, /* @__PURE__ */ new Map());
         if (arguments[0] !== kConstruct) {
           webidl.illegalConstructor();
         }
       }
       async match(request, options = {}) {
-        webidl.brandCheck(this, _CacheStorage);
+        webidl.brandCheck(this, CacheStorage);
         webidl.argumentLengthCheck(arguments, 1, { header: "CacheStorage.match" });
         request = webidl.converters.RequestInfo(request);
         options = webidl.converters.MultiCacheQueryOptions(options);
         if (options.cacheName != null) {
-          if (__privateGet(this, _caches).has(options.cacheName)) {
-            const cacheList = __privateGet(this, _caches).get(options.cacheName);
+          if (this.#caches.has(options.cacheName)) {
+            const cacheList = this.#caches.get(options.cacheName);
             const cache = new Cache(kConstruct, cacheList);
             return await cache.match(request, options);
           }
         } else {
-          for (const cacheList of __privateGet(this, _caches).values()) {
+          for (const cacheList of this.#caches.values()) {
             const cache = new Cache(kConstruct, cacheList);
             const response = await cache.match(request, options);
             if (response !== void 0) {
@@ -15975,58 +15536,37 @@ var require_cachestorage = __commonJS({
           }
         }
       }
-      /**
-       * @see https://w3c.github.io/ServiceWorker/#cache-storage-has
-       * @param {string} cacheName
-       * @returns {Promise<boolean>}
-       */
       async has(cacheName) {
-        webidl.brandCheck(this, _CacheStorage);
+        webidl.brandCheck(this, CacheStorage);
         webidl.argumentLengthCheck(arguments, 1, { header: "CacheStorage.has" });
         cacheName = webidl.converters.DOMString(cacheName);
-        return __privateGet(this, _caches).has(cacheName);
+        return this.#caches.has(cacheName);
       }
-      /**
-       * @see https://w3c.github.io/ServiceWorker/#dom-cachestorage-open
-       * @param {string} cacheName
-       * @returns {Promise<Cache>}
-       */
       async open(cacheName) {
-        webidl.brandCheck(this, _CacheStorage);
+        webidl.brandCheck(this, CacheStorage);
         webidl.argumentLengthCheck(arguments, 1, { header: "CacheStorage.open" });
         cacheName = webidl.converters.DOMString(cacheName);
-        if (__privateGet(this, _caches).has(cacheName)) {
-          const cache2 = __privateGet(this, _caches).get(cacheName);
+        if (this.#caches.has(cacheName)) {
+          const cache2 = this.#caches.get(cacheName);
           return new Cache(kConstruct, cache2);
         }
         const cache = [];
-        __privateGet(this, _caches).set(cacheName, cache);
+        this.#caches.set(cacheName, cache);
         return new Cache(kConstruct, cache);
       }
-      /**
-       * @see https://w3c.github.io/ServiceWorker/#cache-storage-delete
-       * @param {string} cacheName
-       * @returns {Promise<boolean>}
-       */
       async delete(cacheName) {
-        webidl.brandCheck(this, _CacheStorage);
+        webidl.brandCheck(this, CacheStorage);
         webidl.argumentLengthCheck(arguments, 1, { header: "CacheStorage.delete" });
         cacheName = webidl.converters.DOMString(cacheName);
-        return __privateGet(this, _caches).delete(cacheName);
+        return this.#caches.delete(cacheName);
       }
-      /**
-       * @see https://w3c.github.io/ServiceWorker/#cache-storage-keys
-       * @returns {string[]}
-       */
       async keys() {
-        webidl.brandCheck(this, _CacheStorage);
-        const keys = __privateGet(this, _caches).keys();
+        webidl.brandCheck(this, CacheStorage);
+        const keys = this.#caches.keys();
         return [...keys];
       }
     };
-    _caches = new WeakMap();
-    __name(_CacheStorage, "CacheStorage");
-    var CacheStorage = _CacheStorage;
+    __name(CacheStorage, "CacheStorage");
     Object.defineProperties(CacheStorage.prototype, {
       [Symbol.toStringTag]: {
         value: "CacheStorage",
@@ -16087,8 +15627,7 @@ var require_util6 = __commonJS({
     function validateCookieValue(value) {
       for (const char of value) {
         const code = char.charCodeAt(0);
-        if (code < 33 || // exclude CTLs (0-31)
-        code === 34 || code === 44 || code === 59 || code === 92 || code > 126) {
+        if (code < 33 || code === 34 || code === 44 || code === 59 || code === 92 || code > 126) {
           throw new Error("Invalid header value");
         }
       }
@@ -16152,7 +15691,7 @@ var require_util6 = __commonJS({
       }
     }
     __name(validateCookieMaxAge, "validateCookieMaxAge");
-    function stringify2(cookie) {
+    function stringify(cookie) {
       if (cookie.name.length === 0) {
         return null;
       }
@@ -16200,16 +15739,14 @@ var require_util6 = __commonJS({
       }
       return out.join("; ");
     }
-    __name(stringify2, "stringify");
+    __name(stringify, "stringify");
     var kHeadersListNode;
     function getHeadersList(headers) {
       if (headers[kHeadersList]) {
         return headers[kHeadersList];
       }
       if (!kHeadersListNode) {
-        kHeadersListNode = Object.getOwnPropertySymbols(headers).find(
-          (symbol) => symbol.description === "headers list"
-        );
+        kHeadersListNode = Object.getOwnPropertySymbols(headers).find((symbol) => symbol.description === "headers list");
         assert(kHeadersListNode, "Headers cannot be parsed");
       }
       const headersList = headers[kHeadersListNode];
@@ -16219,14 +15756,14 @@ var require_util6 = __commonJS({
     __name(getHeadersList, "getHeadersList");
     module2.exports = {
       isCTLExcludingHtab,
-      stringify: stringify2,
+      stringify,
       getHeadersList
     };
   }
 });
 
 // node_modules/undici/lib/cookies/parse.js
-var require_parse = __commonJS({
+var require_parse2 = __commonJS({
   "node_modules/undici/lib/cookies/parse.js"(exports2, module2) {
     "use strict";
     var { maxNameValuePairSize, maxAttributeValueSize } = require_constants3();
@@ -16252,11 +15789,7 @@ var require_parse = __commonJS({
         value = nameValuePair;
       } else {
         const position = { position: 0 };
-        name = collectASequenceOfCodePointsFast(
-          "=",
-          nameValuePair,
-          position
-        );
+        name = collectASequenceOfCodePointsFast("=", nameValuePair, position);
         value = nameValuePair.slice(position.position + 1);
       }
       name = name.trim();
@@ -16264,11 +15797,10 @@ var require_parse = __commonJS({
       if (name.length + value.length > maxNameValuePairSize) {
         return null;
       }
-      return {
+      return __spreadValues({
         name,
-        value,
-        ...parseUnparsedAttributes(unparsedAttributes)
-      };
+        value
+      }, parseUnparsedAttributes(unparsedAttributes));
     }
     __name(parseSetCookie, "parseSetCookie");
     function parseUnparsedAttributes(unparsedAttributes, cookieAttributeList = {}) {
@@ -16279,11 +15811,7 @@ var require_parse = __commonJS({
       unparsedAttributes = unparsedAttributes.slice(1);
       let cookieAv = "";
       if (unparsedAttributes.includes(";")) {
-        cookieAv = collectASequenceOfCodePointsFast(
-          ";",
-          unparsedAttributes,
-          { position: 0 }
-        );
+        cookieAv = collectASequenceOfCodePointsFast(";", unparsedAttributes, { position: 0 });
         unparsedAttributes = unparsedAttributes.slice(cookieAv.length);
       } else {
         cookieAv = unparsedAttributes;
@@ -16293,11 +15821,7 @@ var require_parse = __commonJS({
       let attributeValue = "";
       if (cookieAv.includes("=")) {
         const position = { position: 0 };
-        attributeName = collectASequenceOfCodePointsFast(
-          "=",
-          cookieAv,
-          position
-        );
+        attributeName = collectASequenceOfCodePointsFast("=", cookieAv, position);
         attributeValue = cookieAv.slice(position.position + 1);
       } else {
         attributeName = cookieAv;
@@ -16371,8 +15895,8 @@ var require_parse = __commonJS({
 var require_cookies = __commonJS({
   "node_modules/undici/lib/cookies/index.js"(exports2, module2) {
     "use strict";
-    var { parseSetCookie } = require_parse();
-    var { stringify: stringify2, getHeadersList } = require_util6();
+    var { parseSetCookie } = require_parse2();
+    var { stringify, getHeadersList } = require_util6();
     var { webidl } = require_webidl();
     var { Headers } = require_headers();
     function getCookies(headers) {
@@ -16395,12 +15919,11 @@ var require_cookies = __commonJS({
       webidl.brandCheck(headers, Headers, { strict: false });
       name = webidl.converters.DOMString(name);
       attributes = webidl.converters.DeleteCookieAttributes(attributes);
-      setCookie(headers, {
+      setCookie(headers, __spreadValues({
         name,
         value: "",
-        expires: /* @__PURE__ */ new Date(0),
-        ...attributes
-      });
+        expires: new Date(0)
+      }, attributes));
     }
     __name(deleteCookie, "deleteCookie");
     function getSetCookies(headers) {
@@ -16417,9 +15940,9 @@ var require_cookies = __commonJS({
       webidl.argumentLengthCheck(arguments, 2, { header: "setCookie" });
       webidl.brandCheck(headers, Headers, { strict: false });
       cookie = webidl.converters.Cookie(cookie);
-      const str = stringify2(cookie);
+      const str = stringify(cookie);
       if (str) {
-        headers.append("Set-Cookie", stringify2(cookie));
+        headers.append("Set-Cookie", stringify(cookie));
       }
     }
     __name(setCookie, "setCookie");
@@ -16567,43 +16090,42 @@ var require_events = __commonJS({
     var { webidl } = require_webidl();
     var { kEnumerableProperty } = require_util();
     var { MessagePort } = require("worker_threads");
-    var _eventInit;
-    var _MessageEvent = class _MessageEvent extends Event {
+    var MessageEvent = class extends Event {
+      #eventInit;
       constructor(type, eventInitDict = {}) {
         webidl.argumentLengthCheck(arguments, 1, { header: "MessageEvent constructor" });
         type = webidl.converters.DOMString(type);
         eventInitDict = webidl.converters.MessageEventInit(eventInitDict);
         super(type, eventInitDict);
-        __privateAdd(this, _eventInit);
-        __privateSet(this, _eventInit, eventInitDict);
+        this.#eventInit = eventInitDict;
       }
       get data() {
-        webidl.brandCheck(this, _MessageEvent);
-        return __privateGet(this, _eventInit).data;
+        webidl.brandCheck(this, MessageEvent);
+        return this.#eventInit.data;
       }
       get origin() {
-        webidl.brandCheck(this, _MessageEvent);
-        return __privateGet(this, _eventInit).origin;
+        webidl.brandCheck(this, MessageEvent);
+        return this.#eventInit.origin;
       }
       get lastEventId() {
-        webidl.brandCheck(this, _MessageEvent);
-        return __privateGet(this, _eventInit).lastEventId;
+        webidl.brandCheck(this, MessageEvent);
+        return this.#eventInit.lastEventId;
       }
       get source() {
-        webidl.brandCheck(this, _MessageEvent);
-        return __privateGet(this, _eventInit).source;
+        webidl.brandCheck(this, MessageEvent);
+        return this.#eventInit.source;
       }
       get ports() {
-        webidl.brandCheck(this, _MessageEvent);
-        if (!Object.isFrozen(__privateGet(this, _eventInit).ports)) {
-          Object.freeze(__privateGet(this, _eventInit).ports);
+        webidl.brandCheck(this, MessageEvent);
+        if (!Object.isFrozen(this.#eventInit.ports)) {
+          Object.freeze(this.#eventInit.ports);
         }
-        return __privateGet(this, _eventInit).ports;
+        return this.#eventInit.ports;
       }
       initMessageEvent(type, bubbles = false, cancelable = false, data = null, origin = "", lastEventId = "", source = null, ports = []) {
-        webidl.brandCheck(this, _MessageEvent);
+        webidl.brandCheck(this, MessageEvent);
         webidl.argumentLengthCheck(arguments, 1, { header: "MessageEvent.initMessageEvent" });
-        return new _MessageEvent(type, {
+        return new MessageEvent(type, {
           bubbles,
           cancelable,
           data,
@@ -16614,69 +16136,61 @@ var require_events = __commonJS({
         });
       }
     };
-    _eventInit = new WeakMap();
-    __name(_MessageEvent, "MessageEvent");
-    var MessageEvent = _MessageEvent;
-    var _eventInit2;
-    var _CloseEvent = class _CloseEvent extends Event {
+    __name(MessageEvent, "MessageEvent");
+    var CloseEvent = class extends Event {
+      #eventInit;
       constructor(type, eventInitDict = {}) {
         webidl.argumentLengthCheck(arguments, 1, { header: "CloseEvent constructor" });
         type = webidl.converters.DOMString(type);
         eventInitDict = webidl.converters.CloseEventInit(eventInitDict);
         super(type, eventInitDict);
-        __privateAdd(this, _eventInit2);
-        __privateSet(this, _eventInit2, eventInitDict);
+        this.#eventInit = eventInitDict;
       }
       get wasClean() {
-        webidl.brandCheck(this, _CloseEvent);
-        return __privateGet(this, _eventInit2).wasClean;
+        webidl.brandCheck(this, CloseEvent);
+        return this.#eventInit.wasClean;
       }
       get code() {
-        webidl.brandCheck(this, _CloseEvent);
-        return __privateGet(this, _eventInit2).code;
+        webidl.brandCheck(this, CloseEvent);
+        return this.#eventInit.code;
       }
       get reason() {
-        webidl.brandCheck(this, _CloseEvent);
-        return __privateGet(this, _eventInit2).reason;
+        webidl.brandCheck(this, CloseEvent);
+        return this.#eventInit.reason;
       }
     };
-    _eventInit2 = new WeakMap();
-    __name(_CloseEvent, "CloseEvent");
-    var CloseEvent = _CloseEvent;
-    var _eventInit3;
-    var _ErrorEvent = class _ErrorEvent extends Event {
+    __name(CloseEvent, "CloseEvent");
+    var ErrorEvent = class extends Event {
+      #eventInit;
       constructor(type, eventInitDict) {
         webidl.argumentLengthCheck(arguments, 1, { header: "ErrorEvent constructor" });
         super(type, eventInitDict);
-        __privateAdd(this, _eventInit3);
         type = webidl.converters.DOMString(type);
         eventInitDict = webidl.converters.ErrorEventInit(eventInitDict ?? {});
-        __privateSet(this, _eventInit3, eventInitDict);
+        this.#eventInit = eventInitDict;
       }
       get message() {
-        webidl.brandCheck(this, _ErrorEvent);
-        return __privateGet(this, _eventInit3).message;
+        webidl.brandCheck(this, ErrorEvent);
+        return this.#eventInit.message;
       }
       get filename() {
-        webidl.brandCheck(this, _ErrorEvent);
-        return __privateGet(this, _eventInit3).filename;
+        webidl.brandCheck(this, ErrorEvent);
+        return this.#eventInit.filename;
       }
       get lineno() {
-        webidl.brandCheck(this, _ErrorEvent);
-        return __privateGet(this, _eventInit3).lineno;
+        webidl.brandCheck(this, ErrorEvent);
+        return this.#eventInit.lineno;
       }
       get colno() {
-        webidl.brandCheck(this, _ErrorEvent);
-        return __privateGet(this, _eventInit3).colno;
+        webidl.brandCheck(this, ErrorEvent);
+        return this.#eventInit.colno;
       }
       get error() {
-        webidl.brandCheck(this, _ErrorEvent);
-        return __privateGet(this, _eventInit3).error;
+        webidl.brandCheck(this, ErrorEvent);
+        return this.#eventInit.error;
       }
     };
-    _eventInit3 = new WeakMap();
-    __name(_ErrorEvent, "ErrorEvent");
-    var ErrorEvent = _ErrorEvent;
+    __name(ErrorEvent, "ErrorEvent");
     Object.defineProperties(MessageEvent.prototype, {
       [Symbol.toStringTag]: {
         value: "MessageEvent",
@@ -16710,9 +16224,7 @@ var require_events = __commonJS({
       error: kEnumerableProperty
     });
     webidl.converters.MessagePort = webidl.interfaceConverter(MessagePort);
-    webidl.converters["sequence<MessagePort>"] = webidl.sequenceConverter(
-      webidl.converters.MessagePort
-    );
+    webidl.converters["sequence<MessagePort>"] = webidl.sequenceConverter(webidl.converters.MessagePort);
     var eventInit = [
       {
         key: "bubbles",
@@ -16749,8 +16261,6 @@ var require_events = __commonJS({
       },
       {
         key: "source",
-        // Node doesn't implement WindowProxy or ServiceWorker, so the only
-        // valid value for source is a MessagePort.
         converter: webidl.nullableConverter(webidl.converters.MessagePort),
         defaultValue: null
       },
@@ -16870,8 +16380,7 @@ var require_util7 = __commonJS({
       }
       for (const char of protocol) {
         const code = char.charCodeAt(0);
-        if (code < 33 || code > 126 || char === "(" || char === ")" || char === "<" || char === ">" || char === "@" || char === "," || char === ";" || char === ":" || char === "\\" || char === '"' || char === "/" || char === "[" || char === "]" || char === "?" || char === "=" || char === "{" || char === "}" || code === 32 || // SP
-        code === 9) {
+        if (code < 33 || code > 126 || char === "(" || char === ")" || char === "<" || char === ">" || char === "@" || char === "," || char === ";" || char === ":" || char === "\\" || char === '"' || char === "/" || char === "[" || char === "]" || char === "?" || char === "=" || char === "{" || char === "}" || code === 32 || code === 9) {
           return false;
         }
       }
@@ -16880,9 +16389,7 @@ var require_util7 = __commonJS({
     __name(isValidSubprotocol, "isValidSubprotocol");
     function isValidStatusCode(code) {
       if (code >= 1e3 && code < 1015) {
-        return code !== 1004 && // reserved
-        code !== 1005 && // "MUST NOT be set as a status code"
-        code !== 1006;
+        return code !== 1004 && code !== 1005 && code !== 1006;
       }
       return code >= 3e3 && code <= 4999;
     }
@@ -16890,7 +16397,7 @@ var require_util7 = __commonJS({
     function failWebsocketConnection(ws, reason) {
       const { [kController]: controller, [kResponse]: response } = ws;
       controller.abort();
-      if ((response == null ? void 0 : response.socket) && !response.socket.destroyed) {
+      if (response?.socket && !response.socket.destroyed) {
         response.socket.destroy();
       }
       if (reason) {
@@ -16936,9 +16443,9 @@ var require_connection = __commonJS({
     channels.open = diagnosticsChannel.channel("undici:websocket:open");
     channels.close = diagnosticsChannel.channel("undici:websocket:close");
     channels.socketError = diagnosticsChannel.channel("undici:websocket:socket_error");
-    var crypto4;
+    var crypto;
     try {
-      crypto4 = require("crypto");
+      crypto = require("crypto");
     } catch {
     }
     function establishWebSocketConnection(url, protocols, ws, onEstablish, options) {
@@ -16957,7 +16464,7 @@ var require_connection = __commonJS({
         const headersList = new Headers(options.headers)[kHeadersList];
         request.headersList = headersList;
       }
-      const keyValue = crypto4.randomBytes(16).toString("base64");
+      const keyValue = crypto.randomBytes(16).toString("base64");
       request.headersList.append("sec-websocket-key", keyValue);
       request.headersList.append("sec-websocket-version", "13");
       for (const protocol of protocols) {
@@ -16969,7 +16476,6 @@ var require_connection = __commonJS({
         useParallelQueue: true,
         dispatcher: options.dispatcher ?? getGlobalDispatcher(),
         processResponse(response) {
-          var _a, _b;
           if (response.type === "error" || response.status !== 101) {
             failWebsocketConnection(ws, "Received network error or non-101 status code.");
             return;
@@ -16978,16 +16484,16 @@ var require_connection = __commonJS({
             failWebsocketConnection(ws, "Server did not respond with sent protocols.");
             return;
           }
-          if (((_a = response.headersList.get("Upgrade")) == null ? void 0 : _a.toLowerCase()) !== "websocket") {
+          if (response.headersList.get("Upgrade")?.toLowerCase() !== "websocket") {
             failWebsocketConnection(ws, 'Server did not set Upgrade header to "websocket".');
             return;
           }
-          if (((_b = response.headersList.get("Connection")) == null ? void 0 : _b.toLowerCase()) !== "upgrade") {
+          if (response.headersList.get("Connection")?.toLowerCase() !== "upgrade") {
             failWebsocketConnection(ws, 'Server did not set Connection header to "upgrade".');
             return;
           }
           const secWSAccept = response.headersList.get("Sec-WebSocket-Accept");
-          const digest = crypto4.createHash("sha1").update(keyValue + uid).digest("base64");
+          const digest = crypto.createHash("sha1").update(keyValue + uid).digest("base64");
           if (secWSAccept !== digest) {
             failWebsocketConnection(ws, "Incorrect hash received in Sec-WebSocket-Accept header.");
             return;
@@ -17071,22 +16577,18 @@ var require_frame = __commonJS({
   "node_modules/undici/lib/websocket/frame.js"(exports2, module2) {
     "use strict";
     var { maxUnsigned16Bit } = require_constants4();
-    var crypto4;
+    var crypto;
     try {
-      crypto4 = require("crypto");
+      crypto = require("crypto");
     } catch {
     }
-    var _WebsocketFrameSend = class _WebsocketFrameSend {
-      /**
-       * @param {Buffer|undefined} data
-       */
+    var WebsocketFrameSend = class {
       constructor(data) {
         this.frameData = data;
-        this.maskKey = crypto4.randomBytes(4);
+        this.maskKey = crypto.randomBytes(4);
       }
       createFrame(opcode) {
-        var _a;
-        const bodyLength = ((_a = this.frameData) == null ? void 0 : _a.byteLength) ?? 0;
+        const bodyLength = this.frameData?.byteLength ?? 0;
         let payloadLength = bodyLength;
         let offset = 6;
         if (bodyLength > maxUnsigned16Bit) {
@@ -17118,8 +16620,7 @@ var require_frame = __commonJS({
         return buffer;
       }
     };
-    __name(_WebsocketFrameSend, "WebsocketFrameSend");
-    var WebsocketFrameSend = _WebsocketFrameSend;
+    __name(WebsocketFrameSend, "WebsocketFrameSend");
     module2.exports = {
       WebsocketFrameSend
     };
@@ -17139,86 +16640,73 @@ var require_receiver = __commonJS({
     var channels = {};
     channels.ping = diagnosticsChannel.channel("undici:websocket:ping");
     channels.pong = diagnosticsChannel.channel("undici:websocket:pong");
-    var _buffers, _byteOffset, _state, _info, _fragments;
-    var _ByteParser = class _ByteParser extends Writable {
+    var ByteParser = class extends Writable {
+      #buffers = [];
+      #byteOffset = 0;
+      #state = parserStates.INFO;
+      #info = {};
+      #fragments = [];
       constructor(ws) {
         super();
-        __privateAdd(this, _buffers, []);
-        __privateAdd(this, _byteOffset, 0);
-        __privateAdd(this, _state, parserStates.INFO);
-        __privateAdd(this, _info, {});
-        __privateAdd(this, _fragments, []);
         this.ws = ws;
       }
-      /**
-       * @param {Buffer} chunk
-       * @param {() => void} callback
-       */
       _write(chunk, _, callback) {
-        __privateGet(this, _buffers).push(chunk);
-        __privateSet(this, _byteOffset, __privateGet(this, _byteOffset) + chunk.length);
+        this.#buffers.push(chunk);
+        this.#byteOffset += chunk.length;
         this.run(callback);
       }
-      /**
-       * Runs whenever a new chunk is received.
-       * Callback is called whenever there are no more chunks buffering,
-       * or not enough bytes are buffered to parse.
-       */
       run(callback) {
         while (true) {
-          if (__privateGet(this, _state) === parserStates.INFO) {
-            if (__privateGet(this, _byteOffset) < 2) {
+          if (this.#state === parserStates.INFO) {
+            if (this.#byteOffset < 2) {
               return callback();
             }
             const buffer = this.consume(2);
-            __privateGet(this, _info).fin = (buffer[0] & 128) !== 0;
-            __privateGet(this, _info).opcode = buffer[0] & 15;
-            __privateGet(this, _info).originalOpcode ??= __privateGet(this, _info).opcode;
-            __privateGet(this, _info).fragmented = !__privateGet(this, _info).fin && __privateGet(this, _info).opcode !== opcodes.CONTINUATION;
-            if (__privateGet(this, _info).fragmented && __privateGet(this, _info).opcode !== opcodes.BINARY && __privateGet(this, _info).opcode !== opcodes.TEXT) {
+            this.#info.fin = (buffer[0] & 128) !== 0;
+            this.#info.opcode = buffer[0] & 15;
+            this.#info.originalOpcode ??= this.#info.opcode;
+            this.#info.fragmented = !this.#info.fin && this.#info.opcode !== opcodes.CONTINUATION;
+            if (this.#info.fragmented && this.#info.opcode !== opcodes.BINARY && this.#info.opcode !== opcodes.TEXT) {
               failWebsocketConnection(this.ws, "Invalid frame type was fragmented.");
               return;
             }
             const payloadLength = buffer[1] & 127;
             if (payloadLength <= 125) {
-              __privateGet(this, _info).payloadLength = payloadLength;
-              __privateSet(this, _state, parserStates.READ_DATA);
+              this.#info.payloadLength = payloadLength;
+              this.#state = parserStates.READ_DATA;
             } else if (payloadLength === 126) {
-              __privateSet(this, _state, parserStates.PAYLOADLENGTH_16);
+              this.#state = parserStates.PAYLOADLENGTH_16;
             } else if (payloadLength === 127) {
-              __privateSet(this, _state, parserStates.PAYLOADLENGTH_64);
+              this.#state = parserStates.PAYLOADLENGTH_64;
             }
-            if (__privateGet(this, _info).fragmented && payloadLength > 125) {
+            if (this.#info.fragmented && payloadLength > 125) {
               failWebsocketConnection(this.ws, "Fragmented frame exceeded 125 bytes.");
               return;
-            } else if ((__privateGet(this, _info).opcode === opcodes.PING || __privateGet(this, _info).opcode === opcodes.PONG || __privateGet(this, _info).opcode === opcodes.CLOSE) && payloadLength > 125) {
+            } else if ((this.#info.opcode === opcodes.PING || this.#info.opcode === opcodes.PONG || this.#info.opcode === opcodes.CLOSE) && payloadLength > 125) {
               failWebsocketConnection(this.ws, "Payload length for control frame exceeded 125 bytes.");
               return;
-            } else if (__privateGet(this, _info).opcode === opcodes.CLOSE) {
+            } else if (this.#info.opcode === opcodes.CLOSE) {
               if (payloadLength === 1) {
                 failWebsocketConnection(this.ws, "Received close frame with a 1-byte body.");
                 return;
               }
               const body = this.consume(payloadLength);
-              __privateGet(this, _info).closeInfo = this.parseCloseBody(false, body);
+              this.#info.closeInfo = this.parseCloseBody(false, body);
               if (!this.ws[kSentClose]) {
                 const body2 = Buffer.allocUnsafe(2);
-                body2.writeUInt16BE(__privateGet(this, _info).closeInfo.code, 0);
+                body2.writeUInt16BE(this.#info.closeInfo.code, 0);
                 const closeFrame = new WebsocketFrameSend(body2);
-                this.ws[kResponse].socket.write(
-                  closeFrame.createFrame(opcodes.CLOSE),
-                  (err) => {
-                    if (!err) {
-                      this.ws[kSentClose] = true;
-                    }
+                this.ws[kResponse].socket.write(closeFrame.createFrame(opcodes.CLOSE), (err) => {
+                  if (!err) {
+                    this.ws[kSentClose] = true;
                   }
-                );
+                });
               }
               this.ws[kReadyState] = states.CLOSING;
               this.ws[kReceivedClose] = true;
               this.end();
               return;
-            } else if (__privateGet(this, _info).opcode === opcodes.PING) {
+            } else if (this.#info.opcode === opcodes.PING) {
               const body = this.consume(payloadLength);
               if (!this.ws[kReceivedClose]) {
                 const frame = new WebsocketFrameSend(body);
@@ -17229,36 +16717,36 @@ var require_receiver = __commonJS({
                   });
                 }
               }
-              __privateSet(this, _state, parserStates.INFO);
-              if (__privateGet(this, _byteOffset) > 0) {
+              this.#state = parserStates.INFO;
+              if (this.#byteOffset > 0) {
                 continue;
               } else {
                 callback();
                 return;
               }
-            } else if (__privateGet(this, _info).opcode === opcodes.PONG) {
+            } else if (this.#info.opcode === opcodes.PONG) {
               const body = this.consume(payloadLength);
               if (channels.pong.hasSubscribers) {
                 channels.pong.publish({
                   payload: body
                 });
               }
-              if (__privateGet(this, _byteOffset) > 0) {
+              if (this.#byteOffset > 0) {
                 continue;
               } else {
                 callback();
                 return;
               }
             }
-          } else if (__privateGet(this, _state) === parserStates.PAYLOADLENGTH_16) {
-            if (__privateGet(this, _byteOffset) < 2) {
+          } else if (this.#state === parserStates.PAYLOADLENGTH_16) {
+            if (this.#byteOffset < 2) {
               return callback();
             }
             const buffer = this.consume(2);
-            __privateGet(this, _info).payloadLength = buffer.readUInt16BE(0);
-            __privateSet(this, _state, parserStates.READ_DATA);
-          } else if (__privateGet(this, _state) === parserStates.PAYLOADLENGTH_64) {
-            if (__privateGet(this, _byteOffset) < 8) {
+            this.#info.payloadLength = buffer.readUInt16BE(0);
+            this.#state = parserStates.READ_DATA;
+          } else if (this.#state === parserStates.PAYLOADLENGTH_64) {
+            if (this.#byteOffset < 8) {
               return callback();
             }
             const buffer = this.consume(8);
@@ -17268,24 +16756,24 @@ var require_receiver = __commonJS({
               return;
             }
             const lower = buffer.readUInt32BE(4);
-            __privateGet(this, _info).payloadLength = (upper << 8) + lower;
-            __privateSet(this, _state, parserStates.READ_DATA);
-          } else if (__privateGet(this, _state) === parserStates.READ_DATA) {
-            if (__privateGet(this, _byteOffset) < __privateGet(this, _info).payloadLength) {
+            this.#info.payloadLength = (upper << 8) + lower;
+            this.#state = parserStates.READ_DATA;
+          } else if (this.#state === parserStates.READ_DATA) {
+            if (this.#byteOffset < this.#info.payloadLength) {
               return callback();
-            } else if (__privateGet(this, _byteOffset) >= __privateGet(this, _info).payloadLength) {
-              const body = this.consume(__privateGet(this, _info).payloadLength);
-              __privateGet(this, _fragments).push(body);
-              if (!__privateGet(this, _info).fragmented || __privateGet(this, _info).fin && __privateGet(this, _info).opcode === opcodes.CONTINUATION) {
-                const fullMessage = Buffer.concat(__privateGet(this, _fragments));
-                websocketMessageReceived(this.ws, __privateGet(this, _info).originalOpcode, fullMessage);
-                __privateSet(this, _info, {});
-                __privateGet(this, _fragments).length = 0;
+            } else if (this.#byteOffset >= this.#info.payloadLength) {
+              const body = this.consume(this.#info.payloadLength);
+              this.#fragments.push(body);
+              if (!this.#info.fragmented || this.#info.fin && this.#info.opcode === opcodes.CONTINUATION) {
+                const fullMessage = Buffer.concat(this.#fragments);
+                websocketMessageReceived(this.ws, this.#info.originalOpcode, fullMessage);
+                this.#info = {};
+                this.#fragments.length = 0;
               }
-              __privateSet(this, _state, parserStates.INFO);
+              this.#state = parserStates.INFO;
             }
           }
-          if (__privateGet(this, _byteOffset) > 0) {
+          if (this.#byteOffset > 0) {
             continue;
           } else {
             callback();
@@ -17293,39 +16781,34 @@ var require_receiver = __commonJS({
           }
         }
       }
-      /**
-       * Take n bytes from the buffered Buffers
-       * @param {number} n
-       * @returns {Buffer|null}
-       */
       consume(n) {
-        if (n > __privateGet(this, _byteOffset)) {
+        if (n > this.#byteOffset) {
           return null;
         } else if (n === 0) {
           return emptyBuffer;
         }
-        if (__privateGet(this, _buffers)[0].length === n) {
-          __privateSet(this, _byteOffset, __privateGet(this, _byteOffset) - __privateGet(this, _buffers)[0].length);
-          return __privateGet(this, _buffers).shift();
+        if (this.#buffers[0].length === n) {
+          this.#byteOffset -= this.#buffers[0].length;
+          return this.#buffers.shift();
         }
         const buffer = Buffer.allocUnsafe(n);
         let offset = 0;
         while (offset !== n) {
-          const next = __privateGet(this, _buffers)[0];
+          const next = this.#buffers[0];
           const { length } = next;
           if (length + offset === n) {
-            buffer.set(__privateGet(this, _buffers).shift(), offset);
+            buffer.set(this.#buffers.shift(), offset);
             break;
           } else if (length + offset > n) {
             buffer.set(next.subarray(0, n - offset), offset);
-            __privateGet(this, _buffers)[0] = next.subarray(n - offset);
+            this.#buffers[0] = next.subarray(n - offset);
             break;
           } else {
-            buffer.set(__privateGet(this, _buffers).shift(), offset);
+            buffer.set(this.#buffers.shift(), offset);
             offset += next.length;
           }
         }
-        __privateSet(this, _byteOffset, __privateGet(this, _byteOffset) - n);
+        this.#byteOffset -= n;
         return buffer;
       }
       parseCloseBody(onlyCode, data) {
@@ -17354,16 +16837,10 @@ var require_receiver = __commonJS({
         return { code, reason };
       }
       get closingInfo() {
-        return __privateGet(this, _info).closeInfo;
+        return this.#info.closeInfo;
       }
     };
-    _buffers = new WeakMap();
-    _byteOffset = new WeakMap();
-    _state = new WeakMap();
-    _info = new WeakMap();
-    _fragments = new WeakMap();
-    __name(_ByteParser, "ByteParser");
-    var ByteParser = _ByteParser;
+    __name(ByteParser, "ByteParser");
     module2.exports = {
       ByteParser
     };
@@ -17396,24 +16873,18 @@ var require_websocket = __commonJS({
     var { getGlobalDispatcher } = require_global2();
     var { types } = require("util");
     var experimentalWarned = false;
-    var _events, _bufferedAmount, _protocol, _extensions, _WebSocket_instances, onConnectionEstablished_fn;
-    var _WebSocket = class _WebSocket extends EventTarget {
-      /**
-       * @param {string} url
-       * @param {string|string[]} protocols
-       */
+    var WebSocket = class extends EventTarget {
+      #events = {
+        open: null,
+        error: null,
+        close: null,
+        message: null
+      };
+      #bufferedAmount = 0;
+      #protocol = "";
+      #extensions = "";
       constructor(url, protocols = []) {
         super();
-        __privateAdd(this, _WebSocket_instances);
-        __privateAdd(this, _events, {
-          open: null,
-          error: null,
-          close: null,
-          message: null
-        });
-        __privateAdd(this, _bufferedAmount, 0);
-        __privateAdd(this, _protocol, "");
-        __privateAdd(this, _extensions, "");
         webidl.argumentLengthCheck(arguments, 1, { header: "WebSocket constructor" });
         if (!experimentalWarned) {
           experimentalWarned = true;
@@ -17437,10 +16908,7 @@ var require_websocket = __commonJS({
           urlRecord.protocol = "wss:";
         }
         if (urlRecord.protocol !== "ws:" && urlRecord.protocol !== "wss:") {
-          throw new DOMException2(
-            `Expected a ws: or wss: protocol, got ${urlRecord.protocol}`,
-            "SyntaxError"
-          );
+          throw new DOMException2(`Expected a ws: or wss: protocol, got ${urlRecord.protocol}`, "SyntaxError");
         }
         if (urlRecord.hash || urlRecord.href.endsWith("#")) {
           throw new DOMException2("Got fragment", "SyntaxError");
@@ -17455,23 +16923,12 @@ var require_websocket = __commonJS({
           throw new DOMException2("Invalid Sec-WebSocket-Protocol value", "SyntaxError");
         }
         this[kWebSocketURL] = new URL(urlRecord.href);
-        this[kController] = establishWebSocketConnection(
-          urlRecord,
-          protocols,
-          this,
-          (response) => __privateMethod(this, _WebSocket_instances, onConnectionEstablished_fn).call(this, response),
-          options
-        );
-        this[kReadyState] = _WebSocket.CONNECTING;
+        this[kController] = establishWebSocketConnection(urlRecord, protocols, this, (response) => this.#onConnectionEstablished(response), options);
+        this[kReadyState] = WebSocket.CONNECTING;
         this[kBinaryType] = "blob";
       }
-      /**
-       * @see https://websockets.spec.whatwg.org/#dom-websocket-close
-       * @param {number|undefined} code
-       * @param {string|undefined} reason
-       */
       close(code = void 0, reason = void 0) {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         if (code !== void 0) {
           code = webidl.converters["unsigned short"](code, { clamp: true });
         }
@@ -17487,16 +16944,13 @@ var require_websocket = __commonJS({
         if (reason !== void 0) {
           reasonByteLength = Buffer.byteLength(reason);
           if (reasonByteLength > 123) {
-            throw new DOMException2(
-              `Reason must be less than 123 bytes; received ${reasonByteLength}`,
-              "SyntaxError"
-            );
+            throw new DOMException2(`Reason must be less than 123 bytes; received ${reasonByteLength}`, "SyntaxError");
           }
         }
-        if (this[kReadyState] === _WebSocket.CLOSING || this[kReadyState] === _WebSocket.CLOSED) {
+        if (this[kReadyState] === WebSocket.CLOSING || this[kReadyState] === WebSocket.CLOSED) {
         } else if (!isEstablished(this)) {
           failWebsocketConnection(this, "Connection was closed before it was established.");
-          this[kReadyState] = _WebSocket.CLOSING;
+          this[kReadyState] = WebSocket.CLOSING;
         } else if (!isClosing(this)) {
           const frame = new WebsocketFrameSend();
           if (code !== void 0 && reason === void 0) {
@@ -17517,18 +16971,14 @@ var require_websocket = __commonJS({
           });
           this[kReadyState] = states.CLOSING;
         } else {
-          this[kReadyState] = _WebSocket.CLOSING;
+          this[kReadyState] = WebSocket.CLOSING;
         }
       }
-      /**
-       * @see https://websockets.spec.whatwg.org/#dom-websocket-send
-       * @param {NodeJS.TypedArray|ArrayBuffer|Blob|string} data
-       */
       send(data) {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         webidl.argumentLengthCheck(arguments, 1, { header: "WebSocket.send" });
         data = webidl.converters.WebSocketSendData(data);
-        if (this[kReadyState] === _WebSocket.CONNECTING) {
+        if (this[kReadyState] === WebSocket.CONNECTING) {
           throw new DOMException2("Sent before connected.", "InvalidStateError");
         }
         if (!isEstablished(this) || isClosing(this)) {
@@ -17539,25 +16989,25 @@ var require_websocket = __commonJS({
           const value = Buffer.from(data);
           const frame = new WebsocketFrameSend(value);
           const buffer = frame.createFrame(opcodes.TEXT);
-          __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) + value.byteLength);
+          this.#bufferedAmount += value.byteLength;
           socket.write(buffer, () => {
-            __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) - value.byteLength);
+            this.#bufferedAmount -= value.byteLength;
           });
         } else if (types.isArrayBuffer(data)) {
           const value = Buffer.from(data);
           const frame = new WebsocketFrameSend(value);
           const buffer = frame.createFrame(opcodes.BINARY);
-          __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) + value.byteLength);
+          this.#bufferedAmount += value.byteLength;
           socket.write(buffer, () => {
-            __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) - value.byteLength);
+            this.#bufferedAmount -= value.byteLength;
           });
         } else if (ArrayBuffer.isView(data)) {
           const ab = Buffer.from(data, data.byteOffset, data.byteLength);
           const frame = new WebsocketFrameSend(ab);
           const buffer = frame.createFrame(opcodes.BINARY);
-          __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) + ab.byteLength);
+          this.#bufferedAmount += ab.byteLength;
           socket.write(buffer, () => {
-            __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) - ab.byteLength);
+            this.#bufferedAmount -= ab.byteLength;
           });
         } else if (isBlobLike(data)) {
           const frame = new WebsocketFrameSend();
@@ -17565,139 +17015,130 @@ var require_websocket = __commonJS({
             const value = Buffer.from(ab);
             frame.frameData = value;
             const buffer = frame.createFrame(opcodes.BINARY);
-            __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) + value.byteLength);
+            this.#bufferedAmount += value.byteLength;
             socket.write(buffer, () => {
-              __privateSet(this, _bufferedAmount, __privateGet(this, _bufferedAmount) - value.byteLength);
+              this.#bufferedAmount -= value.byteLength;
             });
           });
         }
       }
       get readyState() {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         return this[kReadyState];
       }
       get bufferedAmount() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _bufferedAmount);
+        webidl.brandCheck(this, WebSocket);
+        return this.#bufferedAmount;
       }
       get url() {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         return URLSerializer(this[kWebSocketURL]);
       }
       get extensions() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _extensions);
+        webidl.brandCheck(this, WebSocket);
+        return this.#extensions;
       }
       get protocol() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _protocol);
+        webidl.brandCheck(this, WebSocket);
+        return this.#protocol;
       }
       get onopen() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _events).open;
+        webidl.brandCheck(this, WebSocket);
+        return this.#events.open;
       }
       set onopen(fn) {
-        webidl.brandCheck(this, _WebSocket);
-        if (__privateGet(this, _events).open) {
-          this.removeEventListener("open", __privateGet(this, _events).open);
+        webidl.brandCheck(this, WebSocket);
+        if (this.#events.open) {
+          this.removeEventListener("open", this.#events.open);
         }
         if (typeof fn === "function") {
-          __privateGet(this, _events).open = fn;
+          this.#events.open = fn;
           this.addEventListener("open", fn);
         } else {
-          __privateGet(this, _events).open = null;
+          this.#events.open = null;
         }
       }
       get onerror() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _events).error;
+        webidl.brandCheck(this, WebSocket);
+        return this.#events.error;
       }
       set onerror(fn) {
-        webidl.brandCheck(this, _WebSocket);
-        if (__privateGet(this, _events).error) {
-          this.removeEventListener("error", __privateGet(this, _events).error);
+        webidl.brandCheck(this, WebSocket);
+        if (this.#events.error) {
+          this.removeEventListener("error", this.#events.error);
         }
         if (typeof fn === "function") {
-          __privateGet(this, _events).error = fn;
+          this.#events.error = fn;
           this.addEventListener("error", fn);
         } else {
-          __privateGet(this, _events).error = null;
+          this.#events.error = null;
         }
       }
       get onclose() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _events).close;
+        webidl.brandCheck(this, WebSocket);
+        return this.#events.close;
       }
       set onclose(fn) {
-        webidl.brandCheck(this, _WebSocket);
-        if (__privateGet(this, _events).close) {
-          this.removeEventListener("close", __privateGet(this, _events).close);
+        webidl.brandCheck(this, WebSocket);
+        if (this.#events.close) {
+          this.removeEventListener("close", this.#events.close);
         }
         if (typeof fn === "function") {
-          __privateGet(this, _events).close = fn;
+          this.#events.close = fn;
           this.addEventListener("close", fn);
         } else {
-          __privateGet(this, _events).close = null;
+          this.#events.close = null;
         }
       }
       get onmessage() {
-        webidl.brandCheck(this, _WebSocket);
-        return __privateGet(this, _events).message;
+        webidl.brandCheck(this, WebSocket);
+        return this.#events.message;
       }
       set onmessage(fn) {
-        webidl.brandCheck(this, _WebSocket);
-        if (__privateGet(this, _events).message) {
-          this.removeEventListener("message", __privateGet(this, _events).message);
+        webidl.brandCheck(this, WebSocket);
+        if (this.#events.message) {
+          this.removeEventListener("message", this.#events.message);
         }
         if (typeof fn === "function") {
-          __privateGet(this, _events).message = fn;
+          this.#events.message = fn;
           this.addEventListener("message", fn);
         } else {
-          __privateGet(this, _events).message = null;
+          this.#events.message = null;
         }
       }
       get binaryType() {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         return this[kBinaryType];
       }
       set binaryType(type) {
-        webidl.brandCheck(this, _WebSocket);
+        webidl.brandCheck(this, WebSocket);
         if (type !== "blob" && type !== "arraybuffer") {
           this[kBinaryType] = "blob";
         } else {
           this[kBinaryType] = type;
         }
       }
+      #onConnectionEstablished(response) {
+        this[kResponse] = response;
+        const parser = new ByteParser(this);
+        parser.on("drain", /* @__PURE__ */ __name(function onParserDrain() {
+          this.ws[kResponse].socket.resume();
+        }, "onParserDrain"));
+        response.socket.ws = this;
+        this[kByteParser] = parser;
+        this[kReadyState] = states.OPEN;
+        const extensions = response.headersList.get("sec-websocket-extensions");
+        if (extensions !== null) {
+          this.#extensions = extensions;
+        }
+        const protocol = response.headersList.get("sec-websocket-protocol");
+        if (protocol !== null) {
+          this.#protocol = protocol;
+        }
+        fireEvent("open", this);
+      }
     };
-    _events = new WeakMap();
-    _bufferedAmount = new WeakMap();
-    _protocol = new WeakMap();
-    _extensions = new WeakMap();
-    _WebSocket_instances = new WeakSet();
-    /**
-     * @see https://websockets.spec.whatwg.org/#feedback-from-the-protocol
-     */
-    onConnectionEstablished_fn = /* @__PURE__ */ __name(function(response) {
-      this[kResponse] = response;
-      const parser = new ByteParser(this);
-      parser.on("drain", /* @__PURE__ */ __name(function onParserDrain() {
-        this.ws[kResponse].socket.resume();
-      }, "onParserDrain"));
-      response.socket.ws = this;
-      this[kByteParser] = parser;
-      this[kReadyState] = states.OPEN;
-      const extensions = response.headersList.get("sec-websocket-extensions");
-      if (extensions !== null) {
-        __privateSet(this, _extensions, extensions);
-      }
-      const protocol = response.headersList.get("sec-websocket-protocol");
-      if (protocol !== null) {
-        __privateSet(this, _protocol, protocol);
-      }
-      fireEvent("open", this);
-    }, "#onConnectionEstablished");
-    __name(_WebSocket, "WebSocket");
-    var WebSocket = _WebSocket;
+    __name(WebSocket, "WebSocket");
     WebSocket.CONNECTING = WebSocket.prototype.CONNECTING = states.CONNECTING;
     WebSocket.OPEN = WebSocket.prototype.OPEN = states.OPEN;
     WebSocket.CLOSING = WebSocket.prototype.CLOSING = states.CLOSING;
@@ -17732,9 +17173,7 @@ var require_websocket = __commonJS({
       CLOSING: staticPropertyDescriptors,
       CLOSED: staticPropertyDescriptors
     });
-    webidl.converters["sequence<DOMString>"] = webidl.sequenceConverter(
-      webidl.converters.DOMString
-    );
+    webidl.converters["sequence<DOMString>"] = webidl.sequenceConverter(webidl.converters.DOMString);
     webidl.converters["DOMString or sequence<DOMString>"] = function(V) {
       if (webidl.util.Type(V) === "Object" && Symbol.iterator in V) {
         return webidl.converters["sequence<DOMString>"](V);
@@ -17751,7 +17190,7 @@ var require_websocket = __commonJS({
       },
       {
         key: "dispatcher",
-        converter: /* @__PURE__ */ __name((V) => V, "converter"),
+        converter: (V) => V,
         get defaultValue() {
           return getGlobalDispatcher();
         }
@@ -17859,12 +17298,11 @@ var require_undici = __commonJS({
         if (agent) {
           throw new InvalidArgumentError("unsupported opts.agent. Did you mean opts.client?");
         }
-        return fn.call(dispatcher, {
-          ...opts,
+        return fn.call(dispatcher, __spreadProps(__spreadValues({}, opts), {
           origin: url.origin,
           path: url.search ? `${url.pathname}${url.search}` : url.pathname,
           method: opts.method || (opts.body ? "PUT" : "GET")
-        }, handler);
+        }), handler);
       };
     }
     __name(makeDispatcher, "makeDispatcher");
@@ -17929,16 +17367,18 @@ var require_lib = __commonJS({
   "node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-        desc = { enumerable: true, get: /* @__PURE__ */ __name(function() {
+        desc = { enumerable: true, get: function() {
           return m[k];
-        }, "get") };
+        } };
       }
       Object.defineProperty(o, k2, desc);
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -17947,10 +17387,13 @@ var require_lib = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -18053,18 +17496,17 @@ var require_lib = __commonJS({
     var RetryableHttpVerbs = ["OPTIONS", "GET", "DELETE", "HEAD"];
     var ExponentialBackoffCeiling = 10;
     var ExponentialBackoffTimeSlice = 5;
-    var _HttpClientError = class _HttpClientError extends Error {
+    var HttpClientError = class extends Error {
       constructor(message, statusCode) {
         super(message);
         this.name = "HttpClientError";
         this.statusCode = statusCode;
-        Object.setPrototypeOf(this, _HttpClientError.prototype);
+        Object.setPrototypeOf(this, HttpClientError.prototype);
       }
     };
-    __name(_HttpClientError, "HttpClientError");
-    var HttpClientError = _HttpClientError;
+    __name(HttpClientError, "HttpClientError");
     exports2.HttpClientError = HttpClientError;
-    var _HttpClientResponse = class _HttpClientResponse {
+    var HttpClientResponse = class {
       constructor(message) {
         this.message = message;
       }
@@ -18095,8 +17537,7 @@ var require_lib = __commonJS({
         });
       }
     };
-    __name(_HttpClientResponse, "HttpClientResponse");
-    var HttpClientResponse = _HttpClientResponse;
+    __name(HttpClientResponse, "HttpClientResponse");
     exports2.HttpClientResponse = HttpClientResponse;
     function isHttps(requestUrl) {
       const parsedUrl = new URL(requestUrl);
@@ -18104,7 +17545,7 @@ var require_lib = __commonJS({
     }
     __name(isHttps, "isHttps");
     exports2.isHttps = isHttps;
-    var _HttpClient = class _HttpClient {
+    var HttpClient = class {
       constructor(userAgent, handlers, requestOptions) {
         this._ignoreSslError = false;
         this._allowRedirects = true;
@@ -18182,10 +17623,6 @@ var require_lib = __commonJS({
           return this.request(verb, requestUrl, stream, additionalHeaders);
         });
       }
-      /**
-       * Gets a typed object from an endpoint
-       * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
-       */
       getJson(requestUrl, additionalHeaders = {}) {
         return __awaiter(this, void 0, void 0, function* () {
           additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
@@ -18220,11 +17657,6 @@ var require_lib = __commonJS({
           return this._processResponse(res, this.requestOptions);
         });
       }
-      /**
-       * Makes a raw http request.
-       * All other methods such as get, post, patch, and request ultimately call this.
-       * Prefer get, del, post and patch
-       */
       request(verb, requestUrl, data, headers) {
         return __awaiter(this, void 0, void 0, function* () {
           if (this._disposed) {
@@ -18285,20 +17717,12 @@ var require_lib = __commonJS({
           return response;
         });
       }
-      /**
-       * Needs to be called if keepAlive is set to true in request options.
-       */
       dispose() {
         if (this._agent) {
           this._agent.destroy();
         }
         this._disposed = true;
       }
-      /**
-       * Raw request.
-       * @param info
-       * @param data
-       */
       requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
           return new Promise((resolve, reject) => {
@@ -18316,12 +17740,6 @@ var require_lib = __commonJS({
           });
         });
       }
-      /**
-       * Raw request with callback.
-       * @param info
-       * @param data
-       * @param onResult
-       */
       requestRawWithCallback(info2, data, onResult) {
         if (typeof data === "string") {
           if (!info2.options.headers) {
@@ -18366,11 +17784,6 @@ var require_lib = __commonJS({
           req.end();
         }
       }
-      /**
-       * Gets an http agent. This function is useful when you need an http agent that handles
-       * routing through a proxy server - depending upon the url and proxy environment variables.
-       * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
-       */
       getAgent(serverUrl) {
         const parsedUrl = new URL(serverUrl);
         return this._getAgent(parsedUrl);
@@ -18554,8 +17967,7 @@ var require_lib = __commonJS({
         });
       }
     };
-    __name(_HttpClient, "HttpClient");
-    var HttpClient = _HttpClient;
+    __name(HttpClient, "HttpClient");
     exports2.HttpClient = HttpClient;
     var lowercaseKeys = /* @__PURE__ */ __name((obj) => Object.keys(obj).reduce((c, k) => (c[k.toLowerCase()] = obj[k], c), {}), "lowercaseKeys");
   }
@@ -18598,7 +18010,7 @@ var require_auth = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.PersonalAccessTokenCredentialHandler = exports2.BearerCredentialHandler = exports2.BasicCredentialHandler = void 0;
-    var _BasicCredentialHandler = class _BasicCredentialHandler {
+    var BasicCredentialHandler = class {
       constructor(username, password) {
         this.username = username;
         this.password = password;
@@ -18609,7 +18021,6 @@ var require_auth = __commonJS({
         }
         options.headers["Authorization"] = `Basic ${Buffer.from(`${this.username}:${this.password}`).toString("base64")}`;
       }
-      // This handler cannot handle 401
       canHandleAuthentication() {
         return false;
       }
@@ -18619,22 +18030,18 @@ var require_auth = __commonJS({
         });
       }
     };
-    __name(_BasicCredentialHandler, "BasicCredentialHandler");
-    var BasicCredentialHandler = _BasicCredentialHandler;
+    __name(BasicCredentialHandler, "BasicCredentialHandler");
     exports2.BasicCredentialHandler = BasicCredentialHandler;
-    var _BearerCredentialHandler = class _BearerCredentialHandler {
+    var BearerCredentialHandler = class {
       constructor(token2) {
         this.token = token2;
       }
-      // currently implements pre-authorization
-      // TODO: support preAuth = false where it hooks on 401
       prepareRequest(options) {
         if (!options.headers) {
           throw Error("The request has no headers");
         }
         options.headers["Authorization"] = `Bearer ${this.token}`;
       }
-      // This handler cannot handle 401
       canHandleAuthentication() {
         return false;
       }
@@ -18644,22 +18051,18 @@ var require_auth = __commonJS({
         });
       }
     };
-    __name(_BearerCredentialHandler, "BearerCredentialHandler");
-    var BearerCredentialHandler = _BearerCredentialHandler;
+    __name(BearerCredentialHandler, "BearerCredentialHandler");
     exports2.BearerCredentialHandler = BearerCredentialHandler;
-    var _PersonalAccessTokenCredentialHandler = class _PersonalAccessTokenCredentialHandler {
+    var PersonalAccessTokenCredentialHandler = class {
       constructor(token2) {
         this.token = token2;
       }
-      // currently implements pre-authorization
-      // TODO: support preAuth = false where it hooks on 401
       prepareRequest(options) {
         if (!options.headers) {
           throw Error("The request has no headers");
         }
         options.headers["Authorization"] = `Basic ${Buffer.from(`PAT:${this.token}`).toString("base64")}`;
       }
-      // This handler cannot handle 401
       canHandleAuthentication() {
         return false;
       }
@@ -18669,8 +18072,7 @@ var require_auth = __commonJS({
         });
       }
     };
-    __name(_PersonalAccessTokenCredentialHandler, "PersonalAccessTokenCredentialHandler");
-    var PersonalAccessTokenCredentialHandler = _PersonalAccessTokenCredentialHandler;
+    __name(PersonalAccessTokenCredentialHandler, "PersonalAccessTokenCredentialHandler");
     exports2.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
   }
 });
@@ -18715,13 +18117,13 @@ var require_oidc_utils = __commonJS({
     var http_client_1 = require_lib();
     var auth_1 = require_auth();
     var core_1 = require_core();
-    var _OidcClient = class _OidcClient {
+    var OidcClient = class {
       static createHttpClient(allowRetry = true, maxRetry = 10) {
         const requestOptions = {
           allowRetries: allowRetry,
           maxRetries: maxRetry
         };
-        return new http_client_1.HttpClient("actions/oidc-client", [new auth_1.BearerCredentialHandler(_OidcClient.getRequestToken())], requestOptions);
+        return new http_client_1.HttpClient("actions/oidc-client", [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
       }
       static getRequestToken() {
         const token2 = process.env["ACTIONS_ID_TOKEN_REQUEST_TOKEN"];
@@ -18740,7 +18142,7 @@ var require_oidc_utils = __commonJS({
       static getCall(id_token_url) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
-          const httpclient = _OidcClient.createHttpClient();
+          const httpclient = OidcClient.createHttpClient();
           const res = yield httpclient.getJson(id_token_url).catch((error) => {
             throw new Error(`Failed to get ID Token. 
  
@@ -18758,13 +18160,13 @@ var require_oidc_utils = __commonJS({
       static getIDToken(audience) {
         return __awaiter(this, void 0, void 0, function* () {
           try {
-            let id_token_url = _OidcClient.getIDTokenUrl();
+            let id_token_url = OidcClient.getIDTokenUrl();
             if (audience) {
               const encodedAudience = encodeURIComponent(audience);
               id_token_url = `${id_token_url}&audience=${encodedAudience}`;
             }
             core_1.debug(`ID token url is ${id_token_url}`);
-            const id_token = yield _OidcClient.getCall(id_token_url);
+            const id_token = yield OidcClient.getCall(id_token_url);
             core_1.setSecret(id_token);
             return id_token;
           } catch (error) {
@@ -18773,8 +18175,7 @@ var require_oidc_utils = __commonJS({
         });
       }
     };
-    __name(_OidcClient, "OidcClient");
-    var OidcClient = _OidcClient;
+    __name(OidcClient, "OidcClient");
     exports2.OidcClient = OidcClient;
   }
 });
@@ -18821,16 +18222,10 @@ var require_summary = __commonJS({
     var { access, appendFile, writeFile } = fs_1.promises;
     exports2.SUMMARY_ENV_VAR = "GITHUB_STEP_SUMMARY";
     exports2.SUMMARY_DOCS_URL = "https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary";
-    var _Summary = class _Summary {
+    var Summary = class {
       constructor() {
         this._buffer = "";
       }
-      /**
-       * Finds the summary file path from the environment, rejects if env var is not found or file does not exist
-       * Also checks r/w permissions.
-       *
-       * @returns step summary file path
-       */
       filePath() {
         return __awaiter(this, void 0, void 0, function* () {
           if (this._filePath) {
@@ -18849,15 +18244,6 @@ var require_summary = __commonJS({
           return this._filePath;
         });
       }
-      /**
-       * Wraps content in an HTML tag, adding any HTML attributes
-       *
-       * @param {string} tag HTML tag to wrap
-       * @param {string | null} content content within the tag
-       * @param {[attribute: string]: string} attrs key-value list of HTML attributes to add
-       *
-       * @returns {string} content wrapped in HTML element
-       */
       wrap(tag, content, attrs = {}) {
         const htmlAttrs = Object.entries(attrs).map(([key, value]) => ` ${key}="${value}"`).join("");
         if (!content) {
@@ -18865,13 +18251,6 @@ var require_summary = __commonJS({
         }
         return `<${tag}${htmlAttrs}>${content}</${tag}>`;
       }
-      /**
-       * Writes text in the buffer to the summary buffer file and empties buffer. Will append by default.
-       *
-       * @param {SummaryWriteOptions} [options] (optional) options for write operation
-       *
-       * @returns {Promise<Summary>} summary instance
-       */
       write(options) {
         return __awaiter(this, void 0, void 0, function* () {
           const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
@@ -18881,95 +18260,39 @@ var require_summary = __commonJS({
           return this.emptyBuffer();
         });
       }
-      /**
-       * Clears the summary buffer and wipes the summary file
-       *
-       * @returns {Summary} summary instance
-       */
       clear() {
         return __awaiter(this, void 0, void 0, function* () {
           return this.emptyBuffer().write({ overwrite: true });
         });
       }
-      /**
-       * Returns the current summary buffer as a string
-       *
-       * @returns {string} string of summary buffer
-       */
       stringify() {
         return this._buffer;
       }
-      /**
-       * If the summary buffer is empty
-       *
-       * @returns {boolen} true if the buffer is empty
-       */
       isEmptyBuffer() {
         return this._buffer.length === 0;
       }
-      /**
-       * Resets the summary buffer without writing to summary file
-       *
-       * @returns {Summary} summary instance
-       */
       emptyBuffer() {
         this._buffer = "";
         return this;
       }
-      /**
-       * Adds raw text to the summary buffer
-       *
-       * @param {string} text content to add
-       * @param {boolean} [addEOL=false] (optional) append an EOL to the raw text (default: false)
-       *
-       * @returns {Summary} summary instance
-       */
       addRaw(text, addEOL = false) {
         this._buffer += text;
         return addEOL ? this.addEOL() : this;
       }
-      /**
-       * Adds the operating system-specific end-of-line marker to the buffer
-       *
-       * @returns {Summary} summary instance
-       */
       addEOL() {
         return this.addRaw(os_1.EOL);
       }
-      /**
-       * Adds an HTML codeblock to the summary buffer
-       *
-       * @param {string} code content to render within fenced code block
-       * @param {string} lang (optional) language to syntax highlight code
-       *
-       * @returns {Summary} summary instance
-       */
       addCodeBlock(code, lang) {
         const attrs = Object.assign({}, lang && { lang });
         const element = this.wrap("pre", this.wrap("code", code), attrs);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML list to the summary buffer
-       *
-       * @param {string[]} items list of items to render
-       * @param {boolean} [ordered=false] (optional) if the rendered list should be ordered or not (default: false)
-       *
-       * @returns {Summary} summary instance
-       */
       addList(items, ordered = false) {
         const tag = ordered ? "ol" : "ul";
         const listItems = items.map((item) => this.wrap("li", item)).join("");
         const element = this.wrap(tag, listItems);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML table to the summary buffer
-       *
-       * @param {SummaryTableCell[]} rows table rows
-       *
-       * @returns {Summary} summary instance
-       */
       addTable(rows) {
         const tableBody = rows.map((row) => {
           const cells = row.map((cell) => {
@@ -18986,93 +18309,41 @@ var require_summary = __commonJS({
         const element = this.wrap("table", tableBody);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds a collapsable HTML details element to the summary buffer
-       *
-       * @param {string} label text for the closed state
-       * @param {string} content collapsable content
-       *
-       * @returns {Summary} summary instance
-       */
       addDetails(label2, content) {
         const element = this.wrap("details", this.wrap("summary", label2) + content);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML image tag to the summary buffer
-       *
-       * @param {string} src path to the image you to embed
-       * @param {string} alt text description of the image
-       * @param {SummaryImageOptions} options (optional) addition image attributes
-       *
-       * @returns {Summary} summary instance
-       */
       addImage(src, alt, options) {
         const { width, height } = options || {};
         const attrs = Object.assign(Object.assign({}, width && { width }), height && { height });
         const element = this.wrap("img", null, Object.assign({ src, alt }, attrs));
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML section heading element
-       *
-       * @param {string} text heading text
-       * @param {number | string} [level=1] (optional) the heading level, default: 1
-       *
-       * @returns {Summary} summary instance
-       */
       addHeading(text, level) {
         const tag = `h${level}`;
         const allowedTag = ["h1", "h2", "h3", "h4", "h5", "h6"].includes(tag) ? tag : "h1";
         const element = this.wrap(allowedTag, text);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML thematic break (<hr>) to the summary buffer
-       *
-       * @returns {Summary} summary instance
-       */
       addSeparator() {
         const element = this.wrap("hr", null);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML line break (<br>) to the summary buffer
-       *
-       * @returns {Summary} summary instance
-       */
       addBreak() {
         const element = this.wrap("br", null);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML blockquote to the summary buffer
-       *
-       * @param {string} text quote text
-       * @param {string} cite (optional) citation url
-       *
-       * @returns {Summary} summary instance
-       */
       addQuote(text, cite) {
         const attrs = Object.assign({}, cite && { cite });
         const element = this.wrap("blockquote", text, attrs);
         return this.addRaw(element).addEOL();
       }
-      /**
-       * Adds an HTML anchor tag to the summary buffer
-       *
-       * @param {string} text link text/content
-       * @param {string} href hyperlink
-       *
-       * @returns {Summary} summary instance
-       */
       addLink(text, href) {
         const element = this.wrap("a", text, { href });
         return this.addRaw(element).addEOL();
       }
     };
-    __name(_Summary, "Summary");
-    var Summary = _Summary;
+    __name(Summary, "Summary");
     var _summary = new Summary();
     exports2.markdownSummary = _summary;
     exports2.summary = _summary;
@@ -19084,12 +18355,14 @@ var require_path_utils = __commonJS({
   "node_modules/@actions/core/lib/path-utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19098,10 +18371,13 @@ var require_path_utils = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19132,12 +18408,14 @@ var require_core = __commonJS({
   "node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19146,10 +18424,13 @@ var require_core = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19356,23 +18637,23 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     __name(getIDToken, "getIDToken");
     exports2.getIDToken = getIDToken;
     var summary_1 = require_summary();
-    Object.defineProperty(exports2, "summary", { enumerable: true, get: /* @__PURE__ */ __name(function() {
+    Object.defineProperty(exports2, "summary", { enumerable: true, get: function() {
       return summary_1.summary;
-    }, "get") });
+    } });
     var summary_2 = require_summary();
-    Object.defineProperty(exports2, "markdownSummary", { enumerable: true, get: /* @__PURE__ */ __name(function() {
+    Object.defineProperty(exports2, "markdownSummary", { enumerable: true, get: function() {
       return summary_2.markdownSummary;
-    }, "get") });
+    } });
     var path_utils_1 = require_path_utils();
-    Object.defineProperty(exports2, "toPosixPath", { enumerable: true, get: /* @__PURE__ */ __name(function() {
+    Object.defineProperty(exports2, "toPosixPath", { enumerable: true, get: function() {
       return path_utils_1.toPosixPath;
-    }, "get") });
-    Object.defineProperty(exports2, "toWin32Path", { enumerable: true, get: /* @__PURE__ */ __name(function() {
+    } });
+    Object.defineProperty(exports2, "toWin32Path", { enumerable: true, get: function() {
       return path_utils_1.toWin32Path;
-    }, "get") });
-    Object.defineProperty(exports2, "toPlatformPath", { enumerable: true, get: /* @__PURE__ */ __name(function() {
+    } });
+    Object.defineProperty(exports2, "toPlatformPath", { enumerable: true, get: function() {
       return path_utils_1.toPlatformPath;
-    }, "get") });
+    } });
   }
 });
 
@@ -19384,10 +18665,7 @@ var require_context = __commonJS({
     exports2.Context = void 0;
     var fs_1 = require("fs");
     var os_1 = require("os");
-    var _Context = class _Context {
-      /**
-       * Hydrate the context from the environment
-       */
+    var Context = class {
       constructor() {
         var _a, _b, _c;
         this.payload = {};
@@ -19430,8 +18708,7 @@ var require_context = __commonJS({
         throw new Error("context.repo requires a GITHUB_REPOSITORY environment variable like 'owner/repo'");
       }
     };
-    __name(_Context, "Context");
-    var Context = _Context;
+    __name(Context, "Context");
     exports2.Context = Context;
   }
 });
@@ -19441,12 +18718,14 @@ var require_utils3 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -19455,10 +18734,13 @@ var require_utils3 = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -19608,10 +18890,7 @@ var require_before_after_hook = __commonJS({
     var bind = Function.bind;
     var bindable = bind.bind(bind);
     function bindApi(hook, state, name) {
-      var removeHookRef = bindable(removeHook, null).apply(
-        null,
-        name ? [state, name] : [state]
-      );
+      var removeHookRef = bindable(removeHook, null).apply(null, name ? [state, name] : [state]);
       hook.api = { remove: removeHookRef };
       hook.remove = removeHookRef;
       ["before", "error", "after", "wrap"].forEach(function(kind) {
@@ -19642,9 +18921,7 @@ var require_before_after_hook = __commonJS({
     var collectionHookDeprecationMessageDisplayed = false;
     function Hook() {
       if (!collectionHookDeprecationMessageDisplayed) {
-        console.warn(
-          '[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4'
-        );
+        console.warn('[before-after-hook]: "Hook()" repurposing warning, use "Hook.Collection()". Read more: https://git.io/upgrade-before-after-hook-to-1.4');
         collectionHookDeprecationMessageDisplayed = true;
       }
       return HookCollection();
@@ -19670,11 +18947,14 @@ var require_is_plain_object = __commonJS({
     __name(isObject, "isObject");
     function isPlainObject(o) {
       var ctor, prot;
-      if (isObject(o) === false) return false;
+      if (isObject(o) === false)
+        return false;
       ctor = o.constructor;
-      if (ctor === void 0) return true;
+      if (ctor === void 0)
+        return true;
       prot = ctor.prototype;
-      if (isObject(prot) === false) return false;
+      if (isObject(prot) === false)
+        return false;
       if (prot.hasOwnProperty("isPrototypeOf") === false) {
         return false;
       }
@@ -19706,10 +18986,12 @@ var require_dist_node2 = __commonJS({
       const result = Object.assign({}, defaults);
       Object.keys(options).forEach((key) => {
         if (isPlainObject.isPlainObject(options[key])) {
-          if (!(key in defaults)) Object.assign(result, {
-            [key]: options[key]
-          });
-          else result[key] = mergeDeep(defaults[key], options[key]);
+          if (!(key in defaults))
+            Object.assign(result, {
+              [key]: options[key]
+            });
+          else
+            result[key] = mergeDeep(defaults[key], options[key]);
         } else {
           Object.assign(result, {
             [key]: options[key]
@@ -19911,7 +19193,7 @@ var require_dist_node2 = __commonJS({
       });
     }
     __name(expand, "expand");
-    function parse2(options) {
+    function parse(options) {
       let method = options.method.toUpperCase();
       let url = (options.url || "/").replace(/:([a-z]\w+)/g, "{$1}");
       let headers = Object.assign({}, options.headers);
@@ -19966,9 +19248,9 @@ var require_dist_node2 = __commonJS({
         request: options.request
       } : null);
     }
-    __name(parse2, "parse");
+    __name(parse, "parse");
     function endpointWithDefaults(defaults, route, options) {
-      return parse2(merge(defaults, route, options));
+      return parse(merge(defaults, route, options));
     }
     __name(endpointWithDefaults, "endpointWithDefaults");
     function withDefaults(oldDefaults, newDefaults) {
@@ -19978,7 +19260,7 @@ var require_dist_node2 = __commonJS({
         DEFAULTS: DEFAULTS2,
         defaults: withDefaults.bind(null, DEFAULTS2),
         merge: merge.bind(null, DEFAULTS2),
-        parse: parse2
+        parse
       });
     }
     __name(withDefaults, "withDefaults");
@@ -20028,7 +19310,8 @@ var require_lib2 = __commonJS({
       const moduloVal = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength) : Math.pow(2, bitLength);
       const moduloBound = typeOpts.moduloBitLength ? Math.pow(2, typeOpts.moduloBitLength - 1) : Math.pow(2, bitLength - 1);
       return function(V, opts) {
-        if (!opts) opts = {};
+        if (!opts)
+          opts = {};
         let x = +V;
         if (opts.enforceRange) {
           if (!Number.isFinite(x)) {
@@ -20042,8 +19325,10 @@ var require_lib2 = __commonJS({
         }
         if (!isNaN(x) && opts.clamp) {
           x = evenRound(x);
-          if (x < lowerBound) x = lowerBound;
-          if (x > upperBound) x = upperBound;
+          if (x < lowerBound)
+            x = lowerBound;
+          if (x > upperBound)
+            x = upperBound;
           return x;
         }
         if (!Number.isFinite(x) || x === 0) {
@@ -20095,7 +19380,8 @@ var require_lib2 = __commonJS({
     conversions["float"] = conversions["double"];
     conversions["unrestricted float"] = conversions["unrestricted double"];
     conversions["DOMString"] = function(V, opts) {
-      if (!opts) opts = {};
+      if (!opts)
+        opts = {};
       if (opts.treatNullAsEmptyString && V === null) {
         return "";
       }
@@ -20338,7 +19624,8 @@ var require_tr46 = __commonJS({
           }
         }
       }
-      if (result.error) return null;
+      if (result.error)
+        return null;
       return labels.join(".");
     };
     module2.exports.toUnicode = function(domain_name, useSTD3) {
@@ -20471,12 +19758,12 @@ var require_url_state_machine = __commonJS({
       return c <= 31 || c > 126;
     }
     __name(isC0ControlPercentEncode, "isC0ControlPercentEncode");
-    var extraPathPercentEncodeSet = /* @__PURE__ */ new Set([32, 34, 35, 60, 62, 63, 96, 123, 125]);
+    var extraPathPercentEncodeSet = new Set([32, 34, 35, 60, 62, 63, 96, 123, 125]);
     function isPathPercentEncode(c) {
       return isC0ControlPercentEncode(c) || extraPathPercentEncodeSet.has(c);
     }
     __name(isPathPercentEncode, "isPathPercentEncode");
-    var extraUserinfoPercentEncodeSet = /* @__PURE__ */ new Set([47, 58, 59, 61, 64, 91, 92, 93, 94, 124]);
+    var extraUserinfoPercentEncodeSet = new Set([47, 58, 59, 61, 64, 91, 92, 93, 94, 124]);
     function isUserinfoPercentEncode(c) {
       return isPathPercentEncode(c) || extraUserinfoPercentEncodeSet.has(c);
     }
@@ -21138,7 +20425,7 @@ var require_url_state_machine = __commonJS({
       }
       return true;
     }, "parsePort");
-    var fileOtherwiseCodePoints = /* @__PURE__ */ new Set([47, 92, 63, 35]);
+    var fileOtherwiseCodePoints = new Set([47, 92, 63, 35]);
     URLStateMachine.prototype["parse file"] = /* @__PURE__ */ __name(function parseFile(c) {
       this.url.scheme = "file";
       if (c === 47 || c === 92) {
@@ -21163,9 +20450,7 @@ var require_url_state_machine = __commonJS({
           this.url.fragment = "";
           this.state = "fragment";
         } else {
-          if (this.input.length - this.pointer - 1 === 0 || // remaining consists of 0 code points
-          !isWindowsDriveLetterCodePoints(c, this.input[this.pointer + 1]) || this.input.length - this.pointer - 1 >= 2 && // remaining has at least 2 code points
-          !fileOtherwiseCodePoints.has(this.input[this.pointer + 2])) {
+          if (this.input.length - this.pointer - 1 === 0 || !isWindowsDriveLetterCodePoints(c, this.input[this.pointer + 1]) || this.input.length - this.pointer - 1 >= 2 && !fileOtherwiseCodePoints.has(this.input[this.pointer + 2])) {
             this.url.host = this.base.host;
             this.url.path = this.base.path.slice();
             shortenPath(this.url);
@@ -21470,8 +20755,7 @@ var require_URL_impl = __commonJS({
   "node_modules/whatwg-url/lib/URL-impl.js"(exports2) {
     "use strict";
     var usm = require_url_state_machine();
-    var _a;
-    exports2.implementation = (_a = class {
+    exports2.implementation = /* @__PURE__ */ __name(class URLImpl {
       constructor(constructorArgs) {
         const url = constructorArgs[0];
         const base = constructorArgs[1];
@@ -21619,7 +20903,7 @@ var require_URL_impl = __commonJS({
       toJSON() {
         return this.href;
       }
-    }, __name(_a, "URLImpl"), _a);
+    }, "URLImpl");
   }
 });
 
@@ -21631,8 +20915,8 @@ var require_URL = __commonJS({
     var utils = require_utils4();
     var Impl = require_URL_impl();
     var impl = utils.implSymbol;
-    function URL3(url) {
-      if (!this || this[impl] || !(this instanceof URL3)) {
+    function URL2(url) {
+      if (!this || this[impl] || !(this instanceof URL2)) {
         throw new TypeError("Failed to construct 'URL': Please use the 'new' operator, this DOM object constructor cannot be called as a function.");
       }
       if (arguments.length < 1) {
@@ -21648,8 +20932,8 @@ var require_URL = __commonJS({
       }
       module2.exports.setup(this, args);
     }
-    __name(URL3, "URL");
-    URL3.prototype.toJSON = /* @__PURE__ */ __name(function toJSON() {
+    __name(URL2, "URL");
+    URL2.prototype.toJSON = /* @__PURE__ */ __name(function toJSON() {
       if (!this || !module2.exports.is(this)) {
         throw new TypeError("Illegal invocation");
       }
@@ -21659,7 +20943,7 @@ var require_URL = __commonJS({
       }
       return this[impl].toJSON.apply(this[impl], args);
     }, "toJSON");
-    Object.defineProperty(URL3.prototype, "href", {
+    Object.defineProperty(URL2.prototype, "href", {
       get() {
         return this[impl].href;
       },
@@ -21670,20 +20954,20 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    URL3.prototype.toString = function() {
+    URL2.prototype.toString = function() {
       if (!this || !module2.exports.is(this)) {
         throw new TypeError("Illegal invocation");
       }
       return this.href;
     };
-    Object.defineProperty(URL3.prototype, "origin", {
+    Object.defineProperty(URL2.prototype, "origin", {
       get() {
         return this[impl].origin;
       },
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "protocol", {
+    Object.defineProperty(URL2.prototype, "protocol", {
       get() {
         return this[impl].protocol;
       },
@@ -21694,7 +20978,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "username", {
+    Object.defineProperty(URL2.prototype, "username", {
       get() {
         return this[impl].username;
       },
@@ -21705,7 +20989,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "password", {
+    Object.defineProperty(URL2.prototype, "password", {
       get() {
         return this[impl].password;
       },
@@ -21716,7 +21000,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "host", {
+    Object.defineProperty(URL2.prototype, "host", {
       get() {
         return this[impl].host;
       },
@@ -21727,7 +21011,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "hostname", {
+    Object.defineProperty(URL2.prototype, "hostname", {
       get() {
         return this[impl].hostname;
       },
@@ -21738,7 +21022,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "port", {
+    Object.defineProperty(URL2.prototype, "port", {
       get() {
         return this[impl].port;
       },
@@ -21749,7 +21033,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "pathname", {
+    Object.defineProperty(URL2.prototype, "pathname", {
       get() {
         return this[impl].pathname;
       },
@@ -21760,7 +21044,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "search", {
+    Object.defineProperty(URL2.prototype, "search", {
       get() {
         return this[impl].search;
       },
@@ -21771,7 +21055,7 @@ var require_URL = __commonJS({
       enumerable: true,
       configurable: true
     });
-    Object.defineProperty(URL3.prototype, "hash", {
+    Object.defineProperty(URL2.prototype, "hash", {
       get() {
         return this[impl].hash;
       },
@@ -21787,20 +21071,21 @@ var require_URL = __commonJS({
         return !!obj && obj[impl] instanceof Impl.implementation;
       },
       create(constructorArgs, privateData) {
-        let obj = Object.create(URL3.prototype);
+        let obj = Object.create(URL2.prototype);
         this.setup(obj, constructorArgs, privateData);
         return obj;
       },
       setup(obj, constructorArgs, privateData) {
-        if (!privateData) privateData = {};
+        if (!privateData)
+          privateData = {};
         privateData.wrapper = obj;
         obj[impl] = new Impl.implementation(constructorArgs, privateData);
         obj[impl][utils.wrapperSymbol] = obj;
       },
-      interface: URL3,
+      interface: URL2,
       expose: {
-        Window: { URL: URL3 },
-        Worker: { URL: URL3 }
+        Window: { URL: URL2 },
+        Worker: { URL: URL2 }
       }
     };
   }
@@ -21840,7 +21125,7 @@ var require_lib3 = __commonJS({
     var Readable = Stream.Readable;
     var BUFFER = Symbol("buffer");
     var TYPE = Symbol("type");
-    var _Blob = class _Blob {
+    var Blob2 = class {
       constructor() {
         this[TYPE] = "";
         const blobParts = arguments[0];
@@ -21859,7 +21144,7 @@ var require_lib3 = __commonJS({
               buffer = Buffer.from(element.buffer, element.byteOffset, element.byteLength);
             } else if (element instanceof ArrayBuffer) {
               buffer = Buffer.from(element);
-            } else if (element instanceof _Blob) {
+            } else if (element instanceof Blob2) {
               buffer = element[BUFFER];
             } else {
               buffer = Buffer.from(typeof element === "string" ? element : String(element));
@@ -21921,13 +21206,12 @@ var require_lib3 = __commonJS({
         const span = Math.max(relativeEnd - relativeStart, 0);
         const buffer = this[BUFFER];
         const slicedBuffer = buffer.slice(relativeStart, relativeStart + span);
-        const blob = new _Blob([], { type: arguments[2] });
+        const blob = new Blob2([], { type: arguments[2] });
         blob[BUFFER] = slicedBuffer;
         return blob;
       }
     };
-    __name(_Blob, "Blob");
-    var Blob2 = _Blob;
+    __name(Blob2, "Blob");
     Object.defineProperties(Blob2.prototype, {
       size: { enumerable: true },
       type: { enumerable: true },
@@ -21969,13 +21253,16 @@ var require_lib3 = __commonJS({
         body = null;
       } else if (isURLSearchParams(body)) {
         body = Buffer.from(body.toString());
-      } else if (isBlob(body)) ;
-      else if (Buffer.isBuffer(body)) ;
+      } else if (isBlob(body))
+        ;
+      else if (Buffer.isBuffer(body))
+        ;
       else if (Object.prototype.toString.call(body) === "[object ArrayBuffer]") {
         body = Buffer.from(body);
       } else if (ArrayBuffer.isView(body)) {
         body = Buffer.from(body.buffer, body.byteOffset, body.byteLength);
-      } else if (body instanceof Stream) ;
+      } else if (body instanceof Stream)
+        ;
       else {
         body = Buffer.from(String(body));
       }
@@ -22001,40 +21288,21 @@ var require_lib3 = __commonJS({
       get bodyUsed() {
         return this[INTERNALS].disturbed;
       },
-      /**
-       * Decode response as ArrayBuffer
-       *
-       * @return  Promise
-       */
       arrayBuffer() {
         return consumeBody.call(this).then(function(buf) {
           return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
         });
       },
-      /**
-       * Return raw response as Blob
-       *
-       * @return Promise
-       */
       blob() {
         let ct = this.headers && this.headers.get("content-type") || "";
         return consumeBody.call(this).then(function(buf) {
-          return Object.assign(
-            // Prevent copying
-            new Blob2([], {
-              type: ct.toLowerCase()
-            }),
-            {
-              [BUFFER]: buf
-            }
-          );
+          return Object.assign(new Blob2([], {
+            type: ct.toLowerCase()
+          }), {
+            [BUFFER]: buf
+          });
         });
       },
-      /**
-       * Decode response as json
-       *
-       * @return  Promise
-       */
       json() {
         var _this2 = this;
         return consumeBody.call(this).then(function(buffer) {
@@ -22045,30 +21313,14 @@ var require_lib3 = __commonJS({
           }
         });
       },
-      /**
-       * Decode response as text
-       *
-       * @return  Promise
-       */
       text() {
         return consumeBody.call(this).then(function(buffer) {
           return buffer.toString();
         });
       },
-      /**
-       * Decode response as buffer (non-spec api)
-       *
-       * @return  Promise
-       */
       buffer() {
         return consumeBody.call(this);
       },
-      /**
-       * Decode response as text, while automatically detecting the encoding and
-       * trying to decode to UTF-8 (non-spec api)
-       *
-       * @return  Promise
-       */
       textConverted() {
         var _this3 = this;
         return consumeBody.call(this).then(function(buffer) {
@@ -22258,8 +21510,7 @@ var require_lib3 = __commonJS({
       } else if (Buffer.isBuffer(body)) {
         return body.length;
       } else if (body && typeof body.getLengthSync === "function") {
-        if (body._lengthRetrievers && body._lengthRetrievers.length == 0 || // 1.x
-        body.hasKnownLength && body.hasKnownLength()) {
+        if (body._lengthRetrievers && body._lengthRetrievers.length == 0 || body.hasKnownLength && body.hasKnownLength()) {
           return body.getLengthSync();
         }
         return null;
@@ -22310,17 +21561,11 @@ var require_lib3 = __commonJS({
     }
     __name(find, "find");
     var MAP = Symbol("map");
-    var _Headers = class _Headers {
-      /**
-       * Headers class
-       *
-       * @param   Object  headers  Response headers
-       * @return  Void
-       */
+    var Headers = class {
       constructor() {
         let init = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : void 0;
-        this[MAP] = /* @__PURE__ */ Object.create(null);
-        if (init instanceof _Headers) {
+        this[MAP] = Object.create(null);
+        if (init instanceof Headers) {
           const rawHeaders = init.raw();
           const headerNames = Object.keys(rawHeaders);
           for (const headerName of headerNames) {
@@ -22330,7 +21575,8 @@ var require_lib3 = __commonJS({
           }
           return;
         }
-        if (init == null) ;
+        if (init == null)
+          ;
         else if (typeof init === "object") {
           const method = init[Symbol.iterator];
           if (method != null) {
@@ -22360,12 +21606,6 @@ var require_lib3 = __commonJS({
           throw new TypeError("Provided initializer must be an object");
         }
       }
-      /**
-       * Return combined header value given name
-       *
-       * @param   String  name  Header name
-       * @return  Mixed
-       */
       get(name) {
         name = `${name}`;
         validateName(name);
@@ -22375,13 +21615,6 @@ var require_lib3 = __commonJS({
         }
         return this[MAP][key].join(", ");
       }
-      /**
-       * Iterate over all headers
-       *
-       * @param   Function  callback  Executed for each item with parameters (value, name, thisArg)
-       * @param   Boolean   thisArg   `this` context for callback function
-       * @return  Void
-       */
       forEach(callback) {
         let thisArg = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : void 0;
         let pairs = getHeaders(this);
@@ -22394,13 +21627,6 @@ var require_lib3 = __commonJS({
           i++;
         }
       }
-      /**
-       * Overwrite header values given name
-       *
-       * @param   String  name   Header name
-       * @param   String  value  Header value
-       * @return  Void
-       */
       set(name, value) {
         name = `${name}`;
         value = `${value}`;
@@ -22409,13 +21635,6 @@ var require_lib3 = __commonJS({
         const key = find(this[MAP], name);
         this[MAP][key !== void 0 ? key : name] = [value];
       }
-      /**
-       * Append a value onto existing header
-       *
-       * @param   String  name   Header name
-       * @param   String  value  Header value
-       * @return  Void
-       */
       append(name, value) {
         name = `${name}`;
         value = `${value}`;
@@ -22428,23 +21647,11 @@ var require_lib3 = __commonJS({
           this[MAP][name] = [value];
         }
       }
-      /**
-       * Check for header name existence
-       *
-       * @param   String   name  Header name
-       * @return  Boolean
-       */
       has(name) {
         name = `${name}`;
         validateName(name);
         return find(this[MAP], name) !== void 0;
       }
-      /**
-       * Delete all header values given name
-       *
-       * @param   String  name  Header name
-       * @return  Void
-       */
       delete(name) {
         name = `${name}`;
         validateName(name);
@@ -22453,43 +21660,20 @@ var require_lib3 = __commonJS({
           delete this[MAP][key];
         }
       }
-      /**
-       * Return raw headers (non-spec api)
-       *
-       * @return  Object
-       */
       raw() {
         return this[MAP];
       }
-      /**
-       * Get an iterator on keys.
-       *
-       * @return  Iterator
-       */
       keys() {
         return createHeadersIterator(this, "key");
       }
-      /**
-       * Get an iterator on values.
-       *
-       * @return  Iterator
-       */
       values() {
         return createHeadersIterator(this, "value");
       }
-      /**
-       * Get an iterator on entries.
-       *
-       * This is the default iterator of the Headers object.
-       *
-       * @return  Iterator
-       */
       [Symbol.iterator]() {
         return createHeadersIterator(this, "key+value");
       }
     };
-    __name(_Headers, "Headers");
-    var Headers = _Headers;
+    __name(Headers, "Headers");
     Headers.prototype.entries = Headers.prototype[Symbol.iterator];
     Object.defineProperty(Headers.prototype, Symbol.toStringTag, {
       value: "Headers",
@@ -22594,7 +21778,7 @@ var require_lib3 = __commonJS({
     __name(createHeadersLenient, "createHeadersLenient");
     var INTERNALS$1 = Symbol("Response internals");
     var STATUS_CODES = http.STATUS_CODES;
-    var _Response = class _Response {
+    var Response = class {
       constructor() {
         let body = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : null;
         let opts = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
@@ -22621,9 +21805,6 @@ var require_lib3 = __commonJS({
       get status() {
         return this[INTERNALS$1].status;
       }
-      /**
-       * Convenience property representing if the request ended normally
-       */
       get ok() {
         return this[INTERNALS$1].status >= 200 && this[INTERNALS$1].status < 300;
       }
@@ -22636,13 +21817,8 @@ var require_lib3 = __commonJS({
       get headers() {
         return this[INTERNALS$1].headers;
       }
-      /**
-       * Clone this response
-       *
-       * @return  Response
-       */
       clone() {
-        return new _Response(clone(this), {
+        return new Response(clone(this), {
           url: this.url,
           status: this.status,
           statusText: this.statusText,
@@ -22652,8 +21828,7 @@ var require_lib3 = __commonJS({
         });
       }
     };
-    __name(_Response, "Response");
-    var Response = _Response;
+    __name(Response, "Response");
     Body.mixIn(Response.prototype);
     Object.defineProperties(Response.prototype, {
       url: { enumerable: true },
@@ -22671,12 +21846,12 @@ var require_lib3 = __commonJS({
       configurable: true
     });
     var INTERNALS$2 = Symbol("Request internals");
-    var URL3 = Url.URL || whatwgUrl.URL;
+    var URL2 = Url.URL || whatwgUrl.URL;
     var parse_url = Url.parse;
     var format_url = Url.format;
     function parseURL(urlStr) {
       if (/^[a-zA-Z][a-zA-Z\d+\-.]*:/.exec(urlStr)) {
-        urlStr = new URL3(urlStr).toString();
+        urlStr = new URL2(urlStr).toString();
       }
       return parse_url(urlStr);
     }
@@ -22691,7 +21866,7 @@ var require_lib3 = __commonJS({
       return !!(proto && proto.constructor.name === "AbortSignal");
     }
     __name(isAbortSignal, "isAbortSignal");
-    var _Request = class _Request {
+    var Request = class {
       constructor(input) {
         let init = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
         let parsedURL;
@@ -22723,7 +21898,8 @@ var require_lib3 = __commonJS({
           }
         }
         let signal = isRequest(input) ? input.signal : null;
-        if ("signal" in init) signal = init.signal;
+        if ("signal" in init)
+          signal = init.signal;
         if (signal != null && !isAbortSignal(signal)) {
           throw new TypeError("Expected signal to be an instanceof AbortSignal");
         }
@@ -22754,17 +21930,11 @@ var require_lib3 = __commonJS({
       get signal() {
         return this[INTERNALS$2].signal;
       }
-      /**
-       * Clone this request
-       *
-       * @return  Request
-       */
       clone() {
-        return new _Request(this);
+        return new Request(this);
       }
     };
-    __name(_Request, "Request");
-    var Request = _Request;
+    __name(Request, "Request");
     Body.mixIn(Request.prototype);
     Object.defineProperty(Request.prototype, Symbol.toStringTag, {
       value: "Request",
@@ -22864,7 +22034,8 @@ var require_lib3 = __commonJS({
           if (request.body && request.body instanceof Stream.Readable) {
             destroyStream(request.body, error);
           }
-          if (!response || !response.body) return;
+          if (!response || !response.body)
+            return;
           response.body.emit("error", error);
         }, "abort");
         if (signal && signal.aborted) {
@@ -22882,7 +22053,8 @@ var require_lib3 = __commonJS({
         }
         function finalize() {
           req.abort();
-          if (signal) signal.removeEventListener("abort", abortAndFinalize);
+          if (signal)
+            signal.removeEventListener("abort", abortAndFinalize);
           clearTimeout(reqTimeout);
         }
         __name(finalize, "finalize");
@@ -22992,7 +22164,8 @@ var require_lib3 = __commonJS({
             }
           }
           res.once("end", function() {
-            if (signal) signal.removeEventListener("abort", abortAndFinalize);
+            if (signal)
+              signal.removeEventListener("abort", abortAndFinalize);
           });
           let body = res.pipe(new PassThrough$1());
           const response_options = {
@@ -23101,7 +22274,7 @@ var require_dist_node3 = __commonJS({
   "node_modules/deprecation/dist-node/index.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var _Deprecation = class _Deprecation extends Error {
+    var Deprecation = class extends Error {
       constructor(message) {
         super(message);
         if (Error.captureStackTrace) {
@@ -23110,8 +22283,7 @@ var require_dist_node3 = __commonJS({
         this.name = "Deprecation";
       }
     };
-    __name(_Deprecation, "Deprecation");
-    var Deprecation = _Deprecation;
+    __name(Deprecation, "Deprecation");
     exports2.Deprecation = Deprecation;
   }
 });
@@ -23121,7 +22293,8 @@ var require_wrappy = __commonJS({
   "node_modules/wrappy/wrappy.js"(exports2, module2) {
     module2.exports = wrappy;
     function wrappy(fn, cb) {
-      if (fn && cb) return wrappy(fn)(cb);
+      if (fn && cb)
+        return wrappy(fn)(cb);
       if (typeof fn !== "function")
         throw new TypeError("need wrapper function");
       Object.keys(fn).forEach(function(k) {
@@ -23156,21 +22329,22 @@ var require_once = __commonJS({
     module2.exports.strict = wrappy(onceStrict);
     once.proto = once(function() {
       Object.defineProperty(Function.prototype, "once", {
-        value: /* @__PURE__ */ __name(function() {
+        value: function() {
           return once(this);
-        }, "value"),
+        },
         configurable: true
       });
       Object.defineProperty(Function.prototype, "onceStrict", {
-        value: /* @__PURE__ */ __name(function() {
+        value: function() {
           return onceStrict(this);
-        }, "value"),
+        },
         configurable: true
       });
     });
     function once(fn) {
       var f = /* @__PURE__ */ __name(function() {
-        if (f.called) return f.value;
+        if (f.called)
+          return f.value;
         f.called = true;
         return f.value = fn.apply(this, arguments);
       }, "f");
@@ -23207,7 +22381,7 @@ var require_dist_node4 = __commonJS({
     var once = _interopDefault(require_once());
     var logOnceCode = once((deprecation2) => console.warn(deprecation2));
     var logOnceHeaders = once((deprecation2) => console.warn(deprecation2));
-    var _RequestError = class _RequestError extends Error {
+    var RequestError = class extends Error {
       constructor(message, statusCode, options) {
         super(message);
         if (Error.captureStackTrace) {
@@ -23245,8 +22419,7 @@ var require_dist_node4 = __commonJS({
         });
       }
     };
-    __name(_RequestError, "RequestError");
-    var RequestError = _RequestError;
+    __name(RequestError, "RequestError");
     exports2.RequestError = RequestError;
   }
 });
@@ -23279,17 +22452,12 @@ var require_dist_node5 = __commonJS({
       let status;
       let url;
       const fetch = requestOptions.request && requestOptions.request.fetch || nodeFetch;
-      return fetch(requestOptions.url, Object.assign(
-        {
-          method: requestOptions.method,
-          body: requestOptions.body,
-          headers: requestOptions.headers,
-          redirect: requestOptions.redirect
-        },
-        // `requestOptions.request.agent` type is incompatible
-        // see https://github.com/octokit/types.ts/pull/264
-        requestOptions.request
-      )).then(async (response) => {
+      return fetch(requestOptions.url, Object.assign({
+        method: requestOptions.method,
+        body: requestOptions.body,
+        headers: requestOptions.headers,
+        redirect: requestOptions.redirect
+      }, requestOptions.request)).then(async (response) => {
         url = response.url;
         status = response.status;
         for (const keyAndValue of response.headers) {
@@ -23350,7 +22518,8 @@ var require_dist_node5 = __commonJS({
           data
         };
       }).catch((error) => {
-        if (error instanceof requestError.RequestError) throw error;
+        if (error instanceof requestError.RequestError)
+          throw error;
         throw new requestError.RequestError(error.message, 500, {
           request: requestOptions
         });
@@ -23369,7 +22538,8 @@ var require_dist_node5 = __commonJS({
     }
     __name(getResponseData, "getResponseData");
     function toErrorMessage(data) {
-      if (typeof data === "string") return data;
+      if (typeof data === "string")
+        return data;
       if ("message" in data) {
         if (Array.isArray(data.errors)) {
           return `${data.message}: ${data.errors.map(JSON.stringify).join(", ")}`;
@@ -23423,7 +22593,7 @@ var require_dist_node6 = __commonJS({
 ` + data.errors.map((e) => ` - ${e.message}`).join("\n");
     }
     __name(_buildMessageForResponseErrors, "_buildMessageForResponseErrors");
-    var _GraphqlResponseError = class _GraphqlResponseError extends Error {
+    var GraphqlResponseError = class extends Error {
       constructor(request2, headers, response) {
         super(_buildMessageForResponseErrors(response));
         this.request = request2;
@@ -23437,8 +22607,7 @@ var require_dist_node6 = __commonJS({
         }
       }
     };
-    __name(_GraphqlResponseError, "GraphqlResponseError");
-    var GraphqlResponseError = _GraphqlResponseError;
+    __name(GraphqlResponseError, "GraphqlResponseError");
     var NON_VARIABLE_OPTIONS = ["method", "baseUrl", "url", "headers", "request", "query", "mediaType"];
     var FORBIDDEN_VARIABLE_OPTIONS = ["query", "method", "url"];
     var GHES_V3_SUFFIX_REGEX = /\/api\/v3\/?$/;
@@ -23448,7 +22617,8 @@ var require_dist_node6 = __commonJS({
           return Promise.reject(new Error(`[@octokit/graphql] "query" cannot be used as variable name`));
         }
         for (const key in options) {
-          if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key)) continue;
+          if (!FORBIDDEN_VARIABLE_OPTIONS.includes(key))
+            continue;
           return Promise.reject(new Error(`[@octokit/graphql] "${key}" cannot be used as variable name`));
         }
       }
@@ -23573,28 +22743,33 @@ var require_dist_node8 = __commonJS({
     var graphql = require_dist_node6();
     var authToken = require_dist_node7();
     function _objectWithoutPropertiesLoose(source, excluded) {
-      if (source == null) return {};
+      if (source == null)
+        return {};
       var target = {};
       var sourceKeys = Object.keys(source);
       var key, i;
       for (i = 0; i < sourceKeys.length; i++) {
         key = sourceKeys[i];
-        if (excluded.indexOf(key) >= 0) continue;
+        if (excluded.indexOf(key) >= 0)
+          continue;
         target[key] = source[key];
       }
       return target;
     }
     __name(_objectWithoutPropertiesLoose, "_objectWithoutPropertiesLoose");
     function _objectWithoutProperties(source, excluded) {
-      if (source == null) return {};
+      if (source == null)
+        return {};
       var target = _objectWithoutPropertiesLoose(source, excluded);
       var key, i;
       if (Object.getOwnPropertySymbols) {
         var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
         for (i = 0; i < sourceSymbolKeys.length; i++) {
           key = sourceSymbolKeys[i];
-          if (excluded.indexOf(key) >= 0) continue;
-          if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+          if (excluded.indexOf(key) >= 0)
+            continue;
+          if (!Object.prototype.propertyIsEnumerable.call(source, key))
+            continue;
           target[key] = source[key];
         }
       }
@@ -23603,14 +22778,13 @@ var require_dist_node8 = __commonJS({
     __name(_objectWithoutProperties, "_objectWithoutProperties");
     var VERSION = "3.6.0";
     var _excluded = ["authStrategy"];
-    var _Octokit = class _Octokit {
+    var Octokit = class {
       constructor(options = {}) {
         const hook = new beforeAfterHook.Collection();
         const requestDefaults = {
           baseUrl: request.request.endpoint.DEFAULTS.baseUrl,
           headers: {},
           request: Object.assign({}, options.request, {
-            // @ts-ignore internal usage only, no need to type
             hook: hook.bind(null, "request")
           }),
           mediaType: {
@@ -23631,10 +22805,10 @@ var require_dist_node8 = __commonJS({
         this.request = request.request.defaults(requestDefaults);
         this.graphql = graphql.withCustomRequest(this.request).defaults(requestDefaults);
         this.log = Object.assign({
-          debug: /* @__PURE__ */ __name(() => {
-          }, "debug"),
-          info: /* @__PURE__ */ __name(() => {
-          }, "info"),
+          debug: () => {
+          },
+          info: () => {
+          },
           warn: console.warn.bind(console),
           error: console.error.bind(console)
         }, options.log);
@@ -23656,11 +22830,6 @@ var require_dist_node8 = __commonJS({
           const auth = authStrategy(Object.assign({
             request: this.request,
             log: this.log,
-            // we pass the current octokit instance as well as its constructor options
-            // to allow for authentication strategies that return a new octokit instance
-            // that shares the same internal state as the current one. The original
-            // requirement for this was the "event-octokit" authentication strategy
-            // of https://github.com/probot/octokit-auth-probot.
             octokit: this,
             octokitOptions: otherOptions
           }, options.auth));
@@ -23673,8 +22842,7 @@ var require_dist_node8 = __commonJS({
         });
       }
       static defaults(defaults) {
-        var _a;
-        const OctokitWithDefaults = (_a = class extends this {
+        const OctokitWithDefaults = /* @__PURE__ */ __name(class extends this {
           constructor(...args) {
             const options = args[0] || {};
             if (typeof defaults === "function") {
@@ -23685,26 +22853,18 @@ var require_dist_node8 = __commonJS({
               userAgent: `${options.userAgent} ${defaults.userAgent}`
             } : null));
           }
-        }, __name(_a, "OctokitWithDefaults"), _a);
+        }, "OctokitWithDefaults");
         return OctokitWithDefaults;
       }
-      /**
-       * Attach a plugin (or many) to your Octokit instance.
-       *
-       * @example
-       * const API = Octokit.plugin(plugin1, plugin2, plugin3, ...)
-       */
       static plugin(...newPlugins) {
-        var _a2;
         var _a;
         const currentPlugins = this.plugins;
-        const NewOctokit = (_a = (_a2 = class extends this {
-        }, __name(_a2, "_a"), _a2), _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a);
+        const NewOctokit = (_a = /* @__PURE__ */ __name(class extends this {
+        }, "_a"), _a.plugins = currentPlugins.concat(newPlugins.filter((plugin) => !currentPlugins.includes(plugin))), _a);
         return NewOctokit;
       }
     };
-    __name(_Octokit, "Octokit");
-    var Octokit = _Octokit;
+    __name(Octokit, "Octokit");
     Octokit.VERSION = VERSION;
     Octokit.plugins = [];
     exports2.Octokit = Octokit;
@@ -24812,7 +23972,7 @@ var require_dist_node10 = __commonJS({
     __name(ownKeys, "ownKeys");
     function _objectSpread2(target) {
       for (var i = 1; i < arguments.length; i++) {
-        var source = null != arguments[i] ? arguments[i] : {};
+        var source = arguments[i] != null ? arguments[i] : {};
         i % 2 ? ownKeys(Object(source), true).forEach(function(key) {
           _defineProperty(target, key, source[key]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
@@ -24843,7 +24003,8 @@ var require_dist_node10 = __commonJS({
         });
       }
       const responseNeedsNormalization = "total_count" in response.data && !("url" in response.data);
-      if (!responseNeedsNormalization) return response;
+      if (!responseNeedsNormalization)
+        return response;
       const incompleteResults = response.data.incomplete_results;
       const repositorySelection = response.data.repository_selection;
       const totalCount = response.data.total_count;
@@ -24872,9 +24033,10 @@ var require_dist_node10 = __commonJS({
       return {
         [Symbol.asyncIterator]: () => ({
           async next() {
-            if (!url) return {
-              done: true
-            };
+            if (!url)
+              return {
+                done: true
+              };
             try {
               const response = await requestMethod({
                 method,
@@ -24887,7 +24049,8 @@ var require_dist_node10 = __commonJS({
                 value: normalizedResponse
               };
             } catch (error) {
-              if (error.status !== 409) throw error;
+              if (error.status !== 409)
+                throw error;
               url = "";
               return {
                 value: {
@@ -24961,12 +24124,14 @@ var require_utils5 = __commonJS({
   "node_modules/@actions/github/lib/utils.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -24975,10 +24140,13 @@ var require_utils5 = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25017,12 +24185,14 @@ var require_github = __commonJS({
   "node_modules/@actions/github/lib/github.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25031,10 +24201,13 @@ var require_github = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25058,12 +24231,14 @@ var require_io_util = __commonJS({
   "node_modules/@actions/io/lib/io-util.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25072,10 +24247,13 @@ var require_io_util = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25242,12 +24420,14 @@ var require_io = __commonJS({
   "node_modules/@actions/io/lib/io.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25256,10 +24436,13 @@ var require_io = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25503,12 +24686,14 @@ var require_toolrunner = __commonJS({
   "node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -25517,10 +24702,13 @@ var require_toolrunner = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -25566,7 +24754,7 @@ var require_toolrunner = __commonJS({
     var ioUtil = __importStar(require_io_util());
     var timers_1 = require("timers");
     var IS_WINDOWS = process.platform === "win32";
-    var _ToolRunner = class _ToolRunner extends events.EventEmitter {
+    var ToolRunner = class extends events.EventEmitter {
       constructor(toolPath, args, options) {
         super();
         if (!toolPath) {
@@ -25764,15 +24952,6 @@ var require_toolrunner = __commonJS({
         }
         return result;
       }
-      /**
-       * Exec a tool.
-       * Output will be streamed to the live console.
-       * Returns promise with return code
-       *
-       * @param     tool     path to tool to exec
-       * @param     options  optional exec options.  See ExecOptions
-       * @returns   number
-       */
       exec() {
         return __awaiter(this, void 0, void 0, function* () {
           if (!ioUtil.isRooted(this.toolPath) && (this.toolPath.includes("/") || IS_WINDOWS && this.toolPath.includes("\\"))) {
@@ -25875,8 +25054,7 @@ var require_toolrunner = __commonJS({
         });
       }
     };
-    __name(_ToolRunner, "ToolRunner");
-    var ToolRunner = _ToolRunner;
+    __name(ToolRunner, "ToolRunner");
     exports2.ToolRunner = ToolRunner;
     function argStringToArray(argString) {
       const args = [];
@@ -25925,7 +25103,7 @@ var require_toolrunner = __commonJS({
     }
     __name(argStringToArray, "argStringToArray");
     exports2.argStringToArray = argStringToArray;
-    var _ExecState = class _ExecState extends events.EventEmitter {
+    var ExecState = class extends events.EventEmitter {
       constructor(options, toolPath) {
         super();
         this.processClosed = false;
@@ -25952,7 +25130,7 @@ var require_toolrunner = __commonJS({
         if (this.processClosed) {
           this._setResult();
         } else if (this.processExited) {
-          this.timeout = timers_1.setTimeout(_ExecState.HandleTimeout, this.delay, this);
+          this.timeout = timers_1.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
       }
       _debug(message) {
@@ -25987,8 +25165,7 @@ var require_toolrunner = __commonJS({
         state._setResult();
       }
     };
-    __name(_ExecState, "ExecState");
-    var ExecState = _ExecState;
+    __name(ExecState, "ExecState");
   }
 });
 
@@ -25997,12 +25174,14 @@ var require_exec = __commonJS({
   "node_modules/@actions/exec/lib/exec.js"(exports2) {
     "use strict";
     var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
-      Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
+      if (k2 === void 0)
+        k2 = k;
+      Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
-      }, "get") });
+      } });
     } : function(o, m, k, k2) {
-      if (k2 === void 0) k2 = k;
+      if (k2 === void 0)
+        k2 = k;
       o[k2] = m[k];
     });
     var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
@@ -26011,10 +25190,13 @@ var require_exec = __commonJS({
       o["default"] = v;
     });
     var __importStar = exports2 && exports2.__importStar || function(mod) {
-      if (mod && mod.__esModule) return mod;
+      if (mod && mod.__esModule)
+        return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+        for (var k in mod)
+          if (k !== "default" && Object.hasOwnProperty.call(mod, k))
+            __createBinding(result, mod, k);
       }
       __setModuleDefault(result, mod);
       return result;
@@ -26106,15 +25288,14 @@ var require_exec = __commonJS({
 });
 
 // deploy-preview/index.ts
-var import_core2 = __toESM(require_core());
-var import_github2 = __toESM(require_github());
+var import_core2 = __toModule(require_core());
+var import_github2 = __toModule(require_github());
 
 // utils/exec.ts
-var import_exec = __toESM(require_exec());
+var import_exec = __toModule(require_exec());
 async function execOutput(commandLine, args, options) {
   const output = { exitCode: 0, debug: [], stdout: "", stderr: "" };
-  output.exitCode = await (0, import_exec.exec)(commandLine, args, {
-    ...options,
+  output.exitCode = await (0, import_exec.exec)(commandLine, args, __spreadProps(__spreadValues({}, options), {
     listeners: {
       stdout(data) {
         output.stdout += data.toString("utf8");
@@ -26126,7 +25307,7 @@ async function execOutput(commandLine, args, options) {
         output.debug.push(data);
       }
     }
-  });
+  }));
   return output;
 }
 __name(execOutput, "execOutput");
@@ -26146,8 +25327,8 @@ async function execJSON(commandLine, args, options) {
 __name(execJSON, "execJSON");
 
 // utils/sendReport.ts
-var import_core = __toESM(require_core());
-var import_github = __toESM(require_github());
+var import_core = __toModule(require_core());
+var import_github = __toModule(require_github());
 var GITHUB_ACTIONS_BOT_LOGIN = "github-actions[bot]";
 async function sendReport({
   pr: pr2,
@@ -26161,16 +25342,12 @@ async function sendReport({
 `;
   let previousCommentID = void 0;
   (0, import_core.info)(`Looking for the previous reports in: #${pr2}`);
-  for await (const { data: comments } of octokit.paginate.iterator(
-    "GET /repos/{owner}/{repo}/issues/{issue_number}/comments",
-    {
-      ...import_github.context.repo,
-      per_page: 100,
-      issue_number: pr2
-    }
-  )) {
+  for await (const { data: comments } of octokit.paginate.iterator("GET /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), {
+    per_page: 100,
+    issue_number: pr2
+  }))) {
     for (const { id, body: body2, user } of comments) {
-      if ((user == null ? void 0 : user.login) === GITHUB_ACTIONS_BOT_LOGIN && (body2 == null ? void 0 : body2.startsWith(reportTitle))) {
+      if (user?.login === GITHUB_ACTIONS_BOT_LOGIN && body2?.startsWith(reportTitle)) {
         if (previousCommentID == null) {
           (0, import_core.info)(`Found previous report: ${id}`);
           previousCommentID = id;
@@ -26182,16 +25359,10 @@ async function sendReport({
   const body = reportTitle + content;
   if (previousCommentID != null) {
     (0, import_core.info)(`Updating previous report: ${previousCommentID}`);
-    await octokit.request(
-      "PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}",
-      { ...import_github.context.repo, body, comment_id: previousCommentID }
-    );
+    await octokit.request("PATCH /repos/{owner}/{repo}/issues/comments/{comment_id}", __spreadProps(__spreadValues({}, import_github.context.repo), { body, comment_id: previousCommentID }));
   } else {
     (0, import_core.info)("Sending new report");
-    await octokit.request(
-      "POST /repos/{owner}/{repo}/issues/{issue_number}/comments",
-      { ...import_github.context.repo, body, issue_number: pr2 }
-    );
+    await octokit.request("POST /repos/{owner}/{repo}/issues/{issue_number}/comments", __spreadProps(__spreadValues({}, import_github.context.repo), { body, issue_number: pr2 }));
   }
 }
 __name(sendReport, "sendReport");
@@ -26206,17 +25377,14 @@ var netlifyToken = (0, import_core2.getInput)("netlify-token", { required: true 
 var netlifySiteID = (0, import_core2.getInput)("netlify-site-id", { required: true });
 var label = alias === defaultAlias ? "" : alias;
 async function main() {
-  const { deploy_url: previewURL } = await (0, import_core2.group)(
-    "Deploying to Netlify",
-    () => execJSON("netlify", [
-      "deploy",
-      "--json",
-      `--dir=${dir}`,
-      `--alias=${alias}`,
-      `--auth=${netlifyToken}`,
-      `--site=${netlifySiteID}`
-    ])
-  );
+  const { deploy_url: previewURL } = await (0, import_core2.group)("Deploying to Netlify", () => execJSON("netlify", [
+    "deploy",
+    "--json",
+    `--dir=${dir}`,
+    `--alias=${alias}`,
+    `--auth=${netlifyToken}`,
+    `--site=${netlifySiteID}`
+  ]));
   await (0, import_core2.group)("Sending deployment report", () => {
     const content = `Built with commit ${import_github2.context.sha}
 ${previewURL}`;
@@ -26231,19 +25399,11 @@ ${previewURL}`;
 }
 __name(main, "main");
 main().catch(import_core2.setFailed);
-/*! Bundled license information:
-
-undici/lib/fetch/body.js:
-  (*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> *)
-
-undici/lib/websocket/frame.js:
-  (*! ws. MIT License. Einar Otto Stangvik <einaros@gmail.com> *)
-
-is-plain-object/dist/is-plain-object.js:
-  (*!
-   * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
-   *
-   * Copyright (c) 2014-2017, Jon Schlinkert.
-   * Released under the MIT License.
-   *)
-*/
+/*!
+ * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+ *
+ * Copyright (c) 2014-2017, Jon Schlinkert.
+ * Released under the MIT License.
+ */
+/*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
+/*! ws. MIT License. Einar Otto Stangvik <einaros@gmail.com> */
