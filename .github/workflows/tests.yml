@@ -162,32 +162,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-1-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-2-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-3-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-4-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-5-${{ github.event.number }}
           path: package.json
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: test-6-${{ github.event.number }}
           path: package.json
