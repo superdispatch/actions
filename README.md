@@ -196,8 +196,8 @@ jobs:
         node: [14, 16, 18]
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
       - uses: superdispatch/actions/npm/install@v2
@@ -232,7 +232,7 @@ jobs:
         node: [14, 16, 18]
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: superdispatch/actions/setup-node-repo@v2
+      - uses: superdispatch/actions/setup-node-repo@v4
         with:
           node-version: ${{ matrix.node }}
       - run: npm test
@@ -249,7 +249,7 @@ jobs:
         node: [14, 16, 18]
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: superdispatch/actions/setup-node-repo@v2
+      - uses: superdispatch/actions/setup-node-repo@v4
         with:
           cache-key: ${{ github.sha }}-
           node-version: ${{ matrix.node }}
