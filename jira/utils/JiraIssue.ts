@@ -5,7 +5,7 @@ const ISSUE_REGEX = /([a-z]{2,}-\d+)/gi;
 
 export function parseIssue(input: string) {
   const match = ISSUE_REGEX.exec(input);
-  return match?.[1].toUpperCase();
+  return match?.[1]?.toUpperCase();
 }
 
 export async function findIssue(input: string): Promise<JIRAIssue | null> {

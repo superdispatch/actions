@@ -23,7 +23,14 @@ async function main() {
     { ...context.repo, sha: SHA },
   );
 
-  const mainIssue = await findIssue(commits[0].commit.message);
+  const commitMessage = commits[0]?.commit.message;
+
+  if (!commitMessage) {
+    info('Skipping... Could not find commit message');
+    return;
+  }
+
+  const mainIssue = await findIssue(commitMessage);
 
   if (!mainIssue) {
     info('Skipping... Could not find issue');
