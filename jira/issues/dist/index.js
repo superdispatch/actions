@@ -200377,7 +200377,7 @@ __name(getEnv, "getEnv");
 var ISSUE_REGEX = /([a-z]{2,}-\d+)/gi;
 function parseIssue(input) {
   const match = ISSUE_REGEX.exec(input);
-  return match?.[1].toUpperCase();
+  return match?.[1]?.toUpperCase();
 }
 __name(parseIssue, "parseIssue");
 

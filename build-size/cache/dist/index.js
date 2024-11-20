@@ -78912,7 +78912,7 @@ async function getBuildSizes(dir2, options) {
   const [buildPath] = globber.getSearchPaths();
   const sizes = {};
   for await (const filename of globber.globGenerator()) {
-    if (!isValidFile(filename)) continue;
+    if (!isValidFile(filename) || !buildPath) continue;
     const key = getFileNameKey(filename, buildPath, options);
     const fileSize = await computeFileSize(filename);
     sizes[key] = (sizes[key] || 0) + fileSize;
