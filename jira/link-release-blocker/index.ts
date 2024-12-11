@@ -64,7 +64,9 @@ async function main() {
             .replace('Blocked by ', ''), // for backward compatibility
       ),
   );
-  const newBlockers = blockers.filter((x) => !existingBlockers.has(x.key));
+  const newBlockers = blockers.filter(
+    (blocker) => !existingBlockers.has(blocker),
+  );
 
   if (!newBlockers.length) {
     info('Release blockers are already added');
@@ -72,12 +74,12 @@ async function main() {
   }
 
   for (const blocker of newBlockers) {
-    info(`Linking blocker: "${blocker.key}"`);
+    info(`Linking blocker: "${blocker}"`);
 
     await jira.createRemoteLink(mainIssue.key, {
       object: {
-        title: `Release Blocked by ${blocker.key}`,
-        url: `https://superdispatch.atlassian.net/browse/${blocker.key}`,
+        title: `Release Blocked by ${blocker}`,
+        url: `https://superdispatch.atlassian.net/browse/${blocker}`,
       },
     });
   }
@@ -88,8 +90,8 @@ async function main() {
 async function findBlockersFromCommits(
   targetIssue: JIRAIssue,
   commits: Array<components['schemas']['commit']>,
-): Promise<JIRAIssue[]> {
-  const blockers: JIRAIssue[] = [];
+): Promise<string[]> {
+  const blockers: Set<string> = new Set();
 
   for (const item of commits) {
     debug(`Checking commit "${item.commit.message}"`);
@@ -114,10 +116,10 @@ async function findBlockersFromCommits(
     }
 
     info(`Found blocker issue: "${blockerIssue.key}"`);
-    blockers.push(blockerIssue);
+    blockers.add(blockerIssue.key);
   }
 
-  return blockers;
+  return Array.from(blockers);
 }
 
 main().catch(setFailed);
