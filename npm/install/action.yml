@@ -22,29 +22,29 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: |
         NPM_LOCK_HASH="${{ hashFiles(format('{0}/package-lock.json', inputs.working-directory)) }}"
-        YARN_LOCK_HASH="${{ hashFiles(format('{0}/yarn.lock', inputs.working-directory)) }}" 
-        PNPM_LOCK_HASH="${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}" 
+        YARN_LOCK_HASH="${{ hashFiles(format('{0}/yarn.lock', inputs.working-directory)) }}"
+        PNPM_LOCK_HASH="${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}"
         PACKAGE_JSON_HASH="${{ hashFiles(format('{0}/package.json', inputs.working-directory)) }}"
 
-        if [[ $YARN_LOCK_HASH != "" ]] 
+        if [[ $YARN_LOCK_HASH != "" ]]
         then
-          AGENT_VERSION=$(yarn --version)        
+          AGENT_VERSION=$(yarn --version)
           AGENT_LOCK_HASH=$YARN_LOCK_HASH
 
-          if [[ $AGENT_VERSION =~ ^1.* ]] 
+          if [[ $AGENT_VERSION =~ ^1.* ]]
           then
             AGENT="yarn"
             AGENT_CACHE_DIR=$(yarn cache dir)
           else
             AGENT="yarn@berry"
             AGENT_CACHE_DIR="${{ format('{0}/.yarn', inputs.working-directory) }}"
-          fi        
-        elif [[ $PNPM_LOCK_HASH != "" ]] 
+          fi
+        elif [[ $PNPM_LOCK_HASH != "" ]]
         then
           AGENT="pnpm"
-          AGENT_VERSION=$(pnpm --version)    
+          AGENT_VERSION=$(pnpm --version)
           AGENT_LOCK_HASH=$PNPM_LOCK_HASH
-          AGENT_CACHE_DIR=$(pnpm store path)      
+          AGENT_CACHE_DIR=$(pnpm store path)
         else
           AGENT="npm"
           AGENT_VERSION=$(npm --version)
@@ -69,7 +69,7 @@ runs:
     - name: 'Restoring cache'
       id: github-cache
       if: runner.environment == 'github-hosted'
-      uses: actions/cache@v3
+      uses: buildjet/cache@v3
       with:
         path: |
           ${{ steps.vars.outputs.agent-cache-dir }}

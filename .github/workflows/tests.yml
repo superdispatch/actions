@@ -6,11 +6,11 @@ on:
 
 jobs:
   build-size-cache:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: main
           ref: ${{ github.event.pull_request.base.sha }}
@@ -65,9 +65,9 @@ jobs:
   build-size-report:
     needs:
       - build-size-cache
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./build-size/report
         with:
@@ -116,7 +116,7 @@ jobs:
           dir: ./build-size/test-same-file-name
 
   build-size-limit:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -130,9 +130,9 @@ jobs:
           target: 'node_modules/object.assign/dist/browser.js'
 
   deploy-preview:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - run: |
           mkdir site
@@ -158,9 +158,9 @@ jobs:
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
   upload-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/upload-artifact@v4
         with:
@@ -193,9 +193,9 @@ jobs:
           path: package.json
 
   prune-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./prune-artifacts
         with:
@@ -210,50 +210,50 @@ jobs:
 
   pr-limit:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test pr-limit') }}
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./pr-limit
         with:
           limit: 1
 
   commit-snapshots:
-    runs-on: ubuntu-latest
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./update-snapshots
         with:
           dry-run: true
           command: exit 1
           update-command: touch test4.txt
 
-  npm-install-cypress-yarn:
-    runs-on: ubuntu-latest
+  npm-install-test-dep-yarn:
+    runs-on: buildjet-2vcpu-ubuntu-2204
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: buildjet/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - uses: ./npm/install
         with:
-          cache-key: yarn-install-cypress-${{ github.sha }}-
-          working-directory: ./examples/cypress-yarn
+          cache-key: yarn-install-test-dep-${{ github.sha }}-
+          working-directory: ./examples/test-dep-yarn
 
       - run: yarn test
-        working-directory: ./examples/cypress-yarn
+        working-directory: ./examples/test-dep-yarn
 
-  prepare-node-repo-cypress:
-    runs-on: ubuntu-latest
+  prepare-node-repo-test-dep:
+    runs-on: buildjet-2vcpu-ubuntu-2204
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./prepare-node-repo
         with:
-          node-version: 18
-          working-directory: ./examples/cypress-npm
-          cache-key: prepare-node-repo-cypress-${{ github.sha }}-
+          node-version: 20
+          working-directory: ./examples/test-dep-npm
+          cache-key: prepare-node-repo-test-dep-${{ github.sha }}-
 
       - run: npm test
-        working-directory: ./examples/cypress-npm
+        working-directory: ./examples/test-dep-npm

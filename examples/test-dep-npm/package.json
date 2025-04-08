@@ -1,12 +1,12 @@
 {
-  "name": "npm-install-cypress",
+  "name": "npm-install-test-dep",
   "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "cypress install && cypress verify"
+    "test": "npm add luxon@latest && npm check"
   },
   "dependencies": {
-    "cypress": "^8.5.0"
+    "luxon": "^3.6.1"
   }
 }
