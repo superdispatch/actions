@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "test": "npm add luxon@latest && npm check"
+    "test": "npm add luxon@latest && npm audit"
   },
   "dependencies": {
     "luxon": "^3.6.1"
