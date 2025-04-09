@@ -25,7 +25,7 @@ runs:
       run: git config --global core.autocrlf false
 
     - name: 'Checking out the repository'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Setting up Node'
       uses: buildjet/setup-node@v4
@@ -35,9 +35,7 @@ runs:
         cache-dependency-path: ${{ inputs.package-manager-dependency-path }}
 
     - name: 'Installing dependencies'
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      run: yarn install
+      uses: superdispatch/actions/npm/install@v2
 
     - name: Cache node modules
       uses: buildjet/cache@v3
@@ -45,7 +43,7 @@ runs:
         cache-name: cache-node-modules
       with:
         path: node_modules
-        key: ${{ inputs.cache-key || runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        key: ${{ inputs.cache-key || runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*lock*') }}
         restore-keys: |
           ${{ inputs.cache-key || runner.os }}-build-${{ env.cache-name }}-
           ${{ inputs.cache-key || runner.os }}-build-

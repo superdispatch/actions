@@ -180,7 +180,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: superdispatch/actions/npm/install@v2
       - run: npm test
 ```
