@@ -68,8 +68,8 @@ runs:
 
     - name: 'Restoring cache'
       id: github-cache
-      uses: buildjet/cache@v3
-      continue-on-error: true
+      if: runner.environment == 'github-hosted'
+      uses: actions/cache@v3
       with:
         path: |
           ${{ steps.vars.outputs.agent-cache-dir }}
