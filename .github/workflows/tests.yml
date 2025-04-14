@@ -232,9 +232,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: buildjet/setup-node@v4
         with:
           node-version: 20
+          cleanup: false
       - uses: ./npm/install
         with:
           cache-key: yarn-install-test-dep-${{ github.sha }}-
