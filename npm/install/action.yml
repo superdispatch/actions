@@ -68,7 +68,6 @@ runs:
 
     - name: 'Restoring cache'
       id: github-cache
-      if: runner.environment == 'github-hosted'
       uses: buildjet/cache@v3
       with:
         path: |
