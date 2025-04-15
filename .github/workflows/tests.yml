@@ -227,7 +227,7 @@ jobs:
           command: exit 1
           update-command: touch test4.txt
 
-  npm-install-cypress-yarn:
+  npm-install-test-dep-yarn:
     runs-on: ubuntu-latest
 
     steps:
@@ -237,11 +237,11 @@ jobs:
           node-version: 18
       - uses: ./npm/install
         with:
-          cache-key: yarn-install-cypress-${{ github.sha }}-
-          working-directory: ./examples/cypress-yarn
+          cache-key: yarn-install-test-dep-${{ github.sha }}-
+          working-directory: ./examples/test-dep-yarn
 
       - run: yarn test
-        working-directory: ./examples/cypress-yarn
+        working-directory: ./examples/test-dep-yarn
 
   prepare-node-repo-test-dep:
     runs-on: buildjet-2vcpu-ubuntu-2204
