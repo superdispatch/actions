@@ -235,7 +235,6 @@ jobs:
       - uses: buildjet/setup-node@v4
         with:
           node-version: 20
-          cleanup: false
       - uses: ./npm/install
         with:
           cache-key: yarn-install-test-dep-${{ github.sha }}-
