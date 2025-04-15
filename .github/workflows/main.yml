@@ -7,7 +7,7 @@ on:
 
 jobs:
   checks:
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: buildjet-2vcpu-ubuntu-2204
     steps:
       - uses: superdispatch/actions/prepare-node-repo@main
         with:
