@@ -187,6 +187,7 @@ jobs:
 - `node-version` – Node version specifier
 - `cache-key` – an explicit key for restoring and saving the cache
 - `fetch-depth` - The depth of the repository to fetch.
+- `pnpm-version` - The version of pnpm to use
 
 #### Usage:
 
