@@ -62,40 +62,6 @@ jobs:
           dir: build
 ```
 
-### Deploy Preview
-
-Deploys build preview to Netlify
-
-##### Inputs
-
-- `dir` - folder to deploy
-- `pr` - pull request number, uses `${{ github.event.number }}` as default
-- `alias` - alias for deployment, uses `preview-${pr}` as default
-- `token` - github token, uses `${{ github.token }}` as default
-- `netlify-token` - netlify token
-- `netlify-site-id` - netlify site to deploy to
-
-##### Usage
-
-```yml
-on:
-  pull_request:
-    branches:
-      - '**'
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: yarn install
-      - run: yarn build
-      - uses: superdispatch/actions/deploy-preview@v1.5.0
-        with:
-          dir: build
-          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-```
-
 ### Prune Artifacts
 
 Removes workflow artifacts
@@ -220,6 +186,7 @@ jobs:
 - `working-directory` – the default working directory
 - `node-version` – Node version specifier
 - `cache-key` – an explicit key for restoring and saving the cache
+- `fetch-depth` - The depth of the repository to fetch.
 
 #### Usage:
 

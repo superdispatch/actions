@@ -34,12 +34,6 @@ jobs:
 
       - uses: ./build-size/cache
         with:
-          label: deploy-preview
-          dir: ./main/deploy-preview
-          sha: ${{ github.event.pull_request.base.sha }}
-
-      - uses: ./build-size/cache
-        with:
           label: prune-artifacts
           dir: ./main/prune-artifacts
           sha: ${{ github.event.pull_request.base.sha }}
@@ -91,11 +85,6 @@ jobs:
 
       - uses: ./build-size/report
         with:
-          label: deploy-preview
-          dir: ./deploy-preview
-
-      - uses: ./build-size/report
-        with:
           label: prune-artifacts
           dir: ./prune-artifacts
 
@@ -128,34 +117,6 @@ jobs:
           install_command: 'yarn install'
           build_command: 'yarn add -WD size-limit @size-limit/preset-small-lib'
           target: 'node_modules/object.assign/dist/browser.js'
-
-  deploy-preview:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - run: |
-          mkdir site
-          echo "<html><body>Hello from ${{ github.sha }}</body></html>" > site/index.html
-
-      - uses: ./deploy-preview
-        with:
-          dir: site
-          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - uses: ./deploy-preview
-        with:
-          dir: site
-          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
-
-      - uses: ./deploy-preview
-        with:
-          dir: site
-          alias: custom-alias
-          netlify-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
 
   upload-artifacts:
     runs-on: ubuntu-latest
