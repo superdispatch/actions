@@ -22,6 +22,11 @@ inputs:
     required: false
     description: 'An explicit key for restoring and saving the cache'
 
+  pnpm-version:
+    required: false
+    default: 'latest'
+    description: 'The version of pnpm to use.'
+
 runs:
   using: 'composite'
   steps:
@@ -40,6 +45,10 @@ runs:
         node-version: ${{ inputs.node-version }}
         cache: ${{ inputs.package-manager }}
         cache-dependency-path: ${{ inputs.package-manager-dependency-path }}
+
+    - uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
 
     - name: 'Installing dependencies'
       uses: superdispatch/actions/npm/install@v2

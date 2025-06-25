@@ -206,15 +206,20 @@ jobs:
 
   prepare-node-repo-cypress:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package-manager: [npm, pnpm, yarn]
 
     steps:
       - uses: actions/checkout@v3
 
       - uses: ./prepare-node-repo
         with:
+          pnpm-version: 10
+          fetch-depth: 2
           node-version: 18
-          working-directory: ./examples/cypress-npm
-          cache-key: prepare-node-repo-cypress-${{ github.sha }}-
+          working-directory: ./examples/cypress-${{ matrix.package-manager }}
+          cache-key: prepare-node-repo-cypress-${{ matrix.package-manager }}-${{ github.sha }}-
 
-      - run: npm test
-        working-directory: ./examples/cypress-npm
+      - run: ${{ matrix.package-manager }} test
+        working-directory: ./examples/cypress-${{ matrix.package-manager }}
