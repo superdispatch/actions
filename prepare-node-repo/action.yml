@@ -13,6 +13,11 @@ inputs:
     default: 'lts/*'
     description: 'Node version specifier.'
 
+  fetch-depth:
+    required: false
+    default: 1
+    description: 'The depth of the repository to fetch.'
+
   cache-key:
     required: false
     description: 'An explicit key for restoring and saving the cache'
@@ -26,6 +31,8 @@ runs:
 
     - name: 'Checking out the repository'
       uses: actions/checkout@v3
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
 
     - name: 'Setting up Node'
       uses: actions/setup-node@v4
