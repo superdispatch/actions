@@ -1,0 +1,40 @@
+name: 'Checks release window'
+description: 'Check if the current time is within the allowed release window.'
+author: 'superdispatch'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check for Hotfix Bypass
+      shell: bash
+      id: check_hotfix
+      run: |
+        COMMIT_MSG=$(git log -1 --pretty=%B)
+        if [[ "$COMMIT_MSG" =~ \[hotfix\] ]]; then
+          echo "hotfix=true" >> $GITHUB_OUTPUT
+          echo "⚠️ Hotfix detected. Bypassing time and weekday checks."
+        else
+          echo "hotfix=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Enforce Time and Weekday Window
+      shell: bash
+      if: steps.check_hotfix.outputs.hotfix == 'false'
+      run: |
+        TZ='Asia/Tashkent'
+        CURRENT_HOUR=$(TZ=$TZ date +'%H')
+        CURRENT_DAY=$(TZ=$TZ date +'%u') # 1=Monday, 7=Sunday
+
+        if [ "$CURRENT_DAY" -gt 5 ]; then
+          echo "⛔ Deployments are disabled on weekends (Saturday & Sunday)."
+          echo "ℹ️ How to bypass: https://www.notion.so/superdispatch/229d135ec9cb80a2b5f3d0b1fdde2fb0"
+          exit 1
+        fi
+
+        if [ "$CURRENT_HOUR" -lt 11 ] || [ "$CURRENT_HOUR" -ge 16 ]; then
+          echo "⛔ Deployment window is 11:00–16:00 Asia/Tashkent time (Mon–Fri)."
+          echo "ℹ️ How to bypass: https://www.notion.so/superdispatch/229d135ec9cb80a2b5f3d0b1fdde2fb0"
+          exit 1
+        fi
+
+        echo "✅ Deployment time and day are within allowed range."
