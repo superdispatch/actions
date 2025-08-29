@@ -5,6 +5,11 @@ author: 'superdispatch'
 runs:
   using: 'composite'
   steps:
+    - name: Checking out the repository
+      uses: actions/checkout@v5
+      with:
+        fetch-depth: 1
+
     - name: Check for Hotfix Bypass
       shell: bash
       id: check_hotfix
