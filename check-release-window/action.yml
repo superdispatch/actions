@@ -5,14 +5,17 @@ author: 'superdispatch'
 runs:
   using: 'composite'
   steps:
-    - name: Checking out the repository
+    - name: Checking Out the Repository to Temporary Directory
       uses: actions/checkout@v5
       with:
         fetch-depth: 1
+        path: release-window-check
 
     - name: Check for Hotfix Bypass
       shell: bash
       id: check_hotfix
+      with:
+        working-directory: release-window-check
       run: |
         COMMIT_MSG=$(git log -1 --pretty=%B)
         if [[ "$COMMIT_MSG" =~ \[hotfix\] ]]; then
@@ -25,6 +28,8 @@ runs:
     - name: Enforce Time and Weekday Window
       shell: bash
       if: steps.check_hotfix.outputs.hotfix == 'false'
+      with:
+        working-directory: release-window-check
       run: |
         TZ='Asia/Tashkent'
         CURRENT_HOUR=$(TZ=$TZ date +'%H')
@@ -43,3 +48,7 @@ runs:
         fi
 
         echo "✅ Deployment time and day are within allowed range."
+
+    - name: Clean Up Temporary Directory
+      shell: bash
+      run: rm -rf release-window-check
