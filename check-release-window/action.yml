@@ -13,9 +13,8 @@ runs:
 
     - name: Check for Hotfix Bypass
       shell: bash
+      working-directory: release-window-check
       id: check_hotfix
-      with:
-        working-directory: release-window-check
       run: |
         COMMIT_MSG=$(git log -1 --pretty=%B)
         if [[ "$COMMIT_MSG" =~ \[hotfix\] ]]; then
@@ -27,9 +26,8 @@ runs:
 
     - name: Enforce Time and Weekday Window
       shell: bash
+      working-directory: release-window-check
       if: steps.check_hotfix.outputs.hotfix == 'false'
-      with:
-        working-directory: release-window-check
       run: |
         TZ='Asia/Tashkent'
         CURRENT_HOUR=$(TZ=$TZ date +'%H')
