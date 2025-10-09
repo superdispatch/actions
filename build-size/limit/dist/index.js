@@ -72,18 +72,18 @@ var require_utils = __commonJS({
 var require_command = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -506,18 +506,18 @@ var init_esm_node = __esm({
 var require_file_command = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -2260,6 +2260,7 @@ var require_decodeText = __commonJS({
             return decoders.utf8;
           case "latin1":
           case "ascii":
+          // TODO: Make these a separate, strict decoder?
           case "us-ascii":
           case "iso-8859-1":
           case "iso8859-1":
@@ -2963,6 +2964,7 @@ var require_basename = __commonJS({
       for (var i = path.length - 1; i >= 0; --i) {
         switch (path.charCodeAt(i)) {
           case 47:
+          // '/'
           case 92:
             path = path.slice(i + 1);
             return path === ".." || path === "." ? "" : path;
@@ -4223,7 +4225,21 @@ var require_util2 = __commonJS({
           return referrerOrigin;
         }
         case "strict-origin":
+        // eslint-disable-line
+        /**
+           * 1. If referrerURL is a potentially trustworthy URL and
+           * request’s current URL is not a potentially trustworthy URL,
+           * then return no referrer.
+           * 2. Return referrerOrigin
+          */
         case "no-referrer-when-downgrade":
+        // eslint-disable-line
+        /**
+         * 1. If referrerURL is a potentially trustworthy URL and
+         * request’s current URL is not a potentially trustworthy URL,
+         * then return no referrer.
+         * 2. Return referrerOrigin
+        */
         default:
           return isNonPotentiallyTrustWorthy ? "no-referrer" : referrerOrigin;
       }
@@ -14320,7 +14336,7 @@ var require_fetch = __commonJS({
             fetchParams.controller.terminate(e);
           }
         }, "processBodyError");
-        requestBody = async function* () {
+        requestBody = (async function* () {
           try {
             for await (const bytes of request.body.stream) {
               yield* processBodyChunk(bytes);
@@ -14329,7 +14345,7 @@ var require_fetch = __commonJS({
           } catch (err) {
             processBodyError(err);
           }
-        }();
+        })();
       }
       try {
         const { body, status, statusText, headersList, socket } = await dispatch({ body: requestBody });
@@ -17964,7 +17980,7 @@ var require_undici = __commonJS({
 var require_lib = __commonJS({
   "node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -17973,13 +17989,13 @@ var require_lib = __commonJS({
         }, "get") };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -19127,18 +19143,18 @@ var require_summary = __commonJS({
 var require_path_utils = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/core/lib/path-utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -19175,18 +19191,18 @@ var require_path_utils = __commonJS({
 var require_core = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -19424,18 +19440,18 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
 var require_io_util = __commonJS({
   "node_modules/@actions/io/lib/io-util.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -19608,18 +19624,18 @@ var require_io_util = __commonJS({
 var require_io = __commonJS({
   "node_modules/@actions/io/lib/io.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -19869,18 +19885,18 @@ var require_io = __commonJS({
 var require_toolrunner = __commonJS({
   "node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -20365,18 +20381,18 @@ var require_toolrunner = __commonJS({
 var require_exec = __commonJS({
   "node_modules/@actions/exec/lib/exec.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -20478,18 +20494,18 @@ var require_exec = __commonJS({
 var require_internal_glob_options_helper = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-glob-options-helper.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -20535,18 +20551,18 @@ var require_internal_glob_options_helper = __commonJS({
 var require_internal_path_helper = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-path-helper.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -20688,18 +20704,18 @@ var require_internal_match_kind = __commonJS({
 var require_internal_pattern_helper = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-pattern-helper.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -21008,12 +21024,12 @@ var require_minimatch = __commonJS({
   "node_modules/minimatch/minimatch.js"(exports2, module2) {
     module2.exports = minimatch;
     minimatch.Minimatch = Minimatch;
-    var path = function() {
+    var path = (function() {
       try {
         return require("path");
       } catch (e) {
       }
-    }() || {
+    })() || {
       sep: "/"
     };
     minimatch.sep = path.sep;
@@ -21253,6 +21269,7 @@ var require_minimatch = __commonJS({
           continue;
         }
         switch (c) {
+          /* istanbul ignore next */
           case "/": {
             return false;
           }
@@ -21260,6 +21277,8 @@ var require_minimatch = __commonJS({
             clearStateChar();
             escaping = true;
             continue;
+          // the various stateChar values
+          // for the "extglob" stuff.
           case "?":
           case "*":
           case "+":
@@ -21320,6 +21339,7 @@ var require_minimatch = __commonJS({
             clearStateChar();
             re += "|";
             continue;
+          // these are mostly the same in regexp and glob
           case "[":
             clearStateChar();
             if (inClass) {
@@ -21589,18 +21609,18 @@ var require_minimatch = __commonJS({
 var require_internal_path = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-path.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -21689,18 +21709,18 @@ var require_internal_path = __commonJS({
 var require_internal_pattern = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-pattern.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -21912,18 +21932,18 @@ var require_internal_search_state = __commonJS({
 var require_internal_globber = __commonJS({
   "node_modules/@actions/cache/node_modules/@actions/glob/lib/internal-globber.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -22567,6 +22587,8 @@ var require_semver = __commonJS({
           this.inc("patch", identifier);
           this.inc("pre", identifier);
           break;
+        // If the input is a non-prerelease version, this acts the same as
+        // prepatch.
         case "prerelease":
           if (this.prerelease.length === 0) {
             this.inc("patch", identifier);
@@ -22594,6 +22616,8 @@ var require_semver = __commonJS({
           }
           this.prerelease = [];
           break;
+        // This probably shouldn't be used publicly.
+        // 1.0.0 "pre" would become 1.0.0-0 which is the wrong direction.
         case "pre":
           if (this.prerelease.length === 0) {
             this.prerelease = [0];
@@ -23296,6 +23320,7 @@ var require_semver = __commonJS({
                 compver.prerelease.push(0);
               }
               compver.raw = compver.format();
+            /* fallthrough */
             case "":
             case ">=":
               if (!minver || gt(minver, compver)) {
@@ -23305,6 +23330,7 @@ var require_semver = __commonJS({
             case "<":
             case "<=":
               break;
+            /* istanbul ignore next */
             default:
               throw new Error("Unexpected operation: " + comparator.operator);
           }
@@ -24635,7 +24661,7 @@ var init_tslib_es6 = __esm({
     __name(__metadata, "__metadata");
     __name(__awaiter, "__awaiter");
     __name(__generator, "__generator");
-    __createBinding = Object.create ? function(o, m, k, k2) {
+    __createBinding = Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -24644,10 +24670,10 @@ var init_tslib_es6 = __esm({
         }, "get") };
       }
       Object.defineProperty(o, k2, desc);
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    };
+    });
     __name(__exportStar, "__exportStar");
     __name(__values2, "__values");
     __name(__read, "__read");
@@ -24659,9 +24685,9 @@ var init_tslib_es6 = __esm({
     __name(__asyncDelegator, "__asyncDelegator");
     __name(__asyncValues, "__asyncValues");
     __name(__makeTemplateObject, "__makeTemplateObject");
-    __setModuleDefault = Object.create ? function(o, v) {
+    __setModuleDefault = Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     };
     __name(__importStar, "__importStar");
@@ -24859,7 +24885,7 @@ var require_XMLDOMImplementation = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDOMImplementation.js"(exports2, module2) {
     (function() {
       var XMLDOMImplementation;
-      module2.exports = XMLDOMImplementation = function() {
+      module2.exports = XMLDOMImplementation = (function() {
         function XMLDOMImplementation2() {
         }
         __name(XMLDOMImplementation2, "XMLDOMImplementation");
@@ -24879,7 +24905,7 @@ var require_XMLDOMImplementation = __commonJS({
           throw new Error("This DOM method is not implemented.");
         };
         return XMLDOMImplementation2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -24889,7 +24915,7 @@ var require_XMLDOMErrorHandler = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDOMErrorHandler.js"(exports2, module2) {
     (function() {
       var XMLDOMErrorHandler;
-      module2.exports = XMLDOMErrorHandler = function() {
+      module2.exports = XMLDOMErrorHandler = (function() {
         function XMLDOMErrorHandler2() {
         }
         __name(XMLDOMErrorHandler2, "XMLDOMErrorHandler");
@@ -24897,7 +24923,7 @@ var require_XMLDOMErrorHandler = __commonJS({
           throw new Error(error);
         };
         return XMLDOMErrorHandler2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -24907,7 +24933,7 @@ var require_XMLDOMStringList = __commonJS({
   "node_modules/xmlbuilder/lib/XMLDOMStringList.js"(exports2, module2) {
     (function() {
       var XMLDOMStringList;
-      module2.exports = XMLDOMStringList = function() {
+      module2.exports = XMLDOMStringList = (function() {
         function XMLDOMStringList2(arr) {
           this.arr = arr || [];
         }
@@ -24924,7 +24950,7 @@ var require_XMLDOMStringList = __commonJS({
           return this.arr.indexOf(str) !== -1;
         };
         return XMLDOMStringList2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -24936,7 +24962,7 @@ var require_XMLDOMConfiguration = __commonJS({
       var XMLDOMConfiguration, XMLDOMErrorHandler, XMLDOMStringList;
       XMLDOMErrorHandler = require_XMLDOMErrorHandler();
       XMLDOMStringList = require_XMLDOMStringList();
-      module2.exports = XMLDOMConfiguration = function() {
+      module2.exports = XMLDOMConfiguration = (function() {
         function XMLDOMConfiguration2() {
           var clonedSelf;
           this.defaultParams = {
@@ -24984,7 +25010,7 @@ var require_XMLDOMConfiguration = __commonJS({
           }
         };
         return XMLDOMConfiguration2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -25023,7 +25049,7 @@ var require_XMLAttribute = __commonJS({
       var NodeType, XMLAttribute, XMLNode;
       NodeType = require_NodeType();
       XMLNode = require_XMLNode();
-      module2.exports = XMLAttribute = function() {
+      module2.exports = XMLAttribute = (function() {
         function XMLAttribute2(parent, name, value) {
           this.parent = parent;
           if (this.parent) {
@@ -25108,7 +25134,7 @@ var require_XMLAttribute = __commonJS({
           return true;
         };
         return XMLAttribute2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -25118,7 +25144,7 @@ var require_XMLNamedNodeMap = __commonJS({
   "node_modules/xmlbuilder/lib/XMLNamedNodeMap.js"(exports2, module2) {
     (function() {
       var XMLNamedNodeMap;
-      module2.exports = XMLNamedNodeMap = function() {
+      module2.exports = XMLNamedNodeMap = (function() {
         function XMLNamedNodeMap2(nodes) {
           this.nodes = nodes;
         }
@@ -25159,7 +25185,7 @@ var require_XMLNamedNodeMap = __commonJS({
           throw new Error("This DOM method is not implemented.");
         };
         return XMLNamedNodeMap2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -25186,7 +25212,7 @@ var require_XMLElement = __commonJS({
       NodeType = require_NodeType();
       XMLAttribute = require_XMLAttribute();
       XMLNamedNodeMap = require_XMLNamedNodeMap();
-      module2.exports = XMLElement = function(superClass) {
+      module2.exports = XMLElement = (function(superClass) {
         extend(XMLElement2, superClass);
         function XMLElement2(parent, name, attributes) {
           var child, j, len, ref1;
@@ -25428,7 +25454,7 @@ var require_XMLElement = __commonJS({
           return true;
         };
         return XMLElement2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25451,7 +25477,7 @@ var require_XMLCharacterData = __commonJS({
         return child;
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
-      module2.exports = XMLCharacterData = function(superClass) {
+      module2.exports = XMLCharacterData = (function(superClass) {
         extend(XMLCharacterData2, superClass);
         function XMLCharacterData2(parent) {
           XMLCharacterData2.__super__.constructor.call(this, parent);
@@ -25507,7 +25533,7 @@ var require_XMLCharacterData = __commonJS({
           return true;
         };
         return XMLCharacterData2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25531,7 +25557,7 @@ var require_XMLCData = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       NodeType = require_NodeType();
       XMLCharacterData = require_XMLCharacterData();
-      module2.exports = XMLCData = function(superClass) {
+      module2.exports = XMLCData = (function(superClass) {
         extend(XMLCData2, superClass);
         function XMLCData2(parent, text) {
           XMLCData2.__super__.constructor.call(this, parent);
@@ -25550,7 +25576,7 @@ var require_XMLCData = __commonJS({
           return this.options.writer.cdata(this, this.options.writer.filterOptions(options));
         };
         return XMLCData2;
-      }(XMLCharacterData);
+      })(XMLCharacterData);
     }).call(exports2);
   }
 });
@@ -25574,7 +25600,7 @@ var require_XMLComment = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       NodeType = require_NodeType();
       XMLCharacterData = require_XMLCharacterData();
-      module2.exports = XMLComment = function(superClass) {
+      module2.exports = XMLComment = (function(superClass) {
         extend(XMLComment2, superClass);
         function XMLComment2(parent, text) {
           XMLComment2.__super__.constructor.call(this, parent);
@@ -25593,7 +25619,7 @@ var require_XMLComment = __commonJS({
           return this.options.writer.comment(this, this.options.writer.filterOptions(options));
         };
         return XMLComment2;
-      }(XMLCharacterData);
+      })(XMLCharacterData);
     }).call(exports2);
   }
 });
@@ -25618,7 +25644,7 @@ var require_XMLDeclaration = __commonJS({
       isObject = require_Utility().isObject;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDeclaration = function(superClass) {
+      module2.exports = XMLDeclaration = (function(superClass) {
         extend(XMLDeclaration2, superClass);
         function XMLDeclaration2(parent, version3, encoding, standalone) {
           var ref;
@@ -25643,7 +25669,7 @@ var require_XMLDeclaration = __commonJS({
           return this.options.writer.declaration(this, this.options.writer.filterOptions(options));
         };
         return XMLDeclaration2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25667,7 +25693,7 @@ var require_XMLDTDAttList = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDTDAttList = function(superClass) {
+      module2.exports = XMLDTDAttList = (function(superClass) {
         extend(XMLDTDAttList2, superClass);
         function XMLDTDAttList2(parent, elementName, attributeName, attributeType, defaultValueType, defaultValue) {
           XMLDTDAttList2.__super__.constructor.call(this, parent);
@@ -25706,7 +25732,7 @@ var require_XMLDTDAttList = __commonJS({
           return this.options.writer.dtdAttList(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDAttList2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25731,7 +25757,7 @@ var require_XMLDTDEntity = __commonJS({
       isObject = require_Utility().isObject;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDTDEntity = function(superClass) {
+      module2.exports = XMLDTDEntity = (function(superClass) {
         extend(XMLDTDEntity2, superClass);
         function XMLDTDEntity2(parent, pe, name, value) {
           XMLDTDEntity2.__super__.constructor.call(this, parent);
@@ -25804,7 +25830,7 @@ var require_XMLDTDEntity = __commonJS({
           return this.options.writer.dtdEntity(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDEntity2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25828,7 +25854,7 @@ var require_XMLDTDElement = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDTDElement = function(superClass) {
+      module2.exports = XMLDTDElement = (function(superClass) {
         extend(XMLDTDElement2, superClass);
         function XMLDTDElement2(parent, name, value) {
           XMLDTDElement2.__super__.constructor.call(this, parent);
@@ -25850,7 +25876,7 @@ var require_XMLDTDElement = __commonJS({
           return this.options.writer.dtdElement(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDElement2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25874,7 +25900,7 @@ var require_XMLDTDNotation = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDTDNotation = function(superClass) {
+      module2.exports = XMLDTDNotation = (function(superClass) {
         extend(XMLDTDNotation2, superClass);
         function XMLDTDNotation2(parent, name, value) {
           XMLDTDNotation2.__super__.constructor.call(this, parent);
@@ -25908,7 +25934,7 @@ var require_XMLDTDNotation = __commonJS({
           return this.options.writer.dtdNotation(this, this.options.writer.filterOptions(options));
         };
         return XMLDTDNotation2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -25938,7 +25964,7 @@ var require_XMLDocType = __commonJS({
       XMLDTDElement = require_XMLDTDElement();
       XMLDTDNotation = require_XMLDTDNotation();
       XMLNamedNodeMap = require_XMLNamedNodeMap();
-      module2.exports = XMLDocType = function(superClass) {
+      module2.exports = XMLDocType = (function(superClass) {
         extend(XMLDocType2, superClass);
         function XMLDocType2(parent, pubID, sysID) {
           var child, i, len, ref, ref1, ref2;
@@ -26079,7 +26105,7 @@ var require_XMLDocType = __commonJS({
           return true;
         };
         return XMLDocType2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -26103,7 +26129,7 @@ var require_XMLRaw = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       NodeType = require_NodeType();
       XMLNode = require_XMLNode();
-      module2.exports = XMLRaw = function(superClass) {
+      module2.exports = XMLRaw = (function(superClass) {
         extend(XMLRaw2, superClass);
         function XMLRaw2(parent, text) {
           XMLRaw2.__super__.constructor.call(this, parent);
@@ -26121,7 +26147,7 @@ var require_XMLRaw = __commonJS({
           return this.options.writer.raw(this, this.options.writer.filterOptions(options));
         };
         return XMLRaw2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -26145,7 +26171,7 @@ var require_XMLText = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       NodeType = require_NodeType();
       XMLCharacterData = require_XMLCharacterData();
-      module2.exports = XMLText = function(superClass) {
+      module2.exports = XMLText = (function(superClass) {
         extend(XMLText2, superClass);
         function XMLText2(parent, text) {
           XMLText2.__super__.constructor.call(this, parent);
@@ -26193,7 +26219,7 @@ var require_XMLText = __commonJS({
           throw new Error("This DOM method is not implemented." + this.debugInfo());
         };
         return XMLText2;
-      }(XMLCharacterData);
+      })(XMLCharacterData);
     }).call(exports2);
   }
 });
@@ -26217,7 +26243,7 @@ var require_XMLProcessingInstruction = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       NodeType = require_NodeType();
       XMLCharacterData = require_XMLCharacterData();
-      module2.exports = XMLProcessingInstruction = function(superClass) {
+      module2.exports = XMLProcessingInstruction = (function(superClass) {
         extend(XMLProcessingInstruction2, superClass);
         function XMLProcessingInstruction2(parent, target2, value) {
           XMLProcessingInstruction2.__super__.constructor.call(this, parent);
@@ -26248,7 +26274,7 @@ var require_XMLProcessingInstruction = __commonJS({
           return true;
         };
         return XMLProcessingInstruction2;
-      }(XMLCharacterData);
+      })(XMLCharacterData);
     }).call(exports2);
   }
 });
@@ -26272,7 +26298,7 @@ var require_XMLDummy = __commonJS({
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLNode = require_XMLNode();
       NodeType = require_NodeType();
-      module2.exports = XMLDummy = function(superClass) {
+      module2.exports = XMLDummy = (function(superClass) {
         extend(XMLDummy2, superClass);
         function XMLDummy2(parent) {
           XMLDummy2.__super__.constructor.call(this, parent);
@@ -26286,7 +26312,7 @@ var require_XMLDummy = __commonJS({
           return "";
         };
         return XMLDummy2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -26296,7 +26322,7 @@ var require_XMLNodeList = __commonJS({
   "node_modules/xmlbuilder/lib/XMLNodeList.js"(exports2, module2) {
     (function() {
       var XMLNodeList;
-      module2.exports = XMLNodeList = function() {
+      module2.exports = XMLNodeList = (function() {
         function XMLNodeList2(nodes) {
           this.nodes = nodes;
         }
@@ -26313,7 +26339,7 @@ var require_XMLNodeList = __commonJS({
           return this.nodes[index] || null;
         };
         return XMLNodeList2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -26353,7 +26379,7 @@ var require_XMLNode = __commonJS({
       XMLNodeList = null;
       XMLNamedNodeMap = null;
       DocumentPosition = null;
-      module2.exports = XMLNode = function() {
+      module2.exports = XMLNode = (function() {
         function XMLNode2(parent1) {
           this.parent = parent1;
           if (this.parent) {
@@ -27023,7 +27049,7 @@ var require_XMLNode = __commonJS({
           }
         };
         return XMLNode2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -27037,7 +27063,7 @@ var require_XMLStringifier = __commonJS({
           return fn.apply(me, arguments);
         };
       }, "bind"), hasProp = {}.hasOwnProperty;
-      module2.exports = XMLStringifier = function() {
+      module2.exports = XMLStringifier = (function() {
         function XMLStringifier2(options) {
           this.assertLegalName = bind(this.assertLegalName, this);
           this.assertLegalChar = bind(this.assertLegalChar, this);
@@ -27239,7 +27265,7 @@ var require_XMLStringifier = __commonJS({
           return str.replace(ampregex, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;").replace(/\t/g, "&#x9;").replace(/\n/g, "&#xA;").replace(/\r/g, "&#xD;");
         };
         return XMLStringifier2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -27279,7 +27305,7 @@ var require_XMLWriterBase = __commonJS({
       XMLDTDEntity = require_XMLDTDEntity();
       XMLDTDNotation = require_XMLDTDNotation();
       WriterState = require_WriterState();
-      module2.exports = XMLWriterBase = function() {
+      module2.exports = XMLWriterBase = (function() {
         function XMLWriterBase2(options) {
           var key, ref, value;
           options || (options = {});
@@ -27649,7 +27675,7 @@ var require_XMLWriterBase = __commonJS({
         XMLWriterBase2.prototype.closeAttribute = function(att, options, level) {
         };
         return XMLWriterBase2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -27672,7 +27698,7 @@ var require_XMLStringWriter = __commonJS({
         return child;
       }, "extend"), hasProp = {}.hasOwnProperty;
       XMLWriterBase = require_XMLWriterBase();
-      module2.exports = XMLStringWriter = function(superClass) {
+      module2.exports = XMLStringWriter = (function(superClass) {
         extend(XMLStringWriter2, superClass);
         function XMLStringWriter2(options) {
           XMLStringWriter2.__super__.constructor.call(this, options);
@@ -27693,7 +27719,7 @@ var require_XMLStringWriter = __commonJS({
           return r;
         };
         return XMLStringWriter2;
-      }(XMLWriterBase);
+      })(XMLWriterBase);
     }).call(exports2);
   }
 });
@@ -27722,7 +27748,7 @@ var require_XMLDocument = __commonJS({
       NodeType = require_NodeType();
       XMLStringifier = require_XMLStringifier();
       XMLStringWriter = require_XMLStringWriter();
-      module2.exports = XMLDocument = function(superClass) {
+      module2.exports = XMLDocument = (function(superClass) {
         extend(XMLDocument2, superClass);
         function XMLDocument2(options) {
           XMLDocument2.__super__.constructor.call(this, null);
@@ -27902,7 +27928,7 @@ var require_XMLDocument = __commonJS({
           throw new Error("This DOM method is not implemented." + this.debugInfo());
         };
         return XMLDocument2;
-      }(XMLNode);
+      })(XMLNode);
     }).call(exports2);
   }
 });
@@ -27931,7 +27957,7 @@ var require_XMLDocumentCB = __commonJS({
       XMLStringifier = require_XMLStringifier();
       XMLStringWriter = require_XMLStringWriter();
       WriterState = require_WriterState();
-      module2.exports = XMLDocumentCB = function() {
+      module2.exports = XMLDocumentCB = (function() {
         function XMLDocumentCB2(options, onData, onEnd) {
           var writerOptions;
           this.name = "?xml";
@@ -28369,7 +28395,7 @@ var require_XMLDocumentCB = __commonJS({
           return this.notation(name, value);
         };
         return XMLDocumentCB2;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -28394,7 +28420,7 @@ var require_XMLStreamWriter = __commonJS({
       NodeType = require_NodeType();
       XMLWriterBase = require_XMLWriterBase();
       WriterState = require_WriterState();
-      module2.exports = XMLStreamWriter = function(superClass) {
+      module2.exports = XMLStreamWriter = (function(superClass) {
         extend(XMLStreamWriter2, superClass);
         function XMLStreamWriter2(stream, options) {
           this.stream = stream;
@@ -28538,7 +28564,7 @@ var require_XMLStreamWriter = __commonJS({
           return this.stream.write(XMLStreamWriter2.__super__.dtdNotation.call(this, node, options, level));
         };
         return XMLStreamWriter2;
-      }(XMLWriterBase);
+      })(XMLWriterBase);
     }).call(exports2);
   }
 });
@@ -28614,7 +28640,7 @@ var require_builder = __commonJS({
       escapeCDATA = /* @__PURE__ */ __name(function(entry) {
         return entry.replace("]]>", "]]]]><![CDATA[>");
       }, "escapeCDATA");
-      exports2.Builder = function() {
+      exports2.Builder = (function() {
         function Builder(opts) {
           var key, ref, value;
           this.options = {};
@@ -28641,7 +28667,7 @@ var require_builder = __commonJS({
           } else {
             rootName = this.options.rootName;
           }
-          render = /* @__PURE__ */ function(_this) {
+          render = /* @__PURE__ */ (function(_this) {
             return function(element, obj) {
               var attr, child, entry, index, key, value;
               if (typeof obj !== "object") {
@@ -28706,7 +28732,7 @@ var require_builder = __commonJS({
               }
               return element;
             };
-          }(this);
+          })(this);
           rootElement = builder.create(rootName, this.options.xmldec, this.options.doctype, {
             headless: this.options.headless,
             allowSurrogateChars: this.options.allowSurrogateChars
@@ -28714,7 +28740,7 @@ var require_builder = __commonJS({
           return render(rootElement, rootObj).end(this.options.renderOpts);
         };
         return Builder;
-      }();
+      })();
     }).call(exports2);
   }
 });
@@ -30276,7 +30302,7 @@ var require_parser = __commonJS({
         }
         return item;
       }, "processItem");
-      exports2.Parser = function(superClass) {
+      exports2.Parser = (function(superClass) {
         extend(Parser, superClass);
         function Parser(opts) {
           this.parseStringPromise = bind(this.parseStringPromise, this);
@@ -30357,7 +30383,7 @@ var require_parser = __commonJS({
             xmlns: this.options.xmlns
           });
           this.saxParser.errThrown = false;
-          this.saxParser.onerror = /* @__PURE__ */ function(_this) {
+          this.saxParser.onerror = /* @__PURE__ */ (function(_this) {
             return function(error) {
               _this.saxParser.resume();
               if (!_this.saxParser.errThrown) {
@@ -30365,22 +30391,22 @@ var require_parser = __commonJS({
                 return _this.emit("error", error);
               }
             };
-          }(this);
-          this.saxParser.onend = /* @__PURE__ */ function(_this) {
+          })(this);
+          this.saxParser.onend = /* @__PURE__ */ (function(_this) {
             return function() {
               if (!_this.saxParser.ended) {
                 _this.saxParser.ended = true;
                 return _this.emit("end", _this.resultObject);
               }
             };
-          }(this);
+          })(this);
           this.saxParser.ended = false;
           this.EXPLICIT_CHARKEY = this.options.explicitCharkey;
           this.resultObject = null;
           stack = [];
           attrkey = this.options.attrkey;
           charkey = this.options.charkey;
-          this.saxParser.onopentag = /* @__PURE__ */ function(_this) {
+          this.saxParser.onopentag = /* @__PURE__ */ (function(_this) {
             return function(node) {
               var key, newValue, obj, processedKey, ref;
               obj = /* @__PURE__ */ Object.create(null);
@@ -30410,8 +30436,8 @@ var require_parser = __commonJS({
               }
               return stack.push(obj);
             };
-          }(this);
-          this.saxParser.onclosetag = /* @__PURE__ */ function(_this) {
+          })(this);
+          this.saxParser.onclosetag = /* @__PURE__ */ (function(_this) {
             return function() {
               var cdata, emptyStr, key, node, nodeName, obj, objClone, old, s, xpath;
               obj = stack.pop();
@@ -30447,7 +30473,7 @@ var require_parser = __commonJS({
                 }
               }
               if (_this.options.validator != null) {
-                xpath = "/" + function() {
+                xpath = "/" + (function() {
                   var i, len, results;
                   results = [];
                   for (i = 0, len = stack.length; i < len; i++) {
@@ -30455,7 +30481,7 @@ var require_parser = __commonJS({
                     results.push(node["#name"]);
                   }
                   return results;
-                }().concat(nodeName).join("/");
+                })().concat(nodeName).join("/");
                 (function() {
                   var err;
                   try {
@@ -30508,8 +30534,8 @@ var require_parser = __commonJS({
                 return _this.emit("end", _this.resultObject);
               }
             };
-          }(this);
-          ontext = /* @__PURE__ */ function(_this) {
+          })(this);
+          ontext = /* @__PURE__ */ (function(_this) {
             return function(text) {
               var charChild, s;
               s = stack[stack.length - 1];
@@ -30529,9 +30555,9 @@ var require_parser = __commonJS({
                 return s;
               }
             };
-          }(this);
+          })(this);
           this.saxParser.ontext = ontext;
-          return this.saxParser.oncdata = /* @__PURE__ */ function(_this) {
+          return this.saxParser.oncdata = /* @__PURE__ */ (function(_this) {
             return function(text) {
               var s;
               s = ontext(text);
@@ -30539,7 +30565,7 @@ var require_parser = __commonJS({
                 return s.cdata = true;
               }
             };
-          }(this);
+          })(this);
         };
         Parser.prototype.parseString = function(str, cb) {
           var err;
@@ -30577,7 +30603,7 @@ var require_parser = __commonJS({
           }
         };
         Parser.prototype.parseStringPromise = function(str) {
-          return new Promise(/* @__PURE__ */ function(_this) {
+          return new Promise(/* @__PURE__ */ (function(_this) {
             return function(resolve, reject) {
               return _this.parseString(str, function(err, value) {
                 if (err) {
@@ -30587,10 +30613,10 @@ var require_parser = __commonJS({
                 }
               });
             };
-          }(this));
+          })(this));
         };
         return Parser;
-      }(events);
+      })(events);
       exports2.parseString = function(str, a, b) {
         var cb, options, parser;
         if (b != null) {
@@ -30645,14 +30671,14 @@ var require_xml2js = __commonJS({
       processors = require_processors();
       exports2.defaults = defaults.defaults;
       exports2.processors = processors;
-      exports2.ValidationError = function(superClass) {
+      exports2.ValidationError = (function(superClass) {
         extend(ValidationError, superClass);
         function ValidationError(message) {
           this.message = message;
         }
         __name(ValidationError, "ValidationError");
         return ValidationError;
-      }(Error);
+      })(Error);
       exports2.Builder = builder.Builder;
       exports2.Parser = parser.Parser;
       exports2.parseString = parser.parseString;
@@ -43916,15 +43942,15 @@ var require_globalThis = __commonJS({
 var require_node = __commonJS({
   "node_modules/@opentelemetry/api/build/src/platform/node/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -43937,15 +43963,15 @@ var require_node = __commonJS({
 var require_platform = __commonJS({
   "node_modules/@opentelemetry/api/build/src/platform/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
+    }));
     var __exportStar2 = exports2 && exports2.__exportStar || function(m, exports3) {
       for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports3, p)) __createBinding2(exports3, m, p);
     };
@@ -50301,13 +50327,13 @@ var require_dist7 = __commonJS({
         [Symbol.asyncIterator]() {
           return this;
         },
-        byPage: (_a = pagedResult === null || pagedResult === void 0 ? void 0 : pagedResult.byPage) !== null && _a !== void 0 ? _a : (settings) => {
+        byPage: (_a = pagedResult === null || pagedResult === void 0 ? void 0 : pagedResult.byPage) !== null && _a !== void 0 ? _a : ((settings) => {
           const { continuationToken, maxPageSize } = settings !== null && settings !== void 0 ? settings : {};
           return getPageAsyncIterator(pagedResult, {
             pageLink: continuationToken,
             maxPageSize
           });
-        }
+        })
       };
     }
     __name(getPagedAsyncIterator, "getPagedAsyncIterator");
@@ -68141,7 +68167,9 @@ ${key}:${decodeURIComponent(lowercaseQueries[key])}`;
             }
             return new AvroMapType(_AvroType.fromSchema(schema.values));
           case AvroComplex.ARRAY:
+          // Unused today
           case AvroComplex.FIXED:
+          // Unused today
           default:
             throw new Error(`Unexpected Avro type ${type} in ${schema}`);
         }
@@ -76029,18 +76057,18 @@ var require_utils6 = __commonJS({
 var require_command2 = __commonJS({
   "node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -76118,18 +76146,18 @@ var require_command2 = __commonJS({
 var require_file_command2 = __commonJS({
   "node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -76587,18 +76615,18 @@ var require_summary2 = __commonJS({
 var require_path_utils2 = __commonJS({
   "node_modules/@actions/core/lib/path-utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -76635,18 +76663,18 @@ var require_path_utils2 = __commonJS({
 var require_core2 = __commonJS({
   "node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -76945,18 +76973,18 @@ var require_context3 = __commonJS({
 var require_utils7 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -79378,18 +79406,18 @@ var require_dist_node10 = __commonJS({
 var require_utils8 = __commonJS({
   "node_modules/@actions/github/lib/utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
@@ -79434,18 +79462,18 @@ var require_utils8 = __commonJS({
 var require_github = __commonJS({
   "node_modules/@actions/github/lib/github.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: /* @__PURE__ */ __name(function() {
         return m[k];
       }, "get") });
-    } : function(o, m, k, k2) {
+    }) : (function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
-    });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    }));
+    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? (function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
-    } : function(o, v) {
+    }) : function(o, v) {
       o["default"] = v;
     });
     var __importStar2 = exports2 && exports2.__importStar || function(mod) {
