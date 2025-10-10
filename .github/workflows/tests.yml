@@ -8,9 +8,9 @@ jobs:
   build-size-cache:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           path: main
           ref: ${{ github.event.pull_request.base.sha }}
@@ -61,7 +61,7 @@ jobs:
       - build-size-cache
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./build-size/report
         with:
@@ -121,7 +121,7 @@ jobs:
   upload-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: actions/upload-artifact@v4
         with:
@@ -156,7 +156,7 @@ jobs:
   prune-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./prune-artifacts
         with:
@@ -173,7 +173,7 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test pr-limit') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./pr-limit
         with:
           limit: 1
@@ -181,7 +181,7 @@ jobs:
   commit-snapshots:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./update-snapshots
         with:
           dry-run: true
@@ -211,7 +211,7 @@ jobs:
         package-manager: [npm, pnpm, yarn]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - uses: ./prepare-node-repo
         with:
@@ -228,5 +228,5 @@ jobs:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'Test check-release-window') }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./check-release-window
