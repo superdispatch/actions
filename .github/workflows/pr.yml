@@ -15,7 +15,7 @@ jobs:
           node-version: 20
       - run: yarn tsc
       - run: yarn lint
-      - uses: superdispatch/actions/update-snapshots@v1.5.0
+      - uses: superdispatch/actions/update-snapshots@v1.16.0
         with:
           command: yarn build --verify
           update-command: yarn build
