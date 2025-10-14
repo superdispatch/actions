@@ -5,7 +5,6 @@
   "license": "MIT",
   "scripts": {
     "build": "node scripts/build.js",
-    "postinstall": "husky install",
     "lint": "js-tools lint",
     "prepare": "husky",
     "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
