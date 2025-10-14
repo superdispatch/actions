@@ -24337,15 +24337,15 @@ var require_log = __commonJS({
   "node_modules/@typespec/ts-http-runtime/dist/commonjs/logger/log.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.log = log;
+    exports2.log = log2;
     var tslib_1 = (init_tslib_es6(), __toCommonJS(tslib_es6_exports));
     var node_os_1 = require("node:os");
     var node_util_1 = tslib_1.__importDefault(require("node:util"));
     var node_process_1 = tslib_1.__importDefault(require("node:process"));
-    function log(message, ...args) {
+    function log2(message, ...args) {
       node_process_1.default.stderr.write(`${node_util_1.default.format(message, ...args)}${node_os_1.EOL}`);
     }
-    __name(log, "log");
+    __name(log2, "log");
   }
 });
 
@@ -26893,7 +26893,7 @@ var require_node = __commonJS({
     var tty = require("tty");
     var util = require("util");
     exports2.init = init;
-    exports2.log = log;
+    exports2.log = log2;
     exports2.formatArgs = formatArgs;
     exports2.save = save;
     exports2.load = load;
@@ -27031,10 +27031,10 @@ var require_node = __commonJS({
       return (/* @__PURE__ */ new Date()).toISOString() + " ";
     }
     __name(getDate, "getDate");
-    function log(...args) {
+    function log2(...args) {
       return process.stderr.write(util.formatWithOptions(exports2.inspectOpts, ...args) + "\n");
     }
-    __name(log, "log");
+    __name(log2, "log");
     function save(namespaces) {
       if (namespaces) {
         process.env.DEBUG = namespaces;
@@ -73526,7 +73526,7 @@ var require_dist_node5 = __commonJS({
     __name(getBufferResponse, "getBufferResponse");
     function fetchWrapper(requestOptions) {
       var _a, _b, _c, _d;
-      const log = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
+      const log2 = requestOptions.request && requestOptions.request.log ? requestOptions.request.log : console;
       const parseSuccessResponseBody = ((_a = requestOptions.request) == null ? void 0 : _a.parseSuccessResponseBody) !== false;
       if (isPlainObject(requestOptions.body) || Array.isArray(requestOptions.body)) {
         requestOptions.body = JSON.stringify(requestOptions.body);
@@ -73561,7 +73561,7 @@ var require_dist_node5 = __commonJS({
         if ("deprecation" in headers) {
           const matches = headers.link && headers.link.match(/<([^<>]+)>; rel="deprecation"/);
           const deprecationLink = matches && matches.pop();
-          log.warn(
+          log2.warn(
             `[@octokit/request] "${requestOptions.method} ${requestOptions.url}" is deprecated. It is scheduled to be removed on ${headers.sunset}${deprecationLink ? `. See ${deprecationLink}` : ""}`
           );
         }
@@ -76741,100 +76741,6 @@ var require_github = __commonJS({
   }
 });
 
-// node_modules/pretty-bytes/index.js
-var require_pretty_bytes = __commonJS({
-  "node_modules/pretty-bytes/index.js"(exports2, module2) {
-    "use strict";
-    var BYTE_UNITS = [
-      "B",
-      "kB",
-      "MB",
-      "GB",
-      "TB",
-      "PB",
-      "EB",
-      "ZB",
-      "YB"
-    ];
-    var BIBYTE_UNITS = [
-      "B",
-      "kiB",
-      "MiB",
-      "GiB",
-      "TiB",
-      "PiB",
-      "EiB",
-      "ZiB",
-      "YiB"
-    ];
-    var BIT_UNITS = [
-      "b",
-      "kbit",
-      "Mbit",
-      "Gbit",
-      "Tbit",
-      "Pbit",
-      "Ebit",
-      "Zbit",
-      "Ybit"
-    ];
-    var BIBIT_UNITS = [
-      "b",
-      "kibit",
-      "Mibit",
-      "Gibit",
-      "Tibit",
-      "Pibit",
-      "Eibit",
-      "Zibit",
-      "Yibit"
-    ];
-    var toLocaleString = /* @__PURE__ */ __name((number, locale, options) => {
-      let result = number;
-      if (typeof locale === "string" || Array.isArray(locale)) {
-        result = number.toLocaleString(locale, options);
-      } else if (locale === true || options !== void 0) {
-        result = number.toLocaleString(void 0, options);
-      }
-      return result;
-    }, "toLocaleString");
-    module2.exports = (number, options) => {
-      if (!Number.isFinite(number)) {
-        throw new TypeError(`Expected a finite number, got ${typeof number}: ${number}`);
-      }
-      options = Object.assign({ bits: false, binary: false }, options);
-      const UNITS = options.bits ? options.binary ? BIBIT_UNITS : BIT_UNITS : options.binary ? BIBYTE_UNITS : BYTE_UNITS;
-      if (options.signed && number === 0) {
-        return ` 0 ${UNITS[0]}`;
-      }
-      const isNegative = number < 0;
-      const prefix = isNegative ? "-" : options.signed ? "+" : "";
-      if (isNegative) {
-        number = -number;
-      }
-      let localeOptions;
-      if (options.minimumFractionDigits !== void 0) {
-        localeOptions = { minimumFractionDigits: options.minimumFractionDigits };
-      }
-      if (options.maximumFractionDigits !== void 0) {
-        localeOptions = Object.assign({ maximumFractionDigits: options.maximumFractionDigits }, localeOptions);
-      }
-      if (number < 1) {
-        const numberString2 = toLocaleString(number, options.locale, localeOptions);
-        return prefix + numberString2 + " " + UNITS[0];
-      }
-      const exponent = Math.min(Math.floor(options.binary ? Math.log(number) / Math.log(1024) : Math.log10(number) / 3), UNITS.length - 1);
-      number /= Math.pow(options.binary ? 1024 : 1e3, exponent);
-      if (!localeOptions) {
-        number = number.toPrecision(3);
-      }
-      const numberString = toLocaleString(Number(number), options.locale, localeOptions);
-      const unit = UNITS[exponent];
-      return prefix + numberString + " " + unit;
-    };
-  }
-});
-
 // node_modules/@actions/glob/node_modules/@actions/core/lib/utils.js
 var require_utils8 = __commonJS({
   "node_modules/@actions/glob/node_modules/@actions/core/lib/utils.js"(exports2) {
@@ -79065,8 +78971,148 @@ async function sendReport({
 }
 __name(sendReport, "sendReport");
 
+// node_modules/pretty-bytes/index.js
+var BYTE_UNITS = [
+  "B",
+  "kB",
+  "MB",
+  "GB",
+  "TB",
+  "PB",
+  "EB",
+  "ZB",
+  "YB"
+];
+var BIBYTE_UNITS = [
+  "B",
+  "KiB",
+  "MiB",
+  "GiB",
+  "TiB",
+  "PiB",
+  "EiB",
+  "ZiB",
+  "YiB"
+];
+var BIT_UNITS = [
+  "b",
+  "kbit",
+  "Mbit",
+  "Gbit",
+  "Tbit",
+  "Pbit",
+  "Ebit",
+  "Zbit",
+  "Ybit"
+];
+var BIBIT_UNITS = [
+  "b",
+  "kibit",
+  "Mibit",
+  "Gibit",
+  "Tibit",
+  "Pibit",
+  "Eibit",
+  "Zibit",
+  "Yibit"
+];
+var toLocaleString = /* @__PURE__ */ __name((number, locale, options) => {
+  let result = number;
+  if (typeof locale === "string" || Array.isArray(locale)) {
+    result = number.toLocaleString(locale, options);
+  } else if (locale === true || options !== void 0) {
+    result = number.toLocaleString(void 0, options);
+  }
+  return result;
+}, "toLocaleString");
+var log10 = /* @__PURE__ */ __name((numberOrBigInt) => {
+  if (typeof numberOrBigInt === "number") {
+    return Math.log10(numberOrBigInt);
+  }
+  const string = numberOrBigInt.toString(10);
+  return string.length + Math.log10(`0.${string.slice(0, 15)}`);
+}, "log10");
+var log = /* @__PURE__ */ __name((numberOrBigInt) => {
+  if (typeof numberOrBigInt === "number") {
+    return Math.log(numberOrBigInt);
+  }
+  return log10(numberOrBigInt) * Math.log(10);
+}, "log");
+var divide = /* @__PURE__ */ __name((numberOrBigInt, divisor) => {
+  if (typeof numberOrBigInt === "number") {
+    return numberOrBigInt / divisor;
+  }
+  const integerPart = numberOrBigInt / BigInt(divisor);
+  const remainder = numberOrBigInt % BigInt(divisor);
+  return Number(integerPart) + Number(remainder) / divisor;
+}, "divide");
+var applyFixedWidth = /* @__PURE__ */ __name((result, fixedWidth) => {
+  if (fixedWidth === void 0) {
+    return result;
+  }
+  if (typeof fixedWidth !== "number" || !Number.isSafeInteger(fixedWidth) || fixedWidth < 0) {
+    throw new TypeError(`Expected fixedWidth to be a non-negative integer, got ${typeof fixedWidth}: ${fixedWidth}`);
+  }
+  if (fixedWidth === 0) {
+    return result;
+  }
+  return result.length < fixedWidth ? result.padStart(fixedWidth, " ") : result;
+}, "applyFixedWidth");
+var buildLocaleOptions = /* @__PURE__ */ __name((options) => {
+  const { minimumFractionDigits, maximumFractionDigits } = options;
+  if (minimumFractionDigits === void 0 && maximumFractionDigits === void 0) {
+    return void 0;
+  }
+  return {
+    ...minimumFractionDigits !== void 0 && { minimumFractionDigits },
+    ...maximumFractionDigits !== void 0 && { maximumFractionDigits },
+    roundingMode: "trunc"
+  };
+}, "buildLocaleOptions");
+function prettyBytes(number, options) {
+  if (typeof number !== "bigint" && !Number.isFinite(number)) {
+    throw new TypeError(`Expected a finite number, got ${typeof number}: ${number}`);
+  }
+  options = {
+    bits: false,
+    binary: false,
+    space: true,
+    nonBreakingSpace: false,
+    ...options
+  };
+  const UNITS = options.bits ? options.binary ? BIBIT_UNITS : BIT_UNITS : options.binary ? BIBYTE_UNITS : BYTE_UNITS;
+  const separator = options.space ? options.nonBreakingSpace ? "\xA0" : " " : "";
+  const isZero = typeof number === "number" ? number === 0 : number === 0n;
+  if (options.signed && isZero) {
+    const result2 = ` 0${separator}${UNITS[0]}`;
+    return applyFixedWidth(result2, options.fixedWidth);
+  }
+  const isNegative = number < 0;
+  const prefix = isNegative ? "-" : options.signed ? "+" : "";
+  if (isNegative) {
+    number = -number;
+  }
+  const localeOptions = buildLocaleOptions(options);
+  let result;
+  if (number < 1) {
+    const numberString = toLocaleString(number, options.locale, localeOptions);
+    result = prefix + numberString + separator + UNITS[0];
+  } else {
+    const exponent = Math.min(Math.floor(options.binary ? log(number) / Math.log(1024) : log10(number) / 3), UNITS.length - 1);
+    number = divide(number, (options.binary ? 1024 : 1e3) ** exponent);
+    if (!localeOptions) {
+      const minPrecision = Math.max(3, Math.floor(number).toString().length);
+      number = number.toPrecision(minPrecision);
+    }
+    const numberString = toLocaleString(Number(number), options.locale, localeOptions);
+    const unit = UNITS[exponent];
+    result = prefix + numberString + separator + unit;
+  }
+  return applyFixedWidth(result, options.fixedWidth);
+}
+__name(prettyBytes, "prettyBytes");
+
 // build-size/utils/BuildSizeDiffReport.ts
-var import_pretty_bytes = __toESM(require_pretty_bytes());
 var import_util = require("util");
 function toFinite(value) {
   return typeof value == "number" && Number.isFinite(value) ? value : 0;
@@ -79092,13 +79138,13 @@ function getDiffIcon(diff) {
 __name(getDiffIcon, "getDiffIcon");
 function formatRow(size, delta) {
   if (size === 0 && delta < 0) {
-    return [(0, import_util.format)("~%s~", (0, import_pretty_bytes.default)(Math.abs(delta))), "", "removed", ""];
+    return [(0, import_util.format)("~%s~", prettyBytes(Math.abs(delta))), "", "removed", ""];
   }
-  const formattedSize = (0, import_pretty_bytes.default)(size);
+  const formattedSize = prettyBytes(size);
   if (delta === size) {
     return [formattedSize, "", "new file", ""];
   }
-  const formattedDelta = (0, import_pretty_bytes.default)(delta, { signed: true });
+  const formattedDelta = prettyBytes(delta, { signed: true });
   const diff = delta / size;
   const diffFormat = diff > 0 ? "+%s" : "%s";
   const formattedDiff = (0, import_util.format)(
