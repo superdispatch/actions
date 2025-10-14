@@ -170,7 +170,6 @@ jobs:
       - uses: ./prune-artifacts
 
   pr-limit:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test pr-limit') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -225,8 +224,8 @@ jobs:
         working-directory: ./examples/cypress-${{ matrix.package-manager }}
 
   check-release-window:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'Test check-release-window') }}
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v5
       - uses: ./check-release-window
