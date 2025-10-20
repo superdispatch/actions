@@ -78005,7 +78005,7 @@ var import_zlib = require("zlib");
 async function computeFileSize(filename) {
   const buffer = await import_fs.promises.readFile(filename);
   return new Promise((resolve, reject) => {
-    (0, import_zlib.brotliCompress)(buffer, (error, result) => {
+    (0, import_zlib.brotliCompress)(new Uint8Array(buffer), (error, result) => {
       if (error) {
         reject(error);
       } else {
