@@ -8,7 +8,7 @@ async function computeFileSize(filename: string): Promise<number> {
   const buffer = await fs.readFile(filename);
 
   return new Promise((resolve, reject) => {
-    brotliCompress(buffer, (error, result) => {
+    brotliCompress(new Uint8Array(buffer), (error, result) => {
       if (error) {
         reject(error);
       } else {
