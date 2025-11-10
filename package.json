@@ -26,7 +26,7 @@
     "@superdispatch/prettier-config": "0.13.1",
     "@superdispatch/tsconfig": "0.13.1",
     "@types/jira-client": "^7.1.9",
-    "esbuild": "^0.25.0",
+    "esbuild": "^0.27.0",
     "eslint": "7.32.0",
     "husky": "9.1.7",
     "jira-client": "^8.2.2",
