@@ -15,7 +15,7 @@ inputs:
 
   fetch-depth:
     required: false
-    default: 1
+    default: '1'
     description: 'The depth of the repository to fetch.'
 
   cache-key:
@@ -30,6 +30,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Set up .npmrc
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
+      run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+
     - name: 'Disable automatic line-end conversion'
       shell: bash
       run: git config --global core.autocrlf false
