@@ -22,6 +22,11 @@ inputs:
     required: false
     description: 'An explicit key for restoring and saving the cache'
 
+  token:
+    required: true
+    default: '${{ github.token }}'
+    description: 'github token'
+
   pnpm-version:
     required: false
     default: 'latest'
@@ -32,9 +37,7 @@ runs:
   steps:
     - name: Set up .npmrc
       shell: bash
-      env:
-        GITHUB_TOKEN: ${{ env.GITHUB_TOKEN }}
-      run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc
+      run: echo "//npm.pkg.github.com/:_authToken=${{ inputs.token }}" > ~/.npmrc
 
     - name: 'Disable automatic line-end conversion'
       shell: bash
