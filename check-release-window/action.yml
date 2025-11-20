@@ -39,8 +39,8 @@ runs:
           exit 1
         fi
 
-        if [ "$CURRENT_HOUR" -lt 11 ] || [ "$CURRENT_HOUR" -ge 16 ]; then
-          echo "⛔ Deployment window is 11:00–16:00 Asia/Tashkent time (Mon–Fri)."
+        if [ "$CURRENT_HOUR" -lt 11 ] || [ "$CURRENT_HOUR" -ge 17 ]; then
+          echo "⛔ Deployment window is 11:00–17:00 Asia/Tashkent time (Mon–Fri)."
           echo "ℹ️ How to bypass: https://www.notion.so/superdispatch/229d135ec9cb80a2b5f3d0b1fdde2fb0"
           exit 1
         fi
