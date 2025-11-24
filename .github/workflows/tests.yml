@@ -8,9 +8,9 @@ jobs:
   build-size-cache:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: main
           ref: ${{ github.event.pull_request.base.sha }}
@@ -61,7 +61,7 @@ jobs:
       - build-size-cache
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./build-size/report
         with:
@@ -107,7 +107,7 @@ jobs:
   build-size-limit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -121,7 +121,7 @@ jobs:
   upload-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/upload-artifact@v5
         with:
@@ -156,7 +156,7 @@ jobs:
   prune-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./prune-artifacts
         with:
@@ -172,7 +172,7 @@ jobs:
   pr-limit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./pr-limit
         with:
           limit: 10
@@ -180,7 +180,7 @@ jobs:
   commit-snapshots:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./update-snapshots
         with:
           dry-run: true
@@ -191,7 +191,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 22
@@ -210,7 +210,7 @@ jobs:
         package-manager: [npm, pnpm, yarn]
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: ./prepare-node-repo
         with:
@@ -227,5 +227,5 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./check-release-window

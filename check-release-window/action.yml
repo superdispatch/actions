@@ -6,7 +6,7 @@ runs:
   using: 'composite'
   steps:
     - name: Checking Out the Repository to Temporary Directory
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 1
         path: release-window-check
