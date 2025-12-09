@@ -37,7 +37,9 @@ runs:
   steps:
     - name: Set up .npmrc
       shell: bash
-      run: echo "//npm-registry.superdispatch.org/:_authToken=${{ inputs.token }}" > ~/.npmrc
+      run: |
+        echo "@superdispatch:registry=https://npm-registry.superdispatch.org" > ~/.npmrc
+        echo "//npm-registry.superdispatch.org/:_authToken=${{ inputs.token }}" >> ~/.npmrc
 
     - name: 'Disable automatic line-end conversion'
       shell: bash
