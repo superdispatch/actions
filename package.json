@@ -19,7 +19,7 @@
     "@actions/cache": "4.1.0",
     "@actions/core": "1.11.1",
     "@actions/exec": "1.1.1",
-    "@actions/github": "6.0.1",
+    "@actions/github": "7.0.0",
     "@actions/glob": "0.5.0",
     "@superdispatch/eslint-plugin": "0.13.1",
     "@superdispatch/js-tools": "0.13.1",
