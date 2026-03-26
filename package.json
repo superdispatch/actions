@@ -7,7 +7,7 @@
     "build": "node scripts/build.js",
     "lint": "js-tools lint",
     "prepare": "husky",
-    "prerelease": "yarn install --frozen-lockfile && yarn tsc && yarn lint && yarn build",
+    "prerelease": "pnpm install --frozen-lockfile && pnpm tsc && pnpm lint && pnpm build",
     "release": "np --no-publish --no-release-draft --no-tests",
     "postrelease": "node scripts/post-release.js"
   },
@@ -21,6 +21,8 @@
     "@actions/exec": "1.1.1",
     "@actions/github": "6.0.1",
     "@actions/glob": "0.5.0",
+    "@octokit/openapi-types": "^27.0.0",
+    "@octokit/request-error": "^7.1.0",
     "@superdispatch/eslint-plugin": "0.14.0",
     "@superdispatch/js-tools": "0.14.0",
     "@superdispatch/prettier-config": "0.14.0",
@@ -36,6 +38,12 @@
     "pretty-bytes": "7.1.0",
     "typescript": "5.9.3",
     "zlib": "1.0.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
   },
   "engines": {
     "node": ">=20"

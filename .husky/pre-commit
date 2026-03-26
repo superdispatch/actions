@@ -1,1 +1,1 @@
-yarn lint-staged && yarn build && git add .
+pnpm lint-staged && pnpm build && git add .

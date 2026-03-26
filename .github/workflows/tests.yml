@@ -111,12 +111,15 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
 
       - uses: ./build-size/limit
         with:
-          install_command: 'yarn install'
-          build_command: 'yarn add -WD size-limit @size-limit/preset-small-lib'
-          target: 'node_modules/object.assign/dist/browser.js'
+          install_command: 'pnpm install'
+          build_command: 'pnpm add -D size-limit @size-limit/preset-small-lib'
+          target: 'node_modules/pretty-bytes/index.js'
 
   upload-artifacts:
     runs-on: ubuntu-latest

@@ -13,9 +13,9 @@ jobs:
       - uses: superdispatch/actions/prepare-node-repo@main
         with:
           node-version: 24
-      - run: yarn tsc
-      - run: yarn lint
+      - run: pnpm tsc
+      - run: pnpm lint
       - uses: superdispatch/actions/update-snapshots@main
         with:
-          command: yarn build --verify
-          update-command: yarn build
+          command: pnpm build --verify
+          update-command: pnpm build
