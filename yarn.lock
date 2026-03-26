@@ -1301,10 +1301,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/merge-streams/-/merge-streams-2.3.0.tgz#719df7fb41766bc143369eaa0dd56d8dc87c9958"
   integrity sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==
 
-"@superdispatch/eslint-plugin@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@superdispatch/eslint-plugin/-/eslint-plugin-0.13.1.tgz#279381d7a5a92d0bd57d62ae54dbea8da65a5449"
-  integrity sha512-+G5nNiMhIoikoQVi8YxKUMfTz13YMXcLUvFOhmLLW/2ECGXTYzrafyDzbVtyZNnfTyX69BM7zw/k2GoItKOpfA==
+"@superdispatch/eslint-plugin@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@superdispatch/eslint-plugin/-/eslint-plugin-0.14.0.tgz#5e2b4305dded637a24be848daee32a48cda75f89"
+  integrity sha512-z0IFnJOmxgvubJ9eYMcbgFkkeOi56m2Hk82fIFk68iDRXOC0pw7Vbhra+MbsWIJ4FzlQM7fU6g4OGUTQd72Hfg==
   dependencies:
     "@typescript-eslint/eslint-plugin" "6.21.0"
     "@typescript-eslint/parser" "6.21.0"
@@ -1325,10 +1325,10 @@
     lodash "^4.17.19"
     snapshot-diff "0.10.0"
 
-"@superdispatch/js-tools@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@superdispatch/js-tools/-/js-tools-0.13.1.tgz#e957727bd602b80ee44d46f432c5168079c9f1de"
-  integrity sha512-FszZKA3Rvux9/Ed65WQSnnKO2gpUFCz3Ay6Uwliatm45LAPBmCUy83QrTwgu7bDVggaitVPz5kRg0rnC2boFhg==
+"@superdispatch/js-tools@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@superdispatch/js-tools/-/js-tools-0.14.0.tgz#c13eea61cdd193a8f8b9fdf124e6366d56ff5c33"
+  integrity sha512-x8acbAYaQspghr9g7+ehc0AVU4YpuWLcYz82nQ3OI+N+Yk+bQS0sKECrPrrPQy+WdzuNbDHqX0wNlRbrDeIjTw==
   dependencies:
     "@oclif/command" "1.8.0"
     "@oclif/config" "1.17.0"
@@ -1339,18 +1339,18 @@
     listr "0.14.3"
     yarn-deduplicate "3.1.0"
 
-"@superdispatch/prettier-config@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@superdispatch/prettier-config/-/prettier-config-0.13.1.tgz#ab18ecca3cd6de266e3963d049a4c91648684c94"
-  integrity sha512-0nn96pNP/0izPTlHElJ5L6a51gGCWJP56KVrO7mZlKx8p92H9HMG27czaL2ANYDlq4AuRLLm24rX9r9VTOAS7w==
+"@superdispatch/prettier-config@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@superdispatch/prettier-config/-/prettier-config-0.14.0.tgz#bc970998f4d9c58ef2f910a0ceeed124fb744398"
+  integrity sha512-EzthqRsgAdQskBFz852sd7LVjd1eRb+o98AJT9Uqs3iaplx41k2kqh5fQknr8sK4BukFuE8cnuSxF/Zq+sasXw==
   dependencies:
     prettier-plugin-organize-imports "^2.1.0"
     prettier-plugin-packagejson "^2.2.9"
 
-"@superdispatch/tsconfig@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@superdispatch/tsconfig/-/tsconfig-0.13.1.tgz#1dbd4333b550181978f4a47cf8e423707be19530"
-  integrity sha512-Da1NMdvHx1xCn2eZDkxOQ7uG0lM2ANkKCPfTyB8ioQG0lUpGxgJDkRfOCPI73sfkRpBmUTIPhVmR0/nbFrFAbQ==
+"@superdispatch/tsconfig@0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@superdispatch/tsconfig/-/tsconfig-0.14.0.tgz#e1c2b351db733f53988e0409d252f8dceb3805fc"
+  integrity sha512-5Acgx85diyLQzEH47egqpM6WNTxB7cLYcVK4DvvWCmUBtown4eacdQxBOmbJHR7U1rVQmw0pikV4iMhePl/k9Q==
 
 "@types/caseless@*":
   version "0.12.5"
