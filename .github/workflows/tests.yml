@@ -219,7 +219,7 @@ jobs:
         with:
           pnpm-version: 10
           fetch-depth: 2
-          node-version: 18
+          node-version: 24
           working-directory: ./examples/cypress-${{ matrix.package-manager }}
           cache-key: prepare-node-repo-cypress-${{ matrix.package-manager }}-${{ github.sha }}-
 
